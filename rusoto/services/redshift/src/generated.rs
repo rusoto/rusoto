@@ -10,16 +10,19 @@
 //
 // =================================================================
 
+use std::error::Error;
+use std::fmt;
+use std::io;
+
 #[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
+use futures::future;
+use futures::Future;
+use hyper::StatusCode;
+use rusoto_core::reactor::{CredentialsProvider, RequestDispatcher};
 use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::region;
+use rusoto_core::{ClientInner, RusotoFuture};
 
-use std::fmt;
-use std::error::Error;
-use std::io;
-use std::io::Read;
 use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
@@ -16850,383 +16853,400 @@ pub trait Redshift {
     fn authorize_cluster_security_group_ingress(
         &self,
         input: &AuthorizeClusterSecurityGroupIngressMessage,
-    ) -> Result<AuthorizeClusterSecurityGroupIngressResult, AuthorizeClusterSecurityGroupIngressError>;
+    ) -> RusotoFuture<
+        AuthorizeClusterSecurityGroupIngressResult,
+        AuthorizeClusterSecurityGroupIngressError,
+    >;
 
     /// <p>Authorizes the specified AWS customer account to restore the specified snapshot.</p> <p> For more information about working with snapshots, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-snapshots.html">Amazon Redshift Snapshots</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
     fn authorize_snapshot_access(
         &self,
         input: &AuthorizeSnapshotAccessMessage,
-    ) -> Result<AuthorizeSnapshotAccessResult, AuthorizeSnapshotAccessError>;
+    ) -> RusotoFuture<AuthorizeSnapshotAccessResult, AuthorizeSnapshotAccessError>;
 
     /// <p>Copies the specified automated cluster snapshot to a new manual cluster snapshot. The source must be an automated snapshot and it must be in the available state.</p> <p>When you delete a cluster, Amazon Redshift deletes any automated snapshots of the cluster. Also, when the retention period of the snapshot expires, Amazon Redshift automatically deletes it. If you want to keep an automated snapshot for a longer period, you can make a manual copy of the snapshot. Manual snapshots are retained until you delete them.</p> <p> For more information about working with snapshots, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-snapshots.html">Amazon Redshift Snapshots</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
     fn copy_cluster_snapshot(
         &self,
         input: &CopyClusterSnapshotMessage,
-    ) -> Result<CopyClusterSnapshotResult, CopyClusterSnapshotError>;
+    ) -> RusotoFuture<CopyClusterSnapshotResult, CopyClusterSnapshotError>;
 
     /// <p>Creates a new cluster.</p> <p>To create the cluster in Virtual Private Cloud (VPC), you must provide a cluster subnet group name. The cluster subnet group identifies the subnets of your VPC that Amazon Redshift uses when creating the cluster. For more information about managing clusters, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html">Amazon Redshift Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
     fn create_cluster(
         &self,
         input: &CreateClusterMessage,
-    ) -> Result<CreateClusterResult, CreateClusterError>;
+    ) -> RusotoFuture<CreateClusterResult, CreateClusterError>;
 
     /// <p>Creates an Amazon Redshift parameter group.</p> <p>Creating parameter groups is independent of creating clusters. You can associate a cluster with a parameter group when you create the cluster. You can also associate an existing cluster with a parameter group after the cluster is created by using <a>ModifyCluster</a>. </p> <p>Parameters in the parameter group define specific behavior that applies to the databases you create on the cluster. For more information about parameters and parameter groups, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-parameter-groups.html">Amazon Redshift Parameter Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
     fn create_cluster_parameter_group(
         &self,
         input: &CreateClusterParameterGroupMessage,
-    ) -> Result<CreateClusterParameterGroupResult, CreateClusterParameterGroupError>;
+    ) -> RusotoFuture<CreateClusterParameterGroupResult, CreateClusterParameterGroupError>;
 
     /// <p>Creates a new Amazon Redshift security group. You use security groups to control access to non-VPC clusters.</p> <p> For information about managing security groups, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-security-groups.html">Amazon Redshift Cluster Security Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
     fn create_cluster_security_group(
         &self,
         input: &CreateClusterSecurityGroupMessage,
-    ) -> Result<CreateClusterSecurityGroupResult, CreateClusterSecurityGroupError>;
+    ) -> RusotoFuture<CreateClusterSecurityGroupResult, CreateClusterSecurityGroupError>;
 
     /// <p>Creates a manual snapshot of the specified cluster. The cluster must be in the <code>available</code> state. </p> <p> For more information about working with snapshots, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-snapshots.html">Amazon Redshift Snapshots</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
     fn create_cluster_snapshot(
         &self,
         input: &CreateClusterSnapshotMessage,
-    ) -> Result<CreateClusterSnapshotResult, CreateClusterSnapshotError>;
+    ) -> RusotoFuture<CreateClusterSnapshotResult, CreateClusterSnapshotError>;
 
     /// <p>Creates a new Amazon Redshift subnet group. You must provide a list of one or more subnets in your existing Amazon Virtual Private Cloud (Amazon VPC) when creating Amazon Redshift subnet group.</p> <p> For information about subnet groups, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-cluster-subnet-groups.html">Amazon Redshift Cluster Subnet Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
     fn create_cluster_subnet_group(
         &self,
         input: &CreateClusterSubnetGroupMessage,
-    ) -> Result<CreateClusterSubnetGroupResult, CreateClusterSubnetGroupError>;
+    ) -> RusotoFuture<CreateClusterSubnetGroupResult, CreateClusterSubnetGroupError>;
 
     /// <p>Creates an Amazon Redshift event notification subscription. This action requires an ARN (Amazon Resource Name) of an Amazon SNS topic created by either the Amazon Redshift console, the Amazon SNS console, or the Amazon SNS API. To obtain an ARN with Amazon SNS, you must create a topic in Amazon SNS and subscribe to the topic. The ARN is displayed in the SNS console.</p> <p>You can specify the source type, and lists of Amazon Redshift source IDs, event categories, and event severities. Notifications will be sent for all events you want that match those criteria. For example, you can specify source type = cluster, source ID = my-cluster-1 and mycluster2, event categories = Availability, Backup, and severity = ERROR. The subscription will only send notifications for those ERROR events in the Availability and Backup categories for the specified clusters.</p> <p>If you specify both the source type and source IDs, such as source type = cluster and source identifier = my-cluster-1, notifications will be sent for all the cluster events for my-cluster-1. If you specify a source type but do not specify a source identifier, you will receive notice of the events for the objects of that type in your AWS account. If you do not specify either the SourceType nor the SourceIdentifier, you will be notified of events generated from all Amazon Redshift sources belonging to your AWS account. You must specify a source type if you specify a source ID.</p>
     fn create_event_subscription(
         &self,
         input: &CreateEventSubscriptionMessage,
-    ) -> Result<CreateEventSubscriptionResult, CreateEventSubscriptionError>;
+    ) -> RusotoFuture<CreateEventSubscriptionResult, CreateEventSubscriptionError>;
 
     /// <p>Creates an HSM client certificate that an Amazon Redshift cluster will use to connect to the client's HSM in order to store and retrieve the keys used to encrypt the cluster databases.</p> <p>The command returns a public key, which you must store in the HSM. In addition to creating the HSM certificate, you must create an Amazon Redshift HSM configuration that provides a cluster the information needed to store and use encryption keys in the HSM. For more information, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-HSM.html">Hardware Security Modules</a> in the Amazon Redshift Cluster Management Guide.</p>
     fn create_hsm_client_certificate(
         &self,
         input: &CreateHsmClientCertificateMessage,
-    ) -> Result<CreateHsmClientCertificateResult, CreateHsmClientCertificateError>;
+    ) -> RusotoFuture<CreateHsmClientCertificateResult, CreateHsmClientCertificateError>;
 
     /// <p>Creates an HSM configuration that contains the information required by an Amazon Redshift cluster to store and use database encryption keys in a Hardware Security Module (HSM). After creating the HSM configuration, you can specify it as a parameter when creating a cluster. The cluster will then store its encryption keys in the HSM.</p> <p>In addition to creating an HSM configuration, you must also create an HSM client certificate. For more information, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-HSM.html">Hardware Security Modules</a> in the Amazon Redshift Cluster Management Guide.</p>
     fn create_hsm_configuration(
         &self,
         input: &CreateHsmConfigurationMessage,
-    ) -> Result<CreateHsmConfigurationResult, CreateHsmConfigurationError>;
+    ) -> RusotoFuture<CreateHsmConfigurationResult, CreateHsmConfigurationError>;
 
     /// <p>Creates a snapshot copy grant that permits Amazon Redshift to use a customer master key (CMK) from AWS Key Management Service (AWS KMS) to encrypt copied snapshots in a destination region.</p> <p> For more information about managing snapshot copy grants, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-db-encryption.html">Amazon Redshift Database Encryption</a> in the <i>Amazon Redshift Cluster Management Guide</i>. </p>
     fn create_snapshot_copy_grant(
         &self,
         input: &CreateSnapshotCopyGrantMessage,
-    ) -> Result<CreateSnapshotCopyGrantResult, CreateSnapshotCopyGrantError>;
+    ) -> RusotoFuture<CreateSnapshotCopyGrantResult, CreateSnapshotCopyGrantError>;
 
     /// <p>Adds one or more tags to a specified resource.</p> <p>A resource can have up to 10 tags. If you try to create more than 10 tags for a resource, you will receive an error and the attempt will fail.</p> <p>If you specify a key that already exists for the resource, the value for that key will be updated with the new value.</p>
-    fn create_tags(&self, input: &CreateTagsMessage) -> Result<(), CreateTagsError>;
+    fn create_tags(&self, input: &CreateTagsMessage) -> RusotoFuture<(), CreateTagsError>;
 
     /// <p>Deletes a previously provisioned cluster. A successful response from the web service indicates that the request was received correctly. Use <a>DescribeClusters</a> to monitor the status of the deletion. The delete operation cannot be canceled or reverted once submitted. For more information about managing clusters, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html">Amazon Redshift Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p> <p>If you want to shut down the cluster and retain it for future use, set <i>SkipFinalClusterSnapshot</i> to <code>false</code> and specify a name for <i>FinalClusterSnapshotIdentifier</i>. You can later restore this snapshot to resume using the cluster. If a final cluster snapshot is requested, the status of the cluster will be "final-snapshot" while the snapshot is being taken, then it's "deleting" once Amazon Redshift begins deleting the cluster. </p> <p> For more information about managing clusters, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html">Amazon Redshift Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
     fn delete_cluster(
         &self,
         input: &DeleteClusterMessage,
-    ) -> Result<DeleteClusterResult, DeleteClusterError>;
+    ) -> RusotoFuture<DeleteClusterResult, DeleteClusterError>;
 
     /// <p><p>Deletes a specified Amazon Redshift parameter group.</p> <note> <p>You cannot delete a parameter group if it is associated with a cluster.</p> </note></p>
     fn delete_cluster_parameter_group(
         &self,
         input: &DeleteClusterParameterGroupMessage,
-    ) -> Result<(), DeleteClusterParameterGroupError>;
+    ) -> RusotoFuture<(), DeleteClusterParameterGroupError>;
 
     /// <p>Deletes an Amazon Redshift security group.</p> <note> <p>You cannot delete a security group that is associated with any clusters. You cannot delete the default security group.</p> </note> <p> For information about managing security groups, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-security-groups.html">Amazon Redshift Cluster Security Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
     fn delete_cluster_security_group(
         &self,
         input: &DeleteClusterSecurityGroupMessage,
-    ) -> Result<(), DeleteClusterSecurityGroupError>;
+    ) -> RusotoFuture<(), DeleteClusterSecurityGroupError>;
 
     /// <p>Deletes the specified manual snapshot. The snapshot must be in the <code>available</code> state, with no other users authorized to access the snapshot. </p> <p>Unlike automated snapshots, manual snapshots are retained even after you delete your cluster. Amazon Redshift does not delete your manual snapshots. You must delete manual snapshot explicitly to avoid getting charged. If other accounts are authorized to access the snapshot, you must revoke all of the authorizations before you can delete the snapshot.</p>
     fn delete_cluster_snapshot(
         &self,
         input: &DeleteClusterSnapshotMessage,
-    ) -> Result<DeleteClusterSnapshotResult, DeleteClusterSnapshotError>;
+    ) -> RusotoFuture<DeleteClusterSnapshotResult, DeleteClusterSnapshotError>;
 
     /// <p>Deletes the specified cluster subnet group.</p>
     fn delete_cluster_subnet_group(
         &self,
         input: &DeleteClusterSubnetGroupMessage,
-    ) -> Result<(), DeleteClusterSubnetGroupError>;
+    ) -> RusotoFuture<(), DeleteClusterSubnetGroupError>;
 
     /// <p>Deletes an Amazon Redshift event notification subscription.</p>
     fn delete_event_subscription(
         &self,
         input: &DeleteEventSubscriptionMessage,
-    ) -> Result<(), DeleteEventSubscriptionError>;
+    ) -> RusotoFuture<(), DeleteEventSubscriptionError>;
 
     /// <p>Deletes the specified HSM client certificate.</p>
     fn delete_hsm_client_certificate(
         &self,
         input: &DeleteHsmClientCertificateMessage,
-    ) -> Result<(), DeleteHsmClientCertificateError>;
+    ) -> RusotoFuture<(), DeleteHsmClientCertificateError>;
 
     /// <p>Deletes the specified Amazon Redshift HSM configuration.</p>
     fn delete_hsm_configuration(
         &self,
         input: &DeleteHsmConfigurationMessage,
-    ) -> Result<(), DeleteHsmConfigurationError>;
+    ) -> RusotoFuture<(), DeleteHsmConfigurationError>;
 
     /// <p>Deletes the specified snapshot copy grant.</p>
     fn delete_snapshot_copy_grant(
         &self,
         input: &DeleteSnapshotCopyGrantMessage,
-    ) -> Result<(), DeleteSnapshotCopyGrantError>;
+    ) -> RusotoFuture<(), DeleteSnapshotCopyGrantError>;
 
     /// <p>Deletes a tag or tags from a resource. You must provide the ARN of the resource from which you want to delete the tag or tags.</p>
-    fn delete_tags(&self, input: &DeleteTagsMessage) -> Result<(), DeleteTagsError>;
+    fn delete_tags(&self, input: &DeleteTagsMessage) -> RusotoFuture<(), DeleteTagsError>;
 
     /// <p>Returns a list of Amazon Redshift parameter groups, including parameter groups you created and the default parameter group. For each parameter group, the response includes the parameter group name, description, and parameter group family name. You can optionally specify a name to retrieve the description of a specific parameter group.</p> <p> For more information about parameters and parameter groups, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-parameter-groups.html">Amazon Redshift Parameter Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p> <p>If you specify both tag keys and tag values in the same request, Amazon Redshift returns all parameter groups that match any combination of the specified keys and values. For example, if you have <code>owner</code> and <code>environment</code> for tag keys, and <code>admin</code> and <code>test</code> for tag values, all parameter groups that have any combination of those values are returned.</p> <p>If both tag keys and values are omitted from the request, parameter groups are returned regardless of whether they have tag keys or values associated with them.</p>
     fn describe_cluster_parameter_groups(
         &self,
         input: &DescribeClusterParameterGroupsMessage,
-    ) -> Result<ClusterParameterGroupsMessage, DescribeClusterParameterGroupsError>;
+    ) -> RusotoFuture<ClusterParameterGroupsMessage, DescribeClusterParameterGroupsError>;
 
     /// <p>Returns a detailed list of parameters contained within the specified Amazon Redshift parameter group. For each parameter the response includes information such as parameter name, description, data type, value, whether the parameter value is modifiable, and so on.</p> <p>You can specify <i>source</i> filter to retrieve parameters of only specific type. For example, to retrieve parameters that were modified by a user action such as from <a>ModifyClusterParameterGroup</a>, you can specify <i>source</i> equal to <i>user</i>.</p> <p> For more information about parameters and parameter groups, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-parameter-groups.html">Amazon Redshift Parameter Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
     fn describe_cluster_parameters(
         &self,
         input: &DescribeClusterParametersMessage,
-    ) -> Result<ClusterParameterGroupDetails, DescribeClusterParametersError>;
+    ) -> RusotoFuture<ClusterParameterGroupDetails, DescribeClusterParametersError>;
 
     /// <p>Returns information about Amazon Redshift security groups. If the name of a security group is specified, the response will contain only information about only that security group.</p> <p> For information about managing security groups, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-security-groups.html">Amazon Redshift Cluster Security Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p> <p>If you specify both tag keys and tag values in the same request, Amazon Redshift returns all security groups that match any combination of the specified keys and values. For example, if you have <code>owner</code> and <code>environment</code> for tag keys, and <code>admin</code> and <code>test</code> for tag values, all security groups that have any combination of those values are returned.</p> <p>If both tag keys and values are omitted from the request, security groups are returned regardless of whether they have tag keys or values associated with them.</p>
     fn describe_cluster_security_groups(
         &self,
         input: &DescribeClusterSecurityGroupsMessage,
-    ) -> Result<ClusterSecurityGroupMessage, DescribeClusterSecurityGroupsError>;
+    ) -> RusotoFuture<ClusterSecurityGroupMessage, DescribeClusterSecurityGroupsError>;
 
     /// <p>Returns one or more snapshot objects, which contain metadata about your cluster snapshots. By default, this operation returns information about all snapshots of all clusters that are owned by you AWS customer account. No information is returned for snapshots owned by inactive AWS customer accounts.</p> <p>If you specify both tag keys and tag values in the same request, Amazon Redshift returns all snapshots that match any combination of the specified keys and values. For example, if you have <code>owner</code> and <code>environment</code> for tag keys, and <code>admin</code> and <code>test</code> for tag values, all snapshots that have any combination of those values are returned. Only snapshots that you own are returned in the response; shared snapshots are not returned with the tag key and tag value request parameters.</p> <p>If both tag keys and values are omitted from the request, snapshots are returned regardless of whether they have tag keys or values associated with them.</p>
     fn describe_cluster_snapshots(
         &self,
         input: &DescribeClusterSnapshotsMessage,
-    ) -> Result<SnapshotMessage, DescribeClusterSnapshotsError>;
+    ) -> RusotoFuture<SnapshotMessage, DescribeClusterSnapshotsError>;
 
     /// <p>Returns one or more cluster subnet group objects, which contain metadata about your cluster subnet groups. By default, this operation returns information about all cluster subnet groups that are defined in you AWS account.</p> <p>If you specify both tag keys and tag values in the same request, Amazon Redshift returns all subnet groups that match any combination of the specified keys and values. For example, if you have <code>owner</code> and <code>environment</code> for tag keys, and <code>admin</code> and <code>test</code> for tag values, all subnet groups that have any combination of those values are returned.</p> <p>If both tag keys and values are omitted from the request, subnet groups are returned regardless of whether they have tag keys or values associated with them.</p>
     fn describe_cluster_subnet_groups(
         &self,
         input: &DescribeClusterSubnetGroupsMessage,
-    ) -> Result<ClusterSubnetGroupMessage, DescribeClusterSubnetGroupsError>;
+    ) -> RusotoFuture<ClusterSubnetGroupMessage, DescribeClusterSubnetGroupsError>;
 
     /// <p>Returns descriptions of the available Amazon Redshift cluster versions. You can call this operation even before creating any clusters to learn more about the Amazon Redshift versions. For more information about managing clusters, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html">Amazon Redshift Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
     fn describe_cluster_versions(
         &self,
         input: &DescribeClusterVersionsMessage,
-    ) -> Result<ClusterVersionsMessage, DescribeClusterVersionsError>;
+    ) -> RusotoFuture<ClusterVersionsMessage, DescribeClusterVersionsError>;
 
     /// <p>Returns properties of provisioned clusters including general cluster properties, cluster database properties, maintenance and backup properties, and security and access properties. This operation supports pagination. For more information about managing clusters, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html">Amazon Redshift Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p> <p>If you specify both tag keys and tag values in the same request, Amazon Redshift returns all clusters that match any combination of the specified keys and values. For example, if you have <code>owner</code> and <code>environment</code> for tag keys, and <code>admin</code> and <code>test</code> for tag values, all clusters that have any combination of those values are returned.</p> <p>If both tag keys and values are omitted from the request, clusters are returned regardless of whether they have tag keys or values associated with them.</p>
     fn describe_clusters(
         &self,
         input: &DescribeClustersMessage,
-    ) -> Result<ClustersMessage, DescribeClustersError>;
+    ) -> RusotoFuture<ClustersMessage, DescribeClustersError>;
 
     /// <p>Returns a list of parameter settings for the specified parameter group family.</p> <p> For more information about parameters and parameter groups, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-parameter-groups.html">Amazon Redshift Parameter Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
     fn describe_default_cluster_parameters(
         &self,
         input: &DescribeDefaultClusterParametersMessage,
-    ) -> Result<DescribeDefaultClusterParametersResult, DescribeDefaultClusterParametersError>;
+    ) -> RusotoFuture<DescribeDefaultClusterParametersResult, DescribeDefaultClusterParametersError>;
 
     /// <p>Displays a list of event categories for all event source types, or for a specified source type. For a list of the event categories and source types, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-event-notifications.html">Amazon Redshift Event Notifications</a>.</p>
     fn describe_event_categories(
         &self,
         input: &DescribeEventCategoriesMessage,
-    ) -> Result<EventCategoriesMessage, DescribeEventCategoriesError>;
+    ) -> RusotoFuture<EventCategoriesMessage, DescribeEventCategoriesError>;
 
     /// <p>Lists descriptions of all the Amazon Redshift event notification subscriptions for a customer account. If you specify a subscription name, lists the description for that subscription.</p> <p>If you specify both tag keys and tag values in the same request, Amazon Redshift returns all event notification subscriptions that match any combination of the specified keys and values. For example, if you have <code>owner</code> and <code>environment</code> for tag keys, and <code>admin</code> and <code>test</code> for tag values, all subscriptions that have any combination of those values are returned.</p> <p>If both tag keys and values are omitted from the request, subscriptions are returned regardless of whether they have tag keys or values associated with them.</p>
     fn describe_event_subscriptions(
         &self,
         input: &DescribeEventSubscriptionsMessage,
-    ) -> Result<EventSubscriptionsMessage, DescribeEventSubscriptionsError>;
+    ) -> RusotoFuture<EventSubscriptionsMessage, DescribeEventSubscriptionsError>;
 
     /// <p>Returns events related to clusters, security groups, snapshots, and parameter groups for the past 14 days. Events specific to a particular cluster, security group, snapshot or parameter group can be obtained by providing the name as a parameter. By default, the past hour of events are returned.</p>
     fn describe_events(
         &self,
         input: &DescribeEventsMessage,
-    ) -> Result<EventsMessage, DescribeEventsError>;
+    ) -> RusotoFuture<EventsMessage, DescribeEventsError>;
 
     /// <p>Returns information about the specified HSM client certificate. If no certificate ID is specified, returns information about all the HSM certificates owned by your AWS customer account.</p> <p>If you specify both tag keys and tag values in the same request, Amazon Redshift returns all HSM client certificates that match any combination of the specified keys and values. For example, if you have <code>owner</code> and <code>environment</code> for tag keys, and <code>admin</code> and <code>test</code> for tag values, all HSM client certificates that have any combination of those values are returned.</p> <p>If both tag keys and values are omitted from the request, HSM client certificates are returned regardless of whether they have tag keys or values associated with them.</p>
     fn describe_hsm_client_certificates(
         &self,
         input: &DescribeHsmClientCertificatesMessage,
-    ) -> Result<HsmClientCertificateMessage, DescribeHsmClientCertificatesError>;
+    ) -> RusotoFuture<HsmClientCertificateMessage, DescribeHsmClientCertificatesError>;
 
     /// <p>Returns information about the specified Amazon Redshift HSM configuration. If no configuration ID is specified, returns information about all the HSM configurations owned by your AWS customer account.</p> <p>If you specify both tag keys and tag values in the same request, Amazon Redshift returns all HSM connections that match any combination of the specified keys and values. For example, if you have <code>owner</code> and <code>environment</code> for tag keys, and <code>admin</code> and <code>test</code> for tag values, all HSM connections that have any combination of those values are returned.</p> <p>If both tag keys and values are omitted from the request, HSM connections are returned regardless of whether they have tag keys or values associated with them.</p>
     fn describe_hsm_configurations(
         &self,
         input: &DescribeHsmConfigurationsMessage,
-    ) -> Result<HsmConfigurationMessage, DescribeHsmConfigurationsError>;
+    ) -> RusotoFuture<HsmConfigurationMessage, DescribeHsmConfigurationsError>;
 
     /// <p>Describes whether information, such as queries and connection attempts, is being logged for the specified Amazon Redshift cluster.</p>
     fn describe_logging_status(
         &self,
         input: &DescribeLoggingStatusMessage,
-    ) -> Result<LoggingStatus, DescribeLoggingStatusError>;
+    ) -> RusotoFuture<LoggingStatus, DescribeLoggingStatusError>;
 
     /// <p>Returns a list of orderable cluster options. Before you create a new cluster you can use this operation to find what options are available, such as the EC2 Availability Zones (AZ) in the specific AWS region that you can specify, and the node types you can request. The node types differ by available storage, memory, CPU and price. With the cost involved you might want to obtain a list of cluster options in the specific region and specify values when creating a cluster. For more information about managing clusters, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html">Amazon Redshift Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
     fn describe_orderable_cluster_options(
         &self,
         input: &DescribeOrderableClusterOptionsMessage,
-    ) -> Result<OrderableClusterOptionsMessage, DescribeOrderableClusterOptionsError>;
+    ) -> RusotoFuture<OrderableClusterOptionsMessage, DescribeOrderableClusterOptionsError>;
 
     /// <p>Returns a list of the available reserved node offerings by Amazon Redshift with their descriptions including the node type, the fixed and recurring costs of reserving the node and duration the node will be reserved for you. These descriptions help you determine which reserve node offering you want to purchase. You then use the unique offering ID in you call to <a>PurchaseReservedNodeOffering</a> to reserve one or more nodes for your Amazon Redshift cluster. </p> <p> For more information about reserved node offerings, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/purchase-reserved-node-instance.html">Purchasing Reserved Nodes</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
     fn describe_reserved_node_offerings(
         &self,
         input: &DescribeReservedNodeOfferingsMessage,
-    ) -> Result<ReservedNodeOfferingsMessage, DescribeReservedNodeOfferingsError>;
+    ) -> RusotoFuture<ReservedNodeOfferingsMessage, DescribeReservedNodeOfferingsError>;
 
     /// <p>Returns the descriptions of the reserved nodes.</p>
     fn describe_reserved_nodes(
         &self,
         input: &DescribeReservedNodesMessage,
-    ) -> Result<ReservedNodesMessage, DescribeReservedNodesError>;
+    ) -> RusotoFuture<ReservedNodesMessage, DescribeReservedNodesError>;
 
     /// <p>Returns information about the last resize operation for the specified cluster. If no resize operation has ever been initiated for the specified cluster, a <code>HTTP 404</code> error is returned. If a resize operation was initiated and completed, the status of the resize remains as <code>SUCCEEDED</code> until the next resize. </p> <p>A resize operation can be requested using <a>ModifyCluster</a> and specifying a different number or type of nodes for the cluster. </p>
     fn describe_resize(
         &self,
         input: &DescribeResizeMessage,
-    ) -> Result<ResizeProgressMessage, DescribeResizeError>;
+    ) -> RusotoFuture<ResizeProgressMessage, DescribeResizeError>;
 
     /// <p>Returns a list of snapshot copy grants owned by the AWS account in the destination region.</p> <p> For more information about managing snapshot copy grants, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-db-encryption.html">Amazon Redshift Database Encryption</a> in the <i>Amazon Redshift Cluster Management Guide</i>. </p>
     fn describe_snapshot_copy_grants(
         &self,
         input: &DescribeSnapshotCopyGrantsMessage,
-    ) -> Result<SnapshotCopyGrantMessage, DescribeSnapshotCopyGrantsError>;
+    ) -> RusotoFuture<SnapshotCopyGrantMessage, DescribeSnapshotCopyGrantsError>;
 
     /// <p>Lists the status of one or more table restore requests made using the <a>RestoreTableFromClusterSnapshot</a> API action. If you don't specify a value for the <code>TableRestoreRequestId</code> parameter, then <code>DescribeTableRestoreStatus</code> returns the status of all table restore requests ordered by the date and time of the request in ascending order. Otherwise <code>DescribeTableRestoreStatus</code> returns the status of the table specified by <code>TableRestoreRequestId</code>.</p>
     fn describe_table_restore_status(
         &self,
         input: &DescribeTableRestoreStatusMessage,
-    ) -> Result<TableRestoreStatusMessage, DescribeTableRestoreStatusError>;
+    ) -> RusotoFuture<TableRestoreStatusMessage, DescribeTableRestoreStatusError>;
 
     /// <p>Returns a list of tags. You can return tags from a specific resource by specifying an ARN, or you can return all tags for a given type of resource, such as clusters, snapshots, and so on.</p> <p>The following are limitations for <code>DescribeTags</code>: </p> <ul> <li> <p>You cannot specify an ARN and a resource-type value together in the same request.</p> </li> <li> <p>You cannot use the <code>MaxRecords</code> and <code>Marker</code> parameters together with the ARN parameter.</p> </li> <li> <p>The <code>MaxRecords</code> parameter can be a range from 10 to 50 results to return in a request.</p> </li> </ul> <p>If you specify both tag keys and tag values in the same request, Amazon Redshift returns all resources that match any combination of the specified keys and values. For example, if you have <code>owner</code> and <code>environment</code> for tag keys, and <code>admin</code> and <code>test</code> for tag values, all resources that have any combination of those values are returned.</p> <p>If both tag keys and values are omitted from the request, resources are returned regardless of whether they have tag keys or values associated with them.</p>
     fn describe_tags(
         &self,
         input: &DescribeTagsMessage,
-    ) -> Result<TaggedResourceListMessage, DescribeTagsError>;
+    ) -> RusotoFuture<TaggedResourceListMessage, DescribeTagsError>;
 
     /// <p>Stops logging information, such as queries and connection attempts, for the specified Amazon Redshift cluster.</p>
     fn disable_logging(
         &self,
         input: &DisableLoggingMessage,
-    ) -> Result<LoggingStatus, DisableLoggingError>;
+    ) -> RusotoFuture<LoggingStatus, DisableLoggingError>;
 
     /// <p>Disables the automatic copying of snapshots from one region to another region for a specified cluster.</p> <p>If your cluster and its snapshots are encrypted using a customer master key (CMK) from AWS KMS, use <a>DeleteSnapshotCopyGrant</a> to delete the grant that grants Amazon Redshift permission to the CMK in the destination region. </p>
     fn disable_snapshot_copy(
         &self,
         input: &DisableSnapshotCopyMessage,
-    ) -> Result<DisableSnapshotCopyResult, DisableSnapshotCopyError>;
+    ) -> RusotoFuture<DisableSnapshotCopyResult, DisableSnapshotCopyError>;
 
     /// <p>Starts logging information, such as queries and connection attempts, for the specified Amazon Redshift cluster.</p>
     fn enable_logging(
         &self,
         input: &EnableLoggingMessage,
-    ) -> Result<LoggingStatus, EnableLoggingError>;
+    ) -> RusotoFuture<LoggingStatus, EnableLoggingError>;
 
     /// <p>Enables the automatic copy of snapshots from one region to another region for a specified cluster.</p>
     fn enable_snapshot_copy(
         &self,
         input: &EnableSnapshotCopyMessage,
-    ) -> Result<EnableSnapshotCopyResult, EnableSnapshotCopyError>;
+    ) -> RusotoFuture<EnableSnapshotCopyResult, EnableSnapshotCopyError>;
 
     /// <p>Returns a database user name and temporary password with temporary authorization to log on to an Amazon Redshift database. The action returns the database user name prefixed with <code>IAM:</code> if <code>AutoCreate</code> is <code>False</code> or <code>IAMA:</code> if <code>AutoCreate</code> is <code>True</code>. You can optionally specify one or more database user groups that the user will join at log on. By default, the temporary credentials expire in 900 seconds. You can optionally specify a duration between 900 seconds (15 minutes) and 3600 seconds (60 minutes). For more information, see <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/generating-user-credentials.html">Using IAM Authentication to Generate Database User Credentials</a> in the Amazon Redshift Cluster Management Guide.</p> <p>The AWS Identity and Access Management (IAM)user or role that executes GetClusterCredentials must have an IAM policy attached that allows access to all necessary actions and resources. For more information about permissions, see <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/redshift-iam-access-control-identity-based.html#redshift-policy-resources.getclustercredentials-resources">Resource Policies for GetClusterCredentials</a> in the Amazon Redshift Cluster Management Guide.</p> <p>If the <code>DbGroups</code> parameter is specified, the IAM policy must allow the <code>redshift:JoinGroup</code> action with access to the listed <code>dbgroups</code>. </p> <p>In addition, if the <code>AutoCreate</code> parameter is set to <code>True</code>, then the policy must include the <code>redshift:CreateClusterUser</code> privilege.</p> <p>If the <code>DbName</code> parameter is specified, the IAM policy must allow access to the resource <code>dbname</code> for the specified database name. </p>
     fn get_cluster_credentials(
         &self,
         input: &GetClusterCredentialsMessage,
-    ) -> Result<ClusterCredentials, GetClusterCredentialsError>;
+    ) -> RusotoFuture<ClusterCredentials, GetClusterCredentialsError>;
 
     /// <p>Modifies the settings for a cluster. For example, you can add another security or parameter group, update the preferred maintenance window, or change the master user password. Resetting a cluster password or modifying the security groups associated with a cluster do not need a reboot. However, modifying a parameter group requires a reboot for parameters to take effect. For more information about managing clusters, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html">Amazon Redshift Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p> <p>You can also change node type and the number of nodes to scale up or down the cluster. When resizing a cluster, you must specify both the number of nodes and the node type even if one of the parameters does not change.</p>
     fn modify_cluster(
         &self,
         input: &ModifyClusterMessage,
-    ) -> Result<ModifyClusterResult, ModifyClusterError>;
+    ) -> RusotoFuture<ModifyClusterResult, ModifyClusterError>;
 
     /// <p>Modifies the list of AWS Identity and Access Management (IAM) roles that can be used by the cluster to access other AWS services.</p> <p>A cluster can have up to 10 IAM roles associated at any time.</p>
     fn modify_cluster_iam_roles(
         &self,
         input: &ModifyClusterIamRolesMessage,
-    ) -> Result<ModifyClusterIamRolesResult, ModifyClusterIamRolesError>;
+    ) -> RusotoFuture<ModifyClusterIamRolesResult, ModifyClusterIamRolesError>;
 
     /// <p>Modifies the parameters of a parameter group.</p> <p> For more information about parameters and parameter groups, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-parameter-groups.html">Amazon Redshift Parameter Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
     fn modify_cluster_parameter_group(
         &self,
         input: &ModifyClusterParameterGroupMessage,
-    ) -> Result<ClusterParameterGroupNameMessage, ModifyClusterParameterGroupError>;
+    ) -> RusotoFuture<ClusterParameterGroupNameMessage, ModifyClusterParameterGroupError>;
 
     /// <p>Modifies a cluster subnet group to include the specified list of VPC subnets. The operation replaces the existing list of subnets with the new list of subnets.</p>
     fn modify_cluster_subnet_group(
         &self,
         input: &ModifyClusterSubnetGroupMessage,
-    ) -> Result<ModifyClusterSubnetGroupResult, ModifyClusterSubnetGroupError>;
+    ) -> RusotoFuture<ModifyClusterSubnetGroupResult, ModifyClusterSubnetGroupError>;
 
     /// <p>Modifies an existing Amazon Redshift event notification subscription.</p>
     fn modify_event_subscription(
         &self,
         input: &ModifyEventSubscriptionMessage,
-    ) -> Result<ModifyEventSubscriptionResult, ModifyEventSubscriptionError>;
+    ) -> RusotoFuture<ModifyEventSubscriptionResult, ModifyEventSubscriptionError>;
 
     /// <p>Modifies the number of days to retain automated snapshots in the destination region after they are copied from the source region.</p>
     fn modify_snapshot_copy_retention_period(
         &self,
         input: &ModifySnapshotCopyRetentionPeriodMessage,
-    ) -> Result<ModifySnapshotCopyRetentionPeriodResult, ModifySnapshotCopyRetentionPeriodError>;
+    ) -> RusotoFuture<ModifySnapshotCopyRetentionPeriodResult, ModifySnapshotCopyRetentionPeriodError>;
 
     /// <p>Allows you to purchase reserved nodes. Amazon Redshift offers a predefined set of reserved node offerings. You can purchase one or more of the offerings. You can call the <a>DescribeReservedNodeOfferings</a> API to obtain the available reserved node offerings. You can call this API by providing a specific reserved node offering and the number of nodes you want to reserve. </p> <p> For more information about reserved node offerings, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/purchase-reserved-node-instance.html">Purchasing Reserved Nodes</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
     fn purchase_reserved_node_offering(
         &self,
         input: &PurchaseReservedNodeOfferingMessage,
-    ) -> Result<PurchaseReservedNodeOfferingResult, PurchaseReservedNodeOfferingError>;
+    ) -> RusotoFuture<PurchaseReservedNodeOfferingResult, PurchaseReservedNodeOfferingError>;
 
     /// <p>Reboots a cluster. This action is taken as soon as possible. It results in a momentary outage to the cluster, during which the cluster status is set to <code>rebooting</code>. A cluster event is created when the reboot is completed. Any pending cluster modifications (see <a>ModifyCluster</a>) are applied at this reboot. For more information about managing clusters, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html">Amazon Redshift Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>. </p>
     fn reboot_cluster(
         &self,
         input: &RebootClusterMessage,
-    ) -> Result<RebootClusterResult, RebootClusterError>;
+    ) -> RusotoFuture<RebootClusterResult, RebootClusterError>;
 
     /// <p>Sets one or more parameters of the specified parameter group to their default values and sets the source values of the parameters to "engine-default". To reset the entire parameter group specify the <i>ResetAllParameters</i> parameter. For parameter changes to take effect you must reboot any associated clusters. </p>
     fn reset_cluster_parameter_group(
         &self,
         input: &ResetClusterParameterGroupMessage,
-    ) -> Result<ClusterParameterGroupNameMessage, ResetClusterParameterGroupError>;
+    ) -> RusotoFuture<ClusterParameterGroupNameMessage, ResetClusterParameterGroupError>;
 
     /// <p>Creates a new cluster from a snapshot. By default, Amazon Redshift creates the resulting cluster with the same configuration as the original cluster from which the snapshot was created, except that the new cluster is created with the default cluster security and parameter groups. After Amazon Redshift creates the cluster, you can use the <a>ModifyCluster</a> API to associate a different security group and different parameter group with the restored cluster. If you are using a DS node type, you can also choose to change to another DS node type of the same size during restore.</p> <p>If you restore a cluster into a VPC, you must provide a cluster subnet group where you want the cluster restored.</p> <p> For more information about working with snapshots, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-snapshots.html">Amazon Redshift Snapshots</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
     fn restore_from_cluster_snapshot(
         &self,
         input: &RestoreFromClusterSnapshotMessage,
-    ) -> Result<RestoreFromClusterSnapshotResult, RestoreFromClusterSnapshotError>;
+    ) -> RusotoFuture<RestoreFromClusterSnapshotResult, RestoreFromClusterSnapshotError>;
 
     /// <p>Creates a new table from a table in an Amazon Redshift cluster snapshot. You must create the new table within the Amazon Redshift cluster that the snapshot was taken from.</p> <p>You cannot use <code>RestoreTableFromClusterSnapshot</code> to restore a table with the same name as an existing table in an Amazon Redshift cluster. That is, you cannot overwrite an existing table in a cluster with a restored table. If you want to replace your original table with a new, restored table, then rename or drop your original table before you call <code>RestoreTableFromClusterSnapshot</code>. When you have renamed your original table, then you can pass the original name of the table as the <code>NewTableName</code> parameter value in the call to <code>RestoreTableFromClusterSnapshot</code>. This way, you can replace the original table with the table created from the snapshot.</p>
     fn restore_table_from_cluster_snapshot(
         &self,
         input: &RestoreTableFromClusterSnapshotMessage,
-    ) -> Result<RestoreTableFromClusterSnapshotResult, RestoreTableFromClusterSnapshotError>;
+    ) -> RusotoFuture<RestoreTableFromClusterSnapshotResult, RestoreTableFromClusterSnapshotError>;
 
     /// <p>Revokes an ingress rule in an Amazon Redshift security group for a previously authorized IP range or Amazon EC2 security group. To add an ingress rule, see <a>AuthorizeClusterSecurityGroupIngress</a>. For information about managing security groups, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-security-groups.html">Amazon Redshift Cluster Security Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>. </p>
     fn revoke_cluster_security_group_ingress(
         &self,
         input: &RevokeClusterSecurityGroupIngressMessage,
-    ) -> Result<RevokeClusterSecurityGroupIngressResult, RevokeClusterSecurityGroupIngressError>;
+    ) -> RusotoFuture<RevokeClusterSecurityGroupIngressResult, RevokeClusterSecurityGroupIngressError>;
 
     /// <p>Removes the ability of the specified AWS customer account to restore the specified snapshot. If the account is currently restoring the snapshot, the restore will run to completion.</p> <p> For more information about working with snapshots, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-snapshots.html">Amazon Redshift Snapshots</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
     fn revoke_snapshot_access(
         &self,
         input: &RevokeSnapshotAccessMessage,
-    ) -> Result<RevokeSnapshotAccessResult, RevokeSnapshotAccessError>;
+    ) -> RusotoFuture<RevokeSnapshotAccessResult, RevokeSnapshotAccessError>;
 
     /// <p>Rotates the encryption keys for a cluster.</p>
     fn rotate_encryption_key(
         &self,
         input: &RotateEncryptionKeyMessage,
-    ) -> Result<RotateEncryptionKeyResult, RotateEncryptionKeyError>;
+    ) -> RusotoFuture<RotateEncryptionKeyResult, RotateEncryptionKeyError>;
 }
 /// A client for the Amazon Redshift API.
-pub struct RedshiftClient<P, D>
+pub struct RedshiftClient<P = CredentialsProvider, D = RequestDispatcher>
 where
     P: ProvideAwsCredentials,
     D: DispatchSignedRequest,
 {
-    credentials_provider: P,
+    inner: ClientInner<P, D>,
     region: region::Region,
-    dispatcher: D,
+}
+
+impl RedshiftClient {
+    /// Creates a simple client backed by an implicit event loop.
+    ///
+    /// The client will use the default credentials provider and tls client.
+    ///
+    /// See the `rusoto_core::reactor` module for more details.
+    pub fn simple(region: region::Region) -> RedshiftClient {
+        RedshiftClient::new(
+            RequestDispatcher::default(),
+            CredentialsProvider::default(),
+            region,
+        )
+    }
 }
 
 impl<P, D> RedshiftClient<P, D>
@@ -17236,24 +17256,25 @@ where
 {
     pub fn new(request_dispatcher: D, credentials_provider: P, region: region::Region) -> Self {
         RedshiftClient {
-            credentials_provider: credentials_provider,
+            inner: ClientInner::new(credentials_provider, request_dispatcher),
             region: region,
-            dispatcher: request_dispatcher,
         }
     }
 }
 
 impl<P, D> Redshift for RedshiftClient<P, D>
 where
-    P: ProvideAwsCredentials,
-    D: DispatchSignedRequest,
+    P: ProvideAwsCredentials + 'static,
+    D: DispatchSignedRequest + 'static,
 {
     /// <p>Adds an inbound (ingress) rule to an Amazon Redshift security group. Depending on whether the application accessing your cluster is running on the Internet or an Amazon EC2 instance, you can authorize inbound access to either a Classless Interdomain Routing (CIDR)/Internet Protocol (IP) range or to an Amazon EC2 security group. You can add as many as 20 ingress rules to an Amazon Redshift security group.</p> <p>If you authorize access to an Amazon EC2 security group, specify <i>EC2SecurityGroupName</i> and <i>EC2SecurityGroupOwnerId</i>. The Amazon EC2 security group and Amazon Redshift cluster must be in the same AWS region. </p> <p>If you authorize access to a CIDR/IP address range, specify <i>CIDRIP</i>. For an overview of CIDR blocks, see the Wikipedia article on <a href="http://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing">Classless Inter-Domain Routing</a>. </p> <p>You must also associate the security group with a cluster so that clients running on these IP addresses or the EC2 instance are authorized to connect to the cluster. For information about managing security groups, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-security-groups.html">Working with Security Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
     fn authorize_cluster_security_group_ingress(
         &self,
         input: &AuthorizeClusterSecurityGroupIngressMessage,
-    ) -> Result<AuthorizeClusterSecurityGroupIngressResult, AuthorizeClusterSecurityGroupIngressError>
-    {
+    ) -> RusotoFuture<
+        AuthorizeClusterSecurityGroupIngressResult,
+        AuthorizeClusterSecurityGroupIngressError,
+    > {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
         let mut params = Params::new();
 
@@ -17262,19 +17283,23 @@ where
         AuthorizeClusterSecurityGroupIngressMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status != StatusCode::Ok {
+                return future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(AuthorizeClusterSecurityGroupIngressError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
+            }
 
-                if body.is_empty() {
+            future::Either::A(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
                     result = AuthorizeClusterSecurityGroupIngressResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        body.as_slice(),
+                        response.body.as_slice(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -17290,23 +17315,19 @@ where
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(AuthorizeClusterSecurityGroupIngressError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+            }))
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Authorizes the specified AWS customer account to restore the specified snapshot.</p> <p> For more information about working with snapshots, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-snapshots.html">Amazon Redshift Snapshots</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
     fn authorize_snapshot_access(
         &self,
         input: &AuthorizeSnapshotAccessMessage,
-    ) -> Result<AuthorizeSnapshotAccessResult, AuthorizeSnapshotAccessError> {
+    ) -> RusotoFuture<AuthorizeSnapshotAccessResult, AuthorizeSnapshotAccessError> {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
         let mut params = Params::new();
 
@@ -17315,19 +17336,23 @@ where
         AuthorizeSnapshotAccessMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status != StatusCode::Ok {
+                return future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(AuthorizeSnapshotAccessError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
+            }
 
-                if body.is_empty() {
+            future::Either::A(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
                     result = AuthorizeSnapshotAccessResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        body.as_slice(),
+                        response.body.as_slice(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -17341,23 +17366,19 @@ where
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(AuthorizeSnapshotAccessError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+            }))
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Copies the specified automated cluster snapshot to a new manual cluster snapshot. The source must be an automated snapshot and it must be in the available state.</p> <p>When you delete a cluster, Amazon Redshift deletes any automated snapshots of the cluster. Also, when the retention period of the snapshot expires, Amazon Redshift automatically deletes it. If you want to keep an automated snapshot for a longer period, you can make a manual copy of the snapshot. Manual snapshots are retained until you delete them.</p> <p> For more information about working with snapshots, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-snapshots.html">Amazon Redshift Snapshots</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
     fn copy_cluster_snapshot(
         &self,
         input: &CopyClusterSnapshotMessage,
-    ) -> Result<CopyClusterSnapshotResult, CopyClusterSnapshotError> {
+    ) -> RusotoFuture<CopyClusterSnapshotResult, CopyClusterSnapshotError> {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
         let mut params = Params::new();
 
@@ -17366,19 +17387,23 @@ where
         CopyClusterSnapshotMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status != StatusCode::Ok {
+                return future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(CopyClusterSnapshotError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
+            }
 
-                if body.is_empty() {
+            future::Either::A(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
                     result = CopyClusterSnapshotResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        body.as_slice(),
+                        response.body.as_slice(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -17392,23 +17417,19 @@ where
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CopyClusterSnapshotError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+            }))
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Creates a new cluster.</p> <p>To create the cluster in Virtual Private Cloud (VPC), you must provide a cluster subnet group name. The cluster subnet group identifies the subnets of your VPC that Amazon Redshift uses when creating the cluster. For more information about managing clusters, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html">Amazon Redshift Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
     fn create_cluster(
         &self,
         input: &CreateClusterMessage,
-    ) -> Result<CreateClusterResult, CreateClusterError> {
+    ) -> RusotoFuture<CreateClusterResult, CreateClusterError> {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
         let mut params = Params::new();
 
@@ -17417,19 +17438,23 @@ where
         CreateClusterMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status != StatusCode::Ok {
+                return future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(CreateClusterError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
+            }
 
-                if body.is_empty() {
+            future::Either::A(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
                     result = CreateClusterResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        body.as_slice(),
+                        response.body.as_slice(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -17443,23 +17468,19 @@ where
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreateClusterError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+            }))
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Creates an Amazon Redshift parameter group.</p> <p>Creating parameter groups is independent of creating clusters. You can associate a cluster with a parameter group when you create the cluster. You can also associate an existing cluster with a parameter group after the cluster is created by using <a>ModifyCluster</a>. </p> <p>Parameters in the parameter group define specific behavior that applies to the databases you create on the cluster. For more information about parameters and parameter groups, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-parameter-groups.html">Amazon Redshift Parameter Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
     fn create_cluster_parameter_group(
         &self,
         input: &CreateClusterParameterGroupMessage,
-    ) -> Result<CreateClusterParameterGroupResult, CreateClusterParameterGroupError> {
+    ) -> RusotoFuture<CreateClusterParameterGroupResult, CreateClusterParameterGroupError> {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
         let mut params = Params::new();
 
@@ -17468,19 +17489,23 @@ where
         CreateClusterParameterGroupMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status != StatusCode::Ok {
+                return future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(CreateClusterParameterGroupError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
+            }
 
-                if body.is_empty() {
+            future::Either::A(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
                     result = CreateClusterParameterGroupResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        body.as_slice(),
+                        response.body.as_slice(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -17494,23 +17519,19 @@ where
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreateClusterParameterGroupError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+            }))
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Creates a new Amazon Redshift security group. You use security groups to control access to non-VPC clusters.</p> <p> For information about managing security groups, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-security-groups.html">Amazon Redshift Cluster Security Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
     fn create_cluster_security_group(
         &self,
         input: &CreateClusterSecurityGroupMessage,
-    ) -> Result<CreateClusterSecurityGroupResult, CreateClusterSecurityGroupError> {
+    ) -> RusotoFuture<CreateClusterSecurityGroupResult, CreateClusterSecurityGroupError> {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
         let mut params = Params::new();
 
@@ -17519,19 +17540,23 @@ where
         CreateClusterSecurityGroupMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status != StatusCode::Ok {
+                return future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(CreateClusterSecurityGroupError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
+            }
 
-                if body.is_empty() {
+            future::Either::A(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
                     result = CreateClusterSecurityGroupResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        body.as_slice(),
+                        response.body.as_slice(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -17545,23 +17570,19 @@ where
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreateClusterSecurityGroupError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+            }))
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Creates a manual snapshot of the specified cluster. The cluster must be in the <code>available</code> state. </p> <p> For more information about working with snapshots, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-snapshots.html">Amazon Redshift Snapshots</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
     fn create_cluster_snapshot(
         &self,
         input: &CreateClusterSnapshotMessage,
-    ) -> Result<CreateClusterSnapshotResult, CreateClusterSnapshotError> {
+    ) -> RusotoFuture<CreateClusterSnapshotResult, CreateClusterSnapshotError> {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
         let mut params = Params::new();
 
@@ -17570,19 +17591,23 @@ where
         CreateClusterSnapshotMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status != StatusCode::Ok {
+                return future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(CreateClusterSnapshotError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
+            }
 
-                if body.is_empty() {
+            future::Either::A(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
                     result = CreateClusterSnapshotResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        body.as_slice(),
+                        response.body.as_slice(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -17596,23 +17621,19 @@ where
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreateClusterSnapshotError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+            }))
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Creates a new Amazon Redshift subnet group. You must provide a list of one or more subnets in your existing Amazon Virtual Private Cloud (Amazon VPC) when creating Amazon Redshift subnet group.</p> <p> For information about subnet groups, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-cluster-subnet-groups.html">Amazon Redshift Cluster Subnet Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
     fn create_cluster_subnet_group(
         &self,
         input: &CreateClusterSubnetGroupMessage,
-    ) -> Result<CreateClusterSubnetGroupResult, CreateClusterSubnetGroupError> {
+    ) -> RusotoFuture<CreateClusterSubnetGroupResult, CreateClusterSubnetGroupError> {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
         let mut params = Params::new();
 
@@ -17621,19 +17642,23 @@ where
         CreateClusterSubnetGroupMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status != StatusCode::Ok {
+                return future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(CreateClusterSubnetGroupError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
+            }
 
-                if body.is_empty() {
+            future::Either::A(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
                     result = CreateClusterSubnetGroupResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        body.as_slice(),
+                        response.body.as_slice(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -17647,23 +17672,19 @@ where
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreateClusterSubnetGroupError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+            }))
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Creates an Amazon Redshift event notification subscription. This action requires an ARN (Amazon Resource Name) of an Amazon SNS topic created by either the Amazon Redshift console, the Amazon SNS console, or the Amazon SNS API. To obtain an ARN with Amazon SNS, you must create a topic in Amazon SNS and subscribe to the topic. The ARN is displayed in the SNS console.</p> <p>You can specify the source type, and lists of Amazon Redshift source IDs, event categories, and event severities. Notifications will be sent for all events you want that match those criteria. For example, you can specify source type = cluster, source ID = my-cluster-1 and mycluster2, event categories = Availability, Backup, and severity = ERROR. The subscription will only send notifications for those ERROR events in the Availability and Backup categories for the specified clusters.</p> <p>If you specify both the source type and source IDs, such as source type = cluster and source identifier = my-cluster-1, notifications will be sent for all the cluster events for my-cluster-1. If you specify a source type but do not specify a source identifier, you will receive notice of the events for the objects of that type in your AWS account. If you do not specify either the SourceType nor the SourceIdentifier, you will be notified of events generated from all Amazon Redshift sources belonging to your AWS account. You must specify a source type if you specify a source ID.</p>
     fn create_event_subscription(
         &self,
         input: &CreateEventSubscriptionMessage,
-    ) -> Result<CreateEventSubscriptionResult, CreateEventSubscriptionError> {
+    ) -> RusotoFuture<CreateEventSubscriptionResult, CreateEventSubscriptionError> {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
         let mut params = Params::new();
 
@@ -17672,19 +17693,23 @@ where
         CreateEventSubscriptionMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status != StatusCode::Ok {
+                return future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(CreateEventSubscriptionError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
+            }
 
-                if body.is_empty() {
+            future::Either::A(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
                     result = CreateEventSubscriptionResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        body.as_slice(),
+                        response.body.as_slice(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -17698,23 +17723,19 @@ where
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreateEventSubscriptionError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+            }))
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Creates an HSM client certificate that an Amazon Redshift cluster will use to connect to the client's HSM in order to store and retrieve the keys used to encrypt the cluster databases.</p> <p>The command returns a public key, which you must store in the HSM. In addition to creating the HSM certificate, you must create an Amazon Redshift HSM configuration that provides a cluster the information needed to store and use encryption keys in the HSM. For more information, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-HSM.html">Hardware Security Modules</a> in the Amazon Redshift Cluster Management Guide.</p>
     fn create_hsm_client_certificate(
         &self,
         input: &CreateHsmClientCertificateMessage,
-    ) -> Result<CreateHsmClientCertificateResult, CreateHsmClientCertificateError> {
+    ) -> RusotoFuture<CreateHsmClientCertificateResult, CreateHsmClientCertificateError> {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
         let mut params = Params::new();
 
@@ -17723,19 +17744,23 @@ where
         CreateHsmClientCertificateMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status != StatusCode::Ok {
+                return future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(CreateHsmClientCertificateError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
+            }
 
-                if body.is_empty() {
+            future::Either::A(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
                     result = CreateHsmClientCertificateResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        body.as_slice(),
+                        response.body.as_slice(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -17749,23 +17774,19 @@ where
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreateHsmClientCertificateError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+            }))
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Creates an HSM configuration that contains the information required by an Amazon Redshift cluster to store and use database encryption keys in a Hardware Security Module (HSM). After creating the HSM configuration, you can specify it as a parameter when creating a cluster. The cluster will then store its encryption keys in the HSM.</p> <p>In addition to creating an HSM configuration, you must also create an HSM client certificate. For more information, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-HSM.html">Hardware Security Modules</a> in the Amazon Redshift Cluster Management Guide.</p>
     fn create_hsm_configuration(
         &self,
         input: &CreateHsmConfigurationMessage,
-    ) -> Result<CreateHsmConfigurationResult, CreateHsmConfigurationError> {
+    ) -> RusotoFuture<CreateHsmConfigurationResult, CreateHsmConfigurationError> {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
         let mut params = Params::new();
 
@@ -17774,19 +17795,23 @@ where
         CreateHsmConfigurationMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status != StatusCode::Ok {
+                return future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(CreateHsmConfigurationError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
+            }
 
-                if body.is_empty() {
+            future::Either::A(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
                     result = CreateHsmConfigurationResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        body.as_slice(),
+                        response.body.as_slice(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -17800,23 +17825,19 @@ where
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreateHsmConfigurationError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+            }))
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Creates a snapshot copy grant that permits Amazon Redshift to use a customer master key (CMK) from AWS Key Management Service (AWS KMS) to encrypt copied snapshots in a destination region.</p> <p> For more information about managing snapshot copy grants, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-db-encryption.html">Amazon Redshift Database Encryption</a> in the <i>Amazon Redshift Cluster Management Guide</i>. </p>
     fn create_snapshot_copy_grant(
         &self,
         input: &CreateSnapshotCopyGrantMessage,
-    ) -> Result<CreateSnapshotCopyGrantResult, CreateSnapshotCopyGrantError> {
+    ) -> RusotoFuture<CreateSnapshotCopyGrantResult, CreateSnapshotCopyGrantError> {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
         let mut params = Params::new();
 
@@ -17825,19 +17846,23 @@ where
         CreateSnapshotCopyGrantMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status != StatusCode::Ok {
+                return future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(CreateSnapshotCopyGrantError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
+            }
 
-                if body.is_empty() {
+            future::Either::A(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
                     result = CreateSnapshotCopyGrantResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        body.as_slice(),
+                        response.body.as_slice(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -17851,20 +17876,16 @@ where
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreateSnapshotCopyGrantError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+            }))
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Adds one or more tags to a specified resource.</p> <p>A resource can have up to 10 tags. If you try to create more than 10 tags for a resource, you will receive an error and the attempt will fail.</p> <p>If you specify a key that already exists for the resource, the value for that key will be updated with the new value.</p>
-    fn create_tags(&self, input: &CreateTagsMessage) -> Result<(), CreateTagsError> {
+    fn create_tags(&self, input: &CreateTagsMessage) -> RusotoFuture<(), CreateTagsError> {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
         let mut params = Params::new();
 
@@ -17873,28 +17894,26 @@ where
         CreateTagsMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
-                Ok(result)
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status != StatusCode::Ok {
+                return future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(CreateTagsError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreateTagsError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+
+            future::Either::A(future::ok(::std::mem::drop(response)))
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Deletes a previously provisioned cluster. A successful response from the web service indicates that the request was received correctly. Use <a>DescribeClusters</a> to monitor the status of the deletion. The delete operation cannot be canceled or reverted once submitted. For more information about managing clusters, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html">Amazon Redshift Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p> <p>If you want to shut down the cluster and retain it for future use, set <i>SkipFinalClusterSnapshot</i> to <code>false</code> and specify a name for <i>FinalClusterSnapshotIdentifier</i>. You can later restore this snapshot to resume using the cluster. If a final cluster snapshot is requested, the status of the cluster will be "final-snapshot" while the snapshot is being taken, then it's "deleting" once Amazon Redshift begins deleting the cluster. </p> <p> For more information about managing clusters, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html">Amazon Redshift Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
     fn delete_cluster(
         &self,
         input: &DeleteClusterMessage,
-    ) -> Result<DeleteClusterResult, DeleteClusterError> {
+    ) -> RusotoFuture<DeleteClusterResult, DeleteClusterError> {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
         let mut params = Params::new();
 
@@ -17903,19 +17922,23 @@ where
         DeleteClusterMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status != StatusCode::Ok {
+                return future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DeleteClusterError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
+            }
 
-                if body.is_empty() {
+            future::Either::A(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
                     result = DeleteClusterResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        body.as_slice(),
+                        response.body.as_slice(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -17929,23 +17952,19 @@ where
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteClusterError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+            }))
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p><p>Deletes a specified Amazon Redshift parameter group.</p> <note> <p>You cannot delete a parameter group if it is associated with a cluster.</p> </note></p>
     fn delete_cluster_parameter_group(
         &self,
         input: &DeleteClusterParameterGroupMessage,
-    ) -> Result<(), DeleteClusterParameterGroupError> {
+    ) -> RusotoFuture<(), DeleteClusterParameterGroupError> {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
         let mut params = Params::new();
 
@@ -17954,28 +17973,26 @@ where
         DeleteClusterParameterGroupMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
-                Ok(result)
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status != StatusCode::Ok {
+                return future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DeleteClusterParameterGroupError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteClusterParameterGroupError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+
+            future::Either::A(future::ok(::std::mem::drop(response)))
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Deletes an Amazon Redshift security group.</p> <note> <p>You cannot delete a security group that is associated with any clusters. You cannot delete the default security group.</p> </note> <p> For information about managing security groups, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-security-groups.html">Amazon Redshift Cluster Security Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
     fn delete_cluster_security_group(
         &self,
         input: &DeleteClusterSecurityGroupMessage,
-    ) -> Result<(), DeleteClusterSecurityGroupError> {
+    ) -> RusotoFuture<(), DeleteClusterSecurityGroupError> {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
         let mut params = Params::new();
 
@@ -17984,28 +18001,26 @@ where
         DeleteClusterSecurityGroupMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
-                Ok(result)
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status != StatusCode::Ok {
+                return future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DeleteClusterSecurityGroupError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteClusterSecurityGroupError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+
+            future::Either::A(future::ok(::std::mem::drop(response)))
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Deletes the specified manual snapshot. The snapshot must be in the <code>available</code> state, with no other users authorized to access the snapshot. </p> <p>Unlike automated snapshots, manual snapshots are retained even after you delete your cluster. Amazon Redshift does not delete your manual snapshots. You must delete manual snapshot explicitly to avoid getting charged. If other accounts are authorized to access the snapshot, you must revoke all of the authorizations before you can delete the snapshot.</p>
     fn delete_cluster_snapshot(
         &self,
         input: &DeleteClusterSnapshotMessage,
-    ) -> Result<DeleteClusterSnapshotResult, DeleteClusterSnapshotError> {
+    ) -> RusotoFuture<DeleteClusterSnapshotResult, DeleteClusterSnapshotError> {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
         let mut params = Params::new();
 
@@ -18014,19 +18029,23 @@ where
         DeleteClusterSnapshotMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status != StatusCode::Ok {
+                return future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DeleteClusterSnapshotError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
+            }
 
-                if body.is_empty() {
+            future::Either::A(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
                     result = DeleteClusterSnapshotResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        body.as_slice(),
+                        response.body.as_slice(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -18040,23 +18059,19 @@ where
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteClusterSnapshotError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+            }))
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Deletes the specified cluster subnet group.</p>
     fn delete_cluster_subnet_group(
         &self,
         input: &DeleteClusterSubnetGroupMessage,
-    ) -> Result<(), DeleteClusterSubnetGroupError> {
+    ) -> RusotoFuture<(), DeleteClusterSubnetGroupError> {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
         let mut params = Params::new();
 
@@ -18065,28 +18080,26 @@ where
         DeleteClusterSubnetGroupMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
-                Ok(result)
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status != StatusCode::Ok {
+                return future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DeleteClusterSubnetGroupError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteClusterSubnetGroupError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+
+            future::Either::A(future::ok(::std::mem::drop(response)))
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Deletes an Amazon Redshift event notification subscription.</p>
     fn delete_event_subscription(
         &self,
         input: &DeleteEventSubscriptionMessage,
-    ) -> Result<(), DeleteEventSubscriptionError> {
+    ) -> RusotoFuture<(), DeleteEventSubscriptionError> {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
         let mut params = Params::new();
 
@@ -18095,28 +18108,26 @@ where
         DeleteEventSubscriptionMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
-                Ok(result)
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status != StatusCode::Ok {
+                return future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DeleteEventSubscriptionError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteEventSubscriptionError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+
+            future::Either::A(future::ok(::std::mem::drop(response)))
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Deletes the specified HSM client certificate.</p>
     fn delete_hsm_client_certificate(
         &self,
         input: &DeleteHsmClientCertificateMessage,
-    ) -> Result<(), DeleteHsmClientCertificateError> {
+    ) -> RusotoFuture<(), DeleteHsmClientCertificateError> {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
         let mut params = Params::new();
 
@@ -18125,28 +18136,26 @@ where
         DeleteHsmClientCertificateMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
-                Ok(result)
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status != StatusCode::Ok {
+                return future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DeleteHsmClientCertificateError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteHsmClientCertificateError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+
+            future::Either::A(future::ok(::std::mem::drop(response)))
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Deletes the specified Amazon Redshift HSM configuration.</p>
     fn delete_hsm_configuration(
         &self,
         input: &DeleteHsmConfigurationMessage,
-    ) -> Result<(), DeleteHsmConfigurationError> {
+    ) -> RusotoFuture<(), DeleteHsmConfigurationError> {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
         let mut params = Params::new();
 
@@ -18155,28 +18164,26 @@ where
         DeleteHsmConfigurationMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
-                Ok(result)
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status != StatusCode::Ok {
+                return future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DeleteHsmConfigurationError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteHsmConfigurationError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+
+            future::Either::A(future::ok(::std::mem::drop(response)))
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Deletes the specified snapshot copy grant.</p>
     fn delete_snapshot_copy_grant(
         &self,
         input: &DeleteSnapshotCopyGrantMessage,
-    ) -> Result<(), DeleteSnapshotCopyGrantError> {
+    ) -> RusotoFuture<(), DeleteSnapshotCopyGrantError> {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
         let mut params = Params::new();
 
@@ -18185,25 +18192,23 @@ where
         DeleteSnapshotCopyGrantMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
-                Ok(result)
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status != StatusCode::Ok {
+                return future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DeleteSnapshotCopyGrantError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteSnapshotCopyGrantError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+
+            future::Either::A(future::ok(::std::mem::drop(response)))
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Deletes a tag or tags from a resource. You must provide the ARN of the resource from which you want to delete the tag or tags.</p>
-    fn delete_tags(&self, input: &DeleteTagsMessage) -> Result<(), DeleteTagsError> {
+    fn delete_tags(&self, input: &DeleteTagsMessage) -> RusotoFuture<(), DeleteTagsError> {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
         let mut params = Params::new();
 
@@ -18212,28 +18217,26 @@ where
         DeleteTagsMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
-                Ok(result)
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status != StatusCode::Ok {
+                return future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DeleteTagsError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteTagsError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+
+            future::Either::A(future::ok(::std::mem::drop(response)))
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Returns a list of Amazon Redshift parameter groups, including parameter groups you created and the default parameter group. For each parameter group, the response includes the parameter group name, description, and parameter group family name. You can optionally specify a name to retrieve the description of a specific parameter group.</p> <p> For more information about parameters and parameter groups, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-parameter-groups.html">Amazon Redshift Parameter Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p> <p>If you specify both tag keys and tag values in the same request, Amazon Redshift returns all parameter groups that match any combination of the specified keys and values. For example, if you have <code>owner</code> and <code>environment</code> for tag keys, and <code>admin</code> and <code>test</code> for tag values, all parameter groups that have any combination of those values are returned.</p> <p>If both tag keys and values are omitted from the request, parameter groups are returned regardless of whether they have tag keys or values associated with them.</p>
     fn describe_cluster_parameter_groups(
         &self,
         input: &DescribeClusterParameterGroupsMessage,
-    ) -> Result<ClusterParameterGroupsMessage, DescribeClusterParameterGroupsError> {
+    ) -> RusotoFuture<ClusterParameterGroupsMessage, DescribeClusterParameterGroupsError> {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
         let mut params = Params::new();
 
@@ -18242,19 +18245,23 @@ where
         DescribeClusterParameterGroupsMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status != StatusCode::Ok {
+                return future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeClusterParameterGroupsError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
+            }
 
-                if body.is_empty() {
+            future::Either::A(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
                     result = ClusterParameterGroupsMessage::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        body.as_slice(),
+                        response.body.as_slice(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -18268,23 +18275,19 @@ where
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeClusterParameterGroupsError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+            }))
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Returns a detailed list of parameters contained within the specified Amazon Redshift parameter group. For each parameter the response includes information such as parameter name, description, data type, value, whether the parameter value is modifiable, and so on.</p> <p>You can specify <i>source</i> filter to retrieve parameters of only specific type. For example, to retrieve parameters that were modified by a user action such as from <a>ModifyClusterParameterGroup</a>, you can specify <i>source</i> equal to <i>user</i>.</p> <p> For more information about parameters and parameter groups, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-parameter-groups.html">Amazon Redshift Parameter Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
     fn describe_cluster_parameters(
         &self,
         input: &DescribeClusterParametersMessage,
-    ) -> Result<ClusterParameterGroupDetails, DescribeClusterParametersError> {
+    ) -> RusotoFuture<ClusterParameterGroupDetails, DescribeClusterParametersError> {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
         let mut params = Params::new();
 
@@ -18293,19 +18296,23 @@ where
         DescribeClusterParametersMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status != StatusCode::Ok {
+                return future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeClusterParametersError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
+            }
 
-                if body.is_empty() {
+            future::Either::A(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
                     result = ClusterParameterGroupDetails::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        body.as_slice(),
+                        response.body.as_slice(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -18319,23 +18326,19 @@ where
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeClusterParametersError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+            }))
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Returns information about Amazon Redshift security groups. If the name of a security group is specified, the response will contain only information about only that security group.</p> <p> For information about managing security groups, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-security-groups.html">Amazon Redshift Cluster Security Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p> <p>If you specify both tag keys and tag values in the same request, Amazon Redshift returns all security groups that match any combination of the specified keys and values. For example, if you have <code>owner</code> and <code>environment</code> for tag keys, and <code>admin</code> and <code>test</code> for tag values, all security groups that have any combination of those values are returned.</p> <p>If both tag keys and values are omitted from the request, security groups are returned regardless of whether they have tag keys or values associated with them.</p>
     fn describe_cluster_security_groups(
         &self,
         input: &DescribeClusterSecurityGroupsMessage,
-    ) -> Result<ClusterSecurityGroupMessage, DescribeClusterSecurityGroupsError> {
+    ) -> RusotoFuture<ClusterSecurityGroupMessage, DescribeClusterSecurityGroupsError> {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
         let mut params = Params::new();
 
@@ -18344,19 +18347,23 @@ where
         DescribeClusterSecurityGroupsMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status != StatusCode::Ok {
+                return future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeClusterSecurityGroupsError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
+            }
 
-                if body.is_empty() {
+            future::Either::A(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
                     result = ClusterSecurityGroupMessage::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        body.as_slice(),
+                        response.body.as_slice(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -18370,23 +18377,19 @@ where
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeClusterSecurityGroupsError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+            }))
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Returns one or more snapshot objects, which contain metadata about your cluster snapshots. By default, this operation returns information about all snapshots of all clusters that are owned by you AWS customer account. No information is returned for snapshots owned by inactive AWS customer accounts.</p> <p>If you specify both tag keys and tag values in the same request, Amazon Redshift returns all snapshots that match any combination of the specified keys and values. For example, if you have <code>owner</code> and <code>environment</code> for tag keys, and <code>admin</code> and <code>test</code> for tag values, all snapshots that have any combination of those values are returned. Only snapshots that you own are returned in the response; shared snapshots are not returned with the tag key and tag value request parameters.</p> <p>If both tag keys and values are omitted from the request, snapshots are returned regardless of whether they have tag keys or values associated with them.</p>
     fn describe_cluster_snapshots(
         &self,
         input: &DescribeClusterSnapshotsMessage,
-    ) -> Result<SnapshotMessage, DescribeClusterSnapshotsError> {
+    ) -> RusotoFuture<SnapshotMessage, DescribeClusterSnapshotsError> {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
         let mut params = Params::new();
 
@@ -18395,19 +18398,23 @@ where
         DescribeClusterSnapshotsMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status != StatusCode::Ok {
+                return future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeClusterSnapshotsError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
+            }
 
-                if body.is_empty() {
+            future::Either::A(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
                     result = SnapshotMessage::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        body.as_slice(),
+                        response.body.as_slice(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -18421,23 +18428,19 @@ where
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeClusterSnapshotsError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+            }))
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Returns one or more cluster subnet group objects, which contain metadata about your cluster subnet groups. By default, this operation returns information about all cluster subnet groups that are defined in you AWS account.</p> <p>If you specify both tag keys and tag values in the same request, Amazon Redshift returns all subnet groups that match any combination of the specified keys and values. For example, if you have <code>owner</code> and <code>environment</code> for tag keys, and <code>admin</code> and <code>test</code> for tag values, all subnet groups that have any combination of those values are returned.</p> <p>If both tag keys and values are omitted from the request, subnet groups are returned regardless of whether they have tag keys or values associated with them.</p>
     fn describe_cluster_subnet_groups(
         &self,
         input: &DescribeClusterSubnetGroupsMessage,
-    ) -> Result<ClusterSubnetGroupMessage, DescribeClusterSubnetGroupsError> {
+    ) -> RusotoFuture<ClusterSubnetGroupMessage, DescribeClusterSubnetGroupsError> {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
         let mut params = Params::new();
 
@@ -18446,19 +18449,23 @@ where
         DescribeClusterSubnetGroupsMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status != StatusCode::Ok {
+                return future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeClusterSubnetGroupsError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
+            }
 
-                if body.is_empty() {
+            future::Either::A(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
                     result = ClusterSubnetGroupMessage::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        body.as_slice(),
+                        response.body.as_slice(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -18472,23 +18479,19 @@ where
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeClusterSubnetGroupsError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+            }))
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Returns descriptions of the available Amazon Redshift cluster versions. You can call this operation even before creating any clusters to learn more about the Amazon Redshift versions. For more information about managing clusters, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html">Amazon Redshift Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
     fn describe_cluster_versions(
         &self,
         input: &DescribeClusterVersionsMessage,
-    ) -> Result<ClusterVersionsMessage, DescribeClusterVersionsError> {
+    ) -> RusotoFuture<ClusterVersionsMessage, DescribeClusterVersionsError> {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
         let mut params = Params::new();
 
@@ -18497,19 +18500,23 @@ where
         DescribeClusterVersionsMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status != StatusCode::Ok {
+                return future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeClusterVersionsError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
+            }
 
-                if body.is_empty() {
+            future::Either::A(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
                     result = ClusterVersionsMessage::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        body.as_slice(),
+                        response.body.as_slice(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -18523,23 +18530,19 @@ where
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeClusterVersionsError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+            }))
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Returns properties of provisioned clusters including general cluster properties, cluster database properties, maintenance and backup properties, and security and access properties. This operation supports pagination. For more information about managing clusters, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html">Amazon Redshift Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p> <p>If you specify both tag keys and tag values in the same request, Amazon Redshift returns all clusters that match any combination of the specified keys and values. For example, if you have <code>owner</code> and <code>environment</code> for tag keys, and <code>admin</code> and <code>test</code> for tag values, all clusters that have any combination of those values are returned.</p> <p>If both tag keys and values are omitted from the request, clusters are returned regardless of whether they have tag keys or values associated with them.</p>
     fn describe_clusters(
         &self,
         input: &DescribeClustersMessage,
-    ) -> Result<ClustersMessage, DescribeClustersError> {
+    ) -> RusotoFuture<ClustersMessage, DescribeClustersError> {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
         let mut params = Params::new();
 
@@ -18548,19 +18551,23 @@ where
         DescribeClustersMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status != StatusCode::Ok {
+                return future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeClustersError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
+            }
 
-                if body.is_empty() {
+            future::Either::A(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
                     result = ClustersMessage::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        body.as_slice(),
+                        response.body.as_slice(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -18574,23 +18581,20 @@ where
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeClustersError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+            }))
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Returns a list of parameter settings for the specified parameter group family.</p> <p> For more information about parameters and parameter groups, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-parameter-groups.html">Amazon Redshift Parameter Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
     fn describe_default_cluster_parameters(
         &self,
         input: &DescribeDefaultClusterParametersMessage,
-    ) -> Result<DescribeDefaultClusterParametersResult, DescribeDefaultClusterParametersError> {
+    ) -> RusotoFuture<DescribeDefaultClusterParametersResult, DescribeDefaultClusterParametersError>
+    {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
         let mut params = Params::new();
 
@@ -18599,19 +18603,23 @@ where
         DescribeDefaultClusterParametersMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status != StatusCode::Ok {
+                return future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeDefaultClusterParametersError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
+            }
 
-                if body.is_empty() {
+            future::Either::A(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
                     result = DescribeDefaultClusterParametersResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        body.as_slice(),
+                        response.body.as_slice(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -18627,23 +18635,19 @@ where
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeDefaultClusterParametersError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+            }))
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Displays a list of event categories for all event source types, or for a specified source type. For a list of the event categories and source types, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-event-notifications.html">Amazon Redshift Event Notifications</a>.</p>
     fn describe_event_categories(
         &self,
         input: &DescribeEventCategoriesMessage,
-    ) -> Result<EventCategoriesMessage, DescribeEventCategoriesError> {
+    ) -> RusotoFuture<EventCategoriesMessage, DescribeEventCategoriesError> {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
         let mut params = Params::new();
 
@@ -18652,19 +18656,23 @@ where
         DescribeEventCategoriesMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status != StatusCode::Ok {
+                return future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeEventCategoriesError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
+            }
 
-                if body.is_empty() {
+            future::Either::A(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
                     result = EventCategoriesMessage::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        body.as_slice(),
+                        response.body.as_slice(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -18678,23 +18686,19 @@ where
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeEventCategoriesError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+            }))
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Lists descriptions of all the Amazon Redshift event notification subscriptions for a customer account. If you specify a subscription name, lists the description for that subscription.</p> <p>If you specify both tag keys and tag values in the same request, Amazon Redshift returns all event notification subscriptions that match any combination of the specified keys and values. For example, if you have <code>owner</code> and <code>environment</code> for tag keys, and <code>admin</code> and <code>test</code> for tag values, all subscriptions that have any combination of those values are returned.</p> <p>If both tag keys and values are omitted from the request, subscriptions are returned regardless of whether they have tag keys or values associated with them.</p>
     fn describe_event_subscriptions(
         &self,
         input: &DescribeEventSubscriptionsMessage,
-    ) -> Result<EventSubscriptionsMessage, DescribeEventSubscriptionsError> {
+    ) -> RusotoFuture<EventSubscriptionsMessage, DescribeEventSubscriptionsError> {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
         let mut params = Params::new();
 
@@ -18703,19 +18707,23 @@ where
         DescribeEventSubscriptionsMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status != StatusCode::Ok {
+                return future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeEventSubscriptionsError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
+            }
 
-                if body.is_empty() {
+            future::Either::A(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
                     result = EventSubscriptionsMessage::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        body.as_slice(),
+                        response.body.as_slice(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -18729,23 +18737,19 @@ where
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeEventSubscriptionsError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+            }))
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Returns events related to clusters, security groups, snapshots, and parameter groups for the past 14 days. Events specific to a particular cluster, security group, snapshot or parameter group can be obtained by providing the name as a parameter. By default, the past hour of events are returned.</p>
     fn describe_events(
         &self,
         input: &DescribeEventsMessage,
-    ) -> Result<EventsMessage, DescribeEventsError> {
+    ) -> RusotoFuture<EventsMessage, DescribeEventsError> {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
         let mut params = Params::new();
 
@@ -18754,19 +18758,23 @@ where
         DescribeEventsMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status != StatusCode::Ok {
+                return future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeEventsError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
+            }
 
-                if body.is_empty() {
+            future::Either::A(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
                     result = EventsMessage::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        body.as_slice(),
+                        response.body.as_slice(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -18780,23 +18788,19 @@ where
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeEventsError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+            }))
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Returns information about the specified HSM client certificate. If no certificate ID is specified, returns information about all the HSM certificates owned by your AWS customer account.</p> <p>If you specify both tag keys and tag values in the same request, Amazon Redshift returns all HSM client certificates that match any combination of the specified keys and values. For example, if you have <code>owner</code> and <code>environment</code> for tag keys, and <code>admin</code> and <code>test</code> for tag values, all HSM client certificates that have any combination of those values are returned.</p> <p>If both tag keys and values are omitted from the request, HSM client certificates are returned regardless of whether they have tag keys or values associated with them.</p>
     fn describe_hsm_client_certificates(
         &self,
         input: &DescribeHsmClientCertificatesMessage,
-    ) -> Result<HsmClientCertificateMessage, DescribeHsmClientCertificatesError> {
+    ) -> RusotoFuture<HsmClientCertificateMessage, DescribeHsmClientCertificatesError> {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
         let mut params = Params::new();
 
@@ -18805,19 +18809,23 @@ where
         DescribeHsmClientCertificatesMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status != StatusCode::Ok {
+                return future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeHsmClientCertificatesError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
+            }
 
-                if body.is_empty() {
+            future::Either::A(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
                     result = HsmClientCertificateMessage::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        body.as_slice(),
+                        response.body.as_slice(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -18831,23 +18839,19 @@ where
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeHsmClientCertificatesError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+            }))
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Returns information about the specified Amazon Redshift HSM configuration. If no configuration ID is specified, returns information about all the HSM configurations owned by your AWS customer account.</p> <p>If you specify both tag keys and tag values in the same request, Amazon Redshift returns all HSM connections that match any combination of the specified keys and values. For example, if you have <code>owner</code> and <code>environment</code> for tag keys, and <code>admin</code> and <code>test</code> for tag values, all HSM connections that have any combination of those values are returned.</p> <p>If both tag keys and values are omitted from the request, HSM connections are returned regardless of whether they have tag keys or values associated with them.</p>
     fn describe_hsm_configurations(
         &self,
         input: &DescribeHsmConfigurationsMessage,
-    ) -> Result<HsmConfigurationMessage, DescribeHsmConfigurationsError> {
+    ) -> RusotoFuture<HsmConfigurationMessage, DescribeHsmConfigurationsError> {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
         let mut params = Params::new();
 
@@ -18856,19 +18860,23 @@ where
         DescribeHsmConfigurationsMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status != StatusCode::Ok {
+                return future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeHsmConfigurationsError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
+            }
 
-                if body.is_empty() {
+            future::Either::A(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
                     result = HsmConfigurationMessage::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        body.as_slice(),
+                        response.body.as_slice(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -18882,23 +18890,19 @@ where
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeHsmConfigurationsError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+            }))
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Describes whether information, such as queries and connection attempts, is being logged for the specified Amazon Redshift cluster.</p>
     fn describe_logging_status(
         &self,
         input: &DescribeLoggingStatusMessage,
-    ) -> Result<LoggingStatus, DescribeLoggingStatusError> {
+    ) -> RusotoFuture<LoggingStatus, DescribeLoggingStatusError> {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
         let mut params = Params::new();
 
@@ -18907,19 +18911,23 @@ where
         DescribeLoggingStatusMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status != StatusCode::Ok {
+                return future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeLoggingStatusError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
+            }
 
-                if body.is_empty() {
+            future::Either::A(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
                     result = LoggingStatus::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        body.as_slice(),
+                        response.body.as_slice(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -18933,23 +18941,19 @@ where
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeLoggingStatusError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+            }))
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Returns a list of orderable cluster options. Before you create a new cluster you can use this operation to find what options are available, such as the EC2 Availability Zones (AZ) in the specific AWS region that you can specify, and the node types you can request. The node types differ by available storage, memory, CPU and price. With the cost involved you might want to obtain a list of cluster options in the specific region and specify values when creating a cluster. For more information about managing clusters, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html">Amazon Redshift Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
     fn describe_orderable_cluster_options(
         &self,
         input: &DescribeOrderableClusterOptionsMessage,
-    ) -> Result<OrderableClusterOptionsMessage, DescribeOrderableClusterOptionsError> {
+    ) -> RusotoFuture<OrderableClusterOptionsMessage, DescribeOrderableClusterOptionsError> {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
         let mut params = Params::new();
 
@@ -18958,19 +18962,23 @@ where
         DescribeOrderableClusterOptionsMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status != StatusCode::Ok {
+                return future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeOrderableClusterOptionsError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
+            }
 
-                if body.is_empty() {
+            future::Either::A(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
                     result = OrderableClusterOptionsMessage::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        body.as_slice(),
+                        response.body.as_slice(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -18984,23 +18992,19 @@ where
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeOrderableClusterOptionsError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+            }))
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Returns a list of the available reserved node offerings by Amazon Redshift with their descriptions including the node type, the fixed and recurring costs of reserving the node and duration the node will be reserved for you. These descriptions help you determine which reserve node offering you want to purchase. You then use the unique offering ID in you call to <a>PurchaseReservedNodeOffering</a> to reserve one or more nodes for your Amazon Redshift cluster. </p> <p> For more information about reserved node offerings, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/purchase-reserved-node-instance.html">Purchasing Reserved Nodes</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
     fn describe_reserved_node_offerings(
         &self,
         input: &DescribeReservedNodeOfferingsMessage,
-    ) -> Result<ReservedNodeOfferingsMessage, DescribeReservedNodeOfferingsError> {
+    ) -> RusotoFuture<ReservedNodeOfferingsMessage, DescribeReservedNodeOfferingsError> {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
         let mut params = Params::new();
 
@@ -19009,19 +19013,23 @@ where
         DescribeReservedNodeOfferingsMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status != StatusCode::Ok {
+                return future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeReservedNodeOfferingsError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
+            }
 
-                if body.is_empty() {
+            future::Either::A(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
                     result = ReservedNodeOfferingsMessage::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        body.as_slice(),
+                        response.body.as_slice(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -19035,23 +19043,19 @@ where
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeReservedNodeOfferingsError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+            }))
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Returns the descriptions of the reserved nodes.</p>
     fn describe_reserved_nodes(
         &self,
         input: &DescribeReservedNodesMessage,
-    ) -> Result<ReservedNodesMessage, DescribeReservedNodesError> {
+    ) -> RusotoFuture<ReservedNodesMessage, DescribeReservedNodesError> {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
         let mut params = Params::new();
 
@@ -19060,19 +19064,23 @@ where
         DescribeReservedNodesMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status != StatusCode::Ok {
+                return future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeReservedNodesError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
+            }
 
-                if body.is_empty() {
+            future::Either::A(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
                     result = ReservedNodesMessage::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        body.as_slice(),
+                        response.body.as_slice(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -19086,23 +19094,19 @@ where
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeReservedNodesError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+            }))
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Returns information about the last resize operation for the specified cluster. If no resize operation has ever been initiated for the specified cluster, a <code>HTTP 404</code> error is returned. If a resize operation was initiated and completed, the status of the resize remains as <code>SUCCEEDED</code> until the next resize. </p> <p>A resize operation can be requested using <a>ModifyCluster</a> and specifying a different number or type of nodes for the cluster. </p>
     fn describe_resize(
         &self,
         input: &DescribeResizeMessage,
-    ) -> Result<ResizeProgressMessage, DescribeResizeError> {
+    ) -> RusotoFuture<ResizeProgressMessage, DescribeResizeError> {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
         let mut params = Params::new();
 
@@ -19111,19 +19115,23 @@ where
         DescribeResizeMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status != StatusCode::Ok {
+                return future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeResizeError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
+            }
 
-                if body.is_empty() {
+            future::Either::A(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
                     result = ResizeProgressMessage::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        body.as_slice(),
+                        response.body.as_slice(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -19137,23 +19145,19 @@ where
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeResizeError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+            }))
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Returns a list of snapshot copy grants owned by the AWS account in the destination region.</p> <p> For more information about managing snapshot copy grants, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-db-encryption.html">Amazon Redshift Database Encryption</a> in the <i>Amazon Redshift Cluster Management Guide</i>. </p>
     fn describe_snapshot_copy_grants(
         &self,
         input: &DescribeSnapshotCopyGrantsMessage,
-    ) -> Result<SnapshotCopyGrantMessage, DescribeSnapshotCopyGrantsError> {
+    ) -> RusotoFuture<SnapshotCopyGrantMessage, DescribeSnapshotCopyGrantsError> {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
         let mut params = Params::new();
 
@@ -19162,19 +19166,23 @@ where
         DescribeSnapshotCopyGrantsMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status != StatusCode::Ok {
+                return future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeSnapshotCopyGrantsError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
+            }
 
-                if body.is_empty() {
+            future::Either::A(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
                     result = SnapshotCopyGrantMessage::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        body.as_slice(),
+                        response.body.as_slice(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -19188,23 +19196,19 @@ where
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeSnapshotCopyGrantsError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+            }))
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Lists the status of one or more table restore requests made using the <a>RestoreTableFromClusterSnapshot</a> API action. If you don't specify a value for the <code>TableRestoreRequestId</code> parameter, then <code>DescribeTableRestoreStatus</code> returns the status of all table restore requests ordered by the date and time of the request in ascending order. Otherwise <code>DescribeTableRestoreStatus</code> returns the status of the table specified by <code>TableRestoreRequestId</code>.</p>
     fn describe_table_restore_status(
         &self,
         input: &DescribeTableRestoreStatusMessage,
-    ) -> Result<TableRestoreStatusMessage, DescribeTableRestoreStatusError> {
+    ) -> RusotoFuture<TableRestoreStatusMessage, DescribeTableRestoreStatusError> {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
         let mut params = Params::new();
 
@@ -19213,19 +19217,23 @@ where
         DescribeTableRestoreStatusMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status != StatusCode::Ok {
+                return future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeTableRestoreStatusError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
+            }
 
-                if body.is_empty() {
+            future::Either::A(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
                     result = TableRestoreStatusMessage::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        body.as_slice(),
+                        response.body.as_slice(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -19239,23 +19247,19 @@ where
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeTableRestoreStatusError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+            }))
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Returns a list of tags. You can return tags from a specific resource by specifying an ARN, or you can return all tags for a given type of resource, such as clusters, snapshots, and so on.</p> <p>The following are limitations for <code>DescribeTags</code>: </p> <ul> <li> <p>You cannot specify an ARN and a resource-type value together in the same request.</p> </li> <li> <p>You cannot use the <code>MaxRecords</code> and <code>Marker</code> parameters together with the ARN parameter.</p> </li> <li> <p>The <code>MaxRecords</code> parameter can be a range from 10 to 50 results to return in a request.</p> </li> </ul> <p>If you specify both tag keys and tag values in the same request, Amazon Redshift returns all resources that match any combination of the specified keys and values. For example, if you have <code>owner</code> and <code>environment</code> for tag keys, and <code>admin</code> and <code>test</code> for tag values, all resources that have any combination of those values are returned.</p> <p>If both tag keys and values are omitted from the request, resources are returned regardless of whether they have tag keys or values associated with them.</p>
     fn describe_tags(
         &self,
         input: &DescribeTagsMessage,
-    ) -> Result<TaggedResourceListMessage, DescribeTagsError> {
+    ) -> RusotoFuture<TaggedResourceListMessage, DescribeTagsError> {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
         let mut params = Params::new();
 
@@ -19264,19 +19268,23 @@ where
         DescribeTagsMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status != StatusCode::Ok {
+                return future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeTagsError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
+            }
 
-                if body.is_empty() {
+            future::Either::A(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
                     result = TaggedResourceListMessage::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        body.as_slice(),
+                        response.body.as_slice(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -19290,23 +19298,19 @@ where
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeTagsError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+            }))
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Stops logging information, such as queries and connection attempts, for the specified Amazon Redshift cluster.</p>
     fn disable_logging(
         &self,
         input: &DisableLoggingMessage,
-    ) -> Result<LoggingStatus, DisableLoggingError> {
+    ) -> RusotoFuture<LoggingStatus, DisableLoggingError> {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
         let mut params = Params::new();
 
@@ -19315,19 +19319,23 @@ where
         DisableLoggingMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status != StatusCode::Ok {
+                return future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DisableLoggingError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
+            }
 
-                if body.is_empty() {
+            future::Either::A(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
                     result = LoggingStatus::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        body.as_slice(),
+                        response.body.as_slice(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -19341,23 +19349,19 @@ where
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DisableLoggingError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+            }))
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Disables the automatic copying of snapshots from one region to another region for a specified cluster.</p> <p>If your cluster and its snapshots are encrypted using a customer master key (CMK) from AWS KMS, use <a>DeleteSnapshotCopyGrant</a> to delete the grant that grants Amazon Redshift permission to the CMK in the destination region. </p>
     fn disable_snapshot_copy(
         &self,
         input: &DisableSnapshotCopyMessage,
-    ) -> Result<DisableSnapshotCopyResult, DisableSnapshotCopyError> {
+    ) -> RusotoFuture<DisableSnapshotCopyResult, DisableSnapshotCopyError> {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
         let mut params = Params::new();
 
@@ -19366,19 +19370,23 @@ where
         DisableSnapshotCopyMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status != StatusCode::Ok {
+                return future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DisableSnapshotCopyError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
+            }
 
-                if body.is_empty() {
+            future::Either::A(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
                     result = DisableSnapshotCopyResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        body.as_slice(),
+                        response.body.as_slice(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -19392,23 +19400,19 @@ where
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DisableSnapshotCopyError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+            }))
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Starts logging information, such as queries and connection attempts, for the specified Amazon Redshift cluster.</p>
     fn enable_logging(
         &self,
         input: &EnableLoggingMessage,
-    ) -> Result<LoggingStatus, EnableLoggingError> {
+    ) -> RusotoFuture<LoggingStatus, EnableLoggingError> {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
         let mut params = Params::new();
 
@@ -19417,19 +19421,23 @@ where
         EnableLoggingMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status != StatusCode::Ok {
+                return future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(EnableLoggingError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
+            }
 
-                if body.is_empty() {
+            future::Either::A(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
                     result = LoggingStatus::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        body.as_slice(),
+                        response.body.as_slice(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -19443,23 +19451,19 @@ where
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(EnableLoggingError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+            }))
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Enables the automatic copy of snapshots from one region to another region for a specified cluster.</p>
     fn enable_snapshot_copy(
         &self,
         input: &EnableSnapshotCopyMessage,
-    ) -> Result<EnableSnapshotCopyResult, EnableSnapshotCopyError> {
+    ) -> RusotoFuture<EnableSnapshotCopyResult, EnableSnapshotCopyError> {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
         let mut params = Params::new();
 
@@ -19468,19 +19472,23 @@ where
         EnableSnapshotCopyMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status != StatusCode::Ok {
+                return future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(EnableSnapshotCopyError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
+            }
 
-                if body.is_empty() {
+            future::Either::A(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
                     result = EnableSnapshotCopyResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        body.as_slice(),
+                        response.body.as_slice(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -19494,23 +19502,19 @@ where
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(EnableSnapshotCopyError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+            }))
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Returns a database user name and temporary password with temporary authorization to log on to an Amazon Redshift database. The action returns the database user name prefixed with <code>IAM:</code> if <code>AutoCreate</code> is <code>False</code> or <code>IAMA:</code> if <code>AutoCreate</code> is <code>True</code>. You can optionally specify one or more database user groups that the user will join at log on. By default, the temporary credentials expire in 900 seconds. You can optionally specify a duration between 900 seconds (15 minutes) and 3600 seconds (60 minutes). For more information, see <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/generating-user-credentials.html">Using IAM Authentication to Generate Database User Credentials</a> in the Amazon Redshift Cluster Management Guide.</p> <p>The AWS Identity and Access Management (IAM)user or role that executes GetClusterCredentials must have an IAM policy attached that allows access to all necessary actions and resources. For more information about permissions, see <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/redshift-iam-access-control-identity-based.html#redshift-policy-resources.getclustercredentials-resources">Resource Policies for GetClusterCredentials</a> in the Amazon Redshift Cluster Management Guide.</p> <p>If the <code>DbGroups</code> parameter is specified, the IAM policy must allow the <code>redshift:JoinGroup</code> action with access to the listed <code>dbgroups</code>. </p> <p>In addition, if the <code>AutoCreate</code> parameter is set to <code>True</code>, then the policy must include the <code>redshift:CreateClusterUser</code> privilege.</p> <p>If the <code>DbName</code> parameter is specified, the IAM policy must allow access to the resource <code>dbname</code> for the specified database name. </p>
     fn get_cluster_credentials(
         &self,
         input: &GetClusterCredentialsMessage,
-    ) -> Result<ClusterCredentials, GetClusterCredentialsError> {
+    ) -> RusotoFuture<ClusterCredentials, GetClusterCredentialsError> {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
         let mut params = Params::new();
 
@@ -19519,19 +19523,23 @@ where
         GetClusterCredentialsMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status != StatusCode::Ok {
+                return future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(GetClusterCredentialsError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
+            }
 
-                if body.is_empty() {
+            future::Either::A(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
                     result = ClusterCredentials::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        body.as_slice(),
+                        response.body.as_slice(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -19545,23 +19553,19 @@ where
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetClusterCredentialsError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+            }))
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Modifies the settings for a cluster. For example, you can add another security or parameter group, update the preferred maintenance window, or change the master user password. Resetting a cluster password or modifying the security groups associated with a cluster do not need a reboot. However, modifying a parameter group requires a reboot for parameters to take effect. For more information about managing clusters, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html">Amazon Redshift Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p> <p>You can also change node type and the number of nodes to scale up or down the cluster. When resizing a cluster, you must specify both the number of nodes and the node type even if one of the parameters does not change.</p>
     fn modify_cluster(
         &self,
         input: &ModifyClusterMessage,
-    ) -> Result<ModifyClusterResult, ModifyClusterError> {
+    ) -> RusotoFuture<ModifyClusterResult, ModifyClusterError> {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
         let mut params = Params::new();
 
@@ -19570,19 +19574,23 @@ where
         ModifyClusterMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status != StatusCode::Ok {
+                return future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(ModifyClusterError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
+            }
 
-                if body.is_empty() {
+            future::Either::A(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
                     result = ModifyClusterResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        body.as_slice(),
+                        response.body.as_slice(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -19596,23 +19604,19 @@ where
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ModifyClusterError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+            }))
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Modifies the list of AWS Identity and Access Management (IAM) roles that can be used by the cluster to access other AWS services.</p> <p>A cluster can have up to 10 IAM roles associated at any time.</p>
     fn modify_cluster_iam_roles(
         &self,
         input: &ModifyClusterIamRolesMessage,
-    ) -> Result<ModifyClusterIamRolesResult, ModifyClusterIamRolesError> {
+    ) -> RusotoFuture<ModifyClusterIamRolesResult, ModifyClusterIamRolesError> {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
         let mut params = Params::new();
 
@@ -19621,19 +19625,23 @@ where
         ModifyClusterIamRolesMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status != StatusCode::Ok {
+                return future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(ModifyClusterIamRolesError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
+            }
 
-                if body.is_empty() {
+            future::Either::A(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
                     result = ModifyClusterIamRolesResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        body.as_slice(),
+                        response.body.as_slice(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -19647,23 +19655,19 @@ where
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ModifyClusterIamRolesError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+            }))
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Modifies the parameters of a parameter group.</p> <p> For more information about parameters and parameter groups, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-parameter-groups.html">Amazon Redshift Parameter Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
     fn modify_cluster_parameter_group(
         &self,
         input: &ModifyClusterParameterGroupMessage,
-    ) -> Result<ClusterParameterGroupNameMessage, ModifyClusterParameterGroupError> {
+    ) -> RusotoFuture<ClusterParameterGroupNameMessage, ModifyClusterParameterGroupError> {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
         let mut params = Params::new();
 
@@ -19672,19 +19676,23 @@ where
         ModifyClusterParameterGroupMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status != StatusCode::Ok {
+                return future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(ModifyClusterParameterGroupError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
+            }
 
-                if body.is_empty() {
+            future::Either::A(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
                     result = ClusterParameterGroupNameMessage::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        body.as_slice(),
+                        response.body.as_slice(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -19698,23 +19706,19 @@ where
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ModifyClusterParameterGroupError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+            }))
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Modifies a cluster subnet group to include the specified list of VPC subnets. The operation replaces the existing list of subnets with the new list of subnets.</p>
     fn modify_cluster_subnet_group(
         &self,
         input: &ModifyClusterSubnetGroupMessage,
-    ) -> Result<ModifyClusterSubnetGroupResult, ModifyClusterSubnetGroupError> {
+    ) -> RusotoFuture<ModifyClusterSubnetGroupResult, ModifyClusterSubnetGroupError> {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
         let mut params = Params::new();
 
@@ -19723,19 +19727,23 @@ where
         ModifyClusterSubnetGroupMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status != StatusCode::Ok {
+                return future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(ModifyClusterSubnetGroupError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
+            }
 
-                if body.is_empty() {
+            future::Either::A(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
                     result = ModifyClusterSubnetGroupResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        body.as_slice(),
+                        response.body.as_slice(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -19749,23 +19757,19 @@ where
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ModifyClusterSubnetGroupError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+            }))
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Modifies an existing Amazon Redshift event notification subscription.</p>
     fn modify_event_subscription(
         &self,
         input: &ModifyEventSubscriptionMessage,
-    ) -> Result<ModifyEventSubscriptionResult, ModifyEventSubscriptionError> {
+    ) -> RusotoFuture<ModifyEventSubscriptionResult, ModifyEventSubscriptionError> {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
         let mut params = Params::new();
 
@@ -19774,19 +19778,23 @@ where
         ModifyEventSubscriptionMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status != StatusCode::Ok {
+                return future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(ModifyEventSubscriptionError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
+            }
 
-                if body.is_empty() {
+            future::Either::A(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
                     result = ModifyEventSubscriptionResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        body.as_slice(),
+                        response.body.as_slice(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -19800,23 +19808,19 @@ where
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ModifyEventSubscriptionError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+            }))
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Modifies the number of days to retain automated snapshots in the destination region after they are copied from the source region.</p>
     fn modify_snapshot_copy_retention_period(
         &self,
         input: &ModifySnapshotCopyRetentionPeriodMessage,
-    ) -> Result<ModifySnapshotCopyRetentionPeriodResult, ModifySnapshotCopyRetentionPeriodError>
+    ) -> RusotoFuture<ModifySnapshotCopyRetentionPeriodResult, ModifySnapshotCopyRetentionPeriodError>
     {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
         let mut params = Params::new();
@@ -19826,19 +19830,23 @@ where
         ModifySnapshotCopyRetentionPeriodMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status != StatusCode::Ok {
+                return future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(ModifySnapshotCopyRetentionPeriodError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
+            }
 
-                if body.is_empty() {
+            future::Either::A(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
                     result = ModifySnapshotCopyRetentionPeriodResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        body.as_slice(),
+                        response.body.as_slice(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -19854,23 +19862,19 @@ where
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ModifySnapshotCopyRetentionPeriodError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+            }))
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Allows you to purchase reserved nodes. Amazon Redshift offers a predefined set of reserved node offerings. You can purchase one or more of the offerings. You can call the <a>DescribeReservedNodeOfferings</a> API to obtain the available reserved node offerings. You can call this API by providing a specific reserved node offering and the number of nodes you want to reserve. </p> <p> For more information about reserved node offerings, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/purchase-reserved-node-instance.html">Purchasing Reserved Nodes</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
     fn purchase_reserved_node_offering(
         &self,
         input: &PurchaseReservedNodeOfferingMessage,
-    ) -> Result<PurchaseReservedNodeOfferingResult, PurchaseReservedNodeOfferingError> {
+    ) -> RusotoFuture<PurchaseReservedNodeOfferingResult, PurchaseReservedNodeOfferingError> {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
         let mut params = Params::new();
 
@@ -19879,19 +19883,23 @@ where
         PurchaseReservedNodeOfferingMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status != StatusCode::Ok {
+                return future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(PurchaseReservedNodeOfferingError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
+            }
 
-                if body.is_empty() {
+            future::Either::A(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
                     result = PurchaseReservedNodeOfferingResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        body.as_slice(),
+                        response.body.as_slice(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -19907,23 +19915,19 @@ where
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(PurchaseReservedNodeOfferingError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+            }))
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Reboots a cluster. This action is taken as soon as possible. It results in a momentary outage to the cluster, during which the cluster status is set to <code>rebooting</code>. A cluster event is created when the reboot is completed. Any pending cluster modifications (see <a>ModifyCluster</a>) are applied at this reboot. For more information about managing clusters, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html">Amazon Redshift Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>. </p>
     fn reboot_cluster(
         &self,
         input: &RebootClusterMessage,
-    ) -> Result<RebootClusterResult, RebootClusterError> {
+    ) -> RusotoFuture<RebootClusterResult, RebootClusterError> {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
         let mut params = Params::new();
 
@@ -19932,19 +19936,23 @@ where
         RebootClusterMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status != StatusCode::Ok {
+                return future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(RebootClusterError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
+            }
 
-                if body.is_empty() {
+            future::Either::A(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
                     result = RebootClusterResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        body.as_slice(),
+                        response.body.as_slice(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -19958,23 +19966,19 @@ where
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(RebootClusterError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+            }))
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Sets one or more parameters of the specified parameter group to their default values and sets the source values of the parameters to "engine-default". To reset the entire parameter group specify the <i>ResetAllParameters</i> parameter. For parameter changes to take effect you must reboot any associated clusters. </p>
     fn reset_cluster_parameter_group(
         &self,
         input: &ResetClusterParameterGroupMessage,
-    ) -> Result<ClusterParameterGroupNameMessage, ResetClusterParameterGroupError> {
+    ) -> RusotoFuture<ClusterParameterGroupNameMessage, ResetClusterParameterGroupError> {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
         let mut params = Params::new();
 
@@ -19983,19 +19987,23 @@ where
         ResetClusterParameterGroupMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status != StatusCode::Ok {
+                return future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(ResetClusterParameterGroupError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
+            }
 
-                if body.is_empty() {
+            future::Either::A(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
                     result = ClusterParameterGroupNameMessage::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        body.as_slice(),
+                        response.body.as_slice(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -20009,23 +20017,19 @@ where
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ResetClusterParameterGroupError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+            }))
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Creates a new cluster from a snapshot. By default, Amazon Redshift creates the resulting cluster with the same configuration as the original cluster from which the snapshot was created, except that the new cluster is created with the default cluster security and parameter groups. After Amazon Redshift creates the cluster, you can use the <a>ModifyCluster</a> API to associate a different security group and different parameter group with the restored cluster. If you are using a DS node type, you can also choose to change to another DS node type of the same size during restore.</p> <p>If you restore a cluster into a VPC, you must provide a cluster subnet group where you want the cluster restored.</p> <p> For more information about working with snapshots, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-snapshots.html">Amazon Redshift Snapshots</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
     fn restore_from_cluster_snapshot(
         &self,
         input: &RestoreFromClusterSnapshotMessage,
-    ) -> Result<RestoreFromClusterSnapshotResult, RestoreFromClusterSnapshotError> {
+    ) -> RusotoFuture<RestoreFromClusterSnapshotResult, RestoreFromClusterSnapshotError> {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
         let mut params = Params::new();
 
@@ -20034,19 +20038,23 @@ where
         RestoreFromClusterSnapshotMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status != StatusCode::Ok {
+                return future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(RestoreFromClusterSnapshotError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
+            }
 
-                if body.is_empty() {
+            future::Either::A(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
                     result = RestoreFromClusterSnapshotResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        body.as_slice(),
+                        response.body.as_slice(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -20060,23 +20068,20 @@ where
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(RestoreFromClusterSnapshotError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+            }))
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Creates a new table from a table in an Amazon Redshift cluster snapshot. You must create the new table within the Amazon Redshift cluster that the snapshot was taken from.</p> <p>You cannot use <code>RestoreTableFromClusterSnapshot</code> to restore a table with the same name as an existing table in an Amazon Redshift cluster. That is, you cannot overwrite an existing table in a cluster with a restored table. If you want to replace your original table with a new, restored table, then rename or drop your original table before you call <code>RestoreTableFromClusterSnapshot</code>. When you have renamed your original table, then you can pass the original name of the table as the <code>NewTableName</code> parameter value in the call to <code>RestoreTableFromClusterSnapshot</code>. This way, you can replace the original table with the table created from the snapshot.</p>
     fn restore_table_from_cluster_snapshot(
         &self,
         input: &RestoreTableFromClusterSnapshotMessage,
-    ) -> Result<RestoreTableFromClusterSnapshotResult, RestoreTableFromClusterSnapshotError> {
+    ) -> RusotoFuture<RestoreTableFromClusterSnapshotResult, RestoreTableFromClusterSnapshotError>
+    {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
         let mut params = Params::new();
 
@@ -20085,19 +20090,23 @@ where
         RestoreTableFromClusterSnapshotMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status != StatusCode::Ok {
+                return future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(RestoreTableFromClusterSnapshotError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
+            }
 
-                if body.is_empty() {
+            future::Either::A(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
                     result = RestoreTableFromClusterSnapshotResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        body.as_slice(),
+                        response.body.as_slice(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -20113,23 +20122,19 @@ where
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(RestoreTableFromClusterSnapshotError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+            }))
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Revokes an ingress rule in an Amazon Redshift security group for a previously authorized IP range or Amazon EC2 security group. To add an ingress rule, see <a>AuthorizeClusterSecurityGroupIngress</a>. For information about managing security groups, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-security-groups.html">Amazon Redshift Cluster Security Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>. </p>
     fn revoke_cluster_security_group_ingress(
         &self,
         input: &RevokeClusterSecurityGroupIngressMessage,
-    ) -> Result<RevokeClusterSecurityGroupIngressResult, RevokeClusterSecurityGroupIngressError>
+    ) -> RusotoFuture<RevokeClusterSecurityGroupIngressResult, RevokeClusterSecurityGroupIngressError>
     {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
         let mut params = Params::new();
@@ -20139,19 +20144,23 @@ where
         RevokeClusterSecurityGroupIngressMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status != StatusCode::Ok {
+                return future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(RevokeClusterSecurityGroupIngressError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
+            }
 
-                if body.is_empty() {
+            future::Either::A(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
                     result = RevokeClusterSecurityGroupIngressResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        body.as_slice(),
+                        response.body.as_slice(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -20167,23 +20176,19 @@ where
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(RevokeClusterSecurityGroupIngressError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+            }))
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Removes the ability of the specified AWS customer account to restore the specified snapshot. If the account is currently restoring the snapshot, the restore will run to completion.</p> <p> For more information about working with snapshots, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-snapshots.html">Amazon Redshift Snapshots</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
     fn revoke_snapshot_access(
         &self,
         input: &RevokeSnapshotAccessMessage,
-    ) -> Result<RevokeSnapshotAccessResult, RevokeSnapshotAccessError> {
+    ) -> RusotoFuture<RevokeSnapshotAccessResult, RevokeSnapshotAccessError> {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
         let mut params = Params::new();
 
@@ -20192,19 +20197,23 @@ where
         RevokeSnapshotAccessMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status != StatusCode::Ok {
+                return future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(RevokeSnapshotAccessError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
+            }
 
-                if body.is_empty() {
+            future::Either::A(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
                     result = RevokeSnapshotAccessResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        body.as_slice(),
+                        response.body.as_slice(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -20218,23 +20227,19 @@ where
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(RevokeSnapshotAccessError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+            }))
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Rotates the encryption keys for a cluster.</p>
     fn rotate_encryption_key(
         &self,
         input: &RotateEncryptionKeyMessage,
-    ) -> Result<RotateEncryptionKeyResult, RotateEncryptionKeyError> {
+    ) -> RusotoFuture<RotateEncryptionKeyResult, RotateEncryptionKeyError> {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
         let mut params = Params::new();
 
@@ -20243,19 +20248,23 @@ where
         RotateEncryptionKeyMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status != StatusCode::Ok {
+                return future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(RotateEncryptionKeyError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
+            }
 
-                if body.is_empty() {
+            future::Either::A(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
                     result = RotateEncryptionKeyResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        body.as_slice(),
+                        response.body.as_slice(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -20269,16 +20278,12 @@ where
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(RotateEncryptionKeyError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+            }))
+        });
+
+        RusotoFuture::new(future)
     }
 }
 
@@ -20300,7 +20305,9 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = RedshiftClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = AuthorizeClusterSecurityGroupIngressMessage::default();
-        let result = client.authorize_cluster_security_group_ingress(&request);
+        let result = client
+            .authorize_cluster_security_group_ingress(&request)
+            .sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -20313,7 +20320,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = RedshiftClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = CopyClusterSnapshotMessage::default();
-        let result = client.copy_cluster_snapshot(&request);
+        let result = client.copy_cluster_snapshot(&request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -20326,7 +20333,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = RedshiftClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = CreateClusterParameterGroupMessage::default();
-        let result = client.create_cluster_parameter_group(&request);
+        let result = client.create_cluster_parameter_group(&request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -20339,7 +20346,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = RedshiftClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = CreateClusterSecurityGroupMessage::default();
-        let result = client.create_cluster_security_group(&request);
+        let result = client.create_cluster_security_group(&request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -20352,7 +20359,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = RedshiftClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = CreateClusterSnapshotMessage::default();
-        let result = client.create_cluster_snapshot(&request);
+        let result = client.create_cluster_snapshot(&request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -20365,7 +20372,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = RedshiftClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = CreateClusterSubnetGroupMessage::default();
-        let result = client.create_cluster_subnet_group(&request);
+        let result = client.create_cluster_subnet_group(&request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -20378,7 +20385,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = RedshiftClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = CreateClusterMessage::default();
-        let result = client.create_cluster(&request);
+        let result = client.create_cluster(&request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -20391,7 +20398,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = RedshiftClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = DeleteClusterParameterGroupMessage::default();
-        let result = client.delete_cluster_parameter_group(&request);
+        let result = client.delete_cluster_parameter_group(&request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -20404,7 +20411,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = RedshiftClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = DeleteClusterSnapshotMessage::default();
-        let result = client.delete_cluster_snapshot(&request);
+        let result = client.delete_cluster_snapshot(&request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -20417,7 +20424,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = RedshiftClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = DeleteClusterMessage::default();
-        let result = client.delete_cluster(&request);
+        let result = client.delete_cluster(&request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -20430,7 +20437,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = RedshiftClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = DescribeClusterParameterGroupsMessage::default();
-        let result = client.describe_cluster_parameter_groups(&request);
+        let result = client.describe_cluster_parameter_groups(&request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -20443,7 +20450,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = RedshiftClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = DescribeClusterParametersMessage::default();
-        let result = client.describe_cluster_parameters(&request);
+        let result = client.describe_cluster_parameters(&request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -20456,7 +20463,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = RedshiftClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = DescribeClusterSecurityGroupsMessage::default();
-        let result = client.describe_cluster_security_groups(&request);
+        let result = client.describe_cluster_security_groups(&request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -20469,7 +20476,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = RedshiftClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = DescribeClusterSnapshotsMessage::default();
-        let result = client.describe_cluster_snapshots(&request);
+        let result = client.describe_cluster_snapshots(&request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -20482,7 +20489,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = RedshiftClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = DescribeClusterSubnetGroupsMessage::default();
-        let result = client.describe_cluster_subnet_groups(&request);
+        let result = client.describe_cluster_subnet_groups(&request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -20495,7 +20502,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = RedshiftClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = DescribeClusterVersionsMessage::default();
-        let result = client.describe_cluster_versions(&request);
+        let result = client.describe_cluster_versions(&request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -20508,7 +20515,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = RedshiftClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = DescribeClustersMessage::default();
-        let result = client.describe_clusters(&request);
+        let result = client.describe_clusters(&request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -20521,7 +20528,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = RedshiftClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = DescribeEventsMessage::default();
-        let result = client.describe_events(&request);
+        let result = client.describe_events(&request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -20534,7 +20541,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = RedshiftClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = DescribeOrderableClusterOptionsMessage::default();
-        let result = client.describe_orderable_cluster_options(&request);
+        let result = client.describe_orderable_cluster_options(&request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -20547,7 +20554,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = RedshiftClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = DescribeReservedNodeOfferingsMessage::default();
-        let result = client.describe_reserved_node_offerings(&request);
+        let result = client.describe_reserved_node_offerings(&request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -20560,7 +20567,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = RedshiftClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = DescribeReservedNodesMessage::default();
-        let result = client.describe_reserved_nodes(&request);
+        let result = client.describe_reserved_nodes(&request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -20573,7 +20580,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = RedshiftClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = DescribeResizeMessage::default();
-        let result = client.describe_resize(&request);
+        let result = client.describe_resize(&request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -20586,7 +20593,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = RedshiftClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = ModifyClusterParameterGroupMessage::default();
-        let result = client.modify_cluster_parameter_group(&request);
+        let result = client.modify_cluster_parameter_group(&request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -20599,7 +20606,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = RedshiftClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = PurchaseReservedNodeOfferingMessage::default();
-        let result = client.purchase_reserved_node_offering(&request);
+        let result = client.purchase_reserved_node_offering(&request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -20612,7 +20619,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = RedshiftClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = RebootClusterMessage::default();
-        let result = client.reboot_cluster(&request);
+        let result = client.reboot_cluster(&request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -20625,7 +20632,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = RedshiftClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = ResetClusterParameterGroupMessage::default();
-        let result = client.reset_cluster_parameter_group(&request);
+        let result = client.reset_cluster_parameter_group(&request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -20638,7 +20645,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = RedshiftClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = RestoreFromClusterSnapshotMessage::default();
-        let result = client.restore_from_cluster_snapshot(&request);
+        let result = client.restore_from_cluster_snapshot(&request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -20651,7 +20658,9 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = RedshiftClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = RevokeClusterSecurityGroupIngressMessage::default();
-        let result = client.revoke_cluster_security_group_ingress(&request);
+        let result = client
+            .revoke_cluster_security_group_ingress(&request)
+            .sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 }

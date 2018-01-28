@@ -4,15 +4,13 @@ extern crate rusoto_core;
 extern crate rusoto_organizations;
 
 use rusoto_organizations::{Organizations, OrganizationsClient };
-use rusoto_core::{DefaultCredentialsProvider, Region};
-use rusoto_core::default_tls_client;
+use rusoto_core::Region;
 
 #[test]
 fn should_describe_organizations() {
     let _ = env_logger::try_init();
-    let credentials = DefaultCredentialsProvider::new().unwrap();
-    let client = OrganizationsClient::new(default_tls_client().unwrap(), credentials, Region::UsEast1);
+    let client = OrganizationsClient::simple(Region::UsEast1);
 
-    let result = client.describe_organization();
+    let result = client.describe_organization().sync();
     println!("{:#?}", result);
 }

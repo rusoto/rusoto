@@ -1,11 +1,11 @@
 //! Mock request dispatcher and credentials for unit testing services
 
 extern crate chrono;
+extern crate futures;
 extern crate hyper;
 extern crate rusoto_core;
 
 use std::fs::File;
-use std::io::Cursor;
 use std::io::Read;
 use std::collections::HashMap;
 
@@ -13,15 +13,19 @@ use rusoto_core::{DispatchSignedRequest, HttpResponse, HttpDispatchError, Signed
 use rusoto_core::credential::{ProvideAwsCredentials, CredentialsError, AwsCredentials};
 use rusoto_core::request::Headers;
 use chrono::{Duration, Utc};
-use hyper::status::StatusCode;
+use futures::future::{FutureResult, ok};
+use futures::stream::once;
+use hyper::StatusCode;
 
 const ONE_DAY: i64 = 86400;
 
 pub struct MockCredentialsProvider;
 
 impl ProvideAwsCredentials for MockCredentialsProvider {
-    fn credentials(&self) -> Result<AwsCredentials, CredentialsError> {
-        Ok(AwsCredentials::new("mock_key",
+    type Future = FutureResult<AwsCredentials, CredentialsError>;
+
+    fn credentials(&self) -> Self::Future {
+        ok(AwsCredentials::new("mock_key",
                                "mock_secret",
                                None,
                                Utc::now() + Duration::seconds(ONE_DAY)))
@@ -38,7 +42,7 @@ pub struct MockRequestDispatcher {
 impl MockRequestDispatcher {
     pub fn with_status(status: u16) -> MockRequestDispatcher {
         MockRequestDispatcher {
-            status: StatusCode::from_u16(status),
+            status: StatusCode::try_from(status).unwrap(),
             body: b"".to_vec(),
             headers: HashMap::new(),
             request_checker: None,
@@ -63,13 +67,15 @@ impl MockRequestDispatcher {
 }
 
 impl DispatchSignedRequest for MockRequestDispatcher {
-    fn dispatch(&self, request: &SignedRequest) -> Result<HttpResponse, HttpDispatchError> {
+    type Future = FutureResult<HttpResponse, HttpDispatchError>;
+
+    fn dispatch(&self, request: SignedRequest) -> Self::Future {
         if self.request_checker.is_some() {
-            self.request_checker.as_ref().unwrap()(request);
+            self.request_checker.as_ref().unwrap()(&request);
         }
-        Ok(HttpResponse {
+        ok(HttpResponse {
             status: self.status,
-            body: Box::new(Cursor::new(self.body.clone())),
+            body: Box::new(once(Ok(self.body.clone()))),
             headers: Headers::new(self.headers.iter().map(|(k, v)| (k.as_ref(), v.to_owned()))),
         })
     }

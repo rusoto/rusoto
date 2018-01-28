@@ -4,15 +4,13 @@ extern crate rusoto_core;
 extern crate rusoto_lex_models;
 
 use rusoto_lex_models::{LexModels, LexModelsClient, GetBotsRequest};
-use rusoto_core::{DefaultCredentialsProvider, Region};
-use rusoto_core::default_tls_client;
+use rusoto_core::Region;
 
 #[test]
 fn should_get_bots() {
-    let credentials = DefaultCredentialsProvider::new().unwrap();
-    let client = LexModelsClient::new(default_tls_client().unwrap(), credentials, Region::UsEast1);
+    let client = LexModelsClient::simple(Region::UsEast1);
     let request = GetBotsRequest::default();
 
-    let result = client.get_bots(&request).unwrap();
+    let result = client.get_bots(&request).sync().unwrap();
     println!("{:#?}", result);
 }

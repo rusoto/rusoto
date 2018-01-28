@@ -4,14 +4,13 @@ extern crate rusoto_core;
 extern crate rusoto_kinesisanalytics;
 
 use rusoto_kinesisanalytics::{KinesisAnalytics, KinesisAnalyticsClient, ListApplicationsRequest};
-use rusoto_core::{DefaultCredentialsProvider, Region, default_tls_client};
+use rusoto_core::Region;
 
 #[test]
 fn should_list_applications() {
-    let credentials = DefaultCredentialsProvider::new().unwrap();
-    let client = KinesisAnalyticsClient::new(default_tls_client().unwrap(), credentials, Region::UsEast1);
+    let client = KinesisAnalyticsClient::simple(Region::UsEast1);
     let request = ListApplicationsRequest::default();
 
-    let result = client.list_applications(&request).unwrap();
+    let result = client.list_applications(&request).sync().unwrap();
 	println!("{:#?}", result);
 }

@@ -23,7 +23,7 @@ impl GenerateProtocol for RestJsonGenerator {
                      "
                 {documentation}
                 {method_signature} -> \
-                      Result<{output_type}, {error_type}>;
+                      RusotoFuture<{output_type}, {error_type}>;
                 ",
                      documentation = generate_documentation(operation).unwrap_or_else(|| "".to_owned()),
                      method_signature = generate_method_signature(operation, input_shape),
@@ -46,7 +46,7 @@ impl GenerateProtocol for RestJsonGenerator {
 
             writeln!(writer,"
                 {documentation}
-                {method_signature} -> Result<{output_type}, {error_type}> {{
+                {method_signature} -> RusotoFuture<{output_type}, {error_type}> {{
                     {request_uri_formatter}
 
                     let mut request = SignedRequest::new(\"{http_method}\", \"{endpoint_prefix}\", &self.region, &request_uri);
@@ -57,22 +57,22 @@ impl GenerateProtocol for RestJsonGenerator {
                     {load_headers}
                     {load_params}
 
-                    request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-                    let mut response = self.dispatcher.dispatch(&request)?;
-
-                    match response.status {{
-                        {status_code} => {{
-                            {parse_body}
-                            {parse_headers}
-                            {parse_status_code}
-                            Ok(result)
+                    let future = self.inner.sign_and_dispatch(request).and_then(|response| {{
+                        if response.status == {status_code} {{
+                            future::Either::A(response.buffer().from_err().map(|response| {{
+                                {parse_body}
+                                {parse_headers}
+                                {parse_status_code}
+                                result
+                            }}))
+                        }} else {{
+                            future::Either::B(response.buffer().from_err().and_then(|response| {{
+                                Err({error_type}::from_body(String::from_utf8_lossy(response.body.as_ref()).as_ref()))
+                            }}))
                         }}
-                         _ => {{
-                             let mut body: Vec<u8> = Vec::new();
-                             try!(response.body.read_to_end(&mut body));
-                             Err({error_type}::from_body(String::from_utf8_lossy(&body).as_ref()))
-                         }}
-                    }}
+                    }});
+
+                    RusotoFuture::new(future)
                 }}
                 ",
                 documentation = generate_documentation(operation).unwrap_or_else(|| "".to_owned()),
@@ -283,10 +283,10 @@ fn generate_status_code_parser(operation: &Operation, service: &Service) -> Stri
         if let Some(ref location) = member.location {
             if location == "statusCode" {
                 if output_shape.required(member_name) {
-                    status_code_parser += &format!("result.{} = StatusCode::to_u16(&response.status);",
+                    status_code_parser += &format!("result.{} = Some(response.status.as_u16());",
                                                    member_name.to_snake_case());
                 } else {
-                    status_code_parser += &format!("result.{} = Some(StatusCode::to_u16(&response.status) as i64);",
+                    status_code_parser += &format!("result.{} = Some(response.status.as_u16() as i64);",
                                                    member_name.to_snake_case());
                 }
             }
@@ -306,7 +306,7 @@ fn generate_status_code_parser(operation: &Operation, service: &Service) -> Stri
 fn generate_body_parser(operation: &Operation, service: &Service) -> String {
 
     if operation.output.is_none() {
-        return "let result = ();".to_string();
+        return "let result = ::std::mem::drop(response);".to_string();
     }
 
     let shape_name = &operation.output.as_ref().unwrap().shape;
@@ -349,16 +349,12 @@ fn payload_body_parser(payload_type: ShapeType,
                        -> String {
 
     let response_body = match payload_type {
-        ShapeType::Blob => "Some(body)",
-        _ => "Some(String::from_utf8_lossy(body).into_owned())",
+        ShapeType::Blob => "Some(response.body)",
+        _ => "Some(String::from_utf8_lossy(response.body.as_ref()).into_owned())",
     };
 
     format!("
         let {mutable} result = {output_shape}::default();
-
-        let mut body: Vec<u8> = Vec::new();
-        try!(response.body.read_to_end(&mut body));
-
         result.{payload_member} = {response_body};
         ",
             output_shape = output_shape,
@@ -374,8 +370,7 @@ fn json_body_parser(output_shape: &str, mutable_result: bool) -> String {
     // "{{}}" for a field-less response, so we must check for this result
     // and convert it if necessary.
     format!("
-            let mut body: Vec<u8> = Vec::new();
-            try!(response.body.read_to_end(&mut body));
+            let mut body = response.body;
 
             if body == b\"{{}}\" {{
                 body = b\"null\".to_vec();

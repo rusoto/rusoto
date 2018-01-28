@@ -5,28 +5,23 @@ extern crate rusoto_directconnect;
 
 use rusoto_directconnect::{DirectConnect, DirectConnectClient, DescribeConnectionsRequest,
                             DescribeConnectionsError};
-use rusoto_core::{DefaultCredentialsProvider, Region};
-use rusoto_core::default_tls_client;
+use rusoto_core::Region;
 
 #[test]
 fn should_describe_connections() {
-    let credentials = DefaultCredentialsProvider::new().unwrap();
-    let client =
-        DirectConnectClient::new(default_tls_client().unwrap(), credentials, Region::UsEast1);
+    let client = DirectConnectClient::simple(Region::UsEast1);
     let request = DescribeConnectionsRequest::default();
 
-    client.describe_connections(&request).unwrap();
+    client.describe_connections(&request).sync().unwrap();
 }
 
 #[test]
 fn should_fail_gracefully() {
-    let credentials = DefaultCredentialsProvider::new().unwrap();
-    let client =
-        DirectConnectClient::new(default_tls_client().unwrap(), credentials, Region::UsEast1);
+    let client = DirectConnectClient::simple(Region::UsEast1);
 
     let request = DescribeConnectionsRequest { connection_id: Some("invalid".to_string()) };
 
-    match client.describe_connections(&request) {
+    match client.describe_connections(&request).sync() {
         Err(DescribeConnectionsError::DirectConnectClient(msg)) => {
             assert!(msg.contains("Connection ID"))
         }
@@ -36,18 +31,14 @@ fn should_fail_gracefully() {
 
 #[test]
 fn should_describe_locations() {
-    let credentials = DefaultCredentialsProvider::new().unwrap();
-    let client =
-        DirectConnectClient::new(default_tls_client().unwrap(), credentials, Region::UsEast1);
+    let client = DirectConnectClient::simple(Region::UsEast1);
 
-    client.describe_locations().unwrap();
+    client.describe_locations().sync().unwrap();
 }
 
 #[test]
 fn should_describe_virtual_gateways() {
-    let credentials = DefaultCredentialsProvider::new().unwrap();
-    let client =
-        DirectConnectClient::new(default_tls_client().unwrap(), credentials, Region::UsEast1);
+    let client = DirectConnectClient::simple(Region::UsEast1);
 
-    client.describe_virtual_gateways().unwrap();
+    client.describe_virtual_gateways().sync().unwrap();
 }

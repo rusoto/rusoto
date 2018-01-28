@@ -2,15 +2,35 @@
 
 use std::env::var as env_var;
 
+use futures::{Future, Poll};
+use futures::future::{FutureResult, result};
+
 use {AwsCredentials, CredentialsError, ProvideAwsCredentials, in_ten_minutes};
 
 /// Provides AWS credentials from environment variables.
 #[derive(Debug)]
 pub struct EnvironmentProvider;
 
+pub struct EnvironmentProviderFuture {
+    inner: FutureResult<AwsCredentials, CredentialsError>
+}
+
+impl Future for EnvironmentProviderFuture {
+    type Item = AwsCredentials;
+    type Error = CredentialsError;
+
+    fn poll(&mut self) -> Poll<Self::Item, Self::Error> {
+        self.inner.poll()
+    }
+}
+
 impl ProvideAwsCredentials for EnvironmentProvider {
-    fn credentials(&self) -> Result<AwsCredentials, CredentialsError> {
-        credentials_from_environment()
+    type Future = EnvironmentProviderFuture;
+
+    fn credentials(&self) -> Self::Future {
+        EnvironmentProviderFuture {
+            inner: result(credentials_from_environment())
+        }
     }
 }
 

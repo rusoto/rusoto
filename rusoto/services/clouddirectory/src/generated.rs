@@ -10,16 +10,19 @@
 //
 // =================================================================
 
+use std::error::Error;
+use std::fmt;
+use std::io;
+
 #[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
+use futures::future;
+use futures::Future;
+use hyper::StatusCode;
+use rusoto_core::reactor::{CredentialsProvider, RequestDispatcher};
 use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::region;
+use rusoto_core::{ClientInner, RusotoFuture};
 
-use std::fmt;
-use std::error::Error;
-use std::io;
-use std::io::Read;
 use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
@@ -10156,370 +10159,394 @@ pub trait CloudDirectory {
     fn add_facet_to_object(
         &self,
         input: &AddFacetToObjectRequest,
-    ) -> Result<AddFacetToObjectResponse, AddFacetToObjectError>;
+    ) -> RusotoFuture<AddFacetToObjectResponse, AddFacetToObjectError>;
 
     /// <p>Copies the input published schema, at the specified version, into the <a>Directory</a> with the same name and version as that of the published schema.</p>
     fn apply_schema(
         &self,
         input: &ApplySchemaRequest,
-    ) -> Result<ApplySchemaResponse, ApplySchemaError>;
+    ) -> RusotoFuture<ApplySchemaResponse, ApplySchemaError>;
 
     /// <p><p>Attaches an existing object to another object. An object can be accessed in two ways:</p> <ol> <li> <p>Using the path</p> </li> <li> <p>Using <code>ObjectIdentifier</code> </p> </li> </ol></p>
     fn attach_object(
         &self,
         input: &AttachObjectRequest,
-    ) -> Result<AttachObjectResponse, AttachObjectError>;
+    ) -> RusotoFuture<AttachObjectResponse, AttachObjectError>;
 
     /// <p>Attaches a policy object to a regular object. An object can have a limited number of attached policies.</p>
     fn attach_policy(
         &self,
         input: &AttachPolicyRequest,
-    ) -> Result<AttachPolicyResponse, AttachPolicyError>;
+    ) -> RusotoFuture<AttachPolicyResponse, AttachPolicyError>;
 
     /// <p>Attaches the specified object to the specified index.</p>
     fn attach_to_index(
         &self,
         input: &AttachToIndexRequest,
-    ) -> Result<AttachToIndexResponse, AttachToIndexError>;
+    ) -> RusotoFuture<AttachToIndexResponse, AttachToIndexError>;
 
     /// <p>Attaches a typed link to a specified source and target object. For more information, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/objectsandlinks.html#typedlink">Typed link</a>.</p>
     fn attach_typed_link(
         &self,
         input: &AttachTypedLinkRequest,
-    ) -> Result<AttachTypedLinkResponse, AttachTypedLinkError>;
+    ) -> RusotoFuture<AttachTypedLinkResponse, AttachTypedLinkError>;
 
     /// <p>Performs all the read operations in a batch. </p>
-    fn batch_read(&self, input: &BatchReadRequest) -> Result<BatchReadResponse, BatchReadError>;
+    fn batch_read(
+        &self,
+        input: &BatchReadRequest,
+    ) -> RusotoFuture<BatchReadResponse, BatchReadError>;
 
     /// <p>Performs all the write operations in a batch. Either all the operations succeed or none.</p>
-    fn batch_write(&self, input: &BatchWriteRequest)
-        -> Result<BatchWriteResponse, BatchWriteError>;
+    fn batch_write(
+        &self,
+        input: &BatchWriteRequest,
+    ) -> RusotoFuture<BatchWriteResponse, BatchWriteError>;
 
     /// <p>Creates a <a>Directory</a> by copying the published schema into the directory. A directory cannot be created without a schema.</p>
     fn create_directory(
         &self,
         input: &CreateDirectoryRequest,
-    ) -> Result<CreateDirectoryResponse, CreateDirectoryError>;
+    ) -> RusotoFuture<CreateDirectoryResponse, CreateDirectoryError>;
 
     /// <p>Creates a new <a>Facet</a> in a schema. Facet creation is allowed only in development or applied schemas.</p>
     fn create_facet(
         &self,
         input: &CreateFacetRequest,
-    ) -> Result<CreateFacetResponse, CreateFacetError>;
+    ) -> RusotoFuture<CreateFacetResponse, CreateFacetError>;
 
     /// <p>Creates an index object. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/cd_indexing.html">Indexing</a> for more information.</p>
     fn create_index(
         &self,
         input: &CreateIndexRequest,
-    ) -> Result<CreateIndexResponse, CreateIndexError>;
+    ) -> RusotoFuture<CreateIndexResponse, CreateIndexError>;
 
     /// <p>Creates an object in a <a>Directory</a>. Additionally attaches the object to a parent, if a parent reference and <code>LinkName</code> is specified. An object is simply a collection of <a>Facet</a> attributes. You can also use this API call to create a policy object, if the facet from which you create the object is a policy facet. </p>
     fn create_object(
         &self,
         input: &CreateObjectRequest,
-    ) -> Result<CreateObjectResponse, CreateObjectError>;
+    ) -> RusotoFuture<CreateObjectResponse, CreateObjectError>;
 
     /// <p><p>Creates a new schema in a development state. A schema can exist in three phases:</p> <ul> <li> <p> <i>Development:</i> This is a mutable phase of the schema. All new schemas are in the development phase. Once the schema is finalized, it can be published.</p> </li> <li> <p> <i>Published:</i> Published schemas are immutable and have a version associated with them.</p> </li> <li> <p> <i>Applied:</i> Applied schemas are mutable in a way that allows you to add new schema facets. You can also add new, nonrequired attributes to existing schema facets. You can apply only published schemas to directories. </p> </li> </ul></p>
     fn create_schema(
         &self,
         input: &CreateSchemaRequest,
-    ) -> Result<CreateSchemaResponse, CreateSchemaError>;
+    ) -> RusotoFuture<CreateSchemaResponse, CreateSchemaError>;
 
     /// <p>Creates a <a>TypedLinkFacet</a>. For more information, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/objectsandlinks.html#typedlink">Typed link</a>.</p>
     fn create_typed_link_facet(
         &self,
         input: &CreateTypedLinkFacetRequest,
-    ) -> Result<CreateTypedLinkFacetResponse, CreateTypedLinkFacetError>;
+    ) -> RusotoFuture<CreateTypedLinkFacetResponse, CreateTypedLinkFacetError>;
 
     /// <p>Deletes a directory. Only disabled directories can be deleted. A deleted directory cannot be undone. Exercise extreme caution when deleting directories.</p>
     fn delete_directory(
         &self,
         input: &DeleteDirectoryRequest,
-    ) -> Result<DeleteDirectoryResponse, DeleteDirectoryError>;
+    ) -> RusotoFuture<DeleteDirectoryResponse, DeleteDirectoryError>;
 
     /// <p>Deletes a given <a>Facet</a>. All attributes and <a>Rule</a>s that are associated with the facet will be deleted. Only development schema facets are allowed deletion.</p>
     fn delete_facet(
         &self,
         input: &DeleteFacetRequest,
-    ) -> Result<DeleteFacetResponse, DeleteFacetError>;
+    ) -> RusotoFuture<DeleteFacetResponse, DeleteFacetError>;
 
     /// <p>Deletes an object and its associated attributes. Only objects with no children and no parents can be deleted.</p>
     fn delete_object(
         &self,
         input: &DeleteObjectRequest,
-    ) -> Result<DeleteObjectResponse, DeleteObjectError>;
+    ) -> RusotoFuture<DeleteObjectResponse, DeleteObjectError>;
 
     /// <p>Deletes a given schema. Schemas in a development and published state can only be deleted. </p>
     fn delete_schema(
         &self,
         input: &DeleteSchemaRequest,
-    ) -> Result<DeleteSchemaResponse, DeleteSchemaError>;
+    ) -> RusotoFuture<DeleteSchemaResponse, DeleteSchemaError>;
 
     /// <p>Deletes a <a>TypedLinkFacet</a>. For more information, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/objectsandlinks.html#typedlink">Typed link</a>.</p>
     fn delete_typed_link_facet(
         &self,
         input: &DeleteTypedLinkFacetRequest,
-    ) -> Result<DeleteTypedLinkFacetResponse, DeleteTypedLinkFacetError>;
+    ) -> RusotoFuture<DeleteTypedLinkFacetResponse, DeleteTypedLinkFacetError>;
 
     /// <p>Detaches the specified object from the specified index.</p>
     fn detach_from_index(
         &self,
         input: &DetachFromIndexRequest,
-    ) -> Result<DetachFromIndexResponse, DetachFromIndexError>;
+    ) -> RusotoFuture<DetachFromIndexResponse, DetachFromIndexError>;
 
     /// <p>Detaches a given object from the parent object. The object that is to be detached from the parent is specified by the link name.</p>
     fn detach_object(
         &self,
         input: &DetachObjectRequest,
-    ) -> Result<DetachObjectResponse, DetachObjectError>;
+    ) -> RusotoFuture<DetachObjectResponse, DetachObjectError>;
 
     /// <p>Detaches a policy from an object.</p>
     fn detach_policy(
         &self,
         input: &DetachPolicyRequest,
-    ) -> Result<DetachPolicyResponse, DetachPolicyError>;
+    ) -> RusotoFuture<DetachPolicyResponse, DetachPolicyError>;
 
     /// <p>Detaches a typed link from a specified source and target object. For more information, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/objectsandlinks.html#typedlink">Typed link</a>.</p>
-    fn detach_typed_link(&self, input: &DetachTypedLinkRequest)
-        -> Result<(), DetachTypedLinkError>;
+    fn detach_typed_link(
+        &self,
+        input: &DetachTypedLinkRequest,
+    ) -> RusotoFuture<(), DetachTypedLinkError>;
 
     /// <p>Disables the specified directory. Disabled directories cannot be read or written to. Only enabled directories can be disabled. Disabled directories may be reenabled.</p>
     fn disable_directory(
         &self,
         input: &DisableDirectoryRequest,
-    ) -> Result<DisableDirectoryResponse, DisableDirectoryError>;
+    ) -> RusotoFuture<DisableDirectoryResponse, DisableDirectoryError>;
 
     /// <p>Enables the specified directory. Only disabled directories can be enabled. Once enabled, the directory can then be read and written to.</p>
     fn enable_directory(
         &self,
         input: &EnableDirectoryRequest,
-    ) -> Result<EnableDirectoryResponse, EnableDirectoryError>;
+    ) -> RusotoFuture<EnableDirectoryResponse, EnableDirectoryError>;
 
     /// <p>Returns current applied schema version ARN, including the minor version in use.</p>
     fn get_applied_schema_version(
         &self,
         input: &GetAppliedSchemaVersionRequest,
-    ) -> Result<GetAppliedSchemaVersionResponse, GetAppliedSchemaVersionError>;
+    ) -> RusotoFuture<GetAppliedSchemaVersionResponse, GetAppliedSchemaVersionError>;
 
     /// <p>Retrieves metadata about a directory.</p>
     fn get_directory(
         &self,
         input: &GetDirectoryRequest,
-    ) -> Result<GetDirectoryResponse, GetDirectoryError>;
+    ) -> RusotoFuture<GetDirectoryResponse, GetDirectoryError>;
 
     /// <p>Gets details of the <a>Facet</a>, such as facet name, attributes, <a>Rule</a>s, or <code>ObjectType</code>. You can call this on all kinds of schema facets -- published, development, or applied.</p>
-    fn get_facet(&self, input: &GetFacetRequest) -> Result<GetFacetResponse, GetFacetError>;
+    fn get_facet(&self, input: &GetFacetRequest) -> RusotoFuture<GetFacetResponse, GetFacetError>;
 
     /// <p>Retrieves metadata about an object.</p>
     fn get_object_information(
         &self,
         input: &GetObjectInformationRequest,
-    ) -> Result<GetObjectInformationResponse, GetObjectInformationError>;
+    ) -> RusotoFuture<GetObjectInformationResponse, GetObjectInformationError>;
 
     /// <p>Retrieves a JSON representation of the schema. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/cd_schemas.html#jsonformat">JSON Schema Format</a> for more information.</p>
     fn get_schema_as_json(
         &self,
         input: &GetSchemaAsJsonRequest,
-    ) -> Result<GetSchemaAsJsonResponse, GetSchemaAsJsonError>;
+    ) -> RusotoFuture<GetSchemaAsJsonResponse, GetSchemaAsJsonError>;
 
     /// <p>Returns the identity attribute order for a specific <a>TypedLinkFacet</a>. For more information, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/objectsandlinks.html#typedlink">Typed link</a>.</p>
     fn get_typed_link_facet_information(
         &self,
         input: &GetTypedLinkFacetInformationRequest,
-    ) -> Result<GetTypedLinkFacetInformationResponse, GetTypedLinkFacetInformationError>;
+    ) -> RusotoFuture<GetTypedLinkFacetInformationResponse, GetTypedLinkFacetInformationError>;
 
     /// <p>Lists schema major versions applied to a directory. If <code>SchemaArn</code> is provided, lists the minor version.</p>
     fn list_applied_schema_arns(
         &self,
         input: &ListAppliedSchemaArnsRequest,
-    ) -> Result<ListAppliedSchemaArnsResponse, ListAppliedSchemaArnsError>;
+    ) -> RusotoFuture<ListAppliedSchemaArnsResponse, ListAppliedSchemaArnsError>;
 
     /// <p>Lists indices attached to the specified object.</p>
     fn list_attached_indices(
         &self,
         input: &ListAttachedIndicesRequest,
-    ) -> Result<ListAttachedIndicesResponse, ListAttachedIndicesError>;
+    ) -> RusotoFuture<ListAttachedIndicesResponse, ListAttachedIndicesError>;
 
     /// <p>Retrieves each Amazon Resource Name (ARN) of schemas in the development state.</p>
     fn list_development_schema_arns(
         &self,
         input: &ListDevelopmentSchemaArnsRequest,
-    ) -> Result<ListDevelopmentSchemaArnsResponse, ListDevelopmentSchemaArnsError>;
+    ) -> RusotoFuture<ListDevelopmentSchemaArnsResponse, ListDevelopmentSchemaArnsError>;
 
     /// <p>Lists directories created within an account.</p>
     fn list_directories(
         &self,
         input: &ListDirectoriesRequest,
-    ) -> Result<ListDirectoriesResponse, ListDirectoriesError>;
+    ) -> RusotoFuture<ListDirectoriesResponse, ListDirectoriesError>;
 
     /// <p>Retrieves attributes attached to the facet.</p>
     fn list_facet_attributes(
         &self,
         input: &ListFacetAttributesRequest,
-    ) -> Result<ListFacetAttributesResponse, ListFacetAttributesError>;
+    ) -> RusotoFuture<ListFacetAttributesResponse, ListFacetAttributesError>;
 
     /// <p>Retrieves the names of facets that exist in a schema.</p>
     fn list_facet_names(
         &self,
         input: &ListFacetNamesRequest,
-    ) -> Result<ListFacetNamesResponse, ListFacetNamesError>;
+    ) -> RusotoFuture<ListFacetNamesResponse, ListFacetNamesError>;
 
     /// <p>Returns a paginated list of all the incoming <a>TypedLinkSpecifier</a> information for an object. It also supports filtering by typed link facet and identity attributes. For more information, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/objectsandlinks.html#typedlink">Typed link</a>.</p>
     fn list_incoming_typed_links(
         &self,
         input: &ListIncomingTypedLinksRequest,
-    ) -> Result<ListIncomingTypedLinksResponse, ListIncomingTypedLinksError>;
+    ) -> RusotoFuture<ListIncomingTypedLinksResponse, ListIncomingTypedLinksError>;
 
     /// <p>Lists objects and indexed values attached to the index.</p>
-    fn list_index(&self, input: &ListIndexRequest) -> Result<ListIndexResponse, ListIndexError>;
+    fn list_index(
+        &self,
+        input: &ListIndexRequest,
+    ) -> RusotoFuture<ListIndexResponse, ListIndexError>;
 
     /// <p>Lists all attributes that are associated with an object. </p>
     fn list_object_attributes(
         &self,
         input: &ListObjectAttributesRequest,
-    ) -> Result<ListObjectAttributesResponse, ListObjectAttributesError>;
+    ) -> RusotoFuture<ListObjectAttributesResponse, ListObjectAttributesError>;
 
     /// <p>Returns a paginated list of child objects that are associated with a given object.</p>
     fn list_object_children(
         &self,
         input: &ListObjectChildrenRequest,
-    ) -> Result<ListObjectChildrenResponse, ListObjectChildrenError>;
+    ) -> RusotoFuture<ListObjectChildrenResponse, ListObjectChildrenError>;
 
     /// <p>Retrieves all available parent paths for any object type such as node, leaf node, policy node, and index node objects. For more information about objects, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/cd_key_concepts.html#dirstructure">Directory Structure</a>.</p> <p>Use this API to evaluate all parents for an object. The call returns all objects from the root of the directory up to the requested object. The API returns the number of paths based on user-defined <code>MaxResults</code>, in case there are multiple paths to the parent. The order of the paths and nodes returned is consistent among multiple API calls unless the objects are deleted or moved. Paths not leading to the directory root are ignored from the target object.</p>
     fn list_object_parent_paths(
         &self,
         input: &ListObjectParentPathsRequest,
-    ) -> Result<ListObjectParentPathsResponse, ListObjectParentPathsError>;
+    ) -> RusotoFuture<ListObjectParentPathsResponse, ListObjectParentPathsError>;
 
     /// <p>Lists parent objects that are associated with a given object in pagination fashion.</p>
     fn list_object_parents(
         &self,
         input: &ListObjectParentsRequest,
-    ) -> Result<ListObjectParentsResponse, ListObjectParentsError>;
+    ) -> RusotoFuture<ListObjectParentsResponse, ListObjectParentsError>;
 
     /// <p>Returns policies attached to an object in pagination fashion.</p>
     fn list_object_policies(
         &self,
         input: &ListObjectPoliciesRequest,
-    ) -> Result<ListObjectPoliciesResponse, ListObjectPoliciesError>;
+    ) -> RusotoFuture<ListObjectPoliciesResponse, ListObjectPoliciesError>;
 
     /// <p>Returns a paginated list of all the outgoing <a>TypedLinkSpecifier</a> information for an object. It also supports filtering by typed link facet and identity attributes. For more information, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/objectsandlinks.html#typedlink">Typed link</a>.</p>
     fn list_outgoing_typed_links(
         &self,
         input: &ListOutgoingTypedLinksRequest,
-    ) -> Result<ListOutgoingTypedLinksResponse, ListOutgoingTypedLinksError>;
+    ) -> RusotoFuture<ListOutgoingTypedLinksResponse, ListOutgoingTypedLinksError>;
 
     /// <p>Returns all of the <code>ObjectIdentifiers</code> to which a given policy is attached.</p>
     fn list_policy_attachments(
         &self,
         input: &ListPolicyAttachmentsRequest,
-    ) -> Result<ListPolicyAttachmentsResponse, ListPolicyAttachmentsError>;
+    ) -> RusotoFuture<ListPolicyAttachmentsResponse, ListPolicyAttachmentsError>;
 
     /// <p>Lists schema major versions for a published schema. If <code>SchemaArn</code> is provided, lists the minor version.</p>
     fn list_published_schema_arns(
         &self,
         input: &ListPublishedSchemaArnsRequest,
-    ) -> Result<ListPublishedSchemaArnsResponse, ListPublishedSchemaArnsError>;
+    ) -> RusotoFuture<ListPublishedSchemaArnsResponse, ListPublishedSchemaArnsError>;
 
     /// <p>Returns tags for a resource. Tagging is currently supported only for directories with a limit of 50 tags per directory. All 50 tags are returned for a given directory with this API call.</p>
     fn list_tags_for_resource(
         &self,
         input: &ListTagsForResourceRequest,
-    ) -> Result<ListTagsForResourceResponse, ListTagsForResourceError>;
+    ) -> RusotoFuture<ListTagsForResourceResponse, ListTagsForResourceError>;
 
     /// <p>Returns a paginated list of all attribute definitions for a particular <a>TypedLinkFacet</a>. For more information, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/objectsandlinks.html#typedlink">Typed link</a>.</p>
     fn list_typed_link_facet_attributes(
         &self,
         input: &ListTypedLinkFacetAttributesRequest,
-    ) -> Result<ListTypedLinkFacetAttributesResponse, ListTypedLinkFacetAttributesError>;
+    ) -> RusotoFuture<ListTypedLinkFacetAttributesResponse, ListTypedLinkFacetAttributesError>;
 
     /// <p>Returns a paginated list of <code>TypedLink</code> facet names for a particular schema. For more information, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/objectsandlinks.html#typedlink">Typed link</a>.</p>
     fn list_typed_link_facet_names(
         &self,
         input: &ListTypedLinkFacetNamesRequest,
-    ) -> Result<ListTypedLinkFacetNamesResponse, ListTypedLinkFacetNamesError>;
+    ) -> RusotoFuture<ListTypedLinkFacetNamesResponse, ListTypedLinkFacetNamesError>;
 
     /// <p>Lists all policies from the root of the <a>Directory</a> to the object specified. If there are no policies present, an empty list is returned. If policies are present, and if some objects don't have the policies attached, it returns the <code>ObjectIdentifier</code> for such objects. If policies are present, it returns <code>ObjectIdentifier</code>, <code>policyId</code>, and <code>policyType</code>. Paths that don't lead to the root from the target object are ignored. For more information, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/cd_key_concepts.html#policies">Policies</a>.</p>
     fn lookup_policy(
         &self,
         input: &LookupPolicyRequest,
-    ) -> Result<LookupPolicyResponse, LookupPolicyError>;
+    ) -> RusotoFuture<LookupPolicyResponse, LookupPolicyError>;
 
     /// <p>Publishes a development schema with a major version and a recommended minor version.</p>
     fn publish_schema(
         &self,
         input: &PublishSchemaRequest,
-    ) -> Result<PublishSchemaResponse, PublishSchemaError>;
+    ) -> RusotoFuture<PublishSchemaResponse, PublishSchemaError>;
 
     /// <p>Allows a schema to be updated using JSON upload. Only available for development schemas. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/cd_schemas.html#jsonformat">JSON Schema Format</a> for more information.</p>
     fn put_schema_from_json(
         &self,
         input: &PutSchemaFromJsonRequest,
-    ) -> Result<PutSchemaFromJsonResponse, PutSchemaFromJsonError>;
+    ) -> RusotoFuture<PutSchemaFromJsonResponse, PutSchemaFromJsonError>;
 
     /// <p>Removes the specified facet from the specified object.</p>
     fn remove_facet_from_object(
         &self,
         input: &RemoveFacetFromObjectRequest,
-    ) -> Result<RemoveFacetFromObjectResponse, RemoveFacetFromObjectError>;
+    ) -> RusotoFuture<RemoveFacetFromObjectResponse, RemoveFacetFromObjectError>;
 
     /// <p>An API operation for adding tags to a resource.</p>
     fn tag_resource(
         &self,
         input: &TagResourceRequest,
-    ) -> Result<TagResourceResponse, TagResourceError>;
+    ) -> RusotoFuture<TagResourceResponse, TagResourceError>;
 
     /// <p>An API operation for removing tags from a resource.</p>
     fn untag_resource(
         &self,
         input: &UntagResourceRequest,
-    ) -> Result<UntagResourceResponse, UntagResourceError>;
+    ) -> RusotoFuture<UntagResourceResponse, UntagResourceError>;
 
     /// <p><p>Does the following:</p> <ol> <li> <p>Adds new <code>Attributes</code>, <code>Rules</code>, or <code>ObjectTypes</code>.</p> </li> <li> <p>Updates existing <code>Attributes</code>, <code>Rules</code>, or <code>ObjectTypes</code>.</p> </li> <li> <p>Deletes existing <code>Attributes</code>, <code>Rules</code>, or <code>ObjectTypes</code>.</p> </li> </ol></p>
     fn update_facet(
         &self,
         input: &UpdateFacetRequest,
-    ) -> Result<UpdateFacetResponse, UpdateFacetError>;
+    ) -> RusotoFuture<UpdateFacetResponse, UpdateFacetError>;
 
     /// <p>Updates a given object's attributes.</p>
     fn update_object_attributes(
         &self,
         input: &UpdateObjectAttributesRequest,
-    ) -> Result<UpdateObjectAttributesResponse, UpdateObjectAttributesError>;
+    ) -> RusotoFuture<UpdateObjectAttributesResponse, UpdateObjectAttributesError>;
 
     /// <p>Updates the schema name with a new name. Only development schema names can be updated.</p>
     fn update_schema(
         &self,
         input: &UpdateSchemaRequest,
-    ) -> Result<UpdateSchemaResponse, UpdateSchemaError>;
+    ) -> RusotoFuture<UpdateSchemaResponse, UpdateSchemaError>;
 
     /// <p>Updates a <a>TypedLinkFacet</a>. For more information, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/objectsandlinks.html#typedlink">Typed link</a>.</p>
     fn update_typed_link_facet(
         &self,
         input: &UpdateTypedLinkFacetRequest,
-    ) -> Result<UpdateTypedLinkFacetResponse, UpdateTypedLinkFacetError>;
+    ) -> RusotoFuture<UpdateTypedLinkFacetResponse, UpdateTypedLinkFacetError>;
 
     /// <p>Upgrades a single directory in-place using the <code>PublishedSchemaArn</code> with schema updates found in <code>MinorVersion</code>. Backwards-compatible minor version upgrades are instantaneously available for readers on all objects in the directory. Note: This is a synchronous API call and upgrades only one schema on a given directory per call. To upgrade multiple directories from one schema, you would need to call this API on each directory.</p>
     fn upgrade_applied_schema(
         &self,
         input: &UpgradeAppliedSchemaRequest,
-    ) -> Result<UpgradeAppliedSchemaResponse, UpgradeAppliedSchemaError>;
+    ) -> RusotoFuture<UpgradeAppliedSchemaResponse, UpgradeAppliedSchemaError>;
 
     /// <p>Upgrades a published schema under a new minor version revision using the current contents of <code>DevelopmentSchemaArn</code>.</p>
     fn upgrade_published_schema(
         &self,
         input: &UpgradePublishedSchemaRequest,
-    ) -> Result<UpgradePublishedSchemaResponse, UpgradePublishedSchemaError>;
+    ) -> RusotoFuture<UpgradePublishedSchemaResponse, UpgradePublishedSchemaError>;
 }
 /// A client for the Amazon CloudDirectory API.
-pub struct CloudDirectoryClient<P, D>
+pub struct CloudDirectoryClient<P = CredentialsProvider, D = RequestDispatcher>
 where
     P: ProvideAwsCredentials,
     D: DispatchSignedRequest,
 {
-    credentials_provider: P,
+    inner: ClientInner<P, D>,
     region: region::Region,
-    dispatcher: D,
+}
+
+impl CloudDirectoryClient {
+    /// Creates a simple client backed by an implicit event loop.
+    ///
+    /// The client will use the default credentials provider and tls client.
+    ///
+    /// See the `rusoto_core::reactor` module for more details.
+    pub fn simple(region: region::Region) -> CloudDirectoryClient {
+        CloudDirectoryClient::new(
+            RequestDispatcher::default(),
+            CredentialsProvider::default(),
+            region,
+        )
+    }
 }
 
 impl<P, D> CloudDirectoryClient<P, D>
@@ -10529,23 +10556,22 @@ where
 {
     pub fn new(request_dispatcher: D, credentials_provider: P, region: region::Region) -> Self {
         CloudDirectoryClient {
-            credentials_provider: credentials_provider,
+            inner: ClientInner::new(credentials_provider, request_dispatcher),
             region: region,
-            dispatcher: request_dispatcher,
         }
     }
 }
 
 impl<P, D> CloudDirectory for CloudDirectoryClient<P, D>
 where
-    P: ProvideAwsCredentials,
-    D: DispatchSignedRequest,
+    P: ProvideAwsCredentials + 'static,
+    D: DispatchSignedRequest + 'static,
 {
     /// <p>Adds a new <a>Facet</a> to an object.</p>
     fn add_facet_to_object(
         &self,
         input: &AddFacetToObjectRequest,
-    ) -> Result<AddFacetToObjectResponse, AddFacetToObjectError> {
+    ) -> RusotoFuture<AddFacetToObjectResponse, AddFacetToObjectError> {
         let request_uri = "/amazonclouddirectory/2017-01-11/object/facets";
 
         let mut request = SignedRequest::new("PUT", "clouddirectory", &self.region, &request_uri);
@@ -10555,39 +10581,38 @@ where
         request.set_payload(encoded);
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<AddFacetToObjectResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<AddFacetToObjectResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(AddFacetToObjectError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(AddFacetToObjectError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Copies the input published schema, at the specified version, into the <a>Directory</a> with the same name and version as that of the published schema.</p>
     fn apply_schema(
         &self,
         input: &ApplySchemaRequest,
-    ) -> Result<ApplySchemaResponse, ApplySchemaError> {
+    ) -> RusotoFuture<ApplySchemaResponse, ApplySchemaError> {
         let request_uri = "/amazonclouddirectory/2017-01-11/schema/apply";
 
         let mut request = SignedRequest::new("PUT", "clouddirectory", &self.region, &request_uri);
@@ -10597,39 +10622,38 @@ where
         request.set_payload(encoded);
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<ApplySchemaResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<ApplySchemaResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(ApplySchemaError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ApplySchemaError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p><p>Attaches an existing object to another object. An object can be accessed in two ways:</p> <ol> <li> <p>Using the path</p> </li> <li> <p>Using <code>ObjectIdentifier</code> </p> </li> </ol></p>
     fn attach_object(
         &self,
         input: &AttachObjectRequest,
-    ) -> Result<AttachObjectResponse, AttachObjectError> {
+    ) -> RusotoFuture<AttachObjectResponse, AttachObjectError> {
         let request_uri = "/amazonclouddirectory/2017-01-11/object/attach";
 
         let mut request = SignedRequest::new("PUT", "clouddirectory", &self.region, &request_uri);
@@ -10639,39 +10663,38 @@ where
         request.set_payload(encoded);
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<AttachObjectResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<AttachObjectResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(AttachObjectError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(AttachObjectError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Attaches a policy object to a regular object. An object can have a limited number of attached policies.</p>
     fn attach_policy(
         &self,
         input: &AttachPolicyRequest,
-    ) -> Result<AttachPolicyResponse, AttachPolicyError> {
+    ) -> RusotoFuture<AttachPolicyResponse, AttachPolicyError> {
         let request_uri = "/amazonclouddirectory/2017-01-11/policy/attach";
 
         let mut request = SignedRequest::new("PUT", "clouddirectory", &self.region, &request_uri);
@@ -10684,39 +10707,38 @@ where
             request.add_header("x-amz-data-partition", &directory_arn.to_string());
         }
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<AttachPolicyResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<AttachPolicyResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(AttachPolicyError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(AttachPolicyError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Attaches the specified object to the specified index.</p>
     fn attach_to_index(
         &self,
         input: &AttachToIndexRequest,
-    ) -> Result<AttachToIndexResponse, AttachToIndexError> {
+    ) -> RusotoFuture<AttachToIndexResponse, AttachToIndexError> {
         let request_uri = "/amazonclouddirectory/2017-01-11/index/attach";
 
         let mut request = SignedRequest::new("PUT", "clouddirectory", &self.region, &request_uri);
@@ -10726,39 +10748,38 @@ where
         request.set_payload(encoded);
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<AttachToIndexResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<AttachToIndexResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(AttachToIndexError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(AttachToIndexError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Attaches a typed link to a specified source and target object. For more information, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/objectsandlinks.html#typedlink">Typed link</a>.</p>
     fn attach_typed_link(
         &self,
         input: &AttachTypedLinkRequest,
-    ) -> Result<AttachTypedLinkResponse, AttachTypedLinkError> {
+    ) -> RusotoFuture<AttachTypedLinkResponse, AttachTypedLinkError> {
         let request_uri = "/amazonclouddirectory/2017-01-11/typedlink/attach";
 
         let mut request = SignedRequest::new("PUT", "clouddirectory", &self.region, &request_uri);
@@ -10768,36 +10789,38 @@ where
         request.set_payload(encoded);
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<AttachTypedLinkResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<AttachTypedLinkResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(AttachTypedLinkError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(AttachTypedLinkError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Performs all the read operations in a batch. </p>
-    fn batch_read(&self, input: &BatchReadRequest) -> Result<BatchReadResponse, BatchReadError> {
+    fn batch_read(
+        &self,
+        input: &BatchReadRequest,
+    ) -> RusotoFuture<BatchReadResponse, BatchReadError> {
         let request_uri = "/amazonclouddirectory/2017-01-11/batchread";
 
         let mut request = SignedRequest::new("POST", "clouddirectory", &self.region, &request_uri);
@@ -10811,39 +10834,38 @@ where
         }
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<BatchReadResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<BatchReadResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(BatchReadError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(BatchReadError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Performs all the write operations in a batch. Either all the operations succeed or none.</p>
     fn batch_write(
         &self,
         input: &BatchWriteRequest,
-    ) -> Result<BatchWriteResponse, BatchWriteError> {
+    ) -> RusotoFuture<BatchWriteResponse, BatchWriteError> {
         let request_uri = "/amazonclouddirectory/2017-01-11/batchwrite";
 
         let mut request = SignedRequest::new("PUT", "clouddirectory", &self.region, &request_uri);
@@ -10853,39 +10875,38 @@ where
         request.set_payload(encoded);
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<BatchWriteResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<BatchWriteResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(BatchWriteError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(BatchWriteError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Creates a <a>Directory</a> by copying the published schema into the directory. A directory cannot be created without a schema.</p>
     fn create_directory(
         &self,
         input: &CreateDirectoryRequest,
-    ) -> Result<CreateDirectoryResponse, CreateDirectoryError> {
+    ) -> RusotoFuture<CreateDirectoryResponse, CreateDirectoryError> {
         let request_uri = "/amazonclouddirectory/2017-01-11/directory/create";
 
         let mut request = SignedRequest::new("PUT", "clouddirectory", &self.region, &request_uri);
@@ -10895,39 +10916,38 @@ where
         request.set_payload(encoded);
         request.add_header("x-amz-data-partition", &input.schema_arn);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<CreateDirectoryResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<CreateDirectoryResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(CreateDirectoryError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreateDirectoryError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Creates a new <a>Facet</a> in a schema. Facet creation is allowed only in development or applied schemas.</p>
     fn create_facet(
         &self,
         input: &CreateFacetRequest,
-    ) -> Result<CreateFacetResponse, CreateFacetError> {
+    ) -> RusotoFuture<CreateFacetResponse, CreateFacetError> {
         let request_uri = "/amazonclouddirectory/2017-01-11/facet/create";
 
         let mut request = SignedRequest::new("PUT", "clouddirectory", &self.region, &request_uri);
@@ -10937,39 +10957,38 @@ where
         request.set_payload(encoded);
         request.add_header("x-amz-data-partition", &input.schema_arn);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<CreateFacetResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<CreateFacetResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(CreateFacetError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreateFacetError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Creates an index object. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/cd_indexing.html">Indexing</a> for more information.</p>
     fn create_index(
         &self,
         input: &CreateIndexRequest,
-    ) -> Result<CreateIndexResponse, CreateIndexError> {
+    ) -> RusotoFuture<CreateIndexResponse, CreateIndexError> {
         let request_uri = "/amazonclouddirectory/2017-01-11/index";
 
         let mut request = SignedRequest::new("PUT", "clouddirectory", &self.region, &request_uri);
@@ -10979,39 +10998,38 @@ where
         request.set_payload(encoded);
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<CreateIndexResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<CreateIndexResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(CreateIndexError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreateIndexError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Creates an object in a <a>Directory</a>. Additionally attaches the object to a parent, if a parent reference and <code>LinkName</code> is specified. An object is simply a collection of <a>Facet</a> attributes. You can also use this API call to create a policy object, if the facet from which you create the object is a policy facet. </p>
     fn create_object(
         &self,
         input: &CreateObjectRequest,
-    ) -> Result<CreateObjectResponse, CreateObjectError> {
+    ) -> RusotoFuture<CreateObjectResponse, CreateObjectError> {
         let request_uri = "/amazonclouddirectory/2017-01-11/object";
 
         let mut request = SignedRequest::new("PUT", "clouddirectory", &self.region, &request_uri);
@@ -11021,39 +11039,38 @@ where
         request.set_payload(encoded);
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<CreateObjectResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<CreateObjectResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(CreateObjectError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreateObjectError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p><p>Creates a new schema in a development state. A schema can exist in three phases:</p> <ul> <li> <p> <i>Development:</i> This is a mutable phase of the schema. All new schemas are in the development phase. Once the schema is finalized, it can be published.</p> </li> <li> <p> <i>Published:</i> Published schemas are immutable and have a version associated with them.</p> </li> <li> <p> <i>Applied:</i> Applied schemas are mutable in a way that allows you to add new schema facets. You can also add new, nonrequired attributes to existing schema facets. You can apply only published schemas to directories. </p> </li> </ul></p>
     fn create_schema(
         &self,
         input: &CreateSchemaRequest,
-    ) -> Result<CreateSchemaResponse, CreateSchemaError> {
+    ) -> RusotoFuture<CreateSchemaResponse, CreateSchemaError> {
         let request_uri = "/amazonclouddirectory/2017-01-11/schema/create";
 
         let mut request = SignedRequest::new("PUT", "clouddirectory", &self.region, &request_uri);
@@ -11062,39 +11079,38 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<CreateSchemaResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<CreateSchemaResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(CreateSchemaError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreateSchemaError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Creates a <a>TypedLinkFacet</a>. For more information, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/objectsandlinks.html#typedlink">Typed link</a>.</p>
     fn create_typed_link_facet(
         &self,
         input: &CreateTypedLinkFacetRequest,
-    ) -> Result<CreateTypedLinkFacetResponse, CreateTypedLinkFacetError> {
+    ) -> RusotoFuture<CreateTypedLinkFacetResponse, CreateTypedLinkFacetError> {
         let request_uri = "/amazonclouddirectory/2017-01-11/typedlink/facet/create";
 
         let mut request = SignedRequest::new("PUT", "clouddirectory", &self.region, &request_uri);
@@ -11104,39 +11120,39 @@ where
         request.set_payload(encoded);
         request.add_header("x-amz-data-partition", &input.schema_arn);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<CreateTypedLinkFacetResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<CreateTypedLinkFacetResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(CreateTypedLinkFacetError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreateTypedLinkFacetError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Deletes a directory. Only disabled directories can be deleted. A deleted directory cannot be undone. Exercise extreme caution when deleting directories.</p>
     fn delete_directory(
         &self,
         input: &DeleteDirectoryRequest,
-    ) -> Result<DeleteDirectoryResponse, DeleteDirectoryError> {
+    ) -> RusotoFuture<DeleteDirectoryResponse, DeleteDirectoryError> {
         let request_uri = "/amazonclouddirectory/2017-01-11/directory";
 
         let mut request = SignedRequest::new("PUT", "clouddirectory", &self.region, &request_uri);
@@ -11144,39 +11160,38 @@ where
 
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<DeleteDirectoryResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<DeleteDirectoryResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DeleteDirectoryError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteDirectoryError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Deletes a given <a>Facet</a>. All attributes and <a>Rule</a>s that are associated with the facet will be deleted. Only development schema facets are allowed deletion.</p>
     fn delete_facet(
         &self,
         input: &DeleteFacetRequest,
-    ) -> Result<DeleteFacetResponse, DeleteFacetError> {
+    ) -> RusotoFuture<DeleteFacetResponse, DeleteFacetError> {
         let request_uri = "/amazonclouddirectory/2017-01-11/facet/delete";
 
         let mut request = SignedRequest::new("PUT", "clouddirectory", &self.region, &request_uri);
@@ -11186,39 +11201,38 @@ where
         request.set_payload(encoded);
         request.add_header("x-amz-data-partition", &input.schema_arn);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<DeleteFacetResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<DeleteFacetResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DeleteFacetError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteFacetError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Deletes an object and its associated attributes. Only objects with no children and no parents can be deleted.</p>
     fn delete_object(
         &self,
         input: &DeleteObjectRequest,
-    ) -> Result<DeleteObjectResponse, DeleteObjectError> {
+    ) -> RusotoFuture<DeleteObjectResponse, DeleteObjectError> {
         let request_uri = "/amazonclouddirectory/2017-01-11/object/delete";
 
         let mut request = SignedRequest::new("PUT", "clouddirectory", &self.region, &request_uri);
@@ -11228,39 +11242,38 @@ where
         request.set_payload(encoded);
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<DeleteObjectResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<DeleteObjectResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DeleteObjectError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteObjectError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Deletes a given schema. Schemas in a development and published state can only be deleted. </p>
     fn delete_schema(
         &self,
         input: &DeleteSchemaRequest,
-    ) -> Result<DeleteSchemaResponse, DeleteSchemaError> {
+    ) -> RusotoFuture<DeleteSchemaResponse, DeleteSchemaError> {
         let request_uri = "/amazonclouddirectory/2017-01-11/schema";
 
         let mut request = SignedRequest::new("PUT", "clouddirectory", &self.region, &request_uri);
@@ -11268,39 +11281,38 @@ where
 
         request.add_header("x-amz-data-partition", &input.schema_arn);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<DeleteSchemaResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<DeleteSchemaResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DeleteSchemaError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteSchemaError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Deletes a <a>TypedLinkFacet</a>. For more information, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/objectsandlinks.html#typedlink">Typed link</a>.</p>
     fn delete_typed_link_facet(
         &self,
         input: &DeleteTypedLinkFacetRequest,
-    ) -> Result<DeleteTypedLinkFacetResponse, DeleteTypedLinkFacetError> {
+    ) -> RusotoFuture<DeleteTypedLinkFacetResponse, DeleteTypedLinkFacetError> {
         let request_uri = "/amazonclouddirectory/2017-01-11/typedlink/facet/delete";
 
         let mut request = SignedRequest::new("PUT", "clouddirectory", &self.region, &request_uri);
@@ -11310,39 +11322,39 @@ where
         request.set_payload(encoded);
         request.add_header("x-amz-data-partition", &input.schema_arn);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<DeleteTypedLinkFacetResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<DeleteTypedLinkFacetResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DeleteTypedLinkFacetError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteTypedLinkFacetError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Detaches the specified object from the specified index.</p>
     fn detach_from_index(
         &self,
         input: &DetachFromIndexRequest,
-    ) -> Result<DetachFromIndexResponse, DetachFromIndexError> {
+    ) -> RusotoFuture<DetachFromIndexResponse, DetachFromIndexError> {
         let request_uri = "/amazonclouddirectory/2017-01-11/index/detach";
 
         let mut request = SignedRequest::new("PUT", "clouddirectory", &self.region, &request_uri);
@@ -11352,39 +11364,38 @@ where
         request.set_payload(encoded);
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<DetachFromIndexResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<DetachFromIndexResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DetachFromIndexError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DetachFromIndexError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Detaches a given object from the parent object. The object that is to be detached from the parent is specified by the link name.</p>
     fn detach_object(
         &self,
         input: &DetachObjectRequest,
-    ) -> Result<DetachObjectResponse, DetachObjectError> {
+    ) -> RusotoFuture<DetachObjectResponse, DetachObjectError> {
         let request_uri = "/amazonclouddirectory/2017-01-11/object/detach";
 
         let mut request = SignedRequest::new("PUT", "clouddirectory", &self.region, &request_uri);
@@ -11394,39 +11405,38 @@ where
         request.set_payload(encoded);
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<DetachObjectResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<DetachObjectResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DetachObjectError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DetachObjectError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Detaches a policy from an object.</p>
     fn detach_policy(
         &self,
         input: &DetachPolicyRequest,
-    ) -> Result<DetachPolicyResponse, DetachPolicyError> {
+    ) -> RusotoFuture<DetachPolicyResponse, DetachPolicyError> {
         let request_uri = "/amazonclouddirectory/2017-01-11/policy/detach";
 
         let mut request = SignedRequest::new("PUT", "clouddirectory", &self.region, &request_uri);
@@ -11436,39 +11446,38 @@ where
         request.set_payload(encoded);
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<DetachPolicyResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<DetachPolicyResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DetachPolicyError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DetachPolicyError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Detaches a typed link from a specified source and target object. For more information, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/objectsandlinks.html#typedlink">Typed link</a>.</p>
     fn detach_typed_link(
         &self,
         input: &DetachTypedLinkRequest,
-    ) -> Result<(), DetachTypedLinkError> {
+    ) -> RusotoFuture<(), DetachTypedLinkError> {
         let request_uri = "/amazonclouddirectory/2017-01-11/typedlink/detach";
 
         let mut request = SignedRequest::new("PUT", "clouddirectory", &self.region, &request_uri);
@@ -11478,30 +11487,30 @@ where
         request.set_payload(encoded);
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let result = ::std::mem::drop(response);
 
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DetachTypedLinkError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        });
 
-                Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DetachTypedLinkError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        RusotoFuture::new(future)
     }
 
     /// <p>Disables the specified directory. Disabled directories cannot be read or written to. Only enabled directories can be disabled. Disabled directories may be reenabled.</p>
     fn disable_directory(
         &self,
         input: &DisableDirectoryRequest,
-    ) -> Result<DisableDirectoryResponse, DisableDirectoryError> {
+    ) -> RusotoFuture<DisableDirectoryResponse, DisableDirectoryError> {
         let request_uri = "/amazonclouddirectory/2017-01-11/directory/disable";
 
         let mut request = SignedRequest::new("PUT", "clouddirectory", &self.region, &request_uri);
@@ -11509,39 +11518,38 @@ where
 
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<DisableDirectoryResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<DisableDirectoryResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DisableDirectoryError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DisableDirectoryError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Enables the specified directory. Only disabled directories can be enabled. Once enabled, the directory can then be read and written to.</p>
     fn enable_directory(
         &self,
         input: &EnableDirectoryRequest,
-    ) -> Result<EnableDirectoryResponse, EnableDirectoryError> {
+    ) -> RusotoFuture<EnableDirectoryResponse, EnableDirectoryError> {
         let request_uri = "/amazonclouddirectory/2017-01-11/directory/enable";
 
         let mut request = SignedRequest::new("PUT", "clouddirectory", &self.region, &request_uri);
@@ -11549,39 +11557,38 @@ where
 
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<EnableDirectoryResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<EnableDirectoryResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(EnableDirectoryError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(EnableDirectoryError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Returns current applied schema version ARN, including the minor version in use.</p>
     fn get_applied_schema_version(
         &self,
         input: &GetAppliedSchemaVersionRequest,
-    ) -> Result<GetAppliedSchemaVersionResponse, GetAppliedSchemaVersionError> {
+    ) -> RusotoFuture<GetAppliedSchemaVersionResponse, GetAppliedSchemaVersionError> {
         let request_uri = "/amazonclouddirectory/2017-01-11/schema/getappliedschema";
 
         let mut request = SignedRequest::new("POST", "clouddirectory", &self.region, &request_uri);
@@ -11590,40 +11597,39 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<GetAppliedSchemaVersionResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result =
-                    serde_json::from_slice::<GetAppliedSchemaVersionResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(GetAppliedSchemaVersionError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetAppliedSchemaVersionError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Retrieves metadata about a directory.</p>
     fn get_directory(
         &self,
         input: &GetDirectoryRequest,
-    ) -> Result<GetDirectoryResponse, GetDirectoryError> {
+    ) -> RusotoFuture<GetDirectoryResponse, GetDirectoryError> {
         let request_uri = "/amazonclouddirectory/2017-01-11/directory/get";
 
         let mut request = SignedRequest::new("POST", "clouddirectory", &self.region, &request_uri);
@@ -11631,36 +11637,35 @@ where
 
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<GetDirectoryResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<GetDirectoryResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(GetDirectoryError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetDirectoryError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Gets details of the <a>Facet</a>, such as facet name, attributes, <a>Rule</a>s, or <code>ObjectType</code>. You can call this on all kinds of schema facets -- published, development, or applied.</p>
-    fn get_facet(&self, input: &GetFacetRequest) -> Result<GetFacetResponse, GetFacetError> {
+    fn get_facet(&self, input: &GetFacetRequest) -> RusotoFuture<GetFacetResponse, GetFacetError> {
         let request_uri = "/amazonclouddirectory/2017-01-11/facet";
 
         let mut request = SignedRequest::new("POST", "clouddirectory", &self.region, &request_uri);
@@ -11670,39 +11675,38 @@ where
         request.set_payload(encoded);
         request.add_header("x-amz-data-partition", &input.schema_arn);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<GetFacetResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<GetFacetResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(GetFacetError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetFacetError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Retrieves metadata about an object.</p>
     fn get_object_information(
         &self,
         input: &GetObjectInformationRequest,
-    ) -> Result<GetObjectInformationResponse, GetObjectInformationError> {
+    ) -> RusotoFuture<GetObjectInformationResponse, GetObjectInformationError> {
         let request_uri = "/amazonclouddirectory/2017-01-11/object/information";
 
         let mut request = SignedRequest::new("POST", "clouddirectory", &self.region, &request_uri);
@@ -11716,39 +11720,39 @@ where
         }
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<GetObjectInformationResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<GetObjectInformationResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(GetObjectInformationError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetObjectInformationError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Retrieves a JSON representation of the schema. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/cd_schemas.html#jsonformat">JSON Schema Format</a> for more information.</p>
     fn get_schema_as_json(
         &self,
         input: &GetSchemaAsJsonRequest,
-    ) -> Result<GetSchemaAsJsonResponse, GetSchemaAsJsonError> {
+    ) -> RusotoFuture<GetSchemaAsJsonResponse, GetSchemaAsJsonError> {
         let request_uri = "/amazonclouddirectory/2017-01-11/schema/json";
 
         let mut request = SignedRequest::new("POST", "clouddirectory", &self.region, &request_uri);
@@ -11756,39 +11760,38 @@ where
 
         request.add_header("x-amz-data-partition", &input.schema_arn);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<GetSchemaAsJsonResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<GetSchemaAsJsonResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(GetSchemaAsJsonError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetSchemaAsJsonError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Returns the identity attribute order for a specific <a>TypedLinkFacet</a>. For more information, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/objectsandlinks.html#typedlink">Typed link</a>.</p>
     fn get_typed_link_facet_information(
         &self,
         input: &GetTypedLinkFacetInformationRequest,
-    ) -> Result<GetTypedLinkFacetInformationResponse, GetTypedLinkFacetInformationError> {
+    ) -> RusotoFuture<GetTypedLinkFacetInformationResponse, GetTypedLinkFacetInformationError> {
         let request_uri = "/amazonclouddirectory/2017-01-11/typedlink/facet/get";
 
         let mut request = SignedRequest::new("POST", "clouddirectory", &self.region, &request_uri);
@@ -11798,40 +11801,40 @@ where
         request.set_payload(encoded);
         request.add_header("x-amz-data-partition", &input.schema_arn);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<GetTypedLinkFacetInformationResponse>(
+                        &body,
+                    ).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result =
-                    serde_json::from_slice::<GetTypedLinkFacetInformationResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(GetTypedLinkFacetInformationError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetTypedLinkFacetInformationError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Lists schema major versions applied to a directory. If <code>SchemaArn</code> is provided, lists the minor version.</p>
     fn list_applied_schema_arns(
         &self,
         input: &ListAppliedSchemaArnsRequest,
-    ) -> Result<ListAppliedSchemaArnsResponse, ListAppliedSchemaArnsError> {
+    ) -> RusotoFuture<ListAppliedSchemaArnsResponse, ListAppliedSchemaArnsError> {
         let request_uri = "/amazonclouddirectory/2017-01-11/schema/applied";
 
         let mut request = SignedRequest::new("POST", "clouddirectory", &self.region, &request_uri);
@@ -11840,40 +11843,39 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<ListAppliedSchemaArnsResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result =
-                    serde_json::from_slice::<ListAppliedSchemaArnsResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(ListAppliedSchemaArnsError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListAppliedSchemaArnsError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Lists indices attached to the specified object.</p>
     fn list_attached_indices(
         &self,
         input: &ListAttachedIndicesRequest,
-    ) -> Result<ListAttachedIndicesResponse, ListAttachedIndicesError> {
+    ) -> RusotoFuture<ListAttachedIndicesResponse, ListAttachedIndicesError> {
         let request_uri = "/amazonclouddirectory/2017-01-11/object/indices";
 
         let mut request = SignedRequest::new("POST", "clouddirectory", &self.region, &request_uri);
@@ -11887,39 +11889,39 @@ where
         }
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<ListAttachedIndicesResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<ListAttachedIndicesResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(ListAttachedIndicesError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListAttachedIndicesError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Retrieves each Amazon Resource Name (ARN) of schemas in the development state.</p>
     fn list_development_schema_arns(
         &self,
         input: &ListDevelopmentSchemaArnsRequest,
-    ) -> Result<ListDevelopmentSchemaArnsResponse, ListDevelopmentSchemaArnsError> {
+    ) -> RusotoFuture<ListDevelopmentSchemaArnsResponse, ListDevelopmentSchemaArnsError> {
         let request_uri = "/amazonclouddirectory/2017-01-11/schema/development";
 
         let mut request = SignedRequest::new("POST", "clouddirectory", &self.region, &request_uri);
@@ -11928,40 +11930,39 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<ListDevelopmentSchemaArnsResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result =
-                    serde_json::from_slice::<ListDevelopmentSchemaArnsResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(ListDevelopmentSchemaArnsError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListDevelopmentSchemaArnsError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Lists directories created within an account.</p>
     fn list_directories(
         &self,
         input: &ListDirectoriesRequest,
-    ) -> Result<ListDirectoriesResponse, ListDirectoriesError> {
+    ) -> RusotoFuture<ListDirectoriesResponse, ListDirectoriesError> {
         let request_uri = "/amazonclouddirectory/2017-01-11/directory/list";
 
         let mut request = SignedRequest::new("POST", "clouddirectory", &self.region, &request_uri);
@@ -11970,39 +11971,38 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<ListDirectoriesResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<ListDirectoriesResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(ListDirectoriesError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListDirectoriesError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Retrieves attributes attached to the facet.</p>
     fn list_facet_attributes(
         &self,
         input: &ListFacetAttributesRequest,
-    ) -> Result<ListFacetAttributesResponse, ListFacetAttributesError> {
+    ) -> RusotoFuture<ListFacetAttributesResponse, ListFacetAttributesError> {
         let request_uri = "/amazonclouddirectory/2017-01-11/facet/attributes";
 
         let mut request = SignedRequest::new("POST", "clouddirectory", &self.region, &request_uri);
@@ -12012,39 +12012,39 @@ where
         request.set_payload(encoded);
         request.add_header("x-amz-data-partition", &input.schema_arn);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<ListFacetAttributesResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<ListFacetAttributesResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(ListFacetAttributesError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListFacetAttributesError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Retrieves the names of facets that exist in a schema.</p>
     fn list_facet_names(
         &self,
         input: &ListFacetNamesRequest,
-    ) -> Result<ListFacetNamesResponse, ListFacetNamesError> {
+    ) -> RusotoFuture<ListFacetNamesResponse, ListFacetNamesError> {
         let request_uri = "/amazonclouddirectory/2017-01-11/facet/list";
 
         let mut request = SignedRequest::new("POST", "clouddirectory", &self.region, &request_uri);
@@ -12054,39 +12054,38 @@ where
         request.set_payload(encoded);
         request.add_header("x-amz-data-partition", &input.schema_arn);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<ListFacetNamesResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<ListFacetNamesResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(ListFacetNamesError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListFacetNamesError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Returns a paginated list of all the incoming <a>TypedLinkSpecifier</a> information for an object. It also supports filtering by typed link facet and identity attributes. For more information, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/objectsandlinks.html#typedlink">Typed link</a>.</p>
     fn list_incoming_typed_links(
         &self,
         input: &ListIncomingTypedLinksRequest,
-    ) -> Result<ListIncomingTypedLinksResponse, ListIncomingTypedLinksError> {
+    ) -> RusotoFuture<ListIncomingTypedLinksResponse, ListIncomingTypedLinksError> {
         let request_uri = "/amazonclouddirectory/2017-01-11/typedlink/incoming";
 
         let mut request = SignedRequest::new("POST", "clouddirectory", &self.region, &request_uri);
@@ -12096,37 +12095,39 @@ where
         request.set_payload(encoded);
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<ListIncomingTypedLinksResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result =
-                    serde_json::from_slice::<ListIncomingTypedLinksResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(ListIncomingTypedLinksError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListIncomingTypedLinksError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Lists objects and indexed values attached to the index.</p>
-    fn list_index(&self, input: &ListIndexRequest) -> Result<ListIndexResponse, ListIndexError> {
+    fn list_index(
+        &self,
+        input: &ListIndexRequest,
+    ) -> RusotoFuture<ListIndexResponse, ListIndexError> {
         let request_uri = "/amazonclouddirectory/2017-01-11/index/targets";
 
         let mut request = SignedRequest::new("POST", "clouddirectory", &self.region, &request_uri);
@@ -12140,39 +12141,38 @@ where
         }
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<ListIndexResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<ListIndexResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(ListIndexError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListIndexError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Lists all attributes that are associated with an object. </p>
     fn list_object_attributes(
         &self,
         input: &ListObjectAttributesRequest,
-    ) -> Result<ListObjectAttributesResponse, ListObjectAttributesError> {
+    ) -> RusotoFuture<ListObjectAttributesResponse, ListObjectAttributesError> {
         let request_uri = "/amazonclouddirectory/2017-01-11/object/attributes";
 
         let mut request = SignedRequest::new("POST", "clouddirectory", &self.region, &request_uri);
@@ -12186,39 +12186,39 @@ where
         }
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<ListObjectAttributesResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<ListObjectAttributesResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(ListObjectAttributesError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListObjectAttributesError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Returns a paginated list of child objects that are associated with a given object.</p>
     fn list_object_children(
         &self,
         input: &ListObjectChildrenRequest,
-    ) -> Result<ListObjectChildrenResponse, ListObjectChildrenError> {
+    ) -> RusotoFuture<ListObjectChildrenResponse, ListObjectChildrenError> {
         let request_uri = "/amazonclouddirectory/2017-01-11/object/children";
 
         let mut request = SignedRequest::new("POST", "clouddirectory", &self.region, &request_uri);
@@ -12232,39 +12232,39 @@ where
         }
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<ListObjectChildrenResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<ListObjectChildrenResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(ListObjectChildrenError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListObjectChildrenError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Retrieves all available parent paths for any object type such as node, leaf node, policy node, and index node objects. For more information about objects, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/cd_key_concepts.html#dirstructure">Directory Structure</a>.</p> <p>Use this API to evaluate all parents for an object. The call returns all objects from the root of the directory up to the requested object. The API returns the number of paths based on user-defined <code>MaxResults</code>, in case there are multiple paths to the parent. The order of the paths and nodes returned is consistent among multiple API calls unless the objects are deleted or moved. Paths not leading to the directory root are ignored from the target object.</p>
     fn list_object_parent_paths(
         &self,
         input: &ListObjectParentPathsRequest,
-    ) -> Result<ListObjectParentPathsResponse, ListObjectParentPathsError> {
+    ) -> RusotoFuture<ListObjectParentPathsResponse, ListObjectParentPathsError> {
         let request_uri = "/amazonclouddirectory/2017-01-11/object/parentpaths";
 
         let mut request = SignedRequest::new("POST", "clouddirectory", &self.region, &request_uri);
@@ -12274,40 +12274,39 @@ where
         request.set_payload(encoded);
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<ListObjectParentPathsResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result =
-                    serde_json::from_slice::<ListObjectParentPathsResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(ListObjectParentPathsError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListObjectParentPathsError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Lists parent objects that are associated with a given object in pagination fashion.</p>
     fn list_object_parents(
         &self,
         input: &ListObjectParentsRequest,
-    ) -> Result<ListObjectParentsResponse, ListObjectParentsError> {
+    ) -> RusotoFuture<ListObjectParentsResponse, ListObjectParentsError> {
         let request_uri = "/amazonclouddirectory/2017-01-11/object/parent";
 
         let mut request = SignedRequest::new("POST", "clouddirectory", &self.region, &request_uri);
@@ -12321,39 +12320,39 @@ where
         }
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<ListObjectParentsResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<ListObjectParentsResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(ListObjectParentsError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListObjectParentsError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Returns policies attached to an object in pagination fashion.</p>
     fn list_object_policies(
         &self,
         input: &ListObjectPoliciesRequest,
-    ) -> Result<ListObjectPoliciesResponse, ListObjectPoliciesError> {
+    ) -> RusotoFuture<ListObjectPoliciesResponse, ListObjectPoliciesError> {
         let request_uri = "/amazonclouddirectory/2017-01-11/object/policy";
 
         let mut request = SignedRequest::new("POST", "clouddirectory", &self.region, &request_uri);
@@ -12367,39 +12366,39 @@ where
         }
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<ListObjectPoliciesResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<ListObjectPoliciesResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(ListObjectPoliciesError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListObjectPoliciesError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Returns a paginated list of all the outgoing <a>TypedLinkSpecifier</a> information for an object. It also supports filtering by typed link facet and identity attributes. For more information, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/objectsandlinks.html#typedlink">Typed link</a>.</p>
     fn list_outgoing_typed_links(
         &self,
         input: &ListOutgoingTypedLinksRequest,
-    ) -> Result<ListOutgoingTypedLinksResponse, ListOutgoingTypedLinksError> {
+    ) -> RusotoFuture<ListOutgoingTypedLinksResponse, ListOutgoingTypedLinksError> {
         let request_uri = "/amazonclouddirectory/2017-01-11/typedlink/outgoing";
 
         let mut request = SignedRequest::new("POST", "clouddirectory", &self.region, &request_uri);
@@ -12409,40 +12408,39 @@ where
         request.set_payload(encoded);
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<ListOutgoingTypedLinksResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result =
-                    serde_json::from_slice::<ListOutgoingTypedLinksResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(ListOutgoingTypedLinksError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListOutgoingTypedLinksError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Returns all of the <code>ObjectIdentifiers</code> to which a given policy is attached.</p>
     fn list_policy_attachments(
         &self,
         input: &ListPolicyAttachmentsRequest,
-    ) -> Result<ListPolicyAttachmentsResponse, ListPolicyAttachmentsError> {
+    ) -> RusotoFuture<ListPolicyAttachmentsResponse, ListPolicyAttachmentsError> {
         let request_uri = "/amazonclouddirectory/2017-01-11/policy/attachment";
 
         let mut request = SignedRequest::new("POST", "clouddirectory", &self.region, &request_uri);
@@ -12456,40 +12454,39 @@ where
         }
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<ListPolicyAttachmentsResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result =
-                    serde_json::from_slice::<ListPolicyAttachmentsResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(ListPolicyAttachmentsError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListPolicyAttachmentsError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Lists schema major versions for a published schema. If <code>SchemaArn</code> is provided, lists the minor version.</p>
     fn list_published_schema_arns(
         &self,
         input: &ListPublishedSchemaArnsRequest,
-    ) -> Result<ListPublishedSchemaArnsResponse, ListPublishedSchemaArnsError> {
+    ) -> RusotoFuture<ListPublishedSchemaArnsResponse, ListPublishedSchemaArnsError> {
         let request_uri = "/amazonclouddirectory/2017-01-11/schema/published";
 
         let mut request = SignedRequest::new("POST", "clouddirectory", &self.region, &request_uri);
@@ -12498,40 +12495,39 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<ListPublishedSchemaArnsResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result =
-                    serde_json::from_slice::<ListPublishedSchemaArnsResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(ListPublishedSchemaArnsError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListPublishedSchemaArnsError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Returns tags for a resource. Tagging is currently supported only for directories with a limit of 50 tags per directory. All 50 tags are returned for a given directory with this API call.</p>
     fn list_tags_for_resource(
         &self,
         input: &ListTagsForResourceRequest,
-    ) -> Result<ListTagsForResourceResponse, ListTagsForResourceError> {
+    ) -> RusotoFuture<ListTagsForResourceResponse, ListTagsForResourceError> {
         let request_uri = "/amazonclouddirectory/2017-01-11/tags";
 
         let mut request = SignedRequest::new("POST", "clouddirectory", &self.region, &request_uri);
@@ -12540,39 +12536,39 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<ListTagsForResourceResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<ListTagsForResourceResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(ListTagsForResourceError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListTagsForResourceError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Returns a paginated list of all attribute definitions for a particular <a>TypedLinkFacet</a>. For more information, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/objectsandlinks.html#typedlink">Typed link</a>.</p>
     fn list_typed_link_facet_attributes(
         &self,
         input: &ListTypedLinkFacetAttributesRequest,
-    ) -> Result<ListTypedLinkFacetAttributesResponse, ListTypedLinkFacetAttributesError> {
+    ) -> RusotoFuture<ListTypedLinkFacetAttributesResponse, ListTypedLinkFacetAttributesError> {
         let request_uri = "/amazonclouddirectory/2017-01-11/typedlink/facet/attributes";
 
         let mut request = SignedRequest::new("POST", "clouddirectory", &self.region, &request_uri);
@@ -12582,40 +12578,40 @@ where
         request.set_payload(encoded);
         request.add_header("x-amz-data-partition", &input.schema_arn);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<ListTypedLinkFacetAttributesResponse>(
+                        &body,
+                    ).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result =
-                    serde_json::from_slice::<ListTypedLinkFacetAttributesResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(ListTypedLinkFacetAttributesError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListTypedLinkFacetAttributesError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Returns a paginated list of <code>TypedLink</code> facet names for a particular schema. For more information, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/objectsandlinks.html#typedlink">Typed link</a>.</p>
     fn list_typed_link_facet_names(
         &self,
         input: &ListTypedLinkFacetNamesRequest,
-    ) -> Result<ListTypedLinkFacetNamesResponse, ListTypedLinkFacetNamesError> {
+    ) -> RusotoFuture<ListTypedLinkFacetNamesResponse, ListTypedLinkFacetNamesError> {
         let request_uri = "/amazonclouddirectory/2017-01-11/typedlink/facet/list";
 
         let mut request = SignedRequest::new("POST", "clouddirectory", &self.region, &request_uri);
@@ -12625,40 +12621,39 @@ where
         request.set_payload(encoded);
         request.add_header("x-amz-data-partition", &input.schema_arn);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<ListTypedLinkFacetNamesResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result =
-                    serde_json::from_slice::<ListTypedLinkFacetNamesResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(ListTypedLinkFacetNamesError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListTypedLinkFacetNamesError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Lists all policies from the root of the <a>Directory</a> to the object specified. If there are no policies present, an empty list is returned. If policies are present, and if some objects don't have the policies attached, it returns the <code>ObjectIdentifier</code> for such objects. If policies are present, it returns <code>ObjectIdentifier</code>, <code>policyId</code>, and <code>policyType</code>. Paths that don't lead to the root from the target object are ignored. For more information, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/cd_key_concepts.html#policies">Policies</a>.</p>
     fn lookup_policy(
         &self,
         input: &LookupPolicyRequest,
-    ) -> Result<LookupPolicyResponse, LookupPolicyError> {
+    ) -> RusotoFuture<LookupPolicyResponse, LookupPolicyError> {
         let request_uri = "/amazonclouddirectory/2017-01-11/policy/lookup";
 
         let mut request = SignedRequest::new("POST", "clouddirectory", &self.region, &request_uri);
@@ -12668,39 +12663,38 @@ where
         request.set_payload(encoded);
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<LookupPolicyResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<LookupPolicyResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(LookupPolicyError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(LookupPolicyError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Publishes a development schema with a major version and a recommended minor version.</p>
     fn publish_schema(
         &self,
         input: &PublishSchemaRequest,
-    ) -> Result<PublishSchemaResponse, PublishSchemaError> {
+    ) -> RusotoFuture<PublishSchemaResponse, PublishSchemaError> {
         let request_uri = "/amazonclouddirectory/2017-01-11/schema/publish";
 
         let mut request = SignedRequest::new("PUT", "clouddirectory", &self.region, &request_uri);
@@ -12710,39 +12704,38 @@ where
         request.set_payload(encoded);
         request.add_header("x-amz-data-partition", &input.development_schema_arn);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<PublishSchemaResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<PublishSchemaResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(PublishSchemaError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(PublishSchemaError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Allows a schema to be updated using JSON upload. Only available for development schemas. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/cd_schemas.html#jsonformat">JSON Schema Format</a> for more information.</p>
     fn put_schema_from_json(
         &self,
         input: &PutSchemaFromJsonRequest,
-    ) -> Result<PutSchemaFromJsonResponse, PutSchemaFromJsonError> {
+    ) -> RusotoFuture<PutSchemaFromJsonResponse, PutSchemaFromJsonError> {
         let request_uri = "/amazonclouddirectory/2017-01-11/schema/json";
 
         let mut request = SignedRequest::new("PUT", "clouddirectory", &self.region, &request_uri);
@@ -12752,39 +12745,39 @@ where
         request.set_payload(encoded);
         request.add_header("x-amz-data-partition", &input.schema_arn);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<PutSchemaFromJsonResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<PutSchemaFromJsonResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(PutSchemaFromJsonError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(PutSchemaFromJsonError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Removes the specified facet from the specified object.</p>
     fn remove_facet_from_object(
         &self,
         input: &RemoveFacetFromObjectRequest,
-    ) -> Result<RemoveFacetFromObjectResponse, RemoveFacetFromObjectError> {
+    ) -> RusotoFuture<RemoveFacetFromObjectResponse, RemoveFacetFromObjectError> {
         let request_uri = "/amazonclouddirectory/2017-01-11/object/facets/delete";
 
         let mut request = SignedRequest::new("PUT", "clouddirectory", &self.region, &request_uri);
@@ -12794,40 +12787,39 @@ where
         request.set_payload(encoded);
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<RemoveFacetFromObjectResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result =
-                    serde_json::from_slice::<RemoveFacetFromObjectResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(RemoveFacetFromObjectError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(RemoveFacetFromObjectError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>An API operation for adding tags to a resource.</p>
     fn tag_resource(
         &self,
         input: &TagResourceRequest,
-    ) -> Result<TagResourceResponse, TagResourceError> {
+    ) -> RusotoFuture<TagResourceResponse, TagResourceError> {
         let request_uri = "/amazonclouddirectory/2017-01-11/tags/add";
 
         let mut request = SignedRequest::new("PUT", "clouddirectory", &self.region, &request_uri);
@@ -12836,39 +12828,38 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<TagResourceResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<TagResourceResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(TagResourceError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(TagResourceError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>An API operation for removing tags from a resource.</p>
     fn untag_resource(
         &self,
         input: &UntagResourceRequest,
-    ) -> Result<UntagResourceResponse, UntagResourceError> {
+    ) -> RusotoFuture<UntagResourceResponse, UntagResourceError> {
         let request_uri = "/amazonclouddirectory/2017-01-11/tags/remove";
 
         let mut request = SignedRequest::new("PUT", "clouddirectory", &self.region, &request_uri);
@@ -12877,39 +12868,38 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<UntagResourceResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<UntagResourceResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(UntagResourceError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(UntagResourceError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p><p>Does the following:</p> <ol> <li> <p>Adds new <code>Attributes</code>, <code>Rules</code>, or <code>ObjectTypes</code>.</p> </li> <li> <p>Updates existing <code>Attributes</code>, <code>Rules</code>, or <code>ObjectTypes</code>.</p> </li> <li> <p>Deletes existing <code>Attributes</code>, <code>Rules</code>, or <code>ObjectTypes</code>.</p> </li> </ol></p>
     fn update_facet(
         &self,
         input: &UpdateFacetRequest,
-    ) -> Result<UpdateFacetResponse, UpdateFacetError> {
+    ) -> RusotoFuture<UpdateFacetResponse, UpdateFacetError> {
         let request_uri = "/amazonclouddirectory/2017-01-11/facet";
 
         let mut request = SignedRequest::new("PUT", "clouddirectory", &self.region, &request_uri);
@@ -12919,39 +12909,38 @@ where
         request.set_payload(encoded);
         request.add_header("x-amz-data-partition", &input.schema_arn);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<UpdateFacetResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<UpdateFacetResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(UpdateFacetError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(UpdateFacetError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Updates a given object's attributes.</p>
     fn update_object_attributes(
         &self,
         input: &UpdateObjectAttributesRequest,
-    ) -> Result<UpdateObjectAttributesResponse, UpdateObjectAttributesError> {
+    ) -> RusotoFuture<UpdateObjectAttributesResponse, UpdateObjectAttributesError> {
         let request_uri = "/amazonclouddirectory/2017-01-11/object/update";
 
         let mut request = SignedRequest::new("PUT", "clouddirectory", &self.region, &request_uri);
@@ -12961,40 +12950,39 @@ where
         request.set_payload(encoded);
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<UpdateObjectAttributesResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result =
-                    serde_json::from_slice::<UpdateObjectAttributesResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(UpdateObjectAttributesError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(UpdateObjectAttributesError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Updates the schema name with a new name. Only development schema names can be updated.</p>
     fn update_schema(
         &self,
         input: &UpdateSchemaRequest,
-    ) -> Result<UpdateSchemaResponse, UpdateSchemaError> {
+    ) -> RusotoFuture<UpdateSchemaResponse, UpdateSchemaError> {
         let request_uri = "/amazonclouddirectory/2017-01-11/schema/update";
 
         let mut request = SignedRequest::new("PUT", "clouddirectory", &self.region, &request_uri);
@@ -13004,39 +12992,38 @@ where
         request.set_payload(encoded);
         request.add_header("x-amz-data-partition", &input.schema_arn);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<UpdateSchemaResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<UpdateSchemaResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(UpdateSchemaError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(UpdateSchemaError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Updates a <a>TypedLinkFacet</a>. For more information, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/objectsandlinks.html#typedlink">Typed link</a>.</p>
     fn update_typed_link_facet(
         &self,
         input: &UpdateTypedLinkFacetRequest,
-    ) -> Result<UpdateTypedLinkFacetResponse, UpdateTypedLinkFacetError> {
+    ) -> RusotoFuture<UpdateTypedLinkFacetResponse, UpdateTypedLinkFacetError> {
         let request_uri = "/amazonclouddirectory/2017-01-11/typedlink/facet";
 
         let mut request = SignedRequest::new("PUT", "clouddirectory", &self.region, &request_uri);
@@ -13046,39 +13033,39 @@ where
         request.set_payload(encoded);
         request.add_header("x-amz-data-partition", &input.schema_arn);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<UpdateTypedLinkFacetResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<UpdateTypedLinkFacetResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(UpdateTypedLinkFacetError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(UpdateTypedLinkFacetError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Upgrades a single directory in-place using the <code>PublishedSchemaArn</code> with schema updates found in <code>MinorVersion</code>. Backwards-compatible minor version upgrades are instantaneously available for readers on all objects in the directory. Note: This is a synchronous API call and upgrades only one schema on a given directory per call. To upgrade multiple directories from one schema, you would need to call this API on each directory.</p>
     fn upgrade_applied_schema(
         &self,
         input: &UpgradeAppliedSchemaRequest,
-    ) -> Result<UpgradeAppliedSchemaResponse, UpgradeAppliedSchemaError> {
+    ) -> RusotoFuture<UpgradeAppliedSchemaResponse, UpgradeAppliedSchemaError> {
         let request_uri = "/amazonclouddirectory/2017-01-11/schema/upgradeapplied";
 
         let mut request = SignedRequest::new("PUT", "clouddirectory", &self.region, &request_uri);
@@ -13087,39 +13074,39 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<UpgradeAppliedSchemaResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<UpgradeAppliedSchemaResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(UpgradeAppliedSchemaError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(UpgradeAppliedSchemaError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Upgrades a published schema under a new minor version revision using the current contents of <code>DevelopmentSchemaArn</code>.</p>
     fn upgrade_published_schema(
         &self,
         input: &UpgradePublishedSchemaRequest,
-    ) -> Result<UpgradePublishedSchemaResponse, UpgradePublishedSchemaError> {
+    ) -> RusotoFuture<UpgradePublishedSchemaResponse, UpgradePublishedSchemaError> {
         let request_uri = "/amazonclouddirectory/2017-01-11/schema/upgradepublished";
 
         let mut request = SignedRequest::new("PUT", "clouddirectory", &self.region, &request_uri);
@@ -13128,33 +13115,32 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<UpgradePublishedSchemaResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result =
-                    serde_json::from_slice::<UpgradePublishedSchemaResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(UpgradePublishedSchemaError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(UpgradePublishedSchemaError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 }
 

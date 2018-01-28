@@ -10,16 +10,19 @@
 //
 // =================================================================
 
+use std::error::Error;
+use std::fmt;
+use std::io;
+
 #[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
+use futures::future;
+use futures::Future;
+use hyper::StatusCode;
+use rusoto_core::reactor::{CredentialsProvider, RequestDispatcher};
 use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::region;
+use rusoto_core::{ClientInner, RusotoFuture};
 
-use std::fmt;
-use std::error::Error;
-use std::io;
-use std::io::Read;
 use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
@@ -17478,710 +17481,743 @@ pub trait Iot {
     fn accept_certificate_transfer(
         &self,
         input: &AcceptCertificateTransferRequest,
-    ) -> Result<(), AcceptCertificateTransferError>;
+    ) -> RusotoFuture<(), AcceptCertificateTransferError>;
 
     /// <p>Adds a thing to a thing group.</p>
     fn add_thing_to_thing_group(
         &self,
         input: &AddThingToThingGroupRequest,
-    ) -> Result<AddThingToThingGroupResponse, AddThingToThingGroupError>;
+    ) -> RusotoFuture<AddThingToThingGroupResponse, AddThingToThingGroupError>;
 
     /// <p><p>Associates a group with a continuous job. The following criteria must be met: </p> <ul> <li> <p>The job must have been created with the <code>targetSelection</code> field set to &quot;CONTINUOUS&quot;.</p> </li> <li> <p>The job status must currently be &quot;IN_PROGRESS&quot;.</p> </li> <li> <p>The total number of targets associated with a job must not exceed 100.</p> </li> </ul></p>
     fn associate_targets_with_job(
         &self,
         input: &AssociateTargetsWithJobRequest,
-    ) -> Result<AssociateTargetsWithJobResponse, AssociateTargetsWithJobError>;
+    ) -> RusotoFuture<AssociateTargetsWithJobResponse, AssociateTargetsWithJobError>;
 
     /// <p>Attaches a policy to the specified target.</p>
-    fn attach_policy(&self, input: &AttachPolicyRequest) -> Result<(), AttachPolicyError>;
+    fn attach_policy(&self, input: &AttachPolicyRequest) -> RusotoFuture<(), AttachPolicyError>;
 
     /// <p>Attaches the specified policy to the specified principal (certificate or other credential).</p> <p> <b>Note:</b> This API is deprecated. Please use <a>AttachPolicy</a> instead.</p>
     fn attach_principal_policy(
         &self,
         input: &AttachPrincipalPolicyRequest,
-    ) -> Result<(), AttachPrincipalPolicyError>;
+    ) -> RusotoFuture<(), AttachPrincipalPolicyError>;
 
     /// <p>Attaches the specified principal to the specified thing.</p>
     fn attach_thing_principal(
         &self,
         input: &AttachThingPrincipalRequest,
-    ) -> Result<AttachThingPrincipalResponse, AttachThingPrincipalError>;
+    ) -> RusotoFuture<AttachThingPrincipalResponse, AttachThingPrincipalError>;
 
     /// <p>Cancels a pending transfer for the specified certificate.</p> <p> <b>Note</b> Only the transfer source account can use this operation to cancel a transfer. (Transfer destinations can use <a>RejectCertificateTransfer</a> instead.) After transfer, AWS IoT returns the certificate to the source account in the INACTIVE state. After the destination account has accepted the transfer, the transfer cannot be cancelled.</p> <p>After a certificate transfer is cancelled, the status of the certificate changes from PENDING_TRANSFER to INACTIVE.</p>
     fn cancel_certificate_transfer(
         &self,
         input: &CancelCertificateTransferRequest,
-    ) -> Result<(), CancelCertificateTransferError>;
+    ) -> RusotoFuture<(), CancelCertificateTransferError>;
 
     /// <p>Cancels a job.</p>
-    fn cancel_job(&self, input: &CancelJobRequest) -> Result<CancelJobResponse, CancelJobError>;
+    fn cancel_job(
+        &self,
+        input: &CancelJobRequest,
+    ) -> RusotoFuture<CancelJobResponse, CancelJobError>;
 
     /// <p>Clears the default authorizer.</p>
     fn clear_default_authorizer(
         &self,
-    ) -> Result<ClearDefaultAuthorizerResponse, ClearDefaultAuthorizerError>;
+    ) -> RusotoFuture<ClearDefaultAuthorizerResponse, ClearDefaultAuthorizerError>;
 
     /// <p>Creates an authorizer.</p>
     fn create_authorizer(
         &self,
         input: &CreateAuthorizerRequest,
-    ) -> Result<CreateAuthorizerResponse, CreateAuthorizerError>;
+    ) -> RusotoFuture<CreateAuthorizerResponse, CreateAuthorizerError>;
 
     /// <p>Creates an X.509 certificate using the specified certificate signing request.</p> <p> <b>Note:</b> The CSR must include a public key that is either an RSA key with a length of at least 2048 bits or an ECC key from NIST P-256 or NIST P-384 curves. </p> <p> <b>Note:</b> Reusing the same certificate signing request (CSR) results in a distinct certificate.</p> <p>You can create multiple certificates in a batch by creating a directory, copying multiple .csr files into that directory, and then specifying that directory on the command line. The following commands show how to create a batch of certificates given a batch of CSRs.</p> <p>Assuming a set of CSRs are located inside of the directory my-csr-directory:</p> <p>On Linux and OS X, the command is:</p> <p>$ ls my-csr-directory/ | xargs -I {} aws iot create-certificate-from-csr --certificate-signing-request file://my-csr-directory/{}</p> <p>This command lists all of the CSRs in my-csr-directory and pipes each CSR file name to the aws iot create-certificate-from-csr AWS CLI command to create a certificate for the corresponding CSR.</p> <p>The aws iot create-certificate-from-csr part of the command can also be run in parallel to speed up the certificate creation process:</p> <p>$ ls my-csr-directory/ | xargs -P 10 -I {} aws iot create-certificate-from-csr --certificate-signing-request file://my-csr-directory/{}</p> <p>On Windows PowerShell, the command to create certificates for all CSRs in my-csr-directory is:</p> <p>&gt; ls -Name my-csr-directory | %{aws iot create-certificate-from-csr --certificate-signing-request file://my-csr-directory/$_}</p> <p>On a Windows command prompt, the command to create certificates for all CSRs in my-csr-directory is:</p> <p>&gt; forfiles /p my-csr-directory /c "cmd /c aws iot create-certificate-from-csr --certificate-signing-request file://@path"</p>
     fn create_certificate_from_csr(
         &self,
         input: &CreateCertificateFromCsrRequest,
-    ) -> Result<CreateCertificateFromCsrResponse, CreateCertificateFromCsrError>;
+    ) -> RusotoFuture<CreateCertificateFromCsrResponse, CreateCertificateFromCsrError>;
 
     /// <p>Creates a job.</p>
-    fn create_job(&self, input: &CreateJobRequest) -> Result<CreateJobResponse, CreateJobError>;
+    fn create_job(
+        &self,
+        input: &CreateJobRequest,
+    ) -> RusotoFuture<CreateJobResponse, CreateJobError>;
 
     /// <p>Creates a 2048-bit RSA key pair and issues an X.509 certificate using the issued public key.</p> <p> <b>Note</b> This is the only time AWS IoT issues the private key for this certificate, so it is important to keep it in a secure location.</p>
     fn create_keys_and_certificate(
         &self,
         input: &CreateKeysAndCertificateRequest,
-    ) -> Result<CreateKeysAndCertificateResponse, CreateKeysAndCertificateError>;
+    ) -> RusotoFuture<CreateKeysAndCertificateResponse, CreateKeysAndCertificateError>;
 
     /// <p>Creates an AWS IoT OTAUpdate on a target group of things or groups.</p>
     fn create_ota_update(
         &self,
         input: &CreateOTAUpdateRequest,
-    ) -> Result<CreateOTAUpdateResponse, CreateOTAUpdateError>;
+    ) -> RusotoFuture<CreateOTAUpdateResponse, CreateOTAUpdateError>;
 
     /// <p>Creates an AWS IoT policy.</p> <p>The created policy is the default version for the policy. This operation creates a policy version with a version identifier of <b>1</b> and sets <b>1</b> as the policy's default version.</p>
     fn create_policy(
         &self,
         input: &CreatePolicyRequest,
-    ) -> Result<CreatePolicyResponse, CreatePolicyError>;
+    ) -> RusotoFuture<CreatePolicyResponse, CreatePolicyError>;
 
     /// <p>Creates a new version of the specified AWS IoT policy. To update a policy, create a new policy version. A managed policy can have up to five versions. If the policy has five versions, you must use <a>DeletePolicyVersion</a> to delete an existing version before you create a new one.</p> <p>Optionally, you can set the new version as the policy's default version. The default version is the operative version (that is, the version that is in effect for the certificates to which the policy is attached).</p>
     fn create_policy_version(
         &self,
         input: &CreatePolicyVersionRequest,
-    ) -> Result<CreatePolicyVersionResponse, CreatePolicyVersionError>;
+    ) -> RusotoFuture<CreatePolicyVersionResponse, CreatePolicyVersionError>;
 
     /// <p>Creates a role alias.</p>
     fn create_role_alias(
         &self,
         input: &CreateRoleAliasRequest,
-    ) -> Result<CreateRoleAliasResponse, CreateRoleAliasError>;
+    ) -> RusotoFuture<CreateRoleAliasResponse, CreateRoleAliasError>;
 
     /// <p>Creates a stream for delivering one or more large files in chunks over MQTT. A stream transports data bytes in chunks or blocks packaged as MQTT messages from a source like S3. You can have one or more files associated with a stream. The total size of a file associated with the stream cannot exceed more than 2 MB. The stream will be created with version 0. If a stream is created with the same streamID as a stream that existed and was deleted within last 90 days, we will resurrect that old stream by incrementing the version by 1.</p>
     fn create_stream(
         &self,
         input: &CreateStreamRequest,
-    ) -> Result<CreateStreamResponse, CreateStreamError>;
+    ) -> RusotoFuture<CreateStreamResponse, CreateStreamError>;
 
     /// <p>Creates a thing record in the thing registry.</p>
     fn create_thing(
         &self,
         input: &CreateThingRequest,
-    ) -> Result<CreateThingResponse, CreateThingError>;
+    ) -> RusotoFuture<CreateThingResponse, CreateThingError>;
 
     /// <p>Create a thing group.</p>
     fn create_thing_group(
         &self,
         input: &CreateThingGroupRequest,
-    ) -> Result<CreateThingGroupResponse, CreateThingGroupError>;
+    ) -> RusotoFuture<CreateThingGroupResponse, CreateThingGroupError>;
 
     /// <p>Creates a new thing type.</p>
     fn create_thing_type(
         &self,
         input: &CreateThingTypeRequest,
-    ) -> Result<CreateThingTypeResponse, CreateThingTypeError>;
+    ) -> RusotoFuture<CreateThingTypeResponse, CreateThingTypeError>;
 
     /// <p>Creates a rule. Creating rules is an administrator-level action. Any user who has permission to create rules will be able to access data processed by the rule.</p>
-    fn create_topic_rule(&self, input: &CreateTopicRuleRequest)
-        -> Result<(), CreateTopicRuleError>;
+    fn create_topic_rule(
+        &self,
+        input: &CreateTopicRuleRequest,
+    ) -> RusotoFuture<(), CreateTopicRuleError>;
 
     /// <p>Deletes an authorizer.</p>
     fn delete_authorizer(
         &self,
         input: &DeleteAuthorizerRequest,
-    ) -> Result<DeleteAuthorizerResponse, DeleteAuthorizerError>;
+    ) -> RusotoFuture<DeleteAuthorizerResponse, DeleteAuthorizerError>;
 
     /// <p>Deletes a registered CA certificate.</p>
     fn delete_ca_certificate(
         &self,
         input: &DeleteCACertificateRequest,
-    ) -> Result<DeleteCACertificateResponse, DeleteCACertificateError>;
+    ) -> RusotoFuture<DeleteCACertificateResponse, DeleteCACertificateError>;
 
     /// <p>Deletes the specified certificate.</p> <p>A certificate cannot be deleted if it has a policy attached to it or if its status is set to ACTIVE. To delete a certificate, first use the <a>DetachPrincipalPolicy</a> API to detach all policies. Next, use the <a>UpdateCertificate</a> API to set the certificate to the INACTIVE status.</p>
     fn delete_certificate(
         &self,
         input: &DeleteCertificateRequest,
-    ) -> Result<(), DeleteCertificateError>;
+    ) -> RusotoFuture<(), DeleteCertificateError>;
 
     /// <p>Delete an OTA update.</p>
     fn delete_ota_update(
         &self,
         input: &DeleteOTAUpdateRequest,
-    ) -> Result<DeleteOTAUpdateResponse, DeleteOTAUpdateError>;
+    ) -> RusotoFuture<DeleteOTAUpdateResponse, DeleteOTAUpdateError>;
 
     /// <p>Deletes the specified policy.</p> <p>A policy cannot be deleted if it has non-default versions or it is attached to any certificate.</p> <p>To delete a policy, use the DeletePolicyVersion API to delete all non-default versions of the policy; use the DetachPrincipalPolicy API to detach the policy from any certificate; and then use the DeletePolicy API to delete the policy.</p> <p>When a policy is deleted using DeletePolicy, its default version is deleted with it.</p>
-    fn delete_policy(&self, input: &DeletePolicyRequest) -> Result<(), DeletePolicyError>;
+    fn delete_policy(&self, input: &DeletePolicyRequest) -> RusotoFuture<(), DeletePolicyError>;
 
     /// <p>Deletes the specified version of the specified policy. You cannot delete the default version of a policy using this API. To delete the default version of a policy, use <a>DeletePolicy</a>. To find out which version of a policy is marked as the default version, use ListPolicyVersions.</p>
     fn delete_policy_version(
         &self,
         input: &DeletePolicyVersionRequest,
-    ) -> Result<(), DeletePolicyVersionError>;
+    ) -> RusotoFuture<(), DeletePolicyVersionError>;
 
     /// <p>Deletes a CA certificate registration code.</p>
     fn delete_registration_code(
         &self,
-    ) -> Result<DeleteRegistrationCodeResponse, DeleteRegistrationCodeError>;
+    ) -> RusotoFuture<DeleteRegistrationCodeResponse, DeleteRegistrationCodeError>;
 
     /// <p>Deletes a role alias</p>
     fn delete_role_alias(
         &self,
         input: &DeleteRoleAliasRequest,
-    ) -> Result<DeleteRoleAliasResponse, DeleteRoleAliasError>;
+    ) -> RusotoFuture<DeleteRoleAliasResponse, DeleteRoleAliasError>;
 
     /// <p>Deletes a stream.</p>
     fn delete_stream(
         &self,
         input: &DeleteStreamRequest,
-    ) -> Result<DeleteStreamResponse, DeleteStreamError>;
+    ) -> RusotoFuture<DeleteStreamResponse, DeleteStreamError>;
 
     /// <p>Deletes the specified thing.</p>
     fn delete_thing(
         &self,
         input: &DeleteThingRequest,
-    ) -> Result<DeleteThingResponse, DeleteThingError>;
+    ) -> RusotoFuture<DeleteThingResponse, DeleteThingError>;
 
     /// <p>Deletes a thing group.</p>
     fn delete_thing_group(
         &self,
         input: &DeleteThingGroupRequest,
-    ) -> Result<DeleteThingGroupResponse, DeleteThingGroupError>;
+    ) -> RusotoFuture<DeleteThingGroupResponse, DeleteThingGroupError>;
 
     /// <p>Deletes the specified thing type . You cannot delete a thing type if it has things associated with it. To delete a thing type, first mark it as deprecated by calling <a>DeprecateThingType</a>, then remove any associated things by calling <a>UpdateThing</a> to change the thing type on any associated thing, and finally use <a>DeleteThingType</a> to delete the thing type.</p>
     fn delete_thing_type(
         &self,
         input: &DeleteThingTypeRequest,
-    ) -> Result<DeleteThingTypeResponse, DeleteThingTypeError>;
+    ) -> RusotoFuture<DeleteThingTypeResponse, DeleteThingTypeError>;
 
     /// <p>Deletes the rule.</p>
-    fn delete_topic_rule(&self, input: &DeleteTopicRuleRequest)
-        -> Result<(), DeleteTopicRuleError>;
+    fn delete_topic_rule(
+        &self,
+        input: &DeleteTopicRuleRequest,
+    ) -> RusotoFuture<(), DeleteTopicRuleError>;
 
     /// <p>Deletes a logging level.</p>
     fn delete_v2_logging_level(
         &self,
         input: &DeleteV2LoggingLevelRequest,
-    ) -> Result<(), DeleteV2LoggingLevelError>;
+    ) -> RusotoFuture<(), DeleteV2LoggingLevelError>;
 
     /// <p>Deprecates a thing type. You can not associate new things with deprecated thing type.</p>
     fn deprecate_thing_type(
         &self,
         input: &DeprecateThingTypeRequest,
-    ) -> Result<DeprecateThingTypeResponse, DeprecateThingTypeError>;
+    ) -> RusotoFuture<DeprecateThingTypeResponse, DeprecateThingTypeError>;
 
     /// <p>Describes an authorizer.</p>
     fn describe_authorizer(
         &self,
         input: &DescribeAuthorizerRequest,
-    ) -> Result<DescribeAuthorizerResponse, DescribeAuthorizerError>;
+    ) -> RusotoFuture<DescribeAuthorizerResponse, DescribeAuthorizerError>;
 
     /// <p>Describes a registered CA certificate.</p>
     fn describe_ca_certificate(
         &self,
         input: &DescribeCACertificateRequest,
-    ) -> Result<DescribeCACertificateResponse, DescribeCACertificateError>;
+    ) -> RusotoFuture<DescribeCACertificateResponse, DescribeCACertificateError>;
 
     /// <p>Gets information about the specified certificate.</p>
     fn describe_certificate(
         &self,
         input: &DescribeCertificateRequest,
-    ) -> Result<DescribeCertificateResponse, DescribeCertificateError>;
+    ) -> RusotoFuture<DescribeCertificateResponse, DescribeCertificateError>;
 
     /// <p>Describes the default authorizer.</p>
     fn describe_default_authorizer(
         &self,
-    ) -> Result<DescribeDefaultAuthorizerResponse, DescribeDefaultAuthorizerError>;
+    ) -> RusotoFuture<DescribeDefaultAuthorizerResponse, DescribeDefaultAuthorizerError>;
 
     /// <p>Returns a unique endpoint specific to the AWS account making the call.</p>
     fn describe_endpoint(
         &self,
         input: &DescribeEndpointRequest,
-    ) -> Result<DescribeEndpointResponse, DescribeEndpointError>;
+    ) -> RusotoFuture<DescribeEndpointResponse, DescribeEndpointError>;
 
     /// <p>Describes event configurations.</p>
     fn describe_event_configurations(
         &self,
-    ) -> Result<DescribeEventConfigurationsResponse, DescribeEventConfigurationsError>;
+    ) -> RusotoFuture<DescribeEventConfigurationsResponse, DescribeEventConfigurationsError>;
 
     /// <p>Describes a search index.</p>
     fn describe_index(
         &self,
         input: &DescribeIndexRequest,
-    ) -> Result<DescribeIndexResponse, DescribeIndexError>;
+    ) -> RusotoFuture<DescribeIndexResponse, DescribeIndexError>;
 
     /// <p>Describes a job.</p>
     fn describe_job(
         &self,
         input: &DescribeJobRequest,
-    ) -> Result<DescribeJobResponse, DescribeJobError>;
+    ) -> RusotoFuture<DescribeJobResponse, DescribeJobError>;
 
     /// <p>Describes a job execution.</p>
     fn describe_job_execution(
         &self,
         input: &DescribeJobExecutionRequest,
-    ) -> Result<DescribeJobExecutionResponse, DescribeJobExecutionError>;
+    ) -> RusotoFuture<DescribeJobExecutionResponse, DescribeJobExecutionError>;
 
     /// <p>Describes a role alias.</p>
     fn describe_role_alias(
         &self,
         input: &DescribeRoleAliasRequest,
-    ) -> Result<DescribeRoleAliasResponse, DescribeRoleAliasError>;
+    ) -> RusotoFuture<DescribeRoleAliasResponse, DescribeRoleAliasError>;
 
     /// <p>Gets information about a stream.</p>
     fn describe_stream(
         &self,
         input: &DescribeStreamRequest,
-    ) -> Result<DescribeStreamResponse, DescribeStreamError>;
+    ) -> RusotoFuture<DescribeStreamResponse, DescribeStreamError>;
 
     /// <p>Gets information about the specified thing.</p>
     fn describe_thing(
         &self,
         input: &DescribeThingRequest,
-    ) -> Result<DescribeThingResponse, DescribeThingError>;
+    ) -> RusotoFuture<DescribeThingResponse, DescribeThingError>;
 
     /// <p>Describe a thing group.</p>
     fn describe_thing_group(
         &self,
         input: &DescribeThingGroupRequest,
-    ) -> Result<DescribeThingGroupResponse, DescribeThingGroupError>;
+    ) -> RusotoFuture<DescribeThingGroupResponse, DescribeThingGroupError>;
 
     /// <p>Describes a bulk thing provisioning task.</p>
     fn describe_thing_registration_task(
         &self,
         input: &DescribeThingRegistrationTaskRequest,
-    ) -> Result<DescribeThingRegistrationTaskResponse, DescribeThingRegistrationTaskError>;
+    ) -> RusotoFuture<DescribeThingRegistrationTaskResponse, DescribeThingRegistrationTaskError>;
 
     /// <p>Gets information about the specified thing type.</p>
     fn describe_thing_type(
         &self,
         input: &DescribeThingTypeRequest,
-    ) -> Result<DescribeThingTypeResponse, DescribeThingTypeError>;
+    ) -> RusotoFuture<DescribeThingTypeResponse, DescribeThingTypeError>;
 
     /// <p>Detaches a policy from the specified target.</p>
-    fn detach_policy(&self, input: &DetachPolicyRequest) -> Result<(), DetachPolicyError>;
+    fn detach_policy(&self, input: &DetachPolicyRequest) -> RusotoFuture<(), DetachPolicyError>;
 
     /// <p>Removes the specified policy from the specified certificate.</p> <p> <b>Note:</b> This API is deprecated. Please use <a>DetachPolicy</a> instead.</p>
     fn detach_principal_policy(
         &self,
         input: &DetachPrincipalPolicyRequest,
-    ) -> Result<(), DetachPrincipalPolicyError>;
+    ) -> RusotoFuture<(), DetachPrincipalPolicyError>;
 
     /// <p>Detaches the specified principal from the specified thing.</p>
     fn detach_thing_principal(
         &self,
         input: &DetachThingPrincipalRequest,
-    ) -> Result<DetachThingPrincipalResponse, DetachThingPrincipalError>;
+    ) -> RusotoFuture<DetachThingPrincipalResponse, DetachThingPrincipalError>;
 
     /// <p>Disables the rule.</p>
     fn disable_topic_rule(
         &self,
         input: &DisableTopicRuleRequest,
-    ) -> Result<(), DisableTopicRuleError>;
+    ) -> RusotoFuture<(), DisableTopicRuleError>;
 
     /// <p>Enables the rule.</p>
-    fn enable_topic_rule(&self, input: &EnableTopicRuleRequest)
-        -> Result<(), EnableTopicRuleError>;
+    fn enable_topic_rule(
+        &self,
+        input: &EnableTopicRuleRequest,
+    ) -> RusotoFuture<(), EnableTopicRuleError>;
 
     /// <p>Gets effective policies.</p>
     fn get_effective_policies(
         &self,
         input: &GetEffectivePoliciesRequest,
-    ) -> Result<GetEffectivePoliciesResponse, GetEffectivePoliciesError>;
+    ) -> RusotoFuture<GetEffectivePoliciesResponse, GetEffectivePoliciesError>;
 
     /// <p>Gets the search configuration.</p>
     fn get_indexing_configuration(
         &self,
-    ) -> Result<GetIndexingConfigurationResponse, GetIndexingConfigurationError>;
+    ) -> RusotoFuture<GetIndexingConfigurationResponse, GetIndexingConfigurationError>;
 
     /// <p>Gets a job document.</p>
     fn get_job_document(
         &self,
         input: &GetJobDocumentRequest,
-    ) -> Result<GetJobDocumentResponse, GetJobDocumentError>;
+    ) -> RusotoFuture<GetJobDocumentResponse, GetJobDocumentError>;
 
     /// <p>Gets the logging options.</p>
-    fn get_logging_options(&self) -> Result<GetLoggingOptionsResponse, GetLoggingOptionsError>;
+    fn get_logging_options(
+        &self,
+    ) -> RusotoFuture<GetLoggingOptionsResponse, GetLoggingOptionsError>;
 
     /// <p>Gets an OTA update.</p>
     fn get_ota_update(
         &self,
         input: &GetOTAUpdateRequest,
-    ) -> Result<GetOTAUpdateResponse, GetOTAUpdateError>;
+    ) -> RusotoFuture<GetOTAUpdateResponse, GetOTAUpdateError>;
 
     /// <p>Gets information about the specified policy with the policy document of the default version.</p>
-    fn get_policy(&self, input: &GetPolicyRequest) -> Result<GetPolicyResponse, GetPolicyError>;
+    fn get_policy(
+        &self,
+        input: &GetPolicyRequest,
+    ) -> RusotoFuture<GetPolicyResponse, GetPolicyError>;
 
     /// <p>Gets information about the specified policy version.</p>
     fn get_policy_version(
         &self,
         input: &GetPolicyVersionRequest,
-    ) -> Result<GetPolicyVersionResponse, GetPolicyVersionError>;
+    ) -> RusotoFuture<GetPolicyVersionResponse, GetPolicyVersionError>;
 
     /// <p>Gets a registration code used to register a CA certificate with AWS IoT.</p>
     fn get_registration_code(
         &self,
-    ) -> Result<GetRegistrationCodeResponse, GetRegistrationCodeError>;
+    ) -> RusotoFuture<GetRegistrationCodeResponse, GetRegistrationCodeError>;
 
     /// <p>Gets information about the rule.</p>
     fn get_topic_rule(
         &self,
         input: &GetTopicRuleRequest,
-    ) -> Result<GetTopicRuleResponse, GetTopicRuleError>;
+    ) -> RusotoFuture<GetTopicRuleResponse, GetTopicRuleError>;
 
     /// <p>Gets the fine grained logging options.</p>
     fn get_v2_logging_options(
         &self,
-    ) -> Result<GetV2LoggingOptionsResponse, GetV2LoggingOptionsError>;
+    ) -> RusotoFuture<GetV2LoggingOptionsResponse, GetV2LoggingOptionsError>;
 
     /// <p>Lists the policies attached to the specified thing group.</p>
     fn list_attached_policies(
         &self,
         input: &ListAttachedPoliciesRequest,
-    ) -> Result<ListAttachedPoliciesResponse, ListAttachedPoliciesError>;
+    ) -> RusotoFuture<ListAttachedPoliciesResponse, ListAttachedPoliciesError>;
 
     /// <p>Lists the authorizers registered in your account.</p>
     fn list_authorizers(
         &self,
         input: &ListAuthorizersRequest,
-    ) -> Result<ListAuthorizersResponse, ListAuthorizersError>;
+    ) -> RusotoFuture<ListAuthorizersResponse, ListAuthorizersError>;
 
     /// <p>Lists the CA certificates registered for your AWS account.</p> <p>The results are paginated with a default page size of 25. You can use the returned marker to retrieve additional results.</p>
     fn list_ca_certificates(
         &self,
         input: &ListCACertificatesRequest,
-    ) -> Result<ListCACertificatesResponse, ListCACertificatesError>;
+    ) -> RusotoFuture<ListCACertificatesResponse, ListCACertificatesError>;
 
     /// <p>Lists the certificates registered in your AWS account.</p> <p>The results are paginated with a default page size of 25. You can use the returned marker to retrieve additional results.</p>
     fn list_certificates(
         &self,
         input: &ListCertificatesRequest,
-    ) -> Result<ListCertificatesResponse, ListCertificatesError>;
+    ) -> RusotoFuture<ListCertificatesResponse, ListCertificatesError>;
 
     /// <p>List the device certificates signed by the specified CA certificate.</p>
     fn list_certificates_by_ca(
         &self,
         input: &ListCertificatesByCARequest,
-    ) -> Result<ListCertificatesByCAResponse, ListCertificatesByCAError>;
+    ) -> RusotoFuture<ListCertificatesByCAResponse, ListCertificatesByCAError>;
 
     /// <p>Lists the search indices.</p>
     fn list_indices(
         &self,
         input: &ListIndicesRequest,
-    ) -> Result<ListIndicesResponse, ListIndicesError>;
+    ) -> RusotoFuture<ListIndicesResponse, ListIndicesError>;
 
     /// <p>Lists the job executions for a job.</p>
     fn list_job_executions_for_job(
         &self,
         input: &ListJobExecutionsForJobRequest,
-    ) -> Result<ListJobExecutionsForJobResponse, ListJobExecutionsForJobError>;
+    ) -> RusotoFuture<ListJobExecutionsForJobResponse, ListJobExecutionsForJobError>;
 
     /// <p>Lists the job executions for the specified thing.</p>
     fn list_job_executions_for_thing(
         &self,
         input: &ListJobExecutionsForThingRequest,
-    ) -> Result<ListJobExecutionsForThingResponse, ListJobExecutionsForThingError>;
+    ) -> RusotoFuture<ListJobExecutionsForThingResponse, ListJobExecutionsForThingError>;
 
     /// <p>Lists jobs.</p>
-    fn list_jobs(&self, input: &ListJobsRequest) -> Result<ListJobsResponse, ListJobsError>;
+    fn list_jobs(&self, input: &ListJobsRequest) -> RusotoFuture<ListJobsResponse, ListJobsError>;
 
     /// <p>Lists OTA updates.</p>
     fn list_ota_updates(
         &self,
         input: &ListOTAUpdatesRequest,
-    ) -> Result<ListOTAUpdatesResponse, ListOTAUpdatesError>;
+    ) -> RusotoFuture<ListOTAUpdatesResponse, ListOTAUpdatesError>;
 
     /// <p>Lists certificates that are being transferred but not yet accepted.</p>
     fn list_outgoing_certificates(
         &self,
         input: &ListOutgoingCertificatesRequest,
-    ) -> Result<ListOutgoingCertificatesResponse, ListOutgoingCertificatesError>;
+    ) -> RusotoFuture<ListOutgoingCertificatesResponse, ListOutgoingCertificatesError>;
 
     /// <p>Lists your policies.</p>
     fn list_policies(
         &self,
         input: &ListPoliciesRequest,
-    ) -> Result<ListPoliciesResponse, ListPoliciesError>;
+    ) -> RusotoFuture<ListPoliciesResponse, ListPoliciesError>;
 
     /// <p>Lists the principals associated with the specified policy.</p> <p> <b>Note:</b> This API is deprecated. Please use <a>ListTargetsForPolicy</a> instead.</p>
     fn list_policy_principals(
         &self,
         input: &ListPolicyPrincipalsRequest,
-    ) -> Result<ListPolicyPrincipalsResponse, ListPolicyPrincipalsError>;
+    ) -> RusotoFuture<ListPolicyPrincipalsResponse, ListPolicyPrincipalsError>;
 
     /// <p>Lists the versions of the specified policy and identifies the default version.</p>
     fn list_policy_versions(
         &self,
         input: &ListPolicyVersionsRequest,
-    ) -> Result<ListPolicyVersionsResponse, ListPolicyVersionsError>;
+    ) -> RusotoFuture<ListPolicyVersionsResponse, ListPolicyVersionsError>;
 
     /// <p>Lists the policies attached to the specified principal. If you use an Cognito identity, the ID must be in <a href="http://docs.aws.amazon.com/cognitoidentity/latest/APIReference/API_GetCredentialsForIdentity.html#API_GetCredentialsForIdentity_RequestSyntax">AmazonCognito Identity format</a>.</p> <p> <b>Note:</b> This API is deprecated. Please use <a>ListAttachedPolicies</a> instead.</p>
     fn list_principal_policies(
         &self,
         input: &ListPrincipalPoliciesRequest,
-    ) -> Result<ListPrincipalPoliciesResponse, ListPrincipalPoliciesError>;
+    ) -> RusotoFuture<ListPrincipalPoliciesResponse, ListPrincipalPoliciesError>;
 
     /// <p>Lists the things associated with the specified principal.</p>
     fn list_principal_things(
         &self,
         input: &ListPrincipalThingsRequest,
-    ) -> Result<ListPrincipalThingsResponse, ListPrincipalThingsError>;
+    ) -> RusotoFuture<ListPrincipalThingsResponse, ListPrincipalThingsError>;
 
     /// <p>Lists the role aliases registered in your account.</p>
     fn list_role_aliases(
         &self,
         input: &ListRoleAliasesRequest,
-    ) -> Result<ListRoleAliasesResponse, ListRoleAliasesError>;
+    ) -> RusotoFuture<ListRoleAliasesResponse, ListRoleAliasesError>;
 
     /// <p>Lists all of the streams in your AWS account.</p>
     fn list_streams(
         &self,
         input: &ListStreamsRequest,
-    ) -> Result<ListStreamsResponse, ListStreamsError>;
+    ) -> RusotoFuture<ListStreamsResponse, ListStreamsError>;
 
     /// <p>List targets for the specified policy.</p>
     fn list_targets_for_policy(
         &self,
         input: &ListTargetsForPolicyRequest,
-    ) -> Result<ListTargetsForPolicyResponse, ListTargetsForPolicyError>;
+    ) -> RusotoFuture<ListTargetsForPolicyResponse, ListTargetsForPolicyError>;
 
     /// <p>List the thing groups in your account.</p>
     fn list_thing_groups(
         &self,
         input: &ListThingGroupsRequest,
-    ) -> Result<ListThingGroupsResponse, ListThingGroupsError>;
+    ) -> RusotoFuture<ListThingGroupsResponse, ListThingGroupsError>;
 
     /// <p>List the thing groups to which the specified thing belongs.</p>
     fn list_thing_groups_for_thing(
         &self,
         input: &ListThingGroupsForThingRequest,
-    ) -> Result<ListThingGroupsForThingResponse, ListThingGroupsForThingError>;
+    ) -> RusotoFuture<ListThingGroupsForThingResponse, ListThingGroupsForThingError>;
 
     /// <p>Lists the principals associated with the specified thing.</p>
     fn list_thing_principals(
         &self,
         input: &ListThingPrincipalsRequest,
-    ) -> Result<ListThingPrincipalsResponse, ListThingPrincipalsError>;
+    ) -> RusotoFuture<ListThingPrincipalsResponse, ListThingPrincipalsError>;
 
     /// <p>Information about the thing registration tasks.</p>
     fn list_thing_registration_task_reports(
         &self,
         input: &ListThingRegistrationTaskReportsRequest,
-    ) -> Result<ListThingRegistrationTaskReportsResponse, ListThingRegistrationTaskReportsError>;
+    ) -> RusotoFuture<ListThingRegistrationTaskReportsResponse, ListThingRegistrationTaskReportsError>;
 
     /// <p>List bulk thing provisioning tasks.</p>
     fn list_thing_registration_tasks(
         &self,
         input: &ListThingRegistrationTasksRequest,
-    ) -> Result<ListThingRegistrationTasksResponse, ListThingRegistrationTasksError>;
+    ) -> RusotoFuture<ListThingRegistrationTasksResponse, ListThingRegistrationTasksError>;
 
     /// <p>Lists the existing thing types.</p>
     fn list_thing_types(
         &self,
         input: &ListThingTypesRequest,
-    ) -> Result<ListThingTypesResponse, ListThingTypesError>;
+    ) -> RusotoFuture<ListThingTypesResponse, ListThingTypesError>;
 
     /// <p>Lists your things. Use the <b>attributeName</b> and <b>attributeValue</b> parameters to filter your things. For example, calling <code>ListThings</code> with attributeName=Color and attributeValue=Red retrieves all things in the registry that contain an attribute <b>Color</b> with the value <b>Red</b>. </p>
-    fn list_things(&self, input: &ListThingsRequest)
-        -> Result<ListThingsResponse, ListThingsError>;
+    fn list_things(
+        &self,
+        input: &ListThingsRequest,
+    ) -> RusotoFuture<ListThingsResponse, ListThingsError>;
 
     /// <p>Lists the things in the specified group.</p>
     fn list_things_in_thing_group(
         &self,
         input: &ListThingsInThingGroupRequest,
-    ) -> Result<ListThingsInThingGroupResponse, ListThingsInThingGroupError>;
+    ) -> RusotoFuture<ListThingsInThingGroupResponse, ListThingsInThingGroupError>;
 
     /// <p>Lists the rules for the specific topic.</p>
     fn list_topic_rules(
         &self,
         input: &ListTopicRulesRequest,
-    ) -> Result<ListTopicRulesResponse, ListTopicRulesError>;
+    ) -> RusotoFuture<ListTopicRulesResponse, ListTopicRulesError>;
 
     /// <p>Lists logging levels.</p>
     fn list_v2_logging_levels(
         &self,
         input: &ListV2LoggingLevelsRequest,
-    ) -> Result<ListV2LoggingLevelsResponse, ListV2LoggingLevelsError>;
+    ) -> RusotoFuture<ListV2LoggingLevelsResponse, ListV2LoggingLevelsError>;
 
     /// <p>Registers a CA certificate with AWS IoT. This CA certificate can then be used to sign device certificates, which can be then registered with AWS IoT. You can register up to 10 CA certificates per AWS account that have the same subject field. This enables you to have up to 10 certificate authorities sign your device certificates. If you have more than one CA certificate registered, make sure you pass the CA certificate when you register your device certificates with the RegisterCertificate API.</p>
     fn register_ca_certificate(
         &self,
         input: &RegisterCACertificateRequest,
-    ) -> Result<RegisterCACertificateResponse, RegisterCACertificateError>;
+    ) -> RusotoFuture<RegisterCACertificateResponse, RegisterCACertificateError>;
 
     /// <p>Registers a device certificate with AWS IoT. If you have more than one CA certificate that has the same subject field, you must specify the CA certificate that was used to sign the device certificate being registered.</p>
     fn register_certificate(
         &self,
         input: &RegisterCertificateRequest,
-    ) -> Result<RegisterCertificateResponse, RegisterCertificateError>;
+    ) -> RusotoFuture<RegisterCertificateResponse, RegisterCertificateError>;
 
     /// <p>Provisions a thing.</p>
     fn register_thing(
         &self,
         input: &RegisterThingRequest,
-    ) -> Result<RegisterThingResponse, RegisterThingError>;
+    ) -> RusotoFuture<RegisterThingResponse, RegisterThingError>;
 
     /// <p>Rejects a pending certificate transfer. After AWS IoT rejects a certificate transfer, the certificate status changes from <b>PENDING_TRANSFER</b> to <b>INACTIVE</b>.</p> <p>To check for pending certificate transfers, call <a>ListCertificates</a> to enumerate your certificates.</p> <p>This operation can only be called by the transfer destination. After it is called, the certificate will be returned to the source's account in the INACTIVE state.</p>
     fn reject_certificate_transfer(
         &self,
         input: &RejectCertificateTransferRequest,
-    ) -> Result<(), RejectCertificateTransferError>;
+    ) -> RusotoFuture<(), RejectCertificateTransferError>;
 
     /// <p>Remove the specified thing from the specified group.</p>
     fn remove_thing_from_thing_group(
         &self,
         input: &RemoveThingFromThingGroupRequest,
-    ) -> Result<RemoveThingFromThingGroupResponse, RemoveThingFromThingGroupError>;
+    ) -> RusotoFuture<RemoveThingFromThingGroupResponse, RemoveThingFromThingGroupError>;
 
     /// <p>Replaces the rule. You must specify all parameters for the new rule. Creating rules is an administrator-level action. Any user who has permission to create rules will be able to access data processed by the rule.</p>
     fn replace_topic_rule(
         &self,
         input: &ReplaceTopicRuleRequest,
-    ) -> Result<(), ReplaceTopicRuleError>;
+    ) -> RusotoFuture<(), ReplaceTopicRuleError>;
 
     /// <p>The query search index.</p>
     fn search_index(
         &self,
         input: &SearchIndexRequest,
-    ) -> Result<SearchIndexResponse, SearchIndexError>;
+    ) -> RusotoFuture<SearchIndexResponse, SearchIndexError>;
 
     /// <p>Sets the default authorizer. This will be used if a websocket connection is made without specifying an authorizer.</p>
     fn set_default_authorizer(
         &self,
         input: &SetDefaultAuthorizerRequest,
-    ) -> Result<SetDefaultAuthorizerResponse, SetDefaultAuthorizerError>;
+    ) -> RusotoFuture<SetDefaultAuthorizerResponse, SetDefaultAuthorizerError>;
 
     /// <p>Sets the specified version of the specified policy as the policy's default (operative) version. This action affects all certificates to which the policy is attached. To list the principals the policy is attached to, use the ListPrincipalPolicy API.</p>
     fn set_default_policy_version(
         &self,
         input: &SetDefaultPolicyVersionRequest,
-    ) -> Result<(), SetDefaultPolicyVersionError>;
+    ) -> RusotoFuture<(), SetDefaultPolicyVersionError>;
 
     /// <p>Sets the logging options.</p>
     fn set_logging_options(
         &self,
         input: &SetLoggingOptionsRequest,
-    ) -> Result<(), SetLoggingOptionsError>;
+    ) -> RusotoFuture<(), SetLoggingOptionsError>;
 
     /// <p>Sets the logging level.</p>
     fn set_v2_logging_level(
         &self,
         input: &SetV2LoggingLevelRequest,
-    ) -> Result<(), SetV2LoggingLevelError>;
+    ) -> RusotoFuture<(), SetV2LoggingLevelError>;
 
     /// <p>Sets the logging options for the V2 logging service.</p>
     fn set_v2_logging_options(
         &self,
         input: &SetV2LoggingOptionsRequest,
-    ) -> Result<(), SetV2LoggingOptionsError>;
+    ) -> RusotoFuture<(), SetV2LoggingOptionsError>;
 
     /// <p>Creates a bulk thing provisioning task.</p>
     fn start_thing_registration_task(
         &self,
         input: &StartThingRegistrationTaskRequest,
-    ) -> Result<StartThingRegistrationTaskResponse, StartThingRegistrationTaskError>;
+    ) -> RusotoFuture<StartThingRegistrationTaskResponse, StartThingRegistrationTaskError>;
 
     /// <p>Cancels a bulk thing provisioning task.</p>
     fn stop_thing_registration_task(
         &self,
         input: &StopThingRegistrationTaskRequest,
-    ) -> Result<StopThingRegistrationTaskResponse, StopThingRegistrationTaskError>;
+    ) -> RusotoFuture<StopThingRegistrationTaskResponse, StopThingRegistrationTaskError>;
 
     /// <p>Test custom authorization.</p>
     fn test_authorization(
         &self,
         input: &TestAuthorizationRequest,
-    ) -> Result<TestAuthorizationResponse, TestAuthorizationError>;
+    ) -> RusotoFuture<TestAuthorizationResponse, TestAuthorizationError>;
 
     /// <p>Invoke the specified custom authorizer for testing purposes.</p>
     fn test_invoke_authorizer(
         &self,
         input: &TestInvokeAuthorizerRequest,
-    ) -> Result<TestInvokeAuthorizerResponse, TestInvokeAuthorizerError>;
+    ) -> RusotoFuture<TestInvokeAuthorizerResponse, TestInvokeAuthorizerError>;
 
     /// <p>Transfers the specified certificate to the specified AWS account.</p> <p>You can cancel the transfer until it is acknowledged by the recipient.</p> <p>No notification is sent to the transfer destination's account. It is up to the caller to notify the transfer target.</p> <p>The certificate being transferred must not be in the ACTIVE state. You can use the UpdateCertificate API to deactivate it.</p> <p>The certificate must not have any policies attached to it. You can use the DetachPrincipalPolicy API to detach them.</p>
     fn transfer_certificate(
         &self,
         input: &TransferCertificateRequest,
-    ) -> Result<TransferCertificateResponse, TransferCertificateError>;
+    ) -> RusotoFuture<TransferCertificateResponse, TransferCertificateError>;
 
     /// <p>Updates an authorizer.</p>
     fn update_authorizer(
         &self,
         input: &UpdateAuthorizerRequest,
-    ) -> Result<UpdateAuthorizerResponse, UpdateAuthorizerError>;
+    ) -> RusotoFuture<UpdateAuthorizerResponse, UpdateAuthorizerError>;
 
     /// <p>Updates a registered CA certificate.</p>
     fn update_ca_certificate(
         &self,
         input: &UpdateCACertificateRequest,
-    ) -> Result<(), UpdateCACertificateError>;
+    ) -> RusotoFuture<(), UpdateCACertificateError>;
 
     /// <p>Updates the status of the specified certificate. This operation is idempotent.</p> <p>Moving a certificate from the ACTIVE state (including REVOKED) will not disconnect currently connected devices, but these devices will be unable to reconnect.</p> <p>The ACTIVE state is required to authenticate devices connecting to AWS IoT using a certificate.</p>
     fn update_certificate(
         &self,
         input: &UpdateCertificateRequest,
-    ) -> Result<(), UpdateCertificateError>;
+    ) -> RusotoFuture<(), UpdateCertificateError>;
 
     /// <p>Updates the event configurations.</p>
     fn update_event_configurations(
         &self,
         input: &UpdateEventConfigurationsRequest,
-    ) -> Result<UpdateEventConfigurationsResponse, UpdateEventConfigurationsError>;
+    ) -> RusotoFuture<UpdateEventConfigurationsResponse, UpdateEventConfigurationsError>;
 
     /// <p>Updates the search configuration.</p>
     fn update_indexing_configuration(
         &self,
         input: &UpdateIndexingConfigurationRequest,
-    ) -> Result<UpdateIndexingConfigurationResponse, UpdateIndexingConfigurationError>;
+    ) -> RusotoFuture<UpdateIndexingConfigurationResponse, UpdateIndexingConfigurationError>;
 
     /// <p>Updates a role alias.</p>
     fn update_role_alias(
         &self,
         input: &UpdateRoleAliasRequest,
-    ) -> Result<UpdateRoleAliasResponse, UpdateRoleAliasError>;
+    ) -> RusotoFuture<UpdateRoleAliasResponse, UpdateRoleAliasError>;
 
     /// <p>Updates an existing stream. The stream version will be incremented by one.</p>
     fn update_stream(
         &self,
         input: &UpdateStreamRequest,
-    ) -> Result<UpdateStreamResponse, UpdateStreamError>;
+    ) -> RusotoFuture<UpdateStreamResponse, UpdateStreamError>;
 
     /// <p>Updates the data for a thing.</p>
     fn update_thing(
         &self,
         input: &UpdateThingRequest,
-    ) -> Result<UpdateThingResponse, UpdateThingError>;
+    ) -> RusotoFuture<UpdateThingResponse, UpdateThingError>;
 
     /// <p>Update a thing group.</p>
     fn update_thing_group(
         &self,
         input: &UpdateThingGroupRequest,
-    ) -> Result<UpdateThingGroupResponse, UpdateThingGroupError>;
+    ) -> RusotoFuture<UpdateThingGroupResponse, UpdateThingGroupError>;
 
     /// <p>Updates the groups to which the thing belongs.</p>
     fn update_thing_groups_for_thing(
         &self,
         input: &UpdateThingGroupsForThingRequest,
-    ) -> Result<UpdateThingGroupsForThingResponse, UpdateThingGroupsForThingError>;
+    ) -> RusotoFuture<UpdateThingGroupsForThingResponse, UpdateThingGroupsForThingError>;
 }
 /// A client for the AWS IoT API.
-pub struct IotClient<P, D>
+pub struct IotClient<P = CredentialsProvider, D = RequestDispatcher>
 where
     P: ProvideAwsCredentials,
     D: DispatchSignedRequest,
 {
-    credentials_provider: P,
+    inner: ClientInner<P, D>,
     region: region::Region,
-    dispatcher: D,
+}
+
+impl IotClient {
+    /// Creates a simple client backed by an implicit event loop.
+    ///
+    /// The client will use the default credentials provider and tls client.
+    ///
+    /// See the `rusoto_core::reactor` module for more details.
+    pub fn simple(region: region::Region) -> IotClient {
+        IotClient::new(
+            RequestDispatcher::default(),
+            CredentialsProvider::default(),
+            region,
+        )
+    }
 }
 
 impl<P, D> IotClient<P, D>
@@ -18191,23 +18227,22 @@ where
 {
     pub fn new(request_dispatcher: D, credentials_provider: P, region: region::Region) -> Self {
         IotClient {
-            credentials_provider: credentials_provider,
+            inner: ClientInner::new(credentials_provider, request_dispatcher),
             region: region,
-            dispatcher: request_dispatcher,
         }
     }
 }
 
 impl<P, D> Iot for IotClient<P, D>
 where
-    P: ProvideAwsCredentials,
-    D: DispatchSignedRequest,
+    P: ProvideAwsCredentials + 'static,
+    D: DispatchSignedRequest + 'static,
 {
     /// <p>Accepts a pending certificate transfer. The default state of the certificate is INACTIVE.</p> <p>To check for pending certificate transfers, call <a>ListCertificates</a> to enumerate your certificates.</p>
     fn accept_certificate_transfer(
         &self,
         input: &AcceptCertificateTransferRequest,
-    ) -> Result<(), AcceptCertificateTransferError> {
+    ) -> RusotoFuture<(), AcceptCertificateTransferError> {
         let request_uri = format!(
             "/accept-certificate-transfer/{certificate_id}",
             certificate_id = input.certificate_id
@@ -18224,30 +18259,30 @@ where
         }
         request.set_params(params);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let result = ::std::mem::drop(response);
 
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(AcceptCertificateTransferError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        });
 
-                Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(AcceptCertificateTransferError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        RusotoFuture::new(future)
     }
 
     /// <p>Adds a thing to a thing group.</p>
     fn add_thing_to_thing_group(
         &self,
         input: &AddThingToThingGroupRequest,
-    ) -> Result<AddThingToThingGroupResponse, AddThingToThingGroupError> {
+    ) -> RusotoFuture<AddThingToThingGroupResponse, AddThingToThingGroupError> {
         let request_uri = "/thing-groups/addThingToThingGroup";
 
         let mut request = SignedRequest::new("PUT", "execute-api", &self.region, &request_uri);
@@ -18257,39 +18292,39 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<AddThingToThingGroupResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<AddThingToThingGroupResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(AddThingToThingGroupError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(AddThingToThingGroupError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p><p>Associates a group with a continuous job. The following criteria must be met: </p> <ul> <li> <p>The job must have been created with the <code>targetSelection</code> field set to &quot;CONTINUOUS&quot;.</p> </li> <li> <p>The job status must currently be &quot;IN_PROGRESS&quot;.</p> </li> <li> <p>The total number of targets associated with a job must not exceed 100.</p> </li> </ul></p>
     fn associate_targets_with_job(
         &self,
         input: &AssociateTargetsWithJobRequest,
-    ) -> Result<AssociateTargetsWithJobResponse, AssociateTargetsWithJobError> {
+    ) -> RusotoFuture<AssociateTargetsWithJobResponse, AssociateTargetsWithJobError> {
         let request_uri = format!("/jobs/{job_id}/targets", job_id = input.job_id);
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
@@ -18299,37 +18334,36 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<AssociateTargetsWithJobResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result =
-                    serde_json::from_slice::<AssociateTargetsWithJobResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(AssociateTargetsWithJobError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(AssociateTargetsWithJobError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Attaches a policy to the specified target.</p>
-    fn attach_policy(&self, input: &AttachPolicyRequest) -> Result<(), AttachPolicyError> {
+    fn attach_policy(&self, input: &AttachPolicyRequest) -> RusotoFuture<(), AttachPolicyError> {
         let request_uri = format!(
             "/target-policies/{policy_name}",
             policy_name = input.policy_name
@@ -18342,30 +18376,30 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let result = ::std::mem::drop(response);
 
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(AttachPolicyError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        });
 
-                Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(AttachPolicyError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        RusotoFuture::new(future)
     }
 
     /// <p>Attaches the specified policy to the specified principal (certificate or other credential).</p> <p> <b>Note:</b> This API is deprecated. Please use <a>AttachPolicy</a> instead.</p>
     fn attach_principal_policy(
         &self,
         input: &AttachPrincipalPolicyRequest,
-    ) -> Result<(), AttachPrincipalPolicyError> {
+    ) -> RusotoFuture<(), AttachPrincipalPolicyError> {
         let request_uri = format!(
             "/principal-policies/{policy_name}",
             policy_name = input.policy_name
@@ -18378,30 +18412,30 @@ where
 
         request.add_header("x-amzn-iot-principal", &input.principal);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let result = ::std::mem::drop(response);
 
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(AttachPrincipalPolicyError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        });
 
-                Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(AttachPrincipalPolicyError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        RusotoFuture::new(future)
     }
 
     /// <p>Attaches the specified principal to the specified thing.</p>
     fn attach_thing_principal(
         &self,
         input: &AttachThingPrincipalRequest,
-    ) -> Result<AttachThingPrincipalResponse, AttachThingPrincipalError> {
+    ) -> RusotoFuture<AttachThingPrincipalResponse, AttachThingPrincipalError> {
         let request_uri = format!(
             "/things/{thing_name}/principals",
             thing_name = input.thing_name
@@ -18414,39 +18448,39 @@ where
 
         request.add_header("x-amzn-principal", &input.principal);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<AttachThingPrincipalResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<AttachThingPrincipalResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(AttachThingPrincipalError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(AttachThingPrincipalError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Cancels a pending transfer for the specified certificate.</p> <p> <b>Note</b> Only the transfer source account can use this operation to cancel a transfer. (Transfer destinations can use <a>RejectCertificateTransfer</a> instead.) After transfer, AWS IoT returns the certificate to the source account in the INACTIVE state. After the destination account has accepted the transfer, the transfer cannot be cancelled.</p> <p>After a certificate transfer is cancelled, the status of the certificate changes from PENDING_TRANSFER to INACTIVE.</p>
     fn cancel_certificate_transfer(
         &self,
         input: &CancelCertificateTransferRequest,
-    ) -> Result<(), CancelCertificateTransferError> {
+    ) -> RusotoFuture<(), CancelCertificateTransferError> {
         let request_uri = format!(
             "/cancel-certificate-transfer/{certificate_id}",
             certificate_id = input.certificate_id
@@ -18457,27 +18491,30 @@ where
 
         request.set_endpoint_prefix("iot".to_string());
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let result = ::std::mem::drop(response);
 
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(CancelCertificateTransferError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        });
 
-                Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CancelCertificateTransferError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        RusotoFuture::new(future)
     }
 
     /// <p>Cancels a job.</p>
-    fn cancel_job(&self, input: &CancelJobRequest) -> Result<CancelJobResponse, CancelJobError> {
+    fn cancel_job(
+        &self,
+        input: &CancelJobRequest,
+    ) -> RusotoFuture<CancelJobResponse, CancelJobError> {
         let request_uri = format!("/jobs/{job_id}/cancel", job_id = input.job_id);
 
         let mut request = SignedRequest::new("PUT", "execute-api", &self.region, &request_uri);
@@ -18487,38 +18524,37 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<CancelJobResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<CancelJobResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(CancelJobError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CancelJobError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Clears the default authorizer.</p>
     fn clear_default_authorizer(
         &self,
-    ) -> Result<ClearDefaultAuthorizerResponse, ClearDefaultAuthorizerError> {
+    ) -> RusotoFuture<ClearDefaultAuthorizerResponse, ClearDefaultAuthorizerError> {
         let request_uri = "/default-authorizer";
 
         let mut request = SignedRequest::new("DELETE", "execute-api", &self.region, &request_uri);
@@ -18526,40 +18562,39 @@ where
 
         request.set_endpoint_prefix("iot".to_string());
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<ClearDefaultAuthorizerResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result =
-                    serde_json::from_slice::<ClearDefaultAuthorizerResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(ClearDefaultAuthorizerError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ClearDefaultAuthorizerError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Creates an authorizer.</p>
     fn create_authorizer(
         &self,
         input: &CreateAuthorizerRequest,
-    ) -> Result<CreateAuthorizerResponse, CreateAuthorizerError> {
+    ) -> RusotoFuture<CreateAuthorizerResponse, CreateAuthorizerError> {
         let request_uri = format!(
             "/authorizer/{authorizer_name}",
             authorizer_name = input.authorizer_name
@@ -18572,39 +18607,38 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<CreateAuthorizerResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<CreateAuthorizerResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(CreateAuthorizerError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreateAuthorizerError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Creates an X.509 certificate using the specified certificate signing request.</p> <p> <b>Note:</b> The CSR must include a public key that is either an RSA key with a length of at least 2048 bits or an ECC key from NIST P-256 or NIST P-384 curves. </p> <p> <b>Note:</b> Reusing the same certificate signing request (CSR) results in a distinct certificate.</p> <p>You can create multiple certificates in a batch by creating a directory, copying multiple .csr files into that directory, and then specifying that directory on the command line. The following commands show how to create a batch of certificates given a batch of CSRs.</p> <p>Assuming a set of CSRs are located inside of the directory my-csr-directory:</p> <p>On Linux and OS X, the command is:</p> <p>$ ls my-csr-directory/ | xargs -I {} aws iot create-certificate-from-csr --certificate-signing-request file://my-csr-directory/{}</p> <p>This command lists all of the CSRs in my-csr-directory and pipes each CSR file name to the aws iot create-certificate-from-csr AWS CLI command to create a certificate for the corresponding CSR.</p> <p>The aws iot create-certificate-from-csr part of the command can also be run in parallel to speed up the certificate creation process:</p> <p>$ ls my-csr-directory/ | xargs -P 10 -I {} aws iot create-certificate-from-csr --certificate-signing-request file://my-csr-directory/{}</p> <p>On Windows PowerShell, the command to create certificates for all CSRs in my-csr-directory is:</p> <p>&gt; ls -Name my-csr-directory | %{aws iot create-certificate-from-csr --certificate-signing-request file://my-csr-directory/$_}</p> <p>On a Windows command prompt, the command to create certificates for all CSRs in my-csr-directory is:</p> <p>&gt; forfiles /p my-csr-directory /c "cmd /c aws iot create-certificate-from-csr --certificate-signing-request file://@path"</p>
     fn create_certificate_from_csr(
         &self,
         input: &CreateCertificateFromCsrRequest,
-    ) -> Result<CreateCertificateFromCsrResponse, CreateCertificateFromCsrError> {
+    ) -> RusotoFuture<CreateCertificateFromCsrResponse, CreateCertificateFromCsrError> {
         let request_uri = "/certificates";
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
@@ -18620,37 +18654,39 @@ where
         }
         request.set_params(params);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<CreateCertificateFromCsrResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result =
-                    serde_json::from_slice::<CreateCertificateFromCsrResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(CreateCertificateFromCsrError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreateCertificateFromCsrError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Creates a job.</p>
-    fn create_job(&self, input: &CreateJobRequest) -> Result<CreateJobResponse, CreateJobError> {
+    fn create_job(
+        &self,
+        input: &CreateJobRequest,
+    ) -> RusotoFuture<CreateJobResponse, CreateJobError> {
         let request_uri = format!("/jobs/{job_id}", job_id = input.job_id);
 
         let mut request = SignedRequest::new("PUT", "execute-api", &self.region, &request_uri);
@@ -18660,39 +18696,38 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<CreateJobResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<CreateJobResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(CreateJobError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreateJobError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Creates a 2048-bit RSA key pair and issues an X.509 certificate using the issued public key.</p> <p> <b>Note</b> This is the only time AWS IoT issues the private key for this certificate, so it is important to keep it in a secure location.</p>
     fn create_keys_and_certificate(
         &self,
         input: &CreateKeysAndCertificateRequest,
-    ) -> Result<CreateKeysAndCertificateResponse, CreateKeysAndCertificateError> {
+    ) -> RusotoFuture<CreateKeysAndCertificateResponse, CreateKeysAndCertificateError> {
         let request_uri = "/keys-and-certificate";
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
@@ -18706,40 +18741,39 @@ where
         }
         request.set_params(params);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<CreateKeysAndCertificateResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result =
-                    serde_json::from_slice::<CreateKeysAndCertificateResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(CreateKeysAndCertificateError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreateKeysAndCertificateError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Creates an AWS IoT OTAUpdate on a target group of things or groups.</p>
     fn create_ota_update(
         &self,
         input: &CreateOTAUpdateRequest,
-    ) -> Result<CreateOTAUpdateResponse, CreateOTAUpdateError> {
+    ) -> RusotoFuture<CreateOTAUpdateResponse, CreateOTAUpdateError> {
         let request_uri = format!(
             "/otaUpdates/{ota_update_id}",
             ota_update_id = input.ota_update_id
@@ -18752,39 +18786,38 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<CreateOTAUpdateResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<CreateOTAUpdateResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(CreateOTAUpdateError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreateOTAUpdateError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Creates an AWS IoT policy.</p> <p>The created policy is the default version for the policy. This operation creates a policy version with a version identifier of <b>1</b> and sets <b>1</b> as the policy's default version.</p>
     fn create_policy(
         &self,
         input: &CreatePolicyRequest,
-    ) -> Result<CreatePolicyResponse, CreatePolicyError> {
+    ) -> RusotoFuture<CreatePolicyResponse, CreatePolicyError> {
         let request_uri = format!("/policies/{policy_name}", policy_name = input.policy_name);
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
@@ -18794,39 +18827,38 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<CreatePolicyResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<CreatePolicyResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(CreatePolicyError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreatePolicyError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Creates a new version of the specified AWS IoT policy. To update a policy, create a new policy version. A managed policy can have up to five versions. If the policy has five versions, you must use <a>DeletePolicyVersion</a> to delete an existing version before you create a new one.</p> <p>Optionally, you can set the new version as the policy's default version. The default version is the operative version (that is, the version that is in effect for the certificates to which the policy is attached).</p>
     fn create_policy_version(
         &self,
         input: &CreatePolicyVersionRequest,
-    ) -> Result<CreatePolicyVersionResponse, CreatePolicyVersionError> {
+    ) -> RusotoFuture<CreatePolicyVersionResponse, CreatePolicyVersionError> {
         let request_uri = format!(
             "/policies/{policy_name}/version",
             policy_name = input.policy_name
@@ -18845,39 +18877,39 @@ where
         }
         request.set_params(params);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<CreatePolicyVersionResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<CreatePolicyVersionResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(CreatePolicyVersionError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreatePolicyVersionError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Creates a role alias.</p>
     fn create_role_alias(
         &self,
         input: &CreateRoleAliasRequest,
-    ) -> Result<CreateRoleAliasResponse, CreateRoleAliasError> {
+    ) -> RusotoFuture<CreateRoleAliasResponse, CreateRoleAliasError> {
         let request_uri = format!("/role-aliases/{role_alias}", role_alias = input.role_alias);
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
@@ -18887,39 +18919,38 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<CreateRoleAliasResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<CreateRoleAliasResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(CreateRoleAliasError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreateRoleAliasError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Creates a stream for delivering one or more large files in chunks over MQTT. A stream transports data bytes in chunks or blocks packaged as MQTT messages from a source like S3. You can have one or more files associated with a stream. The total size of a file associated with the stream cannot exceed more than 2 MB. The stream will be created with version 0. If a stream is created with the same streamID as a stream that existed and was deleted within last 90 days, we will resurrect that old stream by incrementing the version by 1.</p>
     fn create_stream(
         &self,
         input: &CreateStreamRequest,
-    ) -> Result<CreateStreamResponse, CreateStreamError> {
+    ) -> RusotoFuture<CreateStreamResponse, CreateStreamError> {
         let request_uri = format!("/streams/{stream_id}", stream_id = input.stream_id);
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
@@ -18929,39 +18960,38 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<CreateStreamResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<CreateStreamResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(CreateStreamError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreateStreamError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Creates a thing record in the thing registry.</p>
     fn create_thing(
         &self,
         input: &CreateThingRequest,
-    ) -> Result<CreateThingResponse, CreateThingError> {
+    ) -> RusotoFuture<CreateThingResponse, CreateThingError> {
         let request_uri = format!("/things/{thing_name}", thing_name = input.thing_name);
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
@@ -18971,39 +19001,38 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<CreateThingResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<CreateThingResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(CreateThingError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreateThingError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Create a thing group.</p>
     fn create_thing_group(
         &self,
         input: &CreateThingGroupRequest,
-    ) -> Result<CreateThingGroupResponse, CreateThingGroupError> {
+    ) -> RusotoFuture<CreateThingGroupResponse, CreateThingGroupError> {
         let request_uri = format!(
             "/thing-groups/{thing_group_name}",
             thing_group_name = input.thing_group_name
@@ -19016,39 +19045,38 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<CreateThingGroupResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<CreateThingGroupResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(CreateThingGroupError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreateThingGroupError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Creates a new thing type.</p>
     fn create_thing_type(
         &self,
         input: &CreateThingTypeRequest,
-    ) -> Result<CreateThingTypeResponse, CreateThingTypeError> {
+    ) -> RusotoFuture<CreateThingTypeResponse, CreateThingTypeError> {
         let request_uri = format!(
             "/thing-types/{thing_type_name}",
             thing_type_name = input.thing_type_name
@@ -19061,39 +19089,38 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<CreateThingTypeResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<CreateThingTypeResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(CreateThingTypeError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreateThingTypeError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Creates a rule. Creating rules is an administrator-level action. Any user who has permission to create rules will be able to access data processed by the rule.</p>
     fn create_topic_rule(
         &self,
         input: &CreateTopicRuleRequest,
-    ) -> Result<(), CreateTopicRuleError> {
+    ) -> RusotoFuture<(), CreateTopicRuleError> {
         let request_uri = format!("/rules/{rule_name}", rule_name = input.rule_name);
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
@@ -19103,30 +19130,30 @@ where
         let encoded = Some(serde_json::to_vec(&input.topic_rule_payload).unwrap());
         request.set_payload(encoded);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let result = ::std::mem::drop(response);
 
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(CreateTopicRuleError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        });
 
-                Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreateTopicRuleError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        RusotoFuture::new(future)
     }
 
     /// <p>Deletes an authorizer.</p>
     fn delete_authorizer(
         &self,
         input: &DeleteAuthorizerRequest,
-    ) -> Result<DeleteAuthorizerResponse, DeleteAuthorizerError> {
+    ) -> RusotoFuture<DeleteAuthorizerResponse, DeleteAuthorizerError> {
         let request_uri = format!(
             "/authorizer/{authorizer_name}",
             authorizer_name = input.authorizer_name
@@ -19137,39 +19164,38 @@ where
 
         request.set_endpoint_prefix("iot".to_string());
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<DeleteAuthorizerResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<DeleteAuthorizerResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DeleteAuthorizerError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteAuthorizerError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Deletes a registered CA certificate.</p>
     fn delete_ca_certificate(
         &self,
         input: &DeleteCACertificateRequest,
-    ) -> Result<DeleteCACertificateResponse, DeleteCACertificateError> {
+    ) -> RusotoFuture<DeleteCACertificateResponse, DeleteCACertificateError> {
         let request_uri = format!(
             "/cacertificate/{ca_certificate_id}",
             ca_certificate_id = input.certificate_id
@@ -19180,39 +19206,39 @@ where
 
         request.set_endpoint_prefix("iot".to_string());
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<DeleteCACertificateResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<DeleteCACertificateResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DeleteCACertificateError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteCACertificateError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Deletes the specified certificate.</p> <p>A certificate cannot be deleted if it has a policy attached to it or if its status is set to ACTIVE. To delete a certificate, first use the <a>DetachPrincipalPolicy</a> API to detach all policies. Next, use the <a>UpdateCertificate</a> API to set the certificate to the INACTIVE status.</p>
     fn delete_certificate(
         &self,
         input: &DeleteCertificateRequest,
-    ) -> Result<(), DeleteCertificateError> {
+    ) -> RusotoFuture<(), DeleteCertificateError> {
         let request_uri = format!(
             "/certificates/{certificate_id}",
             certificate_id = input.certificate_id
@@ -19229,30 +19255,30 @@ where
         }
         request.set_params(params);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let result = ::std::mem::drop(response);
 
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DeleteCertificateError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        });
 
-                Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteCertificateError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        RusotoFuture::new(future)
     }
 
     /// <p>Delete an OTA update.</p>
     fn delete_ota_update(
         &self,
         input: &DeleteOTAUpdateRequest,
-    ) -> Result<DeleteOTAUpdateResponse, DeleteOTAUpdateError> {
+    ) -> RusotoFuture<DeleteOTAUpdateResponse, DeleteOTAUpdateError> {
         let request_uri = format!(
             "/otaUpdates/{ota_update_id}",
             ota_update_id = input.ota_update_id
@@ -19263,36 +19289,35 @@ where
 
         request.set_endpoint_prefix("iot".to_string());
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<DeleteOTAUpdateResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<DeleteOTAUpdateResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DeleteOTAUpdateError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteOTAUpdateError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Deletes the specified policy.</p> <p>A policy cannot be deleted if it has non-default versions or it is attached to any certificate.</p> <p>To delete a policy, use the DeletePolicyVersion API to delete all non-default versions of the policy; use the DetachPrincipalPolicy API to detach the policy from any certificate; and then use the DeletePolicy API to delete the policy.</p> <p>When a policy is deleted using DeletePolicy, its default version is deleted with it.</p>
-    fn delete_policy(&self, input: &DeletePolicyRequest) -> Result<(), DeletePolicyError> {
+    fn delete_policy(&self, input: &DeletePolicyRequest) -> RusotoFuture<(), DeletePolicyError> {
         let request_uri = format!("/policies/{policy_name}", policy_name = input.policy_name);
 
         let mut request = SignedRequest::new("DELETE", "execute-api", &self.region, &request_uri);
@@ -19300,30 +19325,30 @@ where
 
         request.set_endpoint_prefix("iot".to_string());
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let result = ::std::mem::drop(response);
 
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DeletePolicyError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        });
 
-                Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeletePolicyError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        RusotoFuture::new(future)
     }
 
     /// <p>Deletes the specified version of the specified policy. You cannot delete the default version of a policy using this API. To delete the default version of a policy, use <a>DeletePolicy</a>. To find out which version of a policy is marked as the default version, use ListPolicyVersions.</p>
     fn delete_policy_version(
         &self,
         input: &DeletePolicyVersionRequest,
-    ) -> Result<(), DeletePolicyVersionError> {
+    ) -> RusotoFuture<(), DeletePolicyVersionError> {
         let request_uri = format!(
             "/policies/{policy_name}/version/{policy_version_id}",
             policy_name = input.policy_name,
@@ -19335,29 +19360,29 @@ where
 
         request.set_endpoint_prefix("iot".to_string());
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let result = ::std::mem::drop(response);
 
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DeletePolicyVersionError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        });
 
-                Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeletePolicyVersionError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        RusotoFuture::new(future)
     }
 
     /// <p>Deletes a CA certificate registration code.</p>
     fn delete_registration_code(
         &self,
-    ) -> Result<DeleteRegistrationCodeResponse, DeleteRegistrationCodeError> {
+    ) -> RusotoFuture<DeleteRegistrationCodeResponse, DeleteRegistrationCodeError> {
         let request_uri = "/registrationcode";
 
         let mut request = SignedRequest::new("DELETE", "execute-api", &self.region, &request_uri);
@@ -19365,40 +19390,39 @@ where
 
         request.set_endpoint_prefix("iot".to_string());
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<DeleteRegistrationCodeResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result =
-                    serde_json::from_slice::<DeleteRegistrationCodeResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DeleteRegistrationCodeError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteRegistrationCodeError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Deletes a role alias</p>
     fn delete_role_alias(
         &self,
         input: &DeleteRoleAliasRequest,
-    ) -> Result<DeleteRoleAliasResponse, DeleteRoleAliasError> {
+    ) -> RusotoFuture<DeleteRoleAliasResponse, DeleteRoleAliasError> {
         let request_uri = format!("/role-aliases/{role_alias}", role_alias = input.role_alias);
 
         let mut request = SignedRequest::new("DELETE", "execute-api", &self.region, &request_uri);
@@ -19406,39 +19430,38 @@ where
 
         request.set_endpoint_prefix("iot".to_string());
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<DeleteRoleAliasResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<DeleteRoleAliasResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DeleteRoleAliasError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteRoleAliasError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Deletes a stream.</p>
     fn delete_stream(
         &self,
         input: &DeleteStreamRequest,
-    ) -> Result<DeleteStreamResponse, DeleteStreamError> {
+    ) -> RusotoFuture<DeleteStreamResponse, DeleteStreamError> {
         let request_uri = format!("/streams/{stream_id}", stream_id = input.stream_id);
 
         let mut request = SignedRequest::new("DELETE", "execute-api", &self.region, &request_uri);
@@ -19446,39 +19469,38 @@ where
 
         request.set_endpoint_prefix("iot".to_string());
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<DeleteStreamResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<DeleteStreamResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DeleteStreamError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteStreamError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Deletes the specified thing.</p>
     fn delete_thing(
         &self,
         input: &DeleteThingRequest,
-    ) -> Result<DeleteThingResponse, DeleteThingError> {
+    ) -> RusotoFuture<DeleteThingResponse, DeleteThingError> {
         let request_uri = format!("/things/{thing_name}", thing_name = input.thing_name);
 
         let mut request = SignedRequest::new("DELETE", "execute-api", &self.region, &request_uri);
@@ -19492,39 +19514,38 @@ where
         }
         request.set_params(params);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<DeleteThingResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<DeleteThingResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DeleteThingError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteThingError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Deletes a thing group.</p>
     fn delete_thing_group(
         &self,
         input: &DeleteThingGroupRequest,
-    ) -> Result<DeleteThingGroupResponse, DeleteThingGroupError> {
+    ) -> RusotoFuture<DeleteThingGroupResponse, DeleteThingGroupError> {
         let request_uri = format!(
             "/thing-groups/{thing_group_name}",
             thing_group_name = input.thing_group_name
@@ -19541,39 +19562,38 @@ where
         }
         request.set_params(params);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<DeleteThingGroupResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<DeleteThingGroupResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DeleteThingGroupError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteThingGroupError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Deletes the specified thing type . You cannot delete a thing type if it has things associated with it. To delete a thing type, first mark it as deprecated by calling <a>DeprecateThingType</a>, then remove any associated things by calling <a>UpdateThing</a> to change the thing type on any associated thing, and finally use <a>DeleteThingType</a> to delete the thing type.</p>
     fn delete_thing_type(
         &self,
         input: &DeleteThingTypeRequest,
-    ) -> Result<DeleteThingTypeResponse, DeleteThingTypeError> {
+    ) -> RusotoFuture<DeleteThingTypeResponse, DeleteThingTypeError> {
         let request_uri = format!(
             "/thing-types/{thing_type_name}",
             thing_type_name = input.thing_type_name
@@ -19584,39 +19604,38 @@ where
 
         request.set_endpoint_prefix("iot".to_string());
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<DeleteThingTypeResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<DeleteThingTypeResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DeleteThingTypeError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteThingTypeError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Deletes the rule.</p>
     fn delete_topic_rule(
         &self,
         input: &DeleteTopicRuleRequest,
-    ) -> Result<(), DeleteTopicRuleError> {
+    ) -> RusotoFuture<(), DeleteTopicRuleError> {
         let request_uri = format!("/rules/{rule_name}", rule_name = input.rule_name);
 
         let mut request = SignedRequest::new("DELETE", "execute-api", &self.region, &request_uri);
@@ -19624,30 +19643,30 @@ where
 
         request.set_endpoint_prefix("iot".to_string());
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let result = ::std::mem::drop(response);
 
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DeleteTopicRuleError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        });
 
-                Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteTopicRuleError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        RusotoFuture::new(future)
     }
 
     /// <p>Deletes a logging level.</p>
     fn delete_v2_logging_level(
         &self,
         input: &DeleteV2LoggingLevelRequest,
-    ) -> Result<(), DeleteV2LoggingLevelError> {
+    ) -> RusotoFuture<(), DeleteV2LoggingLevelError> {
         let request_uri = "/v2LoggingLevel";
 
         let mut request = SignedRequest::new("DELETE", "execute-api", &self.region, &request_uri);
@@ -19660,30 +19679,30 @@ where
         params.put("targetType", &input.target_type);
         request.set_params(params);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let result = ::std::mem::drop(response);
 
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DeleteV2LoggingLevelError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        });
 
-                Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteV2LoggingLevelError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        RusotoFuture::new(future)
     }
 
     /// <p>Deprecates a thing type. You can not associate new things with deprecated thing type.</p>
     fn deprecate_thing_type(
         &self,
         input: &DeprecateThingTypeRequest,
-    ) -> Result<DeprecateThingTypeResponse, DeprecateThingTypeError> {
+    ) -> RusotoFuture<DeprecateThingTypeResponse, DeprecateThingTypeError> {
         let request_uri = format!(
             "/thing-types/{thing_type_name}/deprecate",
             thing_type_name = input.thing_type_name
@@ -19696,39 +19715,39 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<DeprecateThingTypeResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<DeprecateThingTypeResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DeprecateThingTypeError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeprecateThingTypeError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Describes an authorizer.</p>
     fn describe_authorizer(
         &self,
         input: &DescribeAuthorizerRequest,
-    ) -> Result<DescribeAuthorizerResponse, DescribeAuthorizerError> {
+    ) -> RusotoFuture<DescribeAuthorizerResponse, DescribeAuthorizerError> {
         let request_uri = format!(
             "/authorizer/{authorizer_name}",
             authorizer_name = input.authorizer_name
@@ -19739,39 +19758,39 @@ where
 
         request.set_endpoint_prefix("iot".to_string());
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<DescribeAuthorizerResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<DescribeAuthorizerResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeAuthorizerError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeAuthorizerError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Describes a registered CA certificate.</p>
     fn describe_ca_certificate(
         &self,
         input: &DescribeCACertificateRequest,
-    ) -> Result<DescribeCACertificateResponse, DescribeCACertificateError> {
+    ) -> RusotoFuture<DescribeCACertificateResponse, DescribeCACertificateError> {
         let request_uri = format!(
             "/cacertificate/{ca_certificate_id}",
             ca_certificate_id = input.certificate_id
@@ -19782,40 +19801,39 @@ where
 
         request.set_endpoint_prefix("iot".to_string());
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<DescribeCACertificateResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result =
-                    serde_json::from_slice::<DescribeCACertificateResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeCACertificateError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeCACertificateError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Gets information about the specified certificate.</p>
     fn describe_certificate(
         &self,
         input: &DescribeCertificateRequest,
-    ) -> Result<DescribeCertificateResponse, DescribeCertificateError> {
+    ) -> RusotoFuture<DescribeCertificateResponse, DescribeCertificateError> {
         let request_uri = format!(
             "/certificates/{certificate_id}",
             certificate_id = input.certificate_id
@@ -19826,38 +19844,38 @@ where
 
         request.set_endpoint_prefix("iot".to_string());
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<DescribeCertificateResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<DescribeCertificateResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeCertificateError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeCertificateError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Describes the default authorizer.</p>
     fn describe_default_authorizer(
         &self,
-    ) -> Result<DescribeDefaultAuthorizerResponse, DescribeDefaultAuthorizerError> {
+    ) -> RusotoFuture<DescribeDefaultAuthorizerResponse, DescribeDefaultAuthorizerError> {
         let request_uri = "/default-authorizer";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -19865,40 +19883,39 @@ where
 
         request.set_endpoint_prefix("iot".to_string());
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<DescribeDefaultAuthorizerResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result =
-                    serde_json::from_slice::<DescribeDefaultAuthorizerResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeDefaultAuthorizerError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeDefaultAuthorizerError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Returns a unique endpoint specific to the AWS account making the call.</p>
     fn describe_endpoint(
         &self,
         input: &DescribeEndpointRequest,
-    ) -> Result<DescribeEndpointResponse, DescribeEndpointError> {
+    ) -> RusotoFuture<DescribeEndpointResponse, DescribeEndpointError> {
         let request_uri = "/endpoint";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -19912,38 +19929,37 @@ where
         }
         request.set_params(params);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<DescribeEndpointResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<DescribeEndpointResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeEndpointError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeEndpointError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Describes event configurations.</p>
     fn describe_event_configurations(
         &self,
-    ) -> Result<DescribeEventConfigurationsResponse, DescribeEventConfigurationsError> {
+    ) -> RusotoFuture<DescribeEventConfigurationsResponse, DescribeEventConfigurationsError> {
         let request_uri = "/event-configurations";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -19951,40 +19967,40 @@ where
 
         request.set_endpoint_prefix("iot".to_string());
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<DescribeEventConfigurationsResponse>(
+                        &body,
+                    ).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result =
-                    serde_json::from_slice::<DescribeEventConfigurationsResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeEventConfigurationsError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeEventConfigurationsError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Describes a search index.</p>
     fn describe_index(
         &self,
         input: &DescribeIndexRequest,
-    ) -> Result<DescribeIndexResponse, DescribeIndexError> {
+    ) -> RusotoFuture<DescribeIndexResponse, DescribeIndexError> {
         let request_uri = format!("/indices/{index_name}", index_name = input.index_name);
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -19992,39 +20008,38 @@ where
 
         request.set_endpoint_prefix("iot".to_string());
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<DescribeIndexResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<DescribeIndexResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeIndexError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeIndexError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Describes a job.</p>
     fn describe_job(
         &self,
         input: &DescribeJobRequest,
-    ) -> Result<DescribeJobResponse, DescribeJobError> {
+    ) -> RusotoFuture<DescribeJobResponse, DescribeJobError> {
         let request_uri = format!("/jobs/{job_id}", job_id = input.job_id);
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -20032,39 +20047,38 @@ where
 
         request.set_endpoint_prefix("iot".to_string());
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<DescribeJobResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<DescribeJobResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeJobError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeJobError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Describes a job execution.</p>
     fn describe_job_execution(
         &self,
         input: &DescribeJobExecutionRequest,
-    ) -> Result<DescribeJobExecutionResponse, DescribeJobExecutionError> {
+    ) -> RusotoFuture<DescribeJobExecutionResponse, DescribeJobExecutionError> {
         let request_uri = format!(
             "/things/{thing_name}/jobs/{job_id}",
             job_id = input.job_id,
@@ -20082,39 +20096,39 @@ where
         }
         request.set_params(params);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<DescribeJobExecutionResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<DescribeJobExecutionResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeJobExecutionError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeJobExecutionError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Describes a role alias.</p>
     fn describe_role_alias(
         &self,
         input: &DescribeRoleAliasRequest,
-    ) -> Result<DescribeRoleAliasResponse, DescribeRoleAliasError> {
+    ) -> RusotoFuture<DescribeRoleAliasResponse, DescribeRoleAliasError> {
         let request_uri = format!("/role-aliases/{role_alias}", role_alias = input.role_alias);
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -20122,39 +20136,39 @@ where
 
         request.set_endpoint_prefix("iot".to_string());
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<DescribeRoleAliasResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<DescribeRoleAliasResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeRoleAliasError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeRoleAliasError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Gets information about a stream.</p>
     fn describe_stream(
         &self,
         input: &DescribeStreamRequest,
-    ) -> Result<DescribeStreamResponse, DescribeStreamError> {
+    ) -> RusotoFuture<DescribeStreamResponse, DescribeStreamError> {
         let request_uri = format!("/streams/{stream_id}", stream_id = input.stream_id);
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -20162,39 +20176,38 @@ where
 
         request.set_endpoint_prefix("iot".to_string());
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<DescribeStreamResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<DescribeStreamResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeStreamError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeStreamError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Gets information about the specified thing.</p>
     fn describe_thing(
         &self,
         input: &DescribeThingRequest,
-    ) -> Result<DescribeThingResponse, DescribeThingError> {
+    ) -> RusotoFuture<DescribeThingResponse, DescribeThingError> {
         let request_uri = format!("/things/{thing_name}", thing_name = input.thing_name);
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -20202,39 +20215,38 @@ where
 
         request.set_endpoint_prefix("iot".to_string());
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<DescribeThingResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<DescribeThingResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeThingError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeThingError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Describe a thing group.</p>
     fn describe_thing_group(
         &self,
         input: &DescribeThingGroupRequest,
-    ) -> Result<DescribeThingGroupResponse, DescribeThingGroupError> {
+    ) -> RusotoFuture<DescribeThingGroupResponse, DescribeThingGroupError> {
         let request_uri = format!(
             "/thing-groups/{thing_group_name}",
             thing_group_name = input.thing_group_name
@@ -20245,39 +20257,40 @@ where
 
         request.set_endpoint_prefix("iot".to_string());
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<DescribeThingGroupResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<DescribeThingGroupResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeThingGroupError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeThingGroupError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Describes a bulk thing provisioning task.</p>
     fn describe_thing_registration_task(
         &self,
         input: &DescribeThingRegistrationTaskRequest,
-    ) -> Result<DescribeThingRegistrationTaskResponse, DescribeThingRegistrationTaskError> {
+    ) -> RusotoFuture<DescribeThingRegistrationTaskResponse, DescribeThingRegistrationTaskError>
+    {
         let request_uri = format!(
             "/thing-registration-tasks/{task_id}",
             task_id = input.task_id
@@ -20288,40 +20301,40 @@ where
 
         request.set_endpoint_prefix("iot".to_string());
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<DescribeThingRegistrationTaskResponse>(
+                        &body,
+                    ).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result =
-                    serde_json::from_slice::<DescribeThingRegistrationTaskResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeThingRegistrationTaskError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeThingRegistrationTaskError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Gets information about the specified thing type.</p>
     fn describe_thing_type(
         &self,
         input: &DescribeThingTypeRequest,
-    ) -> Result<DescribeThingTypeResponse, DescribeThingTypeError> {
+    ) -> RusotoFuture<DescribeThingTypeResponse, DescribeThingTypeError> {
         let request_uri = format!(
             "/thing-types/{thing_type_name}",
             thing_type_name = input.thing_type_name
@@ -20332,36 +20345,36 @@ where
 
         request.set_endpoint_prefix("iot".to_string());
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<DescribeThingTypeResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<DescribeThingTypeResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeThingTypeError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeThingTypeError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Detaches a policy from the specified target.</p>
-    fn detach_policy(&self, input: &DetachPolicyRequest) -> Result<(), DetachPolicyError> {
+    fn detach_policy(&self, input: &DetachPolicyRequest) -> RusotoFuture<(), DetachPolicyError> {
         let request_uri = format!(
             "/target-policies/{policy_name}",
             policy_name = input.policy_name
@@ -20374,30 +20387,30 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let result = ::std::mem::drop(response);
 
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DetachPolicyError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        });
 
-                Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DetachPolicyError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        RusotoFuture::new(future)
     }
 
     /// <p>Removes the specified policy from the specified certificate.</p> <p> <b>Note:</b> This API is deprecated. Please use <a>DetachPolicy</a> instead.</p>
     fn detach_principal_policy(
         &self,
         input: &DetachPrincipalPolicyRequest,
-    ) -> Result<(), DetachPrincipalPolicyError> {
+    ) -> RusotoFuture<(), DetachPrincipalPolicyError> {
         let request_uri = format!(
             "/principal-policies/{policy_name}",
             policy_name = input.policy_name
@@ -20410,30 +20423,30 @@ where
 
         request.add_header("x-amzn-iot-principal", &input.principal);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let result = ::std::mem::drop(response);
 
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DetachPrincipalPolicyError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        });
 
-                Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DetachPrincipalPolicyError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        RusotoFuture::new(future)
     }
 
     /// <p>Detaches the specified principal from the specified thing.</p>
     fn detach_thing_principal(
         &self,
         input: &DetachThingPrincipalRequest,
-    ) -> Result<DetachThingPrincipalResponse, DetachThingPrincipalError> {
+    ) -> RusotoFuture<DetachThingPrincipalResponse, DetachThingPrincipalError> {
         let request_uri = format!(
             "/things/{thing_name}/principals",
             thing_name = input.thing_name
@@ -20446,39 +20459,39 @@ where
 
         request.add_header("x-amzn-principal", &input.principal);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<DetachThingPrincipalResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<DetachThingPrincipalResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DetachThingPrincipalError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DetachThingPrincipalError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Disables the rule.</p>
     fn disable_topic_rule(
         &self,
         input: &DisableTopicRuleRequest,
-    ) -> Result<(), DisableTopicRuleError> {
+    ) -> RusotoFuture<(), DisableTopicRuleError> {
         let request_uri = format!("/rules/{rule_name}/disable", rule_name = input.rule_name);
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
@@ -20486,30 +20499,30 @@ where
 
         request.set_endpoint_prefix("iot".to_string());
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let result = ::std::mem::drop(response);
 
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DisableTopicRuleError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        });
 
-                Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DisableTopicRuleError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        RusotoFuture::new(future)
     }
 
     /// <p>Enables the rule.</p>
     fn enable_topic_rule(
         &self,
         input: &EnableTopicRuleRequest,
-    ) -> Result<(), EnableTopicRuleError> {
+    ) -> RusotoFuture<(), EnableTopicRuleError> {
         let request_uri = format!("/rules/{rule_name}/enable", rule_name = input.rule_name);
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
@@ -20517,30 +20530,30 @@ where
 
         request.set_endpoint_prefix("iot".to_string());
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let result = ::std::mem::drop(response);
 
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(EnableTopicRuleError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        });
 
-                Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(EnableTopicRuleError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        RusotoFuture::new(future)
     }
 
     /// <p>Gets effective policies.</p>
     fn get_effective_policies(
         &self,
         input: &GetEffectivePoliciesRequest,
-    ) -> Result<GetEffectivePoliciesResponse, GetEffectivePoliciesError> {
+    ) -> RusotoFuture<GetEffectivePoliciesResponse, GetEffectivePoliciesError> {
         let request_uri = "/effective-policies";
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
@@ -20556,38 +20569,38 @@ where
         }
         request.set_params(params);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<GetEffectivePoliciesResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<GetEffectivePoliciesResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(GetEffectivePoliciesError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetEffectivePoliciesError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Gets the search configuration.</p>
     fn get_indexing_configuration(
         &self,
-    ) -> Result<GetIndexingConfigurationResponse, GetIndexingConfigurationError> {
+    ) -> RusotoFuture<GetIndexingConfigurationResponse, GetIndexingConfigurationError> {
         let request_uri = "/indexing/config";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -20595,40 +20608,39 @@ where
 
         request.set_endpoint_prefix("iot".to_string());
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<GetIndexingConfigurationResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result =
-                    serde_json::from_slice::<GetIndexingConfigurationResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(GetIndexingConfigurationError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetIndexingConfigurationError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Gets a job document.</p>
     fn get_job_document(
         &self,
         input: &GetJobDocumentRequest,
-    ) -> Result<GetJobDocumentResponse, GetJobDocumentError> {
+    ) -> RusotoFuture<GetJobDocumentResponse, GetJobDocumentError> {
         let request_uri = format!("/jobs/{job_id}/job-document", job_id = input.job_id);
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -20636,36 +20648,37 @@ where
 
         request.set_endpoint_prefix("iot".to_string());
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<GetJobDocumentResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<GetJobDocumentResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(GetJobDocumentError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetJobDocumentError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Gets the logging options.</p>
-    fn get_logging_options(&self) -> Result<GetLoggingOptionsResponse, GetLoggingOptionsError> {
+    fn get_logging_options(
+        &self,
+    ) -> RusotoFuture<GetLoggingOptionsResponse, GetLoggingOptionsError> {
         let request_uri = "/loggingOptions";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -20673,39 +20686,39 @@ where
 
         request.set_endpoint_prefix("iot".to_string());
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<GetLoggingOptionsResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<GetLoggingOptionsResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(GetLoggingOptionsError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetLoggingOptionsError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Gets an OTA update.</p>
     fn get_ota_update(
         &self,
         input: &GetOTAUpdateRequest,
-    ) -> Result<GetOTAUpdateResponse, GetOTAUpdateError> {
+    ) -> RusotoFuture<GetOTAUpdateResponse, GetOTAUpdateError> {
         let request_uri = format!(
             "/otaUpdates/{ota_update_id}",
             ota_update_id = input.ota_update_id
@@ -20716,36 +20729,38 @@ where
 
         request.set_endpoint_prefix("iot".to_string());
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<GetOTAUpdateResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<GetOTAUpdateResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(GetOTAUpdateError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetOTAUpdateError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Gets information about the specified policy with the policy document of the default version.</p>
-    fn get_policy(&self, input: &GetPolicyRequest) -> Result<GetPolicyResponse, GetPolicyError> {
+    fn get_policy(
+        &self,
+        input: &GetPolicyRequest,
+    ) -> RusotoFuture<GetPolicyResponse, GetPolicyError> {
         let request_uri = format!("/policies/{policy_name}", policy_name = input.policy_name);
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -20753,39 +20768,38 @@ where
 
         request.set_endpoint_prefix("iot".to_string());
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<GetPolicyResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<GetPolicyResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(GetPolicyError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetPolicyError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Gets information about the specified policy version.</p>
     fn get_policy_version(
         &self,
         input: &GetPolicyVersionRequest,
-    ) -> Result<GetPolicyVersionResponse, GetPolicyVersionError> {
+    ) -> RusotoFuture<GetPolicyVersionResponse, GetPolicyVersionError> {
         let request_uri = format!(
             "/policies/{policy_name}/version/{policy_version_id}",
             policy_name = input.policy_name,
@@ -20797,38 +20811,37 @@ where
 
         request.set_endpoint_prefix("iot".to_string());
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<GetPolicyVersionResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<GetPolicyVersionResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(GetPolicyVersionError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetPolicyVersionError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Gets a registration code used to register a CA certificate with AWS IoT.</p>
     fn get_registration_code(
         &self,
-    ) -> Result<GetRegistrationCodeResponse, GetRegistrationCodeError> {
+    ) -> RusotoFuture<GetRegistrationCodeResponse, GetRegistrationCodeError> {
         let request_uri = "/registrationcode";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -20836,39 +20849,39 @@ where
 
         request.set_endpoint_prefix("iot".to_string());
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<GetRegistrationCodeResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<GetRegistrationCodeResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(GetRegistrationCodeError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetRegistrationCodeError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Gets information about the rule.</p>
     fn get_topic_rule(
         &self,
         input: &GetTopicRuleRequest,
-    ) -> Result<GetTopicRuleResponse, GetTopicRuleError> {
+    ) -> RusotoFuture<GetTopicRuleResponse, GetTopicRuleError> {
         let request_uri = format!("/rules/{rule_name}", rule_name = input.rule_name);
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -20876,38 +20889,37 @@ where
 
         request.set_endpoint_prefix("iot".to_string());
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<GetTopicRuleResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<GetTopicRuleResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(GetTopicRuleError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetTopicRuleError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Gets the fine grained logging options.</p>
     fn get_v2_logging_options(
         &self,
-    ) -> Result<GetV2LoggingOptionsResponse, GetV2LoggingOptionsError> {
+    ) -> RusotoFuture<GetV2LoggingOptionsResponse, GetV2LoggingOptionsError> {
         let request_uri = "/v2LoggingOptions";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -20915,39 +20927,39 @@ where
 
         request.set_endpoint_prefix("iot".to_string());
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<GetV2LoggingOptionsResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<GetV2LoggingOptionsResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(GetV2LoggingOptionsError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetV2LoggingOptionsError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Lists the policies attached to the specified thing group.</p>
     fn list_attached_policies(
         &self,
         input: &ListAttachedPoliciesRequest,
-    ) -> Result<ListAttachedPoliciesResponse, ListAttachedPoliciesError> {
+    ) -> RusotoFuture<ListAttachedPoliciesResponse, ListAttachedPoliciesError> {
         let request_uri = format!("/attached-policies/{target}", target = input.target);
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
@@ -20967,39 +20979,39 @@ where
         }
         request.set_params(params);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<ListAttachedPoliciesResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<ListAttachedPoliciesResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(ListAttachedPoliciesError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListAttachedPoliciesError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Lists the authorizers registered in your account.</p>
     fn list_authorizers(
         &self,
         input: &ListAuthorizersRequest,
-    ) -> Result<ListAuthorizersResponse, ListAuthorizersError> {
+    ) -> RusotoFuture<ListAuthorizersResponse, ListAuthorizersError> {
         let request_uri = "/authorizers/";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -21022,39 +21034,38 @@ where
         }
         request.set_params(params);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<ListAuthorizersResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<ListAuthorizersResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(ListAuthorizersError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListAuthorizersError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Lists the CA certificates registered for your AWS account.</p> <p>The results are paginated with a default page size of 25. You can use the returned marker to retrieve additional results.</p>
     fn list_ca_certificates(
         &self,
         input: &ListCACertificatesRequest,
-    ) -> Result<ListCACertificatesResponse, ListCACertificatesError> {
+    ) -> RusotoFuture<ListCACertificatesResponse, ListCACertificatesError> {
         let request_uri = "/cacertificates";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -21074,39 +21085,39 @@ where
         }
         request.set_params(params);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<ListCACertificatesResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<ListCACertificatesResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(ListCACertificatesError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListCACertificatesError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Lists the certificates registered in your AWS account.</p> <p>The results are paginated with a default page size of 25. You can use the returned marker to retrieve additional results.</p>
     fn list_certificates(
         &self,
         input: &ListCertificatesRequest,
-    ) -> Result<ListCertificatesResponse, ListCertificatesError> {
+    ) -> RusotoFuture<ListCertificatesResponse, ListCertificatesError> {
         let request_uri = "/certificates";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -21126,39 +21137,38 @@ where
         }
         request.set_params(params);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<ListCertificatesResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<ListCertificatesResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(ListCertificatesError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListCertificatesError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>List the device certificates signed by the specified CA certificate.</p>
     fn list_certificates_by_ca(
         &self,
         input: &ListCertificatesByCARequest,
-    ) -> Result<ListCertificatesByCAResponse, ListCertificatesByCAError> {
+    ) -> RusotoFuture<ListCertificatesByCAResponse, ListCertificatesByCAError> {
         let request_uri = format!(
             "/certificates-by-ca/{ca_certificate_id}",
             ca_certificate_id = input.ca_certificate_id
@@ -21181,39 +21191,39 @@ where
         }
         request.set_params(params);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<ListCertificatesByCAResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<ListCertificatesByCAResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(ListCertificatesByCAError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListCertificatesByCAError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Lists the search indices.</p>
     fn list_indices(
         &self,
         input: &ListIndicesRequest,
-    ) -> Result<ListIndicesResponse, ListIndicesError> {
+    ) -> RusotoFuture<ListIndicesResponse, ListIndicesError> {
         let request_uri = "/indices";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -21230,39 +21240,38 @@ where
         }
         request.set_params(params);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<ListIndicesResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<ListIndicesResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(ListIndicesError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListIndicesError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Lists the job executions for a job.</p>
     fn list_job_executions_for_job(
         &self,
         input: &ListJobExecutionsForJobRequest,
-    ) -> Result<ListJobExecutionsForJobResponse, ListJobExecutionsForJobError> {
+    ) -> RusotoFuture<ListJobExecutionsForJobResponse, ListJobExecutionsForJobError> {
         let request_uri = format!("/jobs/{job_id}/things", job_id = input.job_id);
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -21282,40 +21291,39 @@ where
         }
         request.set_params(params);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<ListJobExecutionsForJobResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result =
-                    serde_json::from_slice::<ListJobExecutionsForJobResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(ListJobExecutionsForJobError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListJobExecutionsForJobError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Lists the job executions for the specified thing.</p>
     fn list_job_executions_for_thing(
         &self,
         input: &ListJobExecutionsForThingRequest,
-    ) -> Result<ListJobExecutionsForThingResponse, ListJobExecutionsForThingError> {
+    ) -> RusotoFuture<ListJobExecutionsForThingResponse, ListJobExecutionsForThingError> {
         let request_uri = format!("/things/{thing_name}/jobs", thing_name = input.thing_name);
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -21335,37 +21343,36 @@ where
         }
         request.set_params(params);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<ListJobExecutionsForThingResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result =
-                    serde_json::from_slice::<ListJobExecutionsForThingResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(ListJobExecutionsForThingError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListJobExecutionsForThingError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Lists jobs.</p>
-    fn list_jobs(&self, input: &ListJobsRequest) -> Result<ListJobsResponse, ListJobsError> {
+    fn list_jobs(&self, input: &ListJobsRequest) -> RusotoFuture<ListJobsResponse, ListJobsError> {
         let request_uri = "/jobs";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -21394,39 +21401,38 @@ where
         }
         request.set_params(params);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<ListJobsResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<ListJobsResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(ListJobsError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListJobsError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Lists OTA updates.</p>
     fn list_ota_updates(
         &self,
         input: &ListOTAUpdatesRequest,
-    ) -> Result<ListOTAUpdatesResponse, ListOTAUpdatesError> {
+    ) -> RusotoFuture<ListOTAUpdatesResponse, ListOTAUpdatesError> {
         let request_uri = "/otaUpdates";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -21446,39 +21452,38 @@ where
         }
         request.set_params(params);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<ListOTAUpdatesResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<ListOTAUpdatesResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(ListOTAUpdatesError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListOTAUpdatesError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Lists certificates that are being transferred but not yet accepted.</p>
     fn list_outgoing_certificates(
         &self,
         input: &ListOutgoingCertificatesRequest,
-    ) -> Result<ListOutgoingCertificatesResponse, ListOutgoingCertificatesError> {
+    ) -> RusotoFuture<ListOutgoingCertificatesResponse, ListOutgoingCertificatesError> {
         let request_uri = "/certificates-out-going";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -21498,40 +21503,39 @@ where
         }
         request.set_params(params);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<ListOutgoingCertificatesResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result =
-                    serde_json::from_slice::<ListOutgoingCertificatesResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(ListOutgoingCertificatesError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListOutgoingCertificatesError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Lists your policies.</p>
     fn list_policies(
         &self,
         input: &ListPoliciesRequest,
-    ) -> Result<ListPoliciesResponse, ListPoliciesError> {
+    ) -> RusotoFuture<ListPoliciesResponse, ListPoliciesError> {
         let request_uri = "/policies";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -21551,39 +21555,38 @@ where
         }
         request.set_params(params);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<ListPoliciesResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<ListPoliciesResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(ListPoliciesError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListPoliciesError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Lists the principals associated with the specified policy.</p> <p> <b>Note:</b> This API is deprecated. Please use <a>ListTargetsForPolicy</a> instead.</p>
     fn list_policy_principals(
         &self,
         input: &ListPolicyPrincipalsRequest,
-    ) -> Result<ListPolicyPrincipalsResponse, ListPolicyPrincipalsError> {
+    ) -> RusotoFuture<ListPolicyPrincipalsResponse, ListPolicyPrincipalsError> {
         let request_uri = "/policy-principals";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -21604,39 +21607,39 @@ where
         }
         request.set_params(params);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<ListPolicyPrincipalsResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<ListPolicyPrincipalsResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(ListPolicyPrincipalsError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListPolicyPrincipalsError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Lists the versions of the specified policy and identifies the default version.</p>
     fn list_policy_versions(
         &self,
         input: &ListPolicyVersionsRequest,
-    ) -> Result<ListPolicyVersionsResponse, ListPolicyVersionsError> {
+    ) -> RusotoFuture<ListPolicyVersionsResponse, ListPolicyVersionsError> {
         let request_uri = format!(
             "/policies/{policy_name}/version",
             policy_name = input.policy_name
@@ -21647,39 +21650,39 @@ where
 
         request.set_endpoint_prefix("iot".to_string());
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<ListPolicyVersionsResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<ListPolicyVersionsResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(ListPolicyVersionsError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListPolicyVersionsError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Lists the policies attached to the specified principal. If you use an Cognito identity, the ID must be in <a href="http://docs.aws.amazon.com/cognitoidentity/latest/APIReference/API_GetCredentialsForIdentity.html#API_GetCredentialsForIdentity_RequestSyntax">AmazonCognito Identity format</a>.</p> <p> <b>Note:</b> This API is deprecated. Please use <a>ListAttachedPolicies</a> instead.</p>
     fn list_principal_policies(
         &self,
         input: &ListPrincipalPoliciesRequest,
-    ) -> Result<ListPrincipalPoliciesResponse, ListPrincipalPoliciesError> {
+    ) -> RusotoFuture<ListPrincipalPoliciesResponse, ListPrincipalPoliciesError> {
         let request_uri = "/principal-policies";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -21700,40 +21703,39 @@ where
         }
         request.set_params(params);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<ListPrincipalPoliciesResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result =
-                    serde_json::from_slice::<ListPrincipalPoliciesResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(ListPrincipalPoliciesError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListPrincipalPoliciesError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Lists the things associated with the specified principal.</p>
     fn list_principal_things(
         &self,
         input: &ListPrincipalThingsRequest,
-    ) -> Result<ListPrincipalThingsResponse, ListPrincipalThingsError> {
+    ) -> RusotoFuture<ListPrincipalThingsResponse, ListPrincipalThingsError> {
         let request_uri = "/principals/things";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -21751,39 +21753,39 @@ where
         }
         request.set_params(params);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<ListPrincipalThingsResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<ListPrincipalThingsResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(ListPrincipalThingsError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListPrincipalThingsError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Lists the role aliases registered in your account.</p>
     fn list_role_aliases(
         &self,
         input: &ListRoleAliasesRequest,
-    ) -> Result<ListRoleAliasesResponse, ListRoleAliasesError> {
+    ) -> RusotoFuture<ListRoleAliasesResponse, ListRoleAliasesError> {
         let request_uri = "/role-aliases";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -21803,39 +21805,38 @@ where
         }
         request.set_params(params);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<ListRoleAliasesResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<ListRoleAliasesResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(ListRoleAliasesError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListRoleAliasesError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Lists all of the streams in your AWS account.</p>
     fn list_streams(
         &self,
         input: &ListStreamsRequest,
-    ) -> Result<ListStreamsResponse, ListStreamsError> {
+    ) -> RusotoFuture<ListStreamsResponse, ListStreamsError> {
         let request_uri = "/streams";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -21855,39 +21856,38 @@ where
         }
         request.set_params(params);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<ListStreamsResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<ListStreamsResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(ListStreamsError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListStreamsError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>List targets for the specified policy.</p>
     fn list_targets_for_policy(
         &self,
         input: &ListTargetsForPolicyRequest,
-    ) -> Result<ListTargetsForPolicyResponse, ListTargetsForPolicyError> {
+    ) -> RusotoFuture<ListTargetsForPolicyResponse, ListTargetsForPolicyError> {
         let request_uri = format!(
             "/policy-targets/{policy_name}",
             policy_name = input.policy_name
@@ -21907,39 +21907,39 @@ where
         }
         request.set_params(params);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<ListTargetsForPolicyResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<ListTargetsForPolicyResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(ListTargetsForPolicyError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListTargetsForPolicyError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>List the thing groups in your account.</p>
     fn list_thing_groups(
         &self,
         input: &ListThingGroupsRequest,
-    ) -> Result<ListThingGroupsResponse, ListThingGroupsError> {
+    ) -> RusotoFuture<ListThingGroupsResponse, ListThingGroupsError> {
         let request_uri = "/thing-groups";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -21965,39 +21965,38 @@ where
         }
         request.set_params(params);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<ListThingGroupsResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<ListThingGroupsResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(ListThingGroupsError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListThingGroupsError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>List the thing groups to which the specified thing belongs.</p>
     fn list_thing_groups_for_thing(
         &self,
         input: &ListThingGroupsForThingRequest,
-    ) -> Result<ListThingGroupsForThingResponse, ListThingGroupsForThingError> {
+    ) -> RusotoFuture<ListThingGroupsForThingResponse, ListThingGroupsForThingError> {
         let request_uri = format!(
             "/things/{thing_name}/thing-groups",
             thing_name = input.thing_name
@@ -22017,40 +22016,39 @@ where
         }
         request.set_params(params);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<ListThingGroupsForThingResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result =
-                    serde_json::from_slice::<ListThingGroupsForThingResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(ListThingGroupsForThingError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListThingGroupsForThingError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Lists the principals associated with the specified thing.</p>
     fn list_thing_principals(
         &self,
         input: &ListThingPrincipalsRequest,
-    ) -> Result<ListThingPrincipalsResponse, ListThingPrincipalsError> {
+    ) -> RusotoFuture<ListThingPrincipalsResponse, ListThingPrincipalsError> {
         let request_uri = format!(
             "/things/{thing_name}/principals",
             thing_name = input.thing_name
@@ -22061,39 +22059,39 @@ where
 
         request.set_endpoint_prefix("iot".to_string());
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<ListThingPrincipalsResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<ListThingPrincipalsResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(ListThingPrincipalsError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListThingPrincipalsError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Information about the thing registration tasks.</p>
     fn list_thing_registration_task_reports(
         &self,
         input: &ListThingRegistrationTaskReportsRequest,
-    ) -> Result<ListThingRegistrationTaskReportsResponse, ListThingRegistrationTaskReportsError>
+    ) -> RusotoFuture<ListThingRegistrationTaskReportsResponse, ListThingRegistrationTaskReportsError>
     {
         let request_uri = format!(
             "/thing-registration-tasks/{task_id}/reports",
@@ -22115,41 +22113,40 @@ where
         params.put("reportType", &input.report_type);
         request.set_params(params);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<ListThingRegistrationTaskReportsResponse>(&body)
+                            .unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<ListThingRegistrationTaskReportsResponse>(
-                    &body,
-                ).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(ListThingRegistrationTaskReportsError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListThingRegistrationTaskReportsError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>List bulk thing provisioning tasks.</p>
     fn list_thing_registration_tasks(
         &self,
         input: &ListThingRegistrationTasksRequest,
-    ) -> Result<ListThingRegistrationTasksResponse, ListThingRegistrationTasksError> {
+    ) -> RusotoFuture<ListThingRegistrationTasksResponse, ListThingRegistrationTasksError> {
         let request_uri = "/thing-registration-tasks";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -22169,40 +22166,40 @@ where
         }
         request.set_params(params);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<ListThingRegistrationTasksResponse>(
+                        &body,
+                    ).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result =
-                    serde_json::from_slice::<ListThingRegistrationTasksResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(ListThingRegistrationTasksError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListThingRegistrationTasksError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Lists the existing thing types.</p>
     fn list_thing_types(
         &self,
         input: &ListThingTypesRequest,
-    ) -> Result<ListThingTypesResponse, ListThingTypesError> {
+    ) -> RusotoFuture<ListThingTypesResponse, ListThingTypesError> {
         let request_uri = "/thing-types";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -22222,39 +22219,38 @@ where
         }
         request.set_params(params);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<ListThingTypesResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<ListThingTypesResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(ListThingTypesError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListThingTypesError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Lists your things. Use the <b>attributeName</b> and <b>attributeValue</b> parameters to filter your things. For example, calling <code>ListThings</code> with attributeName=Color and attributeValue=Red retrieves all things in the registry that contain an attribute <b>Color</b> with the value <b>Red</b>. </p>
     fn list_things(
         &self,
         input: &ListThingsRequest,
-    ) -> Result<ListThingsResponse, ListThingsError> {
+    ) -> RusotoFuture<ListThingsResponse, ListThingsError> {
         let request_uri = "/things";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -22280,39 +22276,38 @@ where
         }
         request.set_params(params);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<ListThingsResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<ListThingsResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(ListThingsError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListThingsError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Lists the things in the specified group.</p>
     fn list_things_in_thing_group(
         &self,
         input: &ListThingsInThingGroupRequest,
-    ) -> Result<ListThingsInThingGroupResponse, ListThingsInThingGroupError> {
+    ) -> RusotoFuture<ListThingsInThingGroupResponse, ListThingsInThingGroupError> {
         let request_uri = format!(
             "/thing-groups/{thing_group_name}/things",
             thing_group_name = input.thing_group_name
@@ -22335,40 +22330,39 @@ where
         }
         request.set_params(params);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<ListThingsInThingGroupResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result =
-                    serde_json::from_slice::<ListThingsInThingGroupResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(ListThingsInThingGroupError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListThingsInThingGroupError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Lists the rules for the specific topic.</p>
     fn list_topic_rules(
         &self,
         input: &ListTopicRulesRequest,
-    ) -> Result<ListTopicRulesResponse, ListTopicRulesError> {
+    ) -> RusotoFuture<ListTopicRulesResponse, ListTopicRulesError> {
         let request_uri = "/rules";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -22391,39 +22385,38 @@ where
         }
         request.set_params(params);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<ListTopicRulesResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<ListTopicRulesResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(ListTopicRulesError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListTopicRulesError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Lists logging levels.</p>
     fn list_v2_logging_levels(
         &self,
         input: &ListV2LoggingLevelsRequest,
-    ) -> Result<ListV2LoggingLevelsResponse, ListV2LoggingLevelsError> {
+    ) -> RusotoFuture<ListV2LoggingLevelsResponse, ListV2LoggingLevelsError> {
         let request_uri = "/v2LoggingLevel";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -22443,39 +22436,39 @@ where
         }
         request.set_params(params);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<ListV2LoggingLevelsResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<ListV2LoggingLevelsResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(ListV2LoggingLevelsError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListV2LoggingLevelsError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Registers a CA certificate with AWS IoT. This CA certificate can then be used to sign device certificates, which can be then registered with AWS IoT. You can register up to 10 CA certificates per AWS account that have the same subject field. This enables you to have up to 10 certificate authorities sign your device certificates. If you have more than one CA certificate registered, make sure you pass the CA certificate when you register your device certificates with the RegisterCertificate API.</p>
     fn register_ca_certificate(
         &self,
         input: &RegisterCACertificateRequest,
-    ) -> Result<RegisterCACertificateResponse, RegisterCACertificateError> {
+    ) -> RusotoFuture<RegisterCACertificateResponse, RegisterCACertificateError> {
         let request_uri = "/cacertificate";
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
@@ -22494,40 +22487,39 @@ where
         }
         request.set_params(params);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<RegisterCACertificateResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result =
-                    serde_json::from_slice::<RegisterCACertificateResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(RegisterCACertificateError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(RegisterCACertificateError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Registers a device certificate with AWS IoT. If you have more than one CA certificate that has the same subject field, you must specify the CA certificate that was used to sign the device certificate being registered.</p>
     fn register_certificate(
         &self,
         input: &RegisterCertificateRequest,
-    ) -> Result<RegisterCertificateResponse, RegisterCertificateError> {
+    ) -> RusotoFuture<RegisterCertificateResponse, RegisterCertificateError> {
         let request_uri = "/certificate/register";
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
@@ -22537,39 +22529,39 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<RegisterCertificateResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<RegisterCertificateResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(RegisterCertificateError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(RegisterCertificateError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Provisions a thing.</p>
     fn register_thing(
         &self,
         input: &RegisterThingRequest,
-    ) -> Result<RegisterThingResponse, RegisterThingError> {
+    ) -> RusotoFuture<RegisterThingResponse, RegisterThingError> {
         let request_uri = "/things";
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
@@ -22579,39 +22571,38 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<RegisterThingResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<RegisterThingResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(RegisterThingError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(RegisterThingError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Rejects a pending certificate transfer. After AWS IoT rejects a certificate transfer, the certificate status changes from <b>PENDING_TRANSFER</b> to <b>INACTIVE</b>.</p> <p>To check for pending certificate transfers, call <a>ListCertificates</a> to enumerate your certificates.</p> <p>This operation can only be called by the transfer destination. After it is called, the certificate will be returned to the source's account in the INACTIVE state.</p>
     fn reject_certificate_transfer(
         &self,
         input: &RejectCertificateTransferRequest,
-    ) -> Result<(), RejectCertificateTransferError> {
+    ) -> RusotoFuture<(), RejectCertificateTransferError> {
         let request_uri = format!(
             "/reject-certificate-transfer/{certificate_id}",
             certificate_id = input.certificate_id
@@ -22624,30 +22615,30 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let result = ::std::mem::drop(response);
 
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(RejectCertificateTransferError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        });
 
-                Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(RejectCertificateTransferError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        RusotoFuture::new(future)
     }
 
     /// <p>Remove the specified thing from the specified group.</p>
     fn remove_thing_from_thing_group(
         &self,
         input: &RemoveThingFromThingGroupRequest,
-    ) -> Result<RemoveThingFromThingGroupResponse, RemoveThingFromThingGroupError> {
+    ) -> RusotoFuture<RemoveThingFromThingGroupResponse, RemoveThingFromThingGroupError> {
         let request_uri = "/thing-groups/removeThingFromThingGroup";
 
         let mut request = SignedRequest::new("PUT", "execute-api", &self.region, &request_uri);
@@ -22657,40 +22648,39 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<RemoveThingFromThingGroupResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result =
-                    serde_json::from_slice::<RemoveThingFromThingGroupResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(RemoveThingFromThingGroupError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(RemoveThingFromThingGroupError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Replaces the rule. You must specify all parameters for the new rule. Creating rules is an administrator-level action. Any user who has permission to create rules will be able to access data processed by the rule.</p>
     fn replace_topic_rule(
         &self,
         input: &ReplaceTopicRuleRequest,
-    ) -> Result<(), ReplaceTopicRuleError> {
+    ) -> RusotoFuture<(), ReplaceTopicRuleError> {
         let request_uri = format!("/rules/{rule_name}", rule_name = input.rule_name);
 
         let mut request = SignedRequest::new("PATCH", "execute-api", &self.region, &request_uri);
@@ -22700,30 +22690,30 @@ where
         let encoded = Some(serde_json::to_vec(&input.topic_rule_payload).unwrap());
         request.set_payload(encoded);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let result = ::std::mem::drop(response);
 
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(ReplaceTopicRuleError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        });
 
-                Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ReplaceTopicRuleError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        RusotoFuture::new(future)
     }
 
     /// <p>The query search index.</p>
     fn search_index(
         &self,
         input: &SearchIndexRequest,
-    ) -> Result<SearchIndexResponse, SearchIndexError> {
+    ) -> RusotoFuture<SearchIndexResponse, SearchIndexError> {
         let request_uri = "/indices/search";
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
@@ -22733,39 +22723,38 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<SearchIndexResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<SearchIndexResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(SearchIndexError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(SearchIndexError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Sets the default authorizer. This will be used if a websocket connection is made without specifying an authorizer.</p>
     fn set_default_authorizer(
         &self,
         input: &SetDefaultAuthorizerRequest,
-    ) -> Result<SetDefaultAuthorizerResponse, SetDefaultAuthorizerError> {
+    ) -> RusotoFuture<SetDefaultAuthorizerResponse, SetDefaultAuthorizerError> {
         let request_uri = "/default-authorizer";
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
@@ -22775,39 +22764,39 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<SetDefaultAuthorizerResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<SetDefaultAuthorizerResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(SetDefaultAuthorizerError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(SetDefaultAuthorizerError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Sets the specified version of the specified policy as the policy's default (operative) version. This action affects all certificates to which the policy is attached. To list the principals the policy is attached to, use the ListPrincipalPolicy API.</p>
     fn set_default_policy_version(
         &self,
         input: &SetDefaultPolicyVersionRequest,
-    ) -> Result<(), SetDefaultPolicyVersionError> {
+    ) -> RusotoFuture<(), SetDefaultPolicyVersionError> {
         let request_uri = format!(
             "/policies/{policy_name}/version/{policy_version_id}",
             policy_name = input.policy_name,
@@ -22819,30 +22808,30 @@ where
 
         request.set_endpoint_prefix("iot".to_string());
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let result = ::std::mem::drop(response);
 
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(SetDefaultPolicyVersionError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        });
 
-                Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(SetDefaultPolicyVersionError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        RusotoFuture::new(future)
     }
 
     /// <p>Sets the logging options.</p>
     fn set_logging_options(
         &self,
         input: &SetLoggingOptionsRequest,
-    ) -> Result<(), SetLoggingOptionsError> {
+    ) -> RusotoFuture<(), SetLoggingOptionsError> {
         let request_uri = "/loggingOptions";
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
@@ -22852,30 +22841,30 @@ where
         let encoded = Some(serde_json::to_vec(&input.logging_options_payload).unwrap());
         request.set_payload(encoded);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let result = ::std::mem::drop(response);
 
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(SetLoggingOptionsError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        });
 
-                Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(SetLoggingOptionsError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        RusotoFuture::new(future)
     }
 
     /// <p>Sets the logging level.</p>
     fn set_v2_logging_level(
         &self,
         input: &SetV2LoggingLevelRequest,
-    ) -> Result<(), SetV2LoggingLevelError> {
+    ) -> RusotoFuture<(), SetV2LoggingLevelError> {
         let request_uri = "/v2LoggingLevel";
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
@@ -22885,30 +22874,30 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let result = ::std::mem::drop(response);
 
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(SetV2LoggingLevelError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        });
 
-                Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(SetV2LoggingLevelError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        RusotoFuture::new(future)
     }
 
     /// <p>Sets the logging options for the V2 logging service.</p>
     fn set_v2_logging_options(
         &self,
         input: &SetV2LoggingOptionsRequest,
-    ) -> Result<(), SetV2LoggingOptionsError> {
+    ) -> RusotoFuture<(), SetV2LoggingOptionsError> {
         let request_uri = "/v2LoggingOptions";
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
@@ -22918,30 +22907,30 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let result = ::std::mem::drop(response);
 
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(SetV2LoggingOptionsError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        });
 
-                Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(SetV2LoggingOptionsError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        RusotoFuture::new(future)
     }
 
     /// <p>Creates a bulk thing provisioning task.</p>
     fn start_thing_registration_task(
         &self,
         input: &StartThingRegistrationTaskRequest,
-    ) -> Result<StartThingRegistrationTaskResponse, StartThingRegistrationTaskError> {
+    ) -> RusotoFuture<StartThingRegistrationTaskResponse, StartThingRegistrationTaskError> {
         let request_uri = "/thing-registration-tasks";
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
@@ -22951,40 +22940,40 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<StartThingRegistrationTaskResponse>(
+                        &body,
+                    ).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result =
-                    serde_json::from_slice::<StartThingRegistrationTaskResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(StartThingRegistrationTaskError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(StartThingRegistrationTaskError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Cancels a bulk thing provisioning task.</p>
     fn stop_thing_registration_task(
         &self,
         input: &StopThingRegistrationTaskRequest,
-    ) -> Result<StopThingRegistrationTaskResponse, StopThingRegistrationTaskError> {
+    ) -> RusotoFuture<StopThingRegistrationTaskResponse, StopThingRegistrationTaskError> {
         let request_uri = format!(
             "/thing-registration-tasks/{task_id}/cancel",
             task_id = input.task_id
@@ -22995,40 +22984,39 @@ where
 
         request.set_endpoint_prefix("iot".to_string());
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<StopThingRegistrationTaskResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result =
-                    serde_json::from_slice::<StopThingRegistrationTaskResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(StopThingRegistrationTaskError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(StopThingRegistrationTaskError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Test custom authorization.</p>
     fn test_authorization(
         &self,
         input: &TestAuthorizationRequest,
-    ) -> Result<TestAuthorizationResponse, TestAuthorizationError> {
+    ) -> RusotoFuture<TestAuthorizationResponse, TestAuthorizationError> {
         let request_uri = "/test-authorization";
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
@@ -23044,39 +23032,39 @@ where
         }
         request.set_params(params);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<TestAuthorizationResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<TestAuthorizationResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(TestAuthorizationError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(TestAuthorizationError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Invoke the specified custom authorizer for testing purposes.</p>
     fn test_invoke_authorizer(
         &self,
         input: &TestInvokeAuthorizerRequest,
-    ) -> Result<TestInvokeAuthorizerResponse, TestInvokeAuthorizerError> {
+    ) -> RusotoFuture<TestInvokeAuthorizerResponse, TestInvokeAuthorizerError> {
         let request_uri = format!(
             "/authorizer/{authorizer_name}/test",
             authorizer_name = input.authorizer_name
@@ -23089,39 +23077,39 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<TestInvokeAuthorizerResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<TestInvokeAuthorizerResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(TestInvokeAuthorizerError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(TestInvokeAuthorizerError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Transfers the specified certificate to the specified AWS account.</p> <p>You can cancel the transfer until it is acknowledged by the recipient.</p> <p>No notification is sent to the transfer destination's account. It is up to the caller to notify the transfer target.</p> <p>The certificate being transferred must not be in the ACTIVE state. You can use the UpdateCertificate API to deactivate it.</p> <p>The certificate must not have any policies attached to it. You can use the DetachPrincipalPolicy API to detach them.</p>
     fn transfer_certificate(
         &self,
         input: &TransferCertificateRequest,
-    ) -> Result<TransferCertificateResponse, TransferCertificateError> {
+    ) -> RusotoFuture<TransferCertificateResponse, TransferCertificateError> {
         let request_uri = format!(
             "/transfer-certificate/{certificate_id}",
             certificate_id = input.certificate_id
@@ -23138,39 +23126,39 @@ where
         params.put("targetAwsAccount", &input.target_aws_account);
         request.set_params(params);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<TransferCertificateResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<TransferCertificateResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(TransferCertificateError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(TransferCertificateError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Updates an authorizer.</p>
     fn update_authorizer(
         &self,
         input: &UpdateAuthorizerRequest,
-    ) -> Result<UpdateAuthorizerResponse, UpdateAuthorizerError> {
+    ) -> RusotoFuture<UpdateAuthorizerResponse, UpdateAuthorizerError> {
         let request_uri = format!(
             "/authorizer/{authorizer_name}",
             authorizer_name = input.authorizer_name
@@ -23183,39 +23171,38 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<UpdateAuthorizerResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<UpdateAuthorizerResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(UpdateAuthorizerError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(UpdateAuthorizerError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Updates a registered CA certificate.</p>
     fn update_ca_certificate(
         &self,
         input: &UpdateCACertificateRequest,
-    ) -> Result<(), UpdateCACertificateError> {
+    ) -> RusotoFuture<(), UpdateCACertificateError> {
         let request_uri = format!(
             "/cacertificate/{ca_certificate_id}",
             ca_certificate_id = input.certificate_id
@@ -23237,30 +23224,30 @@ where
         }
         request.set_params(params);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let result = ::std::mem::drop(response);
 
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(UpdateCACertificateError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        });
 
-                Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(UpdateCACertificateError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        RusotoFuture::new(future)
     }
 
     /// <p>Updates the status of the specified certificate. This operation is idempotent.</p> <p>Moving a certificate from the ACTIVE state (including REVOKED) will not disconnect currently connected devices, but these devices will be unable to reconnect.</p> <p>The ACTIVE state is required to authenticate devices connecting to AWS IoT using a certificate.</p>
     fn update_certificate(
         &self,
         input: &UpdateCertificateRequest,
-    ) -> Result<(), UpdateCertificateError> {
+    ) -> RusotoFuture<(), UpdateCertificateError> {
         let request_uri = format!(
             "/certificates/{certificate_id}",
             certificate_id = input.certificate_id
@@ -23275,30 +23262,30 @@ where
         params.put("newStatus", &input.new_status);
         request.set_params(params);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let result = ::std::mem::drop(response);
 
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(UpdateCertificateError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        });
 
-                Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(UpdateCertificateError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        RusotoFuture::new(future)
     }
 
     /// <p>Updates the event configurations.</p>
     fn update_event_configurations(
         &self,
         input: &UpdateEventConfigurationsRequest,
-    ) -> Result<UpdateEventConfigurationsResponse, UpdateEventConfigurationsError> {
+    ) -> RusotoFuture<UpdateEventConfigurationsResponse, UpdateEventConfigurationsError> {
         let request_uri = "/event-configurations";
 
         let mut request = SignedRequest::new("PATCH", "execute-api", &self.region, &request_uri);
@@ -23308,40 +23295,39 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<UpdateEventConfigurationsResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result =
-                    serde_json::from_slice::<UpdateEventConfigurationsResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(UpdateEventConfigurationsError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(UpdateEventConfigurationsError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Updates the search configuration.</p>
     fn update_indexing_configuration(
         &self,
         input: &UpdateIndexingConfigurationRequest,
-    ) -> Result<UpdateIndexingConfigurationResponse, UpdateIndexingConfigurationError> {
+    ) -> RusotoFuture<UpdateIndexingConfigurationResponse, UpdateIndexingConfigurationError> {
         let request_uri = "/indexing/config";
 
         let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
@@ -23351,40 +23337,40 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<UpdateIndexingConfigurationResponse>(
+                        &body,
+                    ).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result =
-                    serde_json::from_slice::<UpdateIndexingConfigurationResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(UpdateIndexingConfigurationError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(UpdateIndexingConfigurationError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Updates a role alias.</p>
     fn update_role_alias(
         &self,
         input: &UpdateRoleAliasRequest,
-    ) -> Result<UpdateRoleAliasResponse, UpdateRoleAliasError> {
+    ) -> RusotoFuture<UpdateRoleAliasResponse, UpdateRoleAliasError> {
         let request_uri = format!("/role-aliases/{role_alias}", role_alias = input.role_alias);
 
         let mut request = SignedRequest::new("PUT", "execute-api", &self.region, &request_uri);
@@ -23394,39 +23380,38 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<UpdateRoleAliasResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<UpdateRoleAliasResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(UpdateRoleAliasError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(UpdateRoleAliasError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Updates an existing stream. The stream version will be incremented by one.</p>
     fn update_stream(
         &self,
         input: &UpdateStreamRequest,
-    ) -> Result<UpdateStreamResponse, UpdateStreamError> {
+    ) -> RusotoFuture<UpdateStreamResponse, UpdateStreamError> {
         let request_uri = format!("/streams/{stream_id}", stream_id = input.stream_id);
 
         let mut request = SignedRequest::new("PUT", "execute-api", &self.region, &request_uri);
@@ -23436,39 +23421,38 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<UpdateStreamResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<UpdateStreamResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(UpdateStreamError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(UpdateStreamError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Updates the data for a thing.</p>
     fn update_thing(
         &self,
         input: &UpdateThingRequest,
-    ) -> Result<UpdateThingResponse, UpdateThingError> {
+    ) -> RusotoFuture<UpdateThingResponse, UpdateThingError> {
         let request_uri = format!("/things/{thing_name}", thing_name = input.thing_name);
 
         let mut request = SignedRequest::new("PATCH", "execute-api", &self.region, &request_uri);
@@ -23478,39 +23462,38 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<UpdateThingResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<UpdateThingResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(UpdateThingError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(UpdateThingError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Update a thing group.</p>
     fn update_thing_group(
         &self,
         input: &UpdateThingGroupRequest,
-    ) -> Result<UpdateThingGroupResponse, UpdateThingGroupError> {
+    ) -> RusotoFuture<UpdateThingGroupResponse, UpdateThingGroupError> {
         let request_uri = format!(
             "/thing-groups/{thing_group_name}",
             thing_group_name = input.thing_group_name
@@ -23523,39 +23506,38 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<UpdateThingGroupResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<UpdateThingGroupResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(UpdateThingGroupError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(UpdateThingGroupError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Updates the groups to which the thing belongs.</p>
     fn update_thing_groups_for_thing(
         &self,
         input: &UpdateThingGroupsForThingRequest,
-    ) -> Result<UpdateThingGroupsForThingResponse, UpdateThingGroupsForThingError> {
+    ) -> RusotoFuture<UpdateThingGroupsForThingResponse, UpdateThingGroupsForThingError> {
         let request_uri = "/thing-groups/updateThingGroupsForThing";
 
         let mut request = SignedRequest::new("PUT", "execute-api", &self.region, &request_uri);
@@ -23565,33 +23547,32 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<UpdateThingGroupsForThingResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result =
-                    serde_json::from_slice::<UpdateThingGroupsForThingResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(UpdateThingGroupsForThingError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(UpdateThingGroupsForThingError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 }
 

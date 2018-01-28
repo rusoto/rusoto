@@ -1,12 +1,15 @@
 //! The Credentials Provider for Credentials stored in a profile inside of a Credentials file.
 
-use regex::Regex;
 use std::collections::HashMap;
 use std::env::{home_dir, var as env_var};
 use std::fs;
 use std::fs::File;
 use std::io::{BufRead, BufReader};
 use std::path::{Path, PathBuf};
+
+use futures::{Future, Poll};
+use futures::future::{FutureResult, result};
+use regex::Regex;
 
 use {AwsCredentials, CredentialsError, ProvideAwsCredentials, in_ten_minutes};
 
@@ -117,13 +120,30 @@ impl ProfileProvider {
     }
 }
 
+pub struct ProfileProviderFuture {
+    inner: FutureResult<AwsCredentials, CredentialsError>
+}
+
+impl Future for ProfileProviderFuture {
+    type Item = AwsCredentials;
+    type Error = CredentialsError;
+
+    fn poll(&mut self) -> Poll<Self::Item, Self::Error> {
+        self.inner.poll()
+    }
+}
+
 impl ProvideAwsCredentials for ProfileProvider {
-    fn credentials(&self) -> Result<AwsCredentials, CredentialsError> {
-        parse_credentials_file(self.file_path()).and_then(|mut profiles| {
+    type Future = ProfileProviderFuture;
+
+    fn credentials(&self) -> Self::Future {
+        let inner = result(parse_credentials_file(self.file_path()).and_then(|mut profiles| {
             profiles.remove(self.profile()).ok_or_else(|| {
                 CredentialsError::new("profile not found")
             })
-        })
+        }));
+
+        ProfileProviderFuture { inner: inner }
     }
 }
 
@@ -333,7 +353,7 @@ mod tests {
             "tests/sample-data/multiple_profile_credentials",
             "foo",
         );
-        let result = provider.credentials();
+        let result = provider.credentials().wait();
 
         assert!(result.is_ok());
 
@@ -376,7 +396,7 @@ mod tests {
             "tests/sample-data/multiple_profile_credentials",
             "not_a_profile",
         );
-        let result = provider.credentials();
+        let result = provider.credentials().wait();
 
         assert!(result.is_err());
         assert_eq!(

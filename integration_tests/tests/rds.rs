@@ -4,16 +4,14 @@ extern crate rusoto_core;
 extern crate rusoto_rds;
 
 use rusoto_rds::{Rds, RdsClient, DescribeDBClustersMessage};
-use rusoto_core::{DefaultCredentialsProvider, Region};
-use rusoto_core::default_tls_client;
+use rusoto_core::Region;
 
 #[test]
 fn should_describe_db_clusters() {
     let _ = env_logger::try_init();
-    let credentials = DefaultCredentialsProvider::new().unwrap();
-    let client = RdsClient::new(default_tls_client().unwrap(), credentials, Region::UsEast1);
+    let client = RdsClient::simple(Region::UsEast1);
     let request = DescribeDBClustersMessage::default();
 
-    let result = client.describe_db_clusters(&request);
+    let result = client.describe_db_clusters(&request).sync();
     println!("{:#?}", result);
 }
