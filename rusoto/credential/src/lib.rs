@@ -27,6 +27,7 @@ mod instance_metadata;
 mod profile;
 pub mod claims;
 
+use std::env::var as env_var;
 use std::fmt;
 use std::error::Error;
 use std::io::Error as IoError;
@@ -52,7 +53,7 @@ pub struct AwsCredentials {
     key: String,
     secret: String,
     token: Option<String>,
-    expires_at: DateTime<Utc>,
+    expires_at: Option<DateTime<Utc>>,
     claims: BTreeMap<String, String>,
 }
 
@@ -63,7 +64,7 @@ impl AwsCredentials {
         key: K,
         secret: S,
         token: Option<String>,
-        expires_at: DateTime<Utc>,
+        expires_at: Option<DateTime<Utc>>,
     ) -> AwsCredentials
     where
         K: Into<String>,
@@ -89,7 +90,7 @@ impl AwsCredentials {
     }
 
     /// Get a reference to the expiry time.
-    pub fn expires_at(&self) -> &DateTime<Utc> {
+    pub fn expires_at(&self) -> &Option<DateTime<Utc>> {
         &self.expires_at
     }
 
@@ -100,9 +101,14 @@ impl AwsCredentials {
 
     /// Determine whether or not the credentials are expired.
     fn credentials_are_expired(&self) -> bool {
-        // This is a rough hack to hopefully avoid someone requesting creds then sitting on them
-        // before issuing the request:
-        self.expires_at < Utc::now() + Duration::seconds(20)
+        match self.expires_at {
+            Some(ref e) =>
+                // This is a rough hack to hopefully avoid someone requesting creds then sitting on them
+                // before issuing the request:
+               *e < Utc::now() + Duration::seconds(20),
+            None => false,
+        }
+        //self.expires_at < Utc::now() + Duration::seconds(20)
     }
 
     /// Get the token claims
@@ -416,9 +422,13 @@ impl ChainProvider {
     }
 }
 
-/// Gets the DateTime that is 10 minutes from the current Time.
-fn in_ten_minutes() -> DateTime<Utc> {
-    Utc::now() + Duration::seconds(600)
+/// This is a helper function as Option<T>::filter is not yet stable (see issue #45860).
+/// https://github.com/rust-lang/rfcs/issues/2036 also affects the implementation of this.
+fn non_empty_env_var(name: &str) -> Option<String> {
+    match env_var(name) {
+        Ok(value) => if value.is_empty() { None } else { Some(value) },
+        Err(_) => None
+    }
 }
 
 /// Reduces Boilerplate on getting json values. Wraps `serde_json::Value.get(key)`.
@@ -457,7 +467,7 @@ fn parse_credentials_from_aws_service(response: &str) -> Result<AwsCredentials, 
     let token = try!(extract_string_value_from_json(&json_object, "Token"));
     let expiration = try!(extract_string_value_from_json(&json_object, "Expiration"));
 
-    let expiration = try!(expiration.parse());
+    let expiration = Some(try!(expiration.parse()));
 
     Ok(AwsCredentials::new(
         access_key_id,
