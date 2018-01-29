@@ -407,6 +407,7 @@ mod tests {
 
     #[test]
     fn profile_provider_profile_name() {
+        let _guard = lock(&ENV_MUTEX);
         let mut provider = ProfileProvider::new().unwrap();
         assert_eq!("default", provider.profile());
         provider.set_profile("foo");
