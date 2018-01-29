@@ -13,6 +13,10 @@ use regex::Regex;
 
 use {AwsCredentials, CredentialsError, ProvideAwsCredentials, in_ten_minutes};
 
+const AWS_PROFILE: &str = "AWS_PROFILE";
+const AWS_SHARED_CREDENTIALS_FILE: &str = "AWS_SHARED_CREDENTIALS_FILE";
+const DEFAULT: &str = "default";
+
 /// Provides AWS credentials from a profile in a credentials file.
 #[derive(Clone, Debug)]
 pub struct ProfileProvider {
@@ -65,7 +69,7 @@ impl ProfileProvider {
     /// 1. if set and not empty, use value from environment variable ```AWS_SHARED_CREDENTIALS_FILE```
     /// 2. otherwise return `~/.aws/credentials` (Linux/Mac) resp. `%USERPROFILE%\.aws\credentials` (Windows)
     fn default_profile_location() -> Result<PathBuf, CredentialsError> {
-        let env = ProfileProvider::non_empty_env_var("AWS_SHARED_CREDENTIALS_FILE");
+        let env = ProfileProvider::non_empty_env_var(AWS_SHARED_CREDENTIALS_FILE);
         match env {
             Some(path) => Ok(PathBuf::from(path)),
             None => ProfileProvider::hardcoded_profile_location(),
@@ -90,7 +94,7 @@ impl ProfileProvider {
     /// 2. otherwise return ```"default"```
     /// see https://docs.aws.amazon.com/sdk-for-java/v1/developer-guide/credentials.html.
     fn default_profile_name() -> String {
-         ProfileProvider::non_empty_env_var("AWS_PROFILE").unwrap_or("default".to_owned())
+         ProfileProvider::non_empty_env_var(AWS_PROFILE).unwrap_or(DEFAULT.to_owned())
     }
 
     /// Get a reference to the credentials file path.
@@ -300,7 +304,7 @@ mod tests {
         let profiles = result.ok().unwrap();
         assert_eq!(profiles.len(), 1);
 
-        let default_profile = profiles.get("default").expect(
+        let default_profile = profiles.get(DEFAULT).expect(
             "No Default profile in default_profile_credentials",
         );
         assert_eq!(default_profile.aws_access_key_id(), "foo");
@@ -328,7 +332,6 @@ mod tests {
         );
         assert_eq!(bar_profile.aws_access_key_id(), "bar_access_key");
         assert_eq!(bar_profile.aws_secret_access_key(), "bar_secret_key");
-
     }
 
     #[test]
@@ -340,7 +343,7 @@ mod tests {
         let profiles = result.ok().unwrap();
         assert_eq!(profiles.len(), 1);
 
-        let default_profile = profiles.get("default").expect(
+        let default_profile = profiles.get(DEFAULT).expect(
             "No default profile in full_profile_credentials",
         );
         assert_eq!(default_profile.aws_access_key_id(), "foo");
@@ -366,28 +369,28 @@ mod tests {
     fn profile_provider_via_environment_variable() {
         let _guard = lock(&ENV_MUTEX);
         let credentials_path = "tests/sample-data/default_profile_credentials";
-        env::set_var("AWS_SHARED_CREDENTIALS_FILE", credentials_path);
+        env::set_var(AWS_SHARED_CREDENTIALS_FILE, credentials_path);
         let result = ProfileProvider::new();
         assert!(result.is_ok());
         let provider = result.unwrap();
         assert_eq!(provider.file_path().to_str().unwrap(), credentials_path);
-        env::remove_var("AWS_SHARED_CREDENTIALS_FILE");
+        env::remove_var(AWS_SHARED_CREDENTIALS_FILE);
     }
 
     #[test]
     fn profile_provider_profile_name_via_environment_variable() {
         let _guard = lock(&ENV_MUTEX);
         let credentials_path = "tests/sample-data/multiple_profile_credentials";
-        env::set_var("AWS_SHARED_CREDENTIALS_FILE", credentials_path);
-        env::set_var("AWS_PROFILE", "bar");
+        env::set_var(AWS_SHARED_CREDENTIALS_FILE, credentials_path);
+        env::set_var(AWS_PROFILE, "bar");
         let result = ProfileProvider::new();
         assert!(result.is_ok());
         let provider = result.unwrap();
         assert_eq!(provider.file_path().to_str().unwrap(), credentials_path);
         let creds = provider.credentials().wait();
         assert_eq!(creds.unwrap().aws_access_key_id(), "bar_access_key");
-        env::remove_var("AWS_SHARED_CREDENTIALS_FILE");
-        env::remove_var("AWS_PROFILE");
+        env::remove_var(AWS_SHARED_CREDENTIALS_FILE);
+        env::remove_var(AWS_PROFILE);
     } 
 
     #[test]
@@ -409,7 +412,7 @@ mod tests {
     fn profile_provider_profile_name() {
         let _guard = lock(&ENV_MUTEX);
         let mut provider = ProfileProvider::new().unwrap();
-        assert_eq!("default", provider.profile());
+        assert_eq!(DEFAULT, provider.profile());
         provider.set_profile("foo");
         assert_eq!("foo", provider.profile());
     }
@@ -455,7 +458,7 @@ mod tests {
         let profiles = result.ok().unwrap();
         assert_eq!(profiles.len(), 1);
 
-        let default_profile = profiles.get("default").expect(
+        let default_profile = profiles.get(DEFAULT).expect(
             "No default profile in full_profile_credentials",
         );
         assert_eq!(default_profile.aws_access_key_id(), "foo");
@@ -465,46 +468,46 @@ mod tests {
     #[test]
     fn default_profile_name_from_env_var(){
         let _guard = lock(&ENV_MUTEX);
-        env::set_var("AWS_PROFILE", "bar");
+        env::set_var(AWS_PROFILE, "bar");
         assert_eq!("bar", ProfileProvider::default_profile_name());
-        env::remove_var("AWS_PROFILE");
+        env::remove_var(AWS_PROFILE);
     }
 
     #[test]
     fn default_profile_name_from_empty_env_var(){
         let _guard = lock(&ENV_MUTEX);
-        env::set_var("AWS_PROFILE", "");
-        assert_eq!("default", ProfileProvider::default_profile_name());
-        env::remove_var("AWS_PROFILE");
+        env::set_var(AWS_PROFILE, "");
+        assert_eq!(DEFAULT, ProfileProvider::default_profile_name());
+        env::remove_var(AWS_PROFILE);
     }
 
     #[test]
     fn default_profile_name(){
         let _guard = lock(&ENV_MUTEX);
-        env::remove_var("AWS_PROFILE");
-        assert_eq!("default", ProfileProvider::default_profile_name());
+        env::remove_var(AWS_PROFILE);
+        assert_eq!(DEFAULT, ProfileProvider::default_profile_name());
     }
 
     #[test]
     fn default_profile_location_from_env_var(){
         let _guard = lock(&ENV_MUTEX);
-        env::set_var("AWS_SHARED_CREDENTIALS_FILE", "bar");
+        env::set_var(AWS_SHARED_CREDENTIALS_FILE, "bar");
         assert_eq!(Ok(PathBuf::from("bar")), ProfileProvider::default_profile_location());
-        env::remove_var("AWS_SHARED_CREDENTIALS_FILE");
+        env::remove_var(AWS_SHARED_CREDENTIALS_FILE);
     }
 
     #[test]
     fn default_profile_location_from_empty_env_var(){
         let _guard = lock(&ENV_MUTEX);
-        env::set_var("AWS_SHARED_CREDENTIALS_FILE", "");
+        env::set_var(AWS_SHARED_CREDENTIALS_FILE, "");
         assert_eq!(ProfileProvider::hardcoded_profile_location(), ProfileProvider::default_profile_location());
-        env::remove_var("AWS_SHARED_CREDENTIALS_FILE");
+        env::remove_var(AWS_SHARED_CREDENTIALS_FILE);
     }
 
     #[test]
     fn default_profile_location(){
         let _guard = lock(&ENV_MUTEX);
-        env::remove_var("AWS_SHARED_CREDENTIALS_FILE");
+        env::remove_var(AWS_SHARED_CREDENTIALS_FILE);
         assert_eq!(ProfileProvider::hardcoded_profile_location(), ProfileProvider::default_profile_location());
     }
 
