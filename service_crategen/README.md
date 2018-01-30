@@ -43,7 +43,7 @@ This will tests service crates, in addition to the `rusoto_core` crate.
 The crate generator is also able to check for any missing or outdated services with the `check` command:
 
 ```bash
-$ cargo run -- check -c ./services.json
+$ cargo +nightly run -- check -c ./services.json
 ```
 
 If there are any missing or outdated services, they will be output in a formatted list along with useful information.
