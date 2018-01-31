@@ -17,7 +17,6 @@ use std::io;
 #[allow(warnings)]
 use futures::future;
 use futures::Future;
-use hyper::StatusCode;
 use rusoto_core::reactor::{CredentialsProvider, RequestDispatcher};
 use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::region;
@@ -28,6 +27,7 @@ use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
 use serde_json;
 use rusoto_core::param::{Params, ServiceParams};
+use hyper::StatusCode;
 use rusoto_core::signature::SignedRequest;
 use serde_json::from_str;
 use serde_json::Value as SerdeJsonValue;

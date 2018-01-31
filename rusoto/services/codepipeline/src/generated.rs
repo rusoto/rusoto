@@ -17,7 +17,6 @@ use std::io;
 #[allow(warnings)]
 use futures::future;
 use futures::Future;
-use hyper::StatusCode;
 use rusoto_core::reactor::{CredentialsProvider, RequestDispatcher};
 use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::region;
@@ -30,6 +29,7 @@ use serde_json;
 use rusoto_core::signature::SignedRequest;
 use serde_json::Value as SerdeJsonValue;
 use serde_json::from_str;
+use hyper::StatusCode;
 /// <p>Represents an AWS session credentials object. These credentials are temporary credentials that are issued by AWS Secure Token Service (STS). They can be used to access input and output artifacts in the Amazon S3 bucket used to store artifact for the pipeline in AWS CodePipeline.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct AWSSessionCredentials {

@@ -108,6 +108,9 @@ impl GenerateProtocol for RestJsonGenerator {
         if service_has_query_parameters(service) {
             writeln!(writer, "use rusoto_core::param::{{Params, ServiceParams}};")?;
         }
+        if service_has_explicit_status_codes(service) {
+            writeln!(writer, "use hyper::StatusCode;")?;
+        }
 
         writeln!(writer,
                  "use rusoto_core::signature::SignedRequest;
@@ -258,6 +261,15 @@ fn service_has_query_parameters(service: &Service) -> bool {
         .map(|(_, operation)| operation.input_shape())
         .map(|input_type| service.get_shape(input_type).unwrap())
         .any(|input_shape| input_shape.has_query_parameters())
+}
+
+// Do any outputs in the entire service use specific HTTP return values?
+fn service_has_explicit_status_codes(service: &Service) -> bool {
+    service.operations()
+        .iter()
+        .map(|(_, operation)| &operation.http)
+        .map(|http| http.response_code)
+        .any(|code| code.is_some())
 }
 
 fn generate_documentation(operation: &Operation) -> Option<String> {

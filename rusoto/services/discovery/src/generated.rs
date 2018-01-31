@@ -17,7 +17,6 @@ use std::io;
 #[allow(warnings)]
 use futures::future;
 use futures::Future;
-use hyper::StatusCode;
 use rusoto_core::reactor::{CredentialsProvider, RequestDispatcher};
 use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::region;
@@ -30,6 +29,7 @@ use serde_json;
 use rusoto_core::signature::SignedRequest;
 use serde_json::Value as SerdeJsonValue;
 use serde_json::from_str;
+use hyper::StatusCode;
 /// <p>Information about agents or connectors that were instructed to start collecting data. Information includes the agent/connector ID, a description of the operation, and whether the agent/connector configuration was updated.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct AgentConfigurationStatus {

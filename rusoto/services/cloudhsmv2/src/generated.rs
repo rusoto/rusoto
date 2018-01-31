@@ -17,7 +17,6 @@ use std::io;
 #[allow(warnings)]
 use futures::future;
 use futures::Future;
-use hyper::StatusCode;
 use rusoto_core::reactor::{CredentialsProvider, RequestDispatcher};
 use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::region;
@@ -30,6 +29,7 @@ use serde_json;
 use rusoto_core::signature::SignedRequest;
 use serde_json::Value as SerdeJsonValue;
 use serde_json::from_str;
+use hyper::StatusCode;
 /// <p>Contains information about a backup of an AWS CloudHSM cluster.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct Backup {

@@ -95,6 +95,7 @@ impl GenerateProtocol for RestXmlGenerator {
             use rusoto_core::xmlerror::*;
             use rusoto_core::xmlutil::{Next, Peek, XmlParseError, XmlResponse};
             use rusoto_core::xmlutil::{peek_at_name, characters, end_element, find_start_element, start_element, skip_tree};
+            use hyper::StatusCode;
             enum DeserializerNext {
                 Close,
                 Skip,
