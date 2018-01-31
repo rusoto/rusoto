@@ -3458,7 +3458,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request).and_then(|response| {
-            if response.status == StatusCode::Ok {
+            if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
@@ -3506,7 +3506,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request).and_then(|response| {
-            if response.status == StatusCode::Ok {
+            if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
@@ -3553,7 +3553,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request).and_then(|response| {
-            if response.status == StatusCode::Ok {
+            if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
@@ -3600,7 +3600,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request).and_then(|response| {
-            if response.status == StatusCode::Ok {
+            if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
@@ -3635,7 +3635,7 @@ where
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let future = self.inner.sign_and_dispatch(request).and_then(|response| {
-            if response.status == StatusCode::Ok {
+            if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
@@ -3673,7 +3673,7 @@ where
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let future = self.inner.sign_and_dispatch(request).and_then(|response| {
-            if response.status == StatusCode::Ok {
+            if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
@@ -3711,7 +3711,7 @@ where
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let future = self.inner.sign_and_dispatch(request).and_then(|response| {
-            if response.status == StatusCode::Ok {
+            if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
@@ -3831,7 +3831,7 @@ where
         request.set_payload(encoded);
 
         let future = self.inner.sign_and_dispatch(request).and_then(|response| {
-            if response.status == StatusCode::Ok {
+            if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
@@ -3874,7 +3874,7 @@ where
         request.set_payload(encoded);
 
         let future = self.inner.sign_and_dispatch(request).and_then(|response| {
-            if response.status == StatusCode::Ok {
+            if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 

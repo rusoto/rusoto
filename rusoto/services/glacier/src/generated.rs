@@ -5177,7 +5177,7 @@ where
         request.add_header("x-amz-glacier-version", "2012-06-01");
 
         let future = self.inner.sign_and_dispatch(request).and_then(|response| {
-            if response.status == StatusCode::Ok {
+            if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
@@ -5219,7 +5219,7 @@ where
         request.add_header("x-amz-glacier-version", "2012-06-01");
 
         let future = self.inner.sign_and_dispatch(request).and_then(|response| {
-            if response.status == StatusCode::Ok {
+            if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
@@ -5260,7 +5260,7 @@ where
         request.add_header("x-amz-glacier-version", "2012-06-01");
 
         let future = self.inner.sign_and_dispatch(request).and_then(|response| {
-            if response.status == StatusCode::Ok {
+            if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
@@ -5308,7 +5308,7 @@ where
         }
 
         let future = self.inner.sign_and_dispatch(request).and_then(|response| {
-            if response.status == StatusCode::Ok {
+            if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut result = GetJobOutputOutput::default();
                     result.body = Some(response.body);
@@ -5366,7 +5366,7 @@ where
         request.add_header("x-amz-glacier-version", "2012-06-01");
 
         let future = self.inner.sign_and_dispatch(request).and_then(|response| {
-            if response.status == StatusCode::Ok {
+            if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
@@ -5409,7 +5409,7 @@ where
         request.add_header("x-amz-glacier-version", "2012-06-01");
 
         let future = self.inner.sign_and_dispatch(request).and_then(|response| {
-            if response.status == StatusCode::Ok {
+            if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
@@ -5451,7 +5451,7 @@ where
         request.add_header("x-amz-glacier-version", "2012-06-01");
 
         let future = self.inner.sign_and_dispatch(request).and_then(|response| {
-            if response.status == StatusCode::Ok {
+            if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
@@ -5678,7 +5678,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request).and_then(|response| {
-            if response.status == StatusCode::Ok {
+            if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
@@ -5729,7 +5729,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request).and_then(|response| {
-            if response.status == StatusCode::Ok {
+            if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
@@ -5779,7 +5779,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request).and_then(|response| {
-            if response.status == StatusCode::Ok {
+            if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
@@ -5820,7 +5820,7 @@ where
         request.add_header("x-amz-glacier-version", "2012-06-01");
 
         let future = self.inner.sign_and_dispatch(request).and_then(|response| {
-            if response.status == StatusCode::Ok {
+            if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
@@ -5863,7 +5863,7 @@ where
         request.add_header("x-amz-glacier-version", "2012-06-01");
 
         let future = self.inner.sign_and_dispatch(request).and_then(|response| {
-            if response.status == StatusCode::Ok {
+            if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
@@ -5910,7 +5910,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request).and_then(|response| {
-            if response.status == StatusCode::Ok {
+            if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 

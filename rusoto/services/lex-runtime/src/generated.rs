@@ -531,7 +531,7 @@ where
         }
 
         let future = self.inner.sign_and_dispatch(request).and_then(|response| {
-            if response.status == StatusCode::Ok {
+            if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut result = PostContentResponse::default();
                     result.audio_stream = Some(response.body);
@@ -604,7 +604,7 @@ where
         request.set_payload(encoded);
 
         let future = self.inner.sign_and_dispatch(request).and_then(|response| {
-            if response.status == StatusCode::Ok {
+            if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
