@@ -57,7 +57,7 @@ impl GenerateProtocol for RestJsonGenerator {
                     {load_headers}
                     {load_params}
 
-                    let future = self.inner.sign_and_dispatch(request).and_then(|response| {{
+                    let future = self.inner.sign_and_dispatch(request, |response| {{
                         if {status_check} {{
                             future::Either::A(response.buffer().from_err().map(|response| {{
                                 {parse_body}
