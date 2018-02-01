@@ -9,19 +9,21 @@ use std::io::Error as IoError;
 use std::error::Error;
 use std::fmt;
 use std::collections::hash_map::{self, HashMap};
+use std::time::Duration;
 use std::mem;
 
-use futures::{Future, Poll, Stream};
-use hyper::Client;
+use futures::{Async, Future, Poll, Stream};
+use futures::future::{Either, Select2};
+use hyper::Client as HyperClient;
 use hyper::client::{FutureResponse as HyperFutureResponse};
-use hyper::Request as HyperRequest;
+use hyper::{Request as HyperRequest, Response as HyperResponse};
 use hyper::Error as HyperError;
 use hyper::header::{Headers as HyperHeaders, UserAgent};
 use hyper::StatusCode;
 use hyper::Method;
-use hyper::client::{Connect, HttpConnector};
+use hyper::client::HttpConnector;
 use hyper_tls::HttpsConnector;
-use tokio_core::reactor::Handle;
+use tokio_core::reactor::{Handle, Timeout};
 
 use log::Level::Debug;
 
@@ -128,6 +130,16 @@ impl HttpResponse {
             future: self.body.concat2()
         }
     }
+
+    fn from_hyper(hyper_response: HyperResponse) -> HttpResponse {
+        let headers = Headers::new(hyper_response.headers().iter().map(|h| (h.name(), h.value_string())));
+
+        HttpResponse {
+            status: hyper_response.status(),
+            body: Box::new(hyper_response.body().from_err().map(|chunk| chunk.as_ref().to_vec())),
+            headers: headers,
+        }
+    }
 }
 
 
@@ -166,18 +178,19 @@ pub trait DispatchSignedRequest {
     /// The future response value.
     type Future: Future<Item=HttpResponse, Error=HttpDispatchError> + 'static;
     /// Dispatch Request, and then return a Response
-    fn dispatch(&self, request: SignedRequest) -> Self::Future;
+    fn dispatch(&self, request: SignedRequest, timeout: Option<Duration>) -> Self::Future;
 }
 
 /// A future that will resolve to an `HttpResponse`.
-pub struct ClientFuture(ClientFutureInner);
+pub struct HttpClientFuture(ClientFutureInner);
 
 enum ClientFutureInner {
     Hyper(HyperFutureResponse),
+    HyperWithTimeout(Select2<HyperFutureResponse, Timeout>),
     Error(String)
 }
 
-impl Future for ClientFuture {
+impl Future for HttpClientFuture {
     type Item = HttpResponse;
     type Error = HttpDispatchError;
 
@@ -185,26 +198,55 @@ impl Future for ClientFuture {
         match self.0 {
             ClientFutureInner::Error(ref message) =>
                 Err(HttpDispatchError { message: message.clone() }),
-            ClientFutureInner::Hyper(ref mut hyper_future) => {
-                Ok(hyper_future.poll()?
-                    .map(|hyper_response| {
-                        let headers = Headers::new(hyper_response.headers().iter().map(|h| (h.name(), h.value_string())));
-
-                        HttpResponse {
-                            status: hyper_response.status(),
-                            body: Box::new(hyper_response.body().from_err().map(|chunk| chunk.as_ref().to_vec())),
-                            headers: headers,
-                        }
-                    }))
+            ClientFutureInner::Hyper(ref mut hyper_future) =>
+                Ok(hyper_future.poll()?.map(HttpResponse::from_hyper)),
+            ClientFutureInner::HyperWithTimeout(ref mut select_future) => {
+                match select_future.poll() {
+                    Err(Either::A((hyper_err, _))) =>
+                        Err(hyper_err.into()),
+                    Err(Either::B((io_err, _))) =>
+                        Err(io_err.into()),
+                    Ok(Async::NotReady) =>
+                        Ok(Async::NotReady),
+                    Ok(Async::Ready(Either::A((hyper_res, _)))) =>
+                        Ok(Async::Ready(HttpResponse::from_hyper(hyper_res))),
+                    Ok(Async::Ready(Either::B(((), _)))) =>
+                        Err(HttpDispatchError { message: "Request timed out".into() })
+                }
             }
         }
     }
 }
 
-impl<C: Connect> DispatchSignedRequest for Client<C> {
-    type Future = ClientFuture;
+/// Http client for use with AWS services.
+pub struct HttpClient {
+    inner: HyperClient<HttpsConnector<HttpConnector>>,
+    handle: Handle
+}
 
-    fn dispatch(&self, request: SignedRequest) -> Self::Future {
+impl HttpClient {
+    /// Create a tls-enabled http client.
+    pub fn new(handle: &Handle) -> Result<HttpClient, TlsError> {
+        let connector = match HttpsConnector::new(4, handle) {
+            Ok(connector) => connector,
+            Err(tls_error) => {
+                return Err(TlsError {
+                    message: format!("Couldn't create NativeTlsClient: {}", tls_error),
+                })
+            }
+        };
+        let inner = HyperClient::configure().connector(connector).build(handle);
+        Ok(HttpClient {
+            inner: inner,
+            handle: handle.clone()
+        })
+    }
+}
+
+impl DispatchSignedRequest for HttpClient {
+    type Future = HttpClientFuture;
+
+    fn dispatch(&self, request: SignedRequest, timeout: Option<Duration>) -> Self::Future {
         let hyper_method = match request.method().as_ref() {
             "POST" => Method::Post,
             "PUT" => Method::Put,
@@ -212,7 +254,7 @@ impl<C: Connect> DispatchSignedRequest for Client<C> {
             "GET" => Method::Get,
             "HEAD" => Method::Head,
             v => {
-                return ClientFuture(ClientFutureInner::Error(format!("Unsupported HTTP verb {}", v)))
+                return HttpClientFuture(ClientFutureInner::Error(format!("Unsupported HTTP verb {}", v)))
             }
         };
 
@@ -257,7 +299,20 @@ impl<C: Connect> DispatchSignedRequest for Client<C> {
             hyper_request.set_body(payload_contents);
         }
 
-        ClientFuture(ClientFutureInner::Hyper(self.request(hyper_request)))
+        let inner = match timeout {
+            None => ClientFutureInner::Hyper(self.inner.request(hyper_request)),
+            Some(duration) => {
+                match Timeout::new(duration, &self.handle) {
+                    Err(err) => ClientFutureInner::Error(format!("Error creating timeout future {}", err)),
+                    Ok(timeout_future) => {
+                        let future = self.inner.request(hyper_request).select2(timeout_future);
+                        ClientFutureInner::HyperWithTimeout(future)
+                    }
+                }
+            }
+        };
+
+        HttpClientFuture(inner)
     }
 }
 
@@ -277,20 +332,6 @@ impl fmt::Display for TlsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.message)
     }
-}
-
-/// Helper method for creating an http client with tls.
-/// Makes a `hyper` client with `NativeTls` for HTTPS support.
-pub fn default_tls_client(handle: &Handle) -> Result<Client<HttpsConnector<HttpConnector>>, TlsError> {
-    let connector = match HttpsConnector::new(4, handle) {
-        Ok(connector) => connector,
-        Err(tls_error) => {
-            return Err(TlsError {
-                message: format!("Couldn't create NativeTlsClient: {}", tls_error),
-            })
-        }
-    };
-    Ok(Client::configure().connector(connector).build(handle))
 }
 
 #[cfg(test)]

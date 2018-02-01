@@ -53,6 +53,6 @@ pub use credential::{AwsCredentials, ChainProvider, ContainerProvider, Credentia
                      BaseAutoRefreshingProvider};
 
 pub use region::{ParseRegionError, Region};
-pub use request::{DispatchSignedRequest, HttpResponse, HttpDispatchError, TlsError, default_tls_client};
+pub use request::{DispatchSignedRequest, HttpResponse, HttpDispatchError, TlsError, HttpClient};
 pub use signature::SignedRequest;
 pub use future::RusotoFuture;
