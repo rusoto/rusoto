@@ -58,7 +58,7 @@ impl GenerateProtocol for RestJsonGenerator {
                     {load_params}
 
                     let future = self.inner.sign_and_dispatch(request).and_then(|response| {{
-                        if response.status == {status_code} {{
+                        if {status_check} {{
                             future::Either::A(response.buffer().from_err().map(|response| {{
                                 {parse_body}
                                 {parse_headers}
@@ -81,7 +81,7 @@ impl GenerateProtocol for RestJsonGenerator {
                 modify_endpoint_prefix = generate_endpoint_modification(service).unwrap_or_else(|| "".to_owned()),
                 http_method = operation.http.method,
                 error_type = error_type_name(service, operation_name),
-                status_code = http_code_to_status_code(operation.http.response_code),
+                status_check = http_code_expected(operation.http.response_code),
                 parse_body = generate_body_parser(operation, service),
                 parse_status_code = generate_status_code_parser(operation, service),
                 output_type = output_type,
@@ -107,6 +107,9 @@ impl GenerateProtocol for RestJsonGenerator {
         // avoid unused imports when building services that don't use params
         if service_has_query_parameters(service) {
             writeln!(writer, "use rusoto_core::param::{{Params, ServiceParams}};")?;
+        }
+        if service_has_explicit_status_codes(service) {
+            writeln!(writer, "use hyper::StatusCode;")?;
         }
 
         writeln!(writer,
@@ -148,12 +151,12 @@ impl CodegenString for StatusCode {
     }
 }
 
-fn http_code_to_status_code(code: Option<i32>) -> String {
+fn http_code_expected(code: Option<i32>) -> String {
     match code {
-        Some(actual_code) => StatusCode::from_u16(actual_code as u16).enum_as_string(),
+        Some(actual_code) => format!("response.status == {}", StatusCode::from_u16(actual_code as u16).enum_as_string()),
         // Some service definitions such as elastictranscoder don't specify
-        // the response code, we'll assume this:
-        None => "StatusCode::Ok".to_string(),
+        // the response code, we'll assume 2xx is okay:
+        None => "response.status.is_success()".to_string(),
     }
 }
 
@@ -258,6 +261,15 @@ fn service_has_query_parameters(service: &Service) -> bool {
         .map(|(_, operation)| operation.input_shape())
         .map(|input_type| service.get_shape(input_type).unwrap())
         .any(|input_shape| input_shape.has_query_parameters())
+}
+
+// Do any outputs in the entire service use specific HTTP return values?
+fn service_has_explicit_status_codes(service: &Service) -> bool {
+    service.operations()
+        .iter()
+        .map(|(_, operation)| &operation.http)
+        .map(|http| http.response_code)
+        .any(|code| code.is_some())
 }
 
 fn generate_documentation(operation: &Operation) -> Option<String> {

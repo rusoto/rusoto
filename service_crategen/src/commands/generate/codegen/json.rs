@@ -76,7 +76,8 @@ impl GenerateProtocol for JsonGenerator {
                  "use serde_json;
         use rusoto_core::signature::SignedRequest;
         use serde_json::Value as SerdeJsonValue;
-        use serde_json::from_str;")
+        use serde_json::from_str;
+        use hyper::StatusCode;")
     }
 
     fn generate_struct_attributes(&self,

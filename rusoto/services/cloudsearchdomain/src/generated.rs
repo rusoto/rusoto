@@ -17,7 +17,6 @@ use std::io;
 #[allow(warnings)]
 use futures::future;
 use futures::Future;
-use hyper::StatusCode;
 use rusoto_core::reactor::{CredentialsProvider, RequestDispatcher};
 use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::region;
@@ -681,7 +680,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request).and_then(|response| {
-            if response.status == StatusCode::Ok {
+            if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
@@ -726,7 +725,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request).and_then(|response| {
-            if response.status == StatusCode::Ok {
+            if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
@@ -771,7 +770,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request).and_then(|response| {
-            if response.status == StatusCode::Ok {
+            if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
