@@ -4788,7 +4788,7 @@ where
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-glacier-version", "2012-06-01");
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::NoContent {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let result = ::std::mem::drop(response);
@@ -4822,7 +4822,7 @@ where
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-glacier-version", "2012-06-01");
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::NoContent {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let result = ::std::mem::drop(response);
@@ -4863,7 +4863,7 @@ where
         params.put("operation", "add");
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::NoContent {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let result = ::std::mem::drop(response);
@@ -4906,7 +4906,7 @@ where
             request.add_header("x-amz-sha256-tree-hash", &checksum.to_string());
         }
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Created {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -4963,7 +4963,7 @@ where
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-glacier-version", "2012-06-01");
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::NoContent {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let result = ::std::mem::drop(response);
@@ -4997,7 +4997,7 @@ where
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-glacier-version", "2012-06-01");
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Created {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -5042,7 +5042,7 @@ where
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-glacier-version", "2012-06-01");
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::NoContent {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let result = ::std::mem::drop(response);
@@ -5073,7 +5073,7 @@ where
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-glacier-version", "2012-06-01");
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::NoContent {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let result = ::std::mem::drop(response);
@@ -5107,7 +5107,7 @@ where
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-glacier-version", "2012-06-01");
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::NoContent {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let result = ::std::mem::drop(response);
@@ -5141,7 +5141,7 @@ where
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-glacier-version", "2012-06-01");
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::NoContent {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let result = ::std::mem::drop(response);
@@ -5176,7 +5176,7 @@ where
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-glacier-version", "2012-06-01");
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -5218,7 +5218,7 @@ where
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-glacier-version", "2012-06-01");
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -5259,7 +5259,7 @@ where
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-glacier-version", "2012-06-01");
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -5307,7 +5307,7 @@ where
             request.add_header("Range", &range.to_string());
         }
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut result = GetJobOutputOutput::default();
@@ -5365,7 +5365,7 @@ where
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-glacier-version", "2012-06-01");
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -5408,7 +5408,7 @@ where
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-glacier-version", "2012-06-01");
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -5450,7 +5450,7 @@ where
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-glacier-version", "2012-06-01");
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -5496,7 +5496,7 @@ where
         let encoded = Some(serde_json::to_vec(&input.job_parameters).unwrap());
         request.set_payload(encoded);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Accepted {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -5562,7 +5562,7 @@ where
             request.add_header("x-amz-part-size", &part_size.to_string());
         }
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Created {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -5617,7 +5617,7 @@ where
         let encoded = Some(serde_json::to_vec(&input.policy).unwrap());
         request.set_payload(encoded);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Created {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -5677,7 +5677,7 @@ where
         }
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -5728,7 +5728,7 @@ where
         }
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -5778,7 +5778,7 @@ where
         }
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -5819,7 +5819,7 @@ where
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-glacier-version", "2012-06-01");
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -5862,7 +5862,7 @@ where
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-glacier-version", "2012-06-01");
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -5909,7 +5909,7 @@ where
         }
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -5950,7 +5950,7 @@ where
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-glacier-version", "2012-06-01");
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Created {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -6005,7 +6005,7 @@ where
         params.put("operation", "remove");
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::NoContent {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let result = ::std::mem::drop(response);
@@ -6041,7 +6041,7 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::NoContent {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let result = ::std::mem::drop(response);
@@ -6078,7 +6078,7 @@ where
         let encoded = Some(serde_json::to_vec(&input.policy).unwrap());
         request.set_payload(encoded);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::NoContent {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let result = ::std::mem::drop(response);
@@ -6115,7 +6115,7 @@ where
         let encoded = Some(serde_json::to_vec(&input.vault_notification_config).unwrap());
         request.set_payload(encoded);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::NoContent {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let result = ::std::mem::drop(response);
@@ -6167,7 +6167,7 @@ where
             request.add_header("x-amz-sha256-tree-hash", &checksum.to_string());
         }
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Created {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -6239,7 +6239,7 @@ where
             request.add_header("Content-Range", &range.to_string());
         }
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::NoContent {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;

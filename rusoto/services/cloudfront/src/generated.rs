@@ -11664,7 +11664,7 @@ where
 
         request.set_payload(Some(payload));
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok && response.status != StatusCode::NoContent
                 && response.status != StatusCode::PartialContent
             {
@@ -11732,7 +11732,7 @@ where
 
         request.set_payload(Some(payload));
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok && response.status != StatusCode::NoContent
                 && response.status != StatusCode::PartialContent
             {
@@ -11801,7 +11801,7 @@ where
 
         request.set_payload(Some(payload));
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok && response.status != StatusCode::NoContent
                 && response.status != StatusCode::PartialContent
             {
@@ -11870,7 +11870,7 @@ where
 
         request.set_payload(Some(payload));
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok && response.status != StatusCode::NoContent
                 && response.status != StatusCode::PartialContent
             {
@@ -11932,7 +11932,7 @@ where
 
         request.set_payload(Some(payload));
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok && response.status != StatusCode::NoContent
                 && response.status != StatusCode::PartialContent
             {
@@ -12004,7 +12004,7 @@ where
 
         request.set_payload(Some(payload));
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok && response.status != StatusCode::NoContent
                 && response.status != StatusCode::PartialContent
             {
@@ -12068,7 +12068,7 @@ where
             request.add_header("If-Match", &if_match.to_string());
         }
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok && response.status != StatusCode::NoContent
                 && response.status != StatusCode::PartialContent
             {
@@ -12099,7 +12099,7 @@ where
             request.add_header("If-Match", &if_match.to_string());
         }
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok && response.status != StatusCode::NoContent
                 && response.status != StatusCode::PartialContent
             {
@@ -12128,7 +12128,7 @@ where
 
         let mut request = SignedRequest::new("DELETE", "cloudfront", &self.region, &request_uri);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok && response.status != StatusCode::NoContent
                 && response.status != StatusCode::PartialContent
             {
@@ -12159,7 +12159,7 @@ where
             request.add_header("If-Match", &if_match.to_string());
         }
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok && response.status != StatusCode::NoContent
                 && response.status != StatusCode::PartialContent
             {
@@ -12190,7 +12190,7 @@ where
 
         let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok && response.status != StatusCode::NoContent
                 && response.status != StatusCode::PartialContent
             {
@@ -12249,7 +12249,7 @@ where
 
         let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok && response.status != StatusCode::NoContent
                 && response.status != StatusCode::PartialContent
             {
@@ -12302,7 +12302,7 @@ where
 
         let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok && response.status != StatusCode::NoContent
                 && response.status != StatusCode::PartialContent
             {
@@ -12353,7 +12353,7 @@ where
 
         let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok && response.status != StatusCode::NoContent
                 && response.status != StatusCode::PartialContent
             {
@@ -12408,7 +12408,7 @@ where
 
         let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok && response.status != StatusCode::NoContent
                 && response.status != StatusCode::PartialContent
             {
@@ -12455,7 +12455,7 @@ where
 
         let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok && response.status != StatusCode::NoContent
                 && response.status != StatusCode::PartialContent
             {
@@ -12510,7 +12510,7 @@ where
 
         let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok && response.status != StatusCode::NoContent
                 && response.status != StatusCode::PartialContent
             {
@@ -12575,7 +12575,7 @@ where
         }
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok && response.status != StatusCode::NoContent
                 && response.status != StatusCode::PartialContent
             {
@@ -12633,7 +12633,7 @@ where
         }
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok && response.status != StatusCode::NoContent
                 && response.status != StatusCode::PartialContent
             {
@@ -12692,7 +12692,7 @@ where
         }
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok && response.status != StatusCode::NoContent
                 && response.status != StatusCode::PartialContent
             {
@@ -12751,7 +12751,7 @@ where
         }
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok && response.status != StatusCode::NoContent
                 && response.status != StatusCode::PartialContent
             {
@@ -12807,7 +12807,7 @@ where
         }
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok && response.status != StatusCode::NoContent
                 && response.status != StatusCode::PartialContent
             {
@@ -12858,7 +12858,7 @@ where
         params.put("Resource", &input.resource);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok && response.status != StatusCode::NoContent
                 && response.status != StatusCode::PartialContent
             {
@@ -12913,7 +12913,7 @@ where
 
         request.set_payload(Some(payload));
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok && response.status != StatusCode::NoContent
                 && response.status != StatusCode::PartialContent
             {
@@ -12948,7 +12948,7 @@ where
 
         request.set_payload(Some(payload));
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok && response.status != StatusCode::NoContent
                 && response.status != StatusCode::PartialContent
             {
@@ -12996,7 +12996,7 @@ where
 
         request.set_payload(Some(payload));
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok && response.status != StatusCode::NoContent
                 && response.status != StatusCode::PartialContent
             {
@@ -13064,7 +13064,7 @@ where
 
         request.set_payload(Some(payload));
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok && response.status != StatusCode::NoContent
                 && response.status != StatusCode::PartialContent
             {
@@ -13133,7 +13133,7 @@ where
 
         request.set_payload(Some(payload));
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok && response.status != StatusCode::NoContent
                 && response.status != StatusCode::PartialContent
             {
