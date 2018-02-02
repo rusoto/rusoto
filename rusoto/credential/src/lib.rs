@@ -40,8 +40,9 @@ use std::collections::BTreeMap;
 use chrono::{Duration, Utc, DateTime, ParseError};
 use futures::{Async, Future, Poll, Stream};
 use futures::future::{Either, Shared, SharedItem, err};
-use hyper::{Client, Error as HyperError, Uri};
+use hyper::{Client, Error as HyperError};
 use hyper::client::Connect;
+use hyper::Request;
 use hyper::error::UriError;
 use serde_json::{from_str as json_from_str, Value};
 use tokio_core::reactor::Handle;
@@ -480,9 +481,9 @@ fn parse_credentials_from_aws_service(response: &str) -> Result<AwsCredentials, 
 /// Makes an Async Request with a timeout. Defaults to 30 seconds.
 fn make_request<C: Connect>(
     client: &Client<C>,
-    uri: Uri
+    request: Request
 ) -> Box<Future<Item=String, Error=CredentialsError>> {
-    let get = client.get(uri).and_then(|res| {
+    let get = client.request(request).and_then(|res| {
         if !res.status().is_success() {
             Either::A(err(HyperError::Io(IoError::new(
                 InvalidData,

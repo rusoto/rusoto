@@ -2,7 +2,7 @@
 
 use futures::{Future, Poll};
 use futures::future::{FutureResult, result};
-use hyper::{Client, Uri};
+use hyper::{Client, Uri, Request, Method};
 use hyper::client::HttpConnector;
 use tokio_core::reactor::Handle;
 
@@ -87,8 +87,8 @@ fn get_role_name(client: &Client<HttpConnector>) -> Result<Box<Future<Item=Strin
         AWS_CREDENTIALS_PROVIDER_IP,
         AWS_CREDENTIALS_PROVIDER_PATH
     );
-    let uri = try!(role_name_address.parse::<Uri>());
-    Ok(make_request(client, uri))
+    let uri = role_name_address.parse::<Uri>()?;
+    Ok(make_request(client, Request::new(Method::Get, uri)))
 }
 
 /// Gets the credentials for an EC2 Instances IAM Role.
@@ -103,6 +103,6 @@ fn get_credentials_from_role(
         role_name
     );
 
-    let uri = try!(credentials_provider_url.parse::<Uri>());
-    Ok(make_request(client, uri))
+    let uri = credentials_provider_url.parse::<Uri>()?;
+    Ok(make_request(client, Request::new(Method::Get, uri)))
 }
