@@ -49,11 +49,9 @@ rusoto_sqs = "0.31.0"
 rusoto_s3 = "0.31.0"
 ```
 
-## Migrating from Rusoto 0.24.0 to 0.25.0 or later
+## Migration notes
 
-As of Rusoto 0.25.0, the `rusoto` crate is deprecated.  This decision was made because the single crate implementing all AWS services was too large to compile, especially on TravisCI and Appveyor.  The new main crate is `rusoto_core` and all services now have their own crate.
-
-See the [Rusoto 0.25.0 release notes](https://github.com/rusoto/rusoto/releases/tag/rusoto-v0.25.0) for more information including how to migrate from Rusoto 0.24.0 to Rusoto 0.25.0.
+Breaking changes and migration details are documented at [https://rusoto.org/migrations.html](https://rusoto.org/migrations.html).
 
 ## Usage
 
