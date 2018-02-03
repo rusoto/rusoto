@@ -13,7 +13,7 @@ use {AwsCredentials, CredentialsError, ProvideAwsCredentials,
 
 // The following constants are documented in AWS' ECS developers guide,
 // see https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-iam-roles.html.
-const AWS_CREDENTIALS_PROVIDER_IP: &'static str = "169.254.170.2";
+const AWS_CREDENTIALS_PROVIDER_IP: &str = "169.254.170.2";
 const AWS_CONTAINER_CREDENTIALS_RELATIVE_URI: &str = "AWS_CONTAINER_CREDENTIALS_RELATIVE_URI";
 // I have not yet found any official documentation from AWS concerning the following two
 // environment variables, but they are used by the Java, Go, JavaScript and the Python SDKs.

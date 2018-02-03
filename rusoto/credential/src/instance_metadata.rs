@@ -9,8 +9,8 @@ use tokio_core::reactor::Handle;
 use {AwsCredentials, CredentialsError, ProvideAwsCredentials,
      make_request, parse_credentials_from_aws_service};
 
-const AWS_CREDENTIALS_PROVIDER_IP: &'static str = "169.254.169.254";
-const AWS_CREDENTIALS_PROVIDER_PATH: &'static str = "latest/meta-data/iam/security-credentials";
+const AWS_CREDENTIALS_PROVIDER_IP: &str = "169.254.169.254";
+const AWS_CREDENTIALS_PROVIDER_PATH: &str = "latest/meta-data/iam/security-credentials";
 
 /// Provides AWS credentials from a resource's IAM role.
 #[derive(Clone, Debug)]

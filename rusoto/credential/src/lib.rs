@@ -109,7 +109,6 @@ impl AwsCredentials {
                *e < Utc::now() + Duration::seconds(20),
             None => false,
         }
-        //self.expires_at < Utc::now() + Duration::seconds(20)
     }
 
     /// Get the token claims
@@ -424,7 +423,7 @@ impl ChainProvider {
 }
 
 /// This is a helper function as Option<T>::filter is not yet stable (see issue #45860).
-/// https://github.com/rust-lang/rfcs/issues/2036 also affects the implementation of this.
+/// <https://github.com/rust-lang/rfcs/issues/2036> also affects the implementation of this.
 fn non_empty_env_var(name: &str) -> Option<String> {
     match env_var(name) {
         Ok(value) => if value.is_empty() { None } else { Some(value) },
