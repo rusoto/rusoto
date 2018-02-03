@@ -86,7 +86,7 @@ impl ProfileProvider {
     /// 2. otherwise return ```"default"```
     /// see https://docs.aws.amazon.com/sdk-for-java/v1/developer-guide/credentials.html.
     fn default_profile_name() -> String {
-         non_empty_env_var(AWS_PROFILE).unwrap_or(DEFAULT.to_owned())
+        non_empty_env_var(AWS_PROFILE).unwrap_or_else(|| DEFAULT.to_owned())
     }
 
     /// Get a reference to the credentials file path.
@@ -143,7 +143,7 @@ impl ProvideAwsCredentials for ProfileProvider {
     }
 }
 
-/// Parses a Credentials file into a Map of <ProfileName, AwsCredentials>
+/// Parses a Credentials file into a Map of <`ProfileName`, `AwsCredentials`>
 fn parse_credentials_file(
     file_path: &Path,
 ) -> Result<HashMap<String, AwsCredentials>, CredentialsError> {

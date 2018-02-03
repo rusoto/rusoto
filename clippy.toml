@@ -9,5 +9,7 @@ doc-valid-idents = [
     "IoT",
     "MapReduce",
     "OpsWorks",
-    "WorkSpaces"
+    "WorkSpaces",
+    "OpenID",
+    "OAuth"
 ]
