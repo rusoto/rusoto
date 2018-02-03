@@ -4,7 +4,6 @@ use std::error::Error;
 use futures::{Async, Future, Poll};
 use futures::future::err;
 use hyper::{Client, Uri, Request, Method};
-//use hyper::error::UriError;
 use hyper::header::Authorization;
 use hyper::client::HttpConnector;
 use tokio_core::reactor::Handle;
