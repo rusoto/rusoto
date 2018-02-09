@@ -13,6 +13,11 @@ use serde::ser::SerializeTuple;
 
 /// An AWS region.
 ///
+/// # Default
+///
+/// `Region` implements the `Default` trait. Calling `Region::default()` will attempt to read the
+/// `AWS_DEFAULT_REGION` environment variable. If it is not set or malformed, it will fall back to `Region::UsEast1`.
+///
 /// # AWS-compatible services
 ///
 /// `Region::Custom` can be used to connect to AWS-compatible services such as DynamoDB Local or Ceph.
@@ -249,18 +254,13 @@ impl Display for ParseRegionError {
     }
 }
 
-/// Get the region from `AWS_DEFAULT_REGION` environment variable.
-/// Uses us-east-1 if not set or value is malformed.
-pub fn default_region() -> Region {
-    match std::env::var("AWS_DEFAULT_REGION") {
-        Ok(v) => {
-            let slice : &str = &v;
-            match Region::from_str(slice) {
-                Ok(region) => region,
-                Err(_) => Region::UsEast1,
-            }
-        },
-        Err(_) => Region::UsEast1,
+impl Default for Region {
+    fn default() -> Region {
+        match std::env::var("AWS_DEFAULT_REGION") {
+            Ok(ref v) =>
+                Region::from_str(v).unwrap_or(Region::UsEast1),
+            Err(_) => Region::UsEast1,
+        }
     }
 }
 
