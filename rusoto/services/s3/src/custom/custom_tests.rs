@@ -335,6 +335,17 @@ fn can_construct_streaming_body() {
     assert_eq!("Simple Body Test", read_string);
 }
 
+#[test]
+fn structs_should_impl_clone() {
+    fn assert_clone<T: Clone>() {}
+
+    // GetObjectRequest is common but simple. It must impl Clone.
+    // (But note GetObjectOutput cannot impl Clone because it uses streaming.)
+    assert_clone::<GetObjectRequest>();
+    // RestoreObjectRequest has several layers of structs, all of which must impl Clone.
+    assert_clone::<RestoreObjectRequest>();
+}
+
 /// returns Some(String)
 fn sstr(value: &'static str) -> Option<String> {
     Some(value.to_string())
