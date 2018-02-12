@@ -89,12 +89,12 @@ impl AddPermissionRequestSerializer {
 
         AWSAccountIdListSerializer::serialize(
             params,
-            &format!("{}{}", prefix, "AWSAccountIds"),
+            &format!("{}{}", prefix, "AWSAccountId"),
             &obj.aws_account_ids,
         );
         ActionNameListSerializer::serialize(
             params,
-            &format!("{}{}", prefix, "Actions"),
+            &format!("{}{}", prefix, "ActionName"),
             &obj.actions,
         );
         params.put(
@@ -312,7 +312,7 @@ impl ChangeMessageVisibilityBatchRequestSerializer {
 
         ChangeMessageVisibilityBatchRequestEntryListSerializer::serialize(
             params,
-            &format!("{}{}", prefix, "Entries"),
+            &format!("{}{}", prefix, "ChangeMessageVisibilityBatchRequestEntry"),
             &obj.entries,
         );
         params.put(
@@ -636,7 +636,7 @@ impl DeleteMessageBatchRequestSerializer {
 
         DeleteMessageBatchRequestEntryListSerializer::serialize(
             params,
-            &format!("{}{}", prefix, "Entries"),
+            &format!("{}{}", prefix, "DeleteMessageBatchRequestEntry"),
             &obj.entries,
         );
         params.put(
@@ -887,7 +887,7 @@ impl GetQueueAttributesRequestSerializer {
         if let Some(ref field_value) = obj.attribute_names {
             AttributeNameListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "AttributeNames"),
+                &format!("{}{}", prefix, "AttributeName"),
                 field_value,
             );
         }
@@ -1692,7 +1692,7 @@ impl ReceiveMessageRequestSerializer {
         if let Some(ref field_value) = obj.attribute_names {
             AttributeNameListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "AttributeNames"),
+                &format!("{}{}", prefix, "AttributeName"),
                 field_value,
             );
         }
@@ -1705,7 +1705,7 @@ impl ReceiveMessageRequestSerializer {
         if let Some(ref field_value) = obj.message_attribute_names {
             MessageAttributeNameListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "MessageAttributeNames"),
+                &format!("{}{}", prefix, "MessageAttributeName"),
                 field_value,
             );
         }
@@ -1830,7 +1830,7 @@ impl SendMessageBatchRequestSerializer {
 
         SendMessageBatchRequestEntryListSerializer::serialize(
             params,
-            &format!("{}{}", prefix, "Entries"),
+            &format!("{}{}", prefix, "SendMessageBatchRequestEntry"),
             &obj.entries,
         );
         params.put(
@@ -2422,7 +2422,7 @@ impl UntagQueueRequestSerializer {
             &format!("{}{}", prefix, "QueueUrl"),
             &obj.queue_url.replace("+", "%2B"),
         );
-        TagKeyListSerializer::serialize(params, &format!("{}{}", prefix, "TagKeys"), &obj.tag_keys);
+        TagKeyListSerializer::serialize(params, &format!("{}{}", prefix, "TagKey"), &obj.tag_keys);
     }
 }
 

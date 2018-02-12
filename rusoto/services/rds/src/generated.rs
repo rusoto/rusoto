@@ -317,7 +317,7 @@ impl AddTagsToResourceMessageSerializer {
             &format!("{}{}", prefix, "ResourceName"),
             &obj.resource_name.replace("+", "%2B"),
         );
-        TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tags"), &obj.tags);
+        TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tag"), &obj.tags);
     }
 }
 
@@ -1009,7 +1009,7 @@ impl CopyDBClusterParameterGroupMessageSerializer {
                 .replace("+", "%2B"),
         );
         if let Some(ref field_value) = obj.tags {
-            TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tags"), field_value);
+            TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tag"), field_value);
         }
         params.put(
             &format!("{}{}", prefix, "TargetDBClusterParameterGroupDescription"),
@@ -1121,7 +1121,7 @@ impl CopyDBClusterSnapshotMessageSerializer {
                 .replace("+", "%2B"),
         );
         if let Some(ref field_value) = obj.tags {
-            TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tags"), field_value);
+            TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tag"), field_value);
         }
         params.put(
             &format!("{}{}", prefix, "TargetDBClusterSnapshotIdentifier"),
@@ -1203,7 +1203,7 @@ impl CopyDBParameterGroupMessageSerializer {
             &obj.source_db_parameter_group_identifier.replace("+", "%2B"),
         );
         if let Some(ref field_value) = obj.tags {
-            TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tags"), field_value);
+            TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tag"), field_value);
         }
         params.put(
             &format!("{}{}", prefix, "TargetDBParameterGroupDescription"),
@@ -1319,7 +1319,7 @@ impl CopyDBSnapshotMessageSerializer {
             &obj.source_db_snapshot_identifier.replace("+", "%2B"),
         );
         if let Some(ref field_value) = obj.tags {
-            TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tags"), field_value);
+            TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tag"), field_value);
         }
         params.put(
             &format!("{}{}", prefix, "TargetDBSnapshotIdentifier"),
@@ -1401,7 +1401,7 @@ impl CopyOptionGroupMessageSerializer {
             &obj.source_option_group_identifier.replace("+", "%2B"),
         );
         if let Some(ref field_value) = obj.tags {
-            TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tags"), field_value);
+            TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tag"), field_value);
         }
         params.put(
             &format!("{}{}", prefix, "TargetOptionGroupDescription"),
@@ -1521,7 +1521,7 @@ impl CreateDBClusterMessageSerializer {
         if let Some(ref field_value) = obj.availability_zones {
             AvailabilityZonesSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "AvailabilityZones"),
+                &format!("{}{}", prefix, "AvailabilityZone"),
                 field_value,
             );
         }
@@ -1636,12 +1636,12 @@ impl CreateDBClusterMessageSerializer {
             );
         }
         if let Some(ref field_value) = obj.tags {
-            TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tags"), field_value);
+            TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tag"), field_value);
         }
         if let Some(ref field_value) = obj.vpc_security_group_ids {
             VpcSecurityGroupIdListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "VpcSecurityGroupIds"),
+                &format!("{}{}", prefix, "VpcSecurityGroupId"),
                 field_value,
             );
         }
@@ -1682,7 +1682,7 @@ impl CreateDBClusterParameterGroupMessageSerializer {
             &obj.description.replace("+", "%2B"),
         );
         if let Some(ref field_value) = obj.tags {
-            TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tags"), field_value);
+            TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tag"), field_value);
         }
     }
 }
@@ -1809,7 +1809,7 @@ impl CreateDBClusterSnapshotMessageSerializer {
             &obj.db_cluster_snapshot_identifier.replace("+", "%2B"),
         );
         if let Some(ref field_value) = obj.tags {
-            TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tags"), field_value);
+            TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tag"), field_value);
         }
     }
 }
@@ -2020,7 +2020,7 @@ impl CreateDBInstanceMessageSerializer {
         if let Some(ref field_value) = obj.db_security_groups {
             DBSecurityGroupNameListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "DBSecurityGroups"),
+                &format!("{}{}", prefix, "DBSecurityGroupName"),
                 field_value,
             );
         }
@@ -2167,7 +2167,7 @@ impl CreateDBInstanceMessageSerializer {
             );
         }
         if let Some(ref field_value) = obj.tags {
-            TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tags"), field_value);
+            TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tag"), field_value);
         }
         if let Some(ref field_value) = obj.tde_credential_arn {
             params.put(
@@ -2190,7 +2190,7 @@ impl CreateDBInstanceMessageSerializer {
         if let Some(ref field_value) = obj.vpc_security_group_ids {
             VpcSecurityGroupIdListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "VpcSecurityGroupIds"),
+                &format!("{}{}", prefix, "VpcSecurityGroupId"),
                 field_value,
             );
         }
@@ -2360,7 +2360,7 @@ impl CreateDBInstanceReadReplicaMessageSerializer {
             );
         }
         if let Some(ref field_value) = obj.tags {
-            TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tags"), field_value);
+            TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tag"), field_value);
         }
     }
 }
@@ -2493,7 +2493,7 @@ impl CreateDBParameterGroupMessageSerializer {
             &obj.description.replace("+", "%2B"),
         );
         if let Some(ref field_value) = obj.tags {
-            TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tags"), field_value);
+            TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tag"), field_value);
         }
     }
 }
@@ -2572,7 +2572,7 @@ impl CreateDBSecurityGroupMessageSerializer {
             &obj.db_security_group_name.replace("+", "%2B"),
         );
         if let Some(ref field_value) = obj.tags {
-            TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tags"), field_value);
+            TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tag"), field_value);
         }
     }
 }
@@ -2651,7 +2651,7 @@ impl CreateDBSnapshotMessageSerializer {
             &obj.db_snapshot_identifier.replace("+", "%2B"),
         );
         if let Some(ref field_value) = obj.tags {
-            TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tags"), field_value);
+            TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tag"), field_value);
         }
     }
 }
@@ -2734,11 +2734,11 @@ impl CreateDBSubnetGroupMessageSerializer {
         );
         SubnetIdentifierListSerializer::serialize(
             params,
-            &format!("{}{}", prefix, "SubnetIds"),
+            &format!("{}{}", prefix, "SubnetIdentifier"),
             &obj.subnet_ids,
         );
         if let Some(ref field_value) = obj.tags {
-            TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tags"), field_value);
+            TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tag"), field_value);
         }
     }
 }
@@ -2826,7 +2826,7 @@ impl CreateEventSubscriptionMessageSerializer {
         if let Some(ref field_value) = obj.event_categories {
             EventCategoriesListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "EventCategories"),
+                &format!("{}{}", prefix, "EventCategory"),
                 field_value,
             );
         }
@@ -2837,7 +2837,7 @@ impl CreateEventSubscriptionMessageSerializer {
         if let Some(ref field_value) = obj.source_ids {
             SourceIdsListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "SourceIds"),
+                &format!("{}{}", prefix, "SourceId"),
                 field_value,
             );
         }
@@ -2852,7 +2852,7 @@ impl CreateEventSubscriptionMessageSerializer {
             &obj.subscription_name.replace("+", "%2B"),
         );
         if let Some(ref field_value) = obj.tags {
-            TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tags"), field_value);
+            TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tag"), field_value);
         }
     }
 }
@@ -2943,7 +2943,7 @@ impl CreateOptionGroupMessageSerializer {
             &obj.option_group_name.replace("+", "%2B"),
         );
         if let Some(ref field_value) = obj.tags {
-            TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tags"), field_value);
+            TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tag"), field_value);
         }
     }
 }
@@ -7107,7 +7107,7 @@ impl DescribeCertificatesMessageSerializer {
         if let Some(ref field_value) = obj.filters {
             FilterListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "Filters"),
+                &format!("{}{}", prefix, "Filter"),
                 field_value,
             );
         }
@@ -7157,7 +7157,7 @@ impl DescribeDBClusterParameterGroupsMessageSerializer {
         if let Some(ref field_value) = obj.filters {
             FilterListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "Filters"),
+                &format!("{}{}", prefix, "Filter"),
                 field_value,
             );
         }
@@ -7207,7 +7207,7 @@ impl DescribeDBClusterParametersMessageSerializer {
         if let Some(ref field_value) = obj.filters {
             FilterListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "Filters"),
+                &format!("{}{}", prefix, "Filter"),
                 field_value,
             );
         }
@@ -7353,7 +7353,7 @@ impl DescribeDBClusterSnapshotsMessageSerializer {
         if let Some(ref field_value) = obj.filters {
             FilterListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "Filters"),
+                &format!("{}{}", prefix, "Filter"),
                 field_value,
             );
         }
@@ -7421,7 +7421,7 @@ impl DescribeDBClustersMessageSerializer {
         if let Some(ref field_value) = obj.filters {
             FilterListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "Filters"),
+                &format!("{}{}", prefix, "Filter"),
                 field_value,
             );
         }
@@ -7498,7 +7498,7 @@ impl DescribeDBEngineVersionsMessageSerializer {
         if let Some(ref field_value) = obj.filters {
             FilterListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "Filters"),
+                &format!("{}{}", prefix, "Filter"),
                 field_value,
             );
         }
@@ -7560,7 +7560,7 @@ impl DescribeDBInstancesMessageSerializer {
         if let Some(ref field_value) = obj.filters {
             FilterListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "Filters"),
+                &format!("{}{}", prefix, "Filter"),
                 field_value,
             );
         }
@@ -7733,7 +7733,7 @@ impl DescribeDBLogFilesMessageSerializer {
         if let Some(ref field_value) = obj.filters {
             FilterListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "Filters"),
+                &format!("{}{}", prefix, "Filter"),
                 field_value,
             );
         }
@@ -7838,7 +7838,7 @@ impl DescribeDBParameterGroupsMessageSerializer {
         if let Some(ref field_value) = obj.filters {
             FilterListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "Filters"),
+                &format!("{}{}", prefix, "Filter"),
                 field_value,
             );
         }
@@ -7887,7 +7887,7 @@ impl DescribeDBParametersMessageSerializer {
         if let Some(ref field_value) = obj.filters {
             FilterListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "Filters"),
+                &format!("{}{}", prefix, "Filter"),
                 field_value,
             );
         }
@@ -7943,7 +7943,7 @@ impl DescribeDBSecurityGroupsMessageSerializer {
         if let Some(ref field_value) = obj.filters {
             FilterListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "Filters"),
+                &format!("{}{}", prefix, "Filter"),
                 field_value,
             );
         }
@@ -8078,7 +8078,7 @@ impl DescribeDBSnapshotsMessageSerializer {
         if let Some(ref field_value) = obj.filters {
             FilterListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "Filters"),
+                &format!("{}{}", prefix, "Filter"),
                 field_value,
             );
         }
@@ -8146,7 +8146,7 @@ impl DescribeDBSubnetGroupsMessageSerializer {
         if let Some(ref field_value) = obj.filters {
             FilterListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "Filters"),
+                &format!("{}{}", prefix, "Filter"),
                 field_value,
             );
         }
@@ -8198,7 +8198,7 @@ impl DescribeEngineDefaultClusterParametersMessageSerializer {
         if let Some(ref field_value) = obj.filters {
             FilterListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "Filters"),
+                &format!("{}{}", prefix, "Filter"),
                 field_value,
             );
         }
@@ -8293,7 +8293,7 @@ impl DescribeEngineDefaultParametersMessageSerializer {
         if let Some(ref field_value) = obj.filters {
             FilterListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "Filters"),
+                &format!("{}{}", prefix, "Filter"),
                 field_value,
             );
         }
@@ -8380,7 +8380,7 @@ impl DescribeEventCategoriesMessageSerializer {
         if let Some(ref field_value) = obj.filters {
             FilterListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "Filters"),
+                &format!("{}{}", prefix, "Filter"),
                 field_value,
             );
         }
@@ -8418,7 +8418,7 @@ impl DescribeEventSubscriptionsMessageSerializer {
         if let Some(ref field_value) = obj.filters {
             FilterListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "Filters"),
+                &format!("{}{}", prefix, "Filter"),
                 field_value,
             );
         }
@@ -8490,14 +8490,14 @@ impl DescribeEventsMessageSerializer {
         if let Some(ref field_value) = obj.event_categories {
             EventCategoriesListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "EventCategories"),
+                &format!("{}{}", prefix, "EventCategory"),
                 field_value,
             );
         }
         if let Some(ref field_value) = obj.filters {
             FilterListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "Filters"),
+                &format!("{}{}", prefix, "Filter"),
                 field_value,
             );
         }
@@ -8565,7 +8565,7 @@ impl DescribeOptionGroupOptionsMessageSerializer {
         if let Some(ref field_value) = obj.filters {
             FilterListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "Filters"),
+                &format!("{}{}", prefix, "Filter"),
                 field_value,
             );
         }
@@ -8625,7 +8625,7 @@ impl DescribeOptionGroupsMessageSerializer {
         if let Some(ref field_value) = obj.filters {
             FilterListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "Filters"),
+                &format!("{}{}", prefix, "Filter"),
                 field_value,
             );
         }
@@ -8705,7 +8705,7 @@ impl DescribeOrderableDBInstanceOptionsMessageSerializer {
         if let Some(ref field_value) = obj.filters {
             FilterListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "Filters"),
+                &format!("{}{}", prefix, "Filter"),
                 field_value,
             );
         }
@@ -8761,7 +8761,7 @@ impl DescribePendingMaintenanceActionsMessageSerializer {
         if let Some(ref field_value) = obj.filters {
             FilterListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "Filters"),
+                &format!("{}{}", prefix, "Filter"),
                 field_value,
             );
         }
@@ -8835,7 +8835,7 @@ impl DescribeReservedDBInstancesMessageSerializer {
         if let Some(ref field_value) = obj.filters {
             FilterListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "Filters"),
+                &format!("{}{}", prefix, "Filter"),
                 field_value,
             );
         }
@@ -8935,7 +8935,7 @@ impl DescribeReservedDBInstancesOfferingsMessageSerializer {
         if let Some(ref field_value) = obj.filters {
             FilterListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "Filters"),
+                &format!("{}{}", prefix, "Filter"),
                 field_value,
             );
         }
@@ -9003,7 +9003,7 @@ impl DescribeSourceRegionsMessageSerializer {
         if let Some(ref field_value) = obj.filters {
             FilterListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "Filters"),
+                &format!("{}{}", prefix, "Filter"),
                 field_value,
             );
         }
@@ -10351,7 +10351,7 @@ impl FilterSerializer {
         );
         FilterValueListSerializer::serialize(
             params,
-            &format!("{}{}", prefix, "Values"),
+            &format!("{}{}", prefix, "Value"),
             &obj.values,
         );
     }
@@ -10531,7 +10531,7 @@ impl ListTagsForResourceMessageSerializer {
         if let Some(ref field_value) = obj.filters {
             FilterListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "Filters"),
+                &format!("{}{}", prefix, "Filter"),
                 field_value,
             );
         }
@@ -10661,7 +10661,7 @@ impl ModifyDBClusterMessageSerializer {
         if let Some(ref field_value) = obj.vpc_security_group_ids {
             VpcSecurityGroupIdListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "VpcSecurityGroupIds"),
+                &format!("{}{}", prefix, "VpcSecurityGroupId"),
                 field_value,
             );
         }
@@ -10692,7 +10692,7 @@ impl ModifyDBClusterParameterGroupMessageSerializer {
         );
         ParametersListSerializer::serialize(
             params,
-            &format!("{}{}", prefix, "Parameters"),
+            &format!("{}{}", prefix, "Parameter"),
             &obj.parameters,
         );
     }
@@ -10776,14 +10776,14 @@ impl ModifyDBClusterSnapshotAttributeMessageSerializer {
         if let Some(ref field_value) = obj.values_to_add {
             AttributeValueListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "ValuesToAdd"),
+                &format!("{}{}", prefix, "AttributeValue"),
                 field_value,
             );
         }
         if let Some(ref field_value) = obj.values_to_remove {
             AttributeValueListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "ValuesToRemove"),
+                &format!("{}{}", prefix, "AttributeValue"),
                 field_value,
             );
         }
@@ -10990,7 +10990,7 @@ impl ModifyDBInstanceMessageSerializer {
         if let Some(ref field_value) = obj.db_security_groups {
             DBSecurityGroupNameListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "DBSecurityGroups"),
+                &format!("{}{}", prefix, "DBSecurityGroupName"),
                 field_value,
             );
         }
@@ -11129,7 +11129,7 @@ impl ModifyDBInstanceMessageSerializer {
         if let Some(ref field_value) = obj.vpc_security_group_ids {
             VpcSecurityGroupIdListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "VpcSecurityGroupIds"),
+                &format!("{}{}", prefix, "VpcSecurityGroupId"),
                 field_value,
             );
         }
@@ -11207,7 +11207,7 @@ impl ModifyDBParameterGroupMessageSerializer {
         );
         ParametersListSerializer::serialize(
             params,
-            &format!("{}{}", prefix, "Parameters"),
+            &format!("{}{}", prefix, "Parameter"),
             &obj.parameters,
         );
     }
@@ -11246,14 +11246,14 @@ impl ModifyDBSnapshotAttributeMessageSerializer {
         if let Some(ref field_value) = obj.values_to_add {
             AttributeValueListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "ValuesToAdd"),
+                &format!("{}{}", prefix, "AttributeValue"),
                 field_value,
             );
         }
         if let Some(ref field_value) = obj.values_to_remove {
             AttributeValueListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "ValuesToRemove"),
+                &format!("{}{}", prefix, "AttributeValue"),
                 field_value,
             );
         }
@@ -11425,7 +11425,7 @@ impl ModifyDBSubnetGroupMessageSerializer {
         );
         SubnetIdentifierListSerializer::serialize(
             params,
-            &format!("{}{}", prefix, "SubnetIds"),
+            &format!("{}{}", prefix, "SubnetIdentifier"),
             &obj.subnet_ids,
         );
     }
@@ -11511,7 +11511,7 @@ impl ModifyEventSubscriptionMessageSerializer {
         if let Some(ref field_value) = obj.event_categories {
             EventCategoriesListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "EventCategories"),
+                &format!("{}{}", prefix, "EventCategory"),
                 field_value,
             );
         }
@@ -11615,7 +11615,7 @@ impl ModifyOptionGroupMessageSerializer {
         if let Some(ref field_value) = obj.options_to_include {
             OptionConfigurationListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "OptionsToInclude"),
+                &format!("{}{}", prefix, "OptionConfiguration"),
                 field_value,
             );
         }
@@ -11818,7 +11818,7 @@ impl OptionConfigurationSerializer {
         if let Some(ref field_value) = obj.db_security_group_memberships {
             DBSecurityGroupNameListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "DBSecurityGroupMemberships"),
+                &format!("{}{}", prefix, "DBSecurityGroupName"),
                 field_value,
             );
         }
@@ -11829,7 +11829,7 @@ impl OptionConfigurationSerializer {
         if let Some(ref field_value) = obj.option_settings {
             OptionSettingsListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "OptionSettings"),
+                &format!("{}{}", prefix, "OptionSetting"),
                 field_value,
             );
         }
@@ -11848,7 +11848,7 @@ impl OptionConfigurationSerializer {
         if let Some(ref field_value) = obj.vpc_security_group_memberships {
             VpcSecurityGroupIdListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "VpcSecurityGroupMemberships"),
+                &format!("{}{}", prefix, "VpcSecurityGroupId"),
                 field_value,
             );
         }
@@ -14074,7 +14074,7 @@ impl PurchaseReservedDBInstancesOfferingMessageSerializer {
             &obj.reserved_db_instances_offering_id.replace("+", "%2B"),
         );
         if let Some(ref field_value) = obj.tags {
-            TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tags"), field_value);
+            TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tag"), field_value);
         }
     }
 }
@@ -15137,7 +15137,7 @@ impl ResetDBClusterParameterGroupMessageSerializer {
         if let Some(ref field_value) = obj.parameters {
             ParametersListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "Parameters"),
+                &format!("{}{}", prefix, "Parameter"),
                 field_value,
             );
         }
@@ -15177,7 +15177,7 @@ impl ResetDBParameterGroupMessageSerializer {
         if let Some(ref field_value) = obj.parameters {
             ParametersListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "Parameters"),
+                &format!("{}{}", prefix, "Parameter"),
                 field_value,
             );
         }
@@ -15314,7 +15314,7 @@ impl RestoreDBClusterFromS3MessageSerializer {
         if let Some(ref field_value) = obj.availability_zones {
             AvailabilityZonesSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "AvailabilityZones"),
+                &format!("{}{}", prefix, "AvailabilityZone"),
                 field_value,
             );
         }
@@ -15435,12 +15435,12 @@ impl RestoreDBClusterFromS3MessageSerializer {
             );
         }
         if let Some(ref field_value) = obj.tags {
-            TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tags"), field_value);
+            TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tag"), field_value);
         }
         if let Some(ref field_value) = obj.vpc_security_group_ids {
             VpcSecurityGroupIdListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "VpcSecurityGroupIds"),
+                &format!("{}{}", prefix, "VpcSecurityGroupId"),
                 field_value,
             );
         }
@@ -15535,7 +15535,7 @@ impl RestoreDBClusterFromSnapshotMessageSerializer {
         if let Some(ref field_value) = obj.availability_zones {
             AvailabilityZonesSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "AvailabilityZones"),
+                &format!("{}{}", prefix, "AvailabilityZone"),
                 field_value,
             );
         }
@@ -15594,12 +15594,12 @@ impl RestoreDBClusterFromSnapshotMessageSerializer {
             &obj.snapshot_identifier.replace("+", "%2B"),
         );
         if let Some(ref field_value) = obj.tags {
-            TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tags"), field_value);
+            TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tag"), field_value);
         }
         if let Some(ref field_value) = obj.vpc_security_group_ids {
             VpcSecurityGroupIdListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "VpcSecurityGroupIds"),
+                &format!("{}{}", prefix, "VpcSecurityGroupId"),
                 field_value,
             );
         }
@@ -15739,7 +15739,7 @@ impl RestoreDBClusterToPointInTimeMessageSerializer {
             &obj.source_db_cluster_identifier.replace("+", "%2B"),
         );
         if let Some(ref field_value) = obj.tags {
-            TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tags"), field_value);
+            TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tag"), field_value);
         }
         if let Some(ref field_value) = obj.use_latest_restorable_time {
             params.put(
@@ -15750,7 +15750,7 @@ impl RestoreDBClusterToPointInTimeMessageSerializer {
         if let Some(ref field_value) = obj.vpc_security_group_ids {
             VpcSecurityGroupIdListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "VpcSecurityGroupIds"),
+                &format!("{}{}", prefix, "VpcSecurityGroupId"),
                 field_value,
             );
         }
@@ -15970,7 +15970,7 @@ impl RestoreDBInstanceFromDBSnapshotMessageSerializer {
             );
         }
         if let Some(ref field_value) = obj.tags {
-            TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tags"), field_value);
+            TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tag"), field_value);
         }
         if let Some(ref field_value) = obj.tde_credential_arn {
             params.put(
@@ -16176,7 +16176,7 @@ impl RestoreDBInstanceFromS3MessageSerializer {
         if let Some(ref field_value) = obj.db_security_groups {
             DBSecurityGroupNameListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "DBSecurityGroups"),
+                &format!("{}{}", prefix, "DBSecurityGroupName"),
                 field_value,
             );
         }
@@ -16327,12 +16327,12 @@ impl RestoreDBInstanceFromS3MessageSerializer {
             );
         }
         if let Some(ref field_value) = obj.tags {
-            TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tags"), field_value);
+            TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tag"), field_value);
         }
         if let Some(ref field_value) = obj.vpc_security_group_ids {
             VpcSecurityGroupIdListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "VpcSecurityGroupIds"),
+                &format!("{}{}", prefix, "VpcSecurityGroupId"),
                 field_value,
             );
         }
@@ -16560,7 +16560,7 @@ impl RestoreDBInstanceToPointInTimeMessageSerializer {
             );
         }
         if let Some(ref field_value) = obj.tags {
-            TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tags"), field_value);
+            TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tag"), field_value);
         }
         params.put(
             &format!("{}{}", prefix, "TargetDBInstanceIdentifier"),

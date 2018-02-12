@@ -20,7 +20,10 @@ fn should_describe_tags() {
 
     match client.describe_tags(&request).sync() {
         Ok(response) => println!("Response: {:?}", response),
-        Err(e) => assert!(format!("{}", e).contains("is not whitelisted to access")),
+        Err(e) => {
+            println!("Got expected error of {}", e);
+            assert!(format!("{}", e).contains("is not whitelisted to access"));
+        },
     }
 }
 
