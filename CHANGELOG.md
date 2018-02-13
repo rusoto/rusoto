@@ -6,6 +6,7 @@
 - Use ```$AWS_PROFILE``` to obtain default profile name 
 - Implement `Default` for `Region`
 - Derive Clone for remaining types (affects CloudFront, Route 53 and S3)
+- Link to service-specific documentation in generated Cargo manifests
 
 ## [0.31.0] - 2018-01-21
 

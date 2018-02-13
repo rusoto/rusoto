@@ -116,7 +116,7 @@ pub fn generate_services(services: &BTreeMap<String, ServiceConfig>, out_dir: &P
                     "Nikita Pekin <contact@nikitapek.in>".into()
                 ]),
                 description: Some(format!("AWS SDK for Rust - {} @ {}", service.full_name(), service.api_version())),
-                documentation: Some("https://rusoto.github.io/rusoto/rusoto_core/index.html".into()),
+                documentation: Some(format!("https://rusoto.github.io/rusoto/{}/index.html", crate_name)),
                 keywords: Some(vec!["AWS".into(), "Amazon".into(), name_for_keyword]),
                 license: Some("MIT".into()),
                 name: crate_name.clone(),
