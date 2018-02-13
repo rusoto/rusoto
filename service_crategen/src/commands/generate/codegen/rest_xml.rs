@@ -112,15 +112,6 @@ impl GenerateProtocol for RestXmlGenerator {
         writeln!(writer, "{}", imports)
     }
 
-    fn generate_struct_attributes(&self,
-                                  _serialized: bool,
-                                  _deserialized: bool)
-                                  -> String {
-        let derived = vec!["Default", "Debug"];
-
-        format!("#[derive({})]", derived.join(","))
-    }
-
     fn generate_serializer(&self, name: &str, shape: &Shape, service: &Service) -> Option<String> {
         if name != "RestoreRequest" && name.ends_with("Request") {
             if used_as_request_payload(shape) {

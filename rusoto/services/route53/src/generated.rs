@@ -45,7 +45,7 @@ enum DeserializerNext {
     Element(String),
 }
 /// <p>A complex type that contains the type of limit that you specified in the request and the current value for that limit.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct AccountLimit {
     /// <p><p>The limit that you requested. Valid values include the following:</p> <ul> <li> <p> <b>MAX<em>HEALTH</em>CHECKS<em>BY</em>OWNER</b>: The maximum number of health checks that you can create using the current account.</p> </li> <li> <p> <b>MAX<em>HOSTED</em>ZONES<em>BY</em>OWNER</b>: The maximum number of hosted zones that you can create using the current account.</p> </li> <li> <p> <b>MAX<em>REUSABLE</em>DELEGATION<em>SETS</em>BY<em>OWNER</b>: The maximum number of reusable delegation sets that you can create using the current account.</p> </li> <li> <p> <b>MAX</em>TRAFFIC<em>POLICIES</em>BY<em>OWNER</b>: The maximum number of traffic policies that you can create using the current account.</p> </li> <li> <p> <b>MAX</em>TRAFFIC<em>POLICY</em>INSTANCES<em>BY</em>OWNER</b>: The maximum number of traffic policy instances that you can create using the current account. (Traffic policy instances are referred to as traffic flow policy records in the Amazon Route 53 console.)</p> </li> </ul></p>
     pub type_: String,
@@ -131,7 +131,7 @@ impl AccountLimitTypeSerializer {
 }
 
 /// <p>A complex type that identifies the CloudWatch alarm that you want Amazon Route 53 health checkers to use to determine whether this health check is healthy.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct AlarmIdentifier {
     /// <p>The name of the CloudWatch alarm that you want Amazon Route 53 health checkers to use to determine whether this health check is healthy.</p>
     pub name: String,
@@ -282,7 +282,7 @@ impl AliasHealthEnabledSerializer {
 }
 
 /// <p><p> <i>Alias resource record sets only:</i> Information about the CloudFront distribution, Elastic Beanstalk environment, ELB load balancer, Amazon S3 bucket, or Amazon Route 53 resource record set that you&#39;re redirecting queries to. An Elastic Beanstalk environment must have a regionalized subdomain.</p> <p>When creating resource record sets for a private hosted zone, note the following:</p> <ul> <li> <p>Resource record sets can&#39;t be created for CloudFront distributions in a private hosted zone.</p> </li> <li> <p>Creating geolocation alias resource record sets or latency alias resource record sets in a private hosted zone is unsupported.</p> </li> <li> <p>For information about creating failover resource record sets in a private hosted zone, see <a href="http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/dns-failover-private-hosted-zones.html">Configuring Failover in a Private Hosted Zone</a>.</p> </li> </ul></p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct AliasTarget {
     /// <p><p> <i>Alias resource record sets only:</i> The value that you specify depends on where you want to route queries:</p> <dl> <dt>CloudFront distribution</dt> <dd> <p>Specify the domain name that CloudFront assigned when you created your distribution.</p> <p>Your CloudFront distribution must include an alternate domain name that matches the name of the resource record set. For example, if the name of the resource record set is <i>acme.example.com</i>, your CloudFront distribution must include <i>acme.example.com</i> as one of the alternate domain names. For more information, see <a href="http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/CNAMEs.html">Using Alternate Domain Names (CNAMEs)</a> in the <i>Amazon CloudFront Developer Guide</i>.</p> </dd> <dt>Elastic Beanstalk environment</dt> <dd> <p>Specify the <code>CNAME</code> attribute for the environment. (The environment must have a regionalized domain name.) You can use the following methods to get the value of the CNAME attribute:</p> <ul> <li> <p> <i>AWS Management Console</i>: For information about how to get the value by using the console, see <a href="http://docs.aws.amazon.com/elasticbeanstalk/latest/dg/customdomains.html">Using Custom Domains with AWS Elastic Beanstalk</a> in the <i>AWS Elastic Beanstalk Developer Guide</i>.</p> </li> <li> <p> <i>Elastic Beanstalk API</i>: Use the <code>DescribeEnvironments</code> action to get the value of the <code>CNAME</code> attribute. For more information, see <a href="http://docs.aws.amazon.com/elasticbeanstalk/latest/api/API_DescribeEnvironments.html">DescribeEnvironments</a> in the <i>AWS Elastic Beanstalk API Reference</i>.</p> </li> <li> <p> <i>AWS CLI</i>: Use the <code>describe-environments</code> command to get the value of the <code>CNAME</code> attribute. For more information, see <a href="http://docs.aws.amazon.com/cli/latest/reference/elasticbeanstalk/describe-environments.html">describe-environments</a> in the <i>AWS Command Line Interface Reference</i>.</p> </li> </ul> </dd> <dt>ELB load balancer</dt> <dd> <p>Specify the DNS name that is associated with the load balancer. Get the DNS name by using the AWS Management Console, the ELB API, or the AWS CLI. </p> <ul> <li> <p> <b>AWS Management Console</b>: Go to the EC2 page, choose <b>Load Balancers</b> in the navigation pane, choose the load balancer, choose the <b>Description</b> tab, and get the value of the <b>DNS name</b> field. (If you&#39;re routing traffic to a Classic Load Balancer, get the value that begins with <b>dualstack</b>.) </p> </li> <li> <p> <b>Elastic Load Balancing API</b>: Use <code>DescribeLoadBalancers</code> to get the value of <code>DNSName</code>. For more information, see the applicable guide:</p> <ul> <li> <p>Classic Load Balancers: <a href="http://docs.aws.amazon.com/elasticloadbalancing/2012-06-01/APIReference/API_DescribeLoadBalancers.html">DescribeLoadBalancers</a> </p> </li> <li> <p>Application and Network Load Balancers: <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/APIReference/API_DescribeLoadBalancers.html">DescribeLoadBalancers</a> </p> </li> </ul> </li> <li> <p> <b>AWS CLI</b>: Use <code>describe-load-balancers</code> to get the value of <code>DNSName</code>. For more information, see the applicable guide:</p> <ul> <li> <p>Classic Load Balancers: <a href="http://docs.aws.amazon.com/cli/latest/reference/elb/describe-load-balancers.html">describe-load-balancers</a> </p> </li> <li> <p>Application and Network Load Balancers: <a href="http://docs.aws.amazon.com/cli/latest/reference/elbv2/describe-load-balancers.html">describe-load-balancers</a> </p> </li> </ul> </li> </ul> </dd> <dt>Amazon S3 bucket that is configured as a static website</dt> <dd> <p>Specify the domain name of the Amazon S3 website endpoint in which you created the bucket, for example, <code>s3-website-us-east-2.amazonaws.com</code>. For more information about valid values, see the table <a href="http://docs.aws.amazon.com/general/latest/gr/rande.html#s3_region">Amazon Simple Storage Service (S3) Website Endpoints</a> in the <i>Amazon Web Services General Reference</i>. For more information about using S3 buckets for websites, see <a href="http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/getting-started.html">Getting Started with Amazon Route 53</a> in the <i>Amazon Route 53 Developer Guide.</i> </p> </dd> <dt>Another Amazon Route 53 resource record set</dt> <dd> <p>Specify the value of the <code>Name</code> element for a resource record set in the current hosted zone.</p> </dd> </dl></p>
     pub dns_name: String,
@@ -398,7 +398,7 @@ impl AssociateVPCCommentSerializer {
 }
 
 /// <p>A complex type that contains information about the request to associate a VPC with a private hosted zone.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct AssociateVPCWithHostedZoneRequest {
     /// <p> <i>Optional:</i> A comment about the association request.</p>
     pub comment: Option<String>,
@@ -429,7 +429,7 @@ impl AssociateVPCWithHostedZoneRequestSerializer {
     }
 }
 /// <p>A complex type that contains the response information for the <code>AssociateVPCWithHostedZone</code> request.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct AssociateVPCWithHostedZoneResponse {
     /// <p>A complex type that describes the changes made to your hosted zone.</p>
     pub change_info: ChangeInfo,
@@ -476,7 +476,7 @@ impl AssociateVPCWithHostedZoneResponseDeserializer {
     }
 }
 /// <p>The information for each resource record set that you want to change.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct Change {
     /// <p><p>The action to perform:</p> <ul> <li> <p> <code>CREATE</code>: Creates a resource record set that has the specified values.</p> </li> <li> <p> <code>DELETE</code>: Deletes a existing resource record set.</p> <important> <p>To delete the resource record set that is associated with a traffic policy instance, use <code> <a>DeleteTrafficPolicyInstance</a> </code>. Amazon Route 53 will delete the resource record set automatically. If you delete the resource record set by using <code>ChangeResourceRecordSets</code>, Amazon Route 53 doesn&#39;t automatically delete the traffic policy instance, and you&#39;ll continue to be charged for it even though it&#39;s no longer in use. </p> </important> </li> <li> <p> <code>UPSERT</code>: If a resource record set doesn&#39;t already exist, Amazon Route 53 creates it. If a resource record set does exist, Amazon Route 53 updates it with the values in the request.</p> </li> </ul></p>
     pub action: String,
@@ -532,7 +532,7 @@ impl ChangeActionSerializer {
 }
 
 /// <p>The information for a change request.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct ChangeBatch {
     /// <p>Information about the changes to make to the record sets.</p>
     pub changes: Vec<Change>,
@@ -566,7 +566,7 @@ impl ChangeBatchSerializer {
 }
 
 /// <p>A complex type that describes change information about changes made to your hosted zone.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct ChangeInfo {
     /// <p>A complex type that describes change information about changes made to your hosted zone.</p> <p>This element contains an ID that you use when performing a <a>GetChange</a> action to get detailed information about the change.</p>
     pub comment: Option<String>,
@@ -631,7 +631,7 @@ impl ChangeInfoDeserializer {
     }
 }
 /// <p>A complex type that contains change information for the resource record set.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct ChangeResourceRecordSetsRequest {
     /// <p>A complex type that contains an optional comment and the <code>Changes</code> element.</p>
     pub change_batch: ChangeBatch,
@@ -657,7 +657,7 @@ impl ChangeResourceRecordSetsRequestSerializer {
     }
 }
 /// <p>A complex type containing the response for the request.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct ChangeResourceRecordSetsResponse {
     /// <p>A complex type that contains information about changes made to your hosted zone.</p> <p>This element contains an ID that you use when performing a <a>GetChange</a> action to get detailed information about the change.</p>
     pub change_info: ChangeInfo,
@@ -718,7 +718,7 @@ impl ChangeStatusDeserializer {
     }
 }
 /// <p>A complex type that contains information about the tags that you want to add, edit, or delete.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct ChangeTagsForResourceRequest {
     /// <p>A complex type that contains a list of the tags that you want to add to the specified health check or hosted zone and/or the tags that you want to edit <code>Value</code> for.</p> <p>You can add a maximum of 10 tags to a health check or a hosted zone.</p>
     pub add_tags: Option<Vec<Tag>>,
@@ -753,7 +753,7 @@ impl ChangeTagsForResourceRequestSerializer {
     }
 }
 /// <p>Empty response for the request.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct ChangeTagsForResourceResponse;
 
 struct ChangeTagsForResourceResponseDeserializer;
@@ -901,7 +901,7 @@ impl ChildHealthCheckListSerializer {
 }
 
 /// <p>A complex type that contains information about the CloudWatch alarm that Amazon Route 53 is monitoring for this health check.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct CloudWatchAlarmConfiguration {
     /// <p>For the metric that the CloudWatch alarm is associated with, the arithmetic operation that is used for the comparison.</p>
     pub comparison_operator: String,
@@ -1080,7 +1080,7 @@ impl ComparisonOperatorDeserializer {
     }
 }
 /// <p>A complex type that contains the health check request information.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct CreateHealthCheckRequest {
     /// <p><p>A unique string that identifies the request and that allows you to retry a failed <code>CreateHealthCheck</code> request without the risk of creating two identical health checks:</p> <ul> <li> <p>If you send a <code>CreateHealthCheck</code> request with the same <code>CallerReference</code> and settings as a previous request, and if the health check doesn&#39;t exist, Amazon Route 53 creates the health check. If the health check does exist, Amazon Route 53 returns the settings for the existing health check.</p> </li> <li> <p>If you send a <code>CreateHealthCheck</code> request with the same <code>CallerReference</code> as a deleted health check, regardless of the settings, Amazon Route 53 returns a <code>HealthCheckAlreadyExists</code> error.</p> </li> <li> <p>If you send a <code>CreateHealthCheck</code> request with the same <code>CallerReference</code> as an existing health check but with different settings, Amazon Route 53 returns a <code>HealthCheckAlreadyExists</code> error.</p> </li> <li> <p>If you send a <code>CreateHealthCheck</code> request with a unique <code>CallerReference</code> but settings identical to an existing health check, Amazon Route 53 creates the health check.</p> </li> </ul></p>
     pub caller_reference: String,
@@ -1115,7 +1115,7 @@ impl CreateHealthCheckRequestSerializer {
     }
 }
 /// <p>A complex type containing the response information for the new health check.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct CreateHealthCheckResponse {
     /// <p>A complex type that contains identifying information about the health check.</p>
     pub health_check: HealthCheck,
@@ -1164,7 +1164,7 @@ impl CreateHealthCheckResponseDeserializer {
     }
 }
 /// <p>A complex type that contains information about the request to create a hosted zone.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct CreateHostedZoneRequest {
     /// <p>A unique string that identifies the request and that allows failed <code>CreateHostedZone</code> requests to be retried without the risk of executing the operation twice. You must use a unique <code>CallerReference</code> string every time you submit a <code>CreateHostedZone</code> request. <code>CallerReference</code> can be any unique string, for example, a date/time stamp.</p>
     pub caller_reference: String,
@@ -1206,7 +1206,7 @@ impl CreateHostedZoneRequestSerializer {
     }
 }
 /// <p>A complex type containing the response information for the hosted zone.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct CreateHostedZoneResponse {
     /// <p>A complex type that contains information about the <code>CreateHostedZone</code> request.</p>
     pub change_info: ChangeInfo,
@@ -1273,7 +1273,7 @@ impl CreateHostedZoneResponseDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct CreateQueryLoggingConfigRequest {
     /// <p>The Amazon Resource Name (ARN) for the log group that you want to Amazon Route 53 to send query logs to. This is the format of the ARN:</p> <p>arn:aws:logs:<i>region</i>:<i>account-id</i>:log-group:<i>log_group_name</i> </p> <p>To get the ARN for a log group, you can use the CloudWatch console, the <a href="http://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_DescribeLogGroups.html">DescribeLogGroups</a> API action, the <a href="http://docs.aws.amazon.com/cli/latest/reference/logs/describe-log-groups.html">describe-log-groups</a> command, or the applicable command in one of the AWS SDKs.</p>
     pub cloud_watch_logs_log_group_arn: String,
@@ -1303,7 +1303,7 @@ impl CreateQueryLoggingConfigRequestSerializer {
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct CreateQueryLoggingConfigResponse {
     /// <p>The unique URL representing the new query logging configuration.</p>
     pub location: String,
@@ -1354,7 +1354,7 @@ impl CreateQueryLoggingConfigResponseDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct CreateReusableDelegationSetRequest {
     /// <p>A unique string that identifies the request, and that allows you to retry failed <code>CreateReusableDelegationSet</code> requests without the risk of executing the operation twice. You must use a unique <code>CallerReference</code> string every time you submit a <code>CreateReusableDelegationSet</code> request. <code>CallerReference</code> can be any unique string, for example a date/time stamp.</p>
     pub caller_reference: String,
@@ -1382,7 +1382,7 @@ impl CreateReusableDelegationSetRequestSerializer {
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct CreateReusableDelegationSetResponse {
     /// <p>A complex type that contains name server information.</p>
     pub delegation_set: DelegationSet,
@@ -1433,7 +1433,7 @@ impl CreateReusableDelegationSetResponseDeserializer {
     }
 }
 /// <p>A complex type that contains information about the resource record sets that you want to create based on a specified traffic policy.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct CreateTrafficPolicyInstanceRequest {
     /// <p>The ID of the hosted zone in which you want Amazon Route 53 to create resource record sets by using the configuration in a traffic policy.</p>
     pub hosted_zone_id: String,
@@ -1477,7 +1477,7 @@ impl CreateTrafficPolicyInstanceRequestSerializer {
     }
 }
 /// <p>A complex type that contains the response information for the <code>CreateTrafficPolicyInstance</code> request.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct CreateTrafficPolicyInstanceResponse {
     /// <p>A unique URL that represents a new traffic policy instance.</p>
     pub location: String,
@@ -1529,7 +1529,7 @@ impl CreateTrafficPolicyInstanceResponseDeserializer {
     }
 }
 /// <p>A complex type that contains information about the traffic policy that you want to create.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct CreateTrafficPolicyRequest {
     /// <p>(Optional) Any comments that you want to include about the traffic policy.</p>
     pub comment: Option<String>,
@@ -1561,7 +1561,7 @@ impl CreateTrafficPolicyRequestSerializer {
     }
 }
 /// <p>A complex type that contains the response information for the <code>CreateTrafficPolicy</code> request.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct CreateTrafficPolicyResponse {
     /// <p>A unique URL that represents a new traffic policy.</p>
     pub location: String,
@@ -1612,7 +1612,7 @@ impl CreateTrafficPolicyResponseDeserializer {
     }
 }
 /// <p>A complex type that contains information about the traffic policy that you want to create a new version for.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct CreateTrafficPolicyVersionRequest {
     /// <p>The comment that you specified in the <code>CreateTrafficPolicyVersion</code> request, if any.</p>
     pub comment: Option<String>,
@@ -1643,7 +1643,7 @@ impl CreateTrafficPolicyVersionRequestSerializer {
     }
 }
 /// <p>A complex type that contains the response information for the <code>CreateTrafficPolicyVersion</code> request.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct CreateTrafficPolicyVersionResponse {
     /// <p>A unique URL that represents a new traffic policy version.</p>
     pub location: String,
@@ -1694,7 +1694,7 @@ impl CreateTrafficPolicyVersionResponseDeserializer {
     }
 }
 /// <p>A complex type that contains information about the request to authorize associating a VPC with your private hosted zone. Authorization is only required when a private hosted zone and a VPC were created by using different accounts.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct CreateVPCAssociationAuthorizationRequest {
     /// <p>The ID of the private hosted zone that you want to authorize associating a VPC with.</p>
     pub hosted_zone_id: String,
@@ -1720,7 +1720,7 @@ impl CreateVPCAssociationAuthorizationRequestSerializer {
     }
 }
 /// <p>A complex type that contains the response information from a <code>CreateVPCAssociationAuthorization</code> request.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct CreateVPCAssociationAuthorizationResponse {
     /// <p>The ID of the hosted zone that you authorized associating a VPC with.</p>
     pub hosted_zone_id: String,
@@ -1821,7 +1821,7 @@ impl DNSRCodeDeserializer {
     }
 }
 /// <p>A complex type that lists the name servers in a delegation set, as well as the <code>CallerReference</code> and the <code>ID</code> for the delegation set.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct DelegationSet {
     /// <p>The value that you specified for <code>CallerReference</code> when you created the reusable delegation set.</p>
     pub caller_reference: Option<String>,
@@ -1965,14 +1965,14 @@ impl DelegationSetsDeserializer {
     }
 }
 /// <p>This action deletes a health check.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct DeleteHealthCheckRequest {
     /// <p>The ID of the health check that you want to delete.</p>
     pub health_check_id: String,
 }
 
 /// <p>An empty element.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct DeleteHealthCheckResponse;
 
 struct DeleteHealthCheckResponseDeserializer;
@@ -1992,14 +1992,14 @@ impl DeleteHealthCheckResponseDeserializer {
     }
 }
 /// <p>A request to delete a hosted zone.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct DeleteHostedZoneRequest {
     /// <p>The ID of the hosted zone you want to delete.</p>
     pub id: String,
 }
 
 /// <p>A complex type that contains the response to a <code>DeleteHostedZone</code> request.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct DeleteHostedZoneResponse {
     /// <p>A complex type that contains the ID, the status, and the date and time of a request to delete a hosted zone.</p>
     pub change_info: ChangeInfo,
@@ -2045,13 +2045,13 @@ impl DeleteHostedZoneResponseDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct DeleteQueryLoggingConfigRequest {
     /// <p>The ID of the configuration that you want to delete. </p>
     pub id: String,
 }
 
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct DeleteQueryLoggingConfigResponse;
 
 struct DeleteQueryLoggingConfigResponseDeserializer;
@@ -2071,14 +2071,14 @@ impl DeleteQueryLoggingConfigResponseDeserializer {
     }
 }
 /// <p>A request to delete a reusable delegation set.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct DeleteReusableDelegationSetRequest {
     /// <p>The ID of the reusable delegation set that you want to delete.</p>
     pub id: String,
 }
 
 /// <p>An empty element.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct DeleteReusableDelegationSetResponse;
 
 struct DeleteReusableDelegationSetResponseDeserializer;
@@ -2098,14 +2098,14 @@ impl DeleteReusableDelegationSetResponseDeserializer {
     }
 }
 /// <p>A request to delete a specified traffic policy instance.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct DeleteTrafficPolicyInstanceRequest {
     /// <p><p>The ID of the traffic policy instance that you want to delete. </p> <important> <p>When you delete a traffic policy instance, Amazon Route 53 also deletes all of the resource record sets that were created when you created the traffic policy instance.</p> </important></p>
     pub id: String,
 }
 
 /// <p>An empty element.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct DeleteTrafficPolicyInstanceResponse;
 
 struct DeleteTrafficPolicyInstanceResponseDeserializer;
@@ -2125,7 +2125,7 @@ impl DeleteTrafficPolicyInstanceResponseDeserializer {
     }
 }
 /// <p>A request to delete a specified traffic policy version.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct DeleteTrafficPolicyRequest {
     /// <p>The ID of the traffic policy that you want to delete.</p>
     pub id: String,
@@ -2134,7 +2134,7 @@ pub struct DeleteTrafficPolicyRequest {
 }
 
 /// <p>An empty element.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct DeleteTrafficPolicyResponse;
 
 struct DeleteTrafficPolicyResponseDeserializer;
@@ -2154,7 +2154,7 @@ impl DeleteTrafficPolicyResponseDeserializer {
     }
 }
 /// <p>A complex type that contains information about the request to remove authorization to associate a VPC that was created by one AWS account with a hosted zone that was created with a different AWS account. </p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct DeleteVPCAssociationAuthorizationRequest {
     /// <p>When removing authorization to associate a VPC that was created by one AWS account with a hosted zone that was created with a different AWS account, the ID of the hosted zone.</p>
     pub hosted_zone_id: String,
@@ -2180,7 +2180,7 @@ impl DeleteVPCAssociationAuthorizationRequestSerializer {
     }
 }
 /// <p>Empty response for the request.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct DeleteVPCAssociationAuthorizationResponse;
 
 struct DeleteVPCAssociationAuthorizationResponseDeserializer;
@@ -2200,7 +2200,7 @@ impl DeleteVPCAssociationAuthorizationResponseDeserializer {
     }
 }
 /// <p>For the metric that the CloudWatch alarm is associated with, a complex type that contains information about one dimension.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct Dimension {
     /// <p>For the metric that the CloudWatch alarm is associated with, the name of one dimension.</p>
     pub name: String,
@@ -2326,7 +2326,7 @@ impl DisassociateVPCCommentSerializer {
 }
 
 /// <p>A complex type that contains information about the VPC that you want to disassociate from a specified private hosted zone.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct DisassociateVPCFromHostedZoneRequest {
     /// <p> <i>Optional:</i> A comment about the disassociation request.</p>
     pub comment: Option<String>,
@@ -2357,7 +2357,7 @@ impl DisassociateVPCFromHostedZoneRequestSerializer {
     }
 }
 /// <p>A complex type that contains the response information for the disassociate request.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct DisassociateVPCFromHostedZoneResponse {
     /// <p>A complex type that describes the changes made to the specified private hosted zone.</p>
     pub change_info: ChangeInfo,
@@ -2523,7 +2523,7 @@ impl FullyQualifiedDomainNameSerializer {
 }
 
 /// <p>A complex type that contains information about a geo location.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct GeoLocation {
     /// <p>The two-letter code for the continent.</p> <p>Valid values: <code>AF</code> | <code>AN</code> | <code>AS</code> | <code>EU</code> | <code>OC</code> | <code>NA</code> | <code>SA</code> </p> <p>Constraint: Specifying <code>ContinentCode</code> with either <code>CountryCode</code> or <code>SubdivisionCode</code> returns an <code>InvalidInput</code> error.</p>
     pub continent_code: Option<String>,
@@ -2728,7 +2728,7 @@ impl GeoLocationCountryNameDeserializer {
     }
 }
 /// <p>A complex type that contains the codes and full continent, country, and subdivision names for the specified <code>geolocation</code> code.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct GeoLocationDetails {
     /// <p>The two-letter code for the continent.</p>
     pub continent_code: Option<String>,
@@ -2911,14 +2911,14 @@ impl GeoLocationSubdivisionNameDeserializer {
     }
 }
 /// <p>A complex type that contains information about the request to create a hosted zone.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct GetAccountLimitRequest {
     /// <p><p>The limit that you want to get. Valid values include the following:</p> <ul> <li> <p> <b>MAX<em>HEALTH</em>CHECKS<em>BY</em>OWNER</b>: The maximum number of health checks that you can create using the current account.</p> </li> <li> <p> <b>MAX<em>HOSTED</em>ZONES<em>BY</em>OWNER</b>: The maximum number of hosted zones that you can create using the current account.</p> </li> <li> <p> <b>MAX<em>REUSABLE</em>DELEGATION<em>SETS</em>BY<em>OWNER</b>: The maximum number of reusable delegation sets that you can create using the current account.</p> </li> <li> <p> <b>MAX</em>TRAFFIC<em>POLICIES</em>BY<em>OWNER</b>: The maximum number of traffic policies that you can create using the current account.</p> </li> <li> <p> <b>MAX</em>TRAFFIC<em>POLICY</em>INSTANCES<em>BY</em>OWNER</b>: The maximum number of traffic policy instances that you can create using the current account. (Traffic policy instances are referred to as traffic flow policy records in the Amazon Route 53 console.)</p> </li> </ul></p>
     pub type_: String,
 }
 
 /// <p>A complex type that contains the requested limit. </p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct GetAccountLimitResponse {
     /// <p>The current number of entities that you have created of the specified type. For example, if you specified <code>MAX_HEALTH_CHECKS_BY_OWNER</code> for the value of <code>Type</code> in the request, the value of <code>Count</code> is the current number of health checks that you have created using the current account.</p>
     pub count: i64,
@@ -2969,14 +2969,14 @@ impl GetAccountLimitResponseDeserializer {
     }
 }
 /// <p>The input for a GetChange request.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct GetChangeRequest {
     /// <p>The ID of the change batch request. The value that you specify here is the value that <code>ChangeResourceRecordSets</code> returned in the <code>Id</code> element when you submitted the request.</p>
     pub id: String,
 }
 
 /// <p>A complex type that contains the <code>ChangeInfo</code> element.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct GetChangeResponse {
     /// <p>A complex type that contains information about the specified change batch.</p>
     pub change_info: ChangeInfo,
@@ -3022,10 +3022,10 @@ impl GetChangeResponseDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct GetCheckerIpRangesRequest;
 
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct GetCheckerIpRangesResponse {
     pub checker_ip_ranges: Vec<String>,
 }
@@ -3073,7 +3073,7 @@ impl GetCheckerIpRangesResponseDeserializer {
     }
 }
 /// <p>A request for information about whether a specified geographic location is supported for Amazon Route 53 geolocation resource record sets.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct GetGeoLocationRequest {
     /// <p><p>Amazon Route 53 supports the following continent codes:</p> <ul> <li> <p> <b>AF</b>: Africa</p> </li> <li> <p> <b>AN</b>: Antarctica</p> </li> <li> <p> <b>AS</b>: Asia</p> </li> <li> <p> <b>EU</b>: Europe</p> </li> <li> <p> <b>OC</b>: Oceania</p> </li> <li> <p> <b>NA</b>: North America</p> </li> <li> <p> <b>SA</b>: South America</p> </li> </ul></p>
     pub continent_code: Option<String>,
@@ -3084,7 +3084,7 @@ pub struct GetGeoLocationRequest {
 }
 
 /// <p>A complex type that contains the response information for the specified geolocation code.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct GetGeoLocationResponse {
     /// <p>A complex type that contains the codes and full continent, country, and subdivision names for the specified geolocation code.</p>
     pub geo_location_details: GeoLocationDetails,
@@ -3134,11 +3134,11 @@ impl GetGeoLocationResponseDeserializer {
     }
 }
 /// <p>A request for the number of health checks that are associated with the current AWS account.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct GetHealthCheckCountRequest;
 
 /// <p>A complex type that contains the response to a <code>GetHealthCheckCount</code> request.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct GetHealthCheckCountResponse {
     /// <p>The number of health checks associated with the current AWS account.</p>
     pub health_check_count: i64,
@@ -3187,14 +3187,14 @@ impl GetHealthCheckCountResponseDeserializer {
     }
 }
 /// <p>A request for the reason that a health check failed most recently.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct GetHealthCheckLastFailureReasonRequest {
     /// <p><p>The ID for the health check for which you want the last failure reason. When you created the health check, <code>CreateHealthCheck</code> returned the ID in the response, in the <code>HealthCheckId</code> element.</p> <note> <p>If you want to get the last failure reason for a calculated health check, you must use the Amazon Route 53 console or the CloudWatch console. You can&#39;t use <code>GetHealthCheckLastFailureReason</code> for a calculated health check.</p> </note></p>
     pub health_check_id: String,
 }
 
 /// <p>A complex type that contains the response to a <code>GetHealthCheckLastFailureReason</code> request.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct GetHealthCheckLastFailureReasonResponse {
     /// <p>A list that contains one <code>Observation</code> element for each Amazon Route 53 health checker that is reporting a last failure reason. </p>
     pub health_check_observations: Vec<HealthCheckObservation>,
@@ -3244,14 +3244,14 @@ impl GetHealthCheckLastFailureReasonResponseDeserializer {
     }
 }
 /// <p>A request to get information about a specified health check. </p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct GetHealthCheckRequest {
     /// <p>The identifier that Amazon Route 53 assigned to the health check when you created it. When you add or update a resource record set, you use this value to specify which health check to use. The value can be up to 64 characters long.</p>
     pub health_check_id: String,
 }
 
 /// <p>A complex type that contains the response to a <code>GetHealthCheck</code> request.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct GetHealthCheckResponse {
     /// <p>A complex type that contains information about one health check that is associated with the current AWS account.</p>
     pub health_check: HealthCheck,
@@ -3298,14 +3298,14 @@ impl GetHealthCheckResponseDeserializer {
     }
 }
 /// <p>A request to get the status for a health check.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct GetHealthCheckStatusRequest {
     /// <p><p>The ID for the health check that you want the current status for. When you created the health check, <code>CreateHealthCheck</code> returned the ID in the response, in the <code>HealthCheckId</code> element.</p> <note> <p>If you want to check the status of a calculated health check, you must use the Amazon Route 53 console or the CloudWatch console. You can&#39;t use <code>GetHealthCheckStatus</code> to get the status of a calculated health check.</p> </note></p>
     pub health_check_id: String,
 }
 
 /// <p>A complex type that contains the response to a <code>GetHealthCheck</code> request.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct GetHealthCheckStatusResponse {
     /// <p>A list that contains one <code>HealthCheckObservation</code> element for each Amazon Route 53 health checker that is reporting a status about the health check endpoint.</p>
     pub health_check_observations: Vec<HealthCheckObservation>,
@@ -3355,11 +3355,11 @@ impl GetHealthCheckStatusResponseDeserializer {
     }
 }
 /// <p>A request to retrieve a count of all the hosted zones that are associated with the current AWS account.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct GetHostedZoneCountRequest;
 
 /// <p>A complex type that contains the response to a <code>GetHostedZoneCount</code> request.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct GetHostedZoneCountResponse {
     /// <p>The total number of public and private hosted zones that are associated with the current AWS account.</p>
     pub hosted_zone_count: i64,
@@ -3408,7 +3408,7 @@ impl GetHostedZoneCountResponseDeserializer {
     }
 }
 /// <p>A complex type that contains information about the request to create a hosted zone.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct GetHostedZoneLimitRequest {
     /// <p>The ID of the hosted zone that you want to get a limit for.</p>
     pub hosted_zone_id: String,
@@ -3417,7 +3417,7 @@ pub struct GetHostedZoneLimitRequest {
 }
 
 /// <p>A complex type that contains the requested limit. </p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct GetHostedZoneLimitResponse {
     /// <p>The current number of entities that you have created of the specified type. For example, if you specified <code>MAX_RRSETS_BY_ZONE</code> for the value of <code>Type</code> in the request, the value of <code>Count</code> is the current number of records that you have created in the specified hosted zone.</p>
     pub count: i64,
@@ -3468,14 +3468,14 @@ impl GetHostedZoneLimitResponseDeserializer {
     }
 }
 /// <p>A request to get information about a specified hosted zone. </p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct GetHostedZoneRequest {
     /// <p>The ID of the hosted zone that you want to get information about.</p>
     pub id: String,
 }
 
 /// <p>A complex type that contain the response to a <code>GetHostedZone</code> request.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct GetHostedZoneResponse {
     /// <p>A complex type that lists the Amazon Route 53 name servers for the specified hosted zone.</p>
     pub delegation_set: Option<DelegationSet>,
@@ -3534,13 +3534,13 @@ impl GetHostedZoneResponseDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct GetQueryLoggingConfigRequest {
     /// <p>The ID of the configuration for DNS query logging that you want to get information about.</p>
     pub id: String,
 }
 
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct GetQueryLoggingConfigResponse {
     /// <p>A complex type that contains information about the query logging configuration that you specified in a <a>GetQueryLoggingConfig</a> request.</p>
     pub query_logging_config: QueryLoggingConfig,
@@ -3590,7 +3590,7 @@ impl GetQueryLoggingConfigResponseDeserializer {
     }
 }
 /// <p>A complex type that contains information about the request to create a hosted zone.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct GetReusableDelegationSetLimitRequest {
     /// <p>The ID of the delegation set that you want to get the limit for.</p>
     pub delegation_set_id: String,
@@ -3599,7 +3599,7 @@ pub struct GetReusableDelegationSetLimitRequest {
 }
 
 /// <p>A complex type that contains the requested limit. </p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct GetReusableDelegationSetLimitResponse {
     /// <p>The current number of hosted zones that you can associate with the specified reusable delegation set.</p>
     pub count: i64,
@@ -3653,14 +3653,14 @@ impl GetReusableDelegationSetLimitResponseDeserializer {
     }
 }
 /// <p>A request to get information about a specified reusable delegation set.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct GetReusableDelegationSetRequest {
     /// <p>The ID of the reusable delegation set that you want to get a list of name servers for.</p>
     pub id: String,
 }
 
 /// <p>A complex type that contains the response to the <code>GetReusableDelegationSet</code> request.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct GetReusableDelegationSetResponse {
     /// <p>A complex type that contains information about the reusable delegation set.</p>
     pub delegation_set: DelegationSet,
@@ -3709,11 +3709,11 @@ impl GetReusableDelegationSetResponseDeserializer {
     }
 }
 /// <p>Request to get the number of traffic policy instances that are associated with the current AWS account.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct GetTrafficPolicyInstanceCountRequest;
 
 /// <p>A complex type that contains information about the resource record sets that Amazon Route 53 created based on a specified traffic policy.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct GetTrafficPolicyInstanceCountResponse {
     /// <p>The number of traffic policy instances that are associated with the current AWS account.</p>
     pub traffic_policy_instance_count: i64,
@@ -3763,14 +3763,14 @@ impl GetTrafficPolicyInstanceCountResponseDeserializer {
     }
 }
 /// <p>Gets information about a specified traffic policy instance.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct GetTrafficPolicyInstanceRequest {
     /// <p>The ID of the traffic policy instance that you want to get information about.</p>
     pub id: String,
 }
 
 /// <p>A complex type that contains information about the resource record sets that Amazon Route 53 created based on a specified traffic policy.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct GetTrafficPolicyInstanceResponse {
     /// <p>A complex type that contains settings for the traffic policy instance.</p>
     pub traffic_policy_instance: TrafficPolicyInstance,
@@ -3820,7 +3820,7 @@ impl GetTrafficPolicyInstanceResponseDeserializer {
     }
 }
 /// <p>Gets information about a specific traffic policy version.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct GetTrafficPolicyRequest {
     /// <p>The ID of the traffic policy that you want to get information about.</p>
     pub id: String,
@@ -3829,7 +3829,7 @@ pub struct GetTrafficPolicyRequest {
 }
 
 /// <p>A complex type that contains the response information for the request.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct GetTrafficPolicyResponse {
     /// <p>A complex type that contains settings for the specified traffic policy.</p>
     pub traffic_policy: TrafficPolicy,
@@ -3878,7 +3878,7 @@ impl GetTrafficPolicyResponseDeserializer {
     }
 }
 /// <p>A complex type that contains information about one health check that is associated with the current AWS account.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct HealthCheck {
     /// <p>A unique string that you specified when you created the health check.</p>
     pub caller_reference: String,
@@ -3966,7 +3966,7 @@ impl HealthCheckDeserializer {
     }
 }
 /// <p>A complex type that contains information about the health check.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct HealthCheckConfig {
     /// <p>A complex type that identifies the CloudWatch alarm that you want Amazon Route 53 health checkers to use to determine whether this health check is healthy.</p>
     pub alarm_identifier: Option<AlarmIdentifier>,
@@ -4339,7 +4339,7 @@ impl HealthCheckNonceSerializer {
 }
 
 /// <p>A complex type that contains the last failure reason as reported by one Amazon Route 53 health checker.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct HealthCheckObservation {
     /// <p>The IP address of the Amazon Route 53 health checker that provided the failure reason in <code>StatusReport</code>.</p>
     pub ip_address: Option<String>,
@@ -4692,7 +4692,7 @@ impl HealthThresholdSerializer {
 }
 
 /// <p>A complex type that contains general information about the hosted zone.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct HostedZone {
     /// <p>The value that you specified for <code>CallerReference</code> when you created the hosted zone.</p>
     pub caller_reference: String,
@@ -4774,7 +4774,7 @@ impl HostedZoneDeserializer {
     }
 }
 /// <p>A complex type that contains an optional comment about your hosted zone. If you don't want to specify a comment, omit both the <code>HostedZoneConfig</code> and <code>Comment</code> elements.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct HostedZoneConfig {
     /// <p>Any comments that you want to include about the hosted zone.</p>
     pub comment: Option<String>,
@@ -4878,7 +4878,7 @@ impl HostedZoneCountDeserializer {
     }
 }
 /// <p>A complex type that contains the type of limit that you specified in the request and the current value for that limit.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct HostedZoneLimit {
     /// <p><p>The limit that you requested. Valid values include the following:</p> <ul> <li> <p> <b>MAX<em>RRSETS</em>BY<em>ZONE</b>: The maximum number of records that you can create in the specified hosted zone.</p> </li> <li> <p> <b>MAX</em>VPCS<em>ASSOCIATED</em>BY_ZONE</b>: The maximum number of Amazon VPCs that you can associate with the specified private hosted zone.</p> </li> </ul></p>
     pub type_: String,
@@ -5190,7 +5190,7 @@ impl LimitValueDeserializer {
     }
 }
 /// <p>If a health check or hosted zone was created by another service, <code>LinkedService</code> is a complex type that describes the service that created the resource. When a resource is created by another service, you can't edit or delete it using Amazon Route 53. </p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct LinkedService {
     /// <p>If the health check or hosted zone was created by another service, an optional description that can be provided by the other service. When a resource is created by another service, you can't edit or delete it using Amazon Route 53. </p>
     pub description: Option<String>,
@@ -5245,7 +5245,7 @@ impl LinkedServiceDeserializer {
     }
 }
 /// <p>A request to get a list of geographic locations that Amazon Route 53 supports for geolocation resource record sets. </p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct ListGeoLocationsRequest {
     /// <p>(Optional) The maximum number of geolocations to be included in the response body for this request. If more than <code>MaxItems</code> geolocations remain to be listed, then the value of the <code>IsTruncated</code> element in the response is <code>true</code>.</p>
     pub max_items: Option<String>,
@@ -5258,7 +5258,7 @@ pub struct ListGeoLocationsRequest {
 }
 
 /// <p>A complex type containing the response information for the request.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct ListGeoLocationsResponse {
     /// <p>A complex type that contains one <code>GeoLocationDetails</code> element for each location that Amazon Route 53 supports for geolocation.</p>
     pub geo_location_details_list: Vec<GeoLocationDetails>,
@@ -5347,7 +5347,7 @@ impl ListGeoLocationsResponseDeserializer {
     }
 }
 /// <p>A request to retrieve a list of the health checks that are associated with the current AWS account.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct ListHealthChecksRequest {
     /// <p>If the value of <code>IsTruncated</code> in the previous response was <code>true</code>, you have more health checks. To get another group, submit another <code>ListHealthChecks</code> request. </p> <p>For the value of <code>marker</code>, specify the value of <code>NextMarker</code> from the previous response, which is the ID of the first health check that Amazon Route 53 will return if you submit another request.</p> <p>If the value of <code>IsTruncated</code> in the previous response was <code>false</code>, there are no more health checks to get.</p>
     pub marker: Option<String>,
@@ -5356,7 +5356,7 @@ pub struct ListHealthChecksRequest {
 }
 
 /// <p>A complex type that contains the response to a <code>ListHealthChecks</code> request.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct ListHealthChecksResponse {
     /// <p>A complex type that contains one <code>HealthCheck</code> element for each health check that is associated with the current AWS account.</p>
     pub health_checks: Vec<HealthCheck>,
@@ -5428,7 +5428,7 @@ impl ListHealthChecksResponseDeserializer {
     }
 }
 /// <p>Retrieves a list of the public and private hosted zones that are associated with the current AWS account in ASCII order by domain name. </p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct ListHostedZonesByNameRequest {
     /// <p>(Optional) For your first request to <code>ListHostedZonesByName</code>, include the <code>dnsname</code> parameter only if you want to specify the name of the first hosted zone in the response. If you don't include the <code>dnsname</code> parameter, Amazon Route 53 returns all of the hosted zones that were created by the current AWS account, in ASCII order. For subsequent requests, include both <code>dnsname</code> and <code>hostedzoneid</code> parameters. For <code>dnsname</code>, specify the value of <code>NextDNSName</code> from the previous response.</p>
     pub dns_name: Option<String>,
@@ -5439,7 +5439,7 @@ pub struct ListHostedZonesByNameRequest {
 }
 
 /// <p>A complex type that contains the response information for the request.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct ListHostedZonesByNameResponse {
     /// <p>For the second and subsequent calls to <code>ListHostedZonesByName</code>, <code>DNSName</code> is the value that you specified for the <code>dnsname</code> parameter in the request that produced the current response.</p>
     pub dns_name: Option<String>,
@@ -5526,7 +5526,7 @@ impl ListHostedZonesByNameResponseDeserializer {
     }
 }
 /// <p>A request to retrieve a list of the public and private hosted zones that are associated with the current AWS account.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct ListHostedZonesRequest {
     /// <p>If you're using reusable delegation sets and you want to list all of the hosted zones that are associated with a reusable delegation set, specify the ID of that reusable delegation set. </p>
     pub delegation_set_id: Option<String>,
@@ -5536,7 +5536,7 @@ pub struct ListHostedZonesRequest {
     pub max_items: Option<String>,
 }
 
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct ListHostedZonesResponse {
     /// <p>A complex type that contains general information about the hosted zone.</p>
     pub hosted_zones: Vec<HostedZone>,
@@ -5607,7 +5607,7 @@ impl ListHostedZonesResponseDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct ListQueryLoggingConfigsRequest {
     /// <p>(Optional) If you want to list the query logging configuration that is associated with a hosted zone, specify the ID in <code>HostedZoneId</code>. </p> <p>If you don't specify a hosted zone ID, <code>ListQueryLoggingConfigs</code> returns all of the configurations that are associated with the current AWS account.</p>
     pub hosted_zone_id: Option<String>,
@@ -5617,7 +5617,7 @@ pub struct ListQueryLoggingConfigsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct ListQueryLoggingConfigsResponse {
     /// <p>If a response includes the last of the query logging configurations that are associated with the current AWS account, <code>NextToken</code> doesn't appear in the response.</p> <p>If a response doesn't include the last of the configurations, you can get more configurations by submitting another <a>ListQueryLoggingConfigs</a> request. Get the value of <code>NextToken</code> that Amazon Route 53 returned in the previous response and include it in <code>NextToken</code> in the next request.</p>
     pub next_token: Option<String>,
@@ -5675,7 +5675,7 @@ impl ListQueryLoggingConfigsResponseDeserializer {
     }
 }
 /// <p>A request for the resource record sets that are associated with a specified hosted zone.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct ListResourceRecordSetsRequest {
     /// <p>The ID of the hosted zone that contains the resource record sets that you want to list.</p>
     pub hosted_zone_id: String,
@@ -5690,7 +5690,7 @@ pub struct ListResourceRecordSetsRequest {
 }
 
 /// <p>A complex type that contains list information for the resource record set.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct ListResourceRecordSetsResponse {
     /// <p>A flag that indicates whether more resource record sets remain to be listed. If your results were truncated, you can make a follow-up pagination request by using the <code>NextRecordName</code> element.</p>
     pub is_truncated: bool,
@@ -5777,7 +5777,7 @@ impl ListResourceRecordSetsResponseDeserializer {
     }
 }
 /// <p>A request to get a list of the reusable delegation sets that are associated with the current AWS account.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct ListReusableDelegationSetsRequest {
     /// <p>If the value of <code>IsTruncated</code> in the previous response was <code>true</code>, you have more reusable delegation sets. To get another group, submit another <code>ListReusableDelegationSets</code> request. </p> <p>For the value of <code>marker</code>, specify the value of <code>NextMarker</code> from the previous response, which is the ID of the first reusable delegation set that Amazon Route 53 will return if you submit another request.</p> <p>If the value of <code>IsTruncated</code> in the previous response was <code>false</code>, there are no more reusable delegation sets to get.</p>
     pub marker: Option<String>,
@@ -5786,7 +5786,7 @@ pub struct ListReusableDelegationSetsRequest {
 }
 
 /// <p>A complex type that contains information about the reusable delegation sets that are associated with the current AWS account.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct ListReusableDelegationSetsResponse {
     /// <p>A complex type that contains one <code>DelegationSet</code> element for each reusable delegation set that was created by the current AWS account.</p>
     pub delegation_sets: Vec<DelegationSet>,
@@ -5860,7 +5860,7 @@ impl ListReusableDelegationSetsResponseDeserializer {
     }
 }
 /// <p>A complex type containing information about a request for a list of the tags that are associated with an individual resource.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct ListTagsForResourceRequest {
     /// <p>The ID of the resource for which you want to retrieve tags.</p>
     pub resource_id: String,
@@ -5869,7 +5869,7 @@ pub struct ListTagsForResourceRequest {
 }
 
 /// <p>A complex type that contains information about the health checks or hosted zones for which you want to list tags.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct ListTagsForResourceResponse {
     /// <p>A <code>ResourceTagSet</code> containing tags associated with the specified resource.</p>
     pub resource_tag_set: ResourceTagSet,
@@ -5918,7 +5918,7 @@ impl ListTagsForResourceResponseDeserializer {
     }
 }
 /// <p>A complex type that contains information about the health checks or hosted zones for which you want to list tags.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct ListTagsForResourcesRequest {
     /// <p>A complex type that contains the ResourceId element for each resource for which you want to get a list of tags.</p>
     pub resource_ids: Vec<String>,
@@ -5944,7 +5944,7 @@ impl ListTagsForResourcesRequestSerializer {
     }
 }
 /// <p>A complex type containing tags for the specified resources.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct ListTagsForResourcesResponse {
     /// <p>A list of <code>ResourceTagSet</code>s containing tags associated with the specified resources.</p>
     pub resource_tag_sets: Vec<ResourceTagSet>,
@@ -5993,7 +5993,7 @@ impl ListTagsForResourcesResponseDeserializer {
     }
 }
 /// <p>A complex type that contains the information about the request to list the traffic policies that are associated with the current AWS account.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct ListTrafficPoliciesRequest {
     /// <p>(Optional) The maximum number of traffic policies that you want Amazon Route 53 to return in response to this request. If you have more than <code>MaxItems</code> traffic policies, the value of <code>IsTruncated</code> in the response is <code>true</code>, and the value of <code>TrafficPolicyIdMarker</code> is the ID of the first traffic policy that Amazon Route 53 will return if you submit another request.</p>
     pub max_items: Option<String>,
@@ -6002,7 +6002,7 @@ pub struct ListTrafficPoliciesRequest {
 }
 
 /// <p>A complex type that contains the response information for the request.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct ListTrafficPoliciesResponse {
     /// <p>A flag that indicates whether there are more traffic policies to be listed. If the response was truncated, you can get the next group of traffic policies by submitting another <code>ListTrafficPolicies</code> request and specifying the value of <code>TrafficPolicyIdMarker</code> in the <code>TrafficPolicyIdMarker</code> request parameter.</p>
     pub is_truncated: bool,
@@ -6073,7 +6073,7 @@ impl ListTrafficPoliciesResponseDeserializer {
     }
 }
 /// <p>A request for the traffic policy instances that you created in a specified hosted zone.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct ListTrafficPolicyInstancesByHostedZoneRequest {
     /// <p>The ID of the hosted zone that you want to list traffic policy instances for.</p>
     pub hosted_zone_id: String,
@@ -6086,7 +6086,7 @@ pub struct ListTrafficPolicyInstancesByHostedZoneRequest {
 }
 
 /// <p>A complex type that contains the response information for the request.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct ListTrafficPolicyInstancesByHostedZoneResponse {
     /// <p>A flag that indicates whether there are more traffic policy instances to be listed. If the response was truncated, you can get the next group of traffic policy instances by submitting another <code>ListTrafficPolicyInstancesByHostedZone</code> request and specifying the values of <code>HostedZoneIdMarker</code>, <code>TrafficPolicyInstanceNameMarker</code>, and <code>TrafficPolicyInstanceTypeMarker</code> in the corresponding request parameters.</p>
     pub is_truncated: bool,
@@ -6166,7 +6166,7 @@ impl ListTrafficPolicyInstancesByHostedZoneResponseDeserializer {
     }
 }
 /// <p>A complex type that contains the information about the request to list your traffic policy instances.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct ListTrafficPolicyInstancesByPolicyRequest {
     /// <p>If the value of <code>IsTruncated</code> in the previous response was <code>true</code>, you have more traffic policy instances. To get more traffic policy instances, submit another <code>ListTrafficPolicyInstancesByPolicy</code> request. </p> <p>For the value of <code>hostedzoneid</code>, specify the value of <code>HostedZoneIdMarker</code> from the previous response, which is the hosted zone ID of the first traffic policy instance that Amazon Route 53 will return if you submit another request.</p> <p>If the value of <code>IsTruncated</code> in the previous response was <code>false</code>, there are no more traffic policy instances to get.</p>
     pub hosted_zone_id_marker: Option<String>,
@@ -6183,7 +6183,7 @@ pub struct ListTrafficPolicyInstancesByPolicyRequest {
 }
 
 /// <p>A complex type that contains the response information for the request.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct ListTrafficPolicyInstancesByPolicyResponse {
     /// <p>If <code>IsTruncated</code> is <code>true</code>, <code>HostedZoneIdMarker</code> is the ID of the hosted zone of the first traffic policy instance in the next group of traffic policy instances.</p>
     pub hosted_zone_id_marker: Option<String>,
@@ -6270,7 +6270,7 @@ impl ListTrafficPolicyInstancesByPolicyResponseDeserializer {
     }
 }
 /// <p>A request to get information about the traffic policy instances that you created by using the current AWS account.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct ListTrafficPolicyInstancesRequest {
     /// <p>If the value of <code>IsTruncated</code> in the previous response was <code>true</code>, you have more traffic policy instances. To get more traffic policy instances, submit another <code>ListTrafficPolicyInstances</code> request. For the value of <code>HostedZoneId</code>, specify the value of <code>HostedZoneIdMarker</code> from the previous response, which is the hosted zone ID of the first traffic policy instance in the next group of traffic policy instances.</p> <p>If the value of <code>IsTruncated</code> in the previous response was <code>false</code>, there are no more traffic policy instances to get.</p>
     pub hosted_zone_id_marker: Option<String>,
@@ -6283,7 +6283,7 @@ pub struct ListTrafficPolicyInstancesRequest {
 }
 
 /// <p>A complex type that contains the response information for the request.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct ListTrafficPolicyInstancesResponse {
     /// <p>If <code>IsTruncated</code> is <code>true</code>, <code>HostedZoneIdMarker</code> is the ID of the hosted zone of the first traffic policy instance that Amazon Route 53 will return if you submit another <code>ListTrafficPolicyInstances</code> request. </p>
     pub hosted_zone_id_marker: Option<String>,
@@ -6370,7 +6370,7 @@ impl ListTrafficPolicyInstancesResponseDeserializer {
     }
 }
 /// <p>A complex type that contains the information about the request to list your traffic policies.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct ListTrafficPolicyVersionsRequest {
     /// <p>Specify the value of <code>Id</code> of the traffic policy for which you want to list all versions.</p>
     pub id: String,
@@ -6381,7 +6381,7 @@ pub struct ListTrafficPolicyVersionsRequest {
 }
 
 /// <p>A complex type that contains the response information for the request.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct ListTrafficPolicyVersionsResponse {
     /// <p>A flag that indicates whether there are more traffic policies to be listed. If the response was truncated, you can get the next group of traffic policies by submitting another <code>ListTrafficPolicyVersions</code> request and specifying the value of <code>NextMarker</code> in the <code>marker</code> parameter.</p>
     pub is_truncated: bool,
@@ -6451,7 +6451,7 @@ impl ListTrafficPolicyVersionsResponseDeserializer {
     }
 }
 /// <p>A complex type that contains information about that can be associated with your hosted zone.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct ListVPCAssociationAuthorizationsRequest {
     /// <p>The ID of the hosted zone for which you want a list of VPCs that can be associated with the hosted zone.</p>
     pub hosted_zone_id: String,
@@ -6462,7 +6462,7 @@ pub struct ListVPCAssociationAuthorizationsRequest {
 }
 
 /// <p>A complex type that contains the response information for the request.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct ListVPCAssociationAuthorizationsResponse {
     /// <p>The ID of the hosted zone that you can associate the listed VPCs with.</p>
     pub hosted_zone_id: String,
@@ -6837,7 +6837,7 @@ impl PortSerializer {
 }
 
 /// <p>A complex type that contains information about a configuration for DNS query logging.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct QueryLoggingConfig {
     /// <p>The Amazon Resource Name (ARN) of the CloudWatch Logs log group that Amazon Route 53 is publishing logs to.</p>
     pub cloud_watch_logs_log_group_arn: String,
@@ -7283,7 +7283,7 @@ impl ResourcePathSerializer {
 }
 
 /// <p><p>Information specific to the resource record.</p> <note> <p>If you&#39;re creating an alias resource record set, omit <code>ResourceRecord</code>.</p> </note></p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct ResourceRecord {
     /// <p><p>The current or new DNS record value, not to exceed 4,000 characters. In the case of a <code>DELETE</code> action, if the current value does not match the actual value, an error is returned. For descriptions about how to format <code>Value</code> for different record types, see <a href="http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/ResourceRecordTypes.html">Supported DNS Resource Record Types</a> in the <i>Amazon Route 53 Developer Guide</i>.</p> <p>You can specify more than one value for all record types except <code>CNAME</code> and <code>SOA</code>. </p> <note> <p>If you&#39;re creating an alias resource record set, omit <code>Value</code>.</p> </note></p>
     pub value: String,
@@ -7352,7 +7352,7 @@ impl ResourceRecordSerializer {
 }
 
 /// <p>Information about the resource record set to create or delete.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct ResourceRecordSet {
     /// <p><p> <i>Alias resource record sets only:</i> Information about the CloudFront distribution, AWS Elastic Beanstalk environment, ELB load balancer, Amazon S3 bucket, or Amazon Route 53 resource record set to which you&#39;re redirecting queries. The AWS Elastic Beanstalk environment must have a regionalized subdomain.</p> <p>If you&#39;re creating resource records sets for a private hosted zone, note the following:</p> <ul> <li> <p>You can&#39;t create alias resource record sets for CloudFront distributions in a private hosted zone.</p> </li> <li> <p>Creating geolocation alias resource record sets or latency alias resource record sets in a private hosted zone is unsupported.</p> </li> <li> <p>For information about creating failover resource record sets in a private hosted zone, see <a href="http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/dns-failover-private-hosted-zones.html">Configuring Failover in a Private Hosted Zone</a> in the <i>Amazon Route 53 Developer Guide</i>.</p> </li> </ul></p>
     pub alias_target: Option<AliasTarget>,
@@ -7876,7 +7876,7 @@ impl ResourceRecordsSerializer {
 }
 
 /// <p>A complex type containing a resource and its associated tags.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct ResourceTagSet {
     /// <p>The ID for the specified resource.</p>
     pub resource_id: Option<String>,
@@ -7981,7 +7981,7 @@ impl ResourceTagSetListDeserializer {
     }
 }
 /// <p>A complex type that contains the type of limit that you specified in the request and the current value for that limit.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct ReusableDelegationSetLimit {
     /// <p>The limit that you requested: <code>MAX_ZONES_BY_REUSABLE_DELEGATION_SET</code>, the maximum number of hosted zones that you can associate with the specified reusable delegation set.</p>
     pub type_: String,
@@ -8147,7 +8147,7 @@ impl StatusDeserializer {
     }
 }
 /// <p>A complex type that contains the status that one Amazon Route 53 health checker reports and the time of the health check.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct StatusReport {
     /// <p>The date and time that the health checker performed the health check in <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO 8601 format</a> and Coordinated Universal Time (UTC). For example, the value <code>2017-03-27T17:48:16.751Z</code> represents March 27, 2017 at 17:48:16.751 UTC.</p>
     pub checked_time: Option<String>,
@@ -8257,7 +8257,7 @@ impl TTLSerializer {
 }
 
 /// <p>A complex type that contains information about a tag that you want to add or edit for the specified health check or hosted zone.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct Tag {
     /// <p><p>The value of <code>Key</code> depends on the operation that you want to perform:</p> <ul> <li> <p> <b>Add a tag to a health check or hosted zone</b>: <code>Key</code> is the name that you want to give the new tag.</p> </li> <li> <p> <b>Edit a tag</b>: <code>Key</code> is the name of the tag that you want to change the <code>Value</code> for.</p> </li> <li> <p> <b> Delete a key</b>: <code>Key</code> is the name of the tag you want to remove.</p> </li> <li> <p> <b>Give a name to a health check</b>: Edit the default <code>Name</code> tag. In the Amazon Route 53 console, the list of your health checks includes a <b>Name</b> column that lets you see the name that you&#39;ve given to each health check.</p> </li> </ul></p>
     pub key: Option<String>,
@@ -8582,7 +8582,7 @@ impl TagValueSerializer {
 }
 
 /// <p>Gets the value that Amazon Route 53 returns in response to a DNS request for a specified record name and type. You can optionally specify the IP address of a DNS resolver, an EDNS0 client subnet IP address, and a subnet mask. </p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct TestDNSAnswerRequest {
     /// <p>If the resolver that you specified for resolverip supports EDNS0, specify the IPv4 or IPv6 address of a client in the applicable location, for example, <code>192.0.2.44</code> or <code>2001:db8:85a3::8a2e:370:7334</code>.</p>
     pub edns0_client_subnet_ip: Option<String>,
@@ -8599,7 +8599,7 @@ pub struct TestDNSAnswerRequest {
 }
 
 /// <p>A complex type that contains the response to a <code>TestDNSAnswer</code> request. </p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct TestDNSAnswerResponse {
     /// <p>The Amazon Route 53 name server used to respond to the request.</p>
     pub nameserver: String,
@@ -8749,7 +8749,7 @@ impl TrafficPoliciesDeserializer {
     }
 }
 /// <p>A complex type that contains settings for a traffic policy.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct TrafficPolicy {
     /// <p>The comment that you specify in the <code>CreateTrafficPolicy</code> request, if any.</p>
     pub comment: Option<String>,
@@ -8934,7 +8934,7 @@ impl TrafficPolicyIdSerializer {
 }
 
 /// <p>A complex type that contains settings for the new traffic policy instance.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct TrafficPolicyInstance {
     /// <p>The ID of the hosted zone that Amazon Route 53 created resource record sets in.</p>
     pub hosted_zone_id: String,
@@ -9219,7 +9219,7 @@ impl TrafficPolicySummariesDeserializer {
     }
 }
 /// <p>A complex type that contains information about the latest version of one traffic policy that is associated with the current AWS account.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct TrafficPolicySummary {
     /// <p>The ID that Amazon Route 53 assigned to the traffic policy when you created it.</p>
     pub id: String,
@@ -9376,7 +9376,7 @@ impl TransportProtocolDeserializer {
     }
 }
 /// <p>A complex type that contains information about a request to update a health check.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct UpdateHealthCheckRequest {
     pub alarm_identifier: Option<AlarmIdentifier>,
     /// <p>A complex type that contains one <code>ChildHealthCheck</code> element for each health check that you want to associate with a <code>CALCULATED</code> health check.</p>
@@ -9480,7 +9480,7 @@ impl UpdateHealthCheckRequestSerializer {
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct UpdateHealthCheckResponse {
     pub health_check: HealthCheck,
 }
@@ -9526,7 +9526,7 @@ impl UpdateHealthCheckResponseDeserializer {
     }
 }
 /// <p>A request to update the comment for a hosted zone.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct UpdateHostedZoneCommentRequest {
     /// <p>The new comment for the hosted zone. If you don't specify a value for <code>Comment</code>, Amazon Route 53 deletes the existing value of the <code>Comment</code> element, if any.</p>
     pub comment: Option<String>,
@@ -9554,7 +9554,7 @@ impl UpdateHostedZoneCommentRequestSerializer {
     }
 }
 /// <p>A complex type that contains the response to the <code>UpdateHostedZoneComment</code> request.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct UpdateHostedZoneCommentResponse {
     pub hosted_zone: HostedZone,
 }
@@ -9600,7 +9600,7 @@ impl UpdateHostedZoneCommentResponseDeserializer {
     }
 }
 /// <p>A complex type that contains information about the traffic policy that you want to update the comment for.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct UpdateTrafficPolicyCommentRequest {
     /// <p>The new comment for the specified traffic policy and version.</p>
     pub comment: String,
@@ -9628,7 +9628,7 @@ impl UpdateTrafficPolicyCommentRequestSerializer {
     }
 }
 /// <p>A complex type that contains the response information for the traffic policy.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct UpdateTrafficPolicyCommentResponse {
     /// <p>A complex type that contains settings for the specified traffic policy.</p>
     pub traffic_policy: TrafficPolicy,
@@ -9677,7 +9677,7 @@ impl UpdateTrafficPolicyCommentResponseDeserializer {
     }
 }
 /// <p>A complex type that contains information about the resource record sets that you want to update based on a specified traffic policy instance.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct UpdateTrafficPolicyInstanceRequest {
     /// <p>The ID of the traffic policy instance that you want to update.</p>
     pub id: String,
@@ -9717,7 +9717,7 @@ impl UpdateTrafficPolicyInstanceRequestSerializer {
     }
 }
 /// <p>A complex type that contains information about the resource record sets that Amazon Route 53 created based on a specified traffic policy.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct UpdateTrafficPolicyInstanceResponse {
     /// <p>A complex type that contains settings for the updated traffic policy instance.</p>
     pub traffic_policy_instance: TrafficPolicyInstance,
@@ -9781,7 +9781,7 @@ impl UsageCountDeserializer {
     }
 }
 /// <p>(Private hosted zones only) A complex type that contains information about an Amazon VPC.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct VPC {
     pub vpc_id: Option<String>,
     /// <p>(Private hosted zones only) The region in which you created an Amazon VPC.</p>

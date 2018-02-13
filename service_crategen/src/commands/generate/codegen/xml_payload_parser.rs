@@ -4,11 +4,6 @@ use ::Service;
 use botocore::{Member, Operation, Shape, ShapeType};
 use super::{generate_field_name, mutate_type_name, mutate_type_name_for_streaming};
 
-pub fn generate_struct_attributes(_deserialized: bool) -> String {
-    let derived = vec!["Default", "Debug", "Clone"];
-    format!("#[derive({})]", derived.join(","))
-}
-
 pub fn generate_deserializer(name: &str, ty: &str, shape: &Shape, service: &Service) -> String {
     format!("struct {name}Deserializer;
             impl {name}Deserializer {{
