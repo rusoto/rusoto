@@ -1,7 +1,7 @@
 [package]
 authors = ["Anthony DiMarco <ocramida@gmail.com>", "Jimmy Cuadra <jimmy@jimmycuadra.com>", "Matthew Mayer <matthewkmayer@gmail.com>", "Nikita Pekin <contact@nikitapek.in>"]
 description = "AWS SDK for Rust - AWS Marketplace Entitlement Service @ 2017-01-11"
-documentation = "https://rusoto.github.io/rusoto/rusoto_core/index.html"
+documentation = "https://rusoto.github.io/rusoto/rusoto_marketplace_entitlement/index.html"
 keywords = ["AWS", "Amazon", "marketplace-entitlem"]
 license = "MIT"
 name = "rusoto_marketplace_entitlement"

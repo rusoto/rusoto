@@ -1,7 +1,7 @@
 [package]
 authors = ["Anthony DiMarco <ocramida@gmail.com>", "Jimmy Cuadra <jimmy@jimmycuadra.com>", "Matthew Mayer <matthewkmayer@gmail.com>", "Nikita Pekin <contact@nikitapek.in>"]
 description = "AWS SDK for Rust - Amazon Redshift @ 2012-12-01"
-documentation = "https://rusoto.github.io/rusoto/rusoto_core/index.html"
+documentation = "https://rusoto.github.io/rusoto/rusoto_redshift/index.html"
 keywords = ["AWS", "Amazon", "redshift"]
 license = "MIT"
 name = "rusoto_redshift"

@@ -1,7 +1,7 @@
 [package]
 authors = ["Anthony DiMarco <ocramida@gmail.com>", "Jimmy Cuadra <jimmy@jimmycuadra.com>", "Matthew Mayer <matthewkmayer@gmail.com>", "Nikita Pekin <contact@nikitapek.in>"]
 description = "AWS SDK for Rust - Amazon EC2 Container Registry @ 2015-09-21"
-documentation = "https://rusoto.github.io/rusoto/rusoto_core/index.html"
+documentation = "https://rusoto.github.io/rusoto/rusoto_ecr/index.html"
 keywords = ["AWS", "Amazon", "ecr"]
 license = "MIT"
 name = "rusoto_ecr"
