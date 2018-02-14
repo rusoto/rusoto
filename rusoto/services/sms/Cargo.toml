@@ -1,7 +1,7 @@
 [package]
 authors = ["Anthony DiMarco <ocramida@gmail.com>", "Jimmy Cuadra <jimmy@jimmycuadra.com>", "Matthew Mayer <matthewkmayer@gmail.com>", "Nikita Pekin <contact@nikitapek.in>"]
 description = "AWS SDK for Rust - AWS Server Migration Service @ 2016-10-24"
-documentation = "https://rusoto.github.io/rusoto/rusoto_core/index.html"
+documentation = "https://rusoto.github.io/rusoto/rusoto_sms/index.html"
 keywords = ["AWS", "Amazon", "sms"]
 license = "MIT"
 name = "rusoto_sms"
