@@ -1,7 +1,7 @@
 //! The Credentials Provider for Credentials stored in a profile inside of a Credentials file.
 
 use std::collections::HashMap;
-use std::env::{home_dir, var as env_var};
+use std::env::{home_dir};
 use std::fs;
 use std::fs::File;
 use std::io::{BufRead, BufReader};
@@ -11,7 +11,7 @@ use futures::{Future, Poll};
 use futures::future::{FutureResult, result};
 use regex::Regex;
 
-use {AwsCredentials, CredentialsError, ProvideAwsCredentials, in_ten_minutes};
+use {AwsCredentials, CredentialsError, ProvideAwsCredentials, non_empty_env_var};
 
 const AWS_PROFILE: &str = "AWS_PROFILE";
 const AWS_SHARED_CREDENTIALS_FILE: &str = "AWS_SHARED_CREDENTIALS_FILE";
@@ -57,19 +57,11 @@ impl ProfileProvider {
         ProfileProvider::with_configuration(file_path, ProfileProvider::default_profile_name())
     }
 
-    /// This is a helper function as Option<T>::filter is not yet stable (see issue #45860).
-    fn non_empty_env_var(name: &str) -> Option<String> {
-        match env_var(name) {
-            Ok(value) => if value.is_empty() { None } else { Some(value) },
-            Err(_) => None
-        }
-    }
-
     /// Default credentials file location:
     /// 1. if set and not empty, use value from environment variable ```AWS_SHARED_CREDENTIALS_FILE```
     /// 2. otherwise return `~/.aws/credentials` (Linux/Mac) resp. `%USERPROFILE%\.aws\credentials` (Windows)
     fn default_profile_location() -> Result<PathBuf, CredentialsError> {
-        let env = ProfileProvider::non_empty_env_var(AWS_SHARED_CREDENTIALS_FILE);
+        let env = non_empty_env_var(AWS_SHARED_CREDENTIALS_FILE);
         match env {
             Some(path) => Ok(PathBuf::from(path)),
             None => ProfileProvider::hardcoded_profile_location(),
@@ -94,7 +86,7 @@ impl ProfileProvider {
     /// 2. otherwise return ```"default"```
     /// see https://docs.aws.amazon.com/sdk-for-java/v1/developer-guide/credentials.html.
     fn default_profile_name() -> String {
-         ProfileProvider::non_empty_env_var(AWS_PROFILE).unwrap_or(DEFAULT.to_owned())
+        non_empty_env_var(AWS_PROFILE).unwrap_or_else(|| DEFAULT.to_owned())
     }
 
     /// Get a reference to the credentials file path.
@@ -151,7 +143,7 @@ impl ProvideAwsCredentials for ProfileProvider {
     }
 }
 
-/// Parses a Credentials file into a Map of <ProfileName, AwsCredentials>
+/// Parses a Credentials file into a Map of <`ProfileName`, `AwsCredentials`>
 fn parse_credentials_file(
     file_path: &Path,
 ) -> Result<HashMap<String, AwsCredentials>, CredentialsError> {
@@ -205,7 +197,7 @@ fn parse_credentials_file(
                     access_key.unwrap(),
                     secret_key.unwrap(),
                     token,
-                    in_ten_minutes(),
+                    None,
                 );
                 profiles.insert(profile_name.unwrap(), creds);
             }
@@ -256,7 +248,7 @@ fn parse_credentials_file(
             access_key.unwrap(),
             secret_key.unwrap(),
             token,
-            in_ten_minutes(),
+            None,
         );
         profiles.insert(profile_name.unwrap(), creds);
     }

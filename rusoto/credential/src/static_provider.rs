@@ -13,10 +13,10 @@ pub struct StaticProvider {
     aws_access_key_id: String,
     /// The AWS Secret Access Key to use for authenticating to AWS.
     aws_secret_access_key: String,
-    /// The optional token to use for authenticating to aWS.
+    /// The optional token to use for authenticating to AWS.
     token: Option<String>,
-    /// The time in seconds each issued token should be valid ofr.
-    valid_for: i64,
+    /// The time in seconds each issued token should be valid for.
+    valid_for: Option<i64>,
 }
 
 impl StaticProvider {
@@ -32,18 +32,17 @@ impl StaticProvider {
             aws_access_key_id: access_key,
             aws_secret_access_key: secret_access_key,
             token: token,
-            valid_for: valid_for.unwrap_or(600),
+            valid_for: valid_for,
         }
     }
 
-    /// Creates a new minimal Static Provider. This will set the token as optional none,
-    /// and the wait for time as 10 minutes. Which are the defaults elsewhere.
+    /// Creates a new minimal Static Provider. This will set the token as optional none.
     pub fn new_minimal(access_key: String, secret_access_key: String) -> StaticProvider {
         StaticProvider {
             aws_access_key_id: access_key,
             aws_secret_access_key: secret_access_key,
             token: None,
-            valid_for: 600,
+            valid_for: None,
         }
     }
 
@@ -68,7 +67,7 @@ impl StaticProvider {
     }
 
     /// Returns the length in seconds this Static Provider will be valid for.
-    pub fn is_valid_for(&self) -> &i64 {
+    pub fn is_valid_for(&self) -> &Option<i64> {
         &self.valid_for
     }
 }
@@ -81,7 +80,7 @@ impl ProvideAwsCredentials for StaticProvider {
             self.aws_access_key_id.clone(),
             self.aws_secret_access_key.clone(),
             self.token.clone(),
-            Utc::now() + Duration::seconds(self.valid_for),
+            self.valid_for.map(|v| Utc::now() + Duration::seconds(v)),
         ))
     }
 }
@@ -123,7 +122,7 @@ mod tests {
         ).credentials().wait();
         assert!(result.is_ok());
         let finalized = result.unwrap();
-        let expires_at = finalized.expires_at().clone();
+        let expires_at = finalized.expires_at().unwrap().clone();
 
         // Give a wide range of time, just incase there's somehow an immense amount of lag.
         assert!(start_time + Duration::minutes(100) < expires_at);

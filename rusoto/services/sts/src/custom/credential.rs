@@ -27,7 +27,7 @@ pub trait NewAwsCredsForStsCreds {
 
 impl NewAwsCredsForStsCreds for AwsCredentials {
     fn new_for_credentials(sts_creds: ::Credentials) -> Result<AwsCredentials, CredentialsError> {
-        let expires_at = try!(sts_creds.expiration.parse::<DateTime<Utc>>().map_err(CredentialsError::from));
+        let expires_at = Some(try!(sts_creds.expiration.parse::<DateTime<Utc>>().map_err(CredentialsError::from)));
 
         Ok(AwsCredentials::new(
             sts_creds.access_key_id, 
