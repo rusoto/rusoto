@@ -9,6 +9,7 @@
 - Link to service-specific documentation in generated Cargo manifests
 - Change credential expiration for non-temporary crendentials to be optional and add support for ```AWS_CREDENTIAL_EXPIRATION``` to EnvironmentProvider
 - Improve ContainerProvider to mimik the behavior of the other SDKs by also considering ```AWS_CONTAINER_AUTHORIZATION_TOKEN``` and ```AWS_CONTAINER_CREDENTIALS_FULL_URI```
+- Implement per-call timeouts for the `DispatchSignedRequest` trait
 
 ## [0.31.0] - 2018-01-21
 
