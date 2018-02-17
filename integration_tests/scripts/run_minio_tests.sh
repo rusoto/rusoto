@@ -4,6 +4,7 @@ export AWS_ACCESS_KEY_ID=ANTN35UAENTS5UIAEATD
 export AWS_SECRET_ACCESS_KEY=TtnuieannGt2rGuie2t8Tt7urarg5nauedRndrur
 export S3_ENDPOINT='http://localhost:9000'
 
+# if the docker image name changes, update cleanup step in SemaphoreCI:
 ./docker_test_run.py \
     --docker-image="minio/minio" \
     --docker-image="minio/minio:edge" \
@@ -15,12 +16,3 @@ export S3_ENDPOINT='http://localhost:9000'
     --run-arg=server \
     --run-arg=/home/shared \
     -- cargo test --features s3,disable_minio_unsupported
-
-# Above command may fail, store the results
-rc=$?
-
-docker rmi minio/minio
-docker rmi minio/minio:edge
-
-# and exit with error code, otherwise exit with 0
-if [[ $rc != 0 ]]; then exit $rc; fi
