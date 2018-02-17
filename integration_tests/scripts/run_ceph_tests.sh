@@ -16,4 +16,10 @@ export S3_ENDPOINT='http://localhost:9000'
     --run-opt=--hostname=localhost \
     -- cargo test --features s3,disable_ceph_unsupported
 
+# Above command may fail, store the results
+rc=$?
+
 docker rmi ceph/demo
+
+# and exit with error code, otherwise exit with 0
+if [[ $rc != 0 ]]; then exit $rc; fi
