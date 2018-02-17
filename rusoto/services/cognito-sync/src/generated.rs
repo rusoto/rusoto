@@ -2620,7 +2620,7 @@ where
         let mut request = SignedRequest::new("POST", "cognito-sync", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -2662,7 +2662,7 @@ where
         let mut request = SignedRequest::new("DELETE", "cognito-sync", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -2704,7 +2704,7 @@ where
         let mut request = SignedRequest::new("GET", "cognito-sync", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -2744,7 +2744,7 @@ where
         let mut request = SignedRequest::new("GET", "cognito-sync", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -2786,7 +2786,7 @@ where
         let mut request = SignedRequest::new("GET", "cognito-sync", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -2827,7 +2827,7 @@ where
         let mut request = SignedRequest::new("POST", "cognito-sync", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -2868,7 +2868,7 @@ where
         let mut request = SignedRequest::new("GET", "cognito-sync", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -2908,7 +2908,7 @@ where
         let mut request = SignedRequest::new("GET", "cognito-sync", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -2960,7 +2960,7 @@ where
         }
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -3006,7 +3006,7 @@ where
         }
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -3059,7 +3059,7 @@ where
         }
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -3103,7 +3103,7 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -3146,7 +3146,7 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let result = ::std::mem::drop(response);
@@ -3181,7 +3181,7 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -3220,7 +3220,7 @@ where
         let mut request = SignedRequest::new("POST", "cognito-sync", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -3258,7 +3258,7 @@ where
         let mut request = SignedRequest::new("DELETE", "cognito-sync", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -3308,7 +3308,7 @@ where
             request.add_header("x-amz-Client-Context", &client_context.to_string());
         }
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;

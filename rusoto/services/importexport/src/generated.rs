@@ -2051,7 +2051,7 @@ where
         CancelJobInputSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CancelJobError::from_body(
@@ -2104,7 +2104,7 @@ where
         CreateJobInputSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CreateJobError::from_body(
@@ -2160,7 +2160,7 @@ where
         GetShippingLabelInputSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(GetShippingLabelError::from_body(
@@ -2213,7 +2213,7 @@ where
         GetStatusInputSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(GetStatusError::from_body(
@@ -2262,7 +2262,7 @@ where
         ListJobsInputSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ListJobsError::from_body(
@@ -2315,7 +2315,7 @@ where
         UpdateJobInputSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(UpdateJobError::from_body(

@@ -7726,7 +7726,7 @@ where
         BuildSuggestersRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(BuildSuggestersError::from_body(
@@ -7777,7 +7777,7 @@ where
         CreateDomainRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CreateDomainError::from_body(
@@ -7828,7 +7828,7 @@ where
         DefineAnalysisSchemeRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DefineAnalysisSchemeError::from_body(
@@ -7879,7 +7879,7 @@ where
         DefineExpressionRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DefineExpressionError::from_body(
@@ -7930,7 +7930,7 @@ where
         DefineIndexFieldRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DefineIndexFieldError::from_body(
@@ -7981,7 +7981,7 @@ where
         DefineSuggesterRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DefineSuggesterError::from_body(
@@ -8032,7 +8032,7 @@ where
         DeleteAnalysisSchemeRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteAnalysisSchemeError::from_body(
@@ -8083,7 +8083,7 @@ where
         DeleteDomainRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteDomainError::from_body(
@@ -8134,7 +8134,7 @@ where
         DeleteExpressionRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteExpressionError::from_body(
@@ -8185,7 +8185,7 @@ where
         DeleteIndexFieldRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteIndexFieldError::from_body(
@@ -8236,7 +8236,7 @@ where
         DeleteSuggesterRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteSuggesterError::from_body(
@@ -8287,7 +8287,7 @@ where
         DescribeAnalysisSchemesRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeAnalysisSchemesError::from_body(
@@ -8338,7 +8338,7 @@ where
         DescribeAvailabilityOptionsRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeAvailabilityOptionsError::from_body(
@@ -8391,7 +8391,7 @@ where
         DescribeDomainsRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeDomainsError::from_body(
@@ -8442,7 +8442,7 @@ where
         DescribeExpressionsRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeExpressionsError::from_body(
@@ -8493,7 +8493,7 @@ where
         DescribeIndexFieldsRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeIndexFieldsError::from_body(
@@ -8544,7 +8544,7 @@ where
         DescribeScalingParametersRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeScalingParametersError::from_body(
@@ -8596,7 +8596,7 @@ where
         DescribeServiceAccessPoliciesRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeServiceAccessPoliciesError::from_body(
@@ -8649,7 +8649,7 @@ where
         DescribeSuggestersRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeSuggestersError::from_body(
@@ -8700,7 +8700,7 @@ where
         IndexDocumentsRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(IndexDocumentsError::from_body(
@@ -8748,7 +8748,7 @@ where
 
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ListDomainNamesError::from_body(
@@ -8799,7 +8799,7 @@ where
         UpdateAvailabilityOptionsRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(UpdateAvailabilityOptionsError::from_body(
@@ -8850,7 +8850,7 @@ where
         UpdateScalingParametersRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(UpdateScalingParametersError::from_body(
@@ -8901,7 +8901,7 @@ where
         UpdateServiceAccessPoliciesRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(UpdateServiceAccessPoliciesError::from_body(

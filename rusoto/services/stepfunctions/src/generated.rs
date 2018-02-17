@@ -2683,7 +2683,7 @@ where
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     serde_json::from_str::<CreateActivityOutput>(
@@ -2714,7 +2714,7 @@ where
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     serde_json::from_str::<CreateStateMachineOutput>(
@@ -2745,7 +2745,7 @@ where
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     serde_json::from_str::<DeleteActivityOutput>(
@@ -2776,7 +2776,7 @@ where
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     serde_json::from_str::<DeleteStateMachineOutput>(
@@ -2807,7 +2807,7 @@ where
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     serde_json::from_str::<DescribeActivityOutput>(
@@ -2838,7 +2838,7 @@ where
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     serde_json::from_str::<DescribeExecutionOutput>(
@@ -2869,7 +2869,7 @@ where
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     serde_json::from_str::<DescribeStateMachineOutput>(
@@ -2904,7 +2904,7 @@ where
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     serde_json::from_str::<DescribeStateMachineForExecutionOutput>(
@@ -2935,7 +2935,7 @@ where
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     serde_json::from_str::<GetActivityTaskOutput>(
@@ -2966,7 +2966,7 @@ where
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     serde_json::from_str::<GetExecutionHistoryOutput>(
@@ -2997,7 +2997,7 @@ where
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     serde_json::from_str::<ListActivitiesOutput>(
@@ -3028,7 +3028,7 @@ where
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     serde_json::from_str::<ListExecutionsOutput>(
@@ -3059,7 +3059,7 @@ where
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     serde_json::from_str::<ListStateMachinesOutput>(
@@ -3090,7 +3090,7 @@ where
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     serde_json::from_str::<SendTaskFailureOutput>(
@@ -3121,7 +3121,7 @@ where
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     serde_json::from_str::<SendTaskHeartbeatOutput>(
@@ -3152,7 +3152,7 @@ where
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     serde_json::from_str::<SendTaskSuccessOutput>(
@@ -3183,7 +3183,7 @@ where
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     serde_json::from_str::<StartExecutionOutput>(
@@ -3214,7 +3214,7 @@ where
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     serde_json::from_str::<StopExecutionOutput>(
@@ -3245,7 +3245,7 @@ where
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     serde_json::from_str::<UpdateStateMachineOutput>(

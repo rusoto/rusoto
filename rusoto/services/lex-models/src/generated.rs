@@ -5300,7 +5300,7 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Created {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -5341,7 +5341,7 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Created {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -5383,7 +5383,7 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Created {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -5420,7 +5420,7 @@ where
 
         request.set_endpoint_prefix("models.lex".to_string());
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::NoContent {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let result = ::std::mem::drop(response);
@@ -5455,7 +5455,7 @@ where
 
         request.set_endpoint_prefix("models.lex".to_string());
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::NoContent {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let result = ::std::mem::drop(response);
@@ -5491,7 +5491,7 @@ where
 
         request.set_endpoint_prefix("models.lex".to_string());
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::NoContent {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let result = ::std::mem::drop(response);
@@ -5526,7 +5526,7 @@ where
 
         request.set_endpoint_prefix("models.lex".to_string());
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::NoContent {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let result = ::std::mem::drop(response);
@@ -5554,7 +5554,7 @@ where
 
         request.set_endpoint_prefix("models.lex".to_string());
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::NoContent {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let result = ::std::mem::drop(response);
@@ -5589,7 +5589,7 @@ where
 
         request.set_endpoint_prefix("models.lex".to_string());
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::NoContent {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let result = ::std::mem::drop(response);
@@ -5620,7 +5620,7 @@ where
 
         request.set_endpoint_prefix("models.lex".to_string());
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::NoContent {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let result = ::std::mem::drop(response);
@@ -5655,7 +5655,7 @@ where
 
         request.set_endpoint_prefix("models.lex".to_string());
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::NoContent {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let result = ::std::mem::drop(response);
@@ -5690,7 +5690,7 @@ where
 
         request.set_endpoint_prefix("models.lex".to_string());
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::NoContent {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let result = ::std::mem::drop(response);
@@ -5722,7 +5722,7 @@ where
 
         request.set_endpoint_prefix("models.lex".to_string());
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -5765,7 +5765,7 @@ where
 
         request.set_endpoint_prefix("models.lex".to_string());
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -5816,7 +5816,7 @@ where
         }
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -5860,7 +5860,7 @@ where
 
         request.set_endpoint_prefix("models.lex".to_string());
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -5916,7 +5916,7 @@ where
         }
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -5965,7 +5965,7 @@ where
         }
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -6013,7 +6013,7 @@ where
         }
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -6052,7 +6052,7 @@ where
 
         request.set_endpoint_prefix("models.lex".to_string());
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -6106,7 +6106,7 @@ where
         }
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -6161,7 +6161,7 @@ where
         }
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -6208,7 +6208,7 @@ where
         params.put("version", &input.version);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -6251,7 +6251,7 @@ where
 
         request.set_endpoint_prefix("models.lex".to_string());
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -6299,7 +6299,7 @@ where
         }
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -6351,7 +6351,7 @@ where
         }
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -6394,7 +6394,7 @@ where
 
         request.set_endpoint_prefix("models.lex".to_string());
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -6442,7 +6442,7 @@ where
         }
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -6494,7 +6494,7 @@ where
         }
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -6541,7 +6541,7 @@ where
         params.put("view", "aggregation");
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -6580,7 +6580,7 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -6625,7 +6625,7 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -6666,7 +6666,7 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -6707,7 +6707,7 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;

@@ -17283,7 +17283,7 @@ where
         AuthorizeClusterSecurityGroupIngressMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(AuthorizeClusterSecurityGroupIngressError::from_body(
@@ -17336,7 +17336,7 @@ where
         AuthorizeSnapshotAccessMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(AuthorizeSnapshotAccessError::from_body(
@@ -17387,7 +17387,7 @@ where
         CopyClusterSnapshotMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CopyClusterSnapshotError::from_body(
@@ -17438,7 +17438,7 @@ where
         CreateClusterMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CreateClusterError::from_body(
@@ -17489,7 +17489,7 @@ where
         CreateClusterParameterGroupMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CreateClusterParameterGroupError::from_body(
@@ -17540,7 +17540,7 @@ where
         CreateClusterSecurityGroupMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CreateClusterSecurityGroupError::from_body(
@@ -17591,7 +17591,7 @@ where
         CreateClusterSnapshotMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CreateClusterSnapshotError::from_body(
@@ -17642,7 +17642,7 @@ where
         CreateClusterSubnetGroupMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CreateClusterSubnetGroupError::from_body(
@@ -17693,7 +17693,7 @@ where
         CreateEventSubscriptionMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CreateEventSubscriptionError::from_body(
@@ -17744,7 +17744,7 @@ where
         CreateHsmClientCertificateMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CreateHsmClientCertificateError::from_body(
@@ -17795,7 +17795,7 @@ where
         CreateHsmConfigurationMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CreateHsmConfigurationError::from_body(
@@ -17846,7 +17846,7 @@ where
         CreateSnapshotCopyGrantMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CreateSnapshotCopyGrantError::from_body(
@@ -17894,7 +17894,7 @@ where
         CreateTagsMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CreateTagsError::from_body(
@@ -17922,7 +17922,7 @@ where
         DeleteClusterMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteClusterError::from_body(
@@ -17973,7 +17973,7 @@ where
         DeleteClusterParameterGroupMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteClusterParameterGroupError::from_body(
@@ -18001,7 +18001,7 @@ where
         DeleteClusterSecurityGroupMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteClusterSecurityGroupError::from_body(
@@ -18029,7 +18029,7 @@ where
         DeleteClusterSnapshotMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteClusterSnapshotError::from_body(
@@ -18080,7 +18080,7 @@ where
         DeleteClusterSubnetGroupMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteClusterSubnetGroupError::from_body(
@@ -18108,7 +18108,7 @@ where
         DeleteEventSubscriptionMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteEventSubscriptionError::from_body(
@@ -18136,7 +18136,7 @@ where
         DeleteHsmClientCertificateMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteHsmClientCertificateError::from_body(
@@ -18164,7 +18164,7 @@ where
         DeleteHsmConfigurationMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteHsmConfigurationError::from_body(
@@ -18192,7 +18192,7 @@ where
         DeleteSnapshotCopyGrantMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteSnapshotCopyGrantError::from_body(
@@ -18217,7 +18217,7 @@ where
         DeleteTagsMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteTagsError::from_body(
@@ -18245,7 +18245,7 @@ where
         DescribeClusterParameterGroupsMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeClusterParameterGroupsError::from_body(
@@ -18296,7 +18296,7 @@ where
         DescribeClusterParametersMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeClusterParametersError::from_body(
@@ -18347,7 +18347,7 @@ where
         DescribeClusterSecurityGroupsMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeClusterSecurityGroupsError::from_body(
@@ -18398,7 +18398,7 @@ where
         DescribeClusterSnapshotsMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeClusterSnapshotsError::from_body(
@@ -18449,7 +18449,7 @@ where
         DescribeClusterSubnetGroupsMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeClusterSubnetGroupsError::from_body(
@@ -18500,7 +18500,7 @@ where
         DescribeClusterVersionsMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeClusterVersionsError::from_body(
@@ -18551,7 +18551,7 @@ where
         DescribeClustersMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeClustersError::from_body(
@@ -18603,7 +18603,7 @@ where
         DescribeDefaultClusterParametersMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeDefaultClusterParametersError::from_body(
@@ -18656,7 +18656,7 @@ where
         DescribeEventCategoriesMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeEventCategoriesError::from_body(
@@ -18707,7 +18707,7 @@ where
         DescribeEventSubscriptionsMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeEventSubscriptionsError::from_body(
@@ -18758,7 +18758,7 @@ where
         DescribeEventsMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeEventsError::from_body(
@@ -18809,7 +18809,7 @@ where
         DescribeHsmClientCertificatesMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeHsmClientCertificatesError::from_body(
@@ -18860,7 +18860,7 @@ where
         DescribeHsmConfigurationsMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeHsmConfigurationsError::from_body(
@@ -18911,7 +18911,7 @@ where
         DescribeLoggingStatusMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeLoggingStatusError::from_body(
@@ -18962,7 +18962,7 @@ where
         DescribeOrderableClusterOptionsMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeOrderableClusterOptionsError::from_body(
@@ -19013,7 +19013,7 @@ where
         DescribeReservedNodeOfferingsMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeReservedNodeOfferingsError::from_body(
@@ -19064,7 +19064,7 @@ where
         DescribeReservedNodesMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeReservedNodesError::from_body(
@@ -19115,7 +19115,7 @@ where
         DescribeResizeMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeResizeError::from_body(
@@ -19166,7 +19166,7 @@ where
         DescribeSnapshotCopyGrantsMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeSnapshotCopyGrantsError::from_body(
@@ -19217,7 +19217,7 @@ where
         DescribeTableRestoreStatusMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeTableRestoreStatusError::from_body(
@@ -19268,7 +19268,7 @@ where
         DescribeTagsMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeTagsError::from_body(
@@ -19319,7 +19319,7 @@ where
         DisableLoggingMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DisableLoggingError::from_body(
@@ -19370,7 +19370,7 @@ where
         DisableSnapshotCopyMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DisableSnapshotCopyError::from_body(
@@ -19421,7 +19421,7 @@ where
         EnableLoggingMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(EnableLoggingError::from_body(
@@ -19472,7 +19472,7 @@ where
         EnableSnapshotCopyMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(EnableSnapshotCopyError::from_body(
@@ -19523,7 +19523,7 @@ where
         GetClusterCredentialsMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(GetClusterCredentialsError::from_body(
@@ -19574,7 +19574,7 @@ where
         ModifyClusterMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ModifyClusterError::from_body(
@@ -19625,7 +19625,7 @@ where
         ModifyClusterIamRolesMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ModifyClusterIamRolesError::from_body(
@@ -19676,7 +19676,7 @@ where
         ModifyClusterParameterGroupMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ModifyClusterParameterGroupError::from_body(
@@ -19727,7 +19727,7 @@ where
         ModifyClusterSubnetGroupMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ModifyClusterSubnetGroupError::from_body(
@@ -19778,7 +19778,7 @@ where
         ModifyEventSubscriptionMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ModifyEventSubscriptionError::from_body(
@@ -19830,7 +19830,7 @@ where
         ModifySnapshotCopyRetentionPeriodMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ModifySnapshotCopyRetentionPeriodError::from_body(
@@ -19883,7 +19883,7 @@ where
         PurchaseReservedNodeOfferingMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(PurchaseReservedNodeOfferingError::from_body(
@@ -19936,7 +19936,7 @@ where
         RebootClusterMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(RebootClusterError::from_body(
@@ -19987,7 +19987,7 @@ where
         ResetClusterParameterGroupMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ResetClusterParameterGroupError::from_body(
@@ -20038,7 +20038,7 @@ where
         RestoreFromClusterSnapshotMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(RestoreFromClusterSnapshotError::from_body(
@@ -20090,7 +20090,7 @@ where
         RestoreTableFromClusterSnapshotMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(RestoreTableFromClusterSnapshotError::from_body(
@@ -20144,7 +20144,7 @@ where
         RevokeClusterSecurityGroupIngressMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(RevokeClusterSecurityGroupIngressError::from_body(
@@ -20197,7 +20197,7 @@ where
         RevokeSnapshotAccessMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(RevokeSnapshotAccessError::from_body(
@@ -20248,7 +20248,7 @@ where
         RotateEncryptionKeyMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(RotateEncryptionKeyError::from_body(

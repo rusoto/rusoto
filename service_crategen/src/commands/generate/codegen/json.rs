@@ -40,7 +40,7 @@ impl GenerateProtocol for JsonGenerator {
                     request.add_header(\"x-amz-target\", \"{target_prefix}.{name}\");
                     {payload}
 
-                    let future = self.inner.sign_and_dispatch(request).and_then(|response| {{
+                    let future = self.inner.sign_and_dispatch(request, |response| {{
                         if response.status == StatusCode::Ok {{
                             {ok_response}
                         }} else {{

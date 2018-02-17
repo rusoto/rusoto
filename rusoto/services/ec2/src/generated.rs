@@ -73054,7 +73054,7 @@ where
         AcceptReservedInstancesExchangeQuoteRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(AcceptReservedInstancesExchangeQuoteError::from_body(
@@ -73104,7 +73104,7 @@ where
         AcceptVpcEndpointConnectionsRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(AcceptVpcEndpointConnectionsError::from_body(
@@ -73154,7 +73154,7 @@ where
         AcceptVpcPeeringConnectionRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(AcceptVpcPeeringConnectionError::from_body(
@@ -73202,7 +73202,7 @@ where
         AllocateAddressRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(AllocateAddressError::from_body(
@@ -73250,7 +73250,7 @@ where
         AllocateHostsRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(AllocateHostsError::from_body(
@@ -73298,7 +73298,7 @@ where
         AssignIpv6AddressesRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(AssignIpv6AddressesError::from_body(
@@ -73346,7 +73346,7 @@ where
         AssignPrivateIpAddressesRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(AssignPrivateIpAddressesError::from_body(
@@ -73374,7 +73374,7 @@ where
         AssociateAddressRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(AssociateAddressError::from_body(
@@ -73422,7 +73422,7 @@ where
         AssociateDhcpOptionsRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(AssociateDhcpOptionsError::from_body(
@@ -73450,7 +73450,7 @@ where
         AssociateIamInstanceProfileRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(AssociateIamInstanceProfileError::from_body(
@@ -73498,7 +73498,7 @@ where
         AssociateRouteTableRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(AssociateRouteTableError::from_body(
@@ -73546,7 +73546,7 @@ where
         AssociateSubnetCidrBlockRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(AssociateSubnetCidrBlockError::from_body(
@@ -73594,7 +73594,7 @@ where
         AssociateVpcCidrBlockRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(AssociateVpcCidrBlockError::from_body(
@@ -73642,7 +73642,7 @@ where
         AttachClassicLinkVpcRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(AttachClassicLinkVpcError::from_body(
@@ -73690,7 +73690,7 @@ where
         AttachInternetGatewayRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(AttachInternetGatewayError::from_body(
@@ -73718,7 +73718,7 @@ where
         AttachNetworkInterfaceRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(AttachNetworkInterfaceError::from_body(
@@ -73766,7 +73766,7 @@ where
         AttachVolumeRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(AttachVolumeError::from_body(
@@ -73814,7 +73814,7 @@ where
         AttachVpnGatewayRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(AttachVpnGatewayError::from_body(
@@ -73862,7 +73862,7 @@ where
         AuthorizeSecurityGroupEgressRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(AuthorizeSecurityGroupEgressError::from_body(
@@ -73890,7 +73890,7 @@ where
         AuthorizeSecurityGroupIngressRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(AuthorizeSecurityGroupIngressError::from_body(
@@ -73918,7 +73918,7 @@ where
         BundleInstanceRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(BundleInstanceError::from_body(
@@ -73966,7 +73966,7 @@ where
         CancelBundleTaskRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CancelBundleTaskError::from_body(
@@ -74014,7 +74014,7 @@ where
         CancelConversionRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CancelConversionTaskError::from_body(
@@ -74042,7 +74042,7 @@ where
         CancelExportTaskRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CancelExportTaskError::from_body(
@@ -74070,7 +74070,7 @@ where
         CancelImportTaskRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CancelImportTaskError::from_body(
@@ -74119,7 +74119,7 @@ where
         CancelReservedInstancesListingRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CancelReservedInstancesListingError::from_body(
@@ -74169,7 +74169,7 @@ where
         CancelSpotFleetRequestsRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(EC2CancelSpotFleetRequestsError::from_body(
@@ -74217,7 +74217,7 @@ where
         CancelSpotInstanceRequestsRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CancelSpotInstanceRequestsError::from_body(
@@ -74265,7 +74265,7 @@ where
         ConfirmProductInstanceRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ConfirmProductInstanceError::from_body(
@@ -74313,7 +74313,7 @@ where
         CopyFpgaImageRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CopyFpgaImageError::from_body(
@@ -74361,7 +74361,7 @@ where
         CopyImageRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CopyImageError::from_body(
@@ -74409,7 +74409,7 @@ where
         CopySnapshotRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CopySnapshotError::from_body(
@@ -74457,7 +74457,7 @@ where
         CreateCustomerGatewayRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CreateCustomerGatewayError::from_body(
@@ -74505,7 +74505,7 @@ where
         CreateDefaultSubnetRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CreateDefaultSubnetError::from_body(
@@ -74553,7 +74553,7 @@ where
         CreateDefaultVpcRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CreateDefaultVpcError::from_body(
@@ -74601,7 +74601,7 @@ where
         CreateDhcpOptionsRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CreateDhcpOptionsError::from_body(
@@ -74650,7 +74650,7 @@ where
         CreateEgressOnlyInternetGatewayRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CreateEgressOnlyInternetGatewayError::from_body(
@@ -74700,7 +74700,7 @@ where
         CreateFlowLogsRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CreateFlowLogsError::from_body(
@@ -74748,7 +74748,7 @@ where
         CreateFpgaImageRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CreateFpgaImageError::from_body(
@@ -74796,7 +74796,7 @@ where
         CreateImageRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CreateImageError::from_body(
@@ -74844,7 +74844,7 @@ where
         CreateInstanceExportTaskRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CreateInstanceExportTaskError::from_body(
@@ -74892,7 +74892,7 @@ where
         CreateInternetGatewayRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CreateInternetGatewayError::from_body(
@@ -74940,7 +74940,7 @@ where
         CreateKeyPairRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CreateKeyPairError::from_body(
@@ -74988,7 +74988,7 @@ where
         CreateLaunchTemplateRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CreateLaunchTemplateError::from_body(
@@ -75036,7 +75036,7 @@ where
         CreateLaunchTemplateVersionRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CreateLaunchTemplateVersionError::from_body(
@@ -75084,7 +75084,7 @@ where
         CreateNatGatewayRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CreateNatGatewayError::from_body(
@@ -75132,7 +75132,7 @@ where
         CreateNetworkAclRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CreateNetworkAclError::from_body(
@@ -75180,7 +75180,7 @@ where
         CreateNetworkAclEntryRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CreateNetworkAclEntryError::from_body(
@@ -75208,7 +75208,7 @@ where
         CreateNetworkInterfaceRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CreateNetworkInterfaceError::from_body(
@@ -75257,7 +75257,7 @@ where
         CreateNetworkInterfacePermissionRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CreateNetworkInterfacePermissionError::from_body(
@@ -75307,7 +75307,7 @@ where
         CreatePlacementGroupRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CreatePlacementGroupError::from_body(
@@ -75336,7 +75336,7 @@ where
         CreateReservedInstancesListingRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CreateReservedInstancesListingError::from_body(
@@ -75386,7 +75386,7 @@ where
         CreateRouteRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CreateRouteError::from_body(
@@ -75434,7 +75434,7 @@ where
         CreateRouteTableRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CreateRouteTableError::from_body(
@@ -75482,7 +75482,7 @@ where
         CreateSecurityGroupRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CreateSecurityGroupError::from_body(
@@ -75530,7 +75530,7 @@ where
         CreateSnapshotRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CreateSnapshotError::from_body(
@@ -75579,7 +75579,7 @@ where
         CreateSpotDatafeedSubscriptionRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CreateSpotDatafeedSubscriptionError::from_body(
@@ -75629,7 +75629,7 @@ where
         CreateSubnetRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CreateSubnetError::from_body(
@@ -75674,7 +75674,7 @@ where
         CreateTagsRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CreateTagsError::from_body(
@@ -75702,7 +75702,7 @@ where
         CreateVolumeRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CreateVolumeError::from_body(
@@ -75750,7 +75750,7 @@ where
         CreateVpcRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CreateVpcError::from_body(
@@ -75798,7 +75798,7 @@ where
         CreateVpcEndpointRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CreateVpcEndpointError::from_body(
@@ -75853,7 +75853,7 @@ where
         );
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CreateVpcEndpointConnectionNotificationError::from_body(
@@ -75906,7 +75906,7 @@ where
         CreateVpcEndpointServiceConfigurationRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CreateVpcEndpointServiceConfigurationError::from_body(
@@ -75956,7 +75956,7 @@ where
         CreateVpcPeeringConnectionRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CreateVpcPeeringConnectionError::from_body(
@@ -76004,7 +76004,7 @@ where
         CreateVpnConnectionRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CreateVpnConnectionError::from_body(
@@ -76052,7 +76052,7 @@ where
         CreateVpnConnectionRouteRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CreateVpnConnectionRouteError::from_body(
@@ -76080,7 +76080,7 @@ where
         CreateVpnGatewayRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CreateVpnGatewayError::from_body(
@@ -76128,7 +76128,7 @@ where
         DeleteCustomerGatewayRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteCustomerGatewayError::from_body(
@@ -76156,7 +76156,7 @@ where
         DeleteDhcpOptionsRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteDhcpOptionsError::from_body(
@@ -76185,7 +76185,7 @@ where
         DeleteEgressOnlyInternetGatewayRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteEgressOnlyInternetGatewayError::from_body(
@@ -76235,7 +76235,7 @@ where
         DeleteFlowLogsRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteFlowLogsError::from_body(
@@ -76283,7 +76283,7 @@ where
         DeleteFpgaImageRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteFpgaImageError::from_body(
@@ -76331,7 +76331,7 @@ where
         DeleteInternetGatewayRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteInternetGatewayError::from_body(
@@ -76359,7 +76359,7 @@ where
         DeleteKeyPairRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteKeyPairError::from_body(
@@ -76387,7 +76387,7 @@ where
         DeleteLaunchTemplateRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteLaunchTemplateError::from_body(
@@ -76435,7 +76435,7 @@ where
         DeleteLaunchTemplateVersionsRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteLaunchTemplateVersionsError::from_body(
@@ -76485,7 +76485,7 @@ where
         DeleteNatGatewayRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteNatGatewayError::from_body(
@@ -76533,7 +76533,7 @@ where
         DeleteNetworkAclRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteNetworkAclError::from_body(
@@ -76561,7 +76561,7 @@ where
         DeleteNetworkAclEntryRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteNetworkAclEntryError::from_body(
@@ -76589,7 +76589,7 @@ where
         DeleteNetworkInterfaceRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteNetworkInterfaceError::from_body(
@@ -76618,7 +76618,7 @@ where
         DeleteNetworkInterfacePermissionRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteNetworkInterfacePermissionError::from_body(
@@ -76668,7 +76668,7 @@ where
         DeletePlacementGroupRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeletePlacementGroupError::from_body(
@@ -76693,7 +76693,7 @@ where
         DeleteRouteRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteRouteError::from_body(
@@ -76721,7 +76721,7 @@ where
         DeleteRouteTableRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteRouteTableError::from_body(
@@ -76749,7 +76749,7 @@ where
         DeleteSecurityGroupRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteSecurityGroupError::from_body(
@@ -76777,7 +76777,7 @@ where
         DeleteSnapshotRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteSnapshotError::from_body(
@@ -76805,7 +76805,7 @@ where
         DeleteSpotDatafeedSubscriptionRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteSpotDatafeedSubscriptionError::from_body(
@@ -76830,7 +76830,7 @@ where
         DeleteSubnetRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteSubnetError::from_body(
@@ -76855,7 +76855,7 @@ where
         DeleteTagsRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteTagsError::from_body(
@@ -76880,7 +76880,7 @@ where
         DeleteVolumeRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteVolumeError::from_body(
@@ -76905,7 +76905,7 @@ where
         DeleteVpcRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteVpcError::from_body(
@@ -76940,7 +76940,7 @@ where
         );
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteVpcEndpointConnectionNotificationsError::from_body(
@@ -76993,7 +76993,7 @@ where
         DeleteVpcEndpointServiceConfigurationsRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteVpcEndpointServiceConfigurationsError::from_body(
@@ -77043,7 +77043,7 @@ where
         DeleteVpcEndpointsRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteVpcEndpointsError::from_body(
@@ -77091,7 +77091,7 @@ where
         DeleteVpcPeeringConnectionRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteVpcPeeringConnectionError::from_body(
@@ -77139,7 +77139,7 @@ where
         DeleteVpnConnectionRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteVpnConnectionError::from_body(
@@ -77167,7 +77167,7 @@ where
         DeleteVpnConnectionRouteRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteVpnConnectionRouteError::from_body(
@@ -77195,7 +77195,7 @@ where
         DeleteVpnGatewayRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteVpnGatewayError::from_body(
@@ -77223,7 +77223,7 @@ where
         DeregisterImageRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeregisterImageError::from_body(
@@ -77251,7 +77251,7 @@ where
         DescribeAccountAttributesRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeAccountAttributesError::from_body(
@@ -77299,7 +77299,7 @@ where
         DescribeAddressesRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeAddressesError::from_body(
@@ -77347,7 +77347,7 @@ where
         DescribeAvailabilityZonesRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeAvailabilityZonesError::from_body(
@@ -77395,7 +77395,7 @@ where
         DescribeBundleTasksRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeBundleTasksError::from_body(
@@ -77443,7 +77443,7 @@ where
         DescribeClassicLinkInstancesRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeClassicLinkInstancesError::from_body(
@@ -77493,7 +77493,7 @@ where
         DescribeConversionTasksRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeConversionTasksError::from_body(
@@ -77541,7 +77541,7 @@ where
         DescribeCustomerGatewaysRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeCustomerGatewaysError::from_body(
@@ -77589,7 +77589,7 @@ where
         DescribeDhcpOptionsRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeDhcpOptionsError::from_body(
@@ -77640,7 +77640,7 @@ where
         DescribeEgressOnlyInternetGatewaysRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeEgressOnlyInternetGatewaysError::from_body(
@@ -77690,7 +77690,7 @@ where
         DescribeElasticGpusRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeElasticGpusError::from_body(
@@ -77738,7 +77738,7 @@ where
         DescribeExportTasksRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeExportTasksError::from_body(
@@ -77786,7 +77786,7 @@ where
         DescribeFlowLogsRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeFlowLogsError::from_body(
@@ -77834,7 +77834,7 @@ where
         DescribeFpgaImageAttributeRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeFpgaImageAttributeError::from_body(
@@ -77882,7 +77882,7 @@ where
         DescribeFpgaImagesRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeFpgaImagesError::from_body(
@@ -77931,7 +77931,7 @@ where
         DescribeHostReservationOfferingsRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeHostReservationOfferingsError::from_body(
@@ -77981,7 +77981,7 @@ where
         DescribeHostReservationsRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeHostReservationsError::from_body(
@@ -78029,7 +78029,7 @@ where
         DescribeHostsRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeHostsError::from_body(
@@ -78080,7 +78080,7 @@ where
         DescribeIamInstanceProfileAssociationsRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeIamInstanceProfileAssociationsError::from_body(
@@ -78130,7 +78130,7 @@ where
         DescribeIdFormatRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeIdFormatError::from_body(
@@ -78178,7 +78178,7 @@ where
         DescribeIdentityIdFormatRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeIdentityIdFormatError::from_body(
@@ -78226,7 +78226,7 @@ where
         DescribeImageAttributeRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeImageAttributeError::from_body(
@@ -78274,7 +78274,7 @@ where
         DescribeImagesRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeImagesError::from_body(
@@ -78322,7 +78322,7 @@ where
         DescribeImportImageTasksRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeImportImageTasksError::from_body(
@@ -78370,7 +78370,7 @@ where
         DescribeImportSnapshotTasksRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeImportSnapshotTasksError::from_body(
@@ -78418,7 +78418,7 @@ where
         DescribeInstanceAttributeRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeInstanceAttributeError::from_body(
@@ -78469,7 +78469,7 @@ where
         DescribeInstanceCreditSpecificationsRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeInstanceCreditSpecificationsError::from_body(
@@ -78519,7 +78519,7 @@ where
         DescribeInstanceStatusRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeInstanceStatusError::from_body(
@@ -78567,7 +78567,7 @@ where
         DescribeInstancesRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeInstancesError::from_body(
@@ -78615,7 +78615,7 @@ where
         DescribeInternetGatewaysRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeInternetGatewaysError::from_body(
@@ -78663,7 +78663,7 @@ where
         DescribeKeyPairsRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeKeyPairsError::from_body(
@@ -78712,7 +78712,7 @@ where
         DescribeLaunchTemplateVersionsRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeLaunchTemplateVersionsError::from_body(
@@ -78762,7 +78762,7 @@ where
         DescribeLaunchTemplatesRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeLaunchTemplatesError::from_body(
@@ -78810,7 +78810,7 @@ where
         DescribeMovingAddressesRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeMovingAddressesError::from_body(
@@ -78858,7 +78858,7 @@ where
         DescribeNatGatewaysRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeNatGatewaysError::from_body(
@@ -78906,7 +78906,7 @@ where
         DescribeNetworkAclsRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeNetworkAclsError::from_body(
@@ -78955,7 +78955,7 @@ where
         DescribeNetworkInterfaceAttributeRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeNetworkInterfaceAttributeError::from_body(
@@ -79008,7 +79008,7 @@ where
         DescribeNetworkInterfacePermissionsRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeNetworkInterfacePermissionsError::from_body(
@@ -79058,7 +79058,7 @@ where
         DescribeNetworkInterfacesRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeNetworkInterfacesError::from_body(
@@ -79106,7 +79106,7 @@ where
         DescribePlacementGroupsRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribePlacementGroupsError::from_body(
@@ -79154,7 +79154,7 @@ where
         DescribePrefixListsRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribePrefixListsError::from_body(
@@ -79202,7 +79202,7 @@ where
         DescribeRegionsRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeRegionsError::from_body(
@@ -79250,7 +79250,7 @@ where
         DescribeReservedInstancesRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeReservedInstancesError::from_body(
@@ -79299,7 +79299,7 @@ where
         DescribeReservedInstancesListingsRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeReservedInstancesListingsError::from_body(
@@ -79352,7 +79352,7 @@ where
         DescribeReservedInstancesModificationsRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeReservedInstancesModificationsError::from_body(
@@ -79405,7 +79405,7 @@ where
         DescribeReservedInstancesOfferingsRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeReservedInstancesOfferingsError::from_body(
@@ -79455,7 +79455,7 @@ where
         DescribeRouteTablesRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeRouteTablesError::from_body(
@@ -79506,7 +79506,7 @@ where
         DescribeScheduledInstanceAvailabilityRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeScheduledInstanceAvailabilityError::from_body(
@@ -79556,7 +79556,7 @@ where
         DescribeScheduledInstancesRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeScheduledInstancesError::from_body(
@@ -79605,7 +79605,7 @@ where
         DescribeSecurityGroupReferencesRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeSecurityGroupReferencesError::from_body(
@@ -79655,7 +79655,7 @@ where
         DescribeSecurityGroupsRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeSecurityGroupsError::from_body(
@@ -79703,7 +79703,7 @@ where
         DescribeSnapshotAttributeRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeSnapshotAttributeError::from_body(
@@ -79751,7 +79751,7 @@ where
         DescribeSnapshotsRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeSnapshotsError::from_body(
@@ -79800,7 +79800,7 @@ where
         DescribeSpotDatafeedSubscriptionRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeSpotDatafeedSubscriptionError::from_body(
@@ -79850,7 +79850,7 @@ where
         DescribeSpotFleetInstancesRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeSpotFleetInstancesError::from_body(
@@ -79901,7 +79901,7 @@ where
         DescribeSpotFleetRequestHistoryRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeSpotFleetRequestHistoryError::from_body(
@@ -79951,7 +79951,7 @@ where
         DescribeSpotFleetRequestsRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeSpotFleetRequestsError::from_body(
@@ -79999,7 +79999,7 @@ where
         DescribeSpotInstanceRequestsRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeSpotInstanceRequestsError::from_body(
@@ -80049,7 +80049,7 @@ where
         DescribeSpotPriceHistoryRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeSpotPriceHistoryError::from_body(
@@ -80097,7 +80097,7 @@ where
         DescribeStaleSecurityGroupsRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeStaleSecurityGroupsError::from_body(
@@ -80145,7 +80145,7 @@ where
         DescribeSubnetsRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeSubnetsError::from_body(
@@ -80193,7 +80193,7 @@ where
         DescribeTagsRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeTagsError::from_body(
@@ -80241,7 +80241,7 @@ where
         DescribeVolumeAttributeRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeVolumeAttributeError::from_body(
@@ -80289,7 +80289,7 @@ where
         DescribeVolumeStatusRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeVolumeStatusError::from_body(
@@ -80337,7 +80337,7 @@ where
         DescribeVolumesRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeVolumesError::from_body(
@@ -80385,7 +80385,7 @@ where
         DescribeVolumesModificationsRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeVolumesModificationsError::from_body(
@@ -80435,7 +80435,7 @@ where
         DescribeVpcAttributeRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeVpcAttributeError::from_body(
@@ -80483,7 +80483,7 @@ where
         DescribeVpcClassicLinkRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeVpcClassicLinkError::from_body(
@@ -80532,7 +80532,7 @@ where
         DescribeVpcClassicLinkDnsSupportRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeVpcClassicLinkDnsSupportError::from_body(
@@ -80589,7 +80589,7 @@ where
         );
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeVpcEndpointConnectionNotificationsError::from_body(
@@ -80640,7 +80640,7 @@ where
         DescribeVpcEndpointConnectionsRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeVpcEndpointConnectionsError::from_body(
@@ -80697,7 +80697,7 @@ where
         );
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeVpcEndpointServiceConfigurationsError::from_body(
@@ -80750,7 +80750,7 @@ where
         DescribeVpcEndpointServicePermissionsRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeVpcEndpointServicePermissionsError::from_body(
@@ -80800,7 +80800,7 @@ where
         DescribeVpcEndpointServicesRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeVpcEndpointServicesError::from_body(
@@ -80848,7 +80848,7 @@ where
         DescribeVpcEndpointsRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeVpcEndpointsError::from_body(
@@ -80896,7 +80896,7 @@ where
         DescribeVpcPeeringConnectionsRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeVpcPeeringConnectionsError::from_body(
@@ -80946,7 +80946,7 @@ where
         DescribeVpcsRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeVpcsError::from_body(
@@ -80994,7 +80994,7 @@ where
         DescribeVpnConnectionsRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeVpnConnectionsError::from_body(
@@ -81042,7 +81042,7 @@ where
         DescribeVpnGatewaysRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeVpnGatewaysError::from_body(
@@ -81090,7 +81090,7 @@ where
         DetachClassicLinkVpcRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DetachClassicLinkVpcError::from_body(
@@ -81138,7 +81138,7 @@ where
         DetachInternetGatewayRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DetachInternetGatewayError::from_body(
@@ -81166,7 +81166,7 @@ where
         DetachNetworkInterfaceRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DetachNetworkInterfaceError::from_body(
@@ -81194,7 +81194,7 @@ where
         DetachVolumeRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DetachVolumeError::from_body(
@@ -81242,7 +81242,7 @@ where
         DetachVpnGatewayRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DetachVpnGatewayError::from_body(
@@ -81270,7 +81270,7 @@ where
         DisableVgwRoutePropagationRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DisableVgwRoutePropagationError::from_body(
@@ -81298,7 +81298,7 @@ where
         DisableVpcClassicLinkRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DisableVpcClassicLinkError::from_body(
@@ -81347,7 +81347,7 @@ where
         DisableVpcClassicLinkDnsSupportRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DisableVpcClassicLinkDnsSupportError::from_body(
@@ -81397,7 +81397,7 @@ where
         DisassociateAddressRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DisassociateAddressError::from_body(
@@ -81426,7 +81426,7 @@ where
         DisassociateIamInstanceProfileRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DisassociateIamInstanceProfileError::from_body(
@@ -81476,7 +81476,7 @@ where
         DisassociateRouteTableRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DisassociateRouteTableError::from_body(
@@ -81504,7 +81504,7 @@ where
         DisassociateSubnetCidrBlockRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DisassociateSubnetCidrBlockError::from_body(
@@ -81552,7 +81552,7 @@ where
         DisassociateVpcCidrBlockRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DisassociateVpcCidrBlockError::from_body(
@@ -81600,7 +81600,7 @@ where
         EnableVgwRoutePropagationRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(EnableVgwRoutePropagationError::from_body(
@@ -81628,7 +81628,7 @@ where
         EnableVolumeIORequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(EnableVolumeIOError::from_body(
@@ -81656,7 +81656,7 @@ where
         EnableVpcClassicLinkRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(EnableVpcClassicLinkError::from_body(
@@ -81705,7 +81705,7 @@ where
         EnableVpcClassicLinkDnsSupportRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(EnableVpcClassicLinkDnsSupportError::from_body(
@@ -81755,7 +81755,7 @@ where
         GetConsoleOutputRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(GetConsoleOutputError::from_body(
@@ -81803,7 +81803,7 @@ where
         GetConsoleScreenshotRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(GetConsoleScreenshotError::from_body(
@@ -81852,7 +81852,7 @@ where
         GetHostReservationPurchasePreviewRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(GetHostReservationPurchasePreviewError::from_body(
@@ -81902,7 +81902,7 @@ where
         GetLaunchTemplateDataRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(GetLaunchTemplateDataError::from_body(
@@ -81950,7 +81950,7 @@ where
         GetPasswordDataRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(GetPasswordDataError::from_body(
@@ -81999,7 +81999,7 @@ where
         GetReservedInstancesExchangeQuoteRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(GetReservedInstancesExchangeQuoteError::from_body(
@@ -82049,7 +82049,7 @@ where
         ImportImageRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ImportImageError::from_body(
@@ -82097,7 +82097,7 @@ where
         ImportInstanceRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ImportInstanceError::from_body(
@@ -82145,7 +82145,7 @@ where
         ImportKeyPairRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ImportKeyPairError::from_body(
@@ -82193,7 +82193,7 @@ where
         ImportSnapshotRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ImportSnapshotError::from_body(
@@ -82241,7 +82241,7 @@ where
         ImportVolumeRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ImportVolumeError::from_body(
@@ -82289,7 +82289,7 @@ where
         ModifyFpgaImageAttributeRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ModifyFpgaImageAttributeError::from_body(
@@ -82337,7 +82337,7 @@ where
         ModifyHostsRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ModifyHostsError::from_body(
@@ -82385,7 +82385,7 @@ where
         ModifyIdFormatRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ModifyIdFormatError::from_body(
@@ -82413,7 +82413,7 @@ where
         ModifyIdentityIdFormatRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ModifyIdentityIdFormatError::from_body(
@@ -82441,7 +82441,7 @@ where
         ModifyImageAttributeRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ModifyImageAttributeError::from_body(
@@ -82469,7 +82469,7 @@ where
         ModifyInstanceAttributeRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ModifyInstanceAttributeError::from_body(
@@ -82498,7 +82498,7 @@ where
         ModifyInstanceCreditSpecificationRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ModifyInstanceCreditSpecificationError::from_body(
@@ -82548,7 +82548,7 @@ where
         ModifyInstancePlacementRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ModifyInstancePlacementError::from_body(
@@ -82596,7 +82596,7 @@ where
         ModifyLaunchTemplateRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ModifyLaunchTemplateError::from_body(
@@ -82644,7 +82644,7 @@ where
         ModifyNetworkInterfaceAttributeRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ModifyNetworkInterfaceAttributeError::from_body(
@@ -82672,7 +82672,7 @@ where
         ModifyReservedInstancesRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ModifyReservedInstancesError::from_body(
@@ -82720,7 +82720,7 @@ where
         ModifySnapshotAttributeRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ModifySnapshotAttributeError::from_body(
@@ -82748,7 +82748,7 @@ where
         ModifySpotFleetRequestRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ModifySpotFleetRequestError::from_body(
@@ -82796,7 +82796,7 @@ where
         ModifySubnetAttributeRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ModifySubnetAttributeError::from_body(
@@ -82824,7 +82824,7 @@ where
         ModifyVolumeRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ModifyVolumeError::from_body(
@@ -82872,7 +82872,7 @@ where
         ModifyVolumeAttributeRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ModifyVolumeAttributeError::from_body(
@@ -82900,7 +82900,7 @@ where
         ModifyVpcAttributeRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ModifyVpcAttributeError::from_body(
@@ -82928,7 +82928,7 @@ where
         ModifyVpcEndpointRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ModifyVpcEndpointError::from_body(
@@ -82983,7 +82983,7 @@ where
         );
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ModifyVpcEndpointConnectionNotificationError::from_body(
@@ -83036,7 +83036,7 @@ where
         ModifyVpcEndpointServiceConfigurationRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ModifyVpcEndpointServiceConfigurationError::from_body(
@@ -83089,7 +83089,7 @@ where
         ModifyVpcEndpointServicePermissionsRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ModifyVpcEndpointServicePermissionsError::from_body(
@@ -83140,7 +83140,7 @@ where
         ModifyVpcPeeringConnectionOptionsRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ModifyVpcPeeringConnectionOptionsError::from_body(
@@ -83190,7 +83190,7 @@ where
         ModifyVpcTenancyRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ModifyVpcTenancyError::from_body(
@@ -83238,7 +83238,7 @@ where
         MonitorInstancesRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(MonitorInstancesError::from_body(
@@ -83286,7 +83286,7 @@ where
         MoveAddressToVpcRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(MoveAddressToVpcError::from_body(
@@ -83334,7 +83334,7 @@ where
         PurchaseHostReservationRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(PurchaseHostReservationError::from_body(
@@ -83383,7 +83383,7 @@ where
         PurchaseReservedInstancesOfferingRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(PurchaseReservedInstancesOfferingError::from_body(
@@ -83433,7 +83433,7 @@ where
         PurchaseScheduledInstancesRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(PurchaseScheduledInstancesError::from_body(
@@ -83481,7 +83481,7 @@ where
         RebootInstancesRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(RebootInstancesError::from_body(
@@ -83509,7 +83509,7 @@ where
         RegisterImageRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(RegisterImageError::from_body(
@@ -83557,7 +83557,7 @@ where
         RejectVpcEndpointConnectionsRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(RejectVpcEndpointConnectionsError::from_body(
@@ -83607,7 +83607,7 @@ where
         RejectVpcPeeringConnectionRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(RejectVpcPeeringConnectionError::from_body(
@@ -83655,7 +83655,7 @@ where
         ReleaseAddressRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ReleaseAddressError::from_body(
@@ -83683,7 +83683,7 @@ where
         ReleaseHostsRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ReleaseHostsError::from_body(
@@ -83734,7 +83734,7 @@ where
         ReplaceIamInstanceProfileAssociationRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ReplaceIamInstanceProfileAssociationError::from_body(
@@ -83784,7 +83784,7 @@ where
         ReplaceNetworkAclAssociationRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ReplaceNetworkAclAssociationError::from_body(
@@ -83834,7 +83834,7 @@ where
         ReplaceNetworkAclEntryRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ReplaceNetworkAclEntryError::from_body(
@@ -83859,7 +83859,7 @@ where
         ReplaceRouteRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ReplaceRouteError::from_body(
@@ -83887,7 +83887,7 @@ where
         ReplaceRouteTableAssociationRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ReplaceRouteTableAssociationError::from_body(
@@ -83937,7 +83937,7 @@ where
         ReportInstanceStatusRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ReportInstanceStatusError::from_body(
@@ -83965,7 +83965,7 @@ where
         RequestSpotFleetRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(RequestSpotFleetError::from_body(
@@ -84013,7 +84013,7 @@ where
         RequestSpotInstancesRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(RequestSpotInstancesError::from_body(
@@ -84061,7 +84061,7 @@ where
         ResetFpgaImageAttributeRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ResetFpgaImageAttributeError::from_body(
@@ -84109,7 +84109,7 @@ where
         ResetImageAttributeRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ResetImageAttributeError::from_body(
@@ -84137,7 +84137,7 @@ where
         ResetInstanceAttributeRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ResetInstanceAttributeError::from_body(
@@ -84165,7 +84165,7 @@ where
         ResetNetworkInterfaceAttributeRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ResetNetworkInterfaceAttributeError::from_body(
@@ -84193,7 +84193,7 @@ where
         ResetSnapshotAttributeRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ResetSnapshotAttributeError::from_body(
@@ -84221,7 +84221,7 @@ where
         RestoreAddressToClassicRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(RestoreAddressToClassicError::from_body(
@@ -84269,7 +84269,7 @@ where
         RevokeSecurityGroupEgressRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(RevokeSecurityGroupEgressError::from_body(
@@ -84297,7 +84297,7 @@ where
         RevokeSecurityGroupIngressRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(RevokeSecurityGroupIngressError::from_body(
@@ -84325,7 +84325,7 @@ where
         RunInstancesRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(RunInstancesError::from_body(
@@ -84373,7 +84373,7 @@ where
         RunScheduledInstancesRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(RunScheduledInstancesError::from_body(
@@ -84421,7 +84421,7 @@ where
         StartInstancesRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(StartInstancesError::from_body(
@@ -84469,7 +84469,7 @@ where
         StopInstancesRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(StopInstancesError::from_body(
@@ -84517,7 +84517,7 @@ where
         TerminateInstancesRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(TerminateInstancesError::from_body(
@@ -84565,7 +84565,7 @@ where
         UnassignIpv6AddressesRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(UnassignIpv6AddressesError::from_body(
@@ -84613,7 +84613,7 @@ where
         UnassignPrivateIpAddressesRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(UnassignPrivateIpAddressesError::from_body(
@@ -84641,7 +84641,7 @@ where
         UnmonitorInstancesRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(UnmonitorInstancesError::from_body(
@@ -84696,7 +84696,7 @@ where
         );
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(UpdateSecurityGroupRuleDescriptionsEgressError::from_body(
@@ -84753,7 +84753,7 @@ where
         );
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(UpdateSecurityGroupRuleDescriptionsIngressError::from_body(

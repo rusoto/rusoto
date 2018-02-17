@@ -4039,7 +4039,7 @@ where
         AddPermissionRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(AddPermissionError::from_body(
@@ -4067,7 +4067,7 @@ where
         ChangeMessageVisibilityRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ChangeMessageVisibilityError::from_body(
@@ -4095,7 +4095,7 @@ where
         ChangeMessageVisibilityBatchRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ChangeMessageVisibilityBatchError::from_body(
@@ -4148,7 +4148,7 @@ where
         CreateQueueRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CreateQueueError::from_body(
@@ -4196,7 +4196,7 @@ where
         DeleteMessageRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteMessageError::from_body(
@@ -4224,7 +4224,7 @@ where
         DeleteMessageBatchRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteMessageBatchError::from_body(
@@ -4272,7 +4272,7 @@ where
         DeleteQueueRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteQueueError::from_body(
@@ -4300,7 +4300,7 @@ where
         GetQueueAttributesRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(GetQueueAttributesError::from_body(
@@ -4351,7 +4351,7 @@ where
         GetQueueUrlRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(GetQueueUrlError::from_body(
@@ -4402,7 +4402,7 @@ where
         ListDeadLetterSourceQueuesRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ListDeadLetterSourceQueuesError::from_body(
@@ -4453,7 +4453,7 @@ where
         ListQueueTagsRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ListQueueTagsError::from_body(
@@ -4504,7 +4504,7 @@ where
         ListQueuesRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ListQueuesError::from_body(
@@ -4552,7 +4552,7 @@ where
         PurgeQueueRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(PurgeQueueError::from_body(
@@ -4580,7 +4580,7 @@ where
         ReceiveMessageRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ReceiveMessageError::from_body(
@@ -4631,7 +4631,7 @@ where
         RemovePermissionRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(RemovePermissionError::from_body(
@@ -4659,7 +4659,7 @@ where
         SendMessageRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(SendMessageError::from_body(
@@ -4710,7 +4710,7 @@ where
         SendMessageBatchRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(SendMessageBatchError::from_body(
@@ -4761,7 +4761,7 @@ where
         SetQueueAttributesRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(SetQueueAttributesError::from_body(
@@ -4786,7 +4786,7 @@ where
         TagQueueRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(TagQueueError::from_body(
@@ -4811,7 +4811,7 @@ where
         UntagQueueRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(UntagQueueError::from_body(

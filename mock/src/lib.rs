@@ -8,6 +8,7 @@ extern crate rusoto_core;
 use std::fs::File;
 use std::io::Read;
 use std::collections::HashMap;
+use std::time::Duration;
 
 use rusoto_core::{DispatchSignedRequest, HttpResponse, HttpDispatchError, SignedRequest};
 use rusoto_core::credential::{ProvideAwsCredentials, CredentialsError, AwsCredentials};
@@ -66,7 +67,7 @@ impl MockRequestDispatcher {
 impl DispatchSignedRequest for MockRequestDispatcher {
     type Future = FutureResult<HttpResponse, HttpDispatchError>;
 
-    fn dispatch(&self, request: SignedRequest) -> Self::Future {
+    fn dispatch(&self, request: SignedRequest, _timeout: Option<Duration>) -> Self::Future {
         if self.request_checker.is_some() {
             self.request_checker.as_ref().unwrap()(&request);
         }

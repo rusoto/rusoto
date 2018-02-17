@@ -18258,7 +18258,7 @@ where
         }
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let result = ::std::mem::drop(response);
@@ -18291,7 +18291,7 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -18333,7 +18333,7 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -18375,7 +18375,7 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let result = ::std::mem::drop(response);
@@ -18411,7 +18411,7 @@ where
 
         request.add_header("x-amzn-iot-principal", &input.principal);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let result = ::std::mem::drop(response);
@@ -18447,7 +18447,7 @@ where
 
         request.add_header("x-amzn-principal", &input.principal);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -18490,7 +18490,7 @@ where
 
         request.set_endpoint_prefix("iot".to_string());
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let result = ::std::mem::drop(response);
@@ -18523,7 +18523,7 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -18561,7 +18561,7 @@ where
 
         request.set_endpoint_prefix("iot".to_string());
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -18606,7 +18606,7 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -18653,7 +18653,7 @@ where
         }
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -18695,7 +18695,7 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -18740,7 +18740,7 @@ where
         }
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -18785,7 +18785,7 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -18826,7 +18826,7 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -18876,7 +18876,7 @@ where
         }
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -18918,7 +18918,7 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -18959,7 +18959,7 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -19000,7 +19000,7 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -19044,7 +19044,7 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -19088,7 +19088,7 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -19129,7 +19129,7 @@ where
         let encoded = Some(serde_json::to_vec(&input.topic_rule_payload).unwrap());
         request.set_payload(encoded);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let result = ::std::mem::drop(response);
@@ -19163,7 +19163,7 @@ where
 
         request.set_endpoint_prefix("iot".to_string());
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -19205,7 +19205,7 @@ where
 
         request.set_endpoint_prefix("iot".to_string());
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -19254,7 +19254,7 @@ where
         }
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let result = ::std::mem::drop(response);
@@ -19288,7 +19288,7 @@ where
 
         request.set_endpoint_prefix("iot".to_string());
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -19324,7 +19324,7 @@ where
 
         request.set_endpoint_prefix("iot".to_string());
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let result = ::std::mem::drop(response);
@@ -19359,7 +19359,7 @@ where
 
         request.set_endpoint_prefix("iot".to_string());
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let result = ::std::mem::drop(response);
@@ -19389,7 +19389,7 @@ where
 
         request.set_endpoint_prefix("iot".to_string());
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -19429,7 +19429,7 @@ where
 
         request.set_endpoint_prefix("iot".to_string());
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -19468,7 +19468,7 @@ where
 
         request.set_endpoint_prefix("iot".to_string());
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -19513,7 +19513,7 @@ where
         }
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -19561,7 +19561,7 @@ where
         }
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -19603,7 +19603,7 @@ where
 
         request.set_endpoint_prefix("iot".to_string());
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -19642,7 +19642,7 @@ where
 
         request.set_endpoint_prefix("iot".to_string());
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let result = ::std::mem::drop(response);
@@ -19678,7 +19678,7 @@ where
         params.put("targetType", &input.target_type);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let result = ::std::mem::drop(response);
@@ -19714,7 +19714,7 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -19757,7 +19757,7 @@ where
 
         request.set_endpoint_prefix("iot".to_string());
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -19800,7 +19800,7 @@ where
 
         request.set_endpoint_prefix("iot".to_string());
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -19843,7 +19843,7 @@ where
 
         request.set_endpoint_prefix("iot".to_string());
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -19882,7 +19882,7 @@ where
 
         request.set_endpoint_prefix("iot".to_string());
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -19928,7 +19928,7 @@ where
         }
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -19966,7 +19966,7 @@ where
 
         request.set_endpoint_prefix("iot".to_string());
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -20007,7 +20007,7 @@ where
 
         request.set_endpoint_prefix("iot".to_string());
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -20046,7 +20046,7 @@ where
 
         request.set_endpoint_prefix("iot".to_string());
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -20095,7 +20095,7 @@ where
         }
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -20135,7 +20135,7 @@ where
 
         request.set_endpoint_prefix("iot".to_string());
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -20175,7 +20175,7 @@ where
 
         request.set_endpoint_prefix("iot".to_string());
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -20214,7 +20214,7 @@ where
 
         request.set_endpoint_prefix("iot".to_string());
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -20256,7 +20256,7 @@ where
 
         request.set_endpoint_prefix("iot".to_string());
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -20300,7 +20300,7 @@ where
 
         request.set_endpoint_prefix("iot".to_string());
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -20344,7 +20344,7 @@ where
 
         request.set_endpoint_prefix("iot".to_string());
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -20386,7 +20386,7 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let result = ::std::mem::drop(response);
@@ -20422,7 +20422,7 @@ where
 
         request.add_header("x-amzn-iot-principal", &input.principal);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let result = ::std::mem::drop(response);
@@ -20458,7 +20458,7 @@ where
 
         request.add_header("x-amzn-principal", &input.principal);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -20498,7 +20498,7 @@ where
 
         request.set_endpoint_prefix("iot".to_string());
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let result = ::std::mem::drop(response);
@@ -20529,7 +20529,7 @@ where
 
         request.set_endpoint_prefix("iot".to_string());
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let result = ::std::mem::drop(response);
@@ -20568,7 +20568,7 @@ where
         }
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -20607,7 +20607,7 @@ where
 
         request.set_endpoint_prefix("iot".to_string());
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -20647,7 +20647,7 @@ where
 
         request.set_endpoint_prefix("iot".to_string());
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -20685,7 +20685,7 @@ where
 
         request.set_endpoint_prefix("iot".to_string());
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -20728,7 +20728,7 @@ where
 
         request.set_endpoint_prefix("iot".to_string());
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -20767,7 +20767,7 @@ where
 
         request.set_endpoint_prefix("iot".to_string());
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -20810,7 +20810,7 @@ where
 
         request.set_endpoint_prefix("iot".to_string());
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -20848,7 +20848,7 @@ where
 
         request.set_endpoint_prefix("iot".to_string());
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -20888,7 +20888,7 @@ where
 
         request.set_endpoint_prefix("iot".to_string());
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -20926,7 +20926,7 @@ where
 
         request.set_endpoint_prefix("iot".to_string());
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -20978,7 +20978,7 @@ where
         }
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -21033,7 +21033,7 @@ where
         }
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -21084,7 +21084,7 @@ where
         }
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -21136,7 +21136,7 @@ where
         }
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -21190,7 +21190,7 @@ where
         }
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -21239,7 +21239,7 @@ where
         }
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -21290,7 +21290,7 @@ where
         }
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -21342,7 +21342,7 @@ where
         }
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -21400,7 +21400,7 @@ where
         }
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -21451,7 +21451,7 @@ where
         }
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -21502,7 +21502,7 @@ where
         }
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -21554,7 +21554,7 @@ where
         }
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -21606,7 +21606,7 @@ where
         }
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -21649,7 +21649,7 @@ where
 
         request.set_endpoint_prefix("iot".to_string());
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -21702,7 +21702,7 @@ where
         }
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -21752,7 +21752,7 @@ where
         }
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -21804,7 +21804,7 @@ where
         }
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -21855,7 +21855,7 @@ where
         }
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -21906,7 +21906,7 @@ where
         }
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -21964,7 +21964,7 @@ where
         }
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -22015,7 +22015,7 @@ where
         }
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -22058,7 +22058,7 @@ where
 
         request.set_endpoint_prefix("iot".to_string());
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -22112,7 +22112,7 @@ where
         params.put("reportType", &input.report_type);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -22165,7 +22165,7 @@ where
         }
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -22218,7 +22218,7 @@ where
         }
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -22275,7 +22275,7 @@ where
         }
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -22329,7 +22329,7 @@ where
         }
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -22384,7 +22384,7 @@ where
         }
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -22435,7 +22435,7 @@ where
         }
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -22486,7 +22486,7 @@ where
         }
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -22528,7 +22528,7 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -22570,7 +22570,7 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -22614,7 +22614,7 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let result = ::std::mem::drop(response);
@@ -22647,7 +22647,7 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -22689,7 +22689,7 @@ where
         let encoded = Some(serde_json::to_vec(&input.topic_rule_payload).unwrap());
         request.set_payload(encoded);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let result = ::std::mem::drop(response);
@@ -22722,7 +22722,7 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -22763,7 +22763,7 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -22807,7 +22807,7 @@ where
 
         request.set_endpoint_prefix("iot".to_string());
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let result = ::std::mem::drop(response);
@@ -22840,7 +22840,7 @@ where
         let encoded = Some(serde_json::to_vec(&input.logging_options_payload).unwrap());
         request.set_payload(encoded);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let result = ::std::mem::drop(response);
@@ -22873,7 +22873,7 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let result = ::std::mem::drop(response);
@@ -22906,7 +22906,7 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let result = ::std::mem::drop(response);
@@ -22939,7 +22939,7 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -22983,7 +22983,7 @@ where
 
         request.set_endpoint_prefix("iot".to_string());
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -23031,7 +23031,7 @@ where
         }
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -23076,7 +23076,7 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -23125,7 +23125,7 @@ where
         params.put("targetAwsAccount", &input.target_aws_account);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -23170,7 +23170,7 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -23223,7 +23223,7 @@ where
         }
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let result = ::std::mem::drop(response);
@@ -23261,7 +23261,7 @@ where
         params.put("newStatus", &input.new_status);
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let result = ::std::mem::drop(response);
@@ -23294,7 +23294,7 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -23336,7 +23336,7 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -23379,7 +23379,7 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -23420,7 +23420,7 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -23461,7 +23461,7 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -23505,7 +23505,7 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -23546,7 +23546,7 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;

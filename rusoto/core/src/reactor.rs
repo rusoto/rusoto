@@ -16,6 +16,7 @@
 
 use std::io::{Result as IoResult};
 use std::rc::Rc;
+use std::time::Duration;
 use std::thread;
 
 use futures::{Async, Future, Poll, Stream};
@@ -26,7 +27,7 @@ use tokio_core::reactor::{Core, Handle, Remote};
 use super::{
     SignedRequest, HttpResponse, HttpDispatchError, DispatchSignedRequest,
     AwsCredentials, CredentialsError, ProvideAwsCredentials,
-    default_tls_client, TlsError, DefaultCredentialsProvider
+    HttpClient, TlsError, DefaultCredentialsProvider
 };
 
 lazy_static! {
@@ -72,7 +73,7 @@ impl Reactor {
 
 /// A request dispatcher backed by an implicit event loop.
 pub struct RequestDispatcher {
-    sender: mpsc::UnboundedSender<(SignedRequest, oneshot::Sender<Result<HttpResponse, HttpDispatchError>>)>
+    sender: mpsc::UnboundedSender<((SignedRequest, Option<Duration>), oneshot::Sender<Result<HttpResponse, HttpDispatchError>>)>
 }
 
 impl Default for RequestDispatcher {
@@ -102,9 +103,9 @@ impl Future for RequestDispatcherFuture {
 impl DispatchSignedRequest for RequestDispatcher {
     type Future = RequestDispatcherFuture;
 
-    fn dispatch(&self, signed_request: SignedRequest) -> Self::Future {
+    fn dispatch(&self, signed_request: SignedRequest, timeout: Option<Duration>) -> Self::Future {
         let (tx, rx) = oneshot::channel();
-        if let Some(err) = self.sender.unbounded_send((signed_request, tx)).err() {
+        if let Some(err) = self.sender.unbounded_send(((signed_request, timeout), tx)).err() {
             panic!("failed to send request to reactor: {}", err);
         }
         RequestDispatcherFuture {
@@ -158,7 +159,7 @@ impl ProvideAwsCredentials for CredentialsProvider {
 
 impl Reactor {
     fn default_request_dispatcher(&self) -> Result<RequestDispatcher, TlsError> {
-        self.new_request_dispatcher(|handle| default_tls_client(&handle))
+        self.new_request_dispatcher(|handle| HttpClient::new(&handle))
     }
 
     fn default_credentials_provider(&self) -> Result<CredentialsProvider, CredentialsError> {
@@ -167,7 +168,7 @@ impl Reactor {
 
     fn new_request_dispatcher<D: DispatchSignedRequest + 'static, E: Send + 'static, F: FnOnce(Handle) -> Result<D, E> + Send + 'static>(&self, make_dispatcher: F) -> Result<RequestDispatcher, E> {
         self.new_responder(|handle| {
-            make_dispatcher(handle).map(|dispatcher| move |request| { dispatcher.dispatch(request) })
+            make_dispatcher(handle).map(|dispatcher| move |(request, timeout)| { dispatcher.dispatch(request, timeout) })
         }).map(|sender| RequestDispatcher { sender: sender })
     }
 

@@ -38,7 +38,7 @@ impl GenerateProtocol for QueryGenerator {
                     {serialize_input}
                     request.set_params(params);
 
-                    let future = self.inner.sign_and_dispatch(request).and_then(|response| {{
+                    let future = self.inner.sign_and_dispatch(request, |response| {{
                         if response.status != StatusCode::Ok {{
                             return future::Either::B(response.buffer().from_err().and_then(|response| {{
                                 Err({error_type}::from_body(String::from_utf8_lossy(response.body.as_ref()).as_ref()))

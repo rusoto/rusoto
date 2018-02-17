@@ -4279,7 +4279,7 @@ where
         }
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Created {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -4322,7 +4322,7 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Created {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -4362,7 +4362,7 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Accepted {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -4403,7 +4403,7 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Created {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -4441,7 +4441,7 @@ where
         let mut request = SignedRequest::new("DELETE", "lambda", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::NoContent {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let result = ::std::mem::drop(response);
@@ -4473,7 +4473,7 @@ where
         let mut request = SignedRequest::new("DELETE", "lambda", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Accepted {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -4520,7 +4520,7 @@ where
         }
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::NoContent {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let result = ::std::mem::drop(response);
@@ -4552,7 +4552,7 @@ where
         let mut request = SignedRequest::new("DELETE", "lambda", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::NoContent {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let result = ::std::mem::drop(response);
@@ -4580,7 +4580,7 @@ where
         let mut request = SignedRequest::new("GET", "lambda", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -4622,7 +4622,7 @@ where
         let mut request = SignedRequest::new("GET", "lambda", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -4662,7 +4662,7 @@ where
         let mut request = SignedRequest::new("GET", "lambda", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -4709,7 +4709,7 @@ where
         }
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -4755,7 +4755,7 @@ where
         }
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -4801,7 +4801,7 @@ where
         }
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -4862,7 +4862,7 @@ where
         }
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut result = InvocationResponse::default();
@@ -4911,7 +4911,7 @@ where
         let encoded = Some(input.invoke_args.to_owned());
         request.set_payload(encoded);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Accepted {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -4964,7 +4964,7 @@ where
         }
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -5016,7 +5016,7 @@ where
         }
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -5069,7 +5069,7 @@ where
         }
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -5103,7 +5103,7 @@ where
         let mut request = SignedRequest::new("GET", "lambda", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -5152,7 +5152,7 @@ where
         }
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -5196,7 +5196,7 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Created {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -5239,7 +5239,7 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -5286,7 +5286,7 @@ where
         }
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::NoContent {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let result = ::std::mem::drop(response);
@@ -5315,7 +5315,7 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::NoContent {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let result = ::std::mem::drop(response);
@@ -5347,7 +5347,7 @@ where
         }
         request.set_params(params);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::NoContent {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let result = ::std::mem::drop(response);
@@ -5383,7 +5383,7 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -5426,7 +5426,7 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Accepted {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -5470,7 +5470,7 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
@@ -5513,7 +5513,7 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+        let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
