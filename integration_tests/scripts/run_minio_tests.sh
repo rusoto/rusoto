@@ -15,3 +15,6 @@ export S3_ENDPOINT='http://localhost:9000'
     --run-arg=server \
     --run-arg=/home/shared \
     -- cargo test --features s3,disable_minio_unsupported
+
+docker rmi minio/minio
+docker rmi minio/minio:edge

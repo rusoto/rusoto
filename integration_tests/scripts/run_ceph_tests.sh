@@ -15,3 +15,5 @@ export S3_ENDPOINT='http://localhost:9000'
     --run-opt=--env=CEPH_PUBLIC_NETWORK=0.0.0.0/0 \
     --run-opt=--hostname=localhost \
     -- cargo test --features s3,disable_ceph_unsupported
+
+docker rmi ceph/demo
