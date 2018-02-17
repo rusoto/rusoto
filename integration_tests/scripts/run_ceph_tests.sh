@@ -4,6 +4,7 @@ export AWS_ACCESS_KEY_ID=ANTN35UAENTS5UIAEATD
 export AWS_SECRET_ACCESS_KEY=TtnuieannGt2rGuie2t8Tt7urarg5nauedRndrur
 export S3_ENDPOINT='http://localhost:9000'
 
+# if the docker image name changes, update cleanup step in SemaphoreCI:
 ./docker_test_run.py \
     --docker-image "ceph/demo" \
     --port=9000 \
