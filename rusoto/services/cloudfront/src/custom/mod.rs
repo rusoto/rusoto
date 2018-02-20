@@ -13,9 +13,9 @@ mod tests {
             "cloudfront-list-distributions.xml",
             );
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
-        let client = CloudFrontClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+        let client = CloudFrontClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = ListDistributionsRequest::default();
-        let result = client.list_distributions(&request).sync();
+        let result = client.list_distributions(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
         assert!(result.unwrap().distribution_list.is_some(), "Should have a distribution list");
     }
