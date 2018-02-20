@@ -4822,37 +4822,16 @@ impl ListDistributionsResultDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListDistributionsResult, XmlParseError> {
-        try!(start_element(tag_name, stack));
-
         let mut obj = ListDistributionsResult::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "DistributionList" => {
-                        obj.distribution_list = Some(try!(
-                            DistributionListDeserializer::deserialize("DistributionList", stack)
-                        ));
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
-                }
+        match tag_name {
+            "DistributionList" => {
+                obj.distribution_list = Some(try!(DistributionListDeserializer::deserialize(
+                    "DistributionList",
+                    stack
+                )));
             }
+            _ => skip_tree(stack),
         }
-
-        try!(end_element(tag_name, stack));
-
         Ok(obj)
     }
 }
