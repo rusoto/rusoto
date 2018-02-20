@@ -363,37 +363,54 @@ fn generate_struct_deserializer(name: &str, service: &Service, shape: &Shape) ->
         );
     }
 
-    format!(
-        "try!(start_element(tag_name, stack));
-
-        let mut obj = {name}::default();
-
-        loop {{
-            let next_event = match stack.peek() {{
-                Some(&Ok(XmlEvent::EndElement {{ ref name, .. }})) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement {{ ref name, .. }})) => DeserializerNext::Element(name.local_name.to_owned()),
-                _ => DeserializerNext::Skip,
-            }};
-
-            match next_event {{
-                DeserializerNext::Element(name) => {{
-                    match &name[..] {{
-                        {struct_field_deserializers}
-                        _ => skip_tree(stack),
-                    }}
-                }},
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {{ stack.next(); }},
+    // CloudFront ListDistributionsResult lacks an element in the response that
+    // is declared in the schema. Ugly workaround.
+    if name == "ListDistributionsResult" && service.name() == "CloudFront" {
+        format!(
+            "
+            let mut obj = {name}::default();
+            match tag_name {{
+                {struct_field_deserializers}
+                _ => skip_tree(stack),
             }}
-        }}
+            Ok(obj)
+            ",
+            name = name,
+            struct_field_deserializers = generate_struct_field_deserializers(service, shape),
+        )
+    } else {
+        format!(
+            "try!(start_element(tag_name, stack));
 
-        try!(end_element(tag_name, stack));
+            let mut obj = {name}::default();
 
-        Ok(obj)
-        ",
-        name = name,
-        struct_field_deserializers = generate_struct_field_deserializers(service, shape),
-    )
+            loop {{
+                let next_event = match stack.peek() {{
+                    Some(&Ok(XmlEvent::EndElement {{ ref name, .. }})) => DeserializerNext::Close,
+                    Some(&Ok(XmlEvent::StartElement {{ ref name, .. }})) => DeserializerNext::Element(name.local_name.to_owned()),
+                    _ => DeserializerNext::Skip,
+                }};
+
+                match next_event {{
+                    DeserializerNext::Element(name) => {{
+                        match &name[..] {{
+                            {struct_field_deserializers}
+                            _ => skip_tree(stack),
+                        }}
+                    }},
+                    DeserializerNext::Close => break,
+                    DeserializerNext::Skip => {{ stack.next(); }},
+                }}
+            }}
+
+            try!(end_element(tag_name, stack));
+
+            Ok(obj)
+            ",
+            name = name,
+            struct_field_deserializers = generate_struct_field_deserializers(service, shape),
+        )
+    }
 }
 
 fn generate_struct_field_deserializers(service: &Service, shape: &Shape) -> String {
