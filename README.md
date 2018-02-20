@@ -1,4 +1,4 @@
-# Rusoto
+# ![Rusoto](./assets/logo-wide.png)
 
 <table>
     <tr>
