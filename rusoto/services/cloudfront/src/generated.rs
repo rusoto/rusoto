@@ -4974,35 +4974,13 @@ impl ListTagsForResourceResultDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListTagsForResourceResult, XmlParseError> {
-        try!(start_element(tag_name, stack));
-
         let mut obj = ListTagsForResourceResult::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "Tags" => {
-                        obj.tags = try!(TagsDeserializer::deserialize("Tags", stack));
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
-                }
+        match tag_name {
+            "Tags" => {
+                obj.tags = try!(TagsDeserializer::deserialize("Tags", stack));
             }
+            _ => skip_tree(stack),
         }
-
-        try!(end_element(tag_name, stack));
-
         Ok(obj)
     }
 }
