@@ -4644,6 +4644,7 @@ impl ListTagsForResourceResultDeserializer {
         })
     }
 }
+
 struct LocationListDeserializer;
 impl LocationListDeserializer {
     #[allow(unused_variables)]
