@@ -4,7 +4,7 @@
 - Add Connect service
 - Add MediaTailor support
 - Add ByteStream struct to core
-- Make parsing of CloudFront ListDistributions work
+- Make parsing of CloudFront ListDistributions and ListTagsForResource work
 
 ## [0.35.0] - 2018-10-31
 
