@@ -1,15 +1,17 @@
 //! The Credentials provider to read from a task's IAM Role.
 
 use std::error::Error;
+use std::time::Duration;
+
 use futures::{Async, Future, Poll};
-use futures::future::err;
-use hyper::{Client, Uri, Request, Method};
+use futures::future::{FutureResult, err};
+use hyper::{Uri, Request, Method};
 use hyper::header::Authorization;
-use hyper::client::HttpConnector;
 use tokio_core::reactor::Handle;
 
 use {AwsCredentials, CredentialsError, ProvideAwsCredentials,
-     make_request, parse_credentials_from_aws_service, non_empty_env_var};
+     parse_credentials_from_aws_service, non_empty_env_var};
+use request::{HttpClient, HttpClientFuture};
 
 // The following constants are documented in AWS' ECS developers guide,
 // see https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-iam-roles.html.
@@ -22,6 +24,9 @@ const AWS_CONTAINER_AUTHORIZATION_TOKEN: &str = "AWS_CONTAINER_AUTHORIZATION_TOK
 
 /// Provides AWS credentials from a task's IAM role.
 ///
+/// The provider has a default timeout of 30 seconds. While it should work well for most setups,
+/// you can change the timeout using the `set_timeout` method.
+///
 /// As described in Amazon's
 /// [ECS developers guide](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-iam-roles.html),
 /// Containers started as part of Tasks using IAM Roles for Tasks will be provided with a relative
@@ -31,22 +36,56 @@ const AWS_CONTAINER_AUTHORIZATION_TOKEN: &str = "AWS_CONTAINER_AUTHORIZATION_TOK
 /// credentials and will (optionally) also set the ```Authorization``` header to the value of
 /// environment variable ```AWS_CONTAINER_AUTHORIZATION_TOKEN```.
 ///
+/// # Example
+///
+/// ```rust
+/// extern crate rusoto_credential;
+/// extern crate tokio_core;
+///
+/// use std::time::Duration;
+///
+/// use rusoto_credential::ContainerProvider;
+/// use tokio_core::reactor::Core;
+///
+/// fn main() {
+///   let core = Core::new().unwrap();
+///
+///   let mut provider = ContainerProvider::new(&core.handle());
+///   // you can overwrite the default timeout like this:
+///   provider.set_timeout(Duration::from_secs(60));
+///
+///   // ...
+/// }
+/// ```
 #[derive(Clone, Debug)]
 pub struct ContainerProvider {
-    client: Client<HttpConnector>
+    client: HttpClient,
+    timeout: Duration
 }
 
 impl ContainerProvider {
     /// Create a new provider with the given handle.
     pub fn new(handle: &Handle) -> Self {
-        let client = Client::configure().build(handle);
-        ContainerProvider { client: client }
+        ContainerProvider {
+            client: HttpClient::new(handle),
+            timeout: Duration::from_secs(30)
+        }
+    }
+
+    /// Set the timeout on the provider to the specified duration.
+    pub fn set_timeout(&mut self, timeout: Duration) {
+        self.timeout = timeout;
     }
 }
 
 /// Future returned from `ContainerProvider`.
 pub struct ContainerProviderFuture {
-    inner: Box<Future<Item=String, Error=CredentialsError>>
+    inner: ContainerProviderFutureInner
+}
+
+enum ContainerProviderFutureInner {
+    Result(FutureResult<String, CredentialsError>),
+    Future(HttpClientFuture)
 }
 
 impl Future for ContainerProviderFuture {
@@ -54,7 +93,12 @@ impl Future for ContainerProviderFuture {
     type Error = CredentialsError;
 
     fn poll(&mut self) -> Poll<Self::Item, Self::Error> {
-        let resp = try_ready!(self.inner.poll());
+        let resp = match self.inner {
+            ContainerProviderFutureInner::Result(ref mut result) =>
+                try_ready!(result.poll()),
+            ContainerProviderFutureInner::Future(ref mut future) =>
+                try_ready!(future.poll())
+        };
         let creds = parse_credentials_from_aws_service(&resp)?;
         Ok(Async::Ready(creds))
     }
@@ -64,17 +108,17 @@ impl ProvideAwsCredentials for ContainerProvider {
     type Future = ContainerProviderFuture;
 
     fn credentials(&self) -> Self::Future {
-        let inner = match credentials_from_container(&self.client) {
-            Ok(future) => future,
-            Err(e) => Box::new(err(e))
+        let inner = match credentials_from_container(&self.client, self.timeout) {
+            Ok(future) => ContainerProviderFutureInner::Future(future),
+            Err(e) => ContainerProviderFutureInner::Result(err(e))
         };
         ContainerProviderFuture { inner: inner }
     }
 }
 
 /// Grabs the Credentials from the AWS Container Credentials Provider. (169.254.170.2).
-fn credentials_from_container(client: &Client<HttpConnector>) -> Result<Box<Future<Item=String, Error=CredentialsError>>, CredentialsError> {
-    Ok(make_request(client, request_from_env_vars()?))
+fn credentials_from_container(client: &HttpClient, timeout: Duration) -> Result<HttpClientFuture, CredentialsError> {
+    Ok(client.request(request_from_env_vars()?, timeout))
 }
 
 fn request_from_env_vars() -> Result<Request, CredentialsError> {

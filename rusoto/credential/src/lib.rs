@@ -20,6 +20,7 @@ pub use static_provider::StaticProvider;
 pub use instance_metadata::InstanceMetadataProvider;
 pub use profile::ProfileProvider;
 
+mod request;
 mod container;
 mod environment;
 mod static_provider;
@@ -31,18 +32,16 @@ use std::env::var as env_var;
 use std::fmt;
 use std::error::Error;
 use std::io::Error as IoError;
-use std::io::ErrorKind::InvalidData;
 use std::ops::Deref;
 use std::sync::Mutex;
+use std::time::Duration;
 use std::cell::RefCell;
 use std::collections::BTreeMap;
 
-use chrono::{Duration, Utc, DateTime, ParseError};
-use futures::{Async, Future, Poll, Stream};
+use chrono::{Duration as ChronoDuration, Utc, DateTime, ParseError};
+use futures::{Async, Future, Poll};
 use futures::future::{Either, Shared, SharedItem, err};
-use hyper::{Client, Error as HyperError};
-use hyper::client::Connect;
-use hyper::Request;
+use hyper::{Error as HyperError};
 use hyper::error::UriError;
 use serde_json::{from_str as json_from_str, Value};
 use tokio_core::reactor::Handle;
@@ -106,7 +105,7 @@ impl AwsCredentials {
             Some(ref e) =>
                 // This is a rough hack to hopefully avoid someone requesting creds then sitting on them
                 // before issuing the request:
-               *e < Utc::now() + Duration::seconds(20),
+               *e < Utc::now() + ChronoDuration::seconds(20),
             None => false,
         }
     }
@@ -194,10 +193,28 @@ pub trait ProvideAwsCredentials {
 /// Wrapper for `ProvideAwsCredentials` that caches the credentials returned by the
 /// wrapped provider.  Each time the credentials are accessed, they are checked to see if
 /// they have expired, in which case they are retrieved from the wrapped provider again.
+///
+/// In order to access the wrapped provider, for instance to set a timeout, the `get_ref`
+/// and `get_mut` methods can be used.
 #[derive(Debug)]
 pub struct BaseAutoRefreshingProvider<P: ProvideAwsCredentials + 'static, T> {
     credentials_provider: P,
     shared_future: T,
+}
+
+impl<P: ProvideAwsCredentials + 'static, T> BaseAutoRefreshingProvider<P, T> {
+    /// Get a shared reference to the wrapped provider.
+    pub fn get_ref(&self) -> &P {
+        &self.credentials_provider
+    }
+
+    /// Get a mutable reference to the wrapped provider.
+    ///
+    /// This can be used to call `set_timeout` on the wrapped
+    /// provider.
+    pub fn get_mut(&mut self) -> &mut P {
+        &mut self.credentials_provider
+    }
 }
 
 enum AutoRefreshingFutureInner<P: ProvideAwsCredentials + 'static> {
@@ -356,11 +373,44 @@ impl DefaultCredentialsProviderSync {
 /// 3. IAM instance profile. Will only work if running on an EC2 instance with an instance profile/role.
 ///
 /// If the sources are exhausted without finding credentials, an error is returned.
+///
+/// The provider has a default timeout of 30 seconds. While it should work well for most setups,
+/// you can change the timeout using the `set_timeout` method.
+///
+/// # Example
+///
+/// ```rust
+/// extern crate rusoto_credential;
+/// extern crate tokio_core;
+///
+/// use std::time::Duration;
+///
+/// use rusoto_credential::ChainProvider;
+/// use tokio_core::reactor::Core;
+///
+/// fn main() {
+///   let core = Core::new().unwrap();
+///
+///   let mut provider = ChainProvider::new(&core.handle());
+///   // you can overwrite the default timeout like this:
+///   provider.set_timeout(Duration::from_secs(60));
+///
+///   // ...
+/// }
+/// ```
 #[derive(Debug, Clone)]
 pub struct ChainProvider {
     instance_metadata_provider: InstanceMetadataProvider,
     container_provider: ContainerProvider,
     profile_provider: Option<ProfileProvider>,
+}
+
+impl ChainProvider {
+    /// Set the timeout on the provider to the specified duration.
+    pub fn set_timeout(&mut self, duration: Duration) {
+        self.instance_metadata_provider.set_timeout(duration);
+        self.container_provider.set_timeout(duration);
+    }
 }
 
 /// Future returned from `ChainProvider`.
@@ -475,33 +525,6 @@ fn parse_credentials_from_aws_service(response: &str) -> Result<AwsCredentials, 
         Some(token),
         expiration,
     ))
-}
-
-/// Makes an Async Request with a timeout. Defaults to 30 seconds.
-fn make_request<C: Connect>(
-    client: &Client<C>,
-    request: Request
-) -> Box<Future<Item=String, Error=CredentialsError>> {
-    let get = client.request(request).and_then(|res| {
-        if !res.status().is_success() {
-            Either::A(err(HyperError::Io(IoError::new(
-                InvalidData,
-                format!("Invalid Response Code: {}", res.status()),
-            ))))
-        } else {
-            Either::B(res.body().concat2())
-        }
-    });
-
-    Box::new(get.from_err().and_then(|got| {
-        let data = std::str::from_utf8(&got);
-        if data.is_err() {
-            return Err(HyperError::Io(
-                IoError::new(InvalidData, "Non UTF-8 Data returned"),
-            ).into());
-        }
-        Ok(data.unwrap().to_owned())
-    }))
 }
 
 #[cfg(test)]
