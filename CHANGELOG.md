@@ -3,6 +3,7 @@
 ## [Unreleased]
 (Please put an entry here in each PR)
 
+- Show secret keys and tokens as `"**********"` in `Debug` output
 - Use ```$AWS_PROFILE``` to obtain default profile name 
 - Implement `Default` for `Region`
 - Derive Clone for remaining types (affects CloudFront, Route 53 and S3)

@@ -48,7 +48,7 @@ use tokio_core::reactor::Handle;
 
 /// AWS API access credentials, including access key, secret key, token (for IAM profiles),
 /// expiration timestamp, and claims from federated login.
-#[derive(Clone, Debug)]
+#[derive(Clone)]
 pub struct AwsCredentials {
     key: String,
     secret: String,
@@ -118,6 +118,18 @@ impl AwsCredentials {
     /// Get the mutable token claims
     pub fn claims_mut(&mut self) -> &mut BTreeMap<String, String> {
         &mut self.claims
+    }
+}
+
+impl fmt::Debug for AwsCredentials {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        f.debug_struct("AwsCredentials")
+            .field("key", &self.key)
+            .field("secret", &"**********")
+            .field("token", &self.token.as_ref().map(|_| "**********"))
+            .field("expires_at", &self.expires_at)
+            .field("claims", &self.claims)
+            .finish()
     }
 }
 
