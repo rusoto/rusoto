@@ -12,6 +12,6 @@ fn should_describe_db_clusters() {
     let client = RdsClient::simple(Region::UsEast1);
     let request = DescribeDBClustersMessage::default();
 
-    let result = client.describe_db_clusters(&request).sync();
+    let result = client.describe_db_clusters(&request).sync().unwrap();
     println!("{:#?}", result);
 }

@@ -12,6 +12,6 @@ fn should_list_jobs() {
     let client = ImportExportClient::simple(Region::UsEast1);
     let request = ListJobsInput::default();
 
-    let result = client.list_jobs(&request).sync();
+    let result = client.list_jobs(&request).sync().unwrap();
     println!("{:#?}", result);
 }

@@ -224,7 +224,7 @@ fn test_put_object_with_filename(client: &TestClient,
                 body: Some(contents),
                 ..Default::default()
             };
-            let result = client.put_object(&req).sync();
+            let result = client.put_object(&req).sync().expect("Couldn't PUT object");
             println!("{:#?}", result);
         }
     }
@@ -398,7 +398,7 @@ fn test_put_object_with_metadata(client: &TestClient,
                 metadata: Some(metadata.clone()),
                 ..Default::default()
             };
-            let result = client.put_object(&req).sync();
+            let result = client.put_object(&req).sync().expect("Couldn't PUT object");
             println!("{:#?}", result);
         }
     }

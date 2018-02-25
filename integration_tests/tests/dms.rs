@@ -11,6 +11,6 @@ fn should_describe_tags() {
     let client = DatabaseMigrationServiceClient::simple(Region::UsEast1);
     let request = DescribeEndpointsMessage::default();
 
-    let result = client.describe_endpoints(&request).sync();
+    let result = client.describe_endpoints(&request).sync().unwrap();
 	println!("{:#?}", result);
 }
