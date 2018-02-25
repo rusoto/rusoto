@@ -26,6 +26,7 @@ mod environment;
 mod static_provider;
 mod instance_metadata;
 mod profile;
+pub(crate) mod test_utils;
 pub mod claims;
 
 use std::env::var as env_var;
@@ -543,12 +544,16 @@ fn parse_credentials_from_aws_service(response: &str) -> Result<AwsCredentials, 
 #[macro_use] extern crate lazy_static;
 
 #[cfg(test)]
+#[macro_use] extern crate quickcheck;
+
+#[cfg(test)]
 mod tests {
     use std::io::Read;
     use std::fs::{self, File};
     use std::path::Path;
 
     use futures::Future;
+    use test_utils::{is_secret_hidden_behind_asterisks, SECRET};
 
     use super::*;
 
@@ -600,5 +605,22 @@ mod tests {
             credentials.aws_secret_access_key(),
             "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
         );
+    }
+
+    #[test]
+    quickcheck! {
+        fn test_aws_credentials_secrets_not_in_debug(
+            key: String,
+            valid_for: Option<i64>,
+            token: Option<()>
+        ) -> bool {
+            let creds = AwsCredentials::new(
+                key,
+                SECRET.to_owned(),
+                token.map(|_| test_utils::SECRET.to_owned()),
+                valid_for.map(|v| Utc::now() + ChronoDuration::seconds(v)),
+            );
+            is_secret_hidden_behind_asterisks(&creds)
+        }
     }
 }

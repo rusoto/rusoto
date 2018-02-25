@@ -93,6 +93,7 @@ mod tests {
     use std::thread;
     use std::time;
 
+    use test_utils::{is_secret_hidden_behind_asterisks, SECRET};
     use ProvideAwsCredentials;
     use super::*;
 
@@ -145,5 +146,22 @@ mod tests {
         thread::sleep(time::Duration::from_secs(1));
         let creds2 = provider.credentials().wait().unwrap();
         assert!(creds1.expires_at() < creds2.expires_at());
+    }
+
+    #[test]
+    quickcheck! {
+        fn test_static_provider_secrets_not_in_debug(
+            access_key: String,
+            token: Option<()>,
+            valid_for: Option<i64>
+        ) -> bool {
+            let provider = StaticProvider::new(
+                access_key,
+                SECRET.to_owned(),
+                token.map(|_| SECRET.to_owned()),
+                valid_for
+            );
+            is_secret_hidden_behind_asterisks(&provider)
+        }
     }
 }
