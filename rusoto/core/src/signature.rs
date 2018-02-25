@@ -622,6 +622,7 @@ mod tests {
         assert_eq!(signature_bar, "2ba6879cd9e769d73df721dc90aafdaa843005d23f5b6c91d0744f804962e44f".to_string());
     }
 
+    #[test]
     fn signed_headers_unsigned_first() {
         let mut headers = BTreeMap::new();
 
@@ -648,6 +649,7 @@ mod tests {
         assert_eq!(super::signed_headers(&headers), "cache-control;content-type;host;x-amz-date");
     }
 
+    #[test]
     fn signed_headers_unsigned_last() {
         let mut headers = BTreeMap::new();
         headers.insert("cache-control".to_owned(), vec![vec![]]);
