@@ -321,8 +321,8 @@ pub fn string_to_sign(date: Tm, hashed_canonical_request: &str, scope: &str) -> 
 
 fn signed_headers(headers: &BTreeMap<String, Vec<Vec<u8>>>) -> String {
     let mut signed = String::new();
-    headers.iter().
-        filter(|&(ref key, _)| !skipped_headers(&key))
+    headers.iter()
+        .filter(|&(ref key, _)| !skipped_headers(&key))
         .for_each(|(key, _)| {
             if !signed.is_empty() {
                 signed.push(';');

@@ -3,6 +3,7 @@
 ## [Unreleased]
 (Please put an entry here in each PR)
 
+- Ensure list of signed headers is correct when not all headers are signed
 - Use ```$AWS_PROFILE``` to obtain default profile name 
 - Implement `Default` for `Region`
 - Derive Clone for remaining types (affects CloudFront, Route 53 and S3)
