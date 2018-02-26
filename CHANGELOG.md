@@ -3,6 +3,8 @@
 ## [Unreleased]
 (Please put an entry here in each PR)
 
+- More efficiently and correctly remove scheme from `Region::Custom` endpoints
+
 ## [0.32.0] - 2018-03-03
 
 - Convert all services to `futures`-based APIs
@@ -12,8 +14,8 @@
 - Implement `Default` for `Region`
 - Derive Clone for remaining types (affects CloudFront, Route 53 and S3)
 - Link to service-specific documentation in generated Cargo manifests
-- Change credential expiration for non-temporary crendentials to be optional and add support for ```AWS_CREDENTIAL_EXPIRATION``` to EnvironmentProvider
-- Improve ContainerProvider to mimik the behavior of the other SDKs by also considering ```AWS_CONTAINER_AUTHORIZATION_TOKEN``` and ```AWS_CONTAINER_CREDENTIALS_FULL_URI```
+- Change credential expiration for non-temporary credentials to be optional and add support for ```AWS_CREDENTIAL_EXPIRATION``` to EnvironmentProvider
+- Improve ContainerProvider to mimic the behavior of the other SDKs by also considering ```AWS_CONTAINER_AUTHORIZATION_TOKEN``` and ```AWS_CONTAINER_CREDENTIALS_FULL_URI```
 - Implement per-call timeouts for the `DispatchSignedRequest` trait
 - Implement timeouts for `ContainerProvider` and `InstanceMetadataProvider`
 
