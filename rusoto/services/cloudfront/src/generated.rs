@@ -3395,6 +3395,7 @@ impl GetDistributionConfigResultDeserializer {
         })
     }
 }
+
 /// <p>The request to get a distribution's information.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetDistributionRequest {
