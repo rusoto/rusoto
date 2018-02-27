@@ -18,7 +18,7 @@ use rusoto_s3::{S3, S3Client, HeadObjectRequest, CopyObjectRequest, GetObjectErr
                  PutObjectRequest, DeleteObjectRequest, PutBucketCorsRequest, CORSConfiguration,
                  CORSRule, CreateBucketRequest, DeleteBucketRequest, CreateMultipartUploadRequest,
                  UploadPartRequest, CompleteMultipartUploadRequest, CompletedMultipartUpload,
-                 CompletedPart, ListObjectsV2Request};
+                 CompletedPart, ListObjectsRequest, ListObjectsV2Request};
 
 type TestClient = S3Client;
 
@@ -36,7 +36,7 @@ fn test_all_the_things() {
     } else {
         Region::UsEast1
     };
-    
+
     let client = S3Client::simple(region);
 
     let test_bucket = format!("rusoto-test-bucket-{}", get_time().sec);
@@ -121,10 +121,13 @@ fn test_all_the_things() {
     test_head_object_with_metadata(&client, &test_bucket, &metadata_filename, &metadata);
     test_get_object_with_metadata(&client, &test_bucket, &metadata_filename, &metadata);
 
-    // list items with paging
+    // list items with paging using list object API v1
+    list_items_in_bucket_paged_v1(&client, &test_bucket);
+
+    // list items with paging using list object API v2
     if cfg!(not(feature = "disable_ceph_unsupported")) {
         // Ceph support: this test depends on the list object v2 API which is not implemented by Ceph
-        list_items_in_bucket_paged(&client, &test_bucket);
+        list_items_in_bucket_paged_v2(&client, &test_bucket);
     }
 
     test_delete_object(&client, &test_bucket, &metadata_filename);
@@ -339,22 +342,49 @@ fn list_items_in_bucket(client: &TestClient, bucket: &str) {
     println!("Items in bucket: {:#?}", result);
 }
 
+fn list_items_in_bucket_paged_v1(client: &TestClient, bucket: &str) {
+    let mut list_request = ListObjectsRequest {
+        delimiter: Some("/".to_owned()),
+        bucket: bucket.to_owned(),
+        max_keys: Some(2),
+        ..Default::default()
+    };
+
+    let response1 = client.list_objects(&list_request).sync().expect("list objects failed");
+    println!("Items in bucket, page 1: {:#?}", response1);
+    let contents1 = response1.contents.unwrap();
+    assert!(response1.is_truncated.unwrap());
+    assert_eq!(contents1.len(), 2);
+
+    list_request.marker = Some(response1.next_marker.unwrap());
+    list_request.max_keys = Some(1000);
+    let response2 = client.list_objects(&list_request).sync().expect("list objects failed");
+    println!("Items in buckut, page 2: {:#?}", response2);
+    let contents2 = response2.contents.unwrap();
+    assert!(!response2.is_truncated.unwrap());
+    assert!(contents1[1].key.as_ref().unwrap() < contents2[0].key.as_ref().unwrap());
+}
+
 // Assuming there's already more than three item in our test bucket:
-fn list_items_in_bucket_paged(client: &TestClient, bucket: &str) {
+fn list_items_in_bucket_paged_v2(client: &TestClient, bucket: &str) {
     let mut list_obj_req = ListObjectsV2Request {
         bucket: bucket.to_owned(),
         max_keys: Some(1),
         ..Default::default()
     };
-    let result = client.list_objects_v2(&list_obj_req).sync().expect("list objects v2 failed");
-    println!("Items in bucket, page 1: {:#?}", result);
-    assert!(result.next_continuation_token.is_some());
+    let result1 = client.list_objects_v2(&list_obj_req).sync().expect("list objects v2 failed");
+    println!("Items in bucket, page 1: {:#?}", result1);
+    assert!(result1.next_continuation_token.is_some());
 
-    list_obj_req.continuation_token = result.next_continuation_token;
-    let result = client.list_objects_v2(&list_obj_req).sync().expect("list objects v2 paging failed");
-    println!("Items in bucket, page 2: {:#?}", result);
+    list_obj_req.continuation_token = result1.next_continuation_token;
+    let result2 = client.list_objects_v2(&list_obj_req).sync().expect("list objects v2 paging failed");
+    println!("Items in bucket, page 2: {:#?}", result2);
     // For the second call it the token is in `continuation_token` not `next_continuation_token`
-    assert!(result.continuation_token.is_some());
+    assert!(result2.continuation_token.is_some());
+    assert!(
+        result1.contents.unwrap()[0].key.as_ref().unwrap()
+            < result2.contents.unwrap()[0].key.as_ref().unwrap()
+    );
 }
 
 fn test_put_bucket_cors(client: &TestClient, bucket: &str) {
@@ -385,7 +415,7 @@ fn test_put_object_with_metadata(client: &TestClient,
                                  dest_filename: &str,
                                  local_filename: &str,
                                  metadata: &HashMap<String,String>) {
-    
+
     let mut f = File::open(local_filename).unwrap();
     let mut contents: Vec<u8> = Vec::new();
     match f.read_to_end(&mut contents) {
