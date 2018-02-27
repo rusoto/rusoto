@@ -3524,39 +3524,16 @@ impl GetDistributionConfigResultDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetDistributionConfigResult, XmlParseError> {
-        try!(start_element(tag_name, stack));
-
         let mut obj = GetDistributionConfigResult::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "DistributionConfig" => {
-                        obj.distribution_config =
-                            Some(try!(DistributionConfigDeserializer::deserialize(
-                                "DistributionConfig",
-                                stack
-                            )));
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
-                }
+        match tag_name {
+            "DistributionConfig" => {
+                obj.distribution_config = Some(try!(DistributionConfigDeserializer::deserialize(
+                    "DistributionConfig",
+                    stack
+                )));
             }
+            _ => skip_tree(stack),
         }
-
-        try!(end_element(tag_name, stack));
-
         Ok(obj)
     }
 }
