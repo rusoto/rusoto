@@ -403,8 +403,11 @@ fn generate_struct_deserializer(name: &str, service: &Service, shape: &Shape) ->
 
     // CloudFront ListDistributionsResult lacks an element in the response that
     // is declared in the schema. Ugly workaround.
-    if (name == "ListDistributionsResult" || name == "ListTagsForResourceResult") &&
-        service.name() == "CloudFront" {
+    if service.name() == "CloudFront" &&
+        (name == "ListDistributionsResult" ||
+         name == "ListTagsForResourceResult" ||
+         name == "GetDistributionConfigResult")
+    {
         format!(
             "
             let mut obj = {name}::default();
