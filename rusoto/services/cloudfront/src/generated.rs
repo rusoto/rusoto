@@ -7468,6 +7468,7 @@ impl UpdateDistributionResultDeserializer {
         })
     }
 }
+
 /// <p>The request to update a streaming distribution.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct UpdateStreamingDistributionRequest {
