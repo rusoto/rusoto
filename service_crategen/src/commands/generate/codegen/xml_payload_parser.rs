@@ -406,7 +406,8 @@ fn generate_struct_deserializer(name: &str, service: &Service, shape: &Shape) ->
     if service.name() == "CloudFront" &&
         (name == "ListDistributionsResult" ||
          name == "ListTagsForResourceResult" ||
-         name == "GetDistributionConfigResult")
+         name == "GetDistributionConfigResult" ||
+         name == "UpdateDistributionResult")
     {
         format!(
             "
