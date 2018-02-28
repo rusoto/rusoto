@@ -369,7 +369,8 @@ fn generate_struct_deserializer(name: &str, service: &Service, shape: &Shape) ->
         (name == "ListDistributionsResult" ||
          name == "ListTagsForResourceResult" ||
          name == "GetDistributionConfigResult" ||
-         name == "UpdateDistributionResult")
+         name == "UpdateDistributionResult" ||
+         name == "CreateDistributionWithTagsResult")
     {
         format!(
             "
