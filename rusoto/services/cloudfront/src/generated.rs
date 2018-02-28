@@ -1539,6 +1539,7 @@ impl CreateDistributionWithTagsResultDeserializer {
         })
     }
 }
+
 /// <p>The request to create an invalidation.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateInvalidationRequest {
