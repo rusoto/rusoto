@@ -17,13 +17,8 @@ cache:
     - $HOME/.cargo
 before_install:
   - if [ "$TRAVIS_OS_NAME" = "osx" ]; then ulimit -n 1024; fi
-  - rustup install nightly
 script:
-  - |
-      echo "Generating service crates..." &&
-      ( cd service_crategen && \
-        cargo +nightly run -- generate -c ./services.json -o ../rusoto/services )
-  - echo "Running Rusoto tests" && cargo update && cargo test --lib --all -v
+  - echo "Running Rusoto tests" && cargo update && cargo test --all -v
   - |
       echo "Building integration tests" &&
       ( cd integration_tests && \

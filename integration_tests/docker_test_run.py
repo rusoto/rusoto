@@ -16,7 +16,7 @@ class Docker:
         self.container = None
 
     def __enter__(self):
-        print("starting container for {!r}".format(self.image))
+        print("starting container:", self)
         self.container = subprocess.check_output(["docker", "run", "-d", "--rm" ] \
             + self.run_opts + [self.image] + self.run_args, universal_newlines=True).strip()
         try:
@@ -25,6 +25,8 @@ class Docker:
         except BaseException:
             self._kill()
             raise
+
+        return self
 
     def __exit__(self, exc_type, exc_value, traceaback):
         self._kill()
@@ -36,15 +38,21 @@ class Docker:
                 requests.get("http://localhost:{}".format(self.port))
                 break
             except requests.exceptions.ConnectionError:
-                print("waiting for container {!r} (image: {!r}) to become ready".format(self.container, self.image))
+                print("waiting for container to become ready", self)
 
         print("container ready, waiting another 5 seconds to ensure everything is set up")
         time.sleep(5)
 
     def _kill(self):
         if self.container is not None:
-            print("terminating docker container {!r} (image {!r})".format(self.container, self.image))
+            print("terminating docker:", self)
             subprocess.check_call(["docker", "kill", self.container])
+
+    def __str__(self):
+        if self.container is not None:
+            return "image {!r}, container {!r}".format(self.image, self.container[:12])
+        else:
+            return "image {!r}".format(self.image)
 
 
 def parse_args(args):
@@ -82,9 +90,15 @@ def main():
     args = parse_args(sys.argv)
     rc = 0
     for image in args.docker_images:
-        with Docker(image=image, run_opts=args.docker_run_opts, run_args=args.docker_run_args, port=args.port):
+        with Docker(image=image, run_opts=args.docker_run_opts, run_args=args.docker_run_args, port=args.port) as docker:
             if subprocess.call([args.command] + args.args) != 0:
+                if sys.stdout.isatty():
+                    print('\033[31m', end='')
+                print("ERROR: Docker test failed:", docker)
+                if sys.stdout.isatty():
+                    print('\033[0m', end='')
                 rc = 1
+
     return rc
 
 
