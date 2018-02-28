@@ -19,4 +19,20 @@ mod tests {
         assert!(result.is_ok(), "parse error: {:?}", result);
         assert!(result.unwrap().distribution_list.is_some(), "Should have a distribution list");
     }
+
+    #[test]
+    fn test_create_distribution_with_tags() {
+        let mock_response = MockResponseReader::read_response(
+            "test_resources/generated/valid",
+            "cloudfront-create-distribution-with-tags-in-progress.xml",
+            );
+        let mock = MockRequestDispatcher::with_status(201).with_body(&mock_response);
+        let client = CloudFrontClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
+        let request = CreateDistributionWithTagsRequest::default();
+        let result = client.create_distribution_with_tags(&request).sync();
+        assert!(result.is_ok(), "parse error: {:?}", result);
+        let result = result.unwrap();
+        assert!(result.distribution.is_some(), "Failed to parse Distribution");
+        assert_eq!(result.distribution.unwrap().domain_name, "xxxxxxxxxxxxxx.cloudfront.net");
+    }
 }
