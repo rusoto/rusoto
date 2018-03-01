@@ -321,17 +321,14 @@ pub fn string_to_sign(date: Tm, hashed_canonical_request: &str, scope: &str) -> 
 
 fn signed_headers(headers: &BTreeMap<String, Vec<Vec<u8>>>) -> String {
     let mut signed = String::new();
-
-    for (key, _) in headers.iter() {
-        if !signed.is_empty() {
-            signed.push(';')
-        }
-
-        if skipped_headers(key) {
-            continue;
-        }
-        signed.push_str(&key);
-    }
+    headers.iter()
+        .filter(|&(ref key, _)| !skipped_headers(&key))
+        .for_each(|(key, _)| {
+            if !signed.is_empty() {
+                signed.push(';');
+            }
+            signed.push_str(key);
+    });
     signed
 }
 
@@ -540,6 +537,7 @@ fn build_hostname(service: &str, region: &Region) -> String {
 #[cfg(test)]
 mod tests {
     use futures::Future;
+    use std::collections::BTreeMap;
     use time::empty_tm;
 
     use credential::{ProvideAwsCredentials, ProfileProvider};
@@ -622,5 +620,43 @@ mod tests {
         assert_eq!(signature_foo, "29673d1d856a7684ff6f0f53c542bae0bfbb1e564f531aff7568be9fd206383b".to_string());
         let signature_bar = super::sign_string("bar", "wJalrXUtnFEMI/K7MDENG+bPxRfiCYEXAMPLEKEY", empty_tm(), "us-west-1", "s3");
         assert_eq!(signature_bar, "2ba6879cd9e769d73df721dc90aafdaa843005d23f5b6c91d0744f804962e44f".to_string());
+    }
+
+    #[test]
+    fn signed_headers_unsigned_first() {
+        let mut headers = BTreeMap::new();
+
+        // This header is excluded from signing
+        headers.insert("content-length".to_owned(), vec![vec![]]);
+
+        headers.insert("content-type".to_owned(), vec![vec![]]);
+        headers.insert("x-amz-date".to_owned(), vec![vec![]]);
+        assert_eq!(super::signed_headers(&headers), "content-type;x-amz-date");
+    }
+
+    #[test]
+    fn signed_headers_unsigned_in_center() {
+        let mut headers = BTreeMap::new();
+        headers.insert("cache-control".to_owned(), vec![vec![]]);
+
+        // This header is excluded from signing
+        headers.insert("content-length".to_owned(), vec![vec![]]);
+
+        headers.insert("content-type".to_owned(), vec![vec![]]);
+        headers.insert("host".to_owned(), vec![vec![]]);
+        headers.insert("x-amz-date".to_owned(), vec![vec![]]);
+
+        assert_eq!(super::signed_headers(&headers), "cache-control;content-type;host;x-amz-date");
+    }
+
+    #[test]
+    fn signed_headers_unsigned_last() {
+        let mut headers = BTreeMap::new();
+        headers.insert("cache-control".to_owned(), vec![vec![]]);
+
+        // This header is excluded from signing
+        headers.insert("content-length".to_owned(), vec![vec![]]);
+
+        assert_eq!(super::signed_headers(&headers), "cache-control");
     }
 }
