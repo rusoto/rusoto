@@ -15,7 +15,6 @@ extern crate inflector;
 #[macro_use]
 extern crate lazy_static;
 extern crate regex;
-extern crate hyper;
 #[macro_use]
 extern crate log;
 extern crate env_logger;
