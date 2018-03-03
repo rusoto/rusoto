@@ -27,7 +27,6 @@ use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
 use serde_json;
 use rusoto_core::param::{Params, ServiceParams};
-use hyper::StatusCode;
 use rusoto_core::signature::SignedRequest;
 use serde_json::from_str;
 use serde_json::Value as SerdeJsonValue;
@@ -5301,7 +5300,7 @@ where
         request.set_payload(encoded);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Created {
+            if response.status.as_u16() == 201 {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
@@ -5342,7 +5341,7 @@ where
         request.set_payload(encoded);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Created {
+            if response.status.as_u16() == 201 {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
@@ -5384,7 +5383,7 @@ where
         request.set_payload(encoded);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Created {
+            if response.status.as_u16() == 201 {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
@@ -5421,7 +5420,7 @@ where
         request.set_endpoint_prefix("models.lex".to_string());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::NoContent {
+            if response.status.as_u16() == 204 {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let result = ::std::mem::drop(response);
 
@@ -5456,7 +5455,7 @@ where
         request.set_endpoint_prefix("models.lex".to_string());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::NoContent {
+            if response.status.as_u16() == 204 {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let result = ::std::mem::drop(response);
 
@@ -5492,7 +5491,7 @@ where
         request.set_endpoint_prefix("models.lex".to_string());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::NoContent {
+            if response.status.as_u16() == 204 {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let result = ::std::mem::drop(response);
 
@@ -5527,7 +5526,7 @@ where
         request.set_endpoint_prefix("models.lex".to_string());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::NoContent {
+            if response.status.as_u16() == 204 {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let result = ::std::mem::drop(response);
 
@@ -5555,7 +5554,7 @@ where
         request.set_endpoint_prefix("models.lex".to_string());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::NoContent {
+            if response.status.as_u16() == 204 {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let result = ::std::mem::drop(response);
 
@@ -5590,7 +5589,7 @@ where
         request.set_endpoint_prefix("models.lex".to_string());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::NoContent {
+            if response.status.as_u16() == 204 {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let result = ::std::mem::drop(response);
 
@@ -5621,7 +5620,7 @@ where
         request.set_endpoint_prefix("models.lex".to_string());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::NoContent {
+            if response.status.as_u16() == 204 {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let result = ::std::mem::drop(response);
 
@@ -5656,7 +5655,7 @@ where
         request.set_endpoint_prefix("models.lex".to_string());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::NoContent {
+            if response.status.as_u16() == 204 {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let result = ::std::mem::drop(response);
 
@@ -5691,7 +5690,7 @@ where
         request.set_endpoint_prefix("models.lex".to_string());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::NoContent {
+            if response.status.as_u16() == 204 {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let result = ::std::mem::drop(response);
 
@@ -5723,7 +5722,7 @@ where
         request.set_endpoint_prefix("models.lex".to_string());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
+            if response.status.as_u16() == 200 {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
@@ -5766,7 +5765,7 @@ where
         request.set_endpoint_prefix("models.lex".to_string());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
+            if response.status.as_u16() == 200 {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
@@ -5817,7 +5816,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
+            if response.status.as_u16() == 200 {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
@@ -5861,7 +5860,7 @@ where
         request.set_endpoint_prefix("models.lex".to_string());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
+            if response.status.as_u16() == 200 {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
@@ -5917,7 +5916,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
+            if response.status.as_u16() == 200 {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
@@ -5966,7 +5965,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
+            if response.status.as_u16() == 200 {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
@@ -6014,7 +6013,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
+            if response.status.as_u16() == 200 {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
@@ -6053,7 +6052,7 @@ where
         request.set_endpoint_prefix("models.lex".to_string());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
+            if response.status.as_u16() == 200 {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
@@ -6107,7 +6106,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
+            if response.status.as_u16() == 200 {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
@@ -6162,7 +6161,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
+            if response.status.as_u16() == 200 {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
@@ -6209,7 +6208,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
+            if response.status.as_u16() == 200 {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
@@ -6252,7 +6251,7 @@ where
         request.set_endpoint_prefix("models.lex".to_string());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
+            if response.status.as_u16() == 200 {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
@@ -6300,7 +6299,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
+            if response.status.as_u16() == 200 {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
@@ -6352,7 +6351,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
+            if response.status.as_u16() == 200 {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
@@ -6395,7 +6394,7 @@ where
         request.set_endpoint_prefix("models.lex".to_string());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
+            if response.status.as_u16() == 200 {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
@@ -6443,7 +6442,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
+            if response.status.as_u16() == 200 {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
@@ -6495,7 +6494,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
+            if response.status.as_u16() == 200 {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
@@ -6542,7 +6541,7 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
+            if response.status.as_u16() == 200 {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
@@ -6581,7 +6580,7 @@ where
         request.set_payload(encoded);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
+            if response.status.as_u16() == 200 {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
@@ -6626,7 +6625,7 @@ where
         request.set_payload(encoded);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
+            if response.status.as_u16() == 200 {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
@@ -6667,7 +6666,7 @@ where
         request.set_payload(encoded);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
+            if response.status.as_u16() == 200 {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
@@ -6708,7 +6707,7 @@ where
         request.set_payload(encoded);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
+            if response.status.as_u16() == 200 {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
