@@ -23,5 +23,5 @@ xml-rs = "0.7"
 version = "0.32.0"
 path = "../../core"
 [dev-dependencies.rusoto_mock]
-version = "0.25.0"
+version = "0.26.0"
 path = "../../../mock"
