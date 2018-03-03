@@ -23,7 +23,7 @@ To use `rusoto_kms` in your application, add it as a dependency in your `Cargo.t
 
 ```toml
 [dependencies]
-rusoto_kms = "0.31.0"
+rusoto_kms = "0.32.0"
 ```
 
 ## Contributing

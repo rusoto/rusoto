@@ -23,7 +23,7 @@ To use `rusoto_kinesisanalytics` in your application, add it as a dependency in 
 
 ```toml
 [dependencies]
-rusoto_kinesisanalytics = "0.31.0"
+rusoto_kinesisanalytics = "0.32.0"
 ```
 
 ## Contributing
