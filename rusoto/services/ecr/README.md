@@ -23,7 +23,7 @@ To use `rusoto_ecr` in your application, add it as a dependency in your `Cargo.t
 
 ```toml
 [dependencies]
-rusoto_ecr = "0.31.0"
+rusoto_ecr = "0.32.0"
 ```
 
 ## Contributing

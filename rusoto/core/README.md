@@ -44,9 +44,9 @@ For example, to include only S3 and SQS:
 
 ``` toml
 [dependencies]
-rusoto_core = "0.31.0"
-rusoto_sqs = "0.31.0"
-rusoto_s3 = "0.31.0"
+rusoto_core = "0.32.0"
+rusoto_sqs = "0.32.0"
+rusoto_s3 = "0.32.0"
 ```
 
 ## Migration notes
@@ -66,32 +66,30 @@ A simple example of using Rusoto's DynamoDB API to list the names of all tables 
 extern crate rusoto_core;
 extern crate rusoto_dynamodb;
 
+use rusoto_core::Region;
 use rusoto_dynamodb::{DynamoDb, DynamoDbClient, ListTablesInput};
-use rusoto_core::{DefaultCredentialsProvider, Region};
-use rusoto_core::default_tls_client;
 
 fn main() {
-  let provider = DefaultCredentialsProvider::new().unwrap();
-  let client = DynamoDbClient::new(default_tls_client().unwrap(), provider, Region::UsEast1);
-  let list_tables_input: ListTablesInput = Default::default();
+    let client = DynamoDbClient::simple(Region::UsEast1);
+    let list_tables_input: ListTablesInput = Default::default();
 
-  match client.list_tables(&list_tables_input) {
-    Ok(output) => {
-      match output.table_names {
-        Some(table_name_list) => {
-          println!("Tables in database:");
+    match client.list_tables(&list_tables_input).sync() {
+        Ok(output) => {
+            match output.table_names {
+                Some(table_name_list) => {
+                    println!("Tables in database:");
 
-          for table_name in table_name_list {
-            println!("{}", table_name);
-          }
-        }
-        None => println!("No tables in database!"),
-      }
+                    for table_name in table_name_list {
+                        println!("{}", table_name);
+                    }
+                },
+                None => println!("No tables in database!"),
+            }
+        },
+        Err(error) => {
+            println!("Error: {:?}", error);
+        },
     }
-    Err(error) => {
-      println!("Error: {:?}", error);
-    }
-  }
 }
 ```
 

@@ -129,7 +129,7 @@ pub fn generate_services(services: &BTreeMap<String, ServiceConfig>, out_dir: &P
             dev_dependencies: vec![
                 ("rusoto_mock".to_owned(), cargo::Dependency::Extended {
                     path: Some("../../../mock".into()),
-                    version: Some("0.25.0".into()),
+                    version: Some("0.26.0".into()),
                     optional: None,
                     default_features: None,
                     features: None

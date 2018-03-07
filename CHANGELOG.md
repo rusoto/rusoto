@@ -3,6 +3,9 @@
 ## [Unreleased]
 (Please put an entry here in each PR)
 
+## [0.32.0] - 2018-03-03
+
+- Convert all services to `futures`-based APIs
 - Show secret keys and tokens as `"**********"` in `Debug` output
 - Ensure list of signed headers is correct when not all headers are signed
 - Use ```$AWS_PROFILE``` to obtain default profile name 
