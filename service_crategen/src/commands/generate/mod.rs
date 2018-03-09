@@ -231,6 +231,7 @@ See [LICENSE][license] for details.
 //
 // =================================================================
 
+#![doc(html_logo_url = "https://raw.githubusercontent.com/rusoto/rusoto/master/assets/logo-square.png")]
 {service_docs}
 //!
 //! If you're using the service, you're probably looking for [{client_name}](struct.{client_name}.html) and [{trait_name}](trait.{trait_name}.html).
