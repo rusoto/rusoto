@@ -20,7 +20,7 @@ use std::time::Duration;
 use std::thread;
 
 use futures::{Async, Future, Poll, Stream};
-use futures::future::{Either, ok};
+use futures::future::{Either, empty, ok};
 use futures::sync::{mpsc, oneshot};
 use tokio_core::reactor::{Core, Handle, Remote};
 
@@ -60,9 +60,7 @@ impl Reactor {
                 }
             };
 
-            loop {
-                core.turn(None);
-            }
+            core.run(empty::<(), ()>()).unwrap();
         });
 
         let remote = init_rx.wait()

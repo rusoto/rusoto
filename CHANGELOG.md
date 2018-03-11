@@ -4,6 +4,7 @@
 (Please put an entry here in each PR)
 
 - More efficiently and correctly remove scheme from `Region::Custom` endpoints
+- Prevent reactor from hanging indefinitely when using the new tokio release
 
 ## [0.32.0] - 2018-03-03
 
