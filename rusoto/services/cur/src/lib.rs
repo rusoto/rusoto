@@ -11,6 +11,7 @@
 //
 // =================================================================
 
+#![doc(html_logo_url = "https://raw.githubusercontent.com/rusoto/rusoto/master/assets/logo-square.png")]
 //! <p>All public APIs for AWS Cost and Usage Report service</p>
 //!
 //! If you're using the service, you're probably looking for [CostAndUsageReportClient](struct.CostAndUsageReportClient.html) and [CostAndUsageReport](trait.CostAndUsageReport.html).
