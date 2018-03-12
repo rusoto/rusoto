@@ -26,7 +26,6 @@ use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
 use serde_json;
-use hyper::StatusCode;
 use rusoto_core::signature::SignedRequest;
 use serde_json::from_str;
 use serde_json::Value as SerdeJsonValue;
@@ -10582,7 +10581,7 @@ where
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
+            if response.status.as_u16() == 200 {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
@@ -10623,7 +10622,7 @@ where
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
+            if response.status.as_u16() == 200 {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
@@ -10664,7 +10663,7 @@ where
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
+            if response.status.as_u16() == 200 {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
@@ -10708,7 +10707,7 @@ where
         }
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
+            if response.status.as_u16() == 200 {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
@@ -10749,7 +10748,7 @@ where
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
+            if response.status.as_u16() == 200 {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
@@ -10790,7 +10789,7 @@ where
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
+            if response.status.as_u16() == 200 {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
@@ -10835,7 +10834,7 @@ where
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
+            if response.status.as_u16() == 200 {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
@@ -10876,7 +10875,7 @@ where
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
+            if response.status.as_u16() == 200 {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
@@ -10917,7 +10916,7 @@ where
         request.add_header("x-amz-data-partition", &input.schema_arn);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
+            if response.status.as_u16() == 200 {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
@@ -10958,7 +10957,7 @@ where
         request.add_header("x-amz-data-partition", &input.schema_arn);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
+            if response.status.as_u16() == 200 {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
@@ -10999,7 +10998,7 @@ where
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
+            if response.status.as_u16() == 200 {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
@@ -11040,7 +11039,7 @@ where
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
+            if response.status.as_u16() == 200 {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
@@ -11080,7 +11079,7 @@ where
         request.set_payload(encoded);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
+            if response.status.as_u16() == 200 {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
@@ -11121,7 +11120,7 @@ where
         request.add_header("x-amz-data-partition", &input.schema_arn);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
+            if response.status.as_u16() == 200 {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
@@ -11161,7 +11160,7 @@ where
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
+            if response.status.as_u16() == 200 {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
@@ -11202,7 +11201,7 @@ where
         request.add_header("x-amz-data-partition", &input.schema_arn);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
+            if response.status.as_u16() == 200 {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
@@ -11243,7 +11242,7 @@ where
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
+            if response.status.as_u16() == 200 {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
@@ -11282,7 +11281,7 @@ where
         request.add_header("x-amz-data-partition", &input.schema_arn);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
+            if response.status.as_u16() == 200 {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
@@ -11323,7 +11322,7 @@ where
         request.add_header("x-amz-data-partition", &input.schema_arn);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
+            if response.status.as_u16() == 200 {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
@@ -11365,7 +11364,7 @@ where
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
+            if response.status.as_u16() == 200 {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
@@ -11406,7 +11405,7 @@ where
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
+            if response.status.as_u16() == 200 {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
@@ -11447,7 +11446,7 @@ where
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
+            if response.status.as_u16() == 200 {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
@@ -11488,7 +11487,7 @@ where
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
+            if response.status.as_u16() == 200 {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let result = ::std::mem::drop(response);
 
@@ -11519,7 +11518,7 @@ where
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
+            if response.status.as_u16() == 200 {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
@@ -11558,7 +11557,7 @@ where
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
+            if response.status.as_u16() == 200 {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
@@ -11598,7 +11597,7 @@ where
         request.set_payload(encoded);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
+            if response.status.as_u16() == 200 {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
@@ -11638,7 +11637,7 @@ where
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
+            if response.status.as_u16() == 200 {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
@@ -11676,7 +11675,7 @@ where
         request.add_header("x-amz-data-partition", &input.schema_arn);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
+            if response.status.as_u16() == 200 {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
@@ -11721,7 +11720,7 @@ where
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
+            if response.status.as_u16() == 200 {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
@@ -11761,7 +11760,7 @@ where
         request.add_header("x-amz-data-partition", &input.schema_arn);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
+            if response.status.as_u16() == 200 {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
@@ -11802,7 +11801,7 @@ where
         request.add_header("x-amz-data-partition", &input.schema_arn);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
+            if response.status.as_u16() == 200 {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
@@ -11844,7 +11843,7 @@ where
         request.set_payload(encoded);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
+            if response.status.as_u16() == 200 {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
@@ -11890,7 +11889,7 @@ where
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
+            if response.status.as_u16() == 200 {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
@@ -11931,7 +11930,7 @@ where
         request.set_payload(encoded);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
+            if response.status.as_u16() == 200 {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
@@ -11972,7 +11971,7 @@ where
         request.set_payload(encoded);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
+            if response.status.as_u16() == 200 {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
@@ -12013,7 +12012,7 @@ where
         request.add_header("x-amz-data-partition", &input.schema_arn);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
+            if response.status.as_u16() == 200 {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
@@ -12055,7 +12054,7 @@ where
         request.add_header("x-amz-data-partition", &input.schema_arn);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
+            if response.status.as_u16() == 200 {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
@@ -12096,7 +12095,7 @@ where
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
+            if response.status.as_u16() == 200 {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
@@ -12142,7 +12141,7 @@ where
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
+            if response.status.as_u16() == 200 {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
@@ -12187,7 +12186,7 @@ where
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
+            if response.status.as_u16() == 200 {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
@@ -12233,7 +12232,7 @@ where
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
+            if response.status.as_u16() == 200 {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
@@ -12275,7 +12274,7 @@ where
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
+            if response.status.as_u16() == 200 {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
@@ -12321,7 +12320,7 @@ where
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
+            if response.status.as_u16() == 200 {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
@@ -12367,7 +12366,7 @@ where
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
+            if response.status.as_u16() == 200 {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
@@ -12409,7 +12408,7 @@ where
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
+            if response.status.as_u16() == 200 {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
@@ -12455,7 +12454,7 @@ where
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
+            if response.status.as_u16() == 200 {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
@@ -12496,7 +12495,7 @@ where
         request.set_payload(encoded);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
+            if response.status.as_u16() == 200 {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
@@ -12537,7 +12536,7 @@ where
         request.set_payload(encoded);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
+            if response.status.as_u16() == 200 {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
@@ -12579,7 +12578,7 @@ where
         request.add_header("x-amz-data-partition", &input.schema_arn);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
+            if response.status.as_u16() == 200 {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
@@ -12622,7 +12621,7 @@ where
         request.add_header("x-amz-data-partition", &input.schema_arn);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
+            if response.status.as_u16() == 200 {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
@@ -12664,7 +12663,7 @@ where
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
+            if response.status.as_u16() == 200 {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
@@ -12705,7 +12704,7 @@ where
         request.add_header("x-amz-data-partition", &input.development_schema_arn);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
+            if response.status.as_u16() == 200 {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
@@ -12746,7 +12745,7 @@ where
         request.add_header("x-amz-data-partition", &input.schema_arn);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
+            if response.status.as_u16() == 200 {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
@@ -12788,7 +12787,7 @@ where
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
+            if response.status.as_u16() == 200 {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
@@ -12829,7 +12828,7 @@ where
         request.set_payload(encoded);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
+            if response.status.as_u16() == 200 {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
@@ -12869,7 +12868,7 @@ where
         request.set_payload(encoded);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
+            if response.status.as_u16() == 200 {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
@@ -12910,7 +12909,7 @@ where
         request.add_header("x-amz-data-partition", &input.schema_arn);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
+            if response.status.as_u16() == 200 {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
@@ -12951,7 +12950,7 @@ where
         request.add_header("x-amz-data-partition", &input.directory_arn);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
+            if response.status.as_u16() == 200 {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
@@ -12993,7 +12992,7 @@ where
         request.add_header("x-amz-data-partition", &input.schema_arn);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
+            if response.status.as_u16() == 200 {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
@@ -13034,7 +13033,7 @@ where
         request.add_header("x-amz-data-partition", &input.schema_arn);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
+            if response.status.as_u16() == 200 {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
@@ -13075,7 +13074,7 @@ where
         request.set_payload(encoded);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
+            if response.status.as_u16() == 200 {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
@@ -13116,7 +13115,7 @@ where
         request.set_payload(encoded);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status == StatusCode::Ok {
+            if response.status.as_u16() == 200 {
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 

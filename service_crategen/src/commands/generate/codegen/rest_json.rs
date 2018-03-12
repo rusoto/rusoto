@@ -1,6 +1,5 @@
 use std::io::Write;
 
-use hyper::status::StatusCode;
 use inflector::Inflector;
 
 use botocore::{Operation, Shape, ShapeType};
@@ -108,9 +107,6 @@ impl GenerateProtocol for RestJsonGenerator {
         if service_has_query_parameters(service) {
             writeln!(writer, "use rusoto_core::param::{{Params, ServiceParams}};")?;
         }
-        if service_has_explicit_status_codes(service) {
-            writeln!(writer, "use hyper::StatusCode;")?;
-        }
 
         writeln!(writer,
                  "use rusoto_core::signature::SignedRequest;
@@ -132,22 +128,9 @@ impl GenerateProtocol for RestJsonGenerator {
     }
 }
 
-// Used to print the enum value rather than the status code and the canonical reason.
-// For codegen purposes, leaving existing StatusCode Display trait implementation intact.
-// StatusCode::Ok.to_string() prints "200 OK"
-// StatusCode::Ok.enum_as_string() prints "StatusCode::Ok"
-trait CodegenString {
-    fn enum_as_string(&self) -> String;
-}
-impl CodegenString for StatusCode {
-    fn enum_as_string(&self) -> String {
-        format!("StatusCode::{:?}", self)
-    }
-}
-
 fn http_code_expected(code: Option<i32>) -> String {
     match code {
-        Some(actual_code) => format!("response.status == {}", StatusCode::from_u16(actual_code as u16).enum_as_string()),
+        Some(actual_code) => format!("response.status.as_u16() == {}", actual_code),
         // Some service definitions such as elastictranscoder don't specify
         // the response code, we'll assume 2xx is okay:
         None => "response.status.is_success()".to_string(),
@@ -255,15 +238,6 @@ fn service_has_query_parameters(service: &Service) -> bool {
         .map(|(_, operation)| operation.input_shape())
         .map(|input_type| service.get_shape(input_type).unwrap())
         .any(|input_shape| input_shape.has_query_parameters())
-}
-
-// Do any outputs in the entire service use specific HTTP return values?
-fn service_has_explicit_status_codes(service: &Service) -> bool {
-    service.operations()
-        .iter()
-        .map(|(_, operation)| &operation.http)
-        .map(|http| http.response_code)
-        .any(|code| code.is_some())
 }
 
 fn generate_documentation(operation: &Operation) -> Option<String> {
