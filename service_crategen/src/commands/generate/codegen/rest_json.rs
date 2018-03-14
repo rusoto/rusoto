@@ -352,8 +352,8 @@ fn json_body_parser(output_shape: &str, mutable_result: bool) -> String {
     format!("
             let mut body = response.body;
 
-            if body == b\"{{}}\" {{
-                body = b\"null\".to_vec();
+            if body == b\"null\" {{
+                body = b\"{{}}\".to_vec();
             }}
 
             debug!(\"Response body: {{:?}}\", body);

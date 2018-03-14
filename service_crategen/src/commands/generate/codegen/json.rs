@@ -134,7 +134,13 @@ fn generate_documentation(operation: &Operation) -> Option<String> {
 fn generate_ok_response(operation: &Operation, output_type: &str) -> String {
     if operation.output.is_some() {
         format!("future::Either::A(response.buffer().from_err().map(|response| {{
-                    serde_json::from_str::<{}>(String::from_utf8_lossy(response.body.as_ref()).as_ref()).unwrap()
+                    let mut body = response.body;
+
+                    if body == b\"null\" {{
+                        body = b\"{{}}\".to_vec();
+                    }}
+
+                    serde_json::from_str::<{}>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
                 }}))",
             output_type)
     } else {

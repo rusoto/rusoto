@@ -423,7 +423,7 @@ fn generate_struct<P>(service: &Service,
     if shape.members.is_none() || shape.members.as_ref().unwrap().is_empty() {
         format!(
             "{attributes}
-            pub struct {name};
+            pub struct {name} {{}}
             ",
             attributes = attributes,
             name = name,
