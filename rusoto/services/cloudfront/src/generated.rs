@@ -8119,7 +8119,7 @@ impl CreateCloudFrontOriginAccessIdentityError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
                                     "CloudFrontOriginAccessIdentityAlreadyExists" => CreateCloudFrontOriginAccessIdentityError::CloudFrontOriginAccessIdentityAlreadyExists(String::from(parsed_error.message)),"InconsistentQuantities" => CreateCloudFrontOriginAccessIdentityError::InconsistentQuantities(String::from(parsed_error.message)),"InvalidArgument" => CreateCloudFrontOriginAccessIdentityError::InvalidArgument(String::from(parsed_error.message)),"MissingBody" => CreateCloudFrontOriginAccessIdentityError::MissingBody(String::from(parsed_error.message)),"TooManyCloudFrontOriginAccessIdentities" => CreateCloudFrontOriginAccessIdentityError::TooManyCloudFrontOriginAccessIdentities(String::from(parsed_error.message)),_ => CreateCloudFrontOriginAccessIdentityError::Unknown(String::from(body))
@@ -8127,6 +8127,14 @@ impl CreateCloudFrontOriginAccessIdentityError {
                            },
                            Err(_) => CreateCloudFrontOriginAccessIdentityError::Unknown(body.to_string())
                        }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -8269,7 +8277,7 @@ impl CreateDistributionError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "AccessDenied" => {
                     CreateDistributionError::AccessDenied(String::from(parsed_error.message))
@@ -8419,6 +8427,14 @@ impl CreateDistributionError {
             },
             Err(_) => CreateDistributionError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -8600,7 +8616,7 @@ impl CreateDistributionWithTagsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "AccessDenied" => CreateDistributionWithTagsError::AccessDenied(String::from(
                     parsed_error.message,
@@ -8774,6 +8790,14 @@ impl CreateDistributionWithTagsError {
             Err(_) => CreateDistributionWithTagsError::Unknown(body.to_string()),
         }
     }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
 }
 
 impl From<XmlParseError> for CreateDistributionWithTagsError {
@@ -8889,7 +8913,7 @@ impl CreateInvalidationError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "AccessDenied" => {
                     CreateInvalidationError::AccessDenied(String::from(parsed_error.message))
@@ -8918,6 +8942,14 @@ impl CreateInvalidationError {
             },
             Err(_) => CreateInvalidationError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -9008,7 +9040,7 @@ impl CreateStreamingDistributionError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "AccessDenied" => CreateStreamingDistributionError::AccessDenied(String::from(
                     parsed_error.message,
@@ -9064,6 +9096,14 @@ impl CreateStreamingDistributionError {
             },
             Err(_) => CreateStreamingDistributionError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -9165,7 +9205,7 @@ impl CreateStreamingDistributionWithTagsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "AccessDenied" => CreateStreamingDistributionWithTagsError::AccessDenied(
                     String::from(parsed_error.message),
@@ -9226,6 +9266,14 @@ impl CreateStreamingDistributionWithTagsError {
             },
             Err(_) => CreateStreamingDistributionWithTagsError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -9316,7 +9364,7 @@ impl DeleteCloudFrontOriginAccessIdentityError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
                                     "AccessDenied" => DeleteCloudFrontOriginAccessIdentityError::AccessDenied(String::from(parsed_error.message)),"CloudFrontOriginAccessIdentityInUse" => DeleteCloudFrontOriginAccessIdentityError::CloudFrontOriginAccessIdentityInUse(String::from(parsed_error.message)),"InvalidIfMatchVersion" => DeleteCloudFrontOriginAccessIdentityError::InvalidIfMatchVersion(String::from(parsed_error.message)),"NoSuchCloudFrontOriginAccessIdentity" => DeleteCloudFrontOriginAccessIdentityError::NoSuchCloudFrontOriginAccessIdentity(String::from(parsed_error.message)),"PreconditionFailed" => DeleteCloudFrontOriginAccessIdentityError::PreconditionFailed(String::from(parsed_error.message)),_ => DeleteCloudFrontOriginAccessIdentityError::Unknown(String::from(body))
@@ -9324,6 +9372,14 @@ impl DeleteCloudFrontOriginAccessIdentityError {
                            },
                            Err(_) => DeleteCloudFrontOriginAccessIdentityError::Unknown(body.to_string())
                        }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -9402,7 +9458,7 @@ impl DeleteDistributionError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "AccessDenied" => {
                     DeleteDistributionError::AccessDenied(String::from(parsed_error.message))
@@ -9423,6 +9479,14 @@ impl DeleteDistributionError {
             },
             Err(_) => DeleteDistributionError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -9495,7 +9559,7 @@ impl DeleteServiceLinkedRoleError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "AccessDenied" => {
                     DeleteServiceLinkedRoleError::AccessDenied(String::from(parsed_error.message))
@@ -9513,6 +9577,14 @@ impl DeleteServiceLinkedRoleError {
             },
             Err(_) => DeleteServiceLinkedRoleError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -9586,7 +9658,7 @@ impl DeleteStreamingDistributionError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "AccessDenied" => DeleteStreamingDistributionError::AccessDenied(String::from(
                     parsed_error.message,
@@ -9613,6 +9685,14 @@ impl DeleteStreamingDistributionError {
             },
             Err(_) => DeleteStreamingDistributionError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -9681,7 +9761,7 @@ impl GetCloudFrontOriginAccessIdentityError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "AccessDenied" => GetCloudFrontOriginAccessIdentityError::AccessDenied(
                     String::from(parsed_error.message),
@@ -9695,6 +9775,14 @@ impl GetCloudFrontOriginAccessIdentityError {
             },
             Err(_) => GetCloudFrontOriginAccessIdentityError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -9762,7 +9850,7 @@ impl GetCloudFrontOriginAccessIdentityConfigError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
                                     "AccessDenied" => GetCloudFrontOriginAccessIdentityConfigError::AccessDenied(String::from(parsed_error.message)),"NoSuchCloudFrontOriginAccessIdentity" => GetCloudFrontOriginAccessIdentityConfigError::NoSuchCloudFrontOriginAccessIdentity(String::from(parsed_error.message)),_ => GetCloudFrontOriginAccessIdentityConfigError::Unknown(String::from(body))
@@ -9770,6 +9858,14 @@ impl GetCloudFrontOriginAccessIdentityConfigError {
                            },
                            Err(_) => GetCloudFrontOriginAccessIdentityConfigError::Unknown(body.to_string())
                        }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -9833,7 +9929,7 @@ impl GetDistributionError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "AccessDenied" => {
                     GetDistributionError::AccessDenied(String::from(parsed_error.message))
@@ -9845,6 +9941,14 @@ impl GetDistributionError {
             },
             Err(_) => GetDistributionError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -9908,7 +10012,7 @@ impl GetDistributionConfigError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "AccessDenied" => {
                     GetDistributionConfigError::AccessDenied(String::from(parsed_error.message))
@@ -9920,6 +10024,14 @@ impl GetDistributionConfigError {
             },
             Err(_) => GetDistributionConfigError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -9987,7 +10099,7 @@ impl GetInvalidationError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "AccessDenied" => {
                     GetInvalidationError::AccessDenied(String::from(parsed_error.message))
@@ -10002,6 +10114,14 @@ impl GetInvalidationError {
             },
             Err(_) => GetInvalidationError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -10066,7 +10186,7 @@ impl GetStreamingDistributionError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "AccessDenied" => {
                     GetStreamingDistributionError::AccessDenied(String::from(parsed_error.message))
@@ -10080,6 +10200,14 @@ impl GetStreamingDistributionError {
             },
             Err(_) => GetStreamingDistributionError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -10145,7 +10273,7 @@ impl GetStreamingDistributionConfigError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "AccessDenied" => GetStreamingDistributionConfigError::AccessDenied(String::from(
                     parsed_error.message,
@@ -10159,6 +10287,14 @@ impl GetStreamingDistributionConfigError {
             },
             Err(_) => GetStreamingDistributionConfigError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -10222,7 +10358,7 @@ impl ListCloudFrontOriginAccessIdentitiesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "InvalidArgument" => ListCloudFrontOriginAccessIdentitiesError::InvalidArgument(
                     String::from(parsed_error.message),
@@ -10231,6 +10367,14 @@ impl ListCloudFrontOriginAccessIdentitiesError {
             },
             Err(_) => ListCloudFrontOriginAccessIdentitiesError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -10293,7 +10437,7 @@ impl ListDistributionsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "InvalidArgument" => {
                     ListDistributionsError::InvalidArgument(String::from(parsed_error.message))
@@ -10302,6 +10446,14 @@ impl ListDistributionsError {
             },
             Err(_) => ListDistributionsError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -10366,7 +10518,7 @@ impl ListDistributionsByWebACLIdError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "InvalidArgument" => ListDistributionsByWebACLIdError::InvalidArgument(
                     String::from(parsed_error.message),
@@ -10378,6 +10530,14 @@ impl ListDistributionsByWebACLIdError {
             },
             Err(_) => ListDistributionsByWebACLIdError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -10445,7 +10605,7 @@ impl ListInvalidationsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "AccessDenied" => {
                     ListInvalidationsError::AccessDenied(String::from(parsed_error.message))
@@ -10460,6 +10620,14 @@ impl ListInvalidationsError {
             },
             Err(_) => ListInvalidationsError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -10524,7 +10692,7 @@ impl ListStreamingDistributionsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "InvalidArgument" => ListStreamingDistributionsError::InvalidArgument(
                     String::from(parsed_error.message),
@@ -10533,6 +10701,14 @@ impl ListStreamingDistributionsError {
             },
             Err(_) => ListStreamingDistributionsError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -10601,7 +10777,7 @@ impl ListTagsForResourceError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "AccessDenied" => {
                     ListTagsForResourceError::AccessDenied(String::from(parsed_error.message))
@@ -10619,6 +10795,14 @@ impl ListTagsForResourceError {
             },
             Err(_) => ListTagsForResourceError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -10690,7 +10874,7 @@ impl TagResourceError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "AccessDenied" => {
                     TagResourceError::AccessDenied(String::from(parsed_error.message))
@@ -10708,6 +10892,14 @@ impl TagResourceError {
             },
             Err(_) => TagResourceError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -10777,7 +10969,7 @@ impl UntagResourceError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "AccessDenied" => {
                     UntagResourceError::AccessDenied(String::from(parsed_error.message))
@@ -10795,6 +10987,14 @@ impl UntagResourceError {
             },
             Err(_) => UntagResourceError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -10872,7 +11072,7 @@ impl UpdateCloudFrontOriginAccessIdentityError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
                                     "AccessDenied" => UpdateCloudFrontOriginAccessIdentityError::AccessDenied(String::from(parsed_error.message)),"IllegalUpdate" => UpdateCloudFrontOriginAccessIdentityError::IllegalUpdate(String::from(parsed_error.message)),"InconsistentQuantities" => UpdateCloudFrontOriginAccessIdentityError::InconsistentQuantities(String::from(parsed_error.message)),"InvalidArgument" => UpdateCloudFrontOriginAccessIdentityError::InvalidArgument(String::from(parsed_error.message)),"InvalidIfMatchVersion" => UpdateCloudFrontOriginAccessIdentityError::InvalidIfMatchVersion(String::from(parsed_error.message)),"MissingBody" => UpdateCloudFrontOriginAccessIdentityError::MissingBody(String::from(parsed_error.message)),"NoSuchCloudFrontOriginAccessIdentity" => UpdateCloudFrontOriginAccessIdentityError::NoSuchCloudFrontOriginAccessIdentity(String::from(parsed_error.message)),"PreconditionFailed" => UpdateCloudFrontOriginAccessIdentityError::PreconditionFailed(String::from(parsed_error.message)),_ => UpdateCloudFrontOriginAccessIdentityError::Unknown(String::from(body))
@@ -10880,6 +11080,14 @@ impl UpdateCloudFrontOriginAccessIdentityError {
                            },
                            Err(_) => UpdateCloudFrontOriginAccessIdentityError::Unknown(body.to_string())
                        }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -11029,7 +11237,7 @@ impl UpdateDistributionError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "AccessDenied" => {
                     UpdateDistributionError::AccessDenied(String::from(parsed_error.message))
@@ -11180,6 +11388,14 @@ impl UpdateDistributionError {
             Err(_) => UpdateDistributionError::Unknown(body.to_string()),
         }
     }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
 }
 
 impl From<XmlParseError> for UpdateDistributionError {
@@ -11304,7 +11520,7 @@ impl UpdateStreamingDistributionError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "AccessDenied" => UpdateStreamingDistributionError::AccessDenied(String::from(
                     parsed_error.message,
@@ -11363,6 +11579,14 @@ impl UpdateStreamingDistributionError {
             },
             Err(_) => UpdateStreamingDistributionError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 

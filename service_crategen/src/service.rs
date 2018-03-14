@@ -29,6 +29,10 @@ impl <'b> Service <'b> {
         &self.definition.metadata.service_full_name
     }
 
+    pub fn service_id(&self) -> Option<&str> {
+        self.definition.metadata.service_id.as_ref().map(|service_id| service_id.as_str())
+    }
+
     pub fn documentation(&self) -> Option<&String> {
         self.definition.documentation.as_ref()
     }

@@ -341,6 +341,8 @@ pub struct Metadata {
     pub service_abbreviation: Option<String>,
     #[serde(rename="serviceFullName")]
     pub service_full_name: String,
+    #[serde(rename="serviceId")]
+    pub service_id: Option<String>,
     #[serde(rename="signatureVersion")]
     pub signature_version: String,
     #[serde(rename="signingName")]
