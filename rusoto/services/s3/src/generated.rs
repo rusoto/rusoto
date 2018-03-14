@@ -13374,7 +13374,7 @@ impl SSEKMSKeyIdSerializer {
 
 /// <p>Specifies the use of SSE-S3 to encrypt delievered Inventory reports.</p>
 #[derive(Default, Debug, Clone)]
-pub struct SSES3;
+pub struct SSES3 {}
 
 struct SSES3Deserializer;
 impl SSES3Deserializer {

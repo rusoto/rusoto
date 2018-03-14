@@ -1747,7 +1747,7 @@ impl OptInPhoneNumberInputSerializer {
 
 /// <p>The response for the OptInPhoneNumber action.</p>
 #[derive(Default, Debug, Clone)]
-pub struct OptInPhoneNumberResponse;
+pub struct OptInPhoneNumberResponse {}
 
 struct OptInPhoneNumberResponseDeserializer;
 impl OptInPhoneNumberResponseDeserializer {
@@ -2123,7 +2123,7 @@ impl SetSMSAttributesInputSerializer {
 
 /// <p>The response for the SetSMSAttributes action.</p>
 #[derive(Default, Debug, Clone)]
-pub struct SetSMSAttributesResponse;
+pub struct SetSMSAttributesResponse {}
 
 struct SetSMSAttributesResponseDeserializer;
 impl SetSMSAttributesResponseDeserializer {

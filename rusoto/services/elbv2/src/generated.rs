@@ -287,7 +287,7 @@ impl AddTagsInputSerializer {
 }
 
 #[derive(Default, Debug, Clone)]
-pub struct AddTagsOutput;
+pub struct AddTagsOutput {}
 
 struct AddTagsOutputDeserializer;
 impl AddTagsOutputDeserializer {
@@ -1251,7 +1251,7 @@ impl DeleteListenerInputSerializer {
 }
 
 #[derive(Default, Debug, Clone)]
-pub struct DeleteListenerOutput;
+pub struct DeleteListenerOutput {}
 
 struct DeleteListenerOutputDeserializer;
 impl DeleteListenerOutputDeserializer {
@@ -1292,7 +1292,7 @@ impl DeleteLoadBalancerInputSerializer {
 }
 
 #[derive(Default, Debug, Clone)]
-pub struct DeleteLoadBalancerOutput;
+pub struct DeleteLoadBalancerOutput {}
 
 struct DeleteLoadBalancerOutputDeserializer;
 impl DeleteLoadBalancerOutputDeserializer {
@@ -1333,7 +1333,7 @@ impl DeleteRuleInputSerializer {
 }
 
 #[derive(Default, Debug, Clone)]
-pub struct DeleteRuleOutput;
+pub struct DeleteRuleOutput {}
 
 struct DeleteRuleOutputDeserializer;
 impl DeleteRuleOutputDeserializer {
@@ -1374,7 +1374,7 @@ impl DeleteTargetGroupInputSerializer {
 }
 
 #[derive(Default, Debug, Clone)]
-pub struct DeleteTargetGroupOutput;
+pub struct DeleteTargetGroupOutput {}
 
 struct DeleteTargetGroupOutputDeserializer;
 impl DeleteTargetGroupOutputDeserializer {
@@ -1422,7 +1422,7 @@ impl DeregisterTargetsInputSerializer {
 }
 
 #[derive(Default, Debug, Clone)]
-pub struct DeregisterTargetsOutput;
+pub struct DeregisterTargetsOutput {}
 
 struct DeregisterTargetsOutputDeserializer;
 impl DeregisterTargetsOutputDeserializer {
@@ -4118,7 +4118,7 @@ impl RegisterTargetsInputSerializer {
 }
 
 #[derive(Default, Debug, Clone)]
-pub struct RegisterTargetsOutput;
+pub struct RegisterTargetsOutput {}
 
 struct RegisterTargetsOutputDeserializer;
 impl RegisterTargetsOutputDeserializer {
@@ -4166,7 +4166,7 @@ impl RemoveListenerCertificatesInputSerializer {
 }
 
 #[derive(Default, Debug, Clone)]
-pub struct RemoveListenerCertificatesOutput;
+pub struct RemoveListenerCertificatesOutput {}
 
 struct RemoveListenerCertificatesOutputDeserializer;
 impl RemoveListenerCertificatesOutputDeserializer {
@@ -4211,7 +4211,7 @@ impl RemoveTagsInputSerializer {
 }
 
 #[derive(Default, Debug, Clone)]
-pub struct RemoveTagsOutput;
+pub struct RemoveTagsOutput {}
 
 struct RemoveTagsOutputDeserializer;
 impl RemoveTagsOutputDeserializer {

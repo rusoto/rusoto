@@ -754,7 +754,7 @@ impl ChangeTagsForResourceRequestSerializer {
 }
 /// <p>Empty response for the request.</p>
 #[derive(Default, Debug, Clone)]
-pub struct ChangeTagsForResourceResponse;
+pub struct ChangeTagsForResourceResponse {}
 
 struct ChangeTagsForResourceResponseDeserializer;
 impl ChangeTagsForResourceResponseDeserializer {
@@ -1973,7 +1973,7 @@ pub struct DeleteHealthCheckRequest {
 
 /// <p>An empty element.</p>
 #[derive(Default, Debug, Clone)]
-pub struct DeleteHealthCheckResponse;
+pub struct DeleteHealthCheckResponse {}
 
 struct DeleteHealthCheckResponseDeserializer;
 impl DeleteHealthCheckResponseDeserializer {
@@ -2052,7 +2052,7 @@ pub struct DeleteQueryLoggingConfigRequest {
 }
 
 #[derive(Default, Debug, Clone)]
-pub struct DeleteQueryLoggingConfigResponse;
+pub struct DeleteQueryLoggingConfigResponse {}
 
 struct DeleteQueryLoggingConfigResponseDeserializer;
 impl DeleteQueryLoggingConfigResponseDeserializer {
@@ -2079,7 +2079,7 @@ pub struct DeleteReusableDelegationSetRequest {
 
 /// <p>An empty element.</p>
 #[derive(Default, Debug, Clone)]
-pub struct DeleteReusableDelegationSetResponse;
+pub struct DeleteReusableDelegationSetResponse {}
 
 struct DeleteReusableDelegationSetResponseDeserializer;
 impl DeleteReusableDelegationSetResponseDeserializer {
@@ -2106,7 +2106,7 @@ pub struct DeleteTrafficPolicyInstanceRequest {
 
 /// <p>An empty element.</p>
 #[derive(Default, Debug, Clone)]
-pub struct DeleteTrafficPolicyInstanceResponse;
+pub struct DeleteTrafficPolicyInstanceResponse {}
 
 struct DeleteTrafficPolicyInstanceResponseDeserializer;
 impl DeleteTrafficPolicyInstanceResponseDeserializer {
@@ -2135,7 +2135,7 @@ pub struct DeleteTrafficPolicyRequest {
 
 /// <p>An empty element.</p>
 #[derive(Default, Debug, Clone)]
-pub struct DeleteTrafficPolicyResponse;
+pub struct DeleteTrafficPolicyResponse {}
 
 struct DeleteTrafficPolicyResponseDeserializer;
 impl DeleteTrafficPolicyResponseDeserializer {
@@ -2181,7 +2181,7 @@ impl DeleteVPCAssociationAuthorizationRequestSerializer {
 }
 /// <p>Empty response for the request.</p>
 #[derive(Default, Debug, Clone)]
-pub struct DeleteVPCAssociationAuthorizationResponse;
+pub struct DeleteVPCAssociationAuthorizationResponse {}
 
 struct DeleteVPCAssociationAuthorizationResponseDeserializer;
 impl DeleteVPCAssociationAuthorizationResponseDeserializer {
@@ -3023,7 +3023,7 @@ impl GetChangeResponseDeserializer {
     }
 }
 #[derive(Default, Debug, Clone)]
-pub struct GetCheckerIpRangesRequest;
+pub struct GetCheckerIpRangesRequest {}
 
 #[derive(Default, Debug, Clone)]
 pub struct GetCheckerIpRangesResponse {
@@ -3135,7 +3135,7 @@ impl GetGeoLocationResponseDeserializer {
 }
 /// <p>A request for the number of health checks that are associated with the current AWS account.</p>
 #[derive(Default, Debug, Clone)]
-pub struct GetHealthCheckCountRequest;
+pub struct GetHealthCheckCountRequest {}
 
 /// <p>A complex type that contains the response to a <code>GetHealthCheckCount</code> request.</p>
 #[derive(Default, Debug, Clone)]
@@ -3356,7 +3356,7 @@ impl GetHealthCheckStatusResponseDeserializer {
 }
 /// <p>A request to retrieve a count of all the hosted zones that are associated with the current AWS account.</p>
 #[derive(Default, Debug, Clone)]
-pub struct GetHostedZoneCountRequest;
+pub struct GetHostedZoneCountRequest {}
 
 /// <p>A complex type that contains the response to a <code>GetHostedZoneCount</code> request.</p>
 #[derive(Default, Debug, Clone)]
@@ -3710,7 +3710,7 @@ impl GetReusableDelegationSetResponseDeserializer {
 }
 /// <p>Request to get the number of traffic policy instances that are associated with the current AWS account.</p>
 #[derive(Default, Debug, Clone)]
-pub struct GetTrafficPolicyInstanceCountRequest;
+pub struct GetTrafficPolicyInstanceCountRequest {}
 
 /// <p>A complex type that contains information about the resource record sets that Amazon Route 53 created based on a specified traffic policy.</p>
 #[derive(Default, Debug, Clone)]

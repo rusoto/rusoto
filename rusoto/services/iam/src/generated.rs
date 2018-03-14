@@ -6620,7 +6620,7 @@ impl ListMFADevicesResponseDeserializer {
     }
 }
 #[derive(Default, Debug, Clone)]
-pub struct ListOpenIDConnectProvidersRequest;
+pub struct ListOpenIDConnectProvidersRequest {}
 
 /// Serialize `ListOpenIDConnectProvidersRequest` contents to a `SignedRequest`.
 struct ListOpenIDConnectProvidersRequestSerializer;
@@ -7108,7 +7108,7 @@ impl ListRolesResponseDeserializer {
     }
 }
 #[derive(Default, Debug, Clone)]
-pub struct ListSAMLProvidersRequest;
+pub struct ListSAMLProvidersRequest {}
 
 /// Serialize `ListSAMLProvidersRequest` contents to a `SignedRequest`.
 struct ListSAMLProvidersRequestSerializer;

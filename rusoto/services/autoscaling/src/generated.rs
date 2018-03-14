@@ -550,7 +550,7 @@ impl AttachInstancesQuerySerializer {
 }
 
 #[derive(Default, Debug, Clone)]
-pub struct AttachLoadBalancerTargetGroupsResultType;
+pub struct AttachLoadBalancerTargetGroupsResultType {}
 
 struct AttachLoadBalancerTargetGroupsResultTypeDeserializer;
 impl AttachLoadBalancerTargetGroupsResultTypeDeserializer {
@@ -598,7 +598,7 @@ impl AttachLoadBalancerTargetGroupsTypeSerializer {
 }
 
 #[derive(Default, Debug, Clone)]
-pub struct AttachLoadBalancersResultType;
+pub struct AttachLoadBalancersResultType {}
 
 struct AttachLoadBalancersResultTypeDeserializer;
 impl AttachLoadBalancersResultTypeDeserializer {
@@ -1657,7 +1657,7 @@ impl ClassicLinkVPCSecurityGroupsSerializer {
 }
 
 #[derive(Default, Debug, Clone)]
-pub struct CompleteLifecycleActionAnswer;
+pub struct CompleteLifecycleActionAnswer {}
 
 struct CompleteLifecycleActionAnswerDeserializer;
 impl CompleteLifecycleActionAnswerDeserializer {
@@ -2226,7 +2226,7 @@ impl DeleteAutoScalingGroupTypeSerializer {
 }
 
 #[derive(Default, Debug, Clone)]
-pub struct DeleteLifecycleHookAnswer;
+pub struct DeleteLifecycleHookAnswer {}
 
 struct DeleteLifecycleHookAnswerDeserializer;
 impl DeleteLifecycleHookAnswerDeserializer {
@@ -3405,7 +3405,7 @@ impl DetachInstancesQuerySerializer {
 }
 
 #[derive(Default, Debug, Clone)]
-pub struct DetachLoadBalancerTargetGroupsResultType;
+pub struct DetachLoadBalancerTargetGroupsResultType {}
 
 struct DetachLoadBalancerTargetGroupsResultTypeDeserializer;
 impl DetachLoadBalancerTargetGroupsResultTypeDeserializer {
@@ -3453,7 +3453,7 @@ impl DetachLoadBalancerTargetGroupsTypeSerializer {
 }
 
 #[derive(Default, Debug, Clone)]
-pub struct DetachLoadBalancersResultType;
+pub struct DetachLoadBalancersResultType {}
 
 struct DetachLoadBalancersResultTypeDeserializer;
 impl DetachLoadBalancersResultTypeDeserializer {
@@ -6449,7 +6449,7 @@ impl PropagateAtLaunchDeserializer {
     }
 }
 #[derive(Default, Debug, Clone)]
-pub struct PutLifecycleHookAnswer;
+pub struct PutLifecycleHookAnswer {}
 
 struct PutLifecycleHookAnswerDeserializer;
 impl PutLifecycleHookAnswerDeserializer {
@@ -6773,7 +6773,7 @@ impl PutScheduledUpdateGroupActionTypeSerializer {
 }
 
 #[derive(Default, Debug, Clone)]
-pub struct RecordLifecycleActionHeartbeatAnswer;
+pub struct RecordLifecycleActionHeartbeatAnswer {}
 
 struct RecordLifecycleActionHeartbeatAnswerDeserializer;
 impl RecordLifecycleActionHeartbeatAnswerDeserializer {
@@ -7440,7 +7440,7 @@ impl SetInstanceHealthQuerySerializer {
 }
 
 #[derive(Default, Debug, Clone)]
-pub struct SetInstanceProtectionAnswer;
+pub struct SetInstanceProtectionAnswer {}
 
 struct SetInstanceProtectionAnswerDeserializer;
 impl SetInstanceProtectionAnswerDeserializer {

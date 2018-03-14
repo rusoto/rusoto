@@ -323,7 +323,7 @@ impl AddTagsInputSerializer {
 
 /// <p>Contains the output of AddTags.</p>
 #[derive(Default, Debug, Clone)]
-pub struct AddTagsOutput;
+pub struct AddTagsOutput {}
 
 struct AddTagsOutputDeserializer;
 impl AddTagsOutputDeserializer {
@@ -1411,7 +1411,7 @@ impl CreateAppCookieStickinessPolicyInputSerializer {
 
 /// <p>Contains the output for CreateAppCookieStickinessPolicy.</p>
 #[derive(Default, Debug, Clone)]
-pub struct CreateAppCookieStickinessPolicyOutput;
+pub struct CreateAppCookieStickinessPolicyOutput {}
 
 struct CreateAppCookieStickinessPolicyOutputDeserializer;
 impl CreateAppCookieStickinessPolicyOutputDeserializer {
@@ -1468,7 +1468,7 @@ impl CreateLBCookieStickinessPolicyInputSerializer {
 
 /// <p>Contains the output for CreateLBCookieStickinessPolicy.</p>
 #[derive(Default, Debug, Clone)]
-pub struct CreateLBCookieStickinessPolicyOutput;
+pub struct CreateLBCookieStickinessPolicyOutput {}
 
 struct CreateLBCookieStickinessPolicyOutputDeserializer;
 impl CreateLBCookieStickinessPolicyOutputDeserializer {
@@ -1518,7 +1518,7 @@ impl CreateLoadBalancerListenerInputSerializer {
 
 /// <p>Contains the parameters for CreateLoadBalancerListener.</p>
 #[derive(Default, Debug, Clone)]
-pub struct CreateLoadBalancerListenerOutput;
+pub struct CreateLoadBalancerListenerOutput {}
 
 struct CreateLoadBalancerListenerOutputDeserializer;
 impl CreateLoadBalancerListenerOutputDeserializer {
@@ -1582,7 +1582,7 @@ impl CreateLoadBalancerPolicyInputSerializer {
 
 /// <p>Contains the output of CreateLoadBalancerPolicy.</p>
 #[derive(Default, Debug, Clone)]
-pub struct CreateLoadBalancerPolicyOutput;
+pub struct CreateLoadBalancerPolicyOutput {}
 
 struct CreateLoadBalancerPolicyOutputDeserializer;
 impl CreateLoadBalancerPolicyOutputDeserializer {
@@ -1748,7 +1748,7 @@ impl DeleteAccessPointInputSerializer {
 
 /// <p>Contains the output of DeleteLoadBalancer.</p>
 #[derive(Default, Debug, Clone)]
-pub struct DeleteAccessPointOutput;
+pub struct DeleteAccessPointOutput {}
 
 struct DeleteAccessPointOutputDeserializer;
 impl DeleteAccessPointOutputDeserializer {
@@ -1798,7 +1798,7 @@ impl DeleteLoadBalancerListenerInputSerializer {
 
 /// <p>Contains the output of DeleteLoadBalancerListeners.</p>
 #[derive(Default, Debug, Clone)]
-pub struct DeleteLoadBalancerListenerOutput;
+pub struct DeleteLoadBalancerListenerOutput {}
 
 struct DeleteLoadBalancerListenerOutputDeserializer;
 impl DeleteLoadBalancerListenerOutputDeserializer {
@@ -1847,7 +1847,7 @@ impl DeleteLoadBalancerPolicyInputSerializer {
 
 /// <p>Contains the output of DeleteLoadBalancerPolicy.</p>
 #[derive(Default, Debug, Clone)]
-pub struct DeleteLoadBalancerPolicyOutput;
+pub struct DeleteLoadBalancerPolicyOutput {}
 
 struct DeleteLoadBalancerPolicyOutputDeserializer;
 impl DeleteLoadBalancerPolicyOutputDeserializer {
@@ -4821,7 +4821,7 @@ impl RemoveTagsInputSerializer {
 
 /// <p>Contains the output of RemoveTags.</p>
 #[derive(Default, Debug, Clone)]
-pub struct RemoveTagsOutput;
+pub struct RemoveTagsOutput {}
 
 struct RemoveTagsOutputDeserializer;
 impl RemoveTagsOutputDeserializer {
@@ -5005,7 +5005,7 @@ impl SetLoadBalancerListenerSSLCertificateInputSerializer {
 
 /// <p>Contains the output of SetLoadBalancerListenerSSLCertificate.</p>
 #[derive(Default, Debug, Clone)]
-pub struct SetLoadBalancerListenerSSLCertificateOutput;
+pub struct SetLoadBalancerListenerSSLCertificateOutput {}
 
 struct SetLoadBalancerListenerSSLCertificateOutputDeserializer;
 impl SetLoadBalancerListenerSSLCertificateOutputDeserializer {
@@ -5065,7 +5065,7 @@ impl SetLoadBalancerPoliciesForBackendServerInputSerializer {
 
 /// <p>Contains the output of SetLoadBalancerPoliciesForBackendServer.</p>
 #[derive(Default, Debug, Clone)]
-pub struct SetLoadBalancerPoliciesForBackendServerOutput;
+pub struct SetLoadBalancerPoliciesForBackendServerOutput {}
 
 struct SetLoadBalancerPoliciesForBackendServerOutputDeserializer;
 impl SetLoadBalancerPoliciesForBackendServerOutputDeserializer {
@@ -5121,7 +5121,7 @@ impl SetLoadBalancerPoliciesOfListenerInputSerializer {
 
 /// <p>Contains the output of SetLoadBalancePoliciesOfListener.</p>
 #[derive(Default, Debug, Clone)]
-pub struct SetLoadBalancerPoliciesOfListenerOutput;
+pub struct SetLoadBalancerPoliciesOfListenerOutput {}
 
 struct SetLoadBalancerPoliciesOfListenerOutputDeserializer;
 impl SetLoadBalancerPoliciesOfListenerOutputDeserializer {
