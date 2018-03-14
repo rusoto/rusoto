@@ -17966,12 +17966,12 @@ impl AddRoleToDBClusterError {
                 "DBClusterNotFoundFault" => AddRoleToDBClusterError::DBClusterNotFoundFault(
                     String::from(parsed_error.message),
                 ),
-                "DBClusterRoleAlreadyExistsFault" => {
+                "DBClusterRoleAlreadyExists" => {
                     AddRoleToDBClusterError::DBClusterRoleAlreadyExistsFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "DBClusterRoleQuotaExceededFault" => {
+                "DBClusterRoleQuotaExceeded" => {
                     AddRoleToDBClusterError::DBClusterRoleQuotaExceededFault(String::from(
                         parsed_error.message,
                     ))
@@ -18062,12 +18062,10 @@ impl AddSourceIdentifierToSubscriptionError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "SourceNotFoundFault" => {
-                    AddSourceIdentifierToSubscriptionError::SourceNotFoundFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "SubscriptionNotFoundFault" => {
+                "SourceNotFound" => AddSourceIdentifierToSubscriptionError::SourceNotFoundFault(
+                    String::from(parsed_error.message),
+                ),
+                "SubscriptionNotFound" => {
                     AddSourceIdentifierToSubscriptionError::SubscriptionNotFoundFault(
                         String::from(parsed_error.message),
                     )
@@ -18156,10 +18154,10 @@ impl AddTagsToResourceError {
                 "DBClusterNotFoundFault" => AddTagsToResourceError::DBClusterNotFoundFault(
                     String::from(parsed_error.message),
                 ),
-                "DBInstanceNotFoundFault" => AddTagsToResourceError::DBInstanceNotFoundFault(
+                "DBInstanceNotFound" => AddTagsToResourceError::DBInstanceNotFoundFault(
                     String::from(parsed_error.message),
                 ),
-                "DBSnapshotNotFoundFault" => AddTagsToResourceError::DBSnapshotNotFoundFault(
+                "DBSnapshotNotFound" => AddTagsToResourceError::DBSnapshotNotFoundFault(
                     String::from(parsed_error.message),
                 ),
                 _ => AddTagsToResourceError::Unknown(String::from(body)),
@@ -18327,22 +18325,22 @@ impl AuthorizeDBSecurityGroupIngressError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "AuthorizationAlreadyExistsFault" => {
+                "AuthorizationAlreadyExists" => {
                     AuthorizeDBSecurityGroupIngressError::AuthorizationAlreadyExistsFault(
                         String::from(parsed_error.message),
                     )
                 }
-                "AuthorizationQuotaExceededFault" => {
+                "AuthorizationQuotaExceeded" => {
                     AuthorizeDBSecurityGroupIngressError::AuthorizationQuotaExceededFault(
                         String::from(parsed_error.message),
                     )
                 }
-                "DBSecurityGroupNotFoundFault" => {
+                "DBSecurityGroupNotFound" => {
                     AuthorizeDBSecurityGroupIngressError::DBSecurityGroupNotFoundFault(
                         String::from(parsed_error.message),
                     )
                 }
-                "InvalidDBSecurityGroupStateFault" => {
+                "InvalidDBSecurityGroupState" => {
                     AuthorizeDBSecurityGroupIngressError::InvalidDBSecurityGroupStateFault(
                         String::from(parsed_error.message),
                     )
@@ -18436,17 +18434,17 @@ impl CopyDBClusterParameterGroupError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "DBParameterGroupAlreadyExistsFault" => {
+                "DBParameterGroupAlreadyExists" => {
                     CopyDBClusterParameterGroupError::DBParameterGroupAlreadyExistsFault(
                         String::from(parsed_error.message),
                     )
                 }
-                "DBParameterGroupNotFoundFault" => {
+                "DBParameterGroupNotFound" => {
                     CopyDBClusterParameterGroupError::DBParameterGroupNotFoundFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "DBParameterGroupQuotaExceededFault" => {
+                "DBParameterGroupQuotaExceeded" => {
                     CopyDBClusterParameterGroupError::DBParameterGroupQuotaExceededFault(
                         String::from(parsed_error.message),
                     )
@@ -18568,11 +18566,9 @@ impl CopyDBClusterSnapshotError {
                         parsed_error.message,
                     ))
                 }
-                "SnapshotQuotaExceededFault" => {
-                    CopyDBClusterSnapshotError::SnapshotQuotaExceededFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "SnapshotQuotaExceeded" => CopyDBClusterSnapshotError::SnapshotQuotaExceededFault(
+                    String::from(parsed_error.message),
+                ),
                 _ => CopyDBClusterSnapshotError::Unknown(String::from(body)),
             },
             Err(_) => CopyDBClusterSnapshotError::Unknown(body.to_string()),
@@ -18658,17 +18654,17 @@ impl CopyDBParameterGroupError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "DBParameterGroupAlreadyExistsFault" => {
+                "DBParameterGroupAlreadyExists" => {
                     CopyDBParameterGroupError::DBParameterGroupAlreadyExistsFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "DBParameterGroupNotFoundFault" => {
+                "DBParameterGroupNotFound" => {
                     CopyDBParameterGroupError::DBParameterGroupNotFoundFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "DBParameterGroupQuotaExceededFault" => {
+                "DBParameterGroupQuotaExceeded" => {
                     CopyDBParameterGroupError::DBParameterGroupQuotaExceededFault(String::from(
                         parsed_error.message,
                     ))
@@ -18759,21 +18755,19 @@ impl CopyDBSnapshotError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "DBSnapshotAlreadyExistsFault" => {
-                    CopyDBSnapshotError::DBSnapshotAlreadyExistsFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "DBSnapshotNotFoundFault" => {
+                "DBSnapshotAlreadyExists" => CopyDBSnapshotError::DBSnapshotAlreadyExistsFault(
+                    String::from(parsed_error.message),
+                ),
+                "DBSnapshotNotFound" => {
                     CopyDBSnapshotError::DBSnapshotNotFoundFault(String::from(parsed_error.message))
                 }
-                "InvalidDBSnapshotStateFault" => CopyDBSnapshotError::InvalidDBSnapshotStateFault(
+                "InvalidDBSnapshotState" => CopyDBSnapshotError::InvalidDBSnapshotStateFault(
                     String::from(parsed_error.message),
                 ),
                 "KMSKeyNotAccessibleFault" => CopyDBSnapshotError::KMSKeyNotAccessibleFault(
                     String::from(parsed_error.message),
                 ),
-                "SnapshotQuotaExceededFault" => CopyDBSnapshotError::SnapshotQuotaExceededFault(
+                "SnapshotQuotaExceeded" => CopyDBSnapshotError::SnapshotQuotaExceededFault(
                     String::from(parsed_error.message),
                 ),
                 _ => CopyDBSnapshotError::Unknown(String::from(body)),
@@ -18983,7 +18977,7 @@ impl CreateDBClusterError {
                 "DBClusterNotFoundFault" => {
                     CreateDBClusterError::DBClusterNotFoundFault(String::from(parsed_error.message))
                 }
-                "DBClusterParameterGroupNotFoundFault" => {
+                "DBClusterParameterGroupNotFound" => {
                     CreateDBClusterError::DBClusterParameterGroupNotFoundFault(String::from(
                         parsed_error.message,
                     ))
@@ -18993,7 +18987,7 @@ impl CreateDBClusterError {
                         parsed_error.message,
                     ))
                 }
-                "DBInstanceNotFoundFault" => CreateDBClusterError::DBInstanceNotFoundFault(
+                "DBInstanceNotFound" => CreateDBClusterError::DBInstanceNotFoundFault(
                     String::from(parsed_error.message),
                 ),
                 "DBSubnetGroupDoesNotCoverEnoughAZs" => {
@@ -19004,7 +18998,7 @@ impl CreateDBClusterError {
                 "DBSubnetGroupNotFoundFault" => CreateDBClusterError::DBSubnetGroupNotFoundFault(
                     String::from(parsed_error.message),
                 ),
-                "InsufficientStorageClusterCapacityFault" => {
+                "InsufficientStorageClusterCapacity" => {
                     CreateDBClusterError::InsufficientStorageClusterCapacityFault(String::from(
                         parsed_error.message,
                     ))
@@ -19012,11 +19006,9 @@ impl CreateDBClusterError {
                 "InvalidDBClusterStateFault" => CreateDBClusterError::InvalidDBClusterStateFault(
                     String::from(parsed_error.message),
                 ),
-                "InvalidDBInstanceStateFault" => {
-                    CreateDBClusterError::InvalidDBInstanceStateFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "InvalidDBInstanceState" => CreateDBClusterError::InvalidDBInstanceStateFault(
+                    String::from(parsed_error.message),
+                ),
                 "InvalidDBSubnetGroupStateFault" => {
                     CreateDBClusterError::InvalidDBSubnetGroupStateFault(String::from(
                         parsed_error.message,
@@ -19033,7 +19025,7 @@ impl CreateDBClusterError {
                 "KMSKeyNotAccessibleFault" => CreateDBClusterError::KMSKeyNotAccessibleFault(
                     String::from(parsed_error.message),
                 ),
-                "StorageQuotaExceededFault" => CreateDBClusterError::StorageQuotaExceededFault(
+                "StorageQuotaExceeded" => CreateDBClusterError::StorageQuotaExceededFault(
                     String::from(parsed_error.message),
                 ),
                 _ => CreateDBClusterError::Unknown(String::from(body)),
@@ -19126,12 +19118,12 @@ impl CreateDBClusterParameterGroupError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "DBParameterGroupAlreadyExistsFault" => {
+                "DBParameterGroupAlreadyExists" => {
                     CreateDBClusterParameterGroupError::DBParameterGroupAlreadyExistsFault(
                         String::from(parsed_error.message),
                     )
                 }
-                "DBParameterGroupQuotaExceededFault" => {
+                "DBParameterGroupQuotaExceeded" => {
                     CreateDBClusterParameterGroupError::DBParameterGroupQuotaExceededFault(
                         String::from(parsed_error.message),
                     )
@@ -19243,7 +19235,7 @@ impl CreateDBClusterSnapshotError {
                         parsed_error.message,
                     ))
                 }
-                "SnapshotQuotaExceededFault" => {
+                "SnapshotQuotaExceeded" => {
                     CreateDBClusterSnapshotError::SnapshotQuotaExceededFault(String::from(
                         parsed_error.message,
                     ))
@@ -19362,27 +19354,23 @@ impl CreateDBInstanceError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "AuthorizationNotFoundFault" => CreateDBInstanceError::AuthorizationNotFoundFault(
+                "AuthorizationNotFound" => CreateDBInstanceError::AuthorizationNotFoundFault(
                     String::from(parsed_error.message),
                 ),
                 "DBClusterNotFoundFault" => CreateDBInstanceError::DBClusterNotFoundFault(
                     String::from(parsed_error.message),
                 ),
-                "DBInstanceAlreadyExistsFault" => {
-                    CreateDBInstanceError::DBInstanceAlreadyExistsFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "DBParameterGroupNotFoundFault" => {
+                "DBInstanceAlreadyExists" => CreateDBInstanceError::DBInstanceAlreadyExistsFault(
+                    String::from(parsed_error.message),
+                ),
+                "DBParameterGroupNotFound" => {
                     CreateDBInstanceError::DBParameterGroupNotFoundFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "DBSecurityGroupNotFoundFault" => {
-                    CreateDBInstanceError::DBSecurityGroupNotFoundFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "DBSecurityGroupNotFound" => CreateDBInstanceError::DBSecurityGroupNotFoundFault(
+                    String::from(parsed_error.message),
+                ),
                 "DBSubnetGroupDoesNotCoverEnoughAZs" => {
                     CreateDBInstanceError::DBSubnetGroupDoesNotCoverEnoughAZs(String::from(
                         parsed_error.message,
@@ -19394,10 +19382,10 @@ impl CreateDBInstanceError {
                 "DomainNotFoundFault" => {
                     CreateDBInstanceError::DomainNotFoundFault(String::from(parsed_error.message))
                 }
-                "InstanceQuotaExceededFault" => CreateDBInstanceError::InstanceQuotaExceededFault(
+                "InstanceQuotaExceeded" => CreateDBInstanceError::InstanceQuotaExceededFault(
                     String::from(parsed_error.message),
                 ),
-                "InsufficientDBInstanceCapacityFault" => {
+                "InsufficientDBInstanceCapacity" => {
                     CreateDBInstanceError::InsufficientDBInstanceCapacityFault(String::from(
                         parsed_error.message,
                     ))
@@ -19424,14 +19412,12 @@ impl CreateDBInstanceError {
                         parsed_error.message,
                     ))
                 }
-                "StorageQuotaExceededFault" => CreateDBInstanceError::StorageQuotaExceededFault(
+                "StorageQuotaExceeded" => CreateDBInstanceError::StorageQuotaExceededFault(
                     String::from(parsed_error.message),
                 ),
-                "StorageTypeNotSupportedFault" => {
-                    CreateDBInstanceError::StorageTypeNotSupportedFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "StorageTypeNotSupported" => CreateDBInstanceError::StorageTypeNotSupportedFault(
+                    String::from(parsed_error.message),
+                ),
                 _ => CreateDBInstanceError::Unknown(String::from(body)),
             },
             Err(_) => CreateDBInstanceError::Unknown(body.to_string()),
@@ -19557,22 +19543,20 @@ impl CreateDBInstanceReadReplicaError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "DBInstanceAlreadyExistsFault" => {
+                "DBInstanceAlreadyExists" => {
                     CreateDBInstanceReadReplicaError::DBInstanceAlreadyExistsFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "DBInstanceNotFoundFault" => {
-                    CreateDBInstanceReadReplicaError::DBInstanceNotFoundFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "DBParameterGroupNotFoundFault" => {
+                "DBInstanceNotFound" => CreateDBInstanceReadReplicaError::DBInstanceNotFoundFault(
+                    String::from(parsed_error.message),
+                ),
+                "DBParameterGroupNotFound" => {
                     CreateDBInstanceReadReplicaError::DBParameterGroupNotFoundFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "DBSecurityGroupNotFoundFault" => {
+                "DBSecurityGroupNotFound" => {
                     CreateDBInstanceReadReplicaError::DBSecurityGroupNotFoundFault(String::from(
                         parsed_error.message,
                     ))
@@ -19592,17 +19576,17 @@ impl CreateDBInstanceReadReplicaError {
                         parsed_error.message,
                     ))
                 }
-                "InstanceQuotaExceededFault" => {
+                "InstanceQuotaExceeded" => {
                     CreateDBInstanceReadReplicaError::InstanceQuotaExceededFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "InsufficientDBInstanceCapacityFault" => {
+                "InsufficientDBInstanceCapacity" => {
                     CreateDBInstanceReadReplicaError::InsufficientDBInstanceCapacityFault(
                         String::from(parsed_error.message),
                     )
                 }
-                "InvalidDBInstanceStateFault" => {
+                "InvalidDBInstanceState" => {
                     CreateDBInstanceReadReplicaError::InvalidDBInstanceStateFault(String::from(
                         parsed_error.message,
                     ))
@@ -19635,12 +19619,12 @@ impl CreateDBInstanceReadReplicaError {
                         String::from(parsed_error.message),
                     )
                 }
-                "StorageQuotaExceededFault" => {
+                "StorageQuotaExceeded" => {
                     CreateDBInstanceReadReplicaError::StorageQuotaExceededFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "StorageTypeNotSupportedFault" => {
+                "StorageTypeNotSupported" => {
                     CreateDBInstanceReadReplicaError::StorageTypeNotSupportedFault(String::from(
                         parsed_error.message,
                     ))
@@ -19746,12 +19730,12 @@ impl CreateDBParameterGroupError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "DBParameterGroupAlreadyExistsFault" => {
+                "DBParameterGroupAlreadyExists" => {
                     CreateDBParameterGroupError::DBParameterGroupAlreadyExistsFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "DBParameterGroupQuotaExceededFault" => {
+                "DBParameterGroupQuotaExceeded" => {
                     CreateDBParameterGroupError::DBParameterGroupQuotaExceededFault(String::from(
                         parsed_error.message,
                     ))
@@ -19837,17 +19821,17 @@ impl CreateDBSecurityGroupError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "DBSecurityGroupAlreadyExistsFault" => {
+                "DBSecurityGroupAlreadyExists" => {
                     CreateDBSecurityGroupError::DBSecurityGroupAlreadyExistsFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "DBSecurityGroupNotSupportedFault" => {
+                "DBSecurityGroupNotSupported" => {
                     CreateDBSecurityGroupError::DBSecurityGroupNotSupportedFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "DBSecurityGroupQuotaExceededFault" => {
+                "QuotaExceeded.DBSecurityGroup" => {
                     CreateDBSecurityGroupError::DBSecurityGroupQuotaExceededFault(String::from(
                         parsed_error.message,
                     ))
@@ -19936,20 +19920,16 @@ impl CreateDBSnapshotError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "DBInstanceNotFoundFault" => CreateDBSnapshotError::DBInstanceNotFoundFault(
+                "DBInstanceNotFound" => CreateDBSnapshotError::DBInstanceNotFoundFault(
                     String::from(parsed_error.message),
                 ),
-                "DBSnapshotAlreadyExistsFault" => {
-                    CreateDBSnapshotError::DBSnapshotAlreadyExistsFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "InvalidDBInstanceStateFault" => {
-                    CreateDBSnapshotError::InvalidDBInstanceStateFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "SnapshotQuotaExceededFault" => CreateDBSnapshotError::SnapshotQuotaExceededFault(
+                "DBSnapshotAlreadyExists" => CreateDBSnapshotError::DBSnapshotAlreadyExistsFault(
+                    String::from(parsed_error.message),
+                ),
+                "InvalidDBInstanceState" => CreateDBSnapshotError::InvalidDBInstanceStateFault(
+                    String::from(parsed_error.message),
+                ),
+                "SnapshotQuotaExceeded" => CreateDBSnapshotError::SnapshotQuotaExceededFault(
                     String::from(parsed_error.message),
                 ),
                 _ => CreateDBSnapshotError::Unknown(String::from(body)),
@@ -20037,7 +20017,7 @@ impl CreateDBSubnetGroupError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "DBSubnetGroupAlreadyExistsFault" => {
+                "DBSubnetGroupAlreadyExists" => {
                     CreateDBSubnetGroupError::DBSubnetGroupAlreadyExistsFault(String::from(
                         parsed_error.message,
                     ))
@@ -20047,7 +20027,7 @@ impl CreateDBSubnetGroupError {
                         parsed_error.message,
                     ))
                 }
-                "DBSubnetGroupQuotaExceededFault" => {
+                "DBSubnetGroupQuotaExceeded" => {
                     CreateDBSubnetGroupError::DBSubnetGroupQuotaExceededFault(String::from(
                         parsed_error.message,
                     ))
@@ -20152,33 +20132,29 @@ impl CreateEventSubscriptionError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "EventSubscriptionQuotaExceededFault" => {
+                "EventSubscriptionQuotaExceeded" => {
                     CreateEventSubscriptionError::EventSubscriptionQuotaExceededFault(
                         String::from(parsed_error.message),
                     )
                 }
-                "SNSInvalidTopicFault" => CreateEventSubscriptionError::SNSInvalidTopicFault(
+                "SNSInvalidTopic" => CreateEventSubscriptionError::SNSInvalidTopicFault(
                     String::from(parsed_error.message),
                 ),
-                "SNSNoAuthorizationFault" => {
-                    CreateEventSubscriptionError::SNSNoAuthorizationFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "SNSTopicArnNotFoundFault" => {
-                    CreateEventSubscriptionError::SNSTopicArnNotFoundFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "SourceNotFoundFault" => CreateEventSubscriptionError::SourceNotFoundFault(
+                "SNSNoAuthorization" => CreateEventSubscriptionError::SNSNoAuthorizationFault(
                     String::from(parsed_error.message),
                 ),
-                "SubscriptionAlreadyExistFault" => {
+                "SNSTopicArnNotFound" => CreateEventSubscriptionError::SNSTopicArnNotFoundFault(
+                    String::from(parsed_error.message),
+                ),
+                "SourceNotFound" => CreateEventSubscriptionError::SourceNotFoundFault(
+                    String::from(parsed_error.message),
+                ),
+                "SubscriptionAlreadyExist" => {
                     CreateEventSubscriptionError::SubscriptionAlreadyExistFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "SubscriptionCategoryNotFoundFault" => {
+                "SubscriptionCategoryNotFound" => {
                     CreateEventSubscriptionError::SubscriptionCategoryNotFoundFault(String::from(
                         parsed_error.message,
                     ))
@@ -20378,7 +20354,7 @@ impl DeleteDBClusterError {
                 "InvalidDBClusterStateFault" => DeleteDBClusterError::InvalidDBClusterStateFault(
                     String::from(parsed_error.message),
                 ),
-                "SnapshotQuotaExceededFault" => DeleteDBClusterError::SnapshotQuotaExceededFault(
+                "SnapshotQuotaExceeded" => DeleteDBClusterError::SnapshotQuotaExceededFault(
                     String::from(parsed_error.message),
                 ),
                 _ => DeleteDBClusterError::Unknown(String::from(body)),
@@ -20461,12 +20437,12 @@ impl DeleteDBClusterParameterGroupError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "DBParameterGroupNotFoundFault" => {
+                "DBParameterGroupNotFound" => {
                     DeleteDBClusterParameterGroupError::DBParameterGroupNotFoundFault(
                         String::from(parsed_error.message),
                     )
                 }
-                "InvalidDBParameterGroupStateFault" => {
+                "InvalidDBParameterGroupState" => {
                     DeleteDBClusterParameterGroupError::InvalidDBParameterGroupStateFault(
                         String::from(parsed_error.message),
                     )
@@ -20647,23 +20623,19 @@ impl DeleteDBInstanceError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "DBInstanceNotFoundFault" => DeleteDBInstanceError::DBInstanceNotFoundFault(
+                "DBInstanceNotFound" => DeleteDBInstanceError::DBInstanceNotFoundFault(
                     String::from(parsed_error.message),
                 ),
-                "DBSnapshotAlreadyExistsFault" => {
-                    DeleteDBInstanceError::DBSnapshotAlreadyExistsFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "DBSnapshotAlreadyExists" => DeleteDBInstanceError::DBSnapshotAlreadyExistsFault(
+                    String::from(parsed_error.message),
+                ),
                 "InvalidDBClusterStateFault" => DeleteDBInstanceError::InvalidDBClusterStateFault(
                     String::from(parsed_error.message),
                 ),
-                "InvalidDBInstanceStateFault" => {
-                    DeleteDBInstanceError::InvalidDBInstanceStateFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "SnapshotQuotaExceededFault" => DeleteDBInstanceError::SnapshotQuotaExceededFault(
+                "InvalidDBInstanceState" => DeleteDBInstanceError::InvalidDBInstanceStateFault(
+                    String::from(parsed_error.message),
+                ),
+                "SnapshotQuotaExceeded" => DeleteDBInstanceError::SnapshotQuotaExceededFault(
                     String::from(parsed_error.message),
                 ),
                 _ => DeleteDBInstanceError::Unknown(String::from(body)),
@@ -20746,12 +20718,12 @@ impl DeleteDBParameterGroupError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "DBParameterGroupNotFoundFault" => {
+                "DBParameterGroupNotFound" => {
                     DeleteDBParameterGroupError::DBParameterGroupNotFoundFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "InvalidDBParameterGroupStateFault" => {
+                "InvalidDBParameterGroupState" => {
                     DeleteDBParameterGroupError::InvalidDBParameterGroupStateFault(String::from(
                         parsed_error.message,
                     ))
@@ -20835,12 +20807,12 @@ impl DeleteDBSecurityGroupError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "DBSecurityGroupNotFoundFault" => {
+                "DBSecurityGroupNotFound" => {
                     DeleteDBSecurityGroupError::DBSecurityGroupNotFoundFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "InvalidDBSecurityGroupStateFault" => {
+                "InvalidDBSecurityGroupState" => {
                     DeleteDBSecurityGroupError::InvalidDBSecurityGroupStateFault(String::from(
                         parsed_error.message,
                     ))
@@ -20924,14 +20896,12 @@ impl DeleteDBSnapshotError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "DBSnapshotNotFoundFault" => DeleteDBSnapshotError::DBSnapshotNotFoundFault(
+                "DBSnapshotNotFound" => DeleteDBSnapshotError::DBSnapshotNotFoundFault(
                     String::from(parsed_error.message),
                 ),
-                "InvalidDBSnapshotStateFault" => {
-                    DeleteDBSnapshotError::InvalidDBSnapshotStateFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "InvalidDBSnapshotState" => DeleteDBSnapshotError::InvalidDBSnapshotStateFault(
+                    String::from(parsed_error.message),
+                ),
                 _ => DeleteDBSnapshotError::Unknown(String::from(body)),
             },
             Err(_) => DeleteDBSnapshotError::Unknown(body.to_string()),
@@ -21106,16 +21076,14 @@ impl DeleteEventSubscriptionError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidEventSubscriptionStateFault" => {
+                "InvalidEventSubscriptionState" => {
                     DeleteEventSubscriptionError::InvalidEventSubscriptionStateFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "SubscriptionNotFoundFault" => {
-                    DeleteEventSubscriptionError::SubscriptionNotFoundFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "SubscriptionNotFound" => DeleteEventSubscriptionError::SubscriptionNotFoundFault(
+                    String::from(parsed_error.message),
+                ),
                 _ => DeleteEventSubscriptionError::Unknown(String::from(body)),
             },
             Err(_) => DeleteEventSubscriptionError::Unknown(body.to_string()),
@@ -21353,7 +21321,7 @@ impl DescribeCertificatesError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "CertificateNotFoundFault" => DescribeCertificatesError::CertificateNotFoundFault(
+                "CertificateNotFound" => DescribeCertificatesError::CertificateNotFoundFault(
                     String::from(parsed_error.message),
                 ),
                 _ => DescribeCertificatesError::Unknown(String::from(body)),
@@ -21432,7 +21400,7 @@ impl DescribeDBClusterParameterGroupsError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "DBParameterGroupNotFoundFault" => {
+                "DBParameterGroupNotFound" => {
                     DescribeDBClusterParameterGroupsError::DBParameterGroupNotFoundFault(
                         String::from(parsed_error.message),
                     )
@@ -21515,7 +21483,7 @@ impl DescribeDBClusterParametersError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "DBParameterGroupNotFoundFault" => {
+                "DBParameterGroupNotFound" => {
                     DescribeDBClusterParametersError::DBParameterGroupNotFoundFault(String::from(
                         parsed_error.message,
                     ))
@@ -21912,7 +21880,7 @@ impl DescribeDBInstancesError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "DBInstanceNotFoundFault" => DescribeDBInstancesError::DBInstanceNotFoundFault(
+                "DBInstanceNotFound" => DescribeDBInstancesError::DBInstanceNotFoundFault(
                     String::from(parsed_error.message),
                 ),
                 _ => DescribeDBInstancesError::Unknown(String::from(body)),
@@ -21991,7 +21959,7 @@ impl DescribeDBLogFilesError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "DBInstanceNotFoundFault" => DescribeDBLogFilesError::DBInstanceNotFoundFault(
+                "DBInstanceNotFound" => DescribeDBLogFilesError::DBInstanceNotFoundFault(
                     String::from(parsed_error.message),
                 ),
                 _ => DescribeDBLogFilesError::Unknown(String::from(body)),
@@ -22070,7 +22038,7 @@ impl DescribeDBParameterGroupsError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "DBParameterGroupNotFoundFault" => {
+                "DBParameterGroupNotFound" => {
                     DescribeDBParameterGroupsError::DBParameterGroupNotFoundFault(String::from(
                         parsed_error.message,
                     ))
@@ -22151,7 +22119,7 @@ impl DescribeDBParametersError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "DBParameterGroupNotFoundFault" => {
+                "DBParameterGroupNotFound" => {
                     DescribeDBParametersError::DBParameterGroupNotFoundFault(String::from(
                         parsed_error.message,
                     ))
@@ -22232,7 +22200,7 @@ impl DescribeDBSecurityGroupsError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "DBSecurityGroupNotFoundFault" => {
+                "DBSecurityGroupNotFound" => {
                     DescribeDBSecurityGroupsError::DBSecurityGroupNotFoundFault(String::from(
                         parsed_error.message,
                     ))
@@ -22313,7 +22281,7 @@ impl DescribeDBSnapshotAttributesError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "DBSnapshotNotFoundFault" => {
+                "DBSnapshotNotFound" => {
                     DescribeDBSnapshotAttributesError::DBSnapshotNotFoundFault(String::from(
                         parsed_error.message,
                     ))
@@ -22394,7 +22362,7 @@ impl DescribeDBSnapshotsError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "DBSnapshotNotFoundFault" => DescribeDBSnapshotsError::DBSnapshotNotFoundFault(
+                "DBSnapshotNotFound" => DescribeDBSnapshotsError::DBSnapshotNotFoundFault(
                     String::from(parsed_error.message),
                 ),
                 _ => DescribeDBSnapshotsError::Unknown(String::from(body)),
@@ -22773,7 +22741,7 @@ impl DescribeEventSubscriptionsError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "SubscriptionNotFoundFault" => {
+                "SubscriptionNotFound" => {
                     DescribeEventSubscriptionsError::SubscriptionNotFoundFault(String::from(
                         parsed_error.message,
                     ))
@@ -23231,7 +23199,7 @@ impl DescribeReservedDBInstancesError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ReservedDBInstanceNotFoundFault" => {
+                "ReservedDBInstanceNotFound" => {
                     DescribeReservedDBInstancesError::ReservedDBInstanceNotFoundFault(
                         String::from(parsed_error.message),
                     )
@@ -23313,7 +23281,7 @@ impl DescribeReservedDBInstancesOfferingsError {
         match Self::deserialize(&mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "ReservedDBInstancesOfferingNotFoundFault" => DescribeReservedDBInstancesOfferingsError::ReservedDBInstancesOfferingNotFoundFault(String::from(parsed_error.message)),_ => DescribeReservedDBInstancesOfferingsError::Unknown(String::from(body))
+                                    "ReservedDBInstancesOfferingNotFound" => DescribeReservedDBInstancesOfferingsError::ReservedDBInstancesOfferingNotFoundFault(String::from(parsed_error.message)),_ => DescribeReservedDBInstancesOfferingsError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => DescribeReservedDBInstancesOfferingsError::Unknown(body.to_string())
@@ -23463,12 +23431,12 @@ impl DescribeValidDBInstanceModificationsError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "DBInstanceNotFoundFault" => {
+                "DBInstanceNotFound" => {
                     DescribeValidDBInstanceModificationsError::DBInstanceNotFoundFault(
                         String::from(parsed_error.message),
                     )
                 }
-                "InvalidDBInstanceStateFault" => {
+                "InvalidDBInstanceState" => {
                     DescribeValidDBInstanceModificationsError::InvalidDBInstanceStateFault(
                         String::from(parsed_error.message),
                     )
@@ -23554,11 +23522,9 @@ impl DownloadDBLogFilePortionError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "DBInstanceNotFoundFault" => {
-                    DownloadDBLogFilePortionError::DBInstanceNotFoundFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "DBInstanceNotFound" => DownloadDBLogFilePortionError::DBInstanceNotFoundFault(
+                    String::from(parsed_error.message),
+                ),
                 "DBLogFileNotFoundFault" => DownloadDBLogFilePortionError::DBLogFileNotFoundFault(
                     String::from(parsed_error.message),
                 ),
@@ -23651,11 +23617,9 @@ impl FailoverDBClusterError {
                         parsed_error.message,
                     ))
                 }
-                "InvalidDBInstanceStateFault" => {
-                    FailoverDBClusterError::InvalidDBInstanceStateFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "InvalidDBInstanceState" => FailoverDBClusterError::InvalidDBInstanceStateFault(
+                    String::from(parsed_error.message),
+                ),
                 _ => FailoverDBClusterError::Unknown(String::from(body)),
             },
             Err(_) => FailoverDBClusterError::Unknown(body.to_string()),
@@ -23741,10 +23705,10 @@ impl ListTagsForResourceError {
                 "DBClusterNotFoundFault" => ListTagsForResourceError::DBClusterNotFoundFault(
                     String::from(parsed_error.message),
                 ),
-                "DBInstanceNotFoundFault" => ListTagsForResourceError::DBInstanceNotFoundFault(
+                "DBInstanceNotFound" => ListTagsForResourceError::DBInstanceNotFoundFault(
                     String::from(parsed_error.message),
                 ),
-                "DBSnapshotNotFoundFault" => ListTagsForResourceError::DBSnapshotNotFoundFault(
+                "DBSnapshotNotFound" => ListTagsForResourceError::DBSnapshotNotFoundFault(
                     String::from(parsed_error.message),
                 ),
                 _ => ListTagsForResourceError::Unknown(String::from(body)),
@@ -23853,7 +23817,7 @@ impl ModifyDBClusterError {
                 "DBClusterNotFoundFault" => {
                     ModifyDBClusterError::DBClusterNotFoundFault(String::from(parsed_error.message))
                 }
-                "DBClusterParameterGroupNotFoundFault" => {
+                "DBClusterParameterGroupNotFound" => {
                     ModifyDBClusterError::DBClusterParameterGroupNotFoundFault(String::from(
                         parsed_error.message,
                     ))
@@ -23864,12 +23828,10 @@ impl ModifyDBClusterError {
                 "InvalidDBClusterStateFault" => ModifyDBClusterError::InvalidDBClusterStateFault(
                     String::from(parsed_error.message),
                 ),
-                "InvalidDBInstanceStateFault" => {
-                    ModifyDBClusterError::InvalidDBInstanceStateFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "InvalidDBSecurityGroupStateFault" => {
+                "InvalidDBInstanceState" => ModifyDBClusterError::InvalidDBInstanceStateFault(
+                    String::from(parsed_error.message),
+                ),
+                "InvalidDBSecurityGroupState" => {
                     ModifyDBClusterError::InvalidDBSecurityGroupStateFault(String::from(
                         parsed_error.message,
                     ))
@@ -23887,7 +23849,7 @@ impl ModifyDBClusterError {
                         parsed_error.message,
                     ))
                 }
-                "StorageQuotaExceededFault" => ModifyDBClusterError::StorageQuotaExceededFault(
+                "StorageQuotaExceeded" => ModifyDBClusterError::StorageQuotaExceededFault(
                     String::from(parsed_error.message),
                 ),
                 _ => ModifyDBClusterError::Unknown(String::from(body)),
@@ -23976,12 +23938,12 @@ impl ModifyDBClusterParameterGroupError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "DBParameterGroupNotFoundFault" => {
+                "DBParameterGroupNotFound" => {
                     ModifyDBClusterParameterGroupError::DBParameterGroupNotFoundFault(
                         String::from(parsed_error.message),
                     )
                 }
-                "InvalidDBParameterGroupStateFault" => {
+                "InvalidDBParameterGroupState" => {
                     ModifyDBClusterParameterGroupError::InvalidDBParameterGroupStateFault(
                         String::from(parsed_error.message),
                     )
@@ -24079,7 +24041,7 @@ impl ModifyDBClusterSnapshotAttributeError {
                         String::from(parsed_error.message),
                     )
                 }
-                "SharedSnapshotQuotaExceededFault" => {
+                "SharedSnapshotQuotaExceeded" => {
                     ModifyDBClusterSnapshotAttributeError::SharedSnapshotQuotaExceededFault(
                         String::from(parsed_error.message),
                     )
@@ -24198,31 +24160,27 @@ impl ModifyDBInstanceError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "AuthorizationNotFoundFault" => ModifyDBInstanceError::AuthorizationNotFoundFault(
+                "AuthorizationNotFound" => ModifyDBInstanceError::AuthorizationNotFoundFault(
                     String::from(parsed_error.message),
                 ),
-                "CertificateNotFoundFault" => ModifyDBInstanceError::CertificateNotFoundFault(
+                "CertificateNotFound" => ModifyDBInstanceError::CertificateNotFoundFault(
                     String::from(parsed_error.message),
                 ),
-                "DBInstanceAlreadyExistsFault" => {
-                    ModifyDBInstanceError::DBInstanceAlreadyExistsFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "DBInstanceNotFoundFault" => ModifyDBInstanceError::DBInstanceNotFoundFault(
+                "DBInstanceAlreadyExists" => ModifyDBInstanceError::DBInstanceAlreadyExistsFault(
                     String::from(parsed_error.message),
                 ),
-                "DBParameterGroupNotFoundFault" => {
+                "DBInstanceNotFound" => ModifyDBInstanceError::DBInstanceNotFoundFault(
+                    String::from(parsed_error.message),
+                ),
+                "DBParameterGroupNotFound" => {
                     ModifyDBInstanceError::DBParameterGroupNotFoundFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "DBSecurityGroupNotFoundFault" => {
-                    ModifyDBInstanceError::DBSecurityGroupNotFoundFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "DBUpgradeDependencyFailureFault" => {
+                "DBSecurityGroupNotFound" => ModifyDBInstanceError::DBSecurityGroupNotFoundFault(
+                    String::from(parsed_error.message),
+                ),
+                "DBUpgradeDependencyFailure" => {
                     ModifyDBInstanceError::DBUpgradeDependencyFailureFault(String::from(
                         parsed_error.message,
                     ))
@@ -24230,17 +24188,15 @@ impl ModifyDBInstanceError {
                 "DomainNotFoundFault" => {
                     ModifyDBInstanceError::DomainNotFoundFault(String::from(parsed_error.message))
                 }
-                "InsufficientDBInstanceCapacityFault" => {
+                "InsufficientDBInstanceCapacity" => {
                     ModifyDBInstanceError::InsufficientDBInstanceCapacityFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "InvalidDBInstanceStateFault" => {
-                    ModifyDBInstanceError::InvalidDBInstanceStateFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "InvalidDBSecurityGroupStateFault" => {
+                "InvalidDBInstanceState" => ModifyDBInstanceError::InvalidDBInstanceStateFault(
+                    String::from(parsed_error.message),
+                ),
+                "InvalidDBSecurityGroupState" => {
                     ModifyDBInstanceError::InvalidDBSecurityGroupStateFault(String::from(
                         parsed_error.message,
                     ))
@@ -24258,14 +24214,12 @@ impl ModifyDBInstanceError {
                         parsed_error.message,
                     ))
                 }
-                "StorageQuotaExceededFault" => ModifyDBInstanceError::StorageQuotaExceededFault(
+                "StorageQuotaExceeded" => ModifyDBInstanceError::StorageQuotaExceededFault(
                     String::from(parsed_error.message),
                 ),
-                "StorageTypeNotSupportedFault" => {
-                    ModifyDBInstanceError::StorageTypeNotSupportedFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "StorageTypeNotSupported" => ModifyDBInstanceError::StorageTypeNotSupportedFault(
+                    String::from(parsed_error.message),
+                ),
                 _ => ModifyDBInstanceError::Unknown(String::from(body)),
             },
             Err(_) => ModifyDBInstanceError::Unknown(body.to_string()),
@@ -24357,12 +24311,12 @@ impl ModifyDBParameterGroupError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "DBParameterGroupNotFoundFault" => {
+                "DBParameterGroupNotFound" => {
                     ModifyDBParameterGroupError::DBParameterGroupNotFoundFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "InvalidDBParameterGroupStateFault" => {
+                "InvalidDBParameterGroupState" => {
                     ModifyDBParameterGroupError::InvalidDBParameterGroupStateFault(String::from(
                         parsed_error.message,
                     ))
@@ -24444,7 +24398,7 @@ impl ModifyDBSnapshotError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "DBSnapshotNotFoundFault" => ModifyDBSnapshotError::DBSnapshotNotFoundFault(
+                "DBSnapshotNotFound" => ModifyDBSnapshotError::DBSnapshotNotFoundFault(
                     String::from(parsed_error.message),
                 ),
                 _ => ModifyDBSnapshotError::Unknown(String::from(body)),
@@ -24525,17 +24479,15 @@ impl ModifyDBSnapshotAttributeError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "DBSnapshotNotFoundFault" => {
-                    ModifyDBSnapshotAttributeError::DBSnapshotNotFoundFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "InvalidDBSnapshotStateFault" => {
+                "DBSnapshotNotFound" => ModifyDBSnapshotAttributeError::DBSnapshotNotFoundFault(
+                    String::from(parsed_error.message),
+                ),
+                "InvalidDBSnapshotState" => {
                     ModifyDBSnapshotAttributeError::InvalidDBSnapshotStateFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "SharedSnapshotQuotaExceededFault" => {
+                "SharedSnapshotQuotaExceeded" => {
                     ModifyDBSnapshotAttributeError::SharedSnapshotQuotaExceededFault(String::from(
                         parsed_error.message,
                     ))
@@ -24737,34 +24689,28 @@ impl ModifyEventSubscriptionError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "EventSubscriptionQuotaExceededFault" => {
+                "EventSubscriptionQuotaExceeded" => {
                     ModifyEventSubscriptionError::EventSubscriptionQuotaExceededFault(
                         String::from(parsed_error.message),
                     )
                 }
-                "SNSInvalidTopicFault" => ModifyEventSubscriptionError::SNSInvalidTopicFault(
+                "SNSInvalidTopic" => ModifyEventSubscriptionError::SNSInvalidTopicFault(
                     String::from(parsed_error.message),
                 ),
-                "SNSNoAuthorizationFault" => {
-                    ModifyEventSubscriptionError::SNSNoAuthorizationFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "SNSTopicArnNotFoundFault" => {
-                    ModifyEventSubscriptionError::SNSTopicArnNotFoundFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "SubscriptionCategoryNotFoundFault" => {
+                "SNSNoAuthorization" => ModifyEventSubscriptionError::SNSNoAuthorizationFault(
+                    String::from(parsed_error.message),
+                ),
+                "SNSTopicArnNotFound" => ModifyEventSubscriptionError::SNSTopicArnNotFoundFault(
+                    String::from(parsed_error.message),
+                ),
+                "SubscriptionCategoryNotFound" => {
                     ModifyEventSubscriptionError::SubscriptionCategoryNotFoundFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "SubscriptionNotFoundFault" => {
-                    ModifyEventSubscriptionError::SubscriptionNotFoundFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "SubscriptionNotFound" => ModifyEventSubscriptionError::SubscriptionNotFoundFault(
+                    String::from(parsed_error.message),
+                ),
                 _ => ModifyEventSubscriptionError::Unknown(String::from(body)),
             },
             Err(_) => ModifyEventSubscriptionError::Unknown(body.to_string()),
@@ -24935,14 +24881,12 @@ impl PromoteReadReplicaError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "DBInstanceNotFoundFault" => PromoteReadReplicaError::DBInstanceNotFoundFault(
+                "DBInstanceNotFound" => PromoteReadReplicaError::DBInstanceNotFoundFault(
                     String::from(parsed_error.message),
                 ),
-                "InvalidDBInstanceStateFault" => {
-                    PromoteReadReplicaError::InvalidDBInstanceStateFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "InvalidDBInstanceState" => PromoteReadReplicaError::InvalidDBInstanceStateFault(
+                    String::from(parsed_error.message),
+                ),
                 _ => PromoteReadReplicaError::Unknown(String::from(body)),
             },
             Err(_) => PromoteReadReplicaError::Unknown(body.to_string()),
@@ -25114,7 +25058,7 @@ impl PurchaseReservedDBInstancesOfferingError {
         match Self::deserialize(&mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "ReservedDBInstanceAlreadyExistsFault" => PurchaseReservedDBInstancesOfferingError::ReservedDBInstanceAlreadyExistsFault(String::from(parsed_error.message)),"ReservedDBInstanceQuotaExceededFault" => PurchaseReservedDBInstancesOfferingError::ReservedDBInstanceQuotaExceededFault(String::from(parsed_error.message)),"ReservedDBInstancesOfferingNotFoundFault" => PurchaseReservedDBInstancesOfferingError::ReservedDBInstancesOfferingNotFoundFault(String::from(parsed_error.message)),_ => PurchaseReservedDBInstancesOfferingError::Unknown(String::from(body))
+                                    "ReservedDBInstanceAlreadyExists" => PurchaseReservedDBInstancesOfferingError::ReservedDBInstanceAlreadyExistsFault(String::from(parsed_error.message)),"ReservedDBInstanceQuotaExceeded" => PurchaseReservedDBInstancesOfferingError::ReservedDBInstanceQuotaExceededFault(String::from(parsed_error.message)),"ReservedDBInstancesOfferingNotFound" => PurchaseReservedDBInstancesOfferingError::ReservedDBInstancesOfferingNotFoundFault(String::from(parsed_error.message)),_ => PurchaseReservedDBInstancesOfferingError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => PurchaseReservedDBInstancesOfferingError::Unknown(body.to_string())
@@ -25193,14 +25137,12 @@ impl RebootDBInstanceError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "DBInstanceNotFoundFault" => RebootDBInstanceError::DBInstanceNotFoundFault(
+                "DBInstanceNotFound" => RebootDBInstanceError::DBInstanceNotFoundFault(
                     String::from(parsed_error.message),
                 ),
-                "InvalidDBInstanceStateFault" => {
-                    RebootDBInstanceError::InvalidDBInstanceStateFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "InvalidDBInstanceState" => RebootDBInstanceError::InvalidDBInstanceStateFault(
+                    String::from(parsed_error.message),
+                ),
                 _ => RebootDBInstanceError::Unknown(String::from(body)),
             },
             Err(_) => RebootDBInstanceError::Unknown(body.to_string()),
@@ -25283,7 +25225,7 @@ impl RemoveRoleFromDBClusterError {
                 "DBClusterNotFoundFault" => RemoveRoleFromDBClusterError::DBClusterNotFoundFault(
                     String::from(parsed_error.message),
                 ),
-                "DBClusterRoleNotFoundFault" => {
+                "DBClusterRoleNotFound" => {
                     RemoveRoleFromDBClusterError::DBClusterRoleNotFoundFault(String::from(
                         parsed_error.message,
                     ))
@@ -25373,12 +25315,12 @@ impl RemoveSourceIdentifierFromSubscriptionError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "SourceNotFoundFault" => {
+                "SourceNotFound" => {
                     RemoveSourceIdentifierFromSubscriptionError::SourceNotFoundFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "SubscriptionNotFoundFault" => {
+                "SubscriptionNotFound" => {
                     RemoveSourceIdentifierFromSubscriptionError::SubscriptionNotFoundFault(
                         String::from(parsed_error.message),
                     )
@@ -25469,10 +25411,10 @@ impl RemoveTagsFromResourceError {
                 "DBClusterNotFoundFault" => RemoveTagsFromResourceError::DBClusterNotFoundFault(
                     String::from(parsed_error.message),
                 ),
-                "DBInstanceNotFoundFault" => RemoveTagsFromResourceError::DBInstanceNotFoundFault(
+                "DBInstanceNotFound" => RemoveTagsFromResourceError::DBInstanceNotFoundFault(
                     String::from(parsed_error.message),
                 ),
-                "DBSnapshotNotFoundFault" => RemoveTagsFromResourceError::DBSnapshotNotFoundFault(
+                "DBSnapshotNotFound" => RemoveTagsFromResourceError::DBSnapshotNotFoundFault(
                     String::from(parsed_error.message),
                 ),
                 _ => RemoveTagsFromResourceError::Unknown(String::from(body)),
@@ -25555,12 +25497,12 @@ impl ResetDBClusterParameterGroupError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "DBParameterGroupNotFoundFault" => {
+                "DBParameterGroupNotFound" => {
                     ResetDBClusterParameterGroupError::DBParameterGroupNotFoundFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "InvalidDBParameterGroupStateFault" => {
+                "InvalidDBParameterGroupState" => {
                     ResetDBClusterParameterGroupError::InvalidDBParameterGroupStateFault(
                         String::from(parsed_error.message),
                     )
@@ -25646,12 +25588,12 @@ impl ResetDBParameterGroupError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "DBParameterGroupNotFoundFault" => {
+                "DBParameterGroupNotFound" => {
                     ResetDBParameterGroupError::DBParameterGroupNotFoundFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "InvalidDBParameterGroupStateFault" => {
+                "InvalidDBParameterGroupState" => {
                     ResetDBParameterGroupError::InvalidDBParameterGroupStateFault(String::from(
                         parsed_error.message,
                     ))
@@ -25765,7 +25707,7 @@ impl RestoreDBClusterFromS3Error {
                 "DBClusterNotFoundFault" => RestoreDBClusterFromS3Error::DBClusterNotFoundFault(
                     String::from(parsed_error.message),
                 ),
-                "DBClusterParameterGroupNotFoundFault" => {
+                "DBClusterParameterGroupNotFound" => {
                     RestoreDBClusterFromS3Error::DBClusterParameterGroupNotFoundFault(
                         String::from(parsed_error.message),
                     )
@@ -25780,7 +25722,7 @@ impl RestoreDBClusterFromS3Error {
                         parsed_error.message,
                     ))
                 }
-                "InsufficientStorageClusterCapacityFault" => {
+                "InsufficientStorageClusterCapacity" => {
                     RestoreDBClusterFromS3Error::InsufficientStorageClusterCapacityFault(
                         String::from(parsed_error.message),
                     )
@@ -25811,11 +25753,9 @@ impl RestoreDBClusterFromS3Error {
                         parsed_error.message,
                     ))
                 }
-                "StorageQuotaExceededFault" => {
-                    RestoreDBClusterFromS3Error::StorageQuotaExceededFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "StorageQuotaExceeded" => RestoreDBClusterFromS3Error::StorageQuotaExceededFault(
+                    String::from(parsed_error.message),
+                ),
                 _ => RestoreDBClusterFromS3Error::Unknown(String::from(body)),
             },
             Err(_) => RestoreDBClusterFromS3Error::Unknown(body.to_string()),
@@ -25949,7 +25889,7 @@ impl RestoreDBClusterFromSnapshotError {
                         String::from(parsed_error.message),
                     )
                 }
-                "DBSnapshotNotFoundFault" => {
+                "DBSnapshotNotFound" => {
                     RestoreDBClusterFromSnapshotError::DBSnapshotNotFoundFault(String::from(
                         parsed_error.message,
                     ))
@@ -25964,7 +25904,7 @@ impl RestoreDBClusterFromSnapshotError {
                         String::from(parsed_error.message),
                     )
                 }
-                "InsufficientStorageClusterCapacityFault" => {
+                "InsufficientStorageClusterCapacity" => {
                     RestoreDBClusterFromSnapshotError::InsufficientStorageClusterCapacityFault(
                         String::from(parsed_error.message),
                     )
@@ -25974,7 +25914,7 @@ impl RestoreDBClusterFromSnapshotError {
                         String::from(parsed_error.message),
                     )
                 }
-                "InvalidDBSnapshotStateFault" => {
+                "InvalidDBSnapshotState" => {
                     RestoreDBClusterFromSnapshotError::InvalidDBSnapshotStateFault(String::from(
                         parsed_error.message,
                     ))
@@ -26000,7 +25940,7 @@ impl RestoreDBClusterFromSnapshotError {
                         parsed_error.message,
                     ))
                 }
-                "StorageQuotaExceededFault" => {
+                "StorageQuotaExceeded" => {
                     RestoreDBClusterFromSnapshotError::StorageQuotaExceededFault(String::from(
                         parsed_error.message,
                     ))
@@ -26161,7 +26101,7 @@ impl RestoreDBClusterToPointInTimeError {
                         String::from(parsed_error.message),
                     )
                 }
-                "InsufficientStorageClusterCapacityFault" => {
+                "InsufficientStorageClusterCapacity" => {
                     RestoreDBClusterToPointInTimeError::InsufficientStorageClusterCapacityFault(
                         String::from(parsed_error.message),
                     )
@@ -26176,7 +26116,7 @@ impl RestoreDBClusterToPointInTimeError {
                         parsed_error.message,
                     ))
                 }
-                "InvalidDBSnapshotStateFault" => {
+                "InvalidDBSnapshotState" => {
                     RestoreDBClusterToPointInTimeError::InvalidDBSnapshotStateFault(String::from(
                         parsed_error.message,
                     ))
@@ -26202,7 +26142,7 @@ impl RestoreDBClusterToPointInTimeError {
                         parsed_error.message,
                     ))
                 }
-                "StorageQuotaExceededFault" => {
+                "StorageQuotaExceeded" => {
                     RestoreDBClusterToPointInTimeError::StorageQuotaExceededFault(String::from(
                         parsed_error.message,
                     ))
@@ -26338,22 +26278,22 @@ impl RestoreDBInstanceFromDBSnapshotError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "AuthorizationNotFoundFault" => {
+                "AuthorizationNotFound" => {
                     RestoreDBInstanceFromDBSnapshotError::AuthorizationNotFoundFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "DBInstanceAlreadyExistsFault" => {
+                "DBInstanceAlreadyExists" => {
                     RestoreDBInstanceFromDBSnapshotError::DBInstanceAlreadyExistsFault(
                         String::from(parsed_error.message),
                     )
                 }
-                "DBSecurityGroupNotFoundFault" => {
+                "DBSecurityGroupNotFound" => {
                     RestoreDBInstanceFromDBSnapshotError::DBSecurityGroupNotFoundFault(
                         String::from(parsed_error.message),
                     )
                 }
-                "DBSnapshotNotFoundFault" => {
+                "DBSnapshotNotFound" => {
                     RestoreDBInstanceFromDBSnapshotError::DBSnapshotNotFoundFault(String::from(
                         parsed_error.message,
                     ))
@@ -26373,17 +26313,17 @@ impl RestoreDBInstanceFromDBSnapshotError {
                         parsed_error.message,
                     ))
                 }
-                "InstanceQuotaExceededFault" => {
+                "InstanceQuotaExceeded" => {
                     RestoreDBInstanceFromDBSnapshotError::InstanceQuotaExceededFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "InsufficientDBInstanceCapacityFault" => {
+                "InsufficientDBInstanceCapacity" => {
                     RestoreDBInstanceFromDBSnapshotError::InsufficientDBInstanceCapacityFault(
                         String::from(parsed_error.message),
                     )
                 }
-                "InvalidDBSnapshotStateFault" => {
+                "InvalidDBSnapshotState" => {
                     RestoreDBInstanceFromDBSnapshotError::InvalidDBSnapshotStateFault(
                         String::from(parsed_error.message),
                     )
@@ -26416,12 +26356,12 @@ impl RestoreDBInstanceFromDBSnapshotError {
                         String::from(parsed_error.message),
                     )
                 }
-                "StorageQuotaExceededFault" => {
+                "StorageQuotaExceeded" => {
                     RestoreDBInstanceFromDBSnapshotError::StorageQuotaExceededFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "StorageTypeNotSupportedFault" => {
+                "StorageTypeNotSupported" => {
                     RestoreDBInstanceFromDBSnapshotError::StorageTypeNotSupportedFault(
                         String::from(parsed_error.message),
                     )
@@ -26555,22 +26495,22 @@ impl RestoreDBInstanceFromS3Error {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "AuthorizationNotFoundFault" => {
+                "AuthorizationNotFound" => {
                     RestoreDBInstanceFromS3Error::AuthorizationNotFoundFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "DBInstanceAlreadyExistsFault" => {
+                "DBInstanceAlreadyExists" => {
                     RestoreDBInstanceFromS3Error::DBInstanceAlreadyExistsFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "DBParameterGroupNotFoundFault" => {
+                "DBParameterGroupNotFound" => {
                     RestoreDBInstanceFromS3Error::DBParameterGroupNotFoundFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "DBSecurityGroupNotFoundFault" => {
+                "DBSecurityGroupNotFound" => {
                     RestoreDBInstanceFromS3Error::DBSecurityGroupNotFoundFault(String::from(
                         parsed_error.message,
                     ))
@@ -26585,12 +26525,12 @@ impl RestoreDBInstanceFromS3Error {
                         parsed_error.message,
                     ))
                 }
-                "InstanceQuotaExceededFault" => {
+                "InstanceQuotaExceeded" => {
                     RestoreDBInstanceFromS3Error::InstanceQuotaExceededFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "InsufficientDBInstanceCapacityFault" => {
+                "InsufficientDBInstanceCapacity" => {
                     RestoreDBInstanceFromS3Error::InsufficientDBInstanceCapacityFault(
                         String::from(parsed_error.message),
                     )
@@ -26621,12 +26561,10 @@ impl RestoreDBInstanceFromS3Error {
                         String::from(parsed_error.message),
                     )
                 }
-                "StorageQuotaExceededFault" => {
-                    RestoreDBInstanceFromS3Error::StorageQuotaExceededFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "StorageTypeNotSupportedFault" => {
+                "StorageQuotaExceeded" => RestoreDBInstanceFromS3Error::StorageQuotaExceededFault(
+                    String::from(parsed_error.message),
+                ),
+                "StorageTypeNotSupported" => {
                     RestoreDBInstanceFromS3Error::StorageTypeNotSupportedFault(String::from(
                         parsed_error.message,
                     ))
@@ -26758,22 +26696,22 @@ impl RestoreDBInstanceToPointInTimeError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "AuthorizationNotFoundFault" => {
+                "AuthorizationNotFound" => {
                     RestoreDBInstanceToPointInTimeError::AuthorizationNotFoundFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "DBInstanceAlreadyExistsFault" => {
+                "DBInstanceAlreadyExists" => {
                     RestoreDBInstanceToPointInTimeError::DBInstanceAlreadyExistsFault(
                         String::from(parsed_error.message),
                     )
                 }
-                "DBInstanceNotFoundFault" => {
+                "DBInstanceNotFound" => {
                     RestoreDBInstanceToPointInTimeError::DBInstanceNotFoundFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "DBSecurityGroupNotFoundFault" => {
+                "DBSecurityGroupNotFound" => {
                     RestoreDBInstanceToPointInTimeError::DBSecurityGroupNotFoundFault(
                         String::from(parsed_error.message),
                     )
@@ -26791,17 +26729,17 @@ impl RestoreDBInstanceToPointInTimeError {
                 "DomainNotFoundFault" => RestoreDBInstanceToPointInTimeError::DomainNotFoundFault(
                     String::from(parsed_error.message),
                 ),
-                "InstanceQuotaExceededFault" => {
+                "InstanceQuotaExceeded" => {
                     RestoreDBInstanceToPointInTimeError::InstanceQuotaExceededFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "InsufficientDBInstanceCapacityFault" => {
+                "InsufficientDBInstanceCapacity" => {
                     RestoreDBInstanceToPointInTimeError::InsufficientDBInstanceCapacityFault(
                         String::from(parsed_error.message),
                     )
                 }
-                "InvalidDBInstanceStateFault" => {
+                "InvalidDBInstanceState" => {
                     RestoreDBInstanceToPointInTimeError::InvalidDBInstanceStateFault(String::from(
                         parsed_error.message,
                     ))
@@ -26827,7 +26765,7 @@ impl RestoreDBInstanceToPointInTimeError {
                         parsed_error.message,
                     ))
                 }
-                "PointInTimeRestoreNotEnabledFault" => {
+                "PointInTimeRestoreNotEnabled" => {
                     RestoreDBInstanceToPointInTimeError::PointInTimeRestoreNotEnabledFault(
                         String::from(parsed_error.message),
                     )
@@ -26837,12 +26775,12 @@ impl RestoreDBInstanceToPointInTimeError {
                         String::from(parsed_error.message),
                     )
                 }
-                "StorageQuotaExceededFault" => {
+                "StorageQuotaExceeded" => {
                     RestoreDBInstanceToPointInTimeError::StorageQuotaExceededFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "StorageTypeNotSupportedFault" => {
+                "StorageTypeNotSupported" => {
                     RestoreDBInstanceToPointInTimeError::StorageTypeNotSupportedFault(
                         String::from(parsed_error.message),
                     )
@@ -26953,17 +26891,17 @@ impl RevokeDBSecurityGroupIngressError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "AuthorizationNotFoundFault" => {
+                "AuthorizationNotFound" => {
                     RevokeDBSecurityGroupIngressError::AuthorizationNotFoundFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "DBSecurityGroupNotFoundFault" => {
+                "DBSecurityGroupNotFound" => {
                     RevokeDBSecurityGroupIngressError::DBSecurityGroupNotFoundFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "InvalidDBSecurityGroupStateFault" => {
+                "InvalidDBSecurityGroupState" => {
                     RevokeDBSecurityGroupIngressError::InvalidDBSecurityGroupStateFault(
                         String::from(parsed_error.message),
                     )
@@ -27066,13 +27004,13 @@ impl StartDBInstanceError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "AuthorizationNotFoundFault" => StartDBInstanceError::AuthorizationNotFoundFault(
+                "AuthorizationNotFound" => StartDBInstanceError::AuthorizationNotFoundFault(
                     String::from(parsed_error.message),
                 ),
                 "DBClusterNotFoundFault" => {
                     StartDBInstanceError::DBClusterNotFoundFault(String::from(parsed_error.message))
                 }
-                "DBInstanceNotFoundFault" => StartDBInstanceError::DBInstanceNotFoundFault(
+                "DBInstanceNotFound" => StartDBInstanceError::DBInstanceNotFoundFault(
                     String::from(parsed_error.message),
                 ),
                 "DBSubnetGroupDoesNotCoverEnoughAZs" => {
@@ -27083,7 +27021,7 @@ impl StartDBInstanceError {
                 "DBSubnetGroupNotFoundFault" => StartDBInstanceError::DBSubnetGroupNotFoundFault(
                     String::from(parsed_error.message),
                 ),
-                "InsufficientDBInstanceCapacityFault" => {
+                "InsufficientDBInstanceCapacity" => {
                     StartDBInstanceError::InsufficientDBInstanceCapacityFault(String::from(
                         parsed_error.message,
                     ))
@@ -27091,11 +27029,9 @@ impl StartDBInstanceError {
                 "InvalidDBClusterStateFault" => StartDBInstanceError::InvalidDBClusterStateFault(
                     String::from(parsed_error.message),
                 ),
-                "InvalidDBInstanceStateFault" => {
-                    StartDBInstanceError::InvalidDBInstanceStateFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "InvalidDBInstanceState" => StartDBInstanceError::InvalidDBInstanceStateFault(
+                    String::from(parsed_error.message),
+                ),
                 "InvalidSubnet" => {
                     StartDBInstanceError::InvalidSubnet(String::from(parsed_error.message))
                 }
@@ -27199,21 +27135,19 @@ impl StopDBInstanceError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "DBInstanceNotFoundFault" => {
+                "DBInstanceNotFound" => {
                     StopDBInstanceError::DBInstanceNotFoundFault(String::from(parsed_error.message))
                 }
-                "DBSnapshotAlreadyExistsFault" => {
-                    StopDBInstanceError::DBSnapshotAlreadyExistsFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "DBSnapshotAlreadyExists" => StopDBInstanceError::DBSnapshotAlreadyExistsFault(
+                    String::from(parsed_error.message),
+                ),
                 "InvalidDBClusterStateFault" => StopDBInstanceError::InvalidDBClusterStateFault(
                     String::from(parsed_error.message),
                 ),
-                "InvalidDBInstanceStateFault" => StopDBInstanceError::InvalidDBInstanceStateFault(
+                "InvalidDBInstanceState" => StopDBInstanceError::InvalidDBInstanceStateFault(
                     String::from(parsed_error.message),
                 ),
-                "SnapshotQuotaExceededFault" => StopDBInstanceError::SnapshotQuotaExceededFault(
+                "SnapshotQuotaExceeded" => StopDBInstanceError::SnapshotQuotaExceededFault(
                     String::from(parsed_error.message),
                 ),
                 _ => StopDBInstanceError::Unknown(String::from(body)),

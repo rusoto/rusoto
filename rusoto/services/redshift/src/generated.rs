@@ -10989,7 +10989,7 @@ impl AuthorizeClusterSecurityGroupIngressError {
         match Self::deserialize(&mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "AuthorizationAlreadyExistsFault" => AuthorizeClusterSecurityGroupIngressError::AuthorizationAlreadyExistsFault(String::from(parsed_error.message)),"AuthorizationQuotaExceededFault" => AuthorizeClusterSecurityGroupIngressError::AuthorizationQuotaExceededFault(String::from(parsed_error.message)),"ClusterSecurityGroupNotFoundFault" => AuthorizeClusterSecurityGroupIngressError::ClusterSecurityGroupNotFoundFault(String::from(parsed_error.message)),"InvalidClusterSecurityGroupStateFault" => AuthorizeClusterSecurityGroupIngressError::InvalidClusterSecurityGroupStateFault(String::from(parsed_error.message)),_ => AuthorizeClusterSecurityGroupIngressError::Unknown(String::from(body))
+                                    "AuthorizationAlreadyExists" => AuthorizeClusterSecurityGroupIngressError::AuthorizationAlreadyExistsFault(String::from(parsed_error.message)),"AuthorizationQuotaExceeded" => AuthorizeClusterSecurityGroupIngressError::AuthorizationQuotaExceededFault(String::from(parsed_error.message)),"ClusterSecurityGroupNotFound" => AuthorizeClusterSecurityGroupIngressError::ClusterSecurityGroupNotFoundFault(String::from(parsed_error.message)),"InvalidClusterSecurityGroupState" => AuthorizeClusterSecurityGroupIngressError::InvalidClusterSecurityGroupStateFault(String::from(parsed_error.message)),_ => AuthorizeClusterSecurityGroupIngressError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => AuthorizeClusterSecurityGroupIngressError::Unknown(body.to_string())
@@ -11087,17 +11087,17 @@ impl AuthorizeSnapshotAccessError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "AuthorizationAlreadyExistsFault" => {
+                "AuthorizationAlreadyExists" => {
                     AuthorizeSnapshotAccessError::AuthorizationAlreadyExistsFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "AuthorizationQuotaExceededFault" => {
+                "AuthorizationQuotaExceeded" => {
                     AuthorizeSnapshotAccessError::AuthorizationQuotaExceededFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "ClusterSnapshotNotFoundFault" => {
+                "ClusterSnapshotNotFound" => {
                     AuthorizeSnapshotAccessError::ClusterSnapshotNotFoundFault(String::from(
                         parsed_error.message,
                     ))
@@ -11107,7 +11107,7 @@ impl AuthorizeSnapshotAccessError {
                         String::from(parsed_error.message),
                     )
                 }
-                "InvalidClusterSnapshotStateFault" => {
+                "InvalidClusterSnapshotState" => {
                     AuthorizeSnapshotAccessError::InvalidClusterSnapshotStateFault(String::from(
                         parsed_error.message,
                     ))
@@ -11204,22 +11204,22 @@ impl CopyClusterSnapshotError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ClusterSnapshotAlreadyExistsFault" => {
+                "ClusterSnapshotAlreadyExists" => {
                     CopyClusterSnapshotError::ClusterSnapshotAlreadyExistsFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "ClusterSnapshotNotFoundFault" => {
+                "ClusterSnapshotNotFound" => {
                     CopyClusterSnapshotError::ClusterSnapshotNotFoundFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "ClusterSnapshotQuotaExceededFault" => {
+                "ClusterSnapshotQuotaExceeded" => {
                     CopyClusterSnapshotError::ClusterSnapshotQuotaExceededFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "InvalidClusterSnapshotStateFault" => {
+                "InvalidClusterSnapshotState" => {
                     CopyClusterSnapshotError::InvalidClusterSnapshotStateFault(String::from(
                         parsed_error.message,
                     ))
@@ -11339,18 +11339,18 @@ impl CreateClusterError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ClusterAlreadyExistsFault" => CreateClusterError::ClusterAlreadyExistsFault(
+                "ClusterAlreadyExists" => CreateClusterError::ClusterAlreadyExistsFault(
                     String::from(parsed_error.message),
                 ),
-                "ClusterParameterGroupNotFoundFault" => {
+                "ClusterParameterGroupNotFound" => {
                     CreateClusterError::ClusterParameterGroupNotFoundFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "ClusterQuotaExceededFault" => CreateClusterError::ClusterQuotaExceededFault(
+                "ClusterQuotaExceeded" => CreateClusterError::ClusterQuotaExceededFault(
                     String::from(parsed_error.message),
                 ),
-                "ClusterSecurityGroupNotFoundFault" => {
+                "ClusterSecurityGroupNotFound" => {
                     CreateClusterError::ClusterSecurityGroupNotFoundFault(String::from(
                         parsed_error.message,
                     ))
@@ -11375,7 +11375,7 @@ impl CreateClusterError {
                         parsed_error.message,
                     ))
                 }
-                "InsufficientClusterCapacityFault" => {
+                "InsufficientClusterCapacity" => {
                     CreateClusterError::InsufficientClusterCapacityFault(String::from(
                         parsed_error.message,
                     ))
@@ -11400,12 +11400,12 @@ impl CreateClusterError {
                 "LimitExceededFault" => {
                     CreateClusterError::LimitExceededFault(String::from(parsed_error.message))
                 }
-                "NumberOfNodesPerClusterLimitExceededFault" => {
+                "NumberOfNodesPerClusterLimitExceeded" => {
                     CreateClusterError::NumberOfNodesPerClusterLimitExceededFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "NumberOfNodesQuotaExceededFault" => {
+                "NumberOfNodesQuotaExceeded" => {
                     CreateClusterError::NumberOfNodesQuotaExceededFault(String::from(
                         parsed_error.message,
                     ))
@@ -11514,12 +11514,12 @@ impl CreateClusterParameterGroupError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ClusterParameterGroupAlreadyExistsFault" => {
+                "ClusterParameterGroupAlreadyExists" => {
                     CreateClusterParameterGroupError::ClusterParameterGroupAlreadyExistsFault(
                         String::from(parsed_error.message),
                     )
                 }
-                "ClusterParameterGroupQuotaExceededFault" => {
+                "ClusterParameterGroupQuotaExceeded" => {
                     CreateClusterParameterGroupError::ClusterParameterGroupQuotaExceededFault(
                         String::from(parsed_error.message),
                     )
@@ -11621,12 +11621,12 @@ impl CreateClusterSecurityGroupError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ClusterSecurityGroupAlreadyExistsFault" => {
+                "ClusterSecurityGroupAlreadyExists" => {
                     CreateClusterSecurityGroupError::ClusterSecurityGroupAlreadyExistsFault(
                         String::from(parsed_error.message),
                     )
                 }
-                "ClusterSecurityGroupQuotaExceededFault" => {
+                "QuotaExceeded.ClusterSecurityGroup" => {
                     CreateClusterSecurityGroupError::ClusterSecurityGroupQuotaExceededFault(
                         String::from(parsed_error.message),
                     )
@@ -11730,24 +11730,22 @@ impl CreateClusterSnapshotError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ClusterNotFoundFault" => CreateClusterSnapshotError::ClusterNotFoundFault(
+                "ClusterNotFound" => CreateClusterSnapshotError::ClusterNotFoundFault(
                     String::from(parsed_error.message),
                 ),
-                "ClusterSnapshotAlreadyExistsFault" => {
+                "ClusterSnapshotAlreadyExists" => {
                     CreateClusterSnapshotError::ClusterSnapshotAlreadyExistsFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "ClusterSnapshotQuotaExceededFault" => {
+                "ClusterSnapshotQuotaExceeded" => {
                     CreateClusterSnapshotError::ClusterSnapshotQuotaExceededFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "InvalidClusterStateFault" => {
-                    CreateClusterSnapshotError::InvalidClusterStateFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "InvalidClusterState" => CreateClusterSnapshotError::InvalidClusterStateFault(
+                    String::from(parsed_error.message),
+                ),
                 "InvalidTagFault" => {
                     CreateClusterSnapshotError::InvalidTagFault(String::from(parsed_error.message))
                 }
@@ -11849,12 +11847,12 @@ impl CreateClusterSubnetGroupError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ClusterSubnetGroupAlreadyExistsFault" => {
+                "ClusterSubnetGroupAlreadyExists" => {
                     CreateClusterSubnetGroupError::ClusterSubnetGroupAlreadyExistsFault(
                         String::from(parsed_error.message),
                     )
                 }
-                "ClusterSubnetGroupQuotaExceededFault" => {
+                "ClusterSubnetGroupQuotaExceeded" => {
                     CreateClusterSubnetGroupError::ClusterSubnetGroupQuotaExceededFault(
                         String::from(parsed_error.message),
                     )
@@ -11986,7 +11984,7 @@ impl CreateEventSubscriptionError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "EventSubscriptionQuotaExceededFault" => {
+                "EventSubscriptionQuotaExceeded" => {
                     CreateEventSubscriptionError::EventSubscriptionQuotaExceededFault(
                         String::from(parsed_error.message),
                     )
@@ -11994,38 +11992,34 @@ impl CreateEventSubscriptionError {
                 "InvalidTagFault" => CreateEventSubscriptionError::InvalidTagFault(String::from(
                     parsed_error.message,
                 )),
-                "SNSInvalidTopicFault" => CreateEventSubscriptionError::SNSInvalidTopicFault(
+                "SNSInvalidTopic" => CreateEventSubscriptionError::SNSInvalidTopicFault(
                     String::from(parsed_error.message),
                 ),
-                "SNSNoAuthorizationFault" => {
-                    CreateEventSubscriptionError::SNSNoAuthorizationFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "SNSTopicArnNotFoundFault" => {
-                    CreateEventSubscriptionError::SNSTopicArnNotFoundFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "SourceNotFoundFault" => CreateEventSubscriptionError::SourceNotFoundFault(
+                "SNSNoAuthorization" => CreateEventSubscriptionError::SNSNoAuthorizationFault(
                     String::from(parsed_error.message),
                 ),
-                "SubscriptionAlreadyExistFault" => {
+                "SNSTopicArnNotFound" => CreateEventSubscriptionError::SNSTopicArnNotFoundFault(
+                    String::from(parsed_error.message),
+                ),
+                "SourceNotFound" => CreateEventSubscriptionError::SourceNotFoundFault(
+                    String::from(parsed_error.message),
+                ),
+                "SubscriptionAlreadyExist" => {
                     CreateEventSubscriptionError::SubscriptionAlreadyExistFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "SubscriptionCategoryNotFoundFault" => {
+                "SubscriptionCategoryNotFound" => {
                     CreateEventSubscriptionError::SubscriptionCategoryNotFoundFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "SubscriptionEventIdNotFoundFault" => {
+                "SubscriptionEventIdNotFound" => {
                     CreateEventSubscriptionError::SubscriptionEventIdNotFoundFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "SubscriptionSeverityNotFoundFault" => {
+                "SubscriptionSeverityNotFound" => {
                     CreateEventSubscriptionError::SubscriptionSeverityNotFoundFault(String::from(
                         parsed_error.message,
                     ))
@@ -12537,20 +12531,20 @@ impl DeleteClusterError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ClusterNotFoundFault" => {
+                "ClusterNotFound" => {
                     DeleteClusterError::ClusterNotFoundFault(String::from(parsed_error.message))
                 }
-                "ClusterSnapshotAlreadyExistsFault" => {
+                "ClusterSnapshotAlreadyExists" => {
                     DeleteClusterError::ClusterSnapshotAlreadyExistsFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "ClusterSnapshotQuotaExceededFault" => {
+                "ClusterSnapshotQuotaExceeded" => {
                     DeleteClusterError::ClusterSnapshotQuotaExceededFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "InvalidClusterStateFault" => {
+                "InvalidClusterState" => {
                     DeleteClusterError::InvalidClusterStateFault(String::from(parsed_error.message))
                 }
                 _ => DeleteClusterError::Unknown(String::from(body)),
@@ -12632,12 +12626,12 @@ impl DeleteClusterParameterGroupError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ClusterParameterGroupNotFoundFault" => {
+                "ClusterParameterGroupNotFound" => {
                     DeleteClusterParameterGroupError::ClusterParameterGroupNotFoundFault(
                         String::from(parsed_error.message),
                     )
                 }
-                "InvalidClusterParameterGroupStateFault" => {
+                "InvalidClusterParameterGroupState" => {
                     DeleteClusterParameterGroupError::InvalidClusterParameterGroupStateFault(
                         String::from(parsed_error.message),
                     )
@@ -12725,12 +12719,12 @@ impl DeleteClusterSecurityGroupError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ClusterSecurityGroupNotFoundFault" => {
+                "ClusterSecurityGroupNotFound" => {
                     DeleteClusterSecurityGroupError::ClusterSecurityGroupNotFoundFault(
                         String::from(parsed_error.message),
                     )
                 }
-                "InvalidClusterSecurityGroupStateFault" => {
+                "InvalidClusterSecurityGroupState" => {
                     DeleteClusterSecurityGroupError::InvalidClusterSecurityGroupStateFault(
                         String::from(parsed_error.message),
                     )
@@ -12816,12 +12810,12 @@ impl DeleteClusterSnapshotError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ClusterSnapshotNotFoundFault" => {
+                "ClusterSnapshotNotFound" => {
                     DeleteClusterSnapshotError::ClusterSnapshotNotFoundFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "InvalidClusterSnapshotStateFault" => {
+                "InvalidClusterSnapshotState" => {
                     DeleteClusterSnapshotError::InvalidClusterSnapshotStateFault(String::from(
                         parsed_error.message,
                     ))
@@ -13007,11 +13001,9 @@ impl DeleteEventSubscriptionError {
                         parsed_error.message,
                     ))
                 }
-                "SubscriptionNotFoundFault" => {
-                    DeleteEventSubscriptionError::SubscriptionNotFoundFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "SubscriptionNotFound" => DeleteEventSubscriptionError::SubscriptionNotFoundFault(
+                    String::from(parsed_error.message),
+                ),
                 _ => DeleteEventSubscriptionError::Unknown(String::from(body)),
             },
             Err(_) => DeleteEventSubscriptionError::Unknown(body.to_string()),
@@ -13443,7 +13435,7 @@ impl DescribeClusterParameterGroupsError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ClusterParameterGroupNotFoundFault" => {
+                "ClusterParameterGroupNotFound" => {
                     DescribeClusterParameterGroupsError::ClusterParameterGroupNotFoundFault(
                         String::from(parsed_error.message),
                     )
@@ -13530,7 +13522,7 @@ impl DescribeClusterParametersError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ClusterParameterGroupNotFoundFault" => {
+                "ClusterParameterGroupNotFound" => {
                     DescribeClusterParametersError::ClusterParameterGroupNotFoundFault(
                         String::from(parsed_error.message),
                     )
@@ -13613,7 +13605,7 @@ impl DescribeClusterSecurityGroupsError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ClusterSecurityGroupNotFoundFault" => {
+                "ClusterSecurityGroupNotFound" => {
                     DescribeClusterSecurityGroupsError::ClusterSecurityGroupNotFoundFault(
                         String::from(parsed_error.message),
                     )
@@ -13702,7 +13694,7 @@ impl DescribeClusterSnapshotsError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ClusterSnapshotNotFoundFault" => {
+                "ClusterSnapshotNotFound" => {
                     DescribeClusterSnapshotsError::ClusterSnapshotNotFoundFault(String::from(
                         parsed_error.message,
                     ))
@@ -13949,7 +13941,7 @@ impl DescribeClustersError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ClusterNotFoundFault" => {
+                "ClusterNotFound" => {
                     DescribeClustersError::ClusterNotFoundFault(String::from(parsed_error.message))
                 }
                 "InvalidTagFault" => {
@@ -14181,7 +14173,7 @@ impl DescribeEventSubscriptionsError {
                 "InvalidTagFault" => DescribeEventSubscriptionsError::InvalidTagFault(
                     String::from(parsed_error.message),
                 ),
-                "SubscriptionNotFoundFault" => {
+                "SubscriptionNotFound" => {
                     DescribeEventSubscriptionsError::SubscriptionNotFoundFault(String::from(
                         parsed_error.message,
                     ))
@@ -14510,7 +14502,7 @@ impl DescribeLoggingStatusError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ClusterNotFoundFault" => DescribeLoggingStatusError::ClusterNotFoundFault(
+                "ClusterNotFound" => DescribeLoggingStatusError::ClusterNotFoundFault(
                     String::from(parsed_error.message),
                 ),
                 _ => DescribeLoggingStatusError::Unknown(String::from(body)),
@@ -14671,12 +14663,12 @@ impl DescribeReservedNodeOfferingsError {
                         String::from(parsed_error.message),
                     )
                 }
-                "ReservedNodeOfferingNotFoundFault" => {
+                "ReservedNodeOfferingNotFound" => {
                     DescribeReservedNodeOfferingsError::ReservedNodeOfferingNotFoundFault(
                         String::from(parsed_error.message),
                     )
                 }
-                "UnsupportedOperationFault" => {
+                "UnsupportedOperation" => {
                     DescribeReservedNodeOfferingsError::UnsupportedOperationFault(String::from(
                         parsed_error.message,
                     ))
@@ -14770,11 +14762,9 @@ impl DescribeReservedNodesError {
                         parsed_error.message,
                     ))
                 }
-                "ReservedNodeNotFoundFault" => {
-                    DescribeReservedNodesError::ReservedNodeNotFoundFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "ReservedNodeNotFound" => DescribeReservedNodesError::ReservedNodeNotFoundFault(
+                    String::from(parsed_error.message),
+                ),
                 _ => DescribeReservedNodesError::Unknown(String::from(body)),
             },
             Err(_) => DescribeReservedNodesError::Unknown(body.to_string()),
@@ -14854,10 +14844,10 @@ impl DescribeResizeError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ClusterNotFoundFault" => {
+                "ClusterNotFound" => {
                     DescribeResizeError::ClusterNotFoundFault(String::from(parsed_error.message))
                 }
-                "ResizeNotFoundFault" => {
+                "ResizeNotFound" => {
                     DescribeResizeError::ResizeNotFoundFault(String::from(parsed_error.message))
                 }
                 _ => DescribeResizeError::Unknown(String::from(body)),
@@ -15024,7 +15014,7 @@ impl DescribeTableRestoreStatusError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ClusterNotFoundFault" => DescribeTableRestoreStatusError::ClusterNotFoundFault(
+                "ClusterNotFound" => DescribeTableRestoreStatusError::ClusterNotFoundFault(
                     String::from(parsed_error.message),
                 ),
                 "TableRestoreNotFoundFault" => {
@@ -15192,7 +15182,7 @@ impl DisableLoggingError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ClusterNotFoundFault" => {
+                "ClusterNotFound" => {
                     DisableLoggingError::ClusterNotFoundFault(String::from(parsed_error.message))
                 }
                 _ => DisableLoggingError::Unknown(String::from(body)),
@@ -15275,10 +15265,10 @@ impl DisableSnapshotCopyError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ClusterNotFoundFault" => DisableSnapshotCopyError::ClusterNotFoundFault(
-                    String::from(parsed_error.message),
-                ),
-                "InvalidClusterStateFault" => DisableSnapshotCopyError::InvalidClusterStateFault(
+                "ClusterNotFound" => DisableSnapshotCopyError::ClusterNotFoundFault(String::from(
+                    parsed_error.message,
+                )),
+                "InvalidClusterState" => DisableSnapshotCopyError::InvalidClusterStateFault(
                     String::from(parsed_error.message),
                 ),
                 "SnapshotCopyAlreadyDisabledFault" => {
@@ -15379,7 +15369,7 @@ impl EnableLoggingError {
                 "BucketNotFoundFault" => {
                     EnableLoggingError::BucketNotFoundFault(String::from(parsed_error.message))
                 }
-                "ClusterNotFoundFault" => {
+                "ClusterNotFound" => {
                     EnableLoggingError::ClusterNotFoundFault(String::from(parsed_error.message))
                 }
                 "InsufficientS3BucketPolicyFault" => {
@@ -15489,9 +15479,9 @@ impl EnableSnapshotCopyError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ClusterNotFoundFault" => EnableSnapshotCopyError::ClusterNotFoundFault(
-                    String::from(parsed_error.message),
-                ),
+                "ClusterNotFound" => EnableSnapshotCopyError::ClusterNotFoundFault(String::from(
+                    parsed_error.message,
+                )),
                 "CopyToRegionDisabledFault" => EnableSnapshotCopyError::CopyToRegionDisabledFault(
                     String::from(parsed_error.message),
                 ),
@@ -15505,7 +15495,7 @@ impl EnableSnapshotCopyError {
                         parsed_error.message,
                     ))
                 }
-                "InvalidClusterStateFault" => EnableSnapshotCopyError::InvalidClusterStateFault(
+                "InvalidClusterState" => EnableSnapshotCopyError::InvalidClusterStateFault(
                     String::from(parsed_error.message),
                 ),
                 "LimitExceededFault" => {
@@ -15616,14 +15606,12 @@ impl GetClusterCredentialsError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ClusterNotFoundFault" => GetClusterCredentialsError::ClusterNotFoundFault(
+                "ClusterNotFound" => GetClusterCredentialsError::ClusterNotFoundFault(
                     String::from(parsed_error.message),
                 ),
-                "UnsupportedOperationFault" => {
-                    GetClusterCredentialsError::UnsupportedOperationFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "UnsupportedOperation" => GetClusterCredentialsError::UnsupportedOperationFault(
+                    String::from(parsed_error.message),
+                ),
                 _ => GetClusterCredentialsError::Unknown(String::from(body)),
             },
             Err(_) => GetClusterCredentialsError::Unknown(body.to_string()),
@@ -15731,18 +15719,18 @@ impl ModifyClusterError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ClusterAlreadyExistsFault" => ModifyClusterError::ClusterAlreadyExistsFault(
+                "ClusterAlreadyExists" => ModifyClusterError::ClusterAlreadyExistsFault(
                     String::from(parsed_error.message),
                 ),
-                "ClusterNotFoundFault" => {
+                "ClusterNotFound" => {
                     ModifyClusterError::ClusterNotFoundFault(String::from(parsed_error.message))
                 }
-                "ClusterParameterGroupNotFoundFault" => {
+                "ClusterParameterGroupNotFound" => {
                     ModifyClusterError::ClusterParameterGroupNotFoundFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "ClusterSecurityGroupNotFoundFault" => {
+                "ClusterSecurityGroupNotFound" => {
                     ModifyClusterError::ClusterSecurityGroupNotFoundFault(String::from(
                         parsed_error.message,
                     ))
@@ -15762,17 +15750,17 @@ impl ModifyClusterError {
                         parsed_error.message,
                     ))
                 }
-                "InsufficientClusterCapacityFault" => {
+                "InsufficientClusterCapacity" => {
                     ModifyClusterError::InsufficientClusterCapacityFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "InvalidClusterSecurityGroupStateFault" => {
+                "InvalidClusterSecurityGroupState" => {
                     ModifyClusterError::InvalidClusterSecurityGroupStateFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "InvalidClusterStateFault" => {
+                "InvalidClusterState" => {
                     ModifyClusterError::InvalidClusterStateFault(String::from(parsed_error.message))
                 }
                 "InvalidElasticIpFault" => {
@@ -15781,12 +15769,12 @@ impl ModifyClusterError {
                 "LimitExceededFault" => {
                     ModifyClusterError::LimitExceededFault(String::from(parsed_error.message))
                 }
-                "NumberOfNodesPerClusterLimitExceededFault" => {
+                "NumberOfNodesPerClusterLimitExceeded" => {
                     ModifyClusterError::NumberOfNodesPerClusterLimitExceededFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "NumberOfNodesQuotaExceededFault" => {
+                "NumberOfNodesQuotaExceeded" => {
                     ModifyClusterError::NumberOfNodesQuotaExceededFault(String::from(
                         parsed_error.message,
                     ))
@@ -15888,14 +15876,12 @@ impl ModifyClusterIamRolesError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ClusterNotFoundFault" => ModifyClusterIamRolesError::ClusterNotFoundFault(
+                "ClusterNotFound" => ModifyClusterIamRolesError::ClusterNotFoundFault(
                     String::from(parsed_error.message),
                 ),
-                "InvalidClusterStateFault" => {
-                    ModifyClusterIamRolesError::InvalidClusterStateFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "InvalidClusterState" => ModifyClusterIamRolesError::InvalidClusterStateFault(
+                    String::from(parsed_error.message),
+                ),
                 _ => ModifyClusterIamRolesError::Unknown(String::from(body)),
             },
             Err(_) => ModifyClusterIamRolesError::Unknown(body.to_string()),
@@ -15975,12 +15961,12 @@ impl ModifyClusterParameterGroupError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ClusterParameterGroupNotFoundFault" => {
+                "ClusterParameterGroupNotFound" => {
                     ModifyClusterParameterGroupError::ClusterParameterGroupNotFoundFault(
                         String::from(parsed_error.message),
                     )
                 }
-                "InvalidClusterParameterGroupStateFault" => {
+                "InvalidClusterParameterGroupState" => {
                     ModifyClusterParameterGroupError::InvalidClusterParameterGroupStateFault(
                         String::from(parsed_error.message),
                     )
@@ -16204,38 +16190,32 @@ impl ModifyEventSubscriptionError {
                         parsed_error.message,
                     ))
                 }
-                "SNSInvalidTopicFault" => ModifyEventSubscriptionError::SNSInvalidTopicFault(
+                "SNSInvalidTopic" => ModifyEventSubscriptionError::SNSInvalidTopicFault(
                     String::from(parsed_error.message),
                 ),
-                "SNSNoAuthorizationFault" => {
-                    ModifyEventSubscriptionError::SNSNoAuthorizationFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "SNSTopicArnNotFoundFault" => {
-                    ModifyEventSubscriptionError::SNSTopicArnNotFoundFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "SourceNotFoundFault" => ModifyEventSubscriptionError::SourceNotFoundFault(
+                "SNSNoAuthorization" => ModifyEventSubscriptionError::SNSNoAuthorizationFault(
                     String::from(parsed_error.message),
                 ),
-                "SubscriptionCategoryNotFoundFault" => {
+                "SNSTopicArnNotFound" => ModifyEventSubscriptionError::SNSTopicArnNotFoundFault(
+                    String::from(parsed_error.message),
+                ),
+                "SourceNotFound" => ModifyEventSubscriptionError::SourceNotFoundFault(
+                    String::from(parsed_error.message),
+                ),
+                "SubscriptionCategoryNotFound" => {
                     ModifyEventSubscriptionError::SubscriptionCategoryNotFoundFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "SubscriptionEventIdNotFoundFault" => {
+                "SubscriptionEventIdNotFound" => {
                     ModifyEventSubscriptionError::SubscriptionEventIdNotFoundFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "SubscriptionNotFoundFault" => {
-                    ModifyEventSubscriptionError::SubscriptionNotFoundFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "SubscriptionSeverityNotFoundFault" => {
+                "SubscriptionNotFound" => ModifyEventSubscriptionError::SubscriptionNotFoundFault(
+                    String::from(parsed_error.message),
+                ),
+                "SubscriptionSeverityNotFound" => {
                     ModifyEventSubscriptionError::SubscriptionSeverityNotFoundFault(String::from(
                         parsed_error.message,
                     ))
@@ -16330,12 +16310,10 @@ impl ModifySnapshotCopyRetentionPeriodError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ClusterNotFoundFault" => {
-                    ModifySnapshotCopyRetentionPeriodError::ClusterNotFoundFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "InvalidClusterStateFault" => {
+                "ClusterNotFound" => ModifySnapshotCopyRetentionPeriodError::ClusterNotFoundFault(
+                    String::from(parsed_error.message),
+                ),
+                "InvalidClusterState" => {
                     ModifySnapshotCopyRetentionPeriodError::InvalidClusterStateFault(String::from(
                         parsed_error.message,
                     ))
@@ -16435,22 +16413,22 @@ impl PurchaseReservedNodeOfferingError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ReservedNodeAlreadyExistsFault" => {
+                "ReservedNodeAlreadyExists" => {
                     PurchaseReservedNodeOfferingError::ReservedNodeAlreadyExistsFault(
                         String::from(parsed_error.message),
                     )
                 }
-                "ReservedNodeOfferingNotFoundFault" => {
+                "ReservedNodeOfferingNotFound" => {
                     PurchaseReservedNodeOfferingError::ReservedNodeOfferingNotFoundFault(
                         String::from(parsed_error.message),
                     )
                 }
-                "ReservedNodeQuotaExceededFault" => {
+                "ReservedNodeQuotaExceeded" => {
                     PurchaseReservedNodeOfferingError::ReservedNodeQuotaExceededFault(
                         String::from(parsed_error.message),
                     )
                 }
-                "UnsupportedOperationFault" => {
+                "UnsupportedOperation" => {
                     PurchaseReservedNodeOfferingError::UnsupportedOperationFault(String::from(
                         parsed_error.message,
                     ))
@@ -16538,10 +16516,10 @@ impl RebootClusterError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ClusterNotFoundFault" => {
+                "ClusterNotFound" => {
                     RebootClusterError::ClusterNotFoundFault(String::from(parsed_error.message))
                 }
-                "InvalidClusterStateFault" => {
+                "InvalidClusterState" => {
                     RebootClusterError::InvalidClusterStateFault(String::from(parsed_error.message))
                 }
                 _ => RebootClusterError::Unknown(String::from(body)),
@@ -16621,12 +16599,12 @@ impl ResetClusterParameterGroupError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ClusterParameterGroupNotFoundFault" => {
+                "ClusterParameterGroupNotFound" => {
                     ResetClusterParameterGroupError::ClusterParameterGroupNotFoundFault(
                         String::from(parsed_error.message),
                     )
                 }
-                "InvalidClusterParameterGroupStateFault" => {
+                "InvalidClusterParameterGroupState" => {
                     ResetClusterParameterGroupError::InvalidClusterParameterGroupStateFault(
                         String::from(parsed_error.message),
                     )
@@ -16750,32 +16728,32 @@ impl RestoreFromClusterSnapshotError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "AccessToSnapshotDeniedFault" => {
+                "AccessToSnapshotDenied" => {
                     RestoreFromClusterSnapshotError::AccessToSnapshotDeniedFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "ClusterAlreadyExistsFault" => {
+                "ClusterAlreadyExists" => {
                     RestoreFromClusterSnapshotError::ClusterAlreadyExistsFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "ClusterParameterGroupNotFoundFault" => {
+                "ClusterParameterGroupNotFound" => {
                     RestoreFromClusterSnapshotError::ClusterParameterGroupNotFoundFault(
                         String::from(parsed_error.message),
                     )
                 }
-                "ClusterQuotaExceededFault" => {
+                "ClusterQuotaExceeded" => {
                     RestoreFromClusterSnapshotError::ClusterQuotaExceededFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "ClusterSecurityGroupNotFoundFault" => {
+                "ClusterSecurityGroupNotFound" => {
                     RestoreFromClusterSnapshotError::ClusterSecurityGroupNotFoundFault(
                         String::from(parsed_error.message),
                     )
                 }
-                "ClusterSnapshotNotFoundFault" => {
+                "ClusterSnapshotNotFound" => {
                     RestoreFromClusterSnapshotError::ClusterSnapshotNotFoundFault(String::from(
                         parsed_error.message,
                     ))
@@ -16800,12 +16778,12 @@ impl RestoreFromClusterSnapshotError {
                         parsed_error.message,
                     ))
                 }
-                "InsufficientClusterCapacityFault" => {
+                "InsufficientClusterCapacity" => {
                     RestoreFromClusterSnapshotError::InsufficientClusterCapacityFault(
                         String::from(parsed_error.message),
                     )
                 }
-                "InvalidClusterSnapshotStateFault" => {
+                "InvalidClusterSnapshotState" => {
                     RestoreFromClusterSnapshotError::InvalidClusterSnapshotStateFault(
                         String::from(parsed_error.message),
                     )
@@ -16818,7 +16796,7 @@ impl RestoreFromClusterSnapshotError {
                 "InvalidElasticIpFault" => RestoreFromClusterSnapshotError::InvalidElasticIpFault(
                     String::from(parsed_error.message),
                 ),
-                "InvalidRestoreFault" => RestoreFromClusterSnapshotError::InvalidRestoreFault(
+                "InvalidRestore" => RestoreFromClusterSnapshotError::InvalidRestoreFault(
                     String::from(parsed_error.message),
                 ),
                 "InvalidSubnet" => RestoreFromClusterSnapshotError::InvalidSubnet(String::from(
@@ -16832,12 +16810,12 @@ impl RestoreFromClusterSnapshotError {
                 "LimitExceededFault" => RestoreFromClusterSnapshotError::LimitExceededFault(
                     String::from(parsed_error.message),
                 ),
-                "NumberOfNodesPerClusterLimitExceededFault" => {
+                "NumberOfNodesPerClusterLimitExceeded" => {
                     RestoreFromClusterSnapshotError::NumberOfNodesPerClusterLimitExceededFault(
                         String::from(parsed_error.message),
                     )
                 }
-                "NumberOfNodesQuotaExceededFault" => {
+                "NumberOfNodesQuotaExceeded" => {
                     RestoreFromClusterSnapshotError::NumberOfNodesQuotaExceededFault(String::from(
                         parsed_error.message,
                     ))
@@ -16959,12 +16937,10 @@ impl RestoreTableFromClusterSnapshotError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ClusterNotFoundFault" => {
-                    RestoreTableFromClusterSnapshotError::ClusterNotFoundFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "ClusterSnapshotNotFoundFault" => {
+                "ClusterNotFound" => RestoreTableFromClusterSnapshotError::ClusterNotFoundFault(
+                    String::from(parsed_error.message),
+                ),
+                "ClusterSnapshotNotFound" => {
                     RestoreTableFromClusterSnapshotError::ClusterSnapshotNotFoundFault(
                         String::from(parsed_error.message),
                     )
@@ -16974,22 +16950,22 @@ impl RestoreTableFromClusterSnapshotError {
                         String::from(parsed_error.message),
                     )
                 }
-                "InvalidClusterSnapshotStateFault" => {
+                "InvalidClusterSnapshotState" => {
                     RestoreTableFromClusterSnapshotError::InvalidClusterSnapshotStateFault(
                         String::from(parsed_error.message),
                     )
                 }
-                "InvalidClusterStateFault" => {
+                "InvalidClusterState" => {
                     RestoreTableFromClusterSnapshotError::InvalidClusterStateFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "InvalidTableRestoreArgumentFault" => {
+                "InvalidTableRestoreArgument" => {
                     RestoreTableFromClusterSnapshotError::InvalidTableRestoreArgumentFault(
                         String::from(parsed_error.message),
                     )
                 }
-                "UnsupportedOperationFault" => {
+                "UnsupportedOperation" => {
                     RestoreTableFromClusterSnapshotError::UnsupportedOperationFault(String::from(
                         parsed_error.message,
                     ))
@@ -17086,17 +17062,17 @@ impl RevokeClusterSecurityGroupIngressError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "AuthorizationNotFoundFault" => {
+                "AuthorizationNotFound" => {
                     RevokeClusterSecurityGroupIngressError::AuthorizationNotFoundFault(
                         String::from(parsed_error.message),
                     )
                 }
-                "ClusterSecurityGroupNotFoundFault" => {
+                "ClusterSecurityGroupNotFound" => {
                     RevokeClusterSecurityGroupIngressError::ClusterSecurityGroupNotFoundFault(
                         String::from(parsed_error.message),
                     )
                 }
-                "InvalidClusterSecurityGroupStateFault" => {
+                "InvalidClusterSecurityGroupState" => {
                     RevokeClusterSecurityGroupIngressError::InvalidClusterSecurityGroupStateFault(
                         String::from(parsed_error.message),
                     )
@@ -17187,17 +17163,15 @@ impl RevokeSnapshotAccessError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "AccessToSnapshotDeniedFault" => {
+                "AccessToSnapshotDenied" => {
                     RevokeSnapshotAccessError::AccessToSnapshotDeniedFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "AuthorizationNotFoundFault" => {
-                    RevokeSnapshotAccessError::AuthorizationNotFoundFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "ClusterSnapshotNotFoundFault" => {
+                "AuthorizationNotFound" => RevokeSnapshotAccessError::AuthorizationNotFoundFault(
+                    String::from(parsed_error.message),
+                ),
+                "ClusterSnapshotNotFound" => {
                     RevokeSnapshotAccessError::ClusterSnapshotNotFoundFault(String::from(
                         parsed_error.message,
                     ))
@@ -17284,15 +17258,15 @@ impl RotateEncryptionKeyError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ClusterNotFoundFault" => RotateEncryptionKeyError::ClusterNotFoundFault(
-                    String::from(parsed_error.message),
-                ),
+                "ClusterNotFound" => RotateEncryptionKeyError::ClusterNotFoundFault(String::from(
+                    parsed_error.message,
+                )),
                 "DependentServiceRequestThrottlingFault" => {
                     RotateEncryptionKeyError::DependentServiceRequestThrottlingFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "InvalidClusterStateFault" => RotateEncryptionKeyError::InvalidClusterStateFault(
+                "InvalidClusterState" => RotateEncryptionKeyError::InvalidClusterStateFault(
                     String::from(parsed_error.message),
                 ),
                 _ => RotateEncryptionKeyError::Unknown(String::from(body)),

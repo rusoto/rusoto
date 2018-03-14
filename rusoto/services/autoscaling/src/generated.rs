@@ -8585,7 +8585,7 @@ impl AttachInstancesError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ResourceContentionFault" => AttachInstancesError::ResourceContentionFault(
+                "ResourceContention" => AttachInstancesError::ResourceContentionFault(
                     String::from(parsed_error.message),
                 ),
                 _ => AttachInstancesError::Unknown(String::from(body)),
@@ -8662,7 +8662,7 @@ impl AttachLoadBalancerTargetGroupsError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ResourceContentionFault" => {
+                "ResourceContention" => {
                     AttachLoadBalancerTargetGroupsError::ResourceContentionFault(String::from(
                         parsed_error.message,
                     ))
@@ -8743,7 +8743,7 @@ impl AttachLoadBalancersError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ResourceContentionFault" => AttachLoadBalancersError::ResourceContentionFault(
+                "ResourceContention" => AttachLoadBalancersError::ResourceContentionFault(
                     String::from(parsed_error.message),
                 ),
                 _ => AttachLoadBalancersError::Unknown(String::from(body)),
@@ -8822,11 +8822,9 @@ impl CompleteLifecycleActionError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ResourceContentionFault" => {
-                    CompleteLifecycleActionError::ResourceContentionFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "ResourceContention" => CompleteLifecycleActionError::ResourceContentionFault(
+                    String::from(parsed_error.message),
+                ),
                 _ => CompleteLifecycleActionError::Unknown(String::from(body)),
             },
             Err(_) => CompleteLifecycleActionError::Unknown(body.to_string()),
@@ -8907,13 +8905,13 @@ impl CreateAutoScalingGroupError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "AlreadyExistsFault" => CreateAutoScalingGroupError::AlreadyExistsFault(
-                    String::from(parsed_error.message),
-                ),
-                "LimitExceededFault" => CreateAutoScalingGroupError::LimitExceededFault(
-                    String::from(parsed_error.message),
-                ),
-                "ResourceContentionFault" => CreateAutoScalingGroupError::ResourceContentionFault(
+                "AlreadyExists" => CreateAutoScalingGroupError::AlreadyExistsFault(String::from(
+                    parsed_error.message,
+                )),
+                "LimitExceeded" => CreateAutoScalingGroupError::LimitExceededFault(String::from(
+                    parsed_error.message,
+                )),
+                "ResourceContention" => CreateAutoScalingGroupError::ResourceContentionFault(
                     String::from(parsed_error.message),
                 ),
                 _ => CreateAutoScalingGroupError::Unknown(String::from(body)),
@@ -8998,17 +8996,15 @@ impl CreateLaunchConfigurationError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "AlreadyExistsFault" => CreateLaunchConfigurationError::AlreadyExistsFault(
+                "AlreadyExists" => CreateLaunchConfigurationError::AlreadyExistsFault(
                     String::from(parsed_error.message),
                 ),
-                "LimitExceededFault" => CreateLaunchConfigurationError::LimitExceededFault(
+                "LimitExceeded" => CreateLaunchConfigurationError::LimitExceededFault(
                     String::from(parsed_error.message),
                 ),
-                "ResourceContentionFault" => {
-                    CreateLaunchConfigurationError::ResourceContentionFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "ResourceContention" => CreateLaunchConfigurationError::ResourceContentionFault(
+                    String::from(parsed_error.message),
+                ),
                 _ => CreateLaunchConfigurationError::Unknown(String::from(body)),
             },
             Err(_) => CreateLaunchConfigurationError::Unknown(body.to_string()),
@@ -9093,16 +9089,16 @@ impl CreateOrUpdateTagsError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "AlreadyExistsFault" => {
+                "AlreadyExists" => {
                     CreateOrUpdateTagsError::AlreadyExistsFault(String::from(parsed_error.message))
                 }
-                "LimitExceededFault" => {
+                "LimitExceeded" => {
                     CreateOrUpdateTagsError::LimitExceededFault(String::from(parsed_error.message))
                 }
-                "ResourceContentionFault" => CreateOrUpdateTagsError::ResourceContentionFault(
+                "ResourceContention" => CreateOrUpdateTagsError::ResourceContentionFault(
                     String::from(parsed_error.message),
                 ),
-                "ResourceInUseFault" => {
+                "ResourceInUse" => {
                     CreateOrUpdateTagsError::ResourceInUseFault(String::from(parsed_error.message))
                 }
                 _ => CreateOrUpdateTagsError::Unknown(String::from(body)),
@@ -9188,13 +9184,13 @@ impl DeleteAutoScalingGroupError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ResourceContentionFault" => DeleteAutoScalingGroupError::ResourceContentionFault(
+                "ResourceContention" => DeleteAutoScalingGroupError::ResourceContentionFault(
                     String::from(parsed_error.message),
                 ),
-                "ResourceInUseFault" => DeleteAutoScalingGroupError::ResourceInUseFault(
-                    String::from(parsed_error.message),
-                ),
-                "ScalingActivityInProgressFault" => {
+                "ResourceInUse" => DeleteAutoScalingGroupError::ResourceInUseFault(String::from(
+                    parsed_error.message,
+                )),
+                "ScalingActivityInProgress" => {
                     DeleteAutoScalingGroupError::ScalingActivityInProgressFault(String::from(
                         parsed_error.message,
                     ))
@@ -9279,12 +9275,10 @@ impl DeleteLaunchConfigurationError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ResourceContentionFault" => {
-                    DeleteLaunchConfigurationError::ResourceContentionFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "ResourceInUseFault" => DeleteLaunchConfigurationError::ResourceInUseFault(
+                "ResourceContention" => DeleteLaunchConfigurationError::ResourceContentionFault(
+                    String::from(parsed_error.message),
+                ),
+                "ResourceInUse" => DeleteLaunchConfigurationError::ResourceInUseFault(
                     String::from(parsed_error.message),
                 ),
                 _ => DeleteLaunchConfigurationError::Unknown(String::from(body)),
@@ -9364,7 +9358,7 @@ impl DeleteLifecycleHookError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ResourceContentionFault" => DeleteLifecycleHookError::ResourceContentionFault(
+                "ResourceContention" => DeleteLifecycleHookError::ResourceContentionFault(
                     String::from(parsed_error.message),
                 ),
                 _ => DeleteLifecycleHookError::Unknown(String::from(body)),
@@ -9443,7 +9437,7 @@ impl DeleteNotificationConfigurationError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ResourceContentionFault" => {
+                "ResourceContention" => {
                     DeleteNotificationConfigurationError::ResourceContentionFault(String::from(
                         parsed_error.message,
                     ))
@@ -9524,7 +9518,7 @@ impl DeletePolicyError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ResourceContentionFault" => {
+                "ResourceContention" => {
                     DeletePolicyError::ResourceContentionFault(String::from(parsed_error.message))
                 }
                 _ => DeletePolicyError::Unknown(String::from(body)),
@@ -9601,7 +9595,7 @@ impl DeleteScheduledActionError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ResourceContentionFault" => DeleteScheduledActionError::ResourceContentionFault(
+                "ResourceContention" => DeleteScheduledActionError::ResourceContentionFault(
                     String::from(parsed_error.message),
                 ),
                 _ => DeleteScheduledActionError::Unknown(String::from(body)),
@@ -9682,10 +9676,10 @@ impl DeleteTagsError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ResourceContentionFault" => {
+                "ResourceContention" => {
                     DeleteTagsError::ResourceContentionFault(String::from(parsed_error.message))
                 }
-                "ResourceInUseFault" => {
+                "ResourceInUse" => {
                     DeleteTagsError::ResourceInUseFault(String::from(parsed_error.message))
                 }
                 _ => DeleteTagsError::Unknown(String::from(body)),
@@ -9763,7 +9757,7 @@ impl DescribeAccountLimitsError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ResourceContentionFault" => DescribeAccountLimitsError::ResourceContentionFault(
+                "ResourceContention" => DescribeAccountLimitsError::ResourceContentionFault(
                     String::from(parsed_error.message),
                 ),
                 _ => DescribeAccountLimitsError::Unknown(String::from(body)),
@@ -9842,11 +9836,9 @@ impl DescribeAdjustmentTypesError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ResourceContentionFault" => {
-                    DescribeAdjustmentTypesError::ResourceContentionFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "ResourceContention" => DescribeAdjustmentTypesError::ResourceContentionFault(
+                    String::from(parsed_error.message),
+                ),
                 _ => DescribeAdjustmentTypesError::Unknown(String::from(body)),
             },
             Err(_) => DescribeAdjustmentTypesError::Unknown(body.to_string()),
@@ -9928,11 +9920,9 @@ impl DescribeAutoScalingGroupsError {
                 "InvalidNextToken" => DescribeAutoScalingGroupsError::InvalidNextToken(
                     String::from(parsed_error.message),
                 ),
-                "ResourceContentionFault" => {
-                    DescribeAutoScalingGroupsError::ResourceContentionFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "ResourceContention" => DescribeAutoScalingGroupsError::ResourceContentionFault(
+                    String::from(parsed_error.message),
+                ),
                 _ => DescribeAutoScalingGroupsError::Unknown(String::from(body)),
             },
             Err(_) => DescribeAutoScalingGroupsError::Unknown(body.to_string()),
@@ -10015,7 +10005,7 @@ impl DescribeAutoScalingInstancesError {
                 "InvalidNextToken" => DescribeAutoScalingInstancesError::InvalidNextToken(
                     String::from(parsed_error.message),
                 ),
-                "ResourceContentionFault" => {
+                "ResourceContention" => {
                     DescribeAutoScalingInstancesError::ResourceContentionFault(String::from(
                         parsed_error.message,
                     ))
@@ -10097,7 +10087,7 @@ impl DescribeAutoScalingNotificationTypesError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ResourceContentionFault" => {
+                "ResourceContention" => {
                     DescribeAutoScalingNotificationTypesError::ResourceContentionFault(
                         String::from(parsed_error.message),
                     )
@@ -10183,7 +10173,7 @@ impl DescribeLaunchConfigurationsError {
                 "InvalidNextToken" => DescribeLaunchConfigurationsError::InvalidNextToken(
                     String::from(parsed_error.message),
                 ),
-                "ResourceContentionFault" => {
+                "ResourceContention" => {
                     DescribeLaunchConfigurationsError::ResourceContentionFault(String::from(
                         parsed_error.message,
                     ))
@@ -10265,11 +10255,9 @@ impl DescribeLifecycleHookTypesError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ResourceContentionFault" => {
-                    DescribeLifecycleHookTypesError::ResourceContentionFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "ResourceContention" => DescribeLifecycleHookTypesError::ResourceContentionFault(
+                    String::from(parsed_error.message),
+                ),
                 _ => DescribeLifecycleHookTypesError::Unknown(String::from(body)),
             },
             Err(_) => DescribeLifecycleHookTypesError::Unknown(body.to_string()),
@@ -10346,7 +10334,7 @@ impl DescribeLifecycleHooksError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ResourceContentionFault" => DescribeLifecycleHooksError::ResourceContentionFault(
+                "ResourceContention" => DescribeLifecycleHooksError::ResourceContentionFault(
                     String::from(parsed_error.message),
                 ),
                 _ => DescribeLifecycleHooksError::Unknown(String::from(body)),
@@ -10425,7 +10413,7 @@ impl DescribeLoadBalancerTargetGroupsError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ResourceContentionFault" => {
+                "ResourceContention" => {
                     DescribeLoadBalancerTargetGroupsError::ResourceContentionFault(String::from(
                         parsed_error.message,
                     ))
@@ -10506,7 +10494,7 @@ impl DescribeLoadBalancersError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ResourceContentionFault" => DescribeLoadBalancersError::ResourceContentionFault(
+                "ResourceContention" => DescribeLoadBalancersError::ResourceContentionFault(
                     String::from(parsed_error.message),
                 ),
                 _ => DescribeLoadBalancersError::Unknown(String::from(body)),
@@ -10585,7 +10573,7 @@ impl DescribeMetricCollectionTypesError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ResourceContentionFault" => {
+                "ResourceContention" => {
                     DescribeMetricCollectionTypesError::ResourceContentionFault(String::from(
                         parsed_error.message,
                     ))
@@ -10671,7 +10659,7 @@ impl DescribeNotificationConfigurationsError {
                 "InvalidNextToken" => DescribeNotificationConfigurationsError::InvalidNextToken(
                     String::from(parsed_error.message),
                 ),
-                "ResourceContentionFault" => {
+                "ResourceContention" => {
                     DescribeNotificationConfigurationsError::ResourceContentionFault(String::from(
                         parsed_error.message,
                     ))
@@ -10758,7 +10746,7 @@ impl DescribePoliciesError {
                 "InvalidNextToken" => {
                     DescribePoliciesError::InvalidNextToken(String::from(parsed_error.message))
                 }
-                "ResourceContentionFault" => DescribePoliciesError::ResourceContentionFault(
+                "ResourceContention" => DescribePoliciesError::ResourceContentionFault(
                     String::from(parsed_error.message),
                 ),
                 _ => DescribePoliciesError::Unknown(String::from(body)),
@@ -10841,11 +10829,9 @@ impl DescribeScalingActivitiesError {
                 "InvalidNextToken" => DescribeScalingActivitiesError::InvalidNextToken(
                     String::from(parsed_error.message),
                 ),
-                "ResourceContentionFault" => {
-                    DescribeScalingActivitiesError::ResourceContentionFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "ResourceContention" => DescribeScalingActivitiesError::ResourceContentionFault(
+                    String::from(parsed_error.message),
+                ),
                 _ => DescribeScalingActivitiesError::Unknown(String::from(body)),
             },
             Err(_) => DescribeScalingActivitiesError::Unknown(body.to_string()),
@@ -10923,11 +10909,9 @@ impl DescribeScalingProcessTypesError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ResourceContentionFault" => {
-                    DescribeScalingProcessTypesError::ResourceContentionFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "ResourceContention" => DescribeScalingProcessTypesError::ResourceContentionFault(
+                    String::from(parsed_error.message),
+                ),
                 _ => DescribeScalingProcessTypesError::Unknown(String::from(body)),
             },
             Err(_) => DescribeScalingProcessTypesError::Unknown(body.to_string()),
@@ -11009,11 +10993,9 @@ impl DescribeScheduledActionsError {
                 "InvalidNextToken" => DescribeScheduledActionsError::InvalidNextToken(
                     String::from(parsed_error.message),
                 ),
-                "ResourceContentionFault" => {
-                    DescribeScheduledActionsError::ResourceContentionFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "ResourceContention" => DescribeScheduledActionsError::ResourceContentionFault(
+                    String::from(parsed_error.message),
+                ),
                 _ => DescribeScheduledActionsError::Unknown(String::from(body)),
             },
             Err(_) => DescribeScheduledActionsError::Unknown(body.to_string()),
@@ -11096,7 +11078,7 @@ impl DescribeTagsError {
                 "InvalidNextToken" => {
                     DescribeTagsError::InvalidNextToken(String::from(parsed_error.message))
                 }
-                "ResourceContentionFault" => {
+                "ResourceContention" => {
                     DescribeTagsError::ResourceContentionFault(String::from(parsed_error.message))
                 }
                 _ => DescribeTagsError::Unknown(String::from(body)),
@@ -11174,7 +11156,7 @@ impl DescribeTerminationPolicyTypesError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ResourceContentionFault" => {
+                "ResourceContention" => {
                     DescribeTerminationPolicyTypesError::ResourceContentionFault(String::from(
                         parsed_error.message,
                     ))
@@ -11255,7 +11237,7 @@ impl DetachInstancesError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ResourceContentionFault" => DetachInstancesError::ResourceContentionFault(
+                "ResourceContention" => DetachInstancesError::ResourceContentionFault(
                     String::from(parsed_error.message),
                 ),
                 _ => DetachInstancesError::Unknown(String::from(body)),
@@ -11332,7 +11314,7 @@ impl DetachLoadBalancerTargetGroupsError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ResourceContentionFault" => {
+                "ResourceContention" => {
                     DetachLoadBalancerTargetGroupsError::ResourceContentionFault(String::from(
                         parsed_error.message,
                     ))
@@ -11413,7 +11395,7 @@ impl DetachLoadBalancersError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ResourceContentionFault" => DetachLoadBalancersError::ResourceContentionFault(
+                "ResourceContention" => DetachLoadBalancersError::ResourceContentionFault(
                     String::from(parsed_error.message),
                 ),
                 _ => DetachLoadBalancersError::Unknown(String::from(body)),
@@ -11492,11 +11474,9 @@ impl DisableMetricsCollectionError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ResourceContentionFault" => {
-                    DisableMetricsCollectionError::ResourceContentionFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "ResourceContention" => DisableMetricsCollectionError::ResourceContentionFault(
+                    String::from(parsed_error.message),
+                ),
                 _ => DisableMetricsCollectionError::Unknown(String::from(body)),
             },
             Err(_) => DisableMetricsCollectionError::Unknown(body.to_string()),
@@ -11573,11 +11553,9 @@ impl EnableMetricsCollectionError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ResourceContentionFault" => {
-                    EnableMetricsCollectionError::ResourceContentionFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "ResourceContention" => EnableMetricsCollectionError::ResourceContentionFault(
+                    String::from(parsed_error.message),
+                ),
                 _ => EnableMetricsCollectionError::Unknown(String::from(body)),
             },
             Err(_) => EnableMetricsCollectionError::Unknown(body.to_string()),
@@ -11654,7 +11632,7 @@ impl EnterStandbyError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ResourceContentionFault" => {
+                "ResourceContention" => {
                     EnterStandbyError::ResourceContentionFault(String::from(parsed_error.message))
                 }
                 _ => EnterStandbyError::Unknown(String::from(body)),
@@ -11733,14 +11711,12 @@ impl ExecutePolicyError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ResourceContentionFault" => {
+                "ResourceContention" => {
                     ExecutePolicyError::ResourceContentionFault(String::from(parsed_error.message))
                 }
-                "ScalingActivityInProgressFault" => {
-                    ExecutePolicyError::ScalingActivityInProgressFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "ScalingActivityInProgress" => ExecutePolicyError::ScalingActivityInProgressFault(
+                    String::from(parsed_error.message),
+                ),
                 _ => ExecutePolicyError::Unknown(String::from(body)),
             },
             Err(_) => ExecutePolicyError::Unknown(body.to_string()),
@@ -11816,7 +11792,7 @@ impl ExitStandbyError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ResourceContentionFault" => {
+                "ResourceContention" => {
                     ExitStandbyError::ResourceContentionFault(String::from(parsed_error.message))
                 }
                 _ => ExitStandbyError::Unknown(String::from(body)),
@@ -11895,10 +11871,10 @@ impl PutLifecycleHookError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "LimitExceededFault" => {
+                "LimitExceeded" => {
                     PutLifecycleHookError::LimitExceededFault(String::from(parsed_error.message))
                 }
-                "ResourceContentionFault" => PutLifecycleHookError::ResourceContentionFault(
+                "ResourceContention" => PutLifecycleHookError::ResourceContentionFault(
                     String::from(parsed_error.message),
                 ),
                 _ => PutLifecycleHookError::Unknown(String::from(body)),
@@ -11978,10 +11954,10 @@ impl PutNotificationConfigurationError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "LimitExceededFault" => PutNotificationConfigurationError::LimitExceededFault(
+                "LimitExceeded" => PutNotificationConfigurationError::LimitExceededFault(
                     String::from(parsed_error.message),
                 ),
-                "ResourceContentionFault" => {
+                "ResourceContention" => {
                     PutNotificationConfigurationError::ResourceContentionFault(String::from(
                         parsed_error.message,
                     ))
@@ -12065,10 +12041,10 @@ impl PutScalingPolicyError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "LimitExceededFault" => {
+                "LimitExceeded" => {
                     PutScalingPolicyError::LimitExceededFault(String::from(parsed_error.message))
                 }
-                "ResourceContentionFault" => PutScalingPolicyError::ResourceContentionFault(
+                "ResourceContention" => PutScalingPolicyError::ResourceContentionFault(
                     String::from(parsed_error.message),
                 ),
                 _ => PutScalingPolicyError::Unknown(String::from(body)),
@@ -12150,13 +12126,13 @@ impl PutScheduledUpdateGroupActionError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "AlreadyExistsFault" => PutScheduledUpdateGroupActionError::AlreadyExistsFault(
+                "AlreadyExists" => PutScheduledUpdateGroupActionError::AlreadyExistsFault(
                     String::from(parsed_error.message),
                 ),
-                "LimitExceededFault" => PutScheduledUpdateGroupActionError::LimitExceededFault(
+                "LimitExceeded" => PutScheduledUpdateGroupActionError::LimitExceededFault(
                     String::from(parsed_error.message),
                 ),
-                "ResourceContentionFault" => {
+                "ResourceContention" => {
                     PutScheduledUpdateGroupActionError::ResourceContentionFault(String::from(
                         parsed_error.message,
                     ))
@@ -12239,7 +12215,7 @@ impl RecordLifecycleActionHeartbeatError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ResourceContentionFault" => {
+                "ResourceContention" => {
                     RecordLifecycleActionHeartbeatError::ResourceContentionFault(String::from(
                         parsed_error.message,
                     ))
@@ -12322,10 +12298,10 @@ impl ResumeProcessesError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ResourceContentionFault" => ResumeProcessesError::ResourceContentionFault(
+                "ResourceContention" => ResumeProcessesError::ResourceContentionFault(
                     String::from(parsed_error.message),
                 ),
-                "ResourceInUseFault" => {
+                "ResourceInUse" => {
                     ResumeProcessesError::ResourceInUseFault(String::from(parsed_error.message))
                 }
                 _ => ResumeProcessesError::Unknown(String::from(body)),
@@ -12405,10 +12381,10 @@ impl SetDesiredCapacityError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ResourceContentionFault" => SetDesiredCapacityError::ResourceContentionFault(
+                "ResourceContention" => SetDesiredCapacityError::ResourceContentionFault(
                     String::from(parsed_error.message),
                 ),
-                "ScalingActivityInProgressFault" => {
+                "ScalingActivityInProgress" => {
                     SetDesiredCapacityError::ScalingActivityInProgressFault(String::from(
                         parsed_error.message,
                     ))
@@ -12490,7 +12466,7 @@ impl SetInstanceHealthError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ResourceContentionFault" => SetInstanceHealthError::ResourceContentionFault(
+                "ResourceContention" => SetInstanceHealthError::ResourceContentionFault(
                     String::from(parsed_error.message),
                 ),
                 _ => SetInstanceHealthError::Unknown(String::from(body)),
@@ -12571,10 +12547,10 @@ impl SetInstanceProtectionError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "LimitExceededFault" => SetInstanceProtectionError::LimitExceededFault(
-                    String::from(parsed_error.message),
-                ),
-                "ResourceContentionFault" => SetInstanceProtectionError::ResourceContentionFault(
+                "LimitExceeded" => SetInstanceProtectionError::LimitExceededFault(String::from(
+                    parsed_error.message,
+                )),
+                "ResourceContention" => SetInstanceProtectionError::ResourceContentionFault(
                     String::from(parsed_error.message),
                 ),
                 _ => SetInstanceProtectionError::Unknown(String::from(body)),
@@ -12656,10 +12632,10 @@ impl SuspendProcessesError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ResourceContentionFault" => SuspendProcessesError::ResourceContentionFault(
+                "ResourceContention" => SuspendProcessesError::ResourceContentionFault(
                     String::from(parsed_error.message),
                 ),
-                "ResourceInUseFault" => {
+                "ResourceInUse" => {
                     SuspendProcessesError::ResourceInUseFault(String::from(parsed_error.message))
                 }
                 _ => SuspendProcessesError::Unknown(String::from(body)),
@@ -12739,12 +12715,12 @@ impl TerminateInstanceInAutoScalingGroupError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ResourceContentionFault" => {
+                "ResourceContention" => {
                     TerminateInstanceInAutoScalingGroupError::ResourceContentionFault(
                         String::from(parsed_error.message),
                     )
                 }
-                "ScalingActivityInProgressFault" => {
+                "ScalingActivityInProgress" => {
                     TerminateInstanceInAutoScalingGroupError::ScalingActivityInProgressFault(
                         String::from(parsed_error.message),
                     )
@@ -12830,10 +12806,10 @@ impl UpdateAutoScalingGroupError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ResourceContentionFault" => UpdateAutoScalingGroupError::ResourceContentionFault(
+                "ResourceContention" => UpdateAutoScalingGroupError::ResourceContentionFault(
                     String::from(parsed_error.message),
                 ),
-                "ScalingActivityInProgressFault" => {
+                "ScalingActivityInProgress" => {
                     UpdateAutoScalingGroupError::ScalingActivityInProgressFault(String::from(
                         parsed_error.message,
                     ))

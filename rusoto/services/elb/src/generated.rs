@@ -5616,15 +5616,13 @@ impl AddTagsError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "AccessPointNotFoundException" => {
+                "LoadBalancerNotFound" => {
                     AddTagsError::AccessPointNotFound(String::from(parsed_error.message))
                 }
-                "DuplicateTagKeysException" => {
+                "DuplicateTagKeys" => {
                     AddTagsError::DuplicateTagKeys(String::from(parsed_error.message))
                 }
-                "TooManyTagsException" => {
-                    AddTagsError::TooManyTags(String::from(parsed_error.message))
-                }
+                "TooManyTags" => AddTagsError::TooManyTags(String::from(parsed_error.message)),
                 _ => AddTagsError::Unknown(String::from(body)),
             },
             Err(_) => AddTagsError::Unknown(body.to_string()),
@@ -5705,17 +5703,17 @@ impl ApplySecurityGroupsToLoadBalancerError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "AccessPointNotFoundException" => {
+                "LoadBalancerNotFound" => {
                     ApplySecurityGroupsToLoadBalancerError::AccessPointNotFound(String::from(
                         parsed_error.message,
                     ))
                 }
-                "InvalidConfigurationRequestException" => {
+                "InvalidConfigurationRequest" => {
                     ApplySecurityGroupsToLoadBalancerError::InvalidConfigurationRequest(
                         String::from(parsed_error.message),
                     )
                 }
-                "InvalidSecurityGroupException" => {
+                "InvalidSecurityGroup" => {
                     ApplySecurityGroupsToLoadBalancerError::InvalidSecurityGroup(String::from(
                         parsed_error.message,
                     ))
@@ -5804,20 +5802,18 @@ impl AttachLoadBalancerToSubnetsError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "AccessPointNotFoundException" => {
-                    AttachLoadBalancerToSubnetsError::AccessPointNotFound(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "InvalidConfigurationRequestException" => {
+                "LoadBalancerNotFound" => AttachLoadBalancerToSubnetsError::AccessPointNotFound(
+                    String::from(parsed_error.message),
+                ),
+                "InvalidConfigurationRequest" => {
                     AttachLoadBalancerToSubnetsError::InvalidConfigurationRequest(String::from(
                         parsed_error.message,
                     ))
                 }
-                "InvalidSubnetException" => AttachLoadBalancerToSubnetsError::InvalidSubnet(
-                    String::from(parsed_error.message),
-                ),
-                "SubnetNotFoundException" => AttachLoadBalancerToSubnetsError::SubnetNotFound(
+                "InvalidSubnet" => AttachLoadBalancerToSubnetsError::InvalidSubnet(String::from(
+                    parsed_error.message,
+                )),
+                "SubnetNotFound" => AttachLoadBalancerToSubnetsError::SubnetNotFound(
                     String::from(parsed_error.message),
                 ),
                 _ => AttachLoadBalancerToSubnetsError::Unknown(String::from(body)),
@@ -5899,7 +5895,7 @@ impl ConfigureHealthCheckError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "AccessPointNotFoundException" => ConfigureHealthCheckError::AccessPointNotFound(
+                "LoadBalancerNotFound" => ConfigureHealthCheckError::AccessPointNotFound(
                     String::from(parsed_error.message),
                 ),
                 _ => ConfigureHealthCheckError::Unknown(String::from(body)),
@@ -5984,26 +5980,24 @@ impl CreateAppCookieStickinessPolicyError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "AccessPointNotFoundException" => {
+                "LoadBalancerNotFound" => {
                     CreateAppCookieStickinessPolicyError::AccessPointNotFound(String::from(
                         parsed_error.message,
                     ))
                 }
-                "DuplicatePolicyNameException" => {
+                "DuplicatePolicyName" => {
                     CreateAppCookieStickinessPolicyError::DuplicatePolicyName(String::from(
                         parsed_error.message,
                     ))
                 }
-                "InvalidConfigurationRequestException" => {
+                "InvalidConfigurationRequest" => {
                     CreateAppCookieStickinessPolicyError::InvalidConfigurationRequest(
                         String::from(parsed_error.message),
                     )
                 }
-                "TooManyPoliciesException" => {
-                    CreateAppCookieStickinessPolicyError::TooManyPolicies(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "TooManyPolicies" => CreateAppCookieStickinessPolicyError::TooManyPolicies(
+                    String::from(parsed_error.message),
+                ),
                 _ => CreateAppCookieStickinessPolicyError::Unknown(String::from(body)),
             },
             Err(_) => CreateAppCookieStickinessPolicyError::Unknown(body.to_string()),
@@ -6089,26 +6083,22 @@ impl CreateLBCookieStickinessPolicyError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "AccessPointNotFoundException" => {
+                "LoadBalancerNotFound" => {
                     CreateLBCookieStickinessPolicyError::AccessPointNotFound(String::from(
                         parsed_error.message,
                     ))
                 }
-                "DuplicatePolicyNameException" => {
-                    CreateLBCookieStickinessPolicyError::DuplicatePolicyName(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "InvalidConfigurationRequestException" => {
+                "DuplicatePolicyName" => CreateLBCookieStickinessPolicyError::DuplicatePolicyName(
+                    String::from(parsed_error.message),
+                ),
+                "InvalidConfigurationRequest" => {
                     CreateLBCookieStickinessPolicyError::InvalidConfigurationRequest(String::from(
                         parsed_error.message,
                     ))
                 }
-                "TooManyPoliciesException" => {
-                    CreateLBCookieStickinessPolicyError::TooManyPolicies(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "TooManyPolicies" => CreateLBCookieStickinessPolicyError::TooManyPolicies(
+                    String::from(parsed_error.message),
+                ),
                 _ => CreateLBCookieStickinessPolicyError::Unknown(String::from(body)),
             },
             Err(_) => CreateLBCookieStickinessPolicyError::Unknown(body.to_string()),
@@ -6208,41 +6198,39 @@ impl CreateLoadBalancerError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "CertificateNotFoundException" => {
+                "CertificateNotFound" => {
                     CreateLoadBalancerError::CertificateNotFound(String::from(parsed_error.message))
                 }
-                "DuplicateAccessPointNameException" => {
-                    CreateLoadBalancerError::DuplicateAccessPointName(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "DuplicateTagKeysException" => {
+                "DuplicateLoadBalancerName" => CreateLoadBalancerError::DuplicateAccessPointName(
+                    String::from(parsed_error.message),
+                ),
+                "DuplicateTagKeys" => {
                     CreateLoadBalancerError::DuplicateTagKeys(String::from(parsed_error.message))
                 }
-                "InvalidConfigurationRequestException" => {
+                "InvalidConfigurationRequest" => {
                     CreateLoadBalancerError::InvalidConfigurationRequest(String::from(
                         parsed_error.message,
                     ))
                 }
-                "InvalidSchemeException" => {
+                "InvalidScheme" => {
                     CreateLoadBalancerError::InvalidScheme(String::from(parsed_error.message))
                 }
-                "InvalidSecurityGroupException" => CreateLoadBalancerError::InvalidSecurityGroup(
+                "InvalidSecurityGroup" => CreateLoadBalancerError::InvalidSecurityGroup(
                     String::from(parsed_error.message),
                 ),
-                "InvalidSubnetException" => {
+                "InvalidSubnet" => {
                     CreateLoadBalancerError::InvalidSubnet(String::from(parsed_error.message))
                 }
-                "SubnetNotFoundException" => {
+                "SubnetNotFound" => {
                     CreateLoadBalancerError::SubnetNotFound(String::from(parsed_error.message))
                 }
-                "TooManyAccessPointsException" => {
+                "TooManyLoadBalancers" => {
                     CreateLoadBalancerError::TooManyAccessPoints(String::from(parsed_error.message))
                 }
-                "TooManyTagsException" => {
+                "TooManyTags" => {
                     CreateLoadBalancerError::TooManyTags(String::from(parsed_error.message))
                 }
-                "UnsupportedProtocolException" => {
+                "UnsupportedProtocol" => {
                     CreateLoadBalancerError::UnsupportedProtocol(String::from(parsed_error.message))
                 }
                 _ => CreateLoadBalancerError::Unknown(String::from(body)),
@@ -6339,31 +6327,23 @@ impl CreateLoadBalancerListenersError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "AccessPointNotFoundException" => {
-                    CreateLoadBalancerListenersError::AccessPointNotFound(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "CertificateNotFoundException" => {
-                    CreateLoadBalancerListenersError::CertificateNotFound(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "DuplicateListenerException" => {
-                    CreateLoadBalancerListenersError::DuplicateListener(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "InvalidConfigurationRequestException" => {
+                "LoadBalancerNotFound" => CreateLoadBalancerListenersError::AccessPointNotFound(
+                    String::from(parsed_error.message),
+                ),
+                "CertificateNotFound" => CreateLoadBalancerListenersError::CertificateNotFound(
+                    String::from(parsed_error.message),
+                ),
+                "DuplicateListener" => CreateLoadBalancerListenersError::DuplicateListener(
+                    String::from(parsed_error.message),
+                ),
+                "InvalidConfigurationRequest" => {
                     CreateLoadBalancerListenersError::InvalidConfigurationRequest(String::from(
                         parsed_error.message,
                     ))
                 }
-                "UnsupportedProtocolException" => {
-                    CreateLoadBalancerListenersError::UnsupportedProtocol(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "UnsupportedProtocol" => CreateLoadBalancerListenersError::UnsupportedProtocol(
+                    String::from(parsed_error.message),
+                ),
                 _ => CreateLoadBalancerListenersError::Unknown(String::from(body)),
             },
             Err(_) => CreateLoadBalancerListenersError::Unknown(body.to_string()),
@@ -6452,29 +6432,23 @@ impl CreateLoadBalancerPolicyError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "AccessPointNotFoundException" => {
-                    CreateLoadBalancerPolicyError::AccessPointNotFound(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "DuplicatePolicyNameException" => {
-                    CreateLoadBalancerPolicyError::DuplicatePolicyName(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "InvalidConfigurationRequestException" => {
+                "LoadBalancerNotFound" => CreateLoadBalancerPolicyError::AccessPointNotFound(
+                    String::from(parsed_error.message),
+                ),
+                "DuplicatePolicyName" => CreateLoadBalancerPolicyError::DuplicatePolicyName(
+                    String::from(parsed_error.message),
+                ),
+                "InvalidConfigurationRequest" => {
                     CreateLoadBalancerPolicyError::InvalidConfigurationRequest(String::from(
                         parsed_error.message,
                     ))
                 }
-                "PolicyTypeNotFoundException" => {
-                    CreateLoadBalancerPolicyError::PolicyTypeNotFound(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "TooManyPoliciesException" => CreateLoadBalancerPolicyError::TooManyPolicies(
+                "PolicyTypeNotFound" => CreateLoadBalancerPolicyError::PolicyTypeNotFound(
                     String::from(parsed_error.message),
                 ),
+                "TooManyPolicies" => CreateLoadBalancerPolicyError::TooManyPolicies(String::from(
+                    parsed_error.message,
+                )),
                 _ => CreateLoadBalancerPolicyError::Unknown(String::from(body)),
             },
             Err(_) => CreateLoadBalancerPolicyError::Unknown(body.to_string()),
@@ -6628,11 +6602,9 @@ impl DeleteLoadBalancerListenersError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "AccessPointNotFoundException" => {
-                    DeleteLoadBalancerListenersError::AccessPointNotFound(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "LoadBalancerNotFound" => DeleteLoadBalancerListenersError::AccessPointNotFound(
+                    String::from(parsed_error.message),
+                ),
                 _ => DeleteLoadBalancerListenersError::Unknown(String::from(body)),
             },
             Err(_) => DeleteLoadBalancerListenersError::Unknown(body.to_string()),
@@ -6711,12 +6683,10 @@ impl DeleteLoadBalancerPolicyError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "AccessPointNotFoundException" => {
-                    DeleteLoadBalancerPolicyError::AccessPointNotFound(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "InvalidConfigurationRequestException" => {
+                "LoadBalancerNotFound" => DeleteLoadBalancerPolicyError::AccessPointNotFound(
+                    String::from(parsed_error.message),
+                ),
+                "InvalidConfigurationRequest" => {
                     DeleteLoadBalancerPolicyError::InvalidConfigurationRequest(String::from(
                         parsed_error.message,
                     ))
@@ -6800,16 +6770,14 @@ impl DeregisterInstancesFromLoadBalancerError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "AccessPointNotFoundException" => {
+                "LoadBalancerNotFound" => {
                     DeregisterInstancesFromLoadBalancerError::AccessPointNotFound(String::from(
                         parsed_error.message,
                     ))
                 }
-                "InvalidEndPointException" => {
-                    DeregisterInstancesFromLoadBalancerError::InvalidEndPoint(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "InvalidInstance" => DeregisterInstancesFromLoadBalancerError::InvalidEndPoint(
+                    String::from(parsed_error.message),
+                ),
                 _ => DeregisterInstancesFromLoadBalancerError::Unknown(String::from(body)),
             },
             Err(_) => DeregisterInstancesFromLoadBalancerError::Unknown(body.to_string()),
@@ -6962,12 +6930,10 @@ impl DescribeInstanceHealthError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "AccessPointNotFoundException" => {
-                    DescribeInstanceHealthError::AccessPointNotFound(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "InvalidEndPointException" => {
+                "LoadBalancerNotFound" => DescribeInstanceHealthError::AccessPointNotFound(
+                    String::from(parsed_error.message),
+                ),
+                "InvalidInstance" => {
                     DescribeInstanceHealthError::InvalidEndPoint(String::from(parsed_error.message))
                 }
                 _ => DescribeInstanceHealthError::Unknown(String::from(body)),
@@ -7049,12 +7015,12 @@ impl DescribeLoadBalancerAttributesError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "AccessPointNotFoundException" => {
+                "LoadBalancerNotFound" => {
                     DescribeLoadBalancerAttributesError::AccessPointNotFound(String::from(
                         parsed_error.message,
                     ))
                 }
-                "LoadBalancerAttributeNotFoundException" => {
+                "LoadBalancerAttributeNotFound" => {
                     DescribeLoadBalancerAttributesError::LoadBalancerAttributeNotFound(
                         String::from(parsed_error.message),
                     )
@@ -7138,12 +7104,10 @@ impl DescribeLoadBalancerPoliciesError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "AccessPointNotFoundException" => {
-                    DescribeLoadBalancerPoliciesError::AccessPointNotFound(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "PolicyNotFoundException" => DescribeLoadBalancerPoliciesError::PolicyNotFound(
+                "LoadBalancerNotFound" => DescribeLoadBalancerPoliciesError::AccessPointNotFound(
+                    String::from(parsed_error.message),
+                ),
+                "PolicyNotFound" => DescribeLoadBalancerPoliciesError::PolicyNotFound(
                     String::from(parsed_error.message),
                 ),
                 _ => DescribeLoadBalancerPoliciesError::Unknown(String::from(body)),
@@ -7223,11 +7187,9 @@ impl DescribeLoadBalancerPolicyTypesError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "PolicyTypeNotFoundException" => {
-                    DescribeLoadBalancerPolicyTypesError::PolicyTypeNotFound(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "PolicyTypeNotFound" => DescribeLoadBalancerPolicyTypesError::PolicyTypeNotFound(
+                    String::from(parsed_error.message),
+                ),
                 _ => DescribeLoadBalancerPolicyTypesError::Unknown(String::from(body)),
             },
             Err(_) => DescribeLoadBalancerPolicyTypesError::Unknown(body.to_string()),
@@ -7306,10 +7268,10 @@ impl DescribeLoadBalancersError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "AccessPointNotFoundException" => DescribeLoadBalancersError::AccessPointNotFound(
+                "LoadBalancerNotFound" => DescribeLoadBalancersError::AccessPointNotFound(
                     String::from(parsed_error.message),
                 ),
-                "DependencyThrottleException" => DescribeLoadBalancersError::DependencyThrottle(
+                "DependencyThrottle" => DescribeLoadBalancersError::DependencyThrottle(
                     String::from(parsed_error.message),
                 ),
                 _ => DescribeLoadBalancersError::Unknown(String::from(body)),
@@ -7389,7 +7351,7 @@ impl DescribeTagsError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "AccessPointNotFoundException" => {
+                "LoadBalancerNotFound" => {
                     DescribeTagsError::AccessPointNotFound(String::from(parsed_error.message))
                 }
                 _ => DescribeTagsError::Unknown(String::from(body)),
@@ -7468,12 +7430,10 @@ impl DetachLoadBalancerFromSubnetsError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "AccessPointNotFoundException" => {
-                    DetachLoadBalancerFromSubnetsError::AccessPointNotFound(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "InvalidConfigurationRequestException" => {
+                "LoadBalancerNotFound" => DetachLoadBalancerFromSubnetsError::AccessPointNotFound(
+                    String::from(parsed_error.message),
+                ),
+                "InvalidConfigurationRequest" => {
                     DetachLoadBalancerFromSubnetsError::InvalidConfigurationRequest(String::from(
                         parsed_error.message,
                     ))
@@ -7557,12 +7517,12 @@ impl DisableAvailabilityZonesForLoadBalancerError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "AccessPointNotFoundException" => {
+                "LoadBalancerNotFound" => {
                     DisableAvailabilityZonesForLoadBalancerError::AccessPointNotFound(
                         String::from(parsed_error.message),
                     )
                 }
-                "InvalidConfigurationRequestException" => {
+                "InvalidConfigurationRequest" => {
                     DisableAvailabilityZonesForLoadBalancerError::InvalidConfigurationRequest(
                         String::from(parsed_error.message),
                     )
@@ -7646,7 +7606,7 @@ impl EnableAvailabilityZonesForLoadBalancerError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "AccessPointNotFoundException" => {
+                "LoadBalancerNotFound" => {
                     EnableAvailabilityZonesForLoadBalancerError::AccessPointNotFound(String::from(
                         parsed_error.message,
                     ))
@@ -7731,17 +7691,15 @@ impl ModifyLoadBalancerAttributesError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "AccessPointNotFoundException" => {
-                    ModifyLoadBalancerAttributesError::AccessPointNotFound(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "InvalidConfigurationRequestException" => {
+                "LoadBalancerNotFound" => ModifyLoadBalancerAttributesError::AccessPointNotFound(
+                    String::from(parsed_error.message),
+                ),
+                "InvalidConfigurationRequest" => {
                     ModifyLoadBalancerAttributesError::InvalidConfigurationRequest(String::from(
                         parsed_error.message,
                     ))
                 }
-                "LoadBalancerAttributeNotFoundException" => {
+                "LoadBalancerAttributeNotFound" => {
                     ModifyLoadBalancerAttributesError::LoadBalancerAttributeNotFound(String::from(
                         parsed_error.message,
                     ))
@@ -7826,16 +7784,14 @@ impl RegisterInstancesWithLoadBalancerError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "AccessPointNotFoundException" => {
+                "LoadBalancerNotFound" => {
                     RegisterInstancesWithLoadBalancerError::AccessPointNotFound(String::from(
                         parsed_error.message,
                     ))
                 }
-                "InvalidEndPointException" => {
-                    RegisterInstancesWithLoadBalancerError::InvalidEndPoint(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "InvalidInstance" => RegisterInstancesWithLoadBalancerError::InvalidEndPoint(
+                    String::from(parsed_error.message),
+                ),
                 _ => RegisterInstancesWithLoadBalancerError::Unknown(String::from(body)),
             },
             Err(_) => RegisterInstancesWithLoadBalancerError::Unknown(body.to_string()),
@@ -7913,7 +7869,7 @@ impl RemoveTagsError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "AccessPointNotFoundException" => {
+                "LoadBalancerNotFound" => {
                     RemoveTagsError::AccessPointNotFound(String::from(parsed_error.message))
                 }
                 _ => RemoveTagsError::Unknown(String::from(body)),
@@ -7998,27 +7954,27 @@ impl SetLoadBalancerListenerSSLCertificateError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "AccessPointNotFoundException" => {
+                "LoadBalancerNotFound" => {
                     SetLoadBalancerListenerSSLCertificateError::AccessPointNotFound(String::from(
                         parsed_error.message,
                     ))
                 }
-                "CertificateNotFoundException" => {
+                "CertificateNotFound" => {
                     SetLoadBalancerListenerSSLCertificateError::CertificateNotFound(String::from(
                         parsed_error.message,
                     ))
                 }
-                "InvalidConfigurationRequestException" => {
+                "InvalidConfigurationRequest" => {
                     SetLoadBalancerListenerSSLCertificateError::InvalidConfigurationRequest(
                         String::from(parsed_error.message),
                     )
                 }
-                "ListenerNotFoundException" => {
+                "ListenerNotFound" => {
                     SetLoadBalancerListenerSSLCertificateError::ListenerNotFound(String::from(
                         parsed_error.message,
                     ))
                 }
-                "UnsupportedProtocolException" => {
+                "UnsupportedProtocol" => {
                     SetLoadBalancerListenerSSLCertificateError::UnsupportedProtocol(String::from(
                         parsed_error.message,
                     ))
@@ -8109,21 +8065,19 @@ impl SetLoadBalancerPoliciesForBackendServerError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "AccessPointNotFoundException" => {
+                "LoadBalancerNotFound" => {
                     SetLoadBalancerPoliciesForBackendServerError::AccessPointNotFound(
                         String::from(parsed_error.message),
                     )
                 }
-                "InvalidConfigurationRequestException" => {
+                "InvalidConfigurationRequest" => {
                     SetLoadBalancerPoliciesForBackendServerError::InvalidConfigurationRequest(
                         String::from(parsed_error.message),
                     )
                 }
-                "PolicyNotFoundException" => {
-                    SetLoadBalancerPoliciesForBackendServerError::PolicyNotFound(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "PolicyNotFound" => SetLoadBalancerPoliciesForBackendServerError::PolicyNotFound(
+                    String::from(parsed_error.message),
+                ),
                 _ => SetLoadBalancerPoliciesForBackendServerError::Unknown(String::from(body)),
             },
             Err(_) => SetLoadBalancerPoliciesForBackendServerError::Unknown(body.to_string()),
@@ -8210,26 +8164,22 @@ impl SetLoadBalancerPoliciesOfListenerError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "AccessPointNotFoundException" => {
+                "LoadBalancerNotFound" => {
                     SetLoadBalancerPoliciesOfListenerError::AccessPointNotFound(String::from(
                         parsed_error.message,
                     ))
                 }
-                "InvalidConfigurationRequestException" => {
+                "InvalidConfigurationRequest" => {
                     SetLoadBalancerPoliciesOfListenerError::InvalidConfigurationRequest(
                         String::from(parsed_error.message),
                     )
                 }
-                "ListenerNotFoundException" => {
-                    SetLoadBalancerPoliciesOfListenerError::ListenerNotFound(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "PolicyNotFoundException" => {
-                    SetLoadBalancerPoliciesOfListenerError::PolicyNotFound(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "ListenerNotFound" => SetLoadBalancerPoliciesOfListenerError::ListenerNotFound(
+                    String::from(parsed_error.message),
+                ),
+                "PolicyNotFound" => SetLoadBalancerPoliciesOfListenerError::PolicyNotFound(
+                    String::from(parsed_error.message),
+                ),
                 _ => SetLoadBalancerPoliciesOfListenerError::Unknown(String::from(body)),
             },
             Err(_) => SetLoadBalancerPoliciesOfListenerError::Unknown(body.to_string()),

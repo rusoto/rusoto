@@ -9089,13 +9089,13 @@ impl CloneReceiptRuleSetError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "AlreadyExistsException" => {
+                "AlreadyExists" => {
                     CloneReceiptRuleSetError::AlreadyExists(String::from(parsed_error.message))
                 }
-                "LimitExceededException" => {
+                "LimitExceeded" => {
                     CloneReceiptRuleSetError::LimitExceeded(String::from(parsed_error.message))
                 }
-                "RuleSetDoesNotExistException" => CloneReceiptRuleSetError::RuleSetDoesNotExist(
+                "RuleSetDoesNotExist" => CloneReceiptRuleSetError::RuleSetDoesNotExist(
                     String::from(parsed_error.message),
                 ),
                 _ => CloneReceiptRuleSetError::Unknown(String::from(body)),
@@ -9180,17 +9180,15 @@ impl CreateConfigurationSetError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ConfigurationSetAlreadyExistsException" => {
+                "ConfigurationSetAlreadyExists" => {
                     CreateConfigurationSetError::ConfigurationSetAlreadyExists(String::from(
                         parsed_error.message,
                     ))
                 }
-                "InvalidConfigurationSetException" => {
-                    CreateConfigurationSetError::InvalidConfigurationSet(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "LimitExceededException" => {
+                "InvalidConfigurationSet" => CreateConfigurationSetError::InvalidConfigurationSet(
+                    String::from(parsed_error.message),
+                ),
+                "LimitExceeded" => {
                     CreateConfigurationSetError::LimitExceeded(String::from(parsed_error.message))
                 }
                 _ => CreateConfigurationSetError::Unknown(String::from(body)),
@@ -9281,36 +9279,34 @@ impl CreateConfigurationSetEventDestinationError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ConfigurationSetDoesNotExistException" => {
+                "ConfigurationSetDoesNotExist" => {
                     CreateConfigurationSetEventDestinationError::ConfigurationSetDoesNotExist(
                         String::from(parsed_error.message),
                     )
                 }
-                "EventDestinationAlreadyExistsException" => {
+                "EventDestinationAlreadyExists" => {
                     CreateConfigurationSetEventDestinationError::EventDestinationAlreadyExists(
                         String::from(parsed_error.message),
                     )
                 }
-                "InvalidCloudWatchDestinationException" => {
+                "InvalidCloudWatchDestination" => {
                     CreateConfigurationSetEventDestinationError::InvalidCloudWatchDestination(
                         String::from(parsed_error.message),
                     )
                 }
-                "InvalidFirehoseDestinationException" => {
+                "InvalidFirehoseDestination" => {
                     CreateConfigurationSetEventDestinationError::InvalidFirehoseDestination(
                         String::from(parsed_error.message),
                     )
                 }
-                "InvalidSNSDestinationException" => {
+                "InvalidSNSDestination" => {
                     CreateConfigurationSetEventDestinationError::InvalidSNSDestination(
                         String::from(parsed_error.message),
                     )
                 }
-                "LimitExceededException" => {
-                    CreateConfigurationSetEventDestinationError::LimitExceeded(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "LimitExceeded" => CreateConfigurationSetEventDestinationError::LimitExceeded(
+                    String::from(parsed_error.message),
+                ),
                 _ => CreateConfigurationSetEventDestinationError::Unknown(String::from(body)),
             },
             Err(_) => CreateConfigurationSetEventDestinationError::Unknown(body.to_string()),
@@ -9404,12 +9400,12 @@ impl CreateConfigurationSetTrackingOptionsError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ConfigurationSetDoesNotExistException" => {
+                "ConfigurationSetDoesNotExist" => {
                     CreateConfigurationSetTrackingOptionsError::ConfigurationSetDoesNotExist(
                         String::from(parsed_error.message),
                     )
                 }
-                "InvalidTrackingOptionsException" => {
+                "InvalidTrackingOptions" => {
                     CreateConfigurationSetTrackingOptionsError::InvalidTrackingOptions(
                         String::from(parsed_error.message),
                     )
@@ -9508,7 +9504,7 @@ impl CreateCustomVerificationEmailTemplateError {
         match Self::deserialize(&mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "CustomVerificationEmailInvalidContentException" => CreateCustomVerificationEmailTemplateError::CustomVerificationEmailInvalidContent(String::from(parsed_error.message)),"CustomVerificationEmailTemplateAlreadyExistsException" => CreateCustomVerificationEmailTemplateError::CustomVerificationEmailTemplateAlreadyExists(String::from(parsed_error.message)),"FromEmailAddressNotVerifiedException" => CreateCustomVerificationEmailTemplateError::FromEmailAddressNotVerified(String::from(parsed_error.message)),"LimitExceededException" => CreateCustomVerificationEmailTemplateError::LimitExceeded(String::from(parsed_error.message)),_ => CreateCustomVerificationEmailTemplateError::Unknown(String::from(body))
+                                    "CustomVerificationEmailInvalidContent" => CreateCustomVerificationEmailTemplateError::CustomVerificationEmailInvalidContent(String::from(parsed_error.message)),"CustomVerificationEmailTemplateAlreadyExists" => CreateCustomVerificationEmailTemplateError::CustomVerificationEmailTemplateAlreadyExists(String::from(parsed_error.message)),"FromEmailAddressNotVerified" => CreateCustomVerificationEmailTemplateError::FromEmailAddressNotVerified(String::from(parsed_error.message)),"LimitExceeded" => CreateCustomVerificationEmailTemplateError::LimitExceeded(String::from(parsed_error.message)),_ => CreateCustomVerificationEmailTemplateError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => CreateCustomVerificationEmailTemplateError::Unknown(body.to_string())
@@ -9588,10 +9584,10 @@ impl CreateReceiptFilterError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "AlreadyExistsException" => {
+                "AlreadyExists" => {
                     CreateReceiptFilterError::AlreadyExists(String::from(parsed_error.message))
                 }
-                "LimitExceededException" => {
+                "LimitExceeded" => {
                     CreateReceiptFilterError::LimitExceeded(String::from(parsed_error.message))
                 }
                 _ => CreateReceiptFilterError::Unknown(String::from(body)),
@@ -9683,27 +9679,25 @@ impl CreateReceiptRuleError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "AlreadyExistsException" => {
+                "AlreadyExists" => {
                     CreateReceiptRuleError::AlreadyExists(String::from(parsed_error.message))
                 }
-                "InvalidLambdaFunctionException" => CreateReceiptRuleError::InvalidLambdaFunction(
+                "InvalidLambdaFunction" => CreateReceiptRuleError::InvalidLambdaFunction(
                     String::from(parsed_error.message),
                 ),
-                "InvalidS3ConfigurationException" => {
-                    CreateReceiptRuleError::InvalidS3Configuration(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "InvalidSnsTopicException" => {
+                "InvalidS3Configuration" => CreateReceiptRuleError::InvalidS3Configuration(
+                    String::from(parsed_error.message),
+                ),
+                "InvalidSnsTopic" => {
                     CreateReceiptRuleError::InvalidSnsTopic(String::from(parsed_error.message))
                 }
-                "LimitExceededException" => {
+                "LimitExceeded" => {
                     CreateReceiptRuleError::LimitExceeded(String::from(parsed_error.message))
                 }
-                "RuleDoesNotExistException" => {
+                "RuleDoesNotExist" => {
                     CreateReceiptRuleError::RuleDoesNotExist(String::from(parsed_error.message))
                 }
-                "RuleSetDoesNotExistException" => {
+                "RuleSetDoesNotExist" => {
                     CreateReceiptRuleError::RuleSetDoesNotExist(String::from(parsed_error.message))
                 }
                 _ => CreateReceiptRuleError::Unknown(String::from(body)),
@@ -9790,10 +9784,10 @@ impl CreateReceiptRuleSetError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "AlreadyExistsException" => {
+                "AlreadyExists" => {
                     CreateReceiptRuleSetError::AlreadyExists(String::from(parsed_error.message))
                 }
-                "LimitExceededException" => {
+                "LimitExceeded" => {
                     CreateReceiptRuleSetError::LimitExceeded(String::from(parsed_error.message))
                 }
                 _ => CreateReceiptRuleSetError::Unknown(String::from(body)),
@@ -9877,13 +9871,13 @@ impl CreateTemplateError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "AlreadyExistsException" => {
+                "AlreadyExists" => {
                     CreateTemplateError::AlreadyExists(String::from(parsed_error.message))
                 }
-                "InvalidTemplateException" => {
+                "InvalidTemplate" => {
                     CreateTemplateError::InvalidTemplate(String::from(parsed_error.message))
                 }
-                "LimitExceededException" => {
+                "LimitExceeded" => {
                     CreateTemplateError::LimitExceeded(String::from(parsed_error.message))
                 }
                 _ => CreateTemplateError::Unknown(String::from(body)),
@@ -9962,7 +9956,7 @@ impl DeleteConfigurationSetError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ConfigurationSetDoesNotExistException" => {
+                "ConfigurationSetDoesNotExist" => {
                     DeleteConfigurationSetError::ConfigurationSetDoesNotExist(String::from(
                         parsed_error.message,
                     ))
@@ -10045,12 +10039,12 @@ impl DeleteConfigurationSetEventDestinationError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ConfigurationSetDoesNotExistException" => {
+                "ConfigurationSetDoesNotExist" => {
                     DeleteConfigurationSetEventDestinationError::ConfigurationSetDoesNotExist(
                         String::from(parsed_error.message),
                     )
                 }
-                "EventDestinationDoesNotExistException" => {
+                "EventDestinationDoesNotExist" => {
                     DeleteConfigurationSetEventDestinationError::EventDestinationDoesNotExist(
                         String::from(parsed_error.message),
                     )
@@ -10138,7 +10132,7 @@ impl DeleteConfigurationSetTrackingOptionsError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ConfigurationSetDoesNotExistException" => {
+                "ConfigurationSetDoesNotExist" => {
                     DeleteConfigurationSetTrackingOptionsError::ConfigurationSetDoesNotExist(
                         String::from(parsed_error.message),
                     )
@@ -10519,7 +10513,7 @@ impl DeleteReceiptRuleError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "RuleSetDoesNotExistException" => {
+                "RuleSetDoesNotExist" => {
                     DeleteReceiptRuleError::RuleSetDoesNotExist(String::from(parsed_error.message))
                 }
                 _ => DeleteReceiptRuleError::Unknown(String::from(body)),
@@ -10598,7 +10592,7 @@ impl DeleteReceiptRuleSetError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "CannotDeleteException" => {
+                "CannotDelete" => {
                     DeleteReceiptRuleSetError::CannotDelete(String::from(parsed_error.message))
                 }
                 _ => DeleteReceiptRuleSetError::Unknown(String::from(body)),
@@ -10894,7 +10888,7 @@ impl DescribeConfigurationSetError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ConfigurationSetDoesNotExistException" => {
+                "ConfigurationSetDoesNotExist" => {
                     DescribeConfigurationSetError::ConfigurationSetDoesNotExist(String::from(
                         parsed_error.message,
                     ))
@@ -10977,10 +10971,10 @@ impl DescribeReceiptRuleError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "RuleDoesNotExistException" => {
+                "RuleDoesNotExist" => {
                     DescribeReceiptRuleError::RuleDoesNotExist(String::from(parsed_error.message))
                 }
-                "RuleSetDoesNotExistException" => DescribeReceiptRuleError::RuleSetDoesNotExist(
+                "RuleSetDoesNotExist" => DescribeReceiptRuleError::RuleSetDoesNotExist(
                     String::from(parsed_error.message),
                 ),
                 _ => DescribeReceiptRuleError::Unknown(String::from(body)),
@@ -11060,11 +11054,9 @@ impl DescribeReceiptRuleSetError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "RuleSetDoesNotExistException" => {
-                    DescribeReceiptRuleSetError::RuleSetDoesNotExist(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "RuleSetDoesNotExist" => DescribeReceiptRuleSetError::RuleSetDoesNotExist(
+                    String::from(parsed_error.message),
+                ),
                 _ => DescribeReceiptRuleSetError::Unknown(String::from(body)),
             },
             Err(_) => DescribeReceiptRuleSetError::Unknown(body.to_string()),
@@ -11215,7 +11207,7 @@ impl GetCustomVerificationEmailTemplateError {
         match Self::deserialize(&mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "CustomVerificationEmailTemplateDoesNotExistException" => GetCustomVerificationEmailTemplateError::CustomVerificationEmailTemplateDoesNotExist(String::from(parsed_error.message)),_ => GetCustomVerificationEmailTemplateError::Unknown(String::from(body))
+                                    "CustomVerificationEmailTemplateDoesNotExist" => GetCustomVerificationEmailTemplateError::CustomVerificationEmailTemplateDoesNotExist(String::from(parsed_error.message)),_ => GetCustomVerificationEmailTemplateError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => GetCustomVerificationEmailTemplateError::Unknown(body.to_string())
@@ -11799,7 +11791,7 @@ impl GetTemplateError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "TemplateDoesNotExistException" => {
+                "TemplateDoesNotExist" => {
                     GetTemplateError::TemplateDoesNotExist(String::from(parsed_error.message))
                 }
                 _ => GetTemplateError::Unknown(String::from(body)),
@@ -12456,7 +12448,7 @@ impl PutIdentityPolicyError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidPolicyException" => {
+                "InvalidPolicy" => {
                     PutIdentityPolicyError::InvalidPolicy(String::from(parsed_error.message))
                 }
                 _ => PutIdentityPolicyError::Unknown(String::from(body)),
@@ -12537,10 +12529,10 @@ impl ReorderReceiptRuleSetError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "RuleDoesNotExistException" => {
+                "RuleDoesNotExist" => {
                     ReorderReceiptRuleSetError::RuleDoesNotExist(String::from(parsed_error.message))
                 }
-                "RuleSetDoesNotExistException" => ReorderReceiptRuleSetError::RuleSetDoesNotExist(
+                "RuleSetDoesNotExist" => ReorderReceiptRuleSetError::RuleSetDoesNotExist(
                     String::from(parsed_error.message),
                 ),
                 _ => ReorderReceiptRuleSetError::Unknown(String::from(body)),
@@ -12712,7 +12704,7 @@ impl SendBulkTemplatedEmailError {
                         parsed_error.message,
                     ))
                 }
-                "ConfigurationSetDoesNotExistException" => {
+                "ConfigurationSetDoesNotExist" => {
                     SendBulkTemplatedEmailError::ConfigurationSetDoesNotExist(String::from(
                         parsed_error.message,
                     ))
@@ -12730,11 +12722,9 @@ impl SendBulkTemplatedEmailError {
                 "MessageRejected" => {
                     SendBulkTemplatedEmailError::MessageRejected(String::from(parsed_error.message))
                 }
-                "TemplateDoesNotExistException" => {
-                    SendBulkTemplatedEmailError::TemplateDoesNotExist(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "TemplateDoesNotExist" => SendBulkTemplatedEmailError::TemplateDoesNotExist(
+                    String::from(parsed_error.message),
+                ),
                 _ => SendBulkTemplatedEmailError::Unknown(String::from(body)),
             },
             Err(_) => SendBulkTemplatedEmailError::Unknown(body.to_string()),
@@ -12824,17 +12814,17 @@ impl SendCustomVerificationEmailError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ConfigurationSetDoesNotExistException" => {
+                "ConfigurationSetDoesNotExist" => {
                     SendCustomVerificationEmailError::ConfigurationSetDoesNotExist(String::from(
                         parsed_error.message,
                     ))
                 }
-                "CustomVerificationEmailTemplateDoesNotExistException" => {
+                "CustomVerificationEmailTemplateDoesNotExist" => {
                     SendCustomVerificationEmailError::CustomVerificationEmailTemplateDoesNotExist(
                         String::from(parsed_error.message),
                     )
                 }
-                "FromEmailAddressNotVerifiedException" => {
+                "FromEmailAddressNotVerified" => {
                     SendCustomVerificationEmailError::FromEmailAddressNotVerified(String::from(
                         parsed_error.message,
                     ))
@@ -12842,7 +12832,7 @@ impl SendCustomVerificationEmailError {
                 "MessageRejected" => SendCustomVerificationEmailError::MessageRejected(
                     String::from(parsed_error.message),
                 ),
-                "ProductionAccessNotGrantedException" => {
+                "ProductionAccessNotGranted" => {
                     SendCustomVerificationEmailError::ProductionAccessNotGranted(String::from(
                         parsed_error.message,
                     ))
@@ -12940,7 +12930,7 @@ impl SendEmailError {
                 "AccountSendingPausedException" => {
                     SendEmailError::AccountSendingPaused(String::from(parsed_error.message))
                 }
-                "ConfigurationSetDoesNotExistException" => {
+                "ConfigurationSetDoesNotExist" => {
                     SendEmailError::ConfigurationSetDoesNotExist(String::from(parsed_error.message))
                 }
                 "ConfigurationSetSendingPausedException" => {
@@ -13043,11 +13033,9 @@ impl SendRawEmailError {
                 "AccountSendingPausedException" => {
                     SendRawEmailError::AccountSendingPaused(String::from(parsed_error.message))
                 }
-                "ConfigurationSetDoesNotExistException" => {
-                    SendRawEmailError::ConfigurationSetDoesNotExist(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "ConfigurationSetDoesNotExist" => SendRawEmailError::ConfigurationSetDoesNotExist(
+                    String::from(parsed_error.message),
+                ),
                 "ConfigurationSetSendingPausedException" => {
                     SendRawEmailError::ConfigurationSetSendingPaused(String::from(
                         parsed_error.message,
@@ -13150,7 +13138,7 @@ impl SendTemplatedEmailError {
                 "AccountSendingPausedException" => SendTemplatedEmailError::AccountSendingPaused(
                     String::from(parsed_error.message),
                 ),
-                "ConfigurationSetDoesNotExistException" => {
+                "ConfigurationSetDoesNotExist" => {
                     SendTemplatedEmailError::ConfigurationSetDoesNotExist(String::from(
                         parsed_error.message,
                     ))
@@ -13168,7 +13156,7 @@ impl SendTemplatedEmailError {
                 "MessageRejected" => {
                     SendTemplatedEmailError::MessageRejected(String::from(parsed_error.message))
                 }
-                "TemplateDoesNotExistException" => SendTemplatedEmailError::TemplateDoesNotExist(
+                "TemplateDoesNotExist" => SendTemplatedEmailError::TemplateDoesNotExist(
                     String::from(parsed_error.message),
                 ),
                 _ => SendTemplatedEmailError::Unknown(String::from(body)),
@@ -13252,11 +13240,9 @@ impl SetActiveReceiptRuleSetError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "RuleSetDoesNotExistException" => {
-                    SetActiveReceiptRuleSetError::RuleSetDoesNotExist(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "RuleSetDoesNotExist" => SetActiveReceiptRuleSetError::RuleSetDoesNotExist(
+                    String::from(parsed_error.message),
+                ),
                 _ => SetActiveReceiptRuleSetError::Unknown(String::from(body)),
             },
             Err(_) => SetActiveReceiptRuleSetError::Unknown(body.to_string()),
@@ -13702,14 +13688,12 @@ impl SetReceiptRulePositionError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "RuleDoesNotExistException" => SetReceiptRulePositionError::RuleDoesNotExist(
+                "RuleDoesNotExist" => SetReceiptRulePositionError::RuleDoesNotExist(String::from(
+                    parsed_error.message,
+                )),
+                "RuleSetDoesNotExist" => SetReceiptRulePositionError::RuleSetDoesNotExist(
                     String::from(parsed_error.message),
                 ),
-                "RuleSetDoesNotExistException" => {
-                    SetReceiptRulePositionError::RuleSetDoesNotExist(String::from(
-                        parsed_error.message,
-                    ))
-                }
                 _ => SetReceiptRulePositionError::Unknown(String::from(body)),
             },
             Err(_) => SetReceiptRulePositionError::Unknown(body.to_string()),
@@ -13791,17 +13775,13 @@ impl TestRenderTemplateError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidRenderingParameterException" => {
-                    TestRenderTemplateError::InvalidRenderingParameter(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "MissingRenderingAttributeException" => {
-                    TestRenderTemplateError::MissingRenderingAttribute(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "TemplateDoesNotExistException" => TestRenderTemplateError::TemplateDoesNotExist(
+                "InvalidRenderingParameter" => TestRenderTemplateError::InvalidRenderingParameter(
+                    String::from(parsed_error.message),
+                ),
+                "MissingRenderingAttribute" => TestRenderTemplateError::MissingRenderingAttribute(
+                    String::from(parsed_error.message),
+                ),
+                "TemplateDoesNotExist" => TestRenderTemplateError::TemplateDoesNotExist(
                     String::from(parsed_error.message),
                 ),
                 _ => TestRenderTemplateError::Unknown(String::from(body)),
@@ -13963,27 +13943,27 @@ impl UpdateConfigurationSetEventDestinationError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ConfigurationSetDoesNotExistException" => {
+                "ConfigurationSetDoesNotExist" => {
                     UpdateConfigurationSetEventDestinationError::ConfigurationSetDoesNotExist(
                         String::from(parsed_error.message),
                     )
                 }
-                "EventDestinationDoesNotExistException" => {
+                "EventDestinationDoesNotExist" => {
                     UpdateConfigurationSetEventDestinationError::EventDestinationDoesNotExist(
                         String::from(parsed_error.message),
                     )
                 }
-                "InvalidCloudWatchDestinationException" => {
+                "InvalidCloudWatchDestination" => {
                     UpdateConfigurationSetEventDestinationError::InvalidCloudWatchDestination(
                         String::from(parsed_error.message),
                     )
                 }
-                "InvalidFirehoseDestinationException" => {
+                "InvalidFirehoseDestination" => {
                     UpdateConfigurationSetEventDestinationError::InvalidFirehoseDestination(
                         String::from(parsed_error.message),
                     )
                 }
-                "InvalidSNSDestinationException" => {
+                "InvalidSNSDestination" => {
                     UpdateConfigurationSetEventDestinationError::InvalidSNSDestination(
                         String::from(parsed_error.message),
                     )
@@ -14077,7 +14057,7 @@ impl UpdateConfigurationSetReputationMetricsEnabledError {
         match Self::deserialize(&mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "ConfigurationSetDoesNotExistException" => UpdateConfigurationSetReputationMetricsEnabledError::ConfigurationSetDoesNotExist(String::from(parsed_error.message)),_ => UpdateConfigurationSetReputationMetricsEnabledError::Unknown(String::from(body))
+                                    "ConfigurationSetDoesNotExist" => UpdateConfigurationSetReputationMetricsEnabledError::ConfigurationSetDoesNotExist(String::from(parsed_error.message)),_ => UpdateConfigurationSetReputationMetricsEnabledError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => UpdateConfigurationSetReputationMetricsEnabledError::Unknown(body.to_string())
@@ -14160,7 +14140,7 @@ impl UpdateConfigurationSetSendingEnabledError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ConfigurationSetDoesNotExistException" => {
+                "ConfigurationSetDoesNotExist" => {
                     UpdateConfigurationSetSendingEnabledError::ConfigurationSetDoesNotExist(
                         String::from(parsed_error.message),
                     )
@@ -14247,12 +14227,12 @@ impl UpdateConfigurationSetTrackingOptionsError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ConfigurationSetDoesNotExistException" => {
+                "ConfigurationSetDoesNotExist" => {
                     UpdateConfigurationSetTrackingOptionsError::ConfigurationSetDoesNotExist(
                         String::from(parsed_error.message),
                     )
                 }
-                "InvalidTrackingOptionsException" => {
+                "InvalidTrackingOptions" => {
                     UpdateConfigurationSetTrackingOptionsError::InvalidTrackingOptions(
                         String::from(parsed_error.message),
                     )
@@ -14349,7 +14329,7 @@ impl UpdateCustomVerificationEmailTemplateError {
         match Self::deserialize(&mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "CustomVerificationEmailInvalidContentException" => UpdateCustomVerificationEmailTemplateError::CustomVerificationEmailInvalidContent(String::from(parsed_error.message)),"CustomVerificationEmailTemplateDoesNotExistException" => UpdateCustomVerificationEmailTemplateError::CustomVerificationEmailTemplateDoesNotExist(String::from(parsed_error.message)),"FromEmailAddressNotVerifiedException" => UpdateCustomVerificationEmailTemplateError::FromEmailAddressNotVerified(String::from(parsed_error.message)),_ => UpdateCustomVerificationEmailTemplateError::Unknown(String::from(body))
+                                    "CustomVerificationEmailInvalidContent" => UpdateCustomVerificationEmailTemplateError::CustomVerificationEmailInvalidContent(String::from(parsed_error.message)),"CustomVerificationEmailTemplateDoesNotExist" => UpdateCustomVerificationEmailTemplateError::CustomVerificationEmailTemplateDoesNotExist(String::from(parsed_error.message)),"FromEmailAddressNotVerified" => UpdateCustomVerificationEmailTemplateError::FromEmailAddressNotVerified(String::from(parsed_error.message)),_ => UpdateCustomVerificationEmailTemplateError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => UpdateCustomVerificationEmailTemplateError::Unknown(body.to_string())
@@ -14436,24 +14416,22 @@ impl UpdateReceiptRuleError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidLambdaFunctionException" => UpdateReceiptRuleError::InvalidLambdaFunction(
+                "InvalidLambdaFunction" => UpdateReceiptRuleError::InvalidLambdaFunction(
                     String::from(parsed_error.message),
                 ),
-                "InvalidS3ConfigurationException" => {
-                    UpdateReceiptRuleError::InvalidS3Configuration(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "InvalidSnsTopicException" => {
+                "InvalidS3Configuration" => UpdateReceiptRuleError::InvalidS3Configuration(
+                    String::from(parsed_error.message),
+                ),
+                "InvalidSnsTopic" => {
                     UpdateReceiptRuleError::InvalidSnsTopic(String::from(parsed_error.message))
                 }
-                "LimitExceededException" => {
+                "LimitExceeded" => {
                     UpdateReceiptRuleError::LimitExceeded(String::from(parsed_error.message))
                 }
-                "RuleDoesNotExistException" => {
+                "RuleDoesNotExist" => {
                     UpdateReceiptRuleError::RuleDoesNotExist(String::from(parsed_error.message))
                 }
-                "RuleSetDoesNotExistException" => {
+                "RuleSetDoesNotExist" => {
                     UpdateReceiptRuleError::RuleSetDoesNotExist(String::from(parsed_error.message))
                 }
                 _ => UpdateReceiptRuleError::Unknown(String::from(body)),
@@ -14539,10 +14517,10 @@ impl UpdateTemplateError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidTemplateException" => {
+                "InvalidTemplate" => {
                     UpdateTemplateError::InvalidTemplate(String::from(parsed_error.message))
                 }
-                "TemplateDoesNotExistException" => {
+                "TemplateDoesNotExist" => {
                     UpdateTemplateError::TemplateDoesNotExist(String::from(parsed_error.message))
                 }
                 _ => UpdateTemplateError::Unknown(String::from(body)),

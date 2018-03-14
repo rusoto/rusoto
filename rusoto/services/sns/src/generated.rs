@@ -2637,18 +2637,16 @@ impl AddPermissionError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "AuthorizationErrorException" => {
+                "AuthorizationError" => {
                     AddPermissionError::AuthorizationError(String::from(parsed_error.message))
                 }
-                "InternalErrorException" => {
+                "InternalError" => {
                     AddPermissionError::InternalError(String::from(parsed_error.message))
                 }
-                "InvalidParameterException" => {
+                "InvalidParameter" => {
                     AddPermissionError::InvalidParameter(String::from(parsed_error.message))
                 }
-                "NotFoundException" => {
-                    AddPermissionError::NotFound(String::from(parsed_error.message))
-                }
+                "NotFound" => AddPermissionError::NotFound(String::from(parsed_error.message)),
                 _ => AddPermissionError::Unknown(String::from(body)),
             },
             Err(_) => AddPermissionError::Unknown(body.to_string()),
@@ -2732,20 +2730,16 @@ impl CheckIfPhoneNumberIsOptedOutError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "AuthorizationErrorException" => {
-                    CheckIfPhoneNumberIsOptedOutError::AuthorizationError(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "InternalErrorException" => CheckIfPhoneNumberIsOptedOutError::InternalError(
+                "AuthorizationError" => CheckIfPhoneNumberIsOptedOutError::AuthorizationError(
                     String::from(parsed_error.message),
                 ),
-                "InvalidParameterException" => {
-                    CheckIfPhoneNumberIsOptedOutError::InvalidParameter(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "ThrottledException" => {
+                "InternalError" => CheckIfPhoneNumberIsOptedOutError::InternalError(String::from(
+                    parsed_error.message,
+                )),
+                "InvalidParameter" => CheckIfPhoneNumberIsOptedOutError::InvalidParameter(
+                    String::from(parsed_error.message),
+                ),
+                "Throttled" => {
                     CheckIfPhoneNumberIsOptedOutError::Throttled(String::from(parsed_error.message))
                 }
                 _ => CheckIfPhoneNumberIsOptedOutError::Unknown(String::from(body)),
@@ -2835,19 +2829,19 @@ impl ConfirmSubscriptionError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "AuthorizationErrorException" => {
+                "AuthorizationError" => {
                     ConfirmSubscriptionError::AuthorizationError(String::from(parsed_error.message))
                 }
-                "InternalErrorException" => {
+                "InternalError" => {
                     ConfirmSubscriptionError::InternalError(String::from(parsed_error.message))
                 }
-                "InvalidParameterException" => {
+                "InvalidParameter" => {
                     ConfirmSubscriptionError::InvalidParameter(String::from(parsed_error.message))
                 }
-                "NotFoundException" => {
+                "NotFound" => {
                     ConfirmSubscriptionError::NotFound(String::from(parsed_error.message))
                 }
-                "SubscriptionLimitExceededException" => {
+                "SubscriptionLimitExceeded" => {
                     ConfirmSubscriptionError::SubscriptionLimitExceeded(String::from(
                         parsed_error.message,
                     ))
@@ -2936,15 +2930,13 @@ impl CreatePlatformApplicationError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "AuthorizationErrorException" => {
-                    CreatePlatformApplicationError::AuthorizationError(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "InternalErrorException" => CreatePlatformApplicationError::InternalError(
+                "AuthorizationError" => CreatePlatformApplicationError::AuthorizationError(
                     String::from(parsed_error.message),
                 ),
-                "InvalidParameterException" => CreatePlatformApplicationError::InvalidParameter(
+                "InternalError" => CreatePlatformApplicationError::InternalError(String::from(
+                    parsed_error.message,
+                )),
+                "InvalidParameter" => CreatePlatformApplicationError::InvalidParameter(
                     String::from(parsed_error.message),
                 ),
                 _ => CreatePlatformApplicationError::Unknown(String::from(body)),
@@ -3031,16 +3023,16 @@ impl CreatePlatformEndpointError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "AuthorizationErrorException" => CreatePlatformEndpointError::AuthorizationError(
+                "AuthorizationError" => CreatePlatformEndpointError::AuthorizationError(
                     String::from(parsed_error.message),
                 ),
-                "InternalErrorException" => {
+                "InternalError" => {
                     CreatePlatformEndpointError::InternalError(String::from(parsed_error.message))
                 }
-                "InvalidParameterException" => CreatePlatformEndpointError::InvalidParameter(
-                    String::from(parsed_error.message),
-                ),
-                "NotFoundException" => {
+                "InvalidParameter" => CreatePlatformEndpointError::InvalidParameter(String::from(
+                    parsed_error.message,
+                )),
+                "NotFound" => {
                     CreatePlatformEndpointError::NotFound(String::from(parsed_error.message))
                 }
                 _ => CreatePlatformEndpointError::Unknown(String::from(body)),
@@ -3128,16 +3120,16 @@ impl CreateTopicError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "AuthorizationErrorException" => {
+                "AuthorizationError" => {
                     CreateTopicError::AuthorizationError(String::from(parsed_error.message))
                 }
-                "InternalErrorException" => {
+                "InternalError" => {
                     CreateTopicError::InternalError(String::from(parsed_error.message))
                 }
-                "InvalidParameterException" => {
+                "InvalidParameter" => {
                     CreateTopicError::InvalidParameter(String::from(parsed_error.message))
                 }
-                "TopicLimitExceededException" => {
+                "TopicLimitExceeded" => {
                     CreateTopicError::TopicLimitExceeded(String::from(parsed_error.message))
                 }
                 _ => CreateTopicError::Unknown(String::from(body)),
@@ -3221,13 +3213,13 @@ impl DeleteEndpointError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "AuthorizationErrorException" => {
+                "AuthorizationError" => {
                     DeleteEndpointError::AuthorizationError(String::from(parsed_error.message))
                 }
-                "InternalErrorException" => {
+                "InternalError" => {
                     DeleteEndpointError::InternalError(String::from(parsed_error.message))
                 }
-                "InvalidParameterException" => {
+                "InvalidParameter" => {
                     DeleteEndpointError::InvalidParameter(String::from(parsed_error.message))
                 }
                 _ => DeleteEndpointError::Unknown(String::from(body)),
@@ -3310,15 +3302,13 @@ impl DeletePlatformApplicationError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "AuthorizationErrorException" => {
-                    DeletePlatformApplicationError::AuthorizationError(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "InternalErrorException" => DeletePlatformApplicationError::InternalError(
+                "AuthorizationError" => DeletePlatformApplicationError::AuthorizationError(
                     String::from(parsed_error.message),
                 ),
-                "InvalidParameterException" => DeletePlatformApplicationError::InvalidParameter(
+                "InternalError" => DeletePlatformApplicationError::InternalError(String::from(
+                    parsed_error.message,
+                )),
+                "InvalidParameter" => DeletePlatformApplicationError::InvalidParameter(
                     String::from(parsed_error.message),
                 ),
                 _ => DeletePlatformApplicationError::Unknown(String::from(body)),
@@ -3405,18 +3395,16 @@ impl DeleteTopicError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "AuthorizationErrorException" => {
+                "AuthorizationError" => {
                     DeleteTopicError::AuthorizationError(String::from(parsed_error.message))
                 }
-                "InternalErrorException" => {
+                "InternalError" => {
                     DeleteTopicError::InternalError(String::from(parsed_error.message))
                 }
-                "InvalidParameterException" => {
+                "InvalidParameter" => {
                     DeleteTopicError::InvalidParameter(String::from(parsed_error.message))
                 }
-                "NotFoundException" => {
-                    DeleteTopicError::NotFound(String::from(parsed_error.message))
-                }
+                "NotFound" => DeleteTopicError::NotFound(String::from(parsed_error.message)),
                 _ => DeleteTopicError::Unknown(String::from(body)),
             },
             Err(_) => DeleteTopicError::Unknown(body.to_string()),
@@ -3500,16 +3488,16 @@ impl GetEndpointAttributesError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "AuthorizationErrorException" => GetEndpointAttributesError::AuthorizationError(
+                "AuthorizationError" => GetEndpointAttributesError::AuthorizationError(
                     String::from(parsed_error.message),
                 ),
-                "InternalErrorException" => {
+                "InternalError" => {
                     GetEndpointAttributesError::InternalError(String::from(parsed_error.message))
                 }
-                "InvalidParameterException" => {
+                "InvalidParameter" => {
                     GetEndpointAttributesError::InvalidParameter(String::from(parsed_error.message))
                 }
-                "NotFoundException" => {
+                "NotFound" => {
                     GetEndpointAttributesError::NotFound(String::from(parsed_error.message))
                 }
                 _ => GetEndpointAttributesError::Unknown(String::from(body)),
@@ -3597,22 +3585,18 @@ impl GetPlatformApplicationAttributesError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "AuthorizationErrorException" => {
-                    GetPlatformApplicationAttributesError::AuthorizationError(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "InternalErrorException" => GetPlatformApplicationAttributesError::InternalError(
+                "AuthorizationError" => GetPlatformApplicationAttributesError::AuthorizationError(
                     String::from(parsed_error.message),
                 ),
-                "InvalidParameterException" => {
-                    GetPlatformApplicationAttributesError::InvalidParameter(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "NotFoundException" => GetPlatformApplicationAttributesError::NotFound(
+                "InternalError" => GetPlatformApplicationAttributesError::InternalError(
                     String::from(parsed_error.message),
                 ),
+                "InvalidParameter" => GetPlatformApplicationAttributesError::InvalidParameter(
+                    String::from(parsed_error.message),
+                ),
+                "NotFound" => GetPlatformApplicationAttributesError::NotFound(String::from(
+                    parsed_error.message,
+                )),
                 _ => GetPlatformApplicationAttributesError::Unknown(String::from(body)),
             },
             Err(_) => GetPlatformApplicationAttributesError::Unknown(body.to_string()),
@@ -3698,18 +3682,16 @@ impl GetSMSAttributesError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "AuthorizationErrorException" => {
+                "AuthorizationError" => {
                     GetSMSAttributesError::AuthorizationError(String::from(parsed_error.message))
                 }
-                "InternalErrorException" => {
+                "InternalError" => {
                     GetSMSAttributesError::InternalError(String::from(parsed_error.message))
                 }
-                "InvalidParameterException" => {
+                "InvalidParameter" => {
                     GetSMSAttributesError::InvalidParameter(String::from(parsed_error.message))
                 }
-                "ThrottledException" => {
-                    GetSMSAttributesError::Throttled(String::from(parsed_error.message))
-                }
+                "Throttled" => GetSMSAttributesError::Throttled(String::from(parsed_error.message)),
                 _ => GetSMSAttributesError::Unknown(String::from(body)),
             },
             Err(_) => GetSMSAttributesError::Unknown(body.to_string()),
@@ -3793,18 +3775,16 @@ impl GetSubscriptionAttributesError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "AuthorizationErrorException" => {
-                    GetSubscriptionAttributesError::AuthorizationError(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "InternalErrorException" => GetSubscriptionAttributesError::InternalError(
+                "AuthorizationError" => GetSubscriptionAttributesError::AuthorizationError(
                     String::from(parsed_error.message),
                 ),
-                "InvalidParameterException" => GetSubscriptionAttributesError::InvalidParameter(
+                "InternalError" => GetSubscriptionAttributesError::InternalError(String::from(
+                    parsed_error.message,
+                )),
+                "InvalidParameter" => GetSubscriptionAttributesError::InvalidParameter(
                     String::from(parsed_error.message),
                 ),
-                "NotFoundException" => {
+                "NotFound" => {
                     GetSubscriptionAttributesError::NotFound(String::from(parsed_error.message))
                 }
                 _ => GetSubscriptionAttributesError::Unknown(String::from(body)),
@@ -3892,18 +3872,16 @@ impl GetTopicAttributesError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "AuthorizationErrorException" => {
+                "AuthorizationError" => {
                     GetTopicAttributesError::AuthorizationError(String::from(parsed_error.message))
                 }
-                "InternalErrorException" => {
+                "InternalError" => {
                     GetTopicAttributesError::InternalError(String::from(parsed_error.message))
                 }
-                "InvalidParameterException" => {
+                "InvalidParameter" => {
                     GetTopicAttributesError::InvalidParameter(String::from(parsed_error.message))
                 }
-                "NotFoundException" => {
-                    GetTopicAttributesError::NotFound(String::from(parsed_error.message))
-                }
+                "NotFound" => GetTopicAttributesError::NotFound(String::from(parsed_error.message)),
                 _ => GetTopicAttributesError::Unknown(String::from(body)),
             },
             Err(_) => GetTopicAttributesError::Unknown(body.to_string()),
@@ -3989,24 +3967,20 @@ impl ListEndpointsByPlatformApplicationError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "AuthorizationErrorException" => {
+                "AuthorizationError" => {
                     ListEndpointsByPlatformApplicationError::AuthorizationError(String::from(
                         parsed_error.message,
                     ))
                 }
-                "InternalErrorException" => {
-                    ListEndpointsByPlatformApplicationError::InternalError(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "InvalidParameterException" => {
-                    ListEndpointsByPlatformApplicationError::InvalidParameter(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "NotFoundException" => ListEndpointsByPlatformApplicationError::NotFound(
+                "InternalError" => ListEndpointsByPlatformApplicationError::InternalError(
                     String::from(parsed_error.message),
                 ),
+                "InvalidParameter" => ListEndpointsByPlatformApplicationError::InvalidParameter(
+                    String::from(parsed_error.message),
+                ),
+                "NotFound" => ListEndpointsByPlatformApplicationError::NotFound(String::from(
+                    parsed_error.message,
+                )),
                 _ => ListEndpointsByPlatformApplicationError::Unknown(String::from(body)),
             },
             Err(_) => ListEndpointsByPlatformApplicationError::Unknown(body.to_string()),
@@ -4092,18 +4066,16 @@ impl ListPhoneNumbersOptedOutError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "AuthorizationErrorException" => {
-                    ListPhoneNumbersOptedOutError::AuthorizationError(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "InternalErrorException" => {
-                    ListPhoneNumbersOptedOutError::InternalError(String::from(parsed_error.message))
-                }
-                "InvalidParameterException" => ListPhoneNumbersOptedOutError::InvalidParameter(
+                "AuthorizationError" => ListPhoneNumbersOptedOutError::AuthorizationError(
                     String::from(parsed_error.message),
                 ),
-                "ThrottledException" => {
+                "InternalError" => {
+                    ListPhoneNumbersOptedOutError::InternalError(String::from(parsed_error.message))
+                }
+                "InvalidParameter" => ListPhoneNumbersOptedOutError::InvalidParameter(
+                    String::from(parsed_error.message),
+                ),
+                "Throttled" => {
                     ListPhoneNumbersOptedOutError::Throttled(String::from(parsed_error.message))
                 }
                 _ => ListPhoneNumbersOptedOutError::Unknown(String::from(body)),
@@ -4189,15 +4161,13 @@ impl ListPlatformApplicationsError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "AuthorizationErrorException" => {
-                    ListPlatformApplicationsError::AuthorizationError(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "InternalErrorException" => {
+                "AuthorizationError" => ListPlatformApplicationsError::AuthorizationError(
+                    String::from(parsed_error.message),
+                ),
+                "InternalError" => {
                     ListPlatformApplicationsError::InternalError(String::from(parsed_error.message))
                 }
-                "InvalidParameterException" => ListPlatformApplicationsError::InvalidParameter(
+                "InvalidParameter" => ListPlatformApplicationsError::InvalidParameter(
                     String::from(parsed_error.message),
                 ),
                 _ => ListPlatformApplicationsError::Unknown(String::from(body)),
@@ -4282,13 +4252,13 @@ impl ListSubscriptionsError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "AuthorizationErrorException" => {
+                "AuthorizationError" => {
                     ListSubscriptionsError::AuthorizationError(String::from(parsed_error.message))
                 }
-                "InternalErrorException" => {
+                "InternalError" => {
                     ListSubscriptionsError::InternalError(String::from(parsed_error.message))
                 }
-                "InvalidParameterException" => {
+                "InvalidParameter" => {
                     ListSubscriptionsError::InvalidParameter(String::from(parsed_error.message))
                 }
                 _ => ListSubscriptionsError::Unknown(String::from(body)),
@@ -4375,18 +4345,16 @@ impl ListSubscriptionsByTopicError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "AuthorizationErrorException" => {
-                    ListSubscriptionsByTopicError::AuthorizationError(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "InternalErrorException" => {
-                    ListSubscriptionsByTopicError::InternalError(String::from(parsed_error.message))
-                }
-                "InvalidParameterException" => ListSubscriptionsByTopicError::InvalidParameter(
+                "AuthorizationError" => ListSubscriptionsByTopicError::AuthorizationError(
                     String::from(parsed_error.message),
                 ),
-                "NotFoundException" => {
+                "InternalError" => {
+                    ListSubscriptionsByTopicError::InternalError(String::from(parsed_error.message))
+                }
+                "InvalidParameter" => ListSubscriptionsByTopicError::InvalidParameter(
+                    String::from(parsed_error.message),
+                ),
+                "NotFound" => {
                     ListSubscriptionsByTopicError::NotFound(String::from(parsed_error.message))
                 }
                 _ => ListSubscriptionsByTopicError::Unknown(String::from(body)),
@@ -4472,13 +4440,13 @@ impl ListTopicsError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "AuthorizationErrorException" => {
+                "AuthorizationError" => {
                     ListTopicsError::AuthorizationError(String::from(parsed_error.message))
                 }
-                "InternalErrorException" => {
+                "InternalError" => {
                     ListTopicsError::InternalError(String::from(parsed_error.message))
                 }
-                "InvalidParameterException" => {
+                "InvalidParameter" => {
                     ListTopicsError::InvalidParameter(String::from(parsed_error.message))
                 }
                 _ => ListTopicsError::Unknown(String::from(body)),
@@ -4563,18 +4531,16 @@ impl OptInPhoneNumberError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "AuthorizationErrorException" => {
+                "AuthorizationError" => {
                     OptInPhoneNumberError::AuthorizationError(String::from(parsed_error.message))
                 }
-                "InternalErrorException" => {
+                "InternalError" => {
                     OptInPhoneNumberError::InternalError(String::from(parsed_error.message))
                 }
-                "InvalidParameterException" => {
+                "InvalidParameter" => {
                     OptInPhoneNumberError::InvalidParameter(String::from(parsed_error.message))
                 }
-                "ThrottledException" => {
-                    OptInPhoneNumberError::Throttled(String::from(parsed_error.message))
-                }
+                "Throttled" => OptInPhoneNumberError::Throttled(String::from(parsed_error.message)),
                 _ => OptInPhoneNumberError::Unknown(String::from(body)),
             },
             Err(_) => OptInPhoneNumberError::Unknown(body.to_string()),
@@ -4664,23 +4630,21 @@ impl PublishError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "AuthorizationErrorException" => {
+                "AuthorizationError" => {
                     PublishError::AuthorizationError(String::from(parsed_error.message))
                 }
-                "EndpointDisabledException" => {
+                "EndpointDisabled" => {
                     PublishError::EndpointDisabled(String::from(parsed_error.message))
                 }
-                "InternalErrorException" => {
-                    PublishError::InternalError(String::from(parsed_error.message))
-                }
-                "InvalidParameterException" => {
+                "InternalError" => PublishError::InternalError(String::from(parsed_error.message)),
+                "InvalidParameter" => {
                     PublishError::InvalidParameter(String::from(parsed_error.message))
                 }
-                "InvalidParameterValueException" => {
+                "ParameterValueInvalid" => {
                     PublishError::InvalidParameterValue(String::from(parsed_error.message))
                 }
-                "NotFoundException" => PublishError::NotFound(String::from(parsed_error.message)),
-                "PlatformApplicationDisabledException" => {
+                "NotFound" => PublishError::NotFound(String::from(parsed_error.message)),
+                "PlatformApplicationDisabled" => {
                     PublishError::PlatformApplicationDisabled(String::from(parsed_error.message))
                 }
                 _ => PublishError::Unknown(String::from(body)),
@@ -4769,18 +4733,16 @@ impl RemovePermissionError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "AuthorizationErrorException" => {
+                "AuthorizationError" => {
                     RemovePermissionError::AuthorizationError(String::from(parsed_error.message))
                 }
-                "InternalErrorException" => {
+                "InternalError" => {
                     RemovePermissionError::InternalError(String::from(parsed_error.message))
                 }
-                "InvalidParameterException" => {
+                "InvalidParameter" => {
                     RemovePermissionError::InvalidParameter(String::from(parsed_error.message))
                 }
-                "NotFoundException" => {
-                    RemovePermissionError::NotFound(String::from(parsed_error.message))
-                }
+                "NotFound" => RemovePermissionError::NotFound(String::from(parsed_error.message)),
                 _ => RemovePermissionError::Unknown(String::from(body)),
             },
             Err(_) => RemovePermissionError::Unknown(body.to_string()),
@@ -4864,16 +4826,16 @@ impl SetEndpointAttributesError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "AuthorizationErrorException" => SetEndpointAttributesError::AuthorizationError(
+                "AuthorizationError" => SetEndpointAttributesError::AuthorizationError(
                     String::from(parsed_error.message),
                 ),
-                "InternalErrorException" => {
+                "InternalError" => {
                     SetEndpointAttributesError::InternalError(String::from(parsed_error.message))
                 }
-                "InvalidParameterException" => {
+                "InvalidParameter" => {
                     SetEndpointAttributesError::InvalidParameter(String::from(parsed_error.message))
                 }
-                "NotFoundException" => {
+                "NotFound" => {
                     SetEndpointAttributesError::NotFound(String::from(parsed_error.message))
                 }
                 _ => SetEndpointAttributesError::Unknown(String::from(body)),
@@ -4961,22 +4923,18 @@ impl SetPlatformApplicationAttributesError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "AuthorizationErrorException" => {
-                    SetPlatformApplicationAttributesError::AuthorizationError(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "InternalErrorException" => SetPlatformApplicationAttributesError::InternalError(
+                "AuthorizationError" => SetPlatformApplicationAttributesError::AuthorizationError(
                     String::from(parsed_error.message),
                 ),
-                "InvalidParameterException" => {
-                    SetPlatformApplicationAttributesError::InvalidParameter(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "NotFoundException" => SetPlatformApplicationAttributesError::NotFound(
+                "InternalError" => SetPlatformApplicationAttributesError::InternalError(
                     String::from(parsed_error.message),
                 ),
+                "InvalidParameter" => SetPlatformApplicationAttributesError::InvalidParameter(
+                    String::from(parsed_error.message),
+                ),
+                "NotFound" => SetPlatformApplicationAttributesError::NotFound(String::from(
+                    parsed_error.message,
+                )),
                 _ => SetPlatformApplicationAttributesError::Unknown(String::from(body)),
             },
             Err(_) => SetPlatformApplicationAttributesError::Unknown(body.to_string()),
@@ -5062,18 +5020,16 @@ impl SetSMSAttributesError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "AuthorizationErrorException" => {
+                "AuthorizationError" => {
                     SetSMSAttributesError::AuthorizationError(String::from(parsed_error.message))
                 }
-                "InternalErrorException" => {
+                "InternalError" => {
                     SetSMSAttributesError::InternalError(String::from(parsed_error.message))
                 }
-                "InvalidParameterException" => {
+                "InvalidParameter" => {
                     SetSMSAttributesError::InvalidParameter(String::from(parsed_error.message))
                 }
-                "ThrottledException" => {
-                    SetSMSAttributesError::Throttled(String::from(parsed_error.message))
-                }
+                "Throttled" => SetSMSAttributesError::Throttled(String::from(parsed_error.message)),
                 _ => SetSMSAttributesError::Unknown(String::from(body)),
             },
             Err(_) => SetSMSAttributesError::Unknown(body.to_string()),
@@ -5157,18 +5113,16 @@ impl SetSubscriptionAttributesError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "AuthorizationErrorException" => {
-                    SetSubscriptionAttributesError::AuthorizationError(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "InternalErrorException" => SetSubscriptionAttributesError::InternalError(
+                "AuthorizationError" => SetSubscriptionAttributesError::AuthorizationError(
                     String::from(parsed_error.message),
                 ),
-                "InvalidParameterException" => SetSubscriptionAttributesError::InvalidParameter(
+                "InternalError" => SetSubscriptionAttributesError::InternalError(String::from(
+                    parsed_error.message,
+                )),
+                "InvalidParameter" => SetSubscriptionAttributesError::InvalidParameter(
                     String::from(parsed_error.message),
                 ),
-                "NotFoundException" => {
+                "NotFound" => {
                     SetSubscriptionAttributesError::NotFound(String::from(parsed_error.message))
                 }
                 _ => SetSubscriptionAttributesError::Unknown(String::from(body)),
@@ -5256,18 +5210,16 @@ impl SetTopicAttributesError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "AuthorizationErrorException" => {
+                "AuthorizationError" => {
                     SetTopicAttributesError::AuthorizationError(String::from(parsed_error.message))
                 }
-                "InternalErrorException" => {
+                "InternalError" => {
                     SetTopicAttributesError::InternalError(String::from(parsed_error.message))
                 }
-                "InvalidParameterException" => {
+                "InvalidParameter" => {
                     SetTopicAttributesError::InvalidParameter(String::from(parsed_error.message))
                 }
-                "NotFoundException" => {
-                    SetTopicAttributesError::NotFound(String::from(parsed_error.message))
-                }
+                "NotFound" => SetTopicAttributesError::NotFound(String::from(parsed_error.message)),
                 _ => SetTopicAttributesError::Unknown(String::from(body)),
             },
             Err(_) => SetTopicAttributesError::Unknown(body.to_string()),
@@ -5355,17 +5307,17 @@ impl SubscribeError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "AuthorizationErrorException" => {
+                "AuthorizationError" => {
                     SubscribeError::AuthorizationError(String::from(parsed_error.message))
                 }
-                "InternalErrorException" => {
+                "InternalError" => {
                     SubscribeError::InternalError(String::from(parsed_error.message))
                 }
-                "InvalidParameterException" => {
+                "InvalidParameter" => {
                     SubscribeError::InvalidParameter(String::from(parsed_error.message))
                 }
-                "NotFoundException" => SubscribeError::NotFound(String::from(parsed_error.message)),
-                "SubscriptionLimitExceededException" => {
+                "NotFound" => SubscribeError::NotFound(String::from(parsed_error.message)),
+                "SubscriptionLimitExceeded" => {
                     SubscribeError::SubscriptionLimitExceeded(String::from(parsed_error.message))
                 }
                 _ => SubscribeError::Unknown(String::from(body)),
@@ -5452,18 +5404,16 @@ impl UnsubscribeError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "AuthorizationErrorException" => {
+                "AuthorizationError" => {
                     UnsubscribeError::AuthorizationError(String::from(parsed_error.message))
                 }
-                "InternalErrorException" => {
+                "InternalError" => {
                     UnsubscribeError::InternalError(String::from(parsed_error.message))
                 }
-                "InvalidParameterException" => {
+                "InvalidParameter" => {
                     UnsubscribeError::InvalidParameter(String::from(parsed_error.message))
                 }
-                "NotFoundException" => {
-                    UnsubscribeError::NotFound(String::from(parsed_error.message))
-                }
+                "NotFound" => UnsubscribeError::NotFound(String::from(parsed_error.message)),
                 _ => UnsubscribeError::Unknown(String::from(body)),
             },
             Err(_) => UnsubscribeError::Unknown(body.to_string()),

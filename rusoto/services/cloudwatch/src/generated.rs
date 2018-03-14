@@ -3068,13 +3068,13 @@ impl DeleteDashboardsError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "DashboardNotFoundError" => DeleteDashboardsError::DashboardNotFoundError(
-                    String::from(parsed_error.message),
-                ),
-                "InternalServiceFault" => {
+                "ResourceNotFound" => DeleteDashboardsError::DashboardNotFoundError(String::from(
+                    parsed_error.message,
+                )),
+                "InternalServiceError" => {
                     DeleteDashboardsError::InternalServiceFault(String::from(parsed_error.message))
                 }
-                "InvalidParameterValueException" => {
+                "InvalidParameterValue" => {
                     DeleteDashboardsError::InvalidParameterValue(String::from(parsed_error.message))
                 }
                 _ => DeleteDashboardsError::Unknown(String::from(body)),
@@ -3532,13 +3532,13 @@ impl GetDashboardError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "DashboardNotFoundError" => {
+                "ResourceNotFound" => {
                     GetDashboardError::DashboardNotFoundError(String::from(parsed_error.message))
                 }
-                "InternalServiceFault" => {
+                "InternalServiceError" => {
                     GetDashboardError::InternalServiceFault(String::from(parsed_error.message))
                 }
-                "InvalidParameterValueException" => {
+                "InvalidParameterValue" => {
                     GetDashboardError::InvalidParameterValue(String::from(parsed_error.message))
                 }
                 _ => GetDashboardError::Unknown(String::from(body)),
@@ -3623,24 +3623,20 @@ impl GetMetricStatisticsError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "InternalServiceFault" => GetMetricStatisticsError::InternalServiceFault(
+                "InternalServiceError" => GetMetricStatisticsError::InternalServiceFault(
                     String::from(parsed_error.message),
                 ),
-                "InvalidParameterCombinationException" => {
+                "InvalidParameterCombination" => {
                     GetMetricStatisticsError::InvalidParameterCombination(String::from(
                         parsed_error.message,
                     ))
                 }
-                "InvalidParameterValueException" => {
-                    GetMetricStatisticsError::InvalidParameterValue(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "MissingRequiredParameterException" => {
-                    GetMetricStatisticsError::MissingRequiredParameter(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "InvalidParameterValue" => GetMetricStatisticsError::InvalidParameterValue(
+                    String::from(parsed_error.message),
+                ),
+                "MissingParameter" => GetMetricStatisticsError::MissingRequiredParameter(
+                    String::from(parsed_error.message),
+                ),
                 _ => GetMetricStatisticsError::Unknown(String::from(body)),
             },
             Err(_) => GetMetricStatisticsError::Unknown(body.to_string()),
@@ -3722,10 +3718,10 @@ impl ListDashboardsError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "InternalServiceFault" => {
+                "InternalServiceError" => {
                     ListDashboardsError::InternalServiceFault(String::from(parsed_error.message))
                 }
-                "InvalidParameterValueException" => {
+                "InvalidParameterValue" => {
                     ListDashboardsError::InvalidParameterValue(String::from(parsed_error.message))
                 }
                 _ => ListDashboardsError::Unknown(String::from(body)),
@@ -3805,10 +3801,10 @@ impl ListMetricsError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "InternalServiceFault" => {
+                "InternalServiceError" => {
                     ListMetricsError::InternalServiceFault(String::from(parsed_error.message))
                 }
-                "InvalidParameterValueException" => {
+                "InvalidParameterValue" => {
                     ListMetricsError::InvalidParameterValue(String::from(parsed_error.message))
                 }
                 _ => ListMetricsError::Unknown(String::from(body)),
@@ -3888,10 +3884,10 @@ impl PutDashboardError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "DashboardInvalidInputError" => PutDashboardError::DashboardInvalidInputError(
+                "InvalidParameterInput" => PutDashboardError::DashboardInvalidInputError(
                     String::from(parsed_error.message),
                 ),
-                "InternalServiceFault" => {
+                "InternalServiceError" => {
                     PutDashboardError::InternalServiceFault(String::from(parsed_error.message))
                 }
                 _ => PutDashboardError::Unknown(String::from(body)),
@@ -3969,7 +3965,7 @@ impl PutMetricAlarmError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "LimitExceededFault" => {
+                "LimitExceeded" => {
                     PutMetricAlarmError::LimitExceededFault(String::from(parsed_error.message))
                 }
                 _ => PutMetricAlarmError::Unknown(String::from(body)),
@@ -4052,18 +4048,16 @@ impl PutMetricDataError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "InternalServiceFault" => {
+                "InternalServiceError" => {
                     PutMetricDataError::InternalServiceFault(String::from(parsed_error.message))
                 }
-                "InvalidParameterCombinationException" => {
-                    PutMetricDataError::InvalidParameterCombination(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "InvalidParameterValueException" => {
+                "InvalidParameterCombination" => PutMetricDataError::InvalidParameterCombination(
+                    String::from(parsed_error.message),
+                ),
+                "InvalidParameterValue" => {
                     PutMetricDataError::InvalidParameterValue(String::from(parsed_error.message))
                 }
-                "MissingRequiredParameterException" => {
+                "MissingParameter" => {
                     PutMetricDataError::MissingRequiredParameter(String::from(parsed_error.message))
                 }
                 _ => PutMetricDataError::Unknown(String::from(body)),
@@ -4145,7 +4139,7 @@ impl SetAlarmStateError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidFormatFault" => {
+                "InvalidFormat" => {
                     SetAlarmStateError::InvalidFormatFault(String::from(parsed_error.message))
                 }
                 "ResourceNotFound" => {

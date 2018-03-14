@@ -2604,9 +2604,9 @@ pub struct VersionInformation {
 #[derive(Debug, PartialEq)]
 pub enum AssociateRoleToGroupError {
     /// <p>General Error</p>
-    InternalServerError(String),
-    /// <p>General Error</p>
     BadRequest(String),
+    /// <p>General Error</p>
+    InternalServerError(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -2630,11 +2630,11 @@ impl AssociateRoleToGroupError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "InternalServerErrorException" => {
-                        AssociateRoleToGroupError::InternalServerError(String::from(error_message))
-                    }
                     "BadRequestException" => {
                         AssociateRoleToGroupError::BadRequest(String::from(error_message))
+                    }
+                    "InternalServerErrorException" => {
+                        AssociateRoleToGroupError::InternalServerError(String::from(error_message))
                     }
                     "ValidationException" => {
                         AssociateRoleToGroupError::Validation(error_message.to_string())
@@ -2675,8 +2675,8 @@ impl fmt::Display for AssociateRoleToGroupError {
 impl Error for AssociateRoleToGroupError {
     fn description(&self) -> &str {
         match *self {
-            AssociateRoleToGroupError::InternalServerError(ref cause) => cause,
             AssociateRoleToGroupError::BadRequest(ref cause) => cause,
+            AssociateRoleToGroupError::InternalServerError(ref cause) => cause,
             AssociateRoleToGroupError::Validation(ref cause) => cause,
             AssociateRoleToGroupError::Credentials(ref err) => err.description(),
             AssociateRoleToGroupError::HttpDispatch(ref dispatch_error) => {
@@ -2690,9 +2690,9 @@ impl Error for AssociateRoleToGroupError {
 #[derive(Debug, PartialEq)]
 pub enum AssociateServiceRoleToAccountError {
     /// <p>General Error</p>
-    InternalServerError(String),
-    /// <p>General Error</p>
     BadRequest(String),
+    /// <p>General Error</p>
+    InternalServerError(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -2716,13 +2716,13 @@ impl AssociateServiceRoleToAccountError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
+                    "BadRequestException" => {
+                        AssociateServiceRoleToAccountError::BadRequest(String::from(error_message))
+                    }
                     "InternalServerErrorException" => {
                         AssociateServiceRoleToAccountError::InternalServerError(String::from(
                             error_message,
                         ))
-                    }
-                    "BadRequestException" => {
-                        AssociateServiceRoleToAccountError::BadRequest(String::from(error_message))
                     }
                     "ValidationException" => {
                         AssociateServiceRoleToAccountError::Validation(error_message.to_string())
@@ -2763,8 +2763,8 @@ impl fmt::Display for AssociateServiceRoleToAccountError {
 impl Error for AssociateServiceRoleToAccountError {
     fn description(&self) -> &str {
         match *self {
-            AssociateServiceRoleToAccountError::InternalServerError(ref cause) => cause,
             AssociateServiceRoleToAccountError::BadRequest(ref cause) => cause,
+            AssociateServiceRoleToAccountError::InternalServerError(ref cause) => cause,
             AssociateServiceRoleToAccountError::Validation(ref cause) => cause,
             AssociateServiceRoleToAccountError::Credentials(ref err) => err.description(),
             AssociateServiceRoleToAccountError::HttpDispatch(ref dispatch_error) => {
@@ -3414,9 +3414,9 @@ impl Error for CreateGroupError {
 #[derive(Debug, PartialEq)]
 pub enum CreateGroupCertificateAuthorityError {
     /// <p>General Error</p>
-    InternalServerError(String),
-    /// <p>General Error</p>
     BadRequest(String),
+    /// <p>General Error</p>
+    InternalServerError(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -3440,14 +3440,14 @@ impl CreateGroupCertificateAuthorityError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
+                    "BadRequestException" => CreateGroupCertificateAuthorityError::BadRequest(
+                        String::from(error_message),
+                    ),
                     "InternalServerErrorException" => {
                         CreateGroupCertificateAuthorityError::InternalServerError(String::from(
                             error_message,
                         ))
                     }
-                    "BadRequestException" => CreateGroupCertificateAuthorityError::BadRequest(
-                        String::from(error_message),
-                    ),
                     "ValidationException" => {
                         CreateGroupCertificateAuthorityError::Validation(error_message.to_string())
                     }
@@ -3487,8 +3487,8 @@ impl fmt::Display for CreateGroupCertificateAuthorityError {
 impl Error for CreateGroupCertificateAuthorityError {
     fn description(&self) -> &str {
         match *self {
-            CreateGroupCertificateAuthorityError::InternalServerError(ref cause) => cause,
             CreateGroupCertificateAuthorityError::BadRequest(ref cause) => cause,
+            CreateGroupCertificateAuthorityError::InternalServerError(ref cause) => cause,
             CreateGroupCertificateAuthorityError::Validation(ref cause) => cause,
             CreateGroupCertificateAuthorityError::Credentials(ref err) => err.description(),
             CreateGroupCertificateAuthorityError::HttpDispatch(ref dispatch_error) => {
@@ -4708,9 +4708,9 @@ impl Error for DeleteSubscriptionDefinitionError {
 #[derive(Debug, PartialEq)]
 pub enum DisassociateRoleFromGroupError {
     /// <p>General Error</p>
-    InternalServerError(String),
-    /// <p>General Error</p>
     BadRequest(String),
+    /// <p>General Error</p>
+    InternalServerError(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -4734,13 +4734,13 @@ impl DisassociateRoleFromGroupError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
+                    "BadRequestException" => {
+                        DisassociateRoleFromGroupError::BadRequest(String::from(error_message))
+                    }
                     "InternalServerErrorException" => {
                         DisassociateRoleFromGroupError::InternalServerError(String::from(
                             error_message,
                         ))
-                    }
-                    "BadRequestException" => {
-                        DisassociateRoleFromGroupError::BadRequest(String::from(error_message))
                     }
                     "ValidationException" => {
                         DisassociateRoleFromGroupError::Validation(error_message.to_string())
@@ -4781,8 +4781,8 @@ impl fmt::Display for DisassociateRoleFromGroupError {
 impl Error for DisassociateRoleFromGroupError {
     fn description(&self) -> &str {
         match *self {
-            DisassociateRoleFromGroupError::InternalServerError(ref cause) => cause,
             DisassociateRoleFromGroupError::BadRequest(ref cause) => cause,
+            DisassociateRoleFromGroupError::InternalServerError(ref cause) => cause,
             DisassociateRoleFromGroupError::Validation(ref cause) => cause,
             DisassociateRoleFromGroupError::Credentials(ref err) => err.description(),
             DisassociateRoleFromGroupError::HttpDispatch(ref dispatch_error) => {
@@ -4878,9 +4878,9 @@ impl Error for DisassociateServiceRoleFromAccountError {
 #[derive(Debug, PartialEq)]
 pub enum GetAssociatedRoleError {
     /// <p>General Error</p>
-    InternalServerError(String),
-    /// <p>General Error</p>
     BadRequest(String),
+    /// <p>General Error</p>
+    InternalServerError(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -4904,11 +4904,11 @@ impl GetAssociatedRoleError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "InternalServerErrorException" => {
-                        GetAssociatedRoleError::InternalServerError(String::from(error_message))
-                    }
                     "BadRequestException" => {
                         GetAssociatedRoleError::BadRequest(String::from(error_message))
+                    }
+                    "InternalServerErrorException" => {
+                        GetAssociatedRoleError::InternalServerError(String::from(error_message))
                     }
                     "ValidationException" => {
                         GetAssociatedRoleError::Validation(error_message.to_string())
@@ -4949,8 +4949,8 @@ impl fmt::Display for GetAssociatedRoleError {
 impl Error for GetAssociatedRoleError {
     fn description(&self) -> &str {
         match *self {
-            GetAssociatedRoleError::InternalServerError(ref cause) => cause,
             GetAssociatedRoleError::BadRequest(ref cause) => cause,
+            GetAssociatedRoleError::InternalServerError(ref cause) => cause,
             GetAssociatedRoleError::Validation(ref cause) => cause,
             GetAssociatedRoleError::Credentials(ref err) => err.description(),
             GetAssociatedRoleError::HttpDispatch(ref dispatch_error) => {

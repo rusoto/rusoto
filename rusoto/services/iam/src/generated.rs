@@ -13052,22 +13052,18 @@ impl AddClientIDToOpenIDConnectProviderError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidInputException" => AddClientIDToOpenIDConnectProviderError::InvalidInput(
+                "InvalidInput" => AddClientIDToOpenIDConnectProviderError::InvalidInput(
                     String::from(parsed_error.message),
                 ),
-                "LimitExceededException" => {
-                    AddClientIDToOpenIDConnectProviderError::LimitExceeded(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "NoSuchEntityException" => AddClientIDToOpenIDConnectProviderError::NoSuchEntity(
+                "LimitExceeded" => AddClientIDToOpenIDConnectProviderError::LimitExceeded(
                     String::from(parsed_error.message),
                 ),
-                "ServiceFailureException" => {
-                    AddClientIDToOpenIDConnectProviderError::ServiceFailure(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "NoSuchEntity" => AddClientIDToOpenIDConnectProviderError::NoSuchEntity(
+                    String::from(parsed_error.message),
+                ),
+                "ServiceFailure" => AddClientIDToOpenIDConnectProviderError::ServiceFailure(
+                    String::from(parsed_error.message),
+                ),
                 _ => AddClientIDToOpenIDConnectProviderError::Unknown(String::from(body)),
             },
             Err(_) => AddClientIDToOpenIDConnectProviderError::Unknown(body.to_string()),
@@ -13155,25 +13151,21 @@ impl AddRoleToInstanceProfileError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "EntityAlreadyExistsException" => {
-                    AddRoleToInstanceProfileError::EntityAlreadyExists(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "LimitExceededException" => {
-                    AddRoleToInstanceProfileError::LimitExceeded(String::from(parsed_error.message))
-                }
-                "NoSuchEntityException" => {
-                    AddRoleToInstanceProfileError::NoSuchEntity(String::from(parsed_error.message))
-                }
-                "ServiceFailureException" => AddRoleToInstanceProfileError::ServiceFailure(
+                "EntityAlreadyExists" => AddRoleToInstanceProfileError::EntityAlreadyExists(
                     String::from(parsed_error.message),
                 ),
-                "UnmodifiableEntityException" => {
-                    AddRoleToInstanceProfileError::UnmodifiableEntity(String::from(
-                        parsed_error.message,
-                    ))
+                "LimitExceeded" => {
+                    AddRoleToInstanceProfileError::LimitExceeded(String::from(parsed_error.message))
                 }
+                "NoSuchEntity" => {
+                    AddRoleToInstanceProfileError::NoSuchEntity(String::from(parsed_error.message))
+                }
+                "ServiceFailure" => AddRoleToInstanceProfileError::ServiceFailure(String::from(
+                    parsed_error.message,
+                )),
+                "UnmodifiableEntity" => AddRoleToInstanceProfileError::UnmodifiableEntity(
+                    String::from(parsed_error.message),
+                ),
                 _ => AddRoleToInstanceProfileError::Unknown(String::from(body)),
             },
             Err(_) => AddRoleToInstanceProfileError::Unknown(body.to_string()),
@@ -13258,13 +13250,13 @@ impl AddUserToGroupError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "LimitExceededException" => {
+                "LimitExceeded" => {
                     AddUserToGroupError::LimitExceeded(String::from(parsed_error.message))
                 }
-                "NoSuchEntityException" => {
+                "NoSuchEntity" => {
                     AddUserToGroupError::NoSuchEntity(String::from(parsed_error.message))
                 }
-                "ServiceFailureException" => {
+                "ServiceFailure" => {
                     AddUserToGroupError::ServiceFailure(String::from(parsed_error.message))
                 }
                 _ => AddUserToGroupError::Unknown(String::from(body)),
@@ -13351,19 +13343,19 @@ impl AttachGroupPolicyError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidInputException" => {
+                "InvalidInput" => {
                     AttachGroupPolicyError::InvalidInput(String::from(parsed_error.message))
                 }
-                "LimitExceededException" => {
+                "LimitExceeded" => {
                     AttachGroupPolicyError::LimitExceeded(String::from(parsed_error.message))
                 }
-                "NoSuchEntityException" => {
+                "NoSuchEntity" => {
                     AttachGroupPolicyError::NoSuchEntity(String::from(parsed_error.message))
                 }
-                "PolicyNotAttachableException" => {
+                "PolicyNotAttachable" => {
                     AttachGroupPolicyError::PolicyNotAttachable(String::from(parsed_error.message))
                 }
-                "ServiceFailureException" => {
+                "ServiceFailure" => {
                     AttachGroupPolicyError::ServiceFailure(String::from(parsed_error.message))
                 }
                 _ => AttachGroupPolicyError::Unknown(String::from(body)),
@@ -13456,22 +13448,22 @@ impl AttachRolePolicyError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidInputException" => {
+                "InvalidInput" => {
                     AttachRolePolicyError::InvalidInput(String::from(parsed_error.message))
                 }
-                "LimitExceededException" => {
+                "LimitExceeded" => {
                     AttachRolePolicyError::LimitExceeded(String::from(parsed_error.message))
                 }
-                "NoSuchEntityException" => {
+                "NoSuchEntity" => {
                     AttachRolePolicyError::NoSuchEntity(String::from(parsed_error.message))
                 }
-                "PolicyNotAttachableException" => {
+                "PolicyNotAttachable" => {
                     AttachRolePolicyError::PolicyNotAttachable(String::from(parsed_error.message))
                 }
-                "ServiceFailureException" => {
+                "ServiceFailure" => {
                     AttachRolePolicyError::ServiceFailure(String::from(parsed_error.message))
                 }
-                "UnmodifiableEntityException" => {
+                "UnmodifiableEntity" => {
                     AttachRolePolicyError::UnmodifiableEntity(String::from(parsed_error.message))
                 }
                 _ => AttachRolePolicyError::Unknown(String::from(body)),
@@ -13561,19 +13553,19 @@ impl AttachUserPolicyError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidInputException" => {
+                "InvalidInput" => {
                     AttachUserPolicyError::InvalidInput(String::from(parsed_error.message))
                 }
-                "LimitExceededException" => {
+                "LimitExceeded" => {
                     AttachUserPolicyError::LimitExceeded(String::from(parsed_error.message))
                 }
-                "NoSuchEntityException" => {
+                "NoSuchEntity" => {
                     AttachUserPolicyError::NoSuchEntity(String::from(parsed_error.message))
                 }
-                "PolicyNotAttachableException" => {
+                "PolicyNotAttachable" => {
                     AttachUserPolicyError::PolicyNotAttachable(String::from(parsed_error.message))
                 }
-                "ServiceFailureException" => {
+                "ServiceFailure" => {
                     AttachUserPolicyError::ServiceFailure(String::from(parsed_error.message))
                 }
                 _ => AttachUserPolicyError::Unknown(String::from(body)),
@@ -13664,24 +13656,24 @@ impl ChangePasswordError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "EntityTemporarilyUnmodifiableException" => {
+                "EntityTemporarilyUnmodifiable" => {
                     ChangePasswordError::EntityTemporarilyUnmodifiable(String::from(
                         parsed_error.message,
                     ))
                 }
-                "InvalidUserTypeException" => {
+                "InvalidUserType" => {
                     ChangePasswordError::InvalidUserType(String::from(parsed_error.message))
                 }
-                "LimitExceededException" => {
+                "LimitExceeded" => {
                     ChangePasswordError::LimitExceeded(String::from(parsed_error.message))
                 }
-                "NoSuchEntityException" => {
+                "NoSuchEntity" => {
                     ChangePasswordError::NoSuchEntity(String::from(parsed_error.message))
                 }
-                "PasswordPolicyViolationException" => {
+                "PasswordPolicyViolation" => {
                     ChangePasswordError::PasswordPolicyViolation(String::from(parsed_error.message))
                 }
-                "ServiceFailureException" => {
+                "ServiceFailure" => {
                     ChangePasswordError::ServiceFailure(String::from(parsed_error.message))
                 }
                 _ => ChangePasswordError::Unknown(String::from(body)),
@@ -13767,13 +13759,13 @@ impl CreateAccessKeyError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "LimitExceededException" => {
+                "LimitExceeded" => {
                     CreateAccessKeyError::LimitExceeded(String::from(parsed_error.message))
                 }
-                "NoSuchEntityException" => {
+                "NoSuchEntity" => {
                     CreateAccessKeyError::NoSuchEntity(String::from(parsed_error.message))
                 }
-                "ServiceFailureException" => {
+                "ServiceFailure" => {
                     CreateAccessKeyError::ServiceFailure(String::from(parsed_error.message))
                 }
                 _ => CreateAccessKeyError::Unknown(String::from(body)),
@@ -13856,13 +13848,13 @@ impl CreateAccountAliasError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "EntityAlreadyExistsException" => {
+                "EntityAlreadyExists" => {
                     CreateAccountAliasError::EntityAlreadyExists(String::from(parsed_error.message))
                 }
-                "LimitExceededException" => {
+                "LimitExceeded" => {
                     CreateAccountAliasError::LimitExceeded(String::from(parsed_error.message))
                 }
-                "ServiceFailureException" => {
+                "ServiceFailure" => {
                     CreateAccountAliasError::ServiceFailure(String::from(parsed_error.message))
                 }
                 _ => CreateAccountAliasError::Unknown(String::from(body)),
@@ -13949,16 +13941,16 @@ impl CreateGroupError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "EntityAlreadyExistsException" => {
+                "EntityAlreadyExists" => {
                     CreateGroupError::EntityAlreadyExists(String::from(parsed_error.message))
                 }
-                "LimitExceededException" => {
+                "LimitExceeded" => {
                     CreateGroupError::LimitExceeded(String::from(parsed_error.message))
                 }
-                "NoSuchEntityException" => {
+                "NoSuchEntity" => {
                     CreateGroupError::NoSuchEntity(String::from(parsed_error.message))
                 }
-                "ServiceFailureException" => {
+                "ServiceFailure" => {
                     CreateGroupError::ServiceFailure(String::from(parsed_error.message))
                 }
                 _ => CreateGroupError::Unknown(String::from(body)),
@@ -14042,13 +14034,13 @@ impl CreateInstanceProfileError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "EntityAlreadyExistsException" => CreateInstanceProfileError::EntityAlreadyExists(
+                "EntityAlreadyExists" => CreateInstanceProfileError::EntityAlreadyExists(
                     String::from(parsed_error.message),
                 ),
-                "LimitExceededException" => {
+                "LimitExceeded" => {
                     CreateInstanceProfileError::LimitExceeded(String::from(parsed_error.message))
                 }
-                "ServiceFailureException" => {
+                "ServiceFailure" => {
                     CreateInstanceProfileError::ServiceFailure(String::from(parsed_error.message))
                 }
                 _ => CreateInstanceProfileError::Unknown(String::from(body)),
@@ -14137,21 +14129,19 @@ impl CreateLoginProfileError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "EntityAlreadyExistsException" => {
+                "EntityAlreadyExists" => {
                     CreateLoginProfileError::EntityAlreadyExists(String::from(parsed_error.message))
                 }
-                "LimitExceededException" => {
+                "LimitExceeded" => {
                     CreateLoginProfileError::LimitExceeded(String::from(parsed_error.message))
                 }
-                "NoSuchEntityException" => {
+                "NoSuchEntity" => {
                     CreateLoginProfileError::NoSuchEntity(String::from(parsed_error.message))
                 }
-                "PasswordPolicyViolationException" => {
-                    CreateLoginProfileError::PasswordPolicyViolation(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "ServiceFailureException" => {
+                "PasswordPolicyViolation" => CreateLoginProfileError::PasswordPolicyViolation(
+                    String::from(parsed_error.message),
+                ),
+                "ServiceFailure" => {
                     CreateLoginProfileError::ServiceFailure(String::from(parsed_error.message))
                 }
                 _ => CreateLoginProfileError::Unknown(String::from(body)),
@@ -14240,18 +14230,16 @@ impl CreateOpenIDConnectProviderError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "EntityAlreadyExistsException" => {
-                    CreateOpenIDConnectProviderError::EntityAlreadyExists(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "InvalidInputException" => CreateOpenIDConnectProviderError::InvalidInput(
+                "EntityAlreadyExists" => CreateOpenIDConnectProviderError::EntityAlreadyExists(
                     String::from(parsed_error.message),
                 ),
-                "LimitExceededException" => CreateOpenIDConnectProviderError::LimitExceeded(
-                    String::from(parsed_error.message),
-                ),
-                "ServiceFailureException" => CreateOpenIDConnectProviderError::ServiceFailure(
+                "InvalidInput" => CreateOpenIDConnectProviderError::InvalidInput(String::from(
+                    parsed_error.message,
+                )),
+                "LimitExceeded" => CreateOpenIDConnectProviderError::LimitExceeded(String::from(
+                    parsed_error.message,
+                )),
+                "ServiceFailure" => CreateOpenIDConnectProviderError::ServiceFailure(
                     String::from(parsed_error.message),
                 ),
                 _ => CreateOpenIDConnectProviderError::Unknown(String::from(body)),
@@ -14341,19 +14329,19 @@ impl CreatePolicyError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "EntityAlreadyExistsException" => {
+                "EntityAlreadyExists" => {
                     CreatePolicyError::EntityAlreadyExists(String::from(parsed_error.message))
                 }
-                "InvalidInputException" => {
+                "InvalidInput" => {
                     CreatePolicyError::InvalidInput(String::from(parsed_error.message))
                 }
-                "LimitExceededException" => {
+                "LimitExceeded" => {
                     CreatePolicyError::LimitExceeded(String::from(parsed_error.message))
                 }
-                "MalformedPolicyDocumentException" => {
+                "MalformedPolicyDocument" => {
                     CreatePolicyError::MalformedPolicyDocument(String::from(parsed_error.message))
                 }
-                "ServiceFailureException" => {
+                "ServiceFailure" => {
                     CreatePolicyError::ServiceFailure(String::from(parsed_error.message))
                 }
                 _ => CreatePolicyError::Unknown(String::from(body)),
@@ -14442,21 +14430,19 @@ impl CreatePolicyVersionError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidInputException" => {
+                "InvalidInput" => {
                     CreatePolicyVersionError::InvalidInput(String::from(parsed_error.message))
                 }
-                "LimitExceededException" => {
+                "LimitExceeded" => {
                     CreatePolicyVersionError::LimitExceeded(String::from(parsed_error.message))
                 }
-                "MalformedPolicyDocumentException" => {
-                    CreatePolicyVersionError::MalformedPolicyDocument(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "NoSuchEntityException" => {
+                "MalformedPolicyDocument" => CreatePolicyVersionError::MalformedPolicyDocument(
+                    String::from(parsed_error.message),
+                ),
+                "NoSuchEntity" => {
                     CreatePolicyVersionError::NoSuchEntity(String::from(parsed_error.message))
                 }
-                "ServiceFailureException" => {
+                "ServiceFailure" => {
                     CreatePolicyVersionError::ServiceFailure(String::from(parsed_error.message))
                 }
                 _ => CreatePolicyVersionError::Unknown(String::from(body)),
@@ -14547,19 +14533,17 @@ impl CreateRoleError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "EntityAlreadyExistsException" => {
+                "EntityAlreadyExists" => {
                     CreateRoleError::EntityAlreadyExists(String::from(parsed_error.message))
                 }
-                "InvalidInputException" => {
-                    CreateRoleError::InvalidInput(String::from(parsed_error.message))
-                }
-                "LimitExceededException" => {
+                "InvalidInput" => CreateRoleError::InvalidInput(String::from(parsed_error.message)),
+                "LimitExceeded" => {
                     CreateRoleError::LimitExceeded(String::from(parsed_error.message))
                 }
-                "MalformedPolicyDocumentException" => {
+                "MalformedPolicyDocument" => {
                     CreateRoleError::MalformedPolicyDocument(String::from(parsed_error.message))
                 }
-                "ServiceFailureException" => {
+                "ServiceFailure" => {
                     CreateRoleError::ServiceFailure(String::from(parsed_error.message))
                 }
                 _ => CreateRoleError::Unknown(String::from(body)),
@@ -14646,16 +14630,16 @@ impl CreateSAMLProviderError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "EntityAlreadyExistsException" => {
+                "EntityAlreadyExists" => {
                     CreateSAMLProviderError::EntityAlreadyExists(String::from(parsed_error.message))
                 }
-                "InvalidInputException" => {
+                "InvalidInput" => {
                     CreateSAMLProviderError::InvalidInput(String::from(parsed_error.message))
                 }
-                "LimitExceededException" => {
+                "LimitExceeded" => {
                     CreateSAMLProviderError::LimitExceeded(String::from(parsed_error.message))
                 }
-                "ServiceFailureException" => {
+                "ServiceFailure" => {
                     CreateSAMLProviderError::ServiceFailure(String::from(parsed_error.message))
                 }
                 _ => CreateSAMLProviderError::Unknown(String::from(body)),
@@ -14743,16 +14727,16 @@ impl CreateServiceLinkedRoleError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidInputException" => {
+                "InvalidInput" => {
                     CreateServiceLinkedRoleError::InvalidInput(String::from(parsed_error.message))
                 }
-                "LimitExceededException" => {
+                "LimitExceeded" => {
                     CreateServiceLinkedRoleError::LimitExceeded(String::from(parsed_error.message))
                 }
-                "NoSuchEntityException" => {
+                "NoSuchEntity" => {
                     CreateServiceLinkedRoleError::NoSuchEntity(String::from(parsed_error.message))
                 }
-                "ServiceFailureException" => {
+                "ServiceFailure" => {
                     CreateServiceLinkedRoleError::ServiceFailure(String::from(parsed_error.message))
                 }
                 _ => CreateServiceLinkedRoleError::Unknown(String::from(body)),
@@ -14838,13 +14822,13 @@ impl CreateServiceSpecificCredentialError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "LimitExceededException" => CreateServiceSpecificCredentialError::LimitExceeded(
+                "LimitExceeded" => CreateServiceSpecificCredentialError::LimitExceeded(
                     String::from(parsed_error.message),
                 ),
-                "NoSuchEntityException" => CreateServiceSpecificCredentialError::NoSuchEntity(
+                "NoSuchEntity" => CreateServiceSpecificCredentialError::NoSuchEntity(
                     String::from(parsed_error.message),
                 ),
-                "ServiceNotSupportedException" => {
+                "NotSupportedService" => {
                     CreateServiceSpecificCredentialError::ServiceNotSupported(String::from(
                         parsed_error.message,
                     ))
@@ -14933,16 +14917,14 @@ impl CreateUserError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "EntityAlreadyExistsException" => {
+                "EntityAlreadyExists" => {
                     CreateUserError::EntityAlreadyExists(String::from(parsed_error.message))
                 }
-                "LimitExceededException" => {
+                "LimitExceeded" => {
                     CreateUserError::LimitExceeded(String::from(parsed_error.message))
                 }
-                "NoSuchEntityException" => {
-                    CreateUserError::NoSuchEntity(String::from(parsed_error.message))
-                }
-                "ServiceFailureException" => {
+                "NoSuchEntity" => CreateUserError::NoSuchEntity(String::from(parsed_error.message)),
+                "ServiceFailure" => {
                     CreateUserError::ServiceFailure(String::from(parsed_error.message))
                 }
                 _ => CreateUserError::Unknown(String::from(body)),
@@ -15026,15 +15008,13 @@ impl CreateVirtualMFADeviceError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "EntityAlreadyExistsException" => {
-                    CreateVirtualMFADeviceError::EntityAlreadyExists(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "LimitExceededException" => {
+                "EntityAlreadyExists" => CreateVirtualMFADeviceError::EntityAlreadyExists(
+                    String::from(parsed_error.message),
+                ),
+                "LimitExceeded" => {
                     CreateVirtualMFADeviceError::LimitExceeded(String::from(parsed_error.message))
                 }
-                "ServiceFailureException" => {
+                "ServiceFailure" => {
                     CreateVirtualMFADeviceError::ServiceFailure(String::from(parsed_error.message))
                 }
                 _ => CreateVirtualMFADeviceError::Unknown(String::from(body)),
@@ -15121,18 +15101,18 @@ impl DeactivateMFADeviceError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "EntityTemporarilyUnmodifiableException" => {
+                "EntityTemporarilyUnmodifiable" => {
                     DeactivateMFADeviceError::EntityTemporarilyUnmodifiable(String::from(
                         parsed_error.message,
                     ))
                 }
-                "LimitExceededException" => {
+                "LimitExceeded" => {
                     DeactivateMFADeviceError::LimitExceeded(String::from(parsed_error.message))
                 }
-                "NoSuchEntityException" => {
+                "NoSuchEntity" => {
                     DeactivateMFADeviceError::NoSuchEntity(String::from(parsed_error.message))
                 }
-                "ServiceFailureException" => {
+                "ServiceFailure" => {
                     DeactivateMFADeviceError::ServiceFailure(String::from(parsed_error.message))
                 }
                 _ => DeactivateMFADeviceError::Unknown(String::from(body)),
@@ -15218,13 +15198,13 @@ impl DeleteAccessKeyError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "LimitExceededException" => {
+                "LimitExceeded" => {
                     DeleteAccessKeyError::LimitExceeded(String::from(parsed_error.message))
                 }
-                "NoSuchEntityException" => {
+                "NoSuchEntity" => {
                     DeleteAccessKeyError::NoSuchEntity(String::from(parsed_error.message))
                 }
-                "ServiceFailureException" => {
+                "ServiceFailure" => {
                     DeleteAccessKeyError::ServiceFailure(String::from(parsed_error.message))
                 }
                 _ => DeleteAccessKeyError::Unknown(String::from(body)),
@@ -15307,13 +15287,13 @@ impl DeleteAccountAliasError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "LimitExceededException" => {
+                "LimitExceeded" => {
                     DeleteAccountAliasError::LimitExceeded(String::from(parsed_error.message))
                 }
-                "NoSuchEntityException" => {
+                "NoSuchEntity" => {
                     DeleteAccountAliasError::NoSuchEntity(String::from(parsed_error.message))
                 }
-                "ServiceFailureException" => {
+                "ServiceFailure" => {
                     DeleteAccountAliasError::ServiceFailure(String::from(parsed_error.message))
                 }
                 _ => DeleteAccountAliasError::Unknown(String::from(body)),
@@ -15398,13 +15378,13 @@ impl DeleteAccountPasswordPolicyError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "LimitExceededException" => DeleteAccountPasswordPolicyError::LimitExceeded(
-                    String::from(parsed_error.message),
-                ),
-                "NoSuchEntityException" => DeleteAccountPasswordPolicyError::NoSuchEntity(
-                    String::from(parsed_error.message),
-                ),
-                "ServiceFailureException" => DeleteAccountPasswordPolicyError::ServiceFailure(
+                "LimitExceeded" => DeleteAccountPasswordPolicyError::LimitExceeded(String::from(
+                    parsed_error.message,
+                )),
+                "NoSuchEntity" => DeleteAccountPasswordPolicyError::NoSuchEntity(String::from(
+                    parsed_error.message,
+                )),
+                "ServiceFailure" => DeleteAccountPasswordPolicyError::ServiceFailure(
                     String::from(parsed_error.message),
                 ),
                 _ => DeleteAccountPasswordPolicyError::Unknown(String::from(body)),
@@ -15491,16 +15471,16 @@ impl DeleteGroupError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "DeleteConflictException" => {
+                "DeleteConflict" => {
                     DeleteGroupError::DeleteConflict(String::from(parsed_error.message))
                 }
-                "LimitExceededException" => {
+                "LimitExceeded" => {
                     DeleteGroupError::LimitExceeded(String::from(parsed_error.message))
                 }
-                "NoSuchEntityException" => {
+                "NoSuchEntity" => {
                     DeleteGroupError::NoSuchEntity(String::from(parsed_error.message))
                 }
-                "ServiceFailureException" => {
+                "ServiceFailure" => {
                     DeleteGroupError::ServiceFailure(String::from(parsed_error.message))
                 }
                 _ => DeleteGroupError::Unknown(String::from(body)),
@@ -15584,13 +15564,13 @@ impl DeleteGroupPolicyError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "LimitExceededException" => {
+                "LimitExceeded" => {
                     DeleteGroupPolicyError::LimitExceeded(String::from(parsed_error.message))
                 }
-                "NoSuchEntityException" => {
+                "NoSuchEntity" => {
                     DeleteGroupPolicyError::NoSuchEntity(String::from(parsed_error.message))
                 }
-                "ServiceFailureException" => {
+                "ServiceFailure" => {
                     DeleteGroupPolicyError::ServiceFailure(String::from(parsed_error.message))
                 }
                 _ => DeleteGroupPolicyError::Unknown(String::from(body)),
@@ -15677,16 +15657,16 @@ impl DeleteInstanceProfileError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "DeleteConflictException" => {
+                "DeleteConflict" => {
                     DeleteInstanceProfileError::DeleteConflict(String::from(parsed_error.message))
                 }
-                "LimitExceededException" => {
+                "LimitExceeded" => {
                     DeleteInstanceProfileError::LimitExceeded(String::from(parsed_error.message))
                 }
-                "NoSuchEntityException" => {
+                "NoSuchEntity" => {
                     DeleteInstanceProfileError::NoSuchEntity(String::from(parsed_error.message))
                 }
-                "ServiceFailureException" => {
+                "ServiceFailure" => {
                     DeleteInstanceProfileError::ServiceFailure(String::from(parsed_error.message))
                 }
                 _ => DeleteInstanceProfileError::Unknown(String::from(body)),
@@ -15774,18 +15754,18 @@ impl DeleteLoginProfileError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "EntityTemporarilyUnmodifiableException" => {
+                "EntityTemporarilyUnmodifiable" => {
                     DeleteLoginProfileError::EntityTemporarilyUnmodifiable(String::from(
                         parsed_error.message,
                     ))
                 }
-                "LimitExceededException" => {
+                "LimitExceeded" => {
                     DeleteLoginProfileError::LimitExceeded(String::from(parsed_error.message))
                 }
-                "NoSuchEntityException" => {
+                "NoSuchEntity" => {
                     DeleteLoginProfileError::NoSuchEntity(String::from(parsed_error.message))
                 }
-                "ServiceFailureException" => {
+                "ServiceFailure" => {
                     DeleteLoginProfileError::ServiceFailure(String::from(parsed_error.message))
                 }
                 _ => DeleteLoginProfileError::Unknown(String::from(body)),
@@ -15871,13 +15851,13 @@ impl DeleteOpenIDConnectProviderError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidInputException" => DeleteOpenIDConnectProviderError::InvalidInput(
-                    String::from(parsed_error.message),
-                ),
-                "NoSuchEntityException" => DeleteOpenIDConnectProviderError::NoSuchEntity(
-                    String::from(parsed_error.message),
-                ),
-                "ServiceFailureException" => DeleteOpenIDConnectProviderError::ServiceFailure(
+                "InvalidInput" => DeleteOpenIDConnectProviderError::InvalidInput(String::from(
+                    parsed_error.message,
+                )),
+                "NoSuchEntity" => DeleteOpenIDConnectProviderError::NoSuchEntity(String::from(
+                    parsed_error.message,
+                )),
+                "ServiceFailure" => DeleteOpenIDConnectProviderError::ServiceFailure(
                     String::from(parsed_error.message),
                 ),
                 _ => DeleteOpenIDConnectProviderError::Unknown(String::from(body)),
@@ -15966,19 +15946,19 @@ impl DeletePolicyError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "DeleteConflictException" => {
+                "DeleteConflict" => {
                     DeletePolicyError::DeleteConflict(String::from(parsed_error.message))
                 }
-                "InvalidInputException" => {
+                "InvalidInput" => {
                     DeletePolicyError::InvalidInput(String::from(parsed_error.message))
                 }
-                "LimitExceededException" => {
+                "LimitExceeded" => {
                     DeletePolicyError::LimitExceeded(String::from(parsed_error.message))
                 }
-                "NoSuchEntityException" => {
+                "NoSuchEntity" => {
                     DeletePolicyError::NoSuchEntity(String::from(parsed_error.message))
                 }
-                "ServiceFailureException" => {
+                "ServiceFailure" => {
                     DeletePolicyError::ServiceFailure(String::from(parsed_error.message))
                 }
                 _ => DeletePolicyError::Unknown(String::from(body)),
@@ -16067,19 +16047,19 @@ impl DeletePolicyVersionError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "DeleteConflictException" => {
+                "DeleteConflict" => {
                     DeletePolicyVersionError::DeleteConflict(String::from(parsed_error.message))
                 }
-                "InvalidInputException" => {
+                "InvalidInput" => {
                     DeletePolicyVersionError::InvalidInput(String::from(parsed_error.message))
                 }
-                "LimitExceededException" => {
+                "LimitExceeded" => {
                     DeletePolicyVersionError::LimitExceeded(String::from(parsed_error.message))
                 }
-                "NoSuchEntityException" => {
+                "NoSuchEntity" => {
                     DeletePolicyVersionError::NoSuchEntity(String::from(parsed_error.message))
                 }
-                "ServiceFailureException" => {
+                "ServiceFailure" => {
                     DeletePolicyVersionError::ServiceFailure(String::from(parsed_error.message))
                 }
                 _ => DeletePolicyVersionError::Unknown(String::from(body)),
@@ -16170,19 +16150,17 @@ impl DeleteRoleError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "DeleteConflictException" => {
+                "DeleteConflict" => {
                     DeleteRoleError::DeleteConflict(String::from(parsed_error.message))
                 }
-                "LimitExceededException" => {
+                "LimitExceeded" => {
                     DeleteRoleError::LimitExceeded(String::from(parsed_error.message))
                 }
-                "NoSuchEntityException" => {
-                    DeleteRoleError::NoSuchEntity(String::from(parsed_error.message))
-                }
-                "ServiceFailureException" => {
+                "NoSuchEntity" => DeleteRoleError::NoSuchEntity(String::from(parsed_error.message)),
+                "ServiceFailure" => {
                     DeleteRoleError::ServiceFailure(String::from(parsed_error.message))
                 }
-                "UnmodifiableEntityException" => {
+                "UnmodifiableEntity" => {
                     DeleteRoleError::UnmodifiableEntity(String::from(parsed_error.message))
                 }
                 _ => DeleteRoleError::Unknown(String::from(body)),
@@ -16269,16 +16247,16 @@ impl DeleteRolePolicyError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "LimitExceededException" => {
+                "LimitExceeded" => {
                     DeleteRolePolicyError::LimitExceeded(String::from(parsed_error.message))
                 }
-                "NoSuchEntityException" => {
+                "NoSuchEntity" => {
                     DeleteRolePolicyError::NoSuchEntity(String::from(parsed_error.message))
                 }
-                "ServiceFailureException" => {
+                "ServiceFailure" => {
                     DeleteRolePolicyError::ServiceFailure(String::from(parsed_error.message))
                 }
-                "UnmodifiableEntityException" => {
+                "UnmodifiableEntity" => {
                     DeleteRolePolicyError::UnmodifiableEntity(String::from(parsed_error.message))
                 }
                 _ => DeleteRolePolicyError::Unknown(String::from(body)),
@@ -16364,16 +16342,16 @@ impl DeleteSAMLProviderError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidInputException" => {
+                "InvalidInput" => {
                     DeleteSAMLProviderError::InvalidInput(String::from(parsed_error.message))
                 }
-                "LimitExceededException" => {
+                "LimitExceeded" => {
                     DeleteSAMLProviderError::LimitExceeded(String::from(parsed_error.message))
                 }
-                "NoSuchEntityException" => {
+                "NoSuchEntity" => {
                     DeleteSAMLProviderError::NoSuchEntity(String::from(parsed_error.message))
                 }
-                "ServiceFailureException" => {
+                "ServiceFailure" => {
                     DeleteSAMLProviderError::ServiceFailure(String::from(parsed_error.message))
                 }
                 _ => DeleteSAMLProviderError::Unknown(String::from(body)),
@@ -16455,7 +16433,7 @@ impl DeleteSSHPublicKeyError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "NoSuchEntityException" => {
+                "NoSuchEntity" => {
                     DeleteSSHPublicKeyError::NoSuchEntity(String::from(parsed_error.message))
                 }
                 _ => DeleteSSHPublicKeyError::Unknown(String::from(body)),
@@ -16540,16 +16518,16 @@ impl DeleteServerCertificateError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "DeleteConflictException" => {
+                "DeleteConflict" => {
                     DeleteServerCertificateError::DeleteConflict(String::from(parsed_error.message))
                 }
-                "LimitExceededException" => {
+                "LimitExceeded" => {
                     DeleteServerCertificateError::LimitExceeded(String::from(parsed_error.message))
                 }
-                "NoSuchEntityException" => {
+                "NoSuchEntity" => {
                     DeleteServerCertificateError::NoSuchEntity(String::from(parsed_error.message))
                 }
-                "ServiceFailureException" => {
+                "ServiceFailure" => {
                     DeleteServerCertificateError::ServiceFailure(String::from(parsed_error.message))
                 }
                 _ => DeleteServerCertificateError::Unknown(String::from(body)),
@@ -16635,13 +16613,13 @@ impl DeleteServiceLinkedRoleError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "LimitExceededException" => {
+                "LimitExceeded" => {
                     DeleteServiceLinkedRoleError::LimitExceeded(String::from(parsed_error.message))
                 }
-                "NoSuchEntityException" => {
+                "NoSuchEntity" => {
                     DeleteServiceLinkedRoleError::NoSuchEntity(String::from(parsed_error.message))
                 }
-                "ServiceFailureException" => {
+                "ServiceFailure" => {
                     DeleteServiceLinkedRoleError::ServiceFailure(String::from(parsed_error.message))
                 }
                 _ => DeleteServiceLinkedRoleError::Unknown(String::from(body)),
@@ -16722,7 +16700,7 @@ impl DeleteServiceSpecificCredentialError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "NoSuchEntityException" => DeleteServiceSpecificCredentialError::NoSuchEntity(
+                "NoSuchEntity" => DeleteServiceSpecificCredentialError::NoSuchEntity(
                     String::from(parsed_error.message),
                 ),
                 _ => DeleteServiceSpecificCredentialError::Unknown(String::from(body)),
@@ -16805,15 +16783,15 @@ impl DeleteSigningCertificateError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "LimitExceededException" => {
+                "LimitExceeded" => {
                     DeleteSigningCertificateError::LimitExceeded(String::from(parsed_error.message))
                 }
-                "NoSuchEntityException" => {
+                "NoSuchEntity" => {
                     DeleteSigningCertificateError::NoSuchEntity(String::from(parsed_error.message))
                 }
-                "ServiceFailureException" => DeleteSigningCertificateError::ServiceFailure(
-                    String::from(parsed_error.message),
-                ),
+                "ServiceFailure" => DeleteSigningCertificateError::ServiceFailure(String::from(
+                    parsed_error.message,
+                )),
                 _ => DeleteSigningCertificateError::Unknown(String::from(body)),
             },
             Err(_) => DeleteSigningCertificateError::Unknown(body.to_string()),
@@ -16898,16 +16876,14 @@ impl DeleteUserError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "DeleteConflictException" => {
+                "DeleteConflict" => {
                     DeleteUserError::DeleteConflict(String::from(parsed_error.message))
                 }
-                "LimitExceededException" => {
+                "LimitExceeded" => {
                     DeleteUserError::LimitExceeded(String::from(parsed_error.message))
                 }
-                "NoSuchEntityException" => {
-                    DeleteUserError::NoSuchEntity(String::from(parsed_error.message))
-                }
-                "ServiceFailureException" => {
+                "NoSuchEntity" => DeleteUserError::NoSuchEntity(String::from(parsed_error.message)),
+                "ServiceFailure" => {
                     DeleteUserError::ServiceFailure(String::from(parsed_error.message))
                 }
                 _ => DeleteUserError::Unknown(String::from(body)),
@@ -16991,13 +16967,13 @@ impl DeleteUserPolicyError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "LimitExceededException" => {
+                "LimitExceeded" => {
                     DeleteUserPolicyError::LimitExceeded(String::from(parsed_error.message))
                 }
-                "NoSuchEntityException" => {
+                "NoSuchEntity" => {
                     DeleteUserPolicyError::NoSuchEntity(String::from(parsed_error.message))
                 }
-                "ServiceFailureException" => {
+                "ServiceFailure" => {
                     DeleteUserPolicyError::ServiceFailure(String::from(parsed_error.message))
                 }
                 _ => DeleteUserPolicyError::Unknown(String::from(body)),
@@ -17082,16 +17058,16 @@ impl DeleteVirtualMFADeviceError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "DeleteConflictException" => {
+                "DeleteConflict" => {
                     DeleteVirtualMFADeviceError::DeleteConflict(String::from(parsed_error.message))
                 }
-                "LimitExceededException" => {
+                "LimitExceeded" => {
                     DeleteVirtualMFADeviceError::LimitExceeded(String::from(parsed_error.message))
                 }
-                "NoSuchEntityException" => {
+                "NoSuchEntity" => {
                     DeleteVirtualMFADeviceError::NoSuchEntity(String::from(parsed_error.message))
                 }
-                "ServiceFailureException" => {
+                "ServiceFailure" => {
                     DeleteVirtualMFADeviceError::ServiceFailure(String::from(parsed_error.message))
                 }
                 _ => DeleteVirtualMFADeviceError::Unknown(String::from(body)),
@@ -17179,16 +17155,16 @@ impl DetachGroupPolicyError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidInputException" => {
+                "InvalidInput" => {
                     DetachGroupPolicyError::InvalidInput(String::from(parsed_error.message))
                 }
-                "LimitExceededException" => {
+                "LimitExceeded" => {
                     DetachGroupPolicyError::LimitExceeded(String::from(parsed_error.message))
                 }
-                "NoSuchEntityException" => {
+                "NoSuchEntity" => {
                     DetachGroupPolicyError::NoSuchEntity(String::from(parsed_error.message))
                 }
-                "ServiceFailureException" => {
+                "ServiceFailure" => {
                     DetachGroupPolicyError::ServiceFailure(String::from(parsed_error.message))
                 }
                 _ => DetachGroupPolicyError::Unknown(String::from(body)),
@@ -17278,19 +17254,19 @@ impl DetachRolePolicyError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidInputException" => {
+                "InvalidInput" => {
                     DetachRolePolicyError::InvalidInput(String::from(parsed_error.message))
                 }
-                "LimitExceededException" => {
+                "LimitExceeded" => {
                     DetachRolePolicyError::LimitExceeded(String::from(parsed_error.message))
                 }
-                "NoSuchEntityException" => {
+                "NoSuchEntity" => {
                     DetachRolePolicyError::NoSuchEntity(String::from(parsed_error.message))
                 }
-                "ServiceFailureException" => {
+                "ServiceFailure" => {
                     DetachRolePolicyError::ServiceFailure(String::from(parsed_error.message))
                 }
-                "UnmodifiableEntityException" => {
+                "UnmodifiableEntity" => {
                     DetachRolePolicyError::UnmodifiableEntity(String::from(parsed_error.message))
                 }
                 _ => DetachRolePolicyError::Unknown(String::from(body)),
@@ -17377,16 +17353,16 @@ impl DetachUserPolicyError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidInputException" => {
+                "InvalidInput" => {
                     DetachUserPolicyError::InvalidInput(String::from(parsed_error.message))
                 }
-                "LimitExceededException" => {
+                "LimitExceeded" => {
                     DetachUserPolicyError::LimitExceeded(String::from(parsed_error.message))
                 }
-                "NoSuchEntityException" => {
+                "NoSuchEntity" => {
                     DetachUserPolicyError::NoSuchEntity(String::from(parsed_error.message))
                 }
-                "ServiceFailureException" => {
+                "ServiceFailure" => {
                     DetachUserPolicyError::ServiceFailure(String::from(parsed_error.message))
                 }
                 _ => DetachUserPolicyError::Unknown(String::from(body)),
@@ -17476,26 +17452,24 @@ impl EnableMFADeviceError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "EntityAlreadyExistsException" => {
+                "EntityAlreadyExists" => {
                     EnableMFADeviceError::EntityAlreadyExists(String::from(parsed_error.message))
                 }
-                "EntityTemporarilyUnmodifiableException" => {
+                "EntityTemporarilyUnmodifiable" => {
                     EnableMFADeviceError::EntityTemporarilyUnmodifiable(String::from(
                         parsed_error.message,
                     ))
                 }
-                "InvalidAuthenticationCodeException" => {
-                    EnableMFADeviceError::InvalidAuthenticationCode(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "LimitExceededException" => {
+                "InvalidAuthenticationCode" => EnableMFADeviceError::InvalidAuthenticationCode(
+                    String::from(parsed_error.message),
+                ),
+                "LimitExceeded" => {
                     EnableMFADeviceError::LimitExceeded(String::from(parsed_error.message))
                 }
-                "NoSuchEntityException" => {
+                "NoSuchEntity" => {
                     EnableMFADeviceError::NoSuchEntity(String::from(parsed_error.message))
                 }
-                "ServiceFailureException" => {
+                "ServiceFailure" => {
                     EnableMFADeviceError::ServiceFailure(String::from(parsed_error.message))
                 }
                 _ => EnableMFADeviceError::Unknown(String::from(body)),
@@ -17579,12 +17553,12 @@ impl GenerateCredentialReportError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "LimitExceededException" => {
+                "LimitExceeded" => {
                     GenerateCredentialReportError::LimitExceeded(String::from(parsed_error.message))
                 }
-                "ServiceFailureException" => GenerateCredentialReportError::ServiceFailure(
-                    String::from(parsed_error.message),
-                ),
+                "ServiceFailure" => GenerateCredentialReportError::ServiceFailure(String::from(
+                    parsed_error.message,
+                )),
                 _ => GenerateCredentialReportError::Unknown(String::from(body)),
             },
             Err(_) => GenerateCredentialReportError::Unknown(body.to_string()),
@@ -17662,7 +17636,7 @@ impl GetAccessKeyLastUsedError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "NoSuchEntityException" => {
+                "NoSuchEntity" => {
                     GetAccessKeyLastUsedError::NoSuchEntity(String::from(parsed_error.message))
                 }
                 _ => GetAccessKeyLastUsedError::Unknown(String::from(body)),
@@ -17741,7 +17715,7 @@ impl GetAccountAuthorizationDetailsError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ServiceFailureException" => GetAccountAuthorizationDetailsError::ServiceFailure(
+                "ServiceFailure" => GetAccountAuthorizationDetailsError::ServiceFailure(
                     String::from(parsed_error.message),
                 ),
                 _ => GetAccountAuthorizationDetailsError::Unknown(String::from(body)),
@@ -17822,12 +17796,12 @@ impl GetAccountPasswordPolicyError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "NoSuchEntityException" => {
+                "NoSuchEntity" => {
                     GetAccountPasswordPolicyError::NoSuchEntity(String::from(parsed_error.message))
                 }
-                "ServiceFailureException" => GetAccountPasswordPolicyError::ServiceFailure(
-                    String::from(parsed_error.message),
-                ),
+                "ServiceFailure" => GetAccountPasswordPolicyError::ServiceFailure(String::from(
+                    parsed_error.message,
+                )),
                 _ => GetAccountPasswordPolicyError::Unknown(String::from(body)),
             },
             Err(_) => GetAccountPasswordPolicyError::Unknown(body.to_string()),
@@ -17905,7 +17879,7 @@ impl GetAccountSummaryError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ServiceFailureException" => {
+                "ServiceFailure" => {
                     GetAccountSummaryError::ServiceFailure(String::from(parsed_error.message))
                 }
                 _ => GetAccountSummaryError::Unknown(String::from(body)),
@@ -17984,9 +17958,9 @@ impl GetContextKeysForCustomPolicyError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidInputException" => GetContextKeysForCustomPolicyError::InvalidInput(
-                    String::from(parsed_error.message),
-                ),
+                "InvalidInput" => GetContextKeysForCustomPolicyError::InvalidInput(String::from(
+                    parsed_error.message,
+                )),
                 _ => GetContextKeysForCustomPolicyError::Unknown(String::from(body)),
             },
             Err(_) => GetContextKeysForCustomPolicyError::Unknown(body.to_string()),
@@ -18065,10 +18039,10 @@ impl GetContextKeysForPrincipalPolicyError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidInputException" => GetContextKeysForPrincipalPolicyError::InvalidInput(
+                "InvalidInput" => GetContextKeysForPrincipalPolicyError::InvalidInput(
                     String::from(parsed_error.message),
                 ),
-                "NoSuchEntityException" => GetContextKeysForPrincipalPolicyError::NoSuchEntity(
+                "NoSuchEntity" => GetContextKeysForPrincipalPolicyError::NoSuchEntity(
                     String::from(parsed_error.message),
                 ),
                 _ => GetContextKeysForPrincipalPolicyError::Unknown(String::from(body)),
@@ -18154,22 +18128,16 @@ impl GetCredentialReportError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "CredentialReportExpiredException" => {
-                    GetCredentialReportError::CredentialReportExpired(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "CredentialReportNotPresentException" => {
-                    GetCredentialReportError::CredentialReportNotPresent(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "CredentialReportNotReadyException" => {
-                    GetCredentialReportError::CredentialReportNotReady(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "ServiceFailureException" => {
+                "ReportExpired" => GetCredentialReportError::CredentialReportExpired(
+                    String::from(parsed_error.message),
+                ),
+                "ReportNotPresent" => GetCredentialReportError::CredentialReportNotPresent(
+                    String::from(parsed_error.message),
+                ),
+                "ReportInProgress" => GetCredentialReportError::CredentialReportNotReady(
+                    String::from(parsed_error.message),
+                ),
+                "ServiceFailure" => {
                     GetCredentialReportError::ServiceFailure(String::from(parsed_error.message))
                 }
                 _ => GetCredentialReportError::Unknown(String::from(body)),
@@ -18253,10 +18221,8 @@ impl GetGroupError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "NoSuchEntityException" => {
-                    GetGroupError::NoSuchEntity(String::from(parsed_error.message))
-                }
-                "ServiceFailureException" => {
+                "NoSuchEntity" => GetGroupError::NoSuchEntity(String::from(parsed_error.message)),
+                "ServiceFailure" => {
                     GetGroupError::ServiceFailure(String::from(parsed_error.message))
                 }
                 _ => GetGroupError::Unknown(String::from(body)),
@@ -18336,10 +18302,10 @@ impl GetGroupPolicyError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "NoSuchEntityException" => {
+                "NoSuchEntity" => {
                     GetGroupPolicyError::NoSuchEntity(String::from(parsed_error.message))
                 }
-                "ServiceFailureException" => {
+                "ServiceFailure" => {
                     GetGroupPolicyError::ServiceFailure(String::from(parsed_error.message))
                 }
                 _ => GetGroupPolicyError::Unknown(String::from(body)),
@@ -18419,10 +18385,10 @@ impl GetInstanceProfileError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "NoSuchEntityException" => {
+                "NoSuchEntity" => {
                     GetInstanceProfileError::NoSuchEntity(String::from(parsed_error.message))
                 }
-                "ServiceFailureException" => {
+                "ServiceFailure" => {
                     GetInstanceProfileError::ServiceFailure(String::from(parsed_error.message))
                 }
                 _ => GetInstanceProfileError::Unknown(String::from(body)),
@@ -18504,10 +18470,10 @@ impl GetLoginProfileError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "NoSuchEntityException" => {
+                "NoSuchEntity" => {
                     GetLoginProfileError::NoSuchEntity(String::from(parsed_error.message))
                 }
-                "ServiceFailureException" => {
+                "ServiceFailure" => {
                     GetLoginProfileError::ServiceFailure(String::from(parsed_error.message))
                 }
                 _ => GetLoginProfileError::Unknown(String::from(body)),
@@ -18589,15 +18555,15 @@ impl GetOpenIDConnectProviderError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidInputException" => {
+                "InvalidInput" => {
                     GetOpenIDConnectProviderError::InvalidInput(String::from(parsed_error.message))
                 }
-                "NoSuchEntityException" => {
+                "NoSuchEntity" => {
                     GetOpenIDConnectProviderError::NoSuchEntity(String::from(parsed_error.message))
                 }
-                "ServiceFailureException" => GetOpenIDConnectProviderError::ServiceFailure(
-                    String::from(parsed_error.message),
-                ),
+                "ServiceFailure" => GetOpenIDConnectProviderError::ServiceFailure(String::from(
+                    parsed_error.message,
+                )),
                 _ => GetOpenIDConnectProviderError::Unknown(String::from(body)),
             },
             Err(_) => GetOpenIDConnectProviderError::Unknown(body.to_string()),
@@ -18680,13 +18646,9 @@ impl GetPolicyError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidInputException" => {
-                    GetPolicyError::InvalidInput(String::from(parsed_error.message))
-                }
-                "NoSuchEntityException" => {
-                    GetPolicyError::NoSuchEntity(String::from(parsed_error.message))
-                }
-                "ServiceFailureException" => {
+                "InvalidInput" => GetPolicyError::InvalidInput(String::from(parsed_error.message)),
+                "NoSuchEntity" => GetPolicyError::NoSuchEntity(String::from(parsed_error.message)),
+                "ServiceFailure" => {
                     GetPolicyError::ServiceFailure(String::from(parsed_error.message))
                 }
                 _ => GetPolicyError::Unknown(String::from(body)),
@@ -18769,13 +18731,13 @@ impl GetPolicyVersionError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidInputException" => {
+                "InvalidInput" => {
                     GetPolicyVersionError::InvalidInput(String::from(parsed_error.message))
                 }
-                "NoSuchEntityException" => {
+                "NoSuchEntity" => {
                     GetPolicyVersionError::NoSuchEntity(String::from(parsed_error.message))
                 }
-                "ServiceFailureException" => {
+                "ServiceFailure" => {
                     GetPolicyVersionError::ServiceFailure(String::from(parsed_error.message))
                 }
                 _ => GetPolicyVersionError::Unknown(String::from(body)),
@@ -18856,10 +18818,8 @@ impl GetRoleError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "NoSuchEntityException" => {
-                    GetRoleError::NoSuchEntity(String::from(parsed_error.message))
-                }
-                "ServiceFailureException" => {
+                "NoSuchEntity" => GetRoleError::NoSuchEntity(String::from(parsed_error.message)),
+                "ServiceFailure" => {
                     GetRoleError::ServiceFailure(String::from(parsed_error.message))
                 }
                 _ => GetRoleError::Unknown(String::from(body)),
@@ -18939,10 +18899,10 @@ impl GetRolePolicyError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "NoSuchEntityException" => {
+                "NoSuchEntity" => {
                     GetRolePolicyError::NoSuchEntity(String::from(parsed_error.message))
                 }
-                "ServiceFailureException" => {
+                "ServiceFailure" => {
                     GetRolePolicyError::ServiceFailure(String::from(parsed_error.message))
                 }
                 _ => GetRolePolicyError::Unknown(String::from(body)),
@@ -19024,13 +18984,13 @@ impl GetSAMLProviderError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidInputException" => {
+                "InvalidInput" => {
                     GetSAMLProviderError::InvalidInput(String::from(parsed_error.message))
                 }
-                "NoSuchEntityException" => {
+                "NoSuchEntity" => {
                     GetSAMLProviderError::NoSuchEntity(String::from(parsed_error.message))
                 }
-                "ServiceFailureException" => {
+                "ServiceFailure" => {
                     GetSAMLProviderError::ServiceFailure(String::from(parsed_error.message))
                 }
                 _ => GetSAMLProviderError::Unknown(String::from(body)),
@@ -19111,10 +19071,10 @@ impl GetSSHPublicKeyError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "NoSuchEntityException" => {
+                "NoSuchEntity" => {
                     GetSSHPublicKeyError::NoSuchEntity(String::from(parsed_error.message))
                 }
-                "UnrecognizedPublicKeyEncodingException" => {
+                "UnrecognizedPublicKeyEncoding" => {
                     GetSSHPublicKeyError::UnrecognizedPublicKeyEncoding(String::from(
                         parsed_error.message,
                     ))
@@ -19196,10 +19156,10 @@ impl GetServerCertificateError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "NoSuchEntityException" => {
+                "NoSuchEntity" => {
                     GetServerCertificateError::NoSuchEntity(String::from(parsed_error.message))
                 }
-                "ServiceFailureException" => {
+                "ServiceFailure" => {
                     GetServerCertificateError::ServiceFailure(String::from(parsed_error.message))
                 }
                 _ => GetServerCertificateError::Unknown(String::from(body)),
@@ -19283,17 +19243,15 @@ impl GetServiceLinkedRoleDeletionStatusError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidInputException" => GetServiceLinkedRoleDeletionStatusError::InvalidInput(
+                "InvalidInput" => GetServiceLinkedRoleDeletionStatusError::InvalidInput(
                     String::from(parsed_error.message),
                 ),
-                "NoSuchEntityException" => GetServiceLinkedRoleDeletionStatusError::NoSuchEntity(
+                "NoSuchEntity" => GetServiceLinkedRoleDeletionStatusError::NoSuchEntity(
                     String::from(parsed_error.message),
                 ),
-                "ServiceFailureException" => {
-                    GetServiceLinkedRoleDeletionStatusError::ServiceFailure(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "ServiceFailure" => GetServiceLinkedRoleDeletionStatusError::ServiceFailure(
+                    String::from(parsed_error.message),
+                ),
                 _ => GetServiceLinkedRoleDeletionStatusError::Unknown(String::from(body)),
             },
             Err(_) => GetServiceLinkedRoleDeletionStatusError::Unknown(body.to_string()),
@@ -19374,10 +19332,8 @@ impl GetUserError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "NoSuchEntityException" => {
-                    GetUserError::NoSuchEntity(String::from(parsed_error.message))
-                }
-                "ServiceFailureException" => {
+                "NoSuchEntity" => GetUserError::NoSuchEntity(String::from(parsed_error.message)),
+                "ServiceFailure" => {
                     GetUserError::ServiceFailure(String::from(parsed_error.message))
                 }
                 _ => GetUserError::Unknown(String::from(body)),
@@ -19457,10 +19413,10 @@ impl GetUserPolicyError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "NoSuchEntityException" => {
+                "NoSuchEntity" => {
                     GetUserPolicyError::NoSuchEntity(String::from(parsed_error.message))
                 }
-                "ServiceFailureException" => {
+                "ServiceFailure" => {
                     GetUserPolicyError::ServiceFailure(String::from(parsed_error.message))
                 }
                 _ => GetUserPolicyError::Unknown(String::from(body)),
@@ -19540,10 +19496,10 @@ impl ListAccessKeysError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "NoSuchEntityException" => {
+                "NoSuchEntity" => {
                     ListAccessKeysError::NoSuchEntity(String::from(parsed_error.message))
                 }
-                "ServiceFailureException" => {
+                "ServiceFailure" => {
                     ListAccessKeysError::ServiceFailure(String::from(parsed_error.message))
                 }
                 _ => ListAccessKeysError::Unknown(String::from(body)),
@@ -19621,7 +19577,7 @@ impl ListAccountAliasesError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ServiceFailureException" => {
+                "ServiceFailure" => {
                     ListAccountAliasesError::ServiceFailure(String::from(parsed_error.message))
                 }
                 _ => ListAccountAliasesError::Unknown(String::from(body)),
@@ -19704,15 +19660,15 @@ impl ListAttachedGroupPoliciesError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidInputException" => {
+                "InvalidInput" => {
                     ListAttachedGroupPoliciesError::InvalidInput(String::from(parsed_error.message))
                 }
-                "NoSuchEntityException" => {
+                "NoSuchEntity" => {
                     ListAttachedGroupPoliciesError::NoSuchEntity(String::from(parsed_error.message))
                 }
-                "ServiceFailureException" => ListAttachedGroupPoliciesError::ServiceFailure(
-                    String::from(parsed_error.message),
-                ),
+                "ServiceFailure" => ListAttachedGroupPoliciesError::ServiceFailure(String::from(
+                    parsed_error.message,
+                )),
                 _ => ListAttachedGroupPoliciesError::Unknown(String::from(body)),
             },
             Err(_) => ListAttachedGroupPoliciesError::Unknown(body.to_string()),
@@ -19795,15 +19751,15 @@ impl ListAttachedRolePoliciesError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidInputException" => {
+                "InvalidInput" => {
                     ListAttachedRolePoliciesError::InvalidInput(String::from(parsed_error.message))
                 }
-                "NoSuchEntityException" => {
+                "NoSuchEntity" => {
                     ListAttachedRolePoliciesError::NoSuchEntity(String::from(parsed_error.message))
                 }
-                "ServiceFailureException" => ListAttachedRolePoliciesError::ServiceFailure(
-                    String::from(parsed_error.message),
-                ),
+                "ServiceFailure" => ListAttachedRolePoliciesError::ServiceFailure(String::from(
+                    parsed_error.message,
+                )),
                 _ => ListAttachedRolePoliciesError::Unknown(String::from(body)),
             },
             Err(_) => ListAttachedRolePoliciesError::Unknown(body.to_string()),
@@ -19886,15 +19842,15 @@ impl ListAttachedUserPoliciesError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidInputException" => {
+                "InvalidInput" => {
                     ListAttachedUserPoliciesError::InvalidInput(String::from(parsed_error.message))
                 }
-                "NoSuchEntityException" => {
+                "NoSuchEntity" => {
                     ListAttachedUserPoliciesError::NoSuchEntity(String::from(parsed_error.message))
                 }
-                "ServiceFailureException" => ListAttachedUserPoliciesError::ServiceFailure(
-                    String::from(parsed_error.message),
-                ),
+                "ServiceFailure" => ListAttachedUserPoliciesError::ServiceFailure(String::from(
+                    parsed_error.message,
+                )),
                 _ => ListAttachedUserPoliciesError::Unknown(String::from(body)),
             },
             Err(_) => ListAttachedUserPoliciesError::Unknown(body.to_string()),
@@ -19977,13 +19933,13 @@ impl ListEntitiesForPolicyError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidInputException" => {
+                "InvalidInput" => {
                     ListEntitiesForPolicyError::InvalidInput(String::from(parsed_error.message))
                 }
-                "NoSuchEntityException" => {
+                "NoSuchEntity" => {
                     ListEntitiesForPolicyError::NoSuchEntity(String::from(parsed_error.message))
                 }
-                "ServiceFailureException" => {
+                "ServiceFailure" => {
                     ListEntitiesForPolicyError::ServiceFailure(String::from(parsed_error.message))
                 }
                 _ => ListEntitiesForPolicyError::Unknown(String::from(body)),
@@ -20066,10 +20022,10 @@ impl ListGroupPoliciesError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "NoSuchEntityException" => {
+                "NoSuchEntity" => {
                     ListGroupPoliciesError::NoSuchEntity(String::from(parsed_error.message))
                 }
-                "ServiceFailureException" => {
+                "ServiceFailure" => {
                     ListGroupPoliciesError::ServiceFailure(String::from(parsed_error.message))
                 }
                 _ => ListGroupPoliciesError::Unknown(String::from(body)),
@@ -20149,7 +20105,7 @@ impl ListGroupsError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ServiceFailureException" => {
+                "ServiceFailure" => {
                     ListGroupsError::ServiceFailure(String::from(parsed_error.message))
                 }
                 _ => ListGroupsError::Unknown(String::from(body)),
@@ -20228,10 +20184,10 @@ impl ListGroupsForUserError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "NoSuchEntityException" => {
+                "NoSuchEntity" => {
                     ListGroupsForUserError::NoSuchEntity(String::from(parsed_error.message))
                 }
-                "ServiceFailureException" => {
+                "ServiceFailure" => {
                     ListGroupsForUserError::ServiceFailure(String::from(parsed_error.message))
                 }
                 _ => ListGroupsForUserError::Unknown(String::from(body)),
@@ -20311,7 +20267,7 @@ impl ListInstanceProfilesError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ServiceFailureException" => {
+                "ServiceFailure" => {
                     ListInstanceProfilesError::ServiceFailure(String::from(parsed_error.message))
                 }
                 _ => ListInstanceProfilesError::Unknown(String::from(body)),
@@ -20392,10 +20348,10 @@ impl ListInstanceProfilesForRoleError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "NoSuchEntityException" => ListInstanceProfilesForRoleError::NoSuchEntity(
-                    String::from(parsed_error.message),
-                ),
-                "ServiceFailureException" => ListInstanceProfilesForRoleError::ServiceFailure(
+                "NoSuchEntity" => ListInstanceProfilesForRoleError::NoSuchEntity(String::from(
+                    parsed_error.message,
+                )),
+                "ServiceFailure" => ListInstanceProfilesForRoleError::ServiceFailure(
                     String::from(parsed_error.message),
                 ),
                 _ => ListInstanceProfilesForRoleError::Unknown(String::from(body)),
@@ -20477,10 +20433,10 @@ impl ListMFADevicesError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "NoSuchEntityException" => {
+                "NoSuchEntity" => {
                     ListMFADevicesError::NoSuchEntity(String::from(parsed_error.message))
                 }
-                "ServiceFailureException" => {
+                "ServiceFailure" => {
                     ListMFADevicesError::ServiceFailure(String::from(parsed_error.message))
                 }
                 _ => ListMFADevicesError::Unknown(String::from(body)),
@@ -20558,9 +20514,9 @@ impl ListOpenIDConnectProvidersError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ServiceFailureException" => ListOpenIDConnectProvidersError::ServiceFailure(
-                    String::from(parsed_error.message),
-                ),
+                "ServiceFailure" => ListOpenIDConnectProvidersError::ServiceFailure(String::from(
+                    parsed_error.message,
+                )),
                 _ => ListOpenIDConnectProvidersError::Unknown(String::from(body)),
             },
             Err(_) => ListOpenIDConnectProvidersError::Unknown(body.to_string()),
@@ -20637,7 +20593,7 @@ impl ListPoliciesError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ServiceFailureException" => {
+                "ServiceFailure" => {
                     ListPoliciesError::ServiceFailure(String::from(parsed_error.message))
                 }
                 _ => ListPoliciesError::Unknown(String::from(body)),
@@ -20718,13 +20674,13 @@ impl ListPolicyVersionsError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidInputException" => {
+                "InvalidInput" => {
                     ListPolicyVersionsError::InvalidInput(String::from(parsed_error.message))
                 }
-                "NoSuchEntityException" => {
+                "NoSuchEntity" => {
                     ListPolicyVersionsError::NoSuchEntity(String::from(parsed_error.message))
                 }
-                "ServiceFailureException" => {
+                "ServiceFailure" => {
                     ListPolicyVersionsError::ServiceFailure(String::from(parsed_error.message))
                 }
                 _ => ListPolicyVersionsError::Unknown(String::from(body)),
@@ -20807,10 +20763,10 @@ impl ListRolePoliciesError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "NoSuchEntityException" => {
+                "NoSuchEntity" => {
                     ListRolePoliciesError::NoSuchEntity(String::from(parsed_error.message))
                 }
-                "ServiceFailureException" => {
+                "ServiceFailure" => {
                     ListRolePoliciesError::ServiceFailure(String::from(parsed_error.message))
                 }
                 _ => ListRolePoliciesError::Unknown(String::from(body)),
@@ -20888,7 +20844,7 @@ impl ListRolesError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ServiceFailureException" => {
+                "ServiceFailure" => {
                     ListRolesError::ServiceFailure(String::from(parsed_error.message))
                 }
                 _ => ListRolesError::Unknown(String::from(body)),
@@ -20965,7 +20921,7 @@ impl ListSAMLProvidersError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ServiceFailureException" => {
+                "ServiceFailure" => {
                     ListSAMLProvidersError::ServiceFailure(String::from(parsed_error.message))
                 }
                 _ => ListSAMLProvidersError::Unknown(String::from(body)),
@@ -21044,7 +21000,7 @@ impl ListSSHPublicKeysError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "NoSuchEntityException" => {
+                "NoSuchEntity" => {
                     ListSSHPublicKeysError::NoSuchEntity(String::from(parsed_error.message))
                 }
                 _ => ListSSHPublicKeysError::Unknown(String::from(body)),
@@ -21123,7 +21079,7 @@ impl ListServerCertificatesError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ServiceFailureException" => {
+                "ServiceFailure" => {
                     ListServerCertificatesError::ServiceFailure(String::from(parsed_error.message))
                 }
                 _ => ListServerCertificatesError::Unknown(String::from(body)),
@@ -21204,14 +21160,12 @@ impl ListServiceSpecificCredentialsError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "NoSuchEntityException" => ListServiceSpecificCredentialsError::NoSuchEntity(
+                "NoSuchEntity" => ListServiceSpecificCredentialsError::NoSuchEntity(String::from(
+                    parsed_error.message,
+                )),
+                "NotSupportedService" => ListServiceSpecificCredentialsError::ServiceNotSupported(
                     String::from(parsed_error.message),
                 ),
-                "ServiceNotSupportedException" => {
-                    ListServiceSpecificCredentialsError::ServiceNotSupported(String::from(
-                        parsed_error.message,
-                    ))
-                }
                 _ => ListServiceSpecificCredentialsError::Unknown(String::from(body)),
             },
             Err(_) => ListServiceSpecificCredentialsError::Unknown(body.to_string()),
@@ -21291,10 +21245,10 @@ impl ListSigningCertificatesError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "NoSuchEntityException" => {
+                "NoSuchEntity" => {
                     ListSigningCertificatesError::NoSuchEntity(String::from(parsed_error.message))
                 }
-                "ServiceFailureException" => {
+                "ServiceFailure" => {
                     ListSigningCertificatesError::ServiceFailure(String::from(parsed_error.message))
                 }
                 _ => ListSigningCertificatesError::Unknown(String::from(body)),
@@ -21376,10 +21330,10 @@ impl ListUserPoliciesError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "NoSuchEntityException" => {
+                "NoSuchEntity" => {
                     ListUserPoliciesError::NoSuchEntity(String::from(parsed_error.message))
                 }
-                "ServiceFailureException" => {
+                "ServiceFailure" => {
                     ListUserPoliciesError::ServiceFailure(String::from(parsed_error.message))
                 }
                 _ => ListUserPoliciesError::Unknown(String::from(body)),
@@ -21457,7 +21411,7 @@ impl ListUsersError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ServiceFailureException" => {
+                "ServiceFailure" => {
                     ListUsersError::ServiceFailure(String::from(parsed_error.message))
                 }
                 _ => ListUsersError::Unknown(String::from(body)),
@@ -21613,16 +21567,16 @@ impl PutGroupPolicyError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "LimitExceededException" => {
+                "LimitExceeded" => {
                     PutGroupPolicyError::LimitExceeded(String::from(parsed_error.message))
                 }
-                "MalformedPolicyDocumentException" => {
+                "MalformedPolicyDocument" => {
                     PutGroupPolicyError::MalformedPolicyDocument(String::from(parsed_error.message))
                 }
-                "NoSuchEntityException" => {
+                "NoSuchEntity" => {
                     PutGroupPolicyError::NoSuchEntity(String::from(parsed_error.message))
                 }
-                "ServiceFailureException" => {
+                "ServiceFailure" => {
                     PutGroupPolicyError::ServiceFailure(String::from(parsed_error.message))
                 }
                 _ => PutGroupPolicyError::Unknown(String::from(body)),
@@ -21710,19 +21664,19 @@ impl PutRolePolicyError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "LimitExceededException" => {
+                "LimitExceeded" => {
                     PutRolePolicyError::LimitExceeded(String::from(parsed_error.message))
                 }
-                "MalformedPolicyDocumentException" => {
+                "MalformedPolicyDocument" => {
                     PutRolePolicyError::MalformedPolicyDocument(String::from(parsed_error.message))
                 }
-                "NoSuchEntityException" => {
+                "NoSuchEntity" => {
                     PutRolePolicyError::NoSuchEntity(String::from(parsed_error.message))
                 }
-                "ServiceFailureException" => {
+                "ServiceFailure" => {
                     PutRolePolicyError::ServiceFailure(String::from(parsed_error.message))
                 }
-                "UnmodifiableEntityException" => {
+                "UnmodifiableEntity" => {
                     PutRolePolicyError::UnmodifiableEntity(String::from(parsed_error.message))
                 }
                 _ => PutRolePolicyError::Unknown(String::from(body)),
@@ -21809,16 +21763,16 @@ impl PutUserPolicyError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "LimitExceededException" => {
+                "LimitExceeded" => {
                     PutUserPolicyError::LimitExceeded(String::from(parsed_error.message))
                 }
-                "MalformedPolicyDocumentException" => {
+                "MalformedPolicyDocument" => {
                     PutUserPolicyError::MalformedPolicyDocument(String::from(parsed_error.message))
                 }
-                "NoSuchEntityException" => {
+                "NoSuchEntity" => {
                     PutUserPolicyError::NoSuchEntity(String::from(parsed_error.message))
                 }
-                "ServiceFailureException" => {
+                "ServiceFailure" => {
                     PutUserPolicyError::ServiceFailure(String::from(parsed_error.message))
                 }
                 _ => PutUserPolicyError::Unknown(String::from(body)),
@@ -21902,21 +21856,15 @@ impl RemoveClientIDFromOpenIDConnectProviderError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidInputException" => {
-                    RemoveClientIDFromOpenIDConnectProviderError::InvalidInput(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "NoSuchEntityException" => {
-                    RemoveClientIDFromOpenIDConnectProviderError::NoSuchEntity(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "ServiceFailureException" => {
-                    RemoveClientIDFromOpenIDConnectProviderError::ServiceFailure(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "InvalidInput" => RemoveClientIDFromOpenIDConnectProviderError::InvalidInput(
+                    String::from(parsed_error.message),
+                ),
+                "NoSuchEntity" => RemoveClientIDFromOpenIDConnectProviderError::NoSuchEntity(
+                    String::from(parsed_error.message),
+                ),
+                "ServiceFailure" => RemoveClientIDFromOpenIDConnectProviderError::ServiceFailure(
+                    String::from(parsed_error.message),
+                ),
                 _ => RemoveClientIDFromOpenIDConnectProviderError::Unknown(String::from(body)),
             },
             Err(_) => RemoveClientIDFromOpenIDConnectProviderError::Unknown(body.to_string()),
@@ -22001,20 +21949,18 @@ impl RemoveRoleFromInstanceProfileError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "LimitExceededException" => RemoveRoleFromInstanceProfileError::LimitExceeded(
+                "LimitExceeded" => RemoveRoleFromInstanceProfileError::LimitExceeded(
                     String::from(parsed_error.message),
                 ),
-                "NoSuchEntityException" => RemoveRoleFromInstanceProfileError::NoSuchEntity(
+                "NoSuchEntity" => RemoveRoleFromInstanceProfileError::NoSuchEntity(String::from(
+                    parsed_error.message,
+                )),
+                "ServiceFailure" => RemoveRoleFromInstanceProfileError::ServiceFailure(
                     String::from(parsed_error.message),
                 ),
-                "ServiceFailureException" => RemoveRoleFromInstanceProfileError::ServiceFailure(
+                "UnmodifiableEntity" => RemoveRoleFromInstanceProfileError::UnmodifiableEntity(
                     String::from(parsed_error.message),
                 ),
-                "UnmodifiableEntityException" => {
-                    RemoveRoleFromInstanceProfileError::UnmodifiableEntity(String::from(
-                        parsed_error.message,
-                    ))
-                }
                 _ => RemoveRoleFromInstanceProfileError::Unknown(String::from(body)),
             },
             Err(_) => RemoveRoleFromInstanceProfileError::Unknown(body.to_string()),
@@ -22098,13 +22044,13 @@ impl RemoveUserFromGroupError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "LimitExceededException" => {
+                "LimitExceeded" => {
                     RemoveUserFromGroupError::LimitExceeded(String::from(parsed_error.message))
                 }
-                "NoSuchEntityException" => {
+                "NoSuchEntity" => {
                     RemoveUserFromGroupError::NoSuchEntity(String::from(parsed_error.message))
                 }
-                "ServiceFailureException" => {
+                "ServiceFailure" => {
                     RemoveUserFromGroupError::ServiceFailure(String::from(parsed_error.message))
                 }
                 _ => RemoveUserFromGroupError::Unknown(String::from(body)),
@@ -22185,9 +22131,9 @@ impl ResetServiceSpecificCredentialError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "NoSuchEntityException" => ResetServiceSpecificCredentialError::NoSuchEntity(
-                    String::from(parsed_error.message),
-                ),
+                "NoSuchEntity" => ResetServiceSpecificCredentialError::NoSuchEntity(String::from(
+                    parsed_error.message,
+                )),
                 _ => ResetServiceSpecificCredentialError::Unknown(String::from(body)),
             },
             Err(_) => ResetServiceSpecificCredentialError::Unknown(body.to_string()),
@@ -22270,18 +22216,16 @@ impl ResyncMFADeviceError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidAuthenticationCodeException" => {
-                    ResyncMFADeviceError::InvalidAuthenticationCode(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "LimitExceededException" => {
+                "InvalidAuthenticationCode" => ResyncMFADeviceError::InvalidAuthenticationCode(
+                    String::from(parsed_error.message),
+                ),
+                "LimitExceeded" => {
                     ResyncMFADeviceError::LimitExceeded(String::from(parsed_error.message))
                 }
-                "NoSuchEntityException" => {
+                "NoSuchEntity" => {
                     ResyncMFADeviceError::NoSuchEntity(String::from(parsed_error.message))
                 }
-                "ServiceFailureException" => {
+                "ServiceFailure" => {
                     ResyncMFADeviceError::ServiceFailure(String::from(parsed_error.message))
                 }
                 _ => ResyncMFADeviceError::Unknown(String::from(body)),
@@ -22367,16 +22311,16 @@ impl SetDefaultPolicyVersionError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidInputException" => {
+                "InvalidInput" => {
                     SetDefaultPolicyVersionError::InvalidInput(String::from(parsed_error.message))
                 }
-                "LimitExceededException" => {
+                "LimitExceeded" => {
                     SetDefaultPolicyVersionError::LimitExceeded(String::from(parsed_error.message))
                 }
-                "NoSuchEntityException" => {
+                "NoSuchEntity" => {
                     SetDefaultPolicyVersionError::NoSuchEntity(String::from(parsed_error.message))
                 }
-                "ServiceFailureException" => {
+                "ServiceFailure" => {
                     SetDefaultPolicyVersionError::ServiceFailure(String::from(parsed_error.message))
                 }
                 _ => SetDefaultPolicyVersionError::Unknown(String::from(body)),
@@ -22460,10 +22404,10 @@ impl SimulateCustomPolicyError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidInputException" => {
+                "InvalidInput" => {
                     SimulateCustomPolicyError::InvalidInput(String::from(parsed_error.message))
                 }
-                "PolicyEvaluationException" => {
+                "PolicyEvaluation" => {
                     SimulateCustomPolicyError::PolicyEvaluation(String::from(parsed_error.message))
                 }
                 _ => SimulateCustomPolicyError::Unknown(String::from(body)),
@@ -22547,13 +22491,13 @@ impl SimulatePrincipalPolicyError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidInputException" => {
+                "InvalidInput" => {
                     SimulatePrincipalPolicyError::InvalidInput(String::from(parsed_error.message))
                 }
-                "NoSuchEntityException" => {
+                "NoSuchEntity" => {
                     SimulatePrincipalPolicyError::NoSuchEntity(String::from(parsed_error.message))
                 }
-                "PolicyEvaluationException" => SimulatePrincipalPolicyError::PolicyEvaluation(
+                "PolicyEvaluation" => SimulatePrincipalPolicyError::PolicyEvaluation(
                     String::from(parsed_error.message),
                 ),
                 _ => SimulatePrincipalPolicyError::Unknown(String::from(body)),
@@ -22638,13 +22582,13 @@ impl UpdateAccessKeyError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "LimitExceededException" => {
+                "LimitExceeded" => {
                     UpdateAccessKeyError::LimitExceeded(String::from(parsed_error.message))
                 }
-                "NoSuchEntityException" => {
+                "NoSuchEntity" => {
                     UpdateAccessKeyError::NoSuchEntity(String::from(parsed_error.message))
                 }
-                "ServiceFailureException" => {
+                "ServiceFailure" => {
                     UpdateAccessKeyError::ServiceFailure(String::from(parsed_error.message))
                 }
                 _ => UpdateAccessKeyError::Unknown(String::from(body)),
@@ -22729,18 +22673,18 @@ impl UpdateAccountPasswordPolicyError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "LimitExceededException" => UpdateAccountPasswordPolicyError::LimitExceeded(
-                    String::from(parsed_error.message),
-                ),
-                "MalformedPolicyDocumentException" => {
+                "LimitExceeded" => UpdateAccountPasswordPolicyError::LimitExceeded(String::from(
+                    parsed_error.message,
+                )),
+                "MalformedPolicyDocument" => {
                     UpdateAccountPasswordPolicyError::MalformedPolicyDocument(String::from(
                         parsed_error.message,
                     ))
                 }
-                "NoSuchEntityException" => UpdateAccountPasswordPolicyError::NoSuchEntity(
-                    String::from(parsed_error.message),
-                ),
-                "ServiceFailureException" => UpdateAccountPasswordPolicyError::ServiceFailure(
+                "NoSuchEntity" => UpdateAccountPasswordPolicyError::NoSuchEntity(String::from(
+                    parsed_error.message,
+                )),
+                "ServiceFailure" => UpdateAccountPasswordPolicyError::ServiceFailure(
                     String::from(parsed_error.message),
                 ),
                 _ => UpdateAccountPasswordPolicyError::Unknown(String::from(body)),
@@ -22830,21 +22774,19 @@ impl UpdateAssumeRolePolicyError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "LimitExceededException" => {
+                "LimitExceeded" => {
                     UpdateAssumeRolePolicyError::LimitExceeded(String::from(parsed_error.message))
                 }
-                "MalformedPolicyDocumentException" => {
-                    UpdateAssumeRolePolicyError::MalformedPolicyDocument(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "NoSuchEntityException" => {
+                "MalformedPolicyDocument" => UpdateAssumeRolePolicyError::MalformedPolicyDocument(
+                    String::from(parsed_error.message),
+                ),
+                "NoSuchEntity" => {
                     UpdateAssumeRolePolicyError::NoSuchEntity(String::from(parsed_error.message))
                 }
-                "ServiceFailureException" => {
+                "ServiceFailure" => {
                     UpdateAssumeRolePolicyError::ServiceFailure(String::from(parsed_error.message))
                 }
-                "UnmodifiableEntityException" => UpdateAssumeRolePolicyError::UnmodifiableEntity(
+                "UnmodifiableEntity" => UpdateAssumeRolePolicyError::UnmodifiableEntity(
                     String::from(parsed_error.message),
                 ),
                 _ => UpdateAssumeRolePolicyError::Unknown(String::from(body)),
@@ -22933,16 +22875,16 @@ impl UpdateGroupError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "EntityAlreadyExistsException" => {
+                "EntityAlreadyExists" => {
                     UpdateGroupError::EntityAlreadyExists(String::from(parsed_error.message))
                 }
-                "LimitExceededException" => {
+                "LimitExceeded" => {
                     UpdateGroupError::LimitExceeded(String::from(parsed_error.message))
                 }
-                "NoSuchEntityException" => {
+                "NoSuchEntity" => {
                     UpdateGroupError::NoSuchEntity(String::from(parsed_error.message))
                 }
-                "ServiceFailureException" => {
+                "ServiceFailure" => {
                     UpdateGroupError::ServiceFailure(String::from(parsed_error.message))
                 }
                 _ => UpdateGroupError::Unknown(String::from(body)),
@@ -23030,23 +22972,21 @@ impl UpdateLoginProfileError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "EntityTemporarilyUnmodifiableException" => {
+                "EntityTemporarilyUnmodifiable" => {
                     UpdateLoginProfileError::EntityTemporarilyUnmodifiable(String::from(
                         parsed_error.message,
                     ))
                 }
-                "LimitExceededException" => {
+                "LimitExceeded" => {
                     UpdateLoginProfileError::LimitExceeded(String::from(parsed_error.message))
                 }
-                "NoSuchEntityException" => {
+                "NoSuchEntity" => {
                     UpdateLoginProfileError::NoSuchEntity(String::from(parsed_error.message))
                 }
-                "PasswordPolicyViolationException" => {
-                    UpdateLoginProfileError::PasswordPolicyViolation(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "ServiceFailureException" => {
+                "PasswordPolicyViolation" => UpdateLoginProfileError::PasswordPolicyViolation(
+                    String::from(parsed_error.message),
+                ),
+                "ServiceFailure" => {
                     UpdateLoginProfileError::ServiceFailure(String::from(parsed_error.message))
                 }
                 _ => UpdateLoginProfileError::Unknown(String::from(body)),
@@ -23133,21 +23073,15 @@ impl UpdateOpenIDConnectProviderThumbprintError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidInputException" => {
-                    UpdateOpenIDConnectProviderThumbprintError::InvalidInput(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "NoSuchEntityException" => {
-                    UpdateOpenIDConnectProviderThumbprintError::NoSuchEntity(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "ServiceFailureException" => {
-                    UpdateOpenIDConnectProviderThumbprintError::ServiceFailure(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "InvalidInput" => UpdateOpenIDConnectProviderThumbprintError::InvalidInput(
+                    String::from(parsed_error.message),
+                ),
+                "NoSuchEntity" => UpdateOpenIDConnectProviderThumbprintError::NoSuchEntity(
+                    String::from(parsed_error.message),
+                ),
+                "ServiceFailure" => UpdateOpenIDConnectProviderThumbprintError::ServiceFailure(
+                    String::from(parsed_error.message),
+                ),
                 _ => UpdateOpenIDConnectProviderThumbprintError::Unknown(String::from(body)),
             },
             Err(_) => UpdateOpenIDConnectProviderThumbprintError::Unknown(body.to_string()),
@@ -23230,13 +23164,13 @@ impl UpdateRoleDescriptionError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "NoSuchEntityException" => {
+                "NoSuchEntity" => {
                     UpdateRoleDescriptionError::NoSuchEntity(String::from(parsed_error.message))
                 }
-                "ServiceFailureException" => {
+                "ServiceFailure" => {
                     UpdateRoleDescriptionError::ServiceFailure(String::from(parsed_error.message))
                 }
-                "UnmodifiableEntityException" => UpdateRoleDescriptionError::UnmodifiableEntity(
+                "UnmodifiableEntity" => UpdateRoleDescriptionError::UnmodifiableEntity(
                     String::from(parsed_error.message),
                 ),
                 _ => UpdateRoleDescriptionError::Unknown(String::from(body)),
@@ -23323,16 +23257,16 @@ impl UpdateSAMLProviderError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidInputException" => {
+                "InvalidInput" => {
                     UpdateSAMLProviderError::InvalidInput(String::from(parsed_error.message))
                 }
-                "LimitExceededException" => {
+                "LimitExceeded" => {
                     UpdateSAMLProviderError::LimitExceeded(String::from(parsed_error.message))
                 }
-                "NoSuchEntityException" => {
+                "NoSuchEntity" => {
                     UpdateSAMLProviderError::NoSuchEntity(String::from(parsed_error.message))
                 }
-                "ServiceFailureException" => {
+                "ServiceFailure" => {
                     UpdateSAMLProviderError::ServiceFailure(String::from(parsed_error.message))
                 }
                 _ => UpdateSAMLProviderError::Unknown(String::from(body)),
@@ -23414,7 +23348,7 @@ impl UpdateSSHPublicKeyError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "NoSuchEntityException" => {
+                "NoSuchEntity" => {
                     UpdateSSHPublicKeyError::NoSuchEntity(String::from(parsed_error.message))
                 }
                 _ => UpdateSSHPublicKeyError::Unknown(String::from(body)),
@@ -23499,18 +23433,16 @@ impl UpdateServerCertificateError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "EntityAlreadyExistsException" => {
-                    UpdateServerCertificateError::EntityAlreadyExists(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "LimitExceededException" => {
+                "EntityAlreadyExists" => UpdateServerCertificateError::EntityAlreadyExists(
+                    String::from(parsed_error.message),
+                ),
+                "LimitExceeded" => {
                     UpdateServerCertificateError::LimitExceeded(String::from(parsed_error.message))
                 }
-                "NoSuchEntityException" => {
+                "NoSuchEntity" => {
                     UpdateServerCertificateError::NoSuchEntity(String::from(parsed_error.message))
                 }
-                "ServiceFailureException" => {
+                "ServiceFailure" => {
                     UpdateServerCertificateError::ServiceFailure(String::from(parsed_error.message))
                 }
                 _ => UpdateServerCertificateError::Unknown(String::from(body)),
@@ -23592,7 +23524,7 @@ impl UpdateServiceSpecificCredentialError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "NoSuchEntityException" => UpdateServiceSpecificCredentialError::NoSuchEntity(
+                "NoSuchEntity" => UpdateServiceSpecificCredentialError::NoSuchEntity(
                     String::from(parsed_error.message),
                 ),
                 _ => UpdateServiceSpecificCredentialError::Unknown(String::from(body)),
@@ -23675,15 +23607,15 @@ impl UpdateSigningCertificateError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "LimitExceededException" => {
+                "LimitExceeded" => {
                     UpdateSigningCertificateError::LimitExceeded(String::from(parsed_error.message))
                 }
-                "NoSuchEntityException" => {
+                "NoSuchEntity" => {
                     UpdateSigningCertificateError::NoSuchEntity(String::from(parsed_error.message))
                 }
-                "ServiceFailureException" => UpdateSigningCertificateError::ServiceFailure(
-                    String::from(parsed_error.message),
-                ),
+                "ServiceFailure" => UpdateSigningCertificateError::ServiceFailure(String::from(
+                    parsed_error.message,
+                )),
                 _ => UpdateSigningCertificateError::Unknown(String::from(body)),
             },
             Err(_) => UpdateSigningCertificateError::Unknown(body.to_string()),
@@ -23770,21 +23702,17 @@ impl UpdateUserError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "EntityAlreadyExistsException" => {
+                "EntityAlreadyExists" => {
                     UpdateUserError::EntityAlreadyExists(String::from(parsed_error.message))
                 }
-                "EntityTemporarilyUnmodifiableException" => {
-                    UpdateUserError::EntityTemporarilyUnmodifiable(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "LimitExceededException" => {
+                "EntityTemporarilyUnmodifiable" => UpdateUserError::EntityTemporarilyUnmodifiable(
+                    String::from(parsed_error.message),
+                ),
+                "LimitExceeded" => {
                     UpdateUserError::LimitExceeded(String::from(parsed_error.message))
                 }
-                "NoSuchEntityException" => {
-                    UpdateUserError::NoSuchEntity(String::from(parsed_error.message))
-                }
-                "ServiceFailureException" => {
+                "NoSuchEntity" => UpdateUserError::NoSuchEntity(String::from(parsed_error.message)),
+                "ServiceFailure" => {
                     UpdateUserError::ServiceFailure(String::from(parsed_error.message))
                 }
                 _ => UpdateUserError::Unknown(String::from(body)),
@@ -23873,21 +23801,19 @@ impl UploadSSHPublicKeyError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "DuplicateSSHPublicKeyException" => {
-                    UploadSSHPublicKeyError::DuplicateSSHPublicKey(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "InvalidPublicKeyException" => {
+                "DuplicateSSHPublicKey" => UploadSSHPublicKeyError::DuplicateSSHPublicKey(
+                    String::from(parsed_error.message),
+                ),
+                "InvalidPublicKey" => {
                     UploadSSHPublicKeyError::InvalidPublicKey(String::from(parsed_error.message))
                 }
-                "LimitExceededException" => {
+                "LimitExceeded" => {
                     UploadSSHPublicKeyError::LimitExceeded(String::from(parsed_error.message))
                 }
-                "NoSuchEntityException" => {
+                "NoSuchEntity" => {
                     UploadSSHPublicKeyError::NoSuchEntity(String::from(parsed_error.message))
                 }
-                "UnrecognizedPublicKeyEncodingException" => {
+                "UnrecognizedPublicKeyEncoding" => {
                     UploadSSHPublicKeyError::UnrecognizedPublicKeyEncoding(String::from(
                         parsed_error.message,
                     ))
@@ -23980,23 +23906,19 @@ impl UploadServerCertificateError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "EntityAlreadyExistsException" => {
-                    UploadServerCertificateError::EntityAlreadyExists(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "KeyPairMismatchException" => UploadServerCertificateError::KeyPairMismatch(
+                "EntityAlreadyExists" => UploadServerCertificateError::EntityAlreadyExists(
                     String::from(parsed_error.message),
                 ),
-                "LimitExceededException" => {
+                "KeyPairMismatch" => UploadServerCertificateError::KeyPairMismatch(String::from(
+                    parsed_error.message,
+                )),
+                "LimitExceeded" => {
                     UploadServerCertificateError::LimitExceeded(String::from(parsed_error.message))
                 }
-                "MalformedCertificateException" => {
-                    UploadServerCertificateError::MalformedCertificate(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "ServiceFailureException" => {
+                "MalformedCertificate" => UploadServerCertificateError::MalformedCertificate(
+                    String::from(parsed_error.message),
+                ),
+                "ServiceFailure" => {
                     UploadServerCertificateError::ServiceFailure(String::from(parsed_error.message))
                 }
                 _ => UploadServerCertificateError::Unknown(String::from(body)),
@@ -24091,35 +24013,27 @@ impl UploadSigningCertificateError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "DuplicateCertificateException" => {
-                    UploadSigningCertificateError::DuplicateCertificate(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "EntityAlreadyExistsException" => {
-                    UploadSigningCertificateError::EntityAlreadyExists(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "InvalidCertificateException" => {
-                    UploadSigningCertificateError::InvalidCertificate(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "LimitExceededException" => {
-                    UploadSigningCertificateError::LimitExceeded(String::from(parsed_error.message))
-                }
-                "MalformedCertificateException" => {
-                    UploadSigningCertificateError::MalformedCertificate(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "NoSuchEntityException" => {
-                    UploadSigningCertificateError::NoSuchEntity(String::from(parsed_error.message))
-                }
-                "ServiceFailureException" => UploadSigningCertificateError::ServiceFailure(
+                "DuplicateCertificate" => UploadSigningCertificateError::DuplicateCertificate(
                     String::from(parsed_error.message),
                 ),
+                "EntityAlreadyExists" => UploadSigningCertificateError::EntityAlreadyExists(
+                    String::from(parsed_error.message),
+                ),
+                "InvalidCertificate" => UploadSigningCertificateError::InvalidCertificate(
+                    String::from(parsed_error.message),
+                ),
+                "LimitExceeded" => {
+                    UploadSigningCertificateError::LimitExceeded(String::from(parsed_error.message))
+                }
+                "MalformedCertificate" => UploadSigningCertificateError::MalformedCertificate(
+                    String::from(parsed_error.message),
+                ),
+                "NoSuchEntity" => {
+                    UploadSigningCertificateError::NoSuchEntity(String::from(parsed_error.message))
+                }
+                "ServiceFailure" => UploadSigningCertificateError::ServiceFailure(String::from(
+                    parsed_error.message,
+                )),
                 _ => UploadSigningCertificateError::Unknown(String::from(body)),
             },
             Err(_) => UploadSigningCertificateError::Unknown(body.to_string()),

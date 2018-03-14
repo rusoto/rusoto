@@ -6285,19 +6285,15 @@ impl AddListenerCertificatesError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "CertificateNotFoundException" => {
-                    AddListenerCertificatesError::CertificateNotFound(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "ListenerNotFoundException" => AddListenerCertificatesError::ListenerNotFound(
+                "CertificateNotFound" => AddListenerCertificatesError::CertificateNotFound(
                     String::from(parsed_error.message),
                 ),
-                "TooManyCertificatesException" => {
-                    AddListenerCertificatesError::TooManyCertificates(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "ListenerNotFound" => AddListenerCertificatesError::ListenerNotFound(
+                    String::from(parsed_error.message),
+                ),
+                "TooManyCertificates" => AddListenerCertificatesError::TooManyCertificates(
+                    String::from(parsed_error.message),
+                ),
                 _ => AddListenerCertificatesError::Unknown(String::from(body)),
             },
             Err(_) => AddListenerCertificatesError::Unknown(body.to_string()),
@@ -6382,18 +6378,16 @@ impl AddTagsError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "DuplicateTagKeysException" => {
+                "DuplicateTagKeys" => {
                     AddTagsError::DuplicateTagKeys(String::from(parsed_error.message))
                 }
-                "LoadBalancerNotFoundException" => {
+                "LoadBalancerNotFound" => {
                     AddTagsError::LoadBalancerNotFound(String::from(parsed_error.message))
                 }
-                "TargetGroupNotFoundException" => {
+                "TargetGroupNotFound" => {
                     AddTagsError::TargetGroupNotFound(String::from(parsed_error.message))
                 }
-                "TooManyTagsException" => {
-                    AddTagsError::TooManyTags(String::from(parsed_error.message))
-                }
+                "TooManyTags" => AddTagsError::TooManyTags(String::from(parsed_error.message)),
                 _ => AddTagsError::Unknown(String::from(body)),
             },
             Err(_) => AddTagsError::Unknown(body.to_string()),
@@ -6495,49 +6489,45 @@ impl CreateListenerError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "CertificateNotFoundException" => {
+                "CertificateNotFound" => {
                     CreateListenerError::CertificateNotFound(String::from(parsed_error.message))
                 }
-                "DuplicateListenerException" => {
+                "DuplicateListener" => {
                     CreateListenerError::DuplicateListener(String::from(parsed_error.message))
                 }
-                "IncompatibleProtocolsException" => {
+                "IncompatibleProtocols" => {
                     CreateListenerError::IncompatibleProtocols(String::from(parsed_error.message))
                 }
-                "InvalidConfigurationRequestException" => {
-                    CreateListenerError::InvalidConfigurationRequest(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "LoadBalancerNotFoundException" => {
+                "InvalidConfigurationRequest" => CreateListenerError::InvalidConfigurationRequest(
+                    String::from(parsed_error.message),
+                ),
+                "LoadBalancerNotFound" => {
                     CreateListenerError::LoadBalancerNotFound(String::from(parsed_error.message))
                 }
-                "SSLPolicyNotFoundException" => {
+                "SSLPolicyNotFound" => {
                     CreateListenerError::SSLPolicyNotFound(String::from(parsed_error.message))
                 }
-                "TargetGroupAssociationLimitException" => {
-                    CreateListenerError::TargetGroupAssociationLimit(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "TargetGroupNotFoundException" => {
+                "TargetGroupAssociationLimit" => CreateListenerError::TargetGroupAssociationLimit(
+                    String::from(parsed_error.message),
+                ),
+                "TargetGroupNotFound" => {
                     CreateListenerError::TargetGroupNotFound(String::from(parsed_error.message))
                 }
-                "TooManyCertificatesException" => {
+                "TooManyCertificates" => {
                     CreateListenerError::TooManyCertificates(String::from(parsed_error.message))
                 }
-                "TooManyListenersException" => {
+                "TooManyListeners" => {
                     CreateListenerError::TooManyListeners(String::from(parsed_error.message))
                 }
-                "TooManyRegistrationsForTargetIdException" => {
+                "TooManyRegistrationsForTargetId" => {
                     CreateListenerError::TooManyRegistrationsForTargetId(String::from(
                         parsed_error.message,
                     ))
                 }
-                "TooManyTargetsException" => {
+                "TooManyTargets" => {
                     CreateListenerError::TooManyTargets(String::from(parsed_error.message))
                 }
-                "UnsupportedProtocolException" => {
+                "UnsupportedProtocol" => {
                     CreateListenerError::UnsupportedProtocol(String::from(parsed_error.message))
                 }
                 _ => CreateListenerError::Unknown(String::from(body)),
@@ -6648,46 +6638,44 @@ impl CreateLoadBalancerError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "AllocationIdNotFoundException" => CreateLoadBalancerError::AllocationIdNotFound(
+                "AllocationIdNotFound" => CreateLoadBalancerError::AllocationIdNotFound(
                     String::from(parsed_error.message),
                 ),
-                "AvailabilityZoneNotSupportedException" => {
+                "AvailabilityZoneNotSupported" => {
                     CreateLoadBalancerError::AvailabilityZoneNotSupported(String::from(
                         parsed_error.message,
                     ))
                 }
-                "DuplicateLoadBalancerNameException" => {
-                    CreateLoadBalancerError::DuplicateLoadBalancerName(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "DuplicateTagKeysException" => {
+                "DuplicateLoadBalancerName" => CreateLoadBalancerError::DuplicateLoadBalancerName(
+                    String::from(parsed_error.message),
+                ),
+                "DuplicateTagKeys" => {
                     CreateLoadBalancerError::DuplicateTagKeys(String::from(parsed_error.message))
                 }
-                "InvalidConfigurationRequestException" => {
+                "InvalidConfigurationRequest" => {
                     CreateLoadBalancerError::InvalidConfigurationRequest(String::from(
                         parsed_error.message,
                     ))
                 }
-                "InvalidSchemeException" => {
+                "InvalidScheme" => {
                     CreateLoadBalancerError::InvalidScheme(String::from(parsed_error.message))
                 }
-                "InvalidSecurityGroupException" => CreateLoadBalancerError::InvalidSecurityGroup(
+                "InvalidSecurityGroup" => CreateLoadBalancerError::InvalidSecurityGroup(
                     String::from(parsed_error.message),
                 ),
-                "InvalidSubnetException" => {
+                "InvalidSubnet" => {
                     CreateLoadBalancerError::InvalidSubnet(String::from(parsed_error.message))
                 }
-                "ResourceInUseException" => {
+                "ResourceInUse" => {
                     CreateLoadBalancerError::ResourceInUse(String::from(parsed_error.message))
                 }
-                "SubnetNotFoundException" => {
+                "SubnetNotFound" => {
                     CreateLoadBalancerError::SubnetNotFound(String::from(parsed_error.message))
                 }
-                "TooManyLoadBalancersException" => CreateLoadBalancerError::TooManyLoadBalancers(
+                "TooManyLoadBalancers" => CreateLoadBalancerError::TooManyLoadBalancers(
                     String::from(parsed_error.message),
                 ),
-                "TooManyTagsException" => {
+                "TooManyTags" => {
                     CreateLoadBalancerError::TooManyTags(String::from(parsed_error.message))
                 }
                 _ => CreateLoadBalancerError::Unknown(String::from(body)),
@@ -6795,36 +6783,34 @@ impl CreateRuleError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "IncompatibleProtocolsException" => {
+                "IncompatibleProtocols" => {
                     CreateRuleError::IncompatibleProtocols(String::from(parsed_error.message))
                 }
-                "InvalidConfigurationRequestException" => {
+                "InvalidConfigurationRequest" => {
                     CreateRuleError::InvalidConfigurationRequest(String::from(parsed_error.message))
                 }
-                "ListenerNotFoundException" => {
+                "ListenerNotFound" => {
                     CreateRuleError::ListenerNotFound(String::from(parsed_error.message))
                 }
-                "PriorityInUseException" => {
+                "PriorityInUse" => {
                     CreateRuleError::PriorityInUse(String::from(parsed_error.message))
                 }
-                "TargetGroupAssociationLimitException" => {
+                "TargetGroupAssociationLimit" => {
                     CreateRuleError::TargetGroupAssociationLimit(String::from(parsed_error.message))
                 }
-                "TargetGroupNotFoundException" => {
+                "TargetGroupNotFound" => {
                     CreateRuleError::TargetGroupNotFound(String::from(parsed_error.message))
                 }
-                "TooManyRegistrationsForTargetIdException" => {
+                "TooManyRegistrationsForTargetId" => {
                     CreateRuleError::TooManyRegistrationsForTargetId(String::from(
                         parsed_error.message,
                     ))
                 }
-                "TooManyRulesException" => {
-                    CreateRuleError::TooManyRules(String::from(parsed_error.message))
-                }
-                "TooManyTargetGroupsException" => {
+                "TooManyRules" => CreateRuleError::TooManyRules(String::from(parsed_error.message)),
+                "TooManyTargetGroups" => {
                     CreateRuleError::TooManyTargetGroups(String::from(parsed_error.message))
                 }
-                "TooManyTargetsException" => {
+                "TooManyTargets" => {
                     CreateRuleError::TooManyTargets(String::from(parsed_error.message))
                 }
                 _ => CreateRuleError::Unknown(String::from(body)),
@@ -6914,17 +6900,15 @@ impl CreateTargetGroupError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "DuplicateTargetGroupNameException" => {
-                    CreateTargetGroupError::DuplicateTargetGroupName(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "InvalidConfigurationRequestException" => {
+                "DuplicateTargetGroupName" => CreateTargetGroupError::DuplicateTargetGroupName(
+                    String::from(parsed_error.message),
+                ),
+                "InvalidConfigurationRequest" => {
                     CreateTargetGroupError::InvalidConfigurationRequest(String::from(
                         parsed_error.message,
                     ))
                 }
-                "TooManyTargetGroupsException" => {
+                "TooManyTargetGroups" => {
                     CreateTargetGroupError::TooManyTargetGroups(String::from(parsed_error.message))
                 }
                 _ => CreateTargetGroupError::Unknown(String::from(body)),
@@ -7005,7 +6989,7 @@ impl DeleteListenerError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ListenerNotFoundException" => {
+                "ListenerNotFound" => {
                     DeleteListenerError::ListenerNotFound(String::from(parsed_error.message))
                 }
                 _ => DeleteListenerError::Unknown(String::from(body)),
@@ -7086,15 +7070,13 @@ impl DeleteLoadBalancerError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "LoadBalancerNotFoundException" => DeleteLoadBalancerError::LoadBalancerNotFound(
+                "LoadBalancerNotFound" => DeleteLoadBalancerError::LoadBalancerNotFound(
                     String::from(parsed_error.message),
                 ),
-                "OperationNotPermittedException" => {
-                    DeleteLoadBalancerError::OperationNotPermitted(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "ResourceInUseException" => {
+                "OperationNotPermitted" => DeleteLoadBalancerError::OperationNotPermitted(
+                    String::from(parsed_error.message),
+                ),
+                "ResourceInUse" => {
                     DeleteLoadBalancerError::ResourceInUse(String::from(parsed_error.message))
                 }
                 _ => DeleteLoadBalancerError::Unknown(String::from(body)),
@@ -7177,12 +7159,10 @@ impl DeleteRuleError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "OperationNotPermittedException" => {
+                "OperationNotPermitted" => {
                     DeleteRuleError::OperationNotPermitted(String::from(parsed_error.message))
                 }
-                "RuleNotFoundException" => {
-                    DeleteRuleError::RuleNotFound(String::from(parsed_error.message))
-                }
+                "RuleNotFound" => DeleteRuleError::RuleNotFound(String::from(parsed_error.message)),
                 _ => DeleteRuleError::Unknown(String::from(body)),
             },
             Err(_) => DeleteRuleError::Unknown(body.to_string()),
@@ -7258,7 +7238,7 @@ impl DeleteTargetGroupError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ResourceInUseException" => {
+                "ResourceInUse" => {
                     DeleteTargetGroupError::ResourceInUse(String::from(parsed_error.message))
                 }
                 _ => DeleteTargetGroupError::Unknown(String::from(body)),
@@ -7339,10 +7319,10 @@ impl DeregisterTargetsError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidTargetException" => {
+                "InvalidTarget" => {
                     DeregisterTargetsError::InvalidTarget(String::from(parsed_error.message))
                 }
-                "TargetGroupNotFoundException" => {
+                "TargetGroupNotFound" => {
                     DeregisterTargetsError::TargetGroupNotFound(String::from(parsed_error.message))
                 }
                 _ => DeregisterTargetsError::Unknown(String::from(body)),
@@ -7495,11 +7475,9 @@ impl DescribeListenerCertificatesError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ListenerNotFoundException" => {
-                    DescribeListenerCertificatesError::ListenerNotFound(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "ListenerNotFound" => DescribeListenerCertificatesError::ListenerNotFound(
+                    String::from(parsed_error.message),
+                ),
                 _ => DescribeListenerCertificatesError::Unknown(String::from(body)),
             },
             Err(_) => DescribeListenerCertificatesError::Unknown(body.to_string()),
@@ -7578,10 +7556,10 @@ impl DescribeListenersError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ListenerNotFoundException" => {
+                "ListenerNotFound" => {
                     DescribeListenersError::ListenerNotFound(String::from(parsed_error.message))
                 }
-                "LoadBalancerNotFoundException" => {
+                "LoadBalancerNotFound" => {
                     DescribeListenersError::LoadBalancerNotFound(String::from(parsed_error.message))
                 }
                 _ => DescribeListenersError::Unknown(String::from(body)),
@@ -7661,7 +7639,7 @@ impl DescribeLoadBalancerAttributesError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "LoadBalancerNotFoundException" => {
+                "LoadBalancerNotFound" => {
                     DescribeLoadBalancerAttributesError::LoadBalancerNotFound(String::from(
                         parsed_error.message,
                     ))
@@ -7742,11 +7720,9 @@ impl DescribeLoadBalancersError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "LoadBalancerNotFoundException" => {
-                    DescribeLoadBalancersError::LoadBalancerNotFound(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "LoadBalancerNotFound" => DescribeLoadBalancersError::LoadBalancerNotFound(
+                    String::from(parsed_error.message),
+                ),
                 _ => DescribeLoadBalancersError::Unknown(String::from(body)),
             },
             Err(_) => DescribeLoadBalancersError::Unknown(body.to_string()),
@@ -7825,10 +7801,10 @@ impl DescribeRulesError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ListenerNotFoundException" => {
+                "ListenerNotFound" => {
                     DescribeRulesError::ListenerNotFound(String::from(parsed_error.message))
                 }
-                "RuleNotFoundException" => {
+                "RuleNotFound" => {
                     DescribeRulesError::RuleNotFound(String::from(parsed_error.message))
                 }
                 _ => DescribeRulesError::Unknown(String::from(body)),
@@ -7906,7 +7882,7 @@ impl DescribeSSLPoliciesError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "SSLPolicyNotFoundException" => {
+                "SSLPolicyNotFound" => {
                     DescribeSSLPoliciesError::SSLPolicyNotFound(String::from(parsed_error.message))
                 }
                 _ => DescribeSSLPoliciesError::Unknown(String::from(body)),
@@ -7991,16 +7967,16 @@ impl DescribeTagsError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ListenerNotFoundException" => {
+                "ListenerNotFound" => {
                     DescribeTagsError::ListenerNotFound(String::from(parsed_error.message))
                 }
-                "LoadBalancerNotFoundException" => {
+                "LoadBalancerNotFound" => {
                     DescribeTagsError::LoadBalancerNotFound(String::from(parsed_error.message))
                 }
-                "RuleNotFoundException" => {
+                "RuleNotFound" => {
                     DescribeTagsError::RuleNotFound(String::from(parsed_error.message))
                 }
-                "TargetGroupNotFoundException" => {
+                "TargetGroupNotFound" => {
                     DescribeTagsError::TargetGroupNotFound(String::from(parsed_error.message))
                 }
                 _ => DescribeTagsError::Unknown(String::from(body)),
@@ -8080,11 +8056,9 @@ impl DescribeTargetGroupAttributesError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "TargetGroupNotFoundException" => {
-                    DescribeTargetGroupAttributesError::TargetGroupNotFound(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "TargetGroupNotFound" => DescribeTargetGroupAttributesError::TargetGroupNotFound(
+                    String::from(parsed_error.message),
+                ),
                 _ => DescribeTargetGroupAttributesError::Unknown(String::from(body)),
             },
             Err(_) => DescribeTargetGroupAttributesError::Unknown(body.to_string()),
@@ -8163,12 +8137,10 @@ impl DescribeTargetGroupsError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "LoadBalancerNotFoundException" => {
-                    DescribeTargetGroupsError::LoadBalancerNotFound(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "TargetGroupNotFoundException" => DescribeTargetGroupsError::TargetGroupNotFound(
+                "LoadBalancerNotFound" => DescribeTargetGroupsError::LoadBalancerNotFound(
+                    String::from(parsed_error.message),
+                ),
+                "TargetGroupNotFound" => DescribeTargetGroupsError::TargetGroupNotFound(
                     String::from(parsed_error.message),
                 ),
                 _ => DescribeTargetGroupsError::Unknown(String::from(body)),
@@ -8252,13 +8224,13 @@ impl DescribeTargetHealthError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "HealthUnavailableException" => {
+                "HealthUnavailable" => {
                     DescribeTargetHealthError::HealthUnavailable(String::from(parsed_error.message))
                 }
-                "InvalidTargetException" => {
+                "InvalidTarget" => {
                     DescribeTargetHealthError::InvalidTarget(String::from(parsed_error.message))
                 }
-                "TargetGroupNotFoundException" => DescribeTargetHealthError::TargetGroupNotFound(
+                "TargetGroupNotFound" => DescribeTargetHealthError::TargetGroupNotFound(
                     String::from(parsed_error.message),
                 ),
                 _ => DescribeTargetHealthError::Unknown(String::from(body)),
@@ -8363,49 +8335,45 @@ impl ModifyListenerError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "CertificateNotFoundException" => {
+                "CertificateNotFound" => {
                     ModifyListenerError::CertificateNotFound(String::from(parsed_error.message))
                 }
-                "DuplicateListenerException" => {
+                "DuplicateListener" => {
                     ModifyListenerError::DuplicateListener(String::from(parsed_error.message))
                 }
-                "IncompatibleProtocolsException" => {
+                "IncompatibleProtocols" => {
                     ModifyListenerError::IncompatibleProtocols(String::from(parsed_error.message))
                 }
-                "InvalidConfigurationRequestException" => {
-                    ModifyListenerError::InvalidConfigurationRequest(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "ListenerNotFoundException" => {
+                "InvalidConfigurationRequest" => ModifyListenerError::InvalidConfigurationRequest(
+                    String::from(parsed_error.message),
+                ),
+                "ListenerNotFound" => {
                     ModifyListenerError::ListenerNotFound(String::from(parsed_error.message))
                 }
-                "SSLPolicyNotFoundException" => {
+                "SSLPolicyNotFound" => {
                     ModifyListenerError::SSLPolicyNotFound(String::from(parsed_error.message))
                 }
-                "TargetGroupAssociationLimitException" => {
-                    ModifyListenerError::TargetGroupAssociationLimit(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "TargetGroupNotFoundException" => {
+                "TargetGroupAssociationLimit" => ModifyListenerError::TargetGroupAssociationLimit(
+                    String::from(parsed_error.message),
+                ),
+                "TargetGroupNotFound" => {
                     ModifyListenerError::TargetGroupNotFound(String::from(parsed_error.message))
                 }
-                "TooManyCertificatesException" => {
+                "TooManyCertificates" => {
                     ModifyListenerError::TooManyCertificates(String::from(parsed_error.message))
                 }
-                "TooManyListenersException" => {
+                "TooManyListeners" => {
                     ModifyListenerError::TooManyListeners(String::from(parsed_error.message))
                 }
-                "TooManyRegistrationsForTargetIdException" => {
+                "TooManyRegistrationsForTargetId" => {
                     ModifyListenerError::TooManyRegistrationsForTargetId(String::from(
                         parsed_error.message,
                     ))
                 }
-                "TooManyTargetsException" => {
+                "TooManyTargets" => {
                     ModifyListenerError::TooManyTargets(String::from(parsed_error.message))
                 }
-                "UnsupportedProtocolException" => {
+                "UnsupportedProtocol" => {
                     ModifyListenerError::UnsupportedProtocol(String::from(parsed_error.message))
                 }
                 _ => ModifyListenerError::Unknown(String::from(body)),
@@ -8496,16 +8464,14 @@ impl ModifyLoadBalancerAttributesError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidConfigurationRequestException" => {
+                "InvalidConfigurationRequest" => {
                     ModifyLoadBalancerAttributesError::InvalidConfigurationRequest(String::from(
                         parsed_error.message,
                     ))
                 }
-                "LoadBalancerNotFoundException" => {
-                    ModifyLoadBalancerAttributesError::LoadBalancerNotFound(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "LoadBalancerNotFound" => ModifyLoadBalancerAttributesError::LoadBalancerNotFound(
+                    String::from(parsed_error.message),
+                ),
                 _ => ModifyLoadBalancerAttributesError::Unknown(String::from(body)),
             },
             Err(_) => ModifyLoadBalancerAttributesError::Unknown(body.to_string()),
@@ -8595,27 +8561,25 @@ impl ModifyRuleError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "IncompatibleProtocolsException" => {
+                "IncompatibleProtocols" => {
                     ModifyRuleError::IncompatibleProtocols(String::from(parsed_error.message))
                 }
-                "OperationNotPermittedException" => {
+                "OperationNotPermitted" => {
                     ModifyRuleError::OperationNotPermitted(String::from(parsed_error.message))
                 }
-                "RuleNotFoundException" => {
-                    ModifyRuleError::RuleNotFound(String::from(parsed_error.message))
-                }
-                "TargetGroupAssociationLimitException" => {
+                "RuleNotFound" => ModifyRuleError::RuleNotFound(String::from(parsed_error.message)),
+                "TargetGroupAssociationLimit" => {
                     ModifyRuleError::TargetGroupAssociationLimit(String::from(parsed_error.message))
                 }
-                "TargetGroupNotFoundException" => {
+                "TargetGroupNotFound" => {
                     ModifyRuleError::TargetGroupNotFound(String::from(parsed_error.message))
                 }
-                "TooManyRegistrationsForTargetIdException" => {
+                "TooManyRegistrationsForTargetId" => {
                     ModifyRuleError::TooManyRegistrationsForTargetId(String::from(
                         parsed_error.message,
                     ))
                 }
-                "TooManyTargetsException" => {
+                "TooManyTargets" => {
                     ModifyRuleError::TooManyTargets(String::from(parsed_error.message))
                 }
                 _ => ModifyRuleError::Unknown(String::from(body)),
@@ -8700,12 +8664,12 @@ impl ModifyTargetGroupError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidConfigurationRequestException" => {
+                "InvalidConfigurationRequest" => {
                     ModifyTargetGroupError::InvalidConfigurationRequest(String::from(
                         parsed_error.message,
                     ))
                 }
-                "TargetGroupNotFoundException" => {
+                "TargetGroupNotFound" => {
                     ModifyTargetGroupError::TargetGroupNotFound(String::from(parsed_error.message))
                 }
                 _ => ModifyTargetGroupError::Unknown(String::from(body)),
@@ -8787,16 +8751,14 @@ impl ModifyTargetGroupAttributesError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidConfigurationRequestException" => {
+                "InvalidConfigurationRequest" => {
                     ModifyTargetGroupAttributesError::InvalidConfigurationRequest(String::from(
                         parsed_error.message,
                     ))
                 }
-                "TargetGroupNotFoundException" => {
-                    ModifyTargetGroupAttributesError::TargetGroupNotFound(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "TargetGroupNotFound" => ModifyTargetGroupAttributesError::TargetGroupNotFound(
+                    String::from(parsed_error.message),
+                ),
                 _ => ModifyTargetGroupAttributesError::Unknown(String::from(body)),
             },
             Err(_) => ModifyTargetGroupAttributesError::Unknown(body.to_string()),
@@ -8880,18 +8842,18 @@ impl RegisterTargetsError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidTargetException" => {
+                "InvalidTarget" => {
                     RegisterTargetsError::InvalidTarget(String::from(parsed_error.message))
                 }
-                "TargetGroupNotFoundException" => {
+                "TargetGroupNotFound" => {
                     RegisterTargetsError::TargetGroupNotFound(String::from(parsed_error.message))
                 }
-                "TooManyRegistrationsForTargetIdException" => {
+                "TooManyRegistrationsForTargetId" => {
                     RegisterTargetsError::TooManyRegistrationsForTargetId(String::from(
                         parsed_error.message,
                     ))
                 }
-                "TooManyTargetsException" => {
+                "TooManyTargets" => {
                     RegisterTargetsError::TooManyTargets(String::from(parsed_error.message))
                 }
                 _ => RegisterTargetsError::Unknown(String::from(body)),
@@ -8973,14 +8935,12 @@ impl RemoveListenerCertificatesError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ListenerNotFoundException" => RemoveListenerCertificatesError::ListenerNotFound(
+                "ListenerNotFound" => RemoveListenerCertificatesError::ListenerNotFound(
                     String::from(parsed_error.message),
                 ),
-                "OperationNotPermittedException" => {
-                    RemoveListenerCertificatesError::OperationNotPermitted(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "OperationNotPermitted" => RemoveListenerCertificatesError::OperationNotPermitted(
+                    String::from(parsed_error.message),
+                ),
                 _ => RemoveListenerCertificatesError::Unknown(String::from(body)),
             },
             Err(_) => RemoveListenerCertificatesError::Unknown(body.to_string()),
@@ -9066,21 +9026,17 @@ impl RemoveTagsError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ListenerNotFoundException" => {
+                "ListenerNotFound" => {
                     RemoveTagsError::ListenerNotFound(String::from(parsed_error.message))
                 }
-                "LoadBalancerNotFoundException" => {
+                "LoadBalancerNotFound" => {
                     RemoveTagsError::LoadBalancerNotFound(String::from(parsed_error.message))
                 }
-                "RuleNotFoundException" => {
-                    RemoveTagsError::RuleNotFound(String::from(parsed_error.message))
-                }
-                "TargetGroupNotFoundException" => {
+                "RuleNotFound" => RemoveTagsError::RuleNotFound(String::from(parsed_error.message)),
+                "TargetGroupNotFound" => {
                     RemoveTagsError::TargetGroupNotFound(String::from(parsed_error.message))
                 }
-                "TooManyTagsException" => {
-                    RemoveTagsError::TooManyTags(String::from(parsed_error.message))
-                }
+                "TooManyTags" => RemoveTagsError::TooManyTags(String::from(parsed_error.message)),
                 _ => RemoveTagsError::Unknown(String::from(body)),
             },
             Err(_) => RemoveTagsError::Unknown(body.to_string()),
@@ -9163,15 +9119,15 @@ impl SetIpAddressTypeError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidConfigurationRequestException" => {
+                "InvalidConfigurationRequest" => {
                     SetIpAddressTypeError::InvalidConfigurationRequest(String::from(
                         parsed_error.message,
                     ))
                 }
-                "InvalidSubnetException" => {
+                "InvalidSubnet" => {
                     SetIpAddressTypeError::InvalidSubnet(String::from(parsed_error.message))
                 }
-                "LoadBalancerNotFoundException" => {
+                "LoadBalancerNotFound" => {
                     SetIpAddressTypeError::LoadBalancerNotFound(String::from(parsed_error.message))
                 }
                 _ => SetIpAddressTypeError::Unknown(String::from(body)),
@@ -9254,13 +9210,13 @@ impl SetRulePrioritiesError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "OperationNotPermittedException" => SetRulePrioritiesError::OperationNotPermitted(
+                "OperationNotPermitted" => SetRulePrioritiesError::OperationNotPermitted(
                     String::from(parsed_error.message),
                 ),
-                "PriorityInUseException" => {
+                "PriorityInUse" => {
                     SetRulePrioritiesError::PriorityInUse(String::from(parsed_error.message))
                 }
-                "RuleNotFoundException" => {
+                "RuleNotFound" => {
                     SetRulePrioritiesError::RuleNotFound(String::from(parsed_error.message))
                 }
                 _ => SetRulePrioritiesError::Unknown(String::from(body)),
@@ -9345,15 +9301,15 @@ impl SetSecurityGroupsError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidConfigurationRequestException" => {
+                "InvalidConfigurationRequest" => {
                     SetSecurityGroupsError::InvalidConfigurationRequest(String::from(
                         parsed_error.message,
                     ))
                 }
-                "InvalidSecurityGroupException" => {
+                "InvalidSecurityGroup" => {
                     SetSecurityGroupsError::InvalidSecurityGroup(String::from(parsed_error.message))
                 }
-                "LoadBalancerNotFoundException" => {
+                "LoadBalancerNotFound" => {
                     SetSecurityGroupsError::LoadBalancerNotFound(String::from(parsed_error.message))
                 }
                 _ => SetSecurityGroupsError::Unknown(String::from(body)),
@@ -9444,24 +9400,22 @@ impl SetSubnetsError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "AllocationIdNotFoundException" => {
+                "AllocationIdNotFound" => {
                     SetSubnetsError::AllocationIdNotFound(String::from(parsed_error.message))
                 }
-                "AvailabilityZoneNotSupportedException" => {
-                    SetSubnetsError::AvailabilityZoneNotSupported(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "InvalidConfigurationRequestException" => {
+                "AvailabilityZoneNotSupported" => SetSubnetsError::AvailabilityZoneNotSupported(
+                    String::from(parsed_error.message),
+                ),
+                "InvalidConfigurationRequest" => {
                     SetSubnetsError::InvalidConfigurationRequest(String::from(parsed_error.message))
                 }
-                "InvalidSubnetException" => {
+                "InvalidSubnet" => {
                     SetSubnetsError::InvalidSubnet(String::from(parsed_error.message))
                 }
-                "LoadBalancerNotFoundException" => {
+                "LoadBalancerNotFound" => {
                     SetSubnetsError::LoadBalancerNotFound(String::from(parsed_error.message))
                 }
-                "SubnetNotFoundException" => {
+                "SubnetNotFound" => {
                     SetSubnetsError::SubnetNotFound(String::from(parsed_error.message))
                 }
                 _ => SetSubnetsError::Unknown(String::from(body)),

@@ -218,8 +218,10 @@ impl XmlErrorTypes {
 
         if operation.errors.is_some() {
             for error in operation.errors() {
-                type_matchers.push(format!("\"{error_shape}\" => {error_type}::{error_name}(String::from(parsed_error.message))",
-                    error_shape = error.shape,
+                let shape = service.get_shape(&error.shape).unwrap();
+                let error_code = shape.error.as_ref().and_then(|http_error| http_error.code.as_ref()).unwrap_or(&error.shape);
+                type_matchers.push(format!("\"{error_code}\" => {error_type}::{error_name}(String::from(parsed_error.message))",
+                    error_code = error_code,
                     error_type = error_type,
                     error_name = error.idiomatic_error_name()))
             }

@@ -9529,7 +9529,7 @@ impl DeleteChangeSetError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidChangeSetStatusException" => {
+                "InvalidChangeSetStatus" => {
                     DeleteChangeSetError::InvalidChangeSetStatus(String::from(parsed_error.message))
                 }
                 _ => DeleteChangeSetError::Unknown(String::from(body)),
@@ -9944,7 +9944,7 @@ impl DescribeChangeSetError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ChangeSetNotFoundException" => {
+                "ChangeSetNotFound" => {
                     DescribeChangeSetError::ChangeSetNotFound(String::from(parsed_error.message))
                 }
                 _ => DescribeChangeSetError::Unknown(String::from(body)),
@@ -10641,7 +10641,7 @@ impl ExecuteChangeSetError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ChangeSetNotFoundException" => {
+                "ChangeSetNotFound" => {
                     ExecuteChangeSetError::ChangeSetNotFound(String::from(parsed_error.message))
                 }
                 "InsufficientCapabilitiesException" => {
@@ -10649,11 +10649,9 @@ impl ExecuteChangeSetError {
                         parsed_error.message,
                     ))
                 }
-                "InvalidChangeSetStatusException" => {
-                    ExecuteChangeSetError::InvalidChangeSetStatus(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "InvalidChangeSetStatus" => ExecuteChangeSetError::InvalidChangeSetStatus(
+                    String::from(parsed_error.message),
+                ),
                 "TokenAlreadyExistsException" => {
                     ExecuteChangeSetError::TokenAlreadyExists(String::from(parsed_error.message))
                 }
@@ -10805,7 +10803,7 @@ impl GetTemplateError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ChangeSetNotFoundException" => {
+                "ChangeSetNotFound" => {
                     GetTemplateError::ChangeSetNotFound(String::from(parsed_error.message))
                 }
                 _ => GetTemplateError::Unknown(String::from(body)),

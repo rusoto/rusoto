@@ -1242,10 +1242,10 @@ impl AssumeRoleError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "MalformedPolicyDocumentException" => {
+                "MalformedPolicyDocument" => {
                     AssumeRoleError::MalformedPolicyDocument(String::from(parsed_error.message))
                 }
-                "PackedPolicyTooLargeException" => {
+                "PackedPolicyTooLarge" => {
                     AssumeRoleError::PackedPolicyTooLarge(String::from(parsed_error.message))
                 }
                 "RegionDisabledException" => {
@@ -1340,18 +1340,16 @@ impl AssumeRoleWithSAMLError {
                 "ExpiredTokenException" => {
                     AssumeRoleWithSAMLError::ExpiredToken(String::from(parsed_error.message))
                 }
-                "IDPRejectedClaimException" => {
+                "IDPRejectedClaim" => {
                     AssumeRoleWithSAMLError::IDPRejectedClaim(String::from(parsed_error.message))
                 }
-                "InvalidIdentityTokenException" => AssumeRoleWithSAMLError::InvalidIdentityToken(
+                "InvalidIdentityToken" => AssumeRoleWithSAMLError::InvalidIdentityToken(
                     String::from(parsed_error.message),
                 ),
-                "MalformedPolicyDocumentException" => {
-                    AssumeRoleWithSAMLError::MalformedPolicyDocument(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "PackedPolicyTooLargeException" => AssumeRoleWithSAMLError::PackedPolicyTooLarge(
+                "MalformedPolicyDocument" => AssumeRoleWithSAMLError::MalformedPolicyDocument(
+                    String::from(parsed_error.message),
+                ),
+                "PackedPolicyTooLarge" => AssumeRoleWithSAMLError::PackedPolicyTooLarge(
                     String::from(parsed_error.message),
                 ),
                 "RegionDisabledException" => {
@@ -1453,29 +1451,23 @@ impl AssumeRoleWithWebIdentityError {
                 "ExpiredTokenException" => {
                     AssumeRoleWithWebIdentityError::ExpiredToken(String::from(parsed_error.message))
                 }
-                "IDPCommunicationErrorException" => {
-                    AssumeRoleWithWebIdentityError::IDPCommunicationError(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "IDPRejectedClaimException" => AssumeRoleWithWebIdentityError::IDPRejectedClaim(
+                "IDPCommunicationError" => AssumeRoleWithWebIdentityError::IDPCommunicationError(
                     String::from(parsed_error.message),
                 ),
-                "InvalidIdentityTokenException" => {
-                    AssumeRoleWithWebIdentityError::InvalidIdentityToken(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "MalformedPolicyDocumentException" => {
+                "IDPRejectedClaim" => AssumeRoleWithWebIdentityError::IDPRejectedClaim(
+                    String::from(parsed_error.message),
+                ),
+                "InvalidIdentityToken" => AssumeRoleWithWebIdentityError::InvalidIdentityToken(
+                    String::from(parsed_error.message),
+                ),
+                "MalformedPolicyDocument" => {
                     AssumeRoleWithWebIdentityError::MalformedPolicyDocument(String::from(
                         parsed_error.message,
                     ))
                 }
-                "PackedPolicyTooLargeException" => {
-                    AssumeRoleWithWebIdentityError::PackedPolicyTooLarge(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "PackedPolicyTooLarge" => AssumeRoleWithWebIdentityError::PackedPolicyTooLarge(
+                    String::from(parsed_error.message),
+                ),
                 "RegionDisabledException" => AssumeRoleWithWebIdentityError::RegionDisabled(
                     String::from(parsed_error.message),
                 ),
@@ -1719,12 +1711,10 @@ impl GetFederationTokenError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "MalformedPolicyDocumentException" => {
-                    GetFederationTokenError::MalformedPolicyDocument(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "PackedPolicyTooLargeException" => GetFederationTokenError::PackedPolicyTooLarge(
+                "MalformedPolicyDocument" => GetFederationTokenError::MalformedPolicyDocument(
+                    String::from(parsed_error.message),
+                ),
+                "PackedPolicyTooLarge" => GetFederationTokenError::PackedPolicyTooLarge(
                     String::from(parsed_error.message),
                 ),
                 "RegionDisabledException" => {

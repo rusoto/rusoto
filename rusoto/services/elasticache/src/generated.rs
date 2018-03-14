@@ -8227,10 +8227,10 @@ impl AddTagsToResourceError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "CacheClusterNotFoundFault" => AddTagsToResourceError::CacheClusterNotFoundFault(
+                "CacheClusterNotFound" => AddTagsToResourceError::CacheClusterNotFoundFault(
                     String::from(parsed_error.message),
                 ),
-                "InvalidARNFault" => {
+                "InvalidARN" => {
                     AddTagsToResourceError::InvalidARNFault(String::from(parsed_error.message))
                 }
                 "SnapshotNotFoundFault" => AddTagsToResourceError::SnapshotNotFoundFault(
@@ -8328,27 +8328,27 @@ impl AuthorizeCacheSecurityGroupIngressError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "AuthorizationAlreadyExistsFault" => {
+                "AuthorizationAlreadyExists" => {
                     AuthorizeCacheSecurityGroupIngressError::AuthorizationAlreadyExistsFault(
                         String::from(parsed_error.message),
                     )
                 }
-                "CacheSecurityGroupNotFoundFault" => {
+                "CacheSecurityGroupNotFound" => {
                     AuthorizeCacheSecurityGroupIngressError::CacheSecurityGroupNotFoundFault(
                         String::from(parsed_error.message),
                     )
                 }
-                "InvalidCacheSecurityGroupStateFault" => {
+                "InvalidCacheSecurityGroupState" => {
                     AuthorizeCacheSecurityGroupIngressError::InvalidCacheSecurityGroupStateFault(
                         String::from(parsed_error.message),
                     )
                 }
-                "InvalidParameterCombinationException" => {
+                "InvalidParameterCombination" => {
                     AuthorizeCacheSecurityGroupIngressError::InvalidParameterCombination(
                         String::from(parsed_error.message),
                     )
                 }
-                "InvalidParameterValueException" => {
+                "InvalidParameterValue" => {
                     AuthorizeCacheSecurityGroupIngressError::InvalidParameterValue(String::from(
                         parsed_error.message,
                     ))
@@ -8451,15 +8451,13 @@ impl CopySnapshotError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidParameterCombinationException" => {
-                    CopySnapshotError::InvalidParameterCombination(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "InvalidParameterValueException" => {
+                "InvalidParameterCombination" => CopySnapshotError::InvalidParameterCombination(
+                    String::from(parsed_error.message),
+                ),
+                "InvalidParameterValue" => {
                     CopySnapshotError::InvalidParameterValue(String::from(parsed_error.message))
                 }
-                "InvalidSnapshotStateFault" => {
+                "InvalidSnapshotState" => {
                     CopySnapshotError::InvalidSnapshotStateFault(String::from(parsed_error.message))
                 }
                 "SnapshotAlreadyExistsFault" => CopySnapshotError::SnapshotAlreadyExistsFault(
@@ -8576,17 +8574,17 @@ impl CreateCacheClusterError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "CacheClusterAlreadyExistsFault" => {
+                "CacheClusterAlreadyExists" => {
                     CreateCacheClusterError::CacheClusterAlreadyExistsFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "CacheParameterGroupNotFoundFault" => {
+                "CacheParameterGroupNotFound" => {
                     CreateCacheClusterError::CacheParameterGroupNotFoundFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "CacheSecurityGroupNotFoundFault" => {
+                "CacheSecurityGroupNotFound" => {
                     CreateCacheClusterError::CacheSecurityGroupNotFoundFault(String::from(
                         parsed_error.message,
                     ))
@@ -8596,27 +8594,25 @@ impl CreateCacheClusterError {
                         parsed_error.message,
                     ))
                 }
-                "ClusterQuotaForCustomerExceededFault" => {
+                "ClusterQuotaForCustomerExceeded" => {
                     CreateCacheClusterError::ClusterQuotaForCustomerExceededFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "InsufficientCacheClusterCapacityFault" => {
+                "InsufficientCacheClusterCapacity" => {
                     CreateCacheClusterError::InsufficientCacheClusterCapacityFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "InvalidParameterCombinationException" => {
+                "InvalidParameterCombination" => {
                     CreateCacheClusterError::InvalidParameterCombination(String::from(
                         parsed_error.message,
                     ))
                 }
-                "InvalidParameterValueException" => {
-                    CreateCacheClusterError::InvalidParameterValue(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "InvalidReplicationGroupStateFault" => {
+                "InvalidParameterValue" => CreateCacheClusterError::InvalidParameterValue(
+                    String::from(parsed_error.message),
+                ),
+                "InvalidReplicationGroupState" => {
                     CreateCacheClusterError::InvalidReplicationGroupStateFault(String::from(
                         parsed_error.message,
                     ))
@@ -8626,12 +8622,12 @@ impl CreateCacheClusterError {
                         parsed_error.message,
                     ))
                 }
-                "NodeQuotaForClusterExceededFault" => {
+                "NodeQuotaForClusterExceeded" => {
                     CreateCacheClusterError::NodeQuotaForClusterExceededFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "NodeQuotaForCustomerExceededFault" => {
+                "NodeQuotaForCustomerExceeded" => {
                     CreateCacheClusterError::NodeQuotaForCustomerExceededFault(String::from(
                         parsed_error.message,
                     ))
@@ -8743,31 +8739,29 @@ impl CreateCacheParameterGroupError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "CacheParameterGroupAlreadyExistsFault" => {
+                "CacheParameterGroupAlreadyExists" => {
                     CreateCacheParameterGroupError::CacheParameterGroupAlreadyExistsFault(
                         String::from(parsed_error.message),
                     )
                 }
-                "CacheParameterGroupQuotaExceededFault" => {
+                "CacheParameterGroupQuotaExceeded" => {
                     CreateCacheParameterGroupError::CacheParameterGroupQuotaExceededFault(
                         String::from(parsed_error.message),
                     )
                 }
-                "InvalidCacheParameterGroupStateFault" => {
+                "InvalidCacheParameterGroupState" => {
                     CreateCacheParameterGroupError::InvalidCacheParameterGroupStateFault(
                         String::from(parsed_error.message),
                     )
                 }
-                "InvalidParameterCombinationException" => {
+                "InvalidParameterCombination" => {
                     CreateCacheParameterGroupError::InvalidParameterCombination(String::from(
                         parsed_error.message,
                     ))
                 }
-                "InvalidParameterValueException" => {
-                    CreateCacheParameterGroupError::InvalidParameterValue(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "InvalidParameterValue" => CreateCacheParameterGroupError::InvalidParameterValue(
+                    String::from(parsed_error.message),
+                ),
                 _ => CreateCacheParameterGroupError::Unknown(String::from(body)),
             },
             Err(_) => CreateCacheParameterGroupError::Unknown(body.to_string()),
@@ -8860,26 +8854,24 @@ impl CreateCacheSecurityGroupError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "CacheSecurityGroupAlreadyExistsFault" => {
+                "CacheSecurityGroupAlreadyExists" => {
                     CreateCacheSecurityGroupError::CacheSecurityGroupAlreadyExistsFault(
                         String::from(parsed_error.message),
                     )
                 }
-                "CacheSecurityGroupQuotaExceededFault" => {
+                "QuotaExceeded.CacheSecurityGroup" => {
                     CreateCacheSecurityGroupError::CacheSecurityGroupQuotaExceededFault(
                         String::from(parsed_error.message),
                     )
                 }
-                "InvalidParameterCombinationException" => {
+                "InvalidParameterCombination" => {
                     CreateCacheSecurityGroupError::InvalidParameterCombination(String::from(
                         parsed_error.message,
                     ))
                 }
-                "InvalidParameterValueException" => {
-                    CreateCacheSecurityGroupError::InvalidParameterValue(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "InvalidParameterValue" => CreateCacheSecurityGroupError::InvalidParameterValue(
+                    String::from(parsed_error.message),
+                ),
                 _ => CreateCacheSecurityGroupError::Unknown(String::from(body)),
             },
             Err(_) => CreateCacheSecurityGroupError::Unknown(body.to_string()),
@@ -8965,12 +8957,12 @@ impl CreateCacheSubnetGroupError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "CacheSubnetGroupAlreadyExistsFault" => {
+                "CacheSubnetGroupAlreadyExists" => {
                     CreateCacheSubnetGroupError::CacheSubnetGroupAlreadyExistsFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "CacheSubnetGroupQuotaExceededFault" => {
+                "CacheSubnetGroupQuotaExceeded" => {
                     CreateCacheSubnetGroupError::CacheSubnetGroupQuotaExceededFault(String::from(
                         parsed_error.message,
                     ))
@@ -9090,17 +9082,15 @@ impl CreateReplicationGroupError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "CacheClusterNotFoundFault" => {
-                    CreateReplicationGroupError::CacheClusterNotFoundFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "CacheParameterGroupNotFoundFault" => {
+                "CacheClusterNotFound" => CreateReplicationGroupError::CacheClusterNotFoundFault(
+                    String::from(parsed_error.message),
+                ),
+                "CacheParameterGroupNotFound" => {
                     CreateReplicationGroupError::CacheParameterGroupNotFoundFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "CacheSecurityGroupNotFoundFault" => {
+                "CacheSecurityGroupNotFound" => {
                     CreateReplicationGroupError::CacheSecurityGroupNotFoundFault(String::from(
                         parsed_error.message,
                     ))
@@ -9110,52 +9100,50 @@ impl CreateReplicationGroupError {
                         parsed_error.message,
                     ))
                 }
-                "ClusterQuotaForCustomerExceededFault" => {
+                "ClusterQuotaForCustomerExceeded" => {
                     CreateReplicationGroupError::ClusterQuotaForCustomerExceededFault(
                         String::from(parsed_error.message),
                     )
                 }
-                "InsufficientCacheClusterCapacityFault" => {
+                "InsufficientCacheClusterCapacity" => {
                     CreateReplicationGroupError::InsufficientCacheClusterCapacityFault(
                         String::from(parsed_error.message),
                     )
                 }
-                "InvalidCacheClusterStateFault" => {
+                "InvalidCacheClusterState" => {
                     CreateReplicationGroupError::InvalidCacheClusterStateFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "InvalidParameterCombinationException" => {
+                "InvalidParameterCombination" => {
                     CreateReplicationGroupError::InvalidParameterCombination(String::from(
                         parsed_error.message,
                     ))
                 }
-                "InvalidParameterValueException" => {
-                    CreateReplicationGroupError::InvalidParameterValue(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "InvalidParameterValue" => CreateReplicationGroupError::InvalidParameterValue(
+                    String::from(parsed_error.message),
+                ),
                 "InvalidVPCNetworkStateFault" => {
                     CreateReplicationGroupError::InvalidVPCNetworkStateFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "NodeGroupsPerReplicationGroupQuotaExceededFault" => {
+                "NodeGroupsPerReplicationGroupQuotaExceeded" => {
                     CreateReplicationGroupError::NodeGroupsPerReplicationGroupQuotaExceededFault(
                         String::from(parsed_error.message),
                     )
                 }
-                "NodeQuotaForClusterExceededFault" => {
+                "NodeQuotaForClusterExceeded" => {
                     CreateReplicationGroupError::NodeQuotaForClusterExceededFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "NodeQuotaForCustomerExceededFault" => {
+                "NodeQuotaForCustomerExceeded" => {
                     CreateReplicationGroupError::NodeQuotaForCustomerExceededFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "ReplicationGroupAlreadyExistsFault" => {
+                "ReplicationGroupAlreadyExists" => {
                     CreateReplicationGroupError::ReplicationGroupAlreadyExistsFault(String::from(
                         parsed_error.message,
                     ))
@@ -9273,23 +9261,19 @@ impl CreateSnapshotError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "CacheClusterNotFoundFault" => CreateSnapshotError::CacheClusterNotFoundFault(
+                "CacheClusterNotFound" => CreateSnapshotError::CacheClusterNotFoundFault(
                     String::from(parsed_error.message),
                 ),
-                "InvalidCacheClusterStateFault" => {
-                    CreateSnapshotError::InvalidCacheClusterStateFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "InvalidParameterCombinationException" => {
-                    CreateSnapshotError::InvalidParameterCombination(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "InvalidParameterValueException" => {
+                "InvalidCacheClusterState" => CreateSnapshotError::InvalidCacheClusterStateFault(
+                    String::from(parsed_error.message),
+                ),
+                "InvalidParameterCombination" => CreateSnapshotError::InvalidParameterCombination(
+                    String::from(parsed_error.message),
+                ),
+                "InvalidParameterValue" => {
                     CreateSnapshotError::InvalidParameterValue(String::from(parsed_error.message))
                 }
-                "InvalidReplicationGroupStateFault" => {
+                "InvalidReplicationGroupState" => {
                     CreateSnapshotError::InvalidReplicationGroupStateFault(String::from(
                         parsed_error.message,
                     ))
@@ -9404,24 +9388,22 @@ impl DeleteCacheClusterError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "CacheClusterNotFoundFault" => DeleteCacheClusterError::CacheClusterNotFoundFault(
+                "CacheClusterNotFound" => DeleteCacheClusterError::CacheClusterNotFoundFault(
                     String::from(parsed_error.message),
                 ),
-                "InvalidCacheClusterStateFault" => {
+                "InvalidCacheClusterState" => {
                     DeleteCacheClusterError::InvalidCacheClusterStateFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "InvalidParameterCombinationException" => {
+                "InvalidParameterCombination" => {
                     DeleteCacheClusterError::InvalidParameterCombination(String::from(
                         parsed_error.message,
                     ))
                 }
-                "InvalidParameterValueException" => {
-                    DeleteCacheClusterError::InvalidParameterValue(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "InvalidParameterValue" => DeleteCacheClusterError::InvalidParameterValue(
+                    String::from(parsed_error.message),
+                ),
                 "SnapshotAlreadyExistsFault" => {
                     DeleteCacheClusterError::SnapshotAlreadyExistsFault(String::from(
                         parsed_error.message,
@@ -9525,26 +9507,24 @@ impl DeleteCacheParameterGroupError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "CacheParameterGroupNotFoundFault" => {
+                "CacheParameterGroupNotFound" => {
                     DeleteCacheParameterGroupError::CacheParameterGroupNotFoundFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "InvalidCacheParameterGroupStateFault" => {
+                "InvalidCacheParameterGroupState" => {
                     DeleteCacheParameterGroupError::InvalidCacheParameterGroupStateFault(
                         String::from(parsed_error.message),
                     )
                 }
-                "InvalidParameterCombinationException" => {
+                "InvalidParameterCombination" => {
                     DeleteCacheParameterGroupError::InvalidParameterCombination(String::from(
                         parsed_error.message,
                     ))
                 }
-                "InvalidParameterValueException" => {
-                    DeleteCacheParameterGroupError::InvalidParameterValue(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "InvalidParameterValue" => DeleteCacheParameterGroupError::InvalidParameterValue(
+                    String::from(parsed_error.message),
+                ),
                 _ => DeleteCacheParameterGroupError::Unknown(String::from(body)),
             },
             Err(_) => DeleteCacheParameterGroupError::Unknown(body.to_string()),
@@ -9632,26 +9612,24 @@ impl DeleteCacheSecurityGroupError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "CacheSecurityGroupNotFoundFault" => {
+                "CacheSecurityGroupNotFound" => {
                     DeleteCacheSecurityGroupError::CacheSecurityGroupNotFoundFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "InvalidCacheSecurityGroupStateFault" => {
+                "InvalidCacheSecurityGroupState" => {
                     DeleteCacheSecurityGroupError::InvalidCacheSecurityGroupStateFault(
                         String::from(parsed_error.message),
                     )
                 }
-                "InvalidParameterCombinationException" => {
+                "InvalidParameterCombination" => {
                     DeleteCacheSecurityGroupError::InvalidParameterCombination(String::from(
                         parsed_error.message,
                     ))
                 }
-                "InvalidParameterValueException" => {
-                    DeleteCacheSecurityGroupError::InvalidParameterValue(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "InvalidParameterValue" => DeleteCacheSecurityGroupError::InvalidParameterValue(
+                    String::from(parsed_error.message),
+                ),
                 _ => DeleteCacheSecurityGroupError::Unknown(String::from(body)),
             },
             Err(_) => DeleteCacheSecurityGroupError::Unknown(body.to_string()),
@@ -9830,17 +9808,15 @@ impl DeleteReplicationGroupError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidParameterCombinationException" => {
+                "InvalidParameterCombination" => {
                     DeleteReplicationGroupError::InvalidParameterCombination(String::from(
                         parsed_error.message,
                     ))
                 }
-                "InvalidParameterValueException" => {
-                    DeleteReplicationGroupError::InvalidParameterValue(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "InvalidReplicationGroupStateFault" => {
+                "InvalidParameterValue" => DeleteReplicationGroupError::InvalidParameterValue(
+                    String::from(parsed_error.message),
+                ),
+                "InvalidReplicationGroupState" => {
                     DeleteReplicationGroupError::InvalidReplicationGroupStateFault(String::from(
                         parsed_error.message,
                     ))
@@ -9953,15 +9929,13 @@ impl DeleteSnapshotError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidParameterCombinationException" => {
-                    DeleteSnapshotError::InvalidParameterCombination(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "InvalidParameterValueException" => {
+                "InvalidParameterCombination" => DeleteSnapshotError::InvalidParameterCombination(
+                    String::from(parsed_error.message),
+                ),
+                "InvalidParameterValue" => {
                     DeleteSnapshotError::InvalidParameterValue(String::from(parsed_error.message))
                 }
-                "InvalidSnapshotStateFault" => DeleteSnapshotError::InvalidSnapshotStateFault(
+                "InvalidSnapshotState" => DeleteSnapshotError::InvalidSnapshotStateFault(
                     String::from(parsed_error.message),
                 ),
                 "SnapshotNotFoundFault" => {
@@ -10048,21 +10022,17 @@ impl DescribeCacheClustersError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "CacheClusterNotFoundFault" => {
-                    DescribeCacheClustersError::CacheClusterNotFoundFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "InvalidParameterCombinationException" => {
+                "CacheClusterNotFound" => DescribeCacheClustersError::CacheClusterNotFoundFault(
+                    String::from(parsed_error.message),
+                ),
+                "InvalidParameterCombination" => {
                     DescribeCacheClustersError::InvalidParameterCombination(String::from(
                         parsed_error.message,
                     ))
                 }
-                "InvalidParameterValueException" => {
-                    DescribeCacheClustersError::InvalidParameterValue(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "InvalidParameterValue" => DescribeCacheClustersError::InvalidParameterValue(
+                    String::from(parsed_error.message),
+                ),
                 _ => DescribeCacheClustersError::Unknown(String::from(body)),
             },
             Err(_) => DescribeCacheClustersError::Unknown(body.to_string()),
@@ -10218,17 +10188,17 @@ impl DescribeCacheParameterGroupsError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "CacheParameterGroupNotFoundFault" => {
+                "CacheParameterGroupNotFound" => {
                     DescribeCacheParameterGroupsError::CacheParameterGroupNotFoundFault(
                         String::from(parsed_error.message),
                     )
                 }
-                "InvalidParameterCombinationException" => {
+                "InvalidParameterCombination" => {
                     DescribeCacheParameterGroupsError::InvalidParameterCombination(String::from(
                         parsed_error.message,
                     ))
                 }
-                "InvalidParameterValueException" => {
+                "InvalidParameterValue" => {
                     DescribeCacheParameterGroupsError::InvalidParameterValue(String::from(
                         parsed_error.message,
                     ))
@@ -10315,21 +10285,19 @@ impl DescribeCacheParametersError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "CacheParameterGroupNotFoundFault" => {
+                "CacheParameterGroupNotFound" => {
                     DescribeCacheParametersError::CacheParameterGroupNotFoundFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "InvalidParameterCombinationException" => {
+                "InvalidParameterCombination" => {
                     DescribeCacheParametersError::InvalidParameterCombination(String::from(
                         parsed_error.message,
                     ))
                 }
-                "InvalidParameterValueException" => {
-                    DescribeCacheParametersError::InvalidParameterValue(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "InvalidParameterValue" => DescribeCacheParametersError::InvalidParameterValue(
+                    String::from(parsed_error.message),
+                ),
                 _ => DescribeCacheParametersError::Unknown(String::from(body)),
             },
             Err(_) => DescribeCacheParametersError::Unknown(body.to_string()),
@@ -10412,17 +10380,17 @@ impl DescribeCacheSecurityGroupsError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "CacheSecurityGroupNotFoundFault" => {
+                "CacheSecurityGroupNotFound" => {
                     DescribeCacheSecurityGroupsError::CacheSecurityGroupNotFoundFault(
                         String::from(parsed_error.message),
                     )
                 }
-                "InvalidParameterCombinationException" => {
+                "InvalidParameterCombination" => {
                     DescribeCacheSecurityGroupsError::InvalidParameterCombination(String::from(
                         parsed_error.message,
                     ))
                 }
-                "InvalidParameterValueException" => {
+                "InvalidParameterValue" => {
                     DescribeCacheSecurityGroupsError::InvalidParameterValue(String::from(
                         parsed_error.message,
                     ))
@@ -10588,12 +10556,12 @@ impl DescribeEngineDefaultParametersError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidParameterCombinationException" => {
+                "InvalidParameterCombination" => {
                     DescribeEngineDefaultParametersError::InvalidParameterCombination(
                         String::from(parsed_error.message),
                     )
                 }
-                "InvalidParameterValueException" => {
+                "InvalidParameterValue" => {
                     DescribeEngineDefaultParametersError::InvalidParameterValue(String::from(
                         parsed_error.message,
                     ))
@@ -10677,12 +10645,10 @@ impl DescribeEventsError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidParameterCombinationException" => {
-                    DescribeEventsError::InvalidParameterCombination(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "InvalidParameterValueException" => {
+                "InvalidParameterCombination" => DescribeEventsError::InvalidParameterCombination(
+                    String::from(parsed_error.message),
+                ),
+                "InvalidParameterValue" => {
                     DescribeEventsError::InvalidParameterValue(String::from(parsed_error.message))
                 }
                 _ => DescribeEventsError::Unknown(String::from(body)),
@@ -10764,16 +10730,14 @@ impl DescribeReplicationGroupsError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidParameterCombinationException" => {
+                "InvalidParameterCombination" => {
                     DescribeReplicationGroupsError::InvalidParameterCombination(String::from(
                         parsed_error.message,
                     ))
                 }
-                "InvalidParameterValueException" => {
-                    DescribeReplicationGroupsError::InvalidParameterValue(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "InvalidParameterValue" => DescribeReplicationGroupsError::InvalidParameterValue(
+                    String::from(parsed_error.message),
+                ),
                 "ReplicationGroupNotFoundFault" => {
                     DescribeReplicationGroupsError::ReplicationGroupNotFoundFault(String::from(
                         parsed_error.message,
@@ -10861,17 +10825,15 @@ impl DescribeReservedCacheNodesError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidParameterCombinationException" => {
+                "InvalidParameterCombination" => {
                     DescribeReservedCacheNodesError::InvalidParameterCombination(String::from(
                         parsed_error.message,
                     ))
                 }
-                "InvalidParameterValueException" => {
-                    DescribeReservedCacheNodesError::InvalidParameterValue(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "ReservedCacheNodeNotFoundFault" => {
+                "InvalidParameterValue" => DescribeReservedCacheNodesError::InvalidParameterValue(
+                    String::from(parsed_error.message),
+                ),
+                "ReservedCacheNodeNotFound" => {
                     DescribeReservedCacheNodesError::ReservedCacheNodeNotFoundFault(String::from(
                         parsed_error.message,
                     ))
@@ -10959,7 +10921,7 @@ impl DescribeReservedCacheNodesOfferingsError {
         match Self::deserialize(&mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "InvalidParameterCombinationException" => DescribeReservedCacheNodesOfferingsError::InvalidParameterCombination(String::from(parsed_error.message)),"InvalidParameterValueException" => DescribeReservedCacheNodesOfferingsError::InvalidParameterValue(String::from(parsed_error.message)),"ReservedCacheNodesOfferingNotFoundFault" => DescribeReservedCacheNodesOfferingsError::ReservedCacheNodesOfferingNotFoundFault(String::from(parsed_error.message)),_ => DescribeReservedCacheNodesOfferingsError::Unknown(String::from(body))
+                                    "InvalidParameterCombination" => DescribeReservedCacheNodesOfferingsError::InvalidParameterCombination(String::from(parsed_error.message)),"InvalidParameterValue" => DescribeReservedCacheNodesOfferingsError::InvalidParameterValue(String::from(parsed_error.message)),"ReservedCacheNodesOfferingNotFound" => DescribeReservedCacheNodesOfferingsError::ReservedCacheNodesOfferingNotFoundFault(String::from(parsed_error.message)),_ => DescribeReservedCacheNodesOfferingsError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => DescribeReservedCacheNodesOfferingsError::Unknown(body.to_string())
@@ -11048,15 +11010,15 @@ impl DescribeSnapshotsError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "CacheClusterNotFoundFault" => DescribeSnapshotsError::CacheClusterNotFoundFault(
+                "CacheClusterNotFound" => DescribeSnapshotsError::CacheClusterNotFoundFault(
                     String::from(parsed_error.message),
                 ),
-                "InvalidParameterCombinationException" => {
+                "InvalidParameterCombination" => {
                     DescribeSnapshotsError::InvalidParameterCombination(String::from(
                         parsed_error.message,
                     ))
                 }
-                "InvalidParameterValueException" => DescribeSnapshotsError::InvalidParameterValue(
+                "InvalidParameterValue" => DescribeSnapshotsError::InvalidParameterValue(
                     String::from(parsed_error.message),
                 ),
                 "SnapshotNotFoundFault" => DescribeSnapshotsError::SnapshotNotFoundFault(
@@ -11147,17 +11109,17 @@ impl ListAllowedNodeTypeModificationsError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "CacheClusterNotFoundFault" => {
+                "CacheClusterNotFound" => {
                     ListAllowedNodeTypeModificationsError::CacheClusterNotFoundFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "InvalidParameterCombinationException" => {
+                "InvalidParameterCombination" => {
                     ListAllowedNodeTypeModificationsError::InvalidParameterCombination(
                         String::from(parsed_error.message),
                     )
                 }
-                "InvalidParameterValueException" => {
+                "InvalidParameterValue" => {
                     ListAllowedNodeTypeModificationsError::InvalidParameterValue(String::from(
                         parsed_error.message,
                     ))
@@ -11252,12 +11214,10 @@ impl ListTagsForResourceError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "CacheClusterNotFoundFault" => {
-                    ListTagsForResourceError::CacheClusterNotFoundFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "InvalidARNFault" => {
+                "CacheClusterNotFound" => ListTagsForResourceError::CacheClusterNotFoundFault(
+                    String::from(parsed_error.message),
+                ),
+                "InvalidARN" => {
                     ListTagsForResourceError::InvalidARNFault(String::from(parsed_error.message))
                 }
                 "SnapshotNotFoundFault" => ListTagsForResourceError::SnapshotNotFoundFault(
@@ -11361,55 +11321,53 @@ impl ModifyCacheClusterError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "CacheClusterNotFoundFault" => ModifyCacheClusterError::CacheClusterNotFoundFault(
+                "CacheClusterNotFound" => ModifyCacheClusterError::CacheClusterNotFoundFault(
                     String::from(parsed_error.message),
                 ),
-                "CacheParameterGroupNotFoundFault" => {
+                "CacheParameterGroupNotFound" => {
                     ModifyCacheClusterError::CacheParameterGroupNotFoundFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "CacheSecurityGroupNotFoundFault" => {
+                "CacheSecurityGroupNotFound" => {
                     ModifyCacheClusterError::CacheSecurityGroupNotFoundFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "InsufficientCacheClusterCapacityFault" => {
+                "InsufficientCacheClusterCapacity" => {
                     ModifyCacheClusterError::InsufficientCacheClusterCapacityFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "InvalidCacheClusterStateFault" => {
+                "InvalidCacheClusterState" => {
                     ModifyCacheClusterError::InvalidCacheClusterStateFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "InvalidCacheSecurityGroupStateFault" => {
+                "InvalidCacheSecurityGroupState" => {
                     ModifyCacheClusterError::InvalidCacheSecurityGroupStateFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "InvalidParameterCombinationException" => {
+                "InvalidParameterCombination" => {
                     ModifyCacheClusterError::InvalidParameterCombination(String::from(
                         parsed_error.message,
                     ))
                 }
-                "InvalidParameterValueException" => {
-                    ModifyCacheClusterError::InvalidParameterValue(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "InvalidParameterValue" => ModifyCacheClusterError::InvalidParameterValue(
+                    String::from(parsed_error.message),
+                ),
                 "InvalidVPCNetworkStateFault" => {
                     ModifyCacheClusterError::InvalidVPCNetworkStateFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "NodeQuotaForClusterExceededFault" => {
+                "NodeQuotaForClusterExceeded" => {
                     ModifyCacheClusterError::NodeQuotaForClusterExceededFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "NodeQuotaForCustomerExceededFault" => {
+                "NodeQuotaForCustomerExceeded" => {
                     ModifyCacheClusterError::NodeQuotaForCustomerExceededFault(String::from(
                         parsed_error.message,
                     ))
@@ -11506,26 +11464,24 @@ impl ModifyCacheParameterGroupError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "CacheParameterGroupNotFoundFault" => {
+                "CacheParameterGroupNotFound" => {
                     ModifyCacheParameterGroupError::CacheParameterGroupNotFoundFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "InvalidCacheParameterGroupStateFault" => {
+                "InvalidCacheParameterGroupState" => {
                     ModifyCacheParameterGroupError::InvalidCacheParameterGroupStateFault(
                         String::from(parsed_error.message),
                     )
                 }
-                "InvalidParameterCombinationException" => {
+                "InvalidParameterCombination" => {
                     ModifyCacheParameterGroupError::InvalidParameterCombination(String::from(
                         parsed_error.message,
                     ))
                 }
-                "InvalidParameterValueException" => {
-                    ModifyCacheParameterGroupError::InvalidParameterValue(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "InvalidParameterValue" => ModifyCacheParameterGroupError::InvalidParameterValue(
+                    String::from(parsed_error.message),
+                ),
                 _ => ModifyCacheParameterGroupError::Unknown(String::from(body)),
             },
             Err(_) => ModifyCacheParameterGroupError::Unknown(body.to_string()),
@@ -11732,47 +11688,43 @@ impl ModifyReplicationGroupError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "CacheClusterNotFoundFault" => {
-                    ModifyReplicationGroupError::CacheClusterNotFoundFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "CacheParameterGroupNotFoundFault" => {
+                "CacheClusterNotFound" => ModifyReplicationGroupError::CacheClusterNotFoundFault(
+                    String::from(parsed_error.message),
+                ),
+                "CacheParameterGroupNotFound" => {
                     ModifyReplicationGroupError::CacheParameterGroupNotFoundFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "CacheSecurityGroupNotFoundFault" => {
+                "CacheSecurityGroupNotFound" => {
                     ModifyReplicationGroupError::CacheSecurityGroupNotFoundFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "InsufficientCacheClusterCapacityFault" => {
+                "InsufficientCacheClusterCapacity" => {
                     ModifyReplicationGroupError::InsufficientCacheClusterCapacityFault(
                         String::from(parsed_error.message),
                     )
                 }
-                "InvalidCacheClusterStateFault" => {
+                "InvalidCacheClusterState" => {
                     ModifyReplicationGroupError::InvalidCacheClusterStateFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "InvalidCacheSecurityGroupStateFault" => {
+                "InvalidCacheSecurityGroupState" => {
                     ModifyReplicationGroupError::InvalidCacheSecurityGroupStateFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "InvalidParameterCombinationException" => {
+                "InvalidParameterCombination" => {
                     ModifyReplicationGroupError::InvalidParameterCombination(String::from(
                         parsed_error.message,
                     ))
                 }
-                "InvalidParameterValueException" => {
-                    ModifyReplicationGroupError::InvalidParameterValue(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "InvalidReplicationGroupStateFault" => {
+                "InvalidParameterValue" => ModifyReplicationGroupError::InvalidParameterValue(
+                    String::from(parsed_error.message),
+                ),
+                "InvalidReplicationGroupState" => {
                     ModifyReplicationGroupError::InvalidReplicationGroupStateFault(String::from(
                         parsed_error.message,
                     ))
@@ -11782,12 +11734,12 @@ impl ModifyReplicationGroupError {
                         parsed_error.message,
                     ))
                 }
-                "NodeQuotaForClusterExceededFault" => {
+                "NodeQuotaForClusterExceeded" => {
                     ModifyReplicationGroupError::NodeQuotaForClusterExceededFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "NodeQuotaForCustomerExceededFault" => {
+                "NodeQuotaForCustomerExceeded" => {
                     ModifyReplicationGroupError::NodeQuotaForCustomerExceededFault(String::from(
                         parsed_error.message,
                     ))
@@ -11902,7 +11854,7 @@ impl ModifyReplicationGroupShardConfigurationError {
         match Self::deserialize(&mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "InsufficientCacheClusterCapacityFault" => ModifyReplicationGroupShardConfigurationError::InsufficientCacheClusterCapacityFault(String::from(parsed_error.message)),"InvalidCacheClusterStateFault" => ModifyReplicationGroupShardConfigurationError::InvalidCacheClusterStateFault(String::from(parsed_error.message)),"InvalidParameterCombinationException" => ModifyReplicationGroupShardConfigurationError::InvalidParameterCombination(String::from(parsed_error.message)),"InvalidParameterValueException" => ModifyReplicationGroupShardConfigurationError::InvalidParameterValue(String::from(parsed_error.message)),"InvalidReplicationGroupStateFault" => ModifyReplicationGroupShardConfigurationError::InvalidReplicationGroupStateFault(String::from(parsed_error.message)),"InvalidVPCNetworkStateFault" => ModifyReplicationGroupShardConfigurationError::InvalidVPCNetworkStateFault(String::from(parsed_error.message)),"NodeGroupsPerReplicationGroupQuotaExceededFault" => ModifyReplicationGroupShardConfigurationError::NodeGroupsPerReplicationGroupQuotaExceededFault(String::from(parsed_error.message)),"NodeQuotaForCustomerExceededFault" => ModifyReplicationGroupShardConfigurationError::NodeQuotaForCustomerExceededFault(String::from(parsed_error.message)),"ReplicationGroupNotFoundFault" => ModifyReplicationGroupShardConfigurationError::ReplicationGroupNotFoundFault(String::from(parsed_error.message)),_ => ModifyReplicationGroupShardConfigurationError::Unknown(String::from(body))
+                                    "InsufficientCacheClusterCapacity" => ModifyReplicationGroupShardConfigurationError::InsufficientCacheClusterCapacityFault(String::from(parsed_error.message)),"InvalidCacheClusterState" => ModifyReplicationGroupShardConfigurationError::InvalidCacheClusterStateFault(String::from(parsed_error.message)),"InvalidParameterCombination" => ModifyReplicationGroupShardConfigurationError::InvalidParameterCombination(String::from(parsed_error.message)),"InvalidParameterValue" => ModifyReplicationGroupShardConfigurationError::InvalidParameterValue(String::from(parsed_error.message)),"InvalidReplicationGroupState" => ModifyReplicationGroupShardConfigurationError::InvalidReplicationGroupStateFault(String::from(parsed_error.message)),"InvalidVPCNetworkStateFault" => ModifyReplicationGroupShardConfigurationError::InvalidVPCNetworkStateFault(String::from(parsed_error.message)),"NodeGroupsPerReplicationGroupQuotaExceeded" => ModifyReplicationGroupShardConfigurationError::NodeGroupsPerReplicationGroupQuotaExceededFault(String::from(parsed_error.message)),"NodeQuotaForCustomerExceeded" => ModifyReplicationGroupShardConfigurationError::NodeQuotaForCustomerExceededFault(String::from(parsed_error.message)),"ReplicationGroupNotFoundFault" => ModifyReplicationGroupShardConfigurationError::ReplicationGroupNotFoundFault(String::from(parsed_error.message)),_ => ModifyReplicationGroupShardConfigurationError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => ModifyReplicationGroupShardConfigurationError::Unknown(body.to_string())
@@ -11994,7 +11946,7 @@ impl PurchaseReservedCacheNodesOfferingError {
         match Self::deserialize(&mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "InvalidParameterCombinationException" => PurchaseReservedCacheNodesOfferingError::InvalidParameterCombination(String::from(parsed_error.message)),"InvalidParameterValueException" => PurchaseReservedCacheNodesOfferingError::InvalidParameterValue(String::from(parsed_error.message)),"ReservedCacheNodeAlreadyExistsFault" => PurchaseReservedCacheNodesOfferingError::ReservedCacheNodeAlreadyExistsFault(String::from(parsed_error.message)),"ReservedCacheNodeQuotaExceededFault" => PurchaseReservedCacheNodesOfferingError::ReservedCacheNodeQuotaExceededFault(String::from(parsed_error.message)),"ReservedCacheNodesOfferingNotFoundFault" => PurchaseReservedCacheNodesOfferingError::ReservedCacheNodesOfferingNotFoundFault(String::from(parsed_error.message)),_ => PurchaseReservedCacheNodesOfferingError::Unknown(String::from(body))
+                                    "InvalidParameterCombination" => PurchaseReservedCacheNodesOfferingError::InvalidParameterCombination(String::from(parsed_error.message)),"InvalidParameterValue" => PurchaseReservedCacheNodesOfferingError::InvalidParameterValue(String::from(parsed_error.message)),"ReservedCacheNodeAlreadyExists" => PurchaseReservedCacheNodesOfferingError::ReservedCacheNodeAlreadyExistsFault(String::from(parsed_error.message)),"ReservedCacheNodeQuotaExceeded" => PurchaseReservedCacheNodesOfferingError::ReservedCacheNodeQuotaExceededFault(String::from(parsed_error.message)),"ReservedCacheNodesOfferingNotFound" => PurchaseReservedCacheNodesOfferingError::ReservedCacheNodesOfferingNotFoundFault(String::from(parsed_error.message)),_ => PurchaseReservedCacheNodesOfferingError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => PurchaseReservedCacheNodesOfferingError::Unknown(body.to_string())
@@ -12085,10 +12037,10 @@ impl RebootCacheClusterError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "CacheClusterNotFoundFault" => RebootCacheClusterError::CacheClusterNotFoundFault(
+                "CacheClusterNotFound" => RebootCacheClusterError::CacheClusterNotFoundFault(
                     String::from(parsed_error.message),
                 ),
-                "InvalidCacheClusterStateFault" => {
+                "InvalidCacheClusterState" => {
                     RebootCacheClusterError::InvalidCacheClusterStateFault(String::from(
                         parsed_error.message,
                     ))
@@ -12176,18 +12128,16 @@ impl RemoveTagsFromResourceError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "CacheClusterNotFoundFault" => {
-                    RemoveTagsFromResourceError::CacheClusterNotFoundFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "InvalidARNFault" => {
+                "CacheClusterNotFound" => RemoveTagsFromResourceError::CacheClusterNotFoundFault(
+                    String::from(parsed_error.message),
+                ),
+                "InvalidARN" => {
                     RemoveTagsFromResourceError::InvalidARNFault(String::from(parsed_error.message))
                 }
                 "SnapshotNotFoundFault" => RemoveTagsFromResourceError::SnapshotNotFoundFault(
                     String::from(parsed_error.message),
                 ),
-                "TagNotFoundFault" => RemoveTagsFromResourceError::TagNotFoundFault(String::from(
+                "TagNotFound" => RemoveTagsFromResourceError::TagNotFoundFault(String::from(
                     parsed_error.message,
                 )),
                 _ => RemoveTagsFromResourceError::Unknown(String::from(body)),
@@ -12275,26 +12225,24 @@ impl ResetCacheParameterGroupError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "CacheParameterGroupNotFoundFault" => {
+                "CacheParameterGroupNotFound" => {
                     ResetCacheParameterGroupError::CacheParameterGroupNotFoundFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "InvalidCacheParameterGroupStateFault" => {
+                "InvalidCacheParameterGroupState" => {
                     ResetCacheParameterGroupError::InvalidCacheParameterGroupStateFault(
                         String::from(parsed_error.message),
                     )
                 }
-                "InvalidParameterCombinationException" => {
+                "InvalidParameterCombination" => {
                     ResetCacheParameterGroupError::InvalidParameterCombination(String::from(
                         parsed_error.message,
                     ))
                 }
-                "InvalidParameterValueException" => {
-                    ResetCacheParameterGroupError::InvalidParameterValue(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "InvalidParameterValue" => ResetCacheParameterGroupError::InvalidParameterValue(
+                    String::from(parsed_error.message),
+                ),
                 _ => ResetCacheParameterGroupError::Unknown(String::from(body)),
             },
             Err(_) => ResetCacheParameterGroupError::Unknown(body.to_string()),
@@ -12382,27 +12330,27 @@ impl RevokeCacheSecurityGroupIngressError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "AuthorizationNotFoundFault" => {
+                "AuthorizationNotFound" => {
                     RevokeCacheSecurityGroupIngressError::AuthorizationNotFoundFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "CacheSecurityGroupNotFoundFault" => {
+                "CacheSecurityGroupNotFound" => {
                     RevokeCacheSecurityGroupIngressError::CacheSecurityGroupNotFoundFault(
                         String::from(parsed_error.message),
                     )
                 }
-                "InvalidCacheSecurityGroupStateFault" => {
+                "InvalidCacheSecurityGroupState" => {
                     RevokeCacheSecurityGroupIngressError::InvalidCacheSecurityGroupStateFault(
                         String::from(parsed_error.message),
                     )
                 }
-                "InvalidParameterCombinationException" => {
+                "InvalidParameterCombination" => {
                     RevokeCacheSecurityGroupIngressError::InvalidParameterCombination(
                         String::from(parsed_error.message),
                     )
                 }
-                "InvalidParameterValueException" => {
+                "InvalidParameterValue" => {
                     RevokeCacheSecurityGroupIngressError::InvalidParameterValue(String::from(
                         parsed_error.message,
                     ))
@@ -12505,25 +12453,21 @@ impl TestFailoverError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "APICallRateForCustomerExceededFault" => {
+                "APICallRateForCustomerExceeded" => {
                     TestFailoverError::APICallRateForCustomerExceededFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "InvalidCacheClusterStateFault" => {
-                    TestFailoverError::InvalidCacheClusterStateFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "InvalidParameterCombinationException" => {
-                    TestFailoverError::InvalidParameterCombination(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "InvalidParameterValueException" => {
+                "InvalidCacheClusterState" => TestFailoverError::InvalidCacheClusterStateFault(
+                    String::from(parsed_error.message),
+                ),
+                "InvalidParameterCombination" => TestFailoverError::InvalidParameterCombination(
+                    String::from(parsed_error.message),
+                ),
+                "InvalidParameterValue" => {
                     TestFailoverError::InvalidParameterValue(String::from(parsed_error.message))
                 }
-                "InvalidReplicationGroupStateFault" => {
+                "InvalidReplicationGroupState" => {
                     TestFailoverError::InvalidReplicationGroupStateFault(String::from(
                         parsed_error.message,
                     ))

@@ -2525,9 +2525,11 @@ impl ChangeMessageVisibilityError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "MessageNotInflight" => ChangeMessageVisibilityError::MessageNotInflight(
-                    String::from(parsed_error.message),
-                ),
+                "AWS.SimpleQueueService.MessageNotInflight" => {
+                    ChangeMessageVisibilityError::MessageNotInflight(String::from(
+                        parsed_error.message,
+                    ))
+                }
                 "ReceiptHandleIsInvalid" => ChangeMessageVisibilityError::ReceiptHandleIsInvalid(
                     String::from(parsed_error.message),
                 ),
@@ -2614,18 +2616,22 @@ impl ChangeMessageVisibilityBatchError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "BatchEntryIdsNotDistinct" => {
+                "AWS.SimpleQueueService.BatchEntryIdsNotDistinct" => {
                     ChangeMessageVisibilityBatchError::BatchEntryIdsNotDistinct(String::from(
                         parsed_error.message,
                     ))
                 }
-                "EmptyBatchRequest" => ChangeMessageVisibilityBatchError::EmptyBatchRequest(
-                    String::from(parsed_error.message),
-                ),
-                "InvalidBatchEntryId" => ChangeMessageVisibilityBatchError::InvalidBatchEntryId(
-                    String::from(parsed_error.message),
-                ),
-                "TooManyEntriesInBatchRequest" => {
+                "AWS.SimpleQueueService.EmptyBatchRequest" => {
+                    ChangeMessageVisibilityBatchError::EmptyBatchRequest(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                "AWS.SimpleQueueService.InvalidBatchEntryId" => {
+                    ChangeMessageVisibilityBatchError::InvalidBatchEntryId(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                "AWS.SimpleQueueService.TooManyEntriesInBatchRequest" => {
                     ChangeMessageVisibilityBatchError::TooManyEntriesInBatchRequest(String::from(
                         parsed_error.message,
                     ))
@@ -2711,10 +2717,10 @@ impl CreateQueueError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "QueueDeletedRecently" => {
+                "AWS.SimpleQueueService.QueueDeletedRecently" => {
                     CreateQueueError::QueueDeletedRecently(String::from(parsed_error.message))
                 }
-                "QueueNameExists" => {
+                "QueueAlreadyExists" => {
                     CreateQueueError::QueueNameExists(String::from(parsed_error.message))
                 }
                 _ => CreateQueueError::Unknown(String::from(body)),
@@ -2881,16 +2887,18 @@ impl DeleteMessageBatchError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "BatchEntryIdsNotDistinct" => DeleteMessageBatchError::BatchEntryIdsNotDistinct(
-                    String::from(parsed_error.message),
-                ),
-                "EmptyBatchRequest" => {
+                "AWS.SimpleQueueService.BatchEntryIdsNotDistinct" => {
+                    DeleteMessageBatchError::BatchEntryIdsNotDistinct(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                "AWS.SimpleQueueService.EmptyBatchRequest" => {
                     DeleteMessageBatchError::EmptyBatchRequest(String::from(parsed_error.message))
                 }
-                "InvalidBatchEntryId" => {
+                "AWS.SimpleQueueService.InvalidBatchEntryId" => {
                     DeleteMessageBatchError::InvalidBatchEntryId(String::from(parsed_error.message))
                 }
-                "TooManyEntriesInBatchRequest" => {
+                "AWS.SimpleQueueService.TooManyEntriesInBatchRequest" => {
                     DeleteMessageBatchError::TooManyEntriesInBatchRequest(String::from(
                         parsed_error.message,
                     ))
@@ -3124,7 +3132,7 @@ impl GetQueueUrlError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "QueueDoesNotExist" => {
+                "AWS.SimpleQueueService.NonExistentQueue" => {
                     GetQueueUrlError::QueueDoesNotExist(String::from(parsed_error.message))
                 }
                 _ => GetQueueUrlError::Unknown(String::from(body)),
@@ -3201,9 +3209,11 @@ impl ListDeadLetterSourceQueuesError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "QueueDoesNotExist" => ListDeadLetterSourceQueuesError::QueueDoesNotExist(
-                    String::from(parsed_error.message),
-                ),
+                "AWS.SimpleQueueService.NonExistentQueue" => {
+                    ListDeadLetterSourceQueuesError::QueueDoesNotExist(String::from(
+                        parsed_error.message,
+                    ))
+                }
                 _ => ListDeadLetterSourceQueuesError::Unknown(String::from(body)),
             },
             Err(_) => ListDeadLetterSourceQueuesError::Unknown(body.to_string()),
@@ -3424,10 +3434,10 @@ impl PurgeQueueError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "PurgeQueueInProgress" => {
+                "AWS.SimpleQueueService.PurgeQueueInProgress" => {
                     PurgeQueueError::PurgeQueueInProgress(String::from(parsed_error.message))
                 }
-                "QueueDoesNotExist" => {
+                "AWS.SimpleQueueService.NonExistentQueue" => {
                     PurgeQueueError::QueueDoesNotExist(String::from(parsed_error.message))
                 }
                 _ => PurgeQueueError::Unknown(String::from(body)),
@@ -3656,7 +3666,7 @@ impl SendMessageError {
                 "InvalidMessageContents" => {
                     SendMessageError::InvalidMessageContents(String::from(parsed_error.message))
                 }
-                "UnsupportedOperation" => {
+                "AWS.SimpleQueueService.UnsupportedOperation" => {
                     SendMessageError::UnsupportedOperation(String::from(parsed_error.message))
                 }
                 _ => SendMessageError::Unknown(String::from(body)),
@@ -3744,24 +3754,26 @@ impl SendMessageBatchError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "BatchEntryIdsNotDistinct" => SendMessageBatchError::BatchEntryIdsNotDistinct(
-                    String::from(parsed_error.message),
-                ),
-                "BatchRequestTooLong" => {
+                "AWS.SimpleQueueService.BatchEntryIdsNotDistinct" => {
+                    SendMessageBatchError::BatchEntryIdsNotDistinct(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                "AWS.SimpleQueueService.BatchRequestTooLong" => {
                     SendMessageBatchError::BatchRequestTooLong(String::from(parsed_error.message))
                 }
-                "EmptyBatchRequest" => {
+                "AWS.SimpleQueueService.EmptyBatchRequest" => {
                     SendMessageBatchError::EmptyBatchRequest(String::from(parsed_error.message))
                 }
-                "InvalidBatchEntryId" => {
+                "AWS.SimpleQueueService.InvalidBatchEntryId" => {
                     SendMessageBatchError::InvalidBatchEntryId(String::from(parsed_error.message))
                 }
-                "TooManyEntriesInBatchRequest" => {
+                "AWS.SimpleQueueService.TooManyEntriesInBatchRequest" => {
                     SendMessageBatchError::TooManyEntriesInBatchRequest(String::from(
                         parsed_error.message,
                     ))
                 }
-                "UnsupportedOperation" => {
+                "AWS.SimpleQueueService.UnsupportedOperation" => {
                     SendMessageBatchError::UnsupportedOperation(String::from(parsed_error.message))
                 }
                 _ => SendMessageBatchError::Unknown(String::from(body)),

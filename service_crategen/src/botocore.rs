@@ -102,10 +102,6 @@ pub struct Output {
 
 #[derive(Debug, Deserialize, PartialEq, Eq, PartialOrd, Ord)]
 pub struct Error {
-    pub documentation: Option<String>,
-    pub error: Option<HttpError>,
-    pub exception: Option<bool>,
-    pub fault: Option<bool>,
     pub shape: String,
 }
 

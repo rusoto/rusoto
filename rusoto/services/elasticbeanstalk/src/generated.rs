@@ -11072,7 +11072,7 @@ impl DeleteApplicationError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "OperationInProgressException" => {
+                "OperationInProgressFailure" => {
                     DeleteApplicationError::OperationInProgress(String::from(parsed_error.message))
                 }
                 _ => DeleteApplicationError::Unknown(String::from(body)),
@@ -11162,7 +11162,7 @@ impl DeleteApplicationVersionError {
                         parsed_error.message,
                     ))
                 }
-                "OperationInProgressException" => {
+                "OperationInProgressFailure" => {
                     DeleteApplicationVersionError::OperationInProgress(String::from(
                         parsed_error.message,
                     ))
@@ -11172,7 +11172,7 @@ impl DeleteApplicationVersionError {
                         parsed_error.message,
                     ))
                 }
-                "SourceBundleDeletionException" => {
+                "SourceBundleDeletionFailure" => {
                     DeleteApplicationVersionError::SourceBundleDeletion(String::from(
                         parsed_error.message,
                     ))
@@ -11256,7 +11256,7 @@ impl DeleteConfigurationTemplateError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "OperationInProgressException" => {
+                "OperationInProgressFailure" => {
                     DeleteConfigurationTemplateError::OperationInProgress(String::from(
                         parsed_error.message,
                     ))
@@ -11426,7 +11426,7 @@ impl DeletePlatformVersionError {
                         parsed_error.message,
                     ))
                 }
-                "OperationInProgressException" => DeletePlatformVersionError::OperationInProgress(
+                "OperationInProgressFailure" => DeletePlatformVersionError::OperationInProgress(
                     String::from(parsed_error.message),
                 ),
                 "PlatformVersionStillReferencedException" => {
@@ -13592,7 +13592,7 @@ impl UpdateTagsForResourceError {
                         parsed_error.message,
                     ))
                 }
-                "OperationInProgressException" => UpdateTagsForResourceError::OperationInProgress(
+                "OperationInProgressFailure" => UpdateTagsForResourceError::OperationInProgress(
                     String::from(parsed_error.message),
                 ),
                 "ResourceNotFoundException" => {
