@@ -1,6 +1,7 @@
 extern crate rusoto_mock;
 
 use ::{Route53, Route53Client, ListResourceRecordSetsRequest, ListResourceRecordSetsError};
+use rusoto_core::Region;
 
 use self::rusoto_mock::*;
 
