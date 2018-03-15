@@ -212,7 +212,7 @@ impl BatchDeleteAttributesRequestSerializer {
         );
         DeletableItemListSerializer::serialize(
             params,
-            &format!("{}{}", prefix, "Items"),
+            &format!("{}{}", prefix, "Item"),
             &obj.items,
         );
     }
@@ -241,7 +241,7 @@ impl BatchPutAttributesRequestSerializer {
         );
         ReplaceableItemListSerializer::serialize(
             params,
-            &format!("{}{}", prefix, "Items"),
+            &format!("{}{}", prefix, "Item"),
             &obj.items,
         );
     }
@@ -287,7 +287,7 @@ impl DeletableItemSerializer {
         if let Some(ref field_value) = obj.attributes {
             AttributeListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "Attributes"),
+                &format!("{}{}", prefix, "Attribute"),
                 field_value,
             );
         }
@@ -333,7 +333,7 @@ impl DeleteAttributesRequestSerializer {
         if let Some(ref field_value) = obj.attributes {
             AttributeListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "Attributes"),
+                &format!("{}{}", prefix, "Attribute"),
                 field_value,
             );
         }
@@ -538,7 +538,7 @@ impl GetAttributesRequestSerializer {
         if let Some(ref field_value) = obj.attribute_names {
             AttributeNameListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "AttributeNames"),
+                &format!("{}{}", prefix, "AttributeName"),
                 field_value,
             );
         }
@@ -829,7 +829,7 @@ impl PutAttributesRequestSerializer {
 
         ReplaceableAttributeListSerializer::serialize(
             params,
-            &format!("{}{}", prefix, "Attributes"),
+            &format!("{}{}", prefix, "Attribute"),
             &obj.attributes,
         );
         params.put(
@@ -918,7 +918,7 @@ impl ReplaceableItemSerializer {
 
         ReplaceableAttributeListSerializer::serialize(
             params,
-            &format!("{}{}", prefix, "Attributes"),
+            &format!("{}{}", prefix, "Attribute"),
             &obj.attributes,
         );
         params.put(

@@ -64,7 +64,7 @@ impl AddTagsToResourceMessageSerializer {
             &format!("{}{}", prefix, "ResourceName"),
             &obj.resource_name.replace("+", "%2B"),
         );
-        TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tags"), &obj.tags);
+        TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tag"), &obj.tags);
     }
 }
 
@@ -2291,7 +2291,7 @@ impl CreateCacheClusterMessageSerializer {
         if let Some(ref field_value) = obj.cache_security_group_names {
             CacheSecurityGroupNameListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "CacheSecurityGroupNames"),
+                &format!("{}{}", prefix, "CacheSecurityGroupName"),
                 field_value,
             );
         }
@@ -2340,7 +2340,7 @@ impl CreateCacheClusterMessageSerializer {
         if let Some(ref field_value) = obj.preferred_availability_zones {
             PreferredAvailabilityZoneListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "PreferredAvailabilityZones"),
+                &format!("{}{}", prefix, "PreferredAvailabilityZone"),
                 field_value,
             );
         }
@@ -2359,14 +2359,14 @@ impl CreateCacheClusterMessageSerializer {
         if let Some(ref field_value) = obj.security_group_ids {
             SecurityGroupIdsListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "SecurityGroupIds"),
+                &format!("{}{}", prefix, "SecurityGroupId"),
                 field_value,
             );
         }
         if let Some(ref field_value) = obj.snapshot_arns {
             SnapshotArnsListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "SnapshotArns"),
+                &format!("{}{}", prefix, "SnapshotArn"),
                 field_value,
             );
         }
@@ -2389,7 +2389,7 @@ impl CreateCacheClusterMessageSerializer {
             );
         }
         if let Some(ref field_value) = obj.tags {
-            TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tags"), field_value);
+            TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tag"), field_value);
         }
     }
 }
@@ -2631,7 +2631,7 @@ impl CreateCacheSubnetGroupMessageSerializer {
         );
         SubnetIdentifierListSerializer::serialize(
             params,
-            &format!("{}{}", prefix, "SubnetIds"),
+            &format!("{}{}", prefix, "SubnetIdentifier"),
             &obj.subnet_ids,
         );
     }
@@ -2792,7 +2792,7 @@ impl CreateReplicationGroupMessageSerializer {
         if let Some(ref field_value) = obj.cache_security_group_names {
             CacheSecurityGroupNameListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "CacheSecurityGroupNames"),
+                &format!("{}{}", prefix, "CacheSecurityGroupName"),
                 field_value,
             );
         }
@@ -2848,7 +2848,7 @@ impl CreateReplicationGroupMessageSerializer {
         if let Some(ref field_value) = obj.preferred_cache_cluster_a_zs {
             AvailabilityZonesListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "PreferredCacheClusterAZs"),
+                &format!("{}{}", prefix, "AvailabilityZone"),
                 field_value,
             );
         }
@@ -2881,14 +2881,14 @@ impl CreateReplicationGroupMessageSerializer {
         if let Some(ref field_value) = obj.security_group_ids {
             SecurityGroupIdsListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "SecurityGroupIds"),
+                &format!("{}{}", prefix, "SecurityGroupId"),
                 field_value,
             );
         }
         if let Some(ref field_value) = obj.snapshot_arns {
             SnapshotArnsListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "SnapshotArns"),
+                &format!("{}{}", prefix, "SnapshotArn"),
                 field_value,
             );
         }
@@ -2911,7 +2911,7 @@ impl CreateReplicationGroupMessageSerializer {
             );
         }
         if let Some(ref field_value) = obj.tags {
-            TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tags"), field_value);
+            TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tag"), field_value);
         }
         if let Some(ref field_value) = obj.transit_encryption_enabled {
             params.put(
@@ -4697,7 +4697,7 @@ impl ModifyCacheClusterMessageSerializer {
         if let Some(ref field_value) = obj.cache_node_ids_to_remove {
             CacheNodeIdsListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "CacheNodeIdsToRemove"),
+                &format!("{}{}", prefix, "CacheNodeId"),
                 field_value,
             );
         }
@@ -4716,7 +4716,7 @@ impl ModifyCacheClusterMessageSerializer {
         if let Some(ref field_value) = obj.cache_security_group_names {
             CacheSecurityGroupNameListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "CacheSecurityGroupNames"),
+                &format!("{}{}", prefix, "CacheSecurityGroupName"),
                 field_value,
             );
         }
@@ -4729,7 +4729,7 @@ impl ModifyCacheClusterMessageSerializer {
         if let Some(ref field_value) = obj.new_availability_zones {
             PreferredAvailabilityZoneListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "NewAvailabilityZones"),
+                &format!("{}{}", prefix, "PreferredAvailabilityZone"),
                 field_value,
             );
         }
@@ -4760,7 +4760,7 @@ impl ModifyCacheClusterMessageSerializer {
         if let Some(ref field_value) = obj.security_group_ids {
             SecurityGroupIdsListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "SecurityGroupIds"),
+                &format!("{}{}", prefix, "SecurityGroupId"),
                 field_value,
             );
         }
@@ -4850,7 +4850,7 @@ impl ModifyCacheParameterGroupMessageSerializer {
         );
         ParameterNameValueListSerializer::serialize(
             params,
-            &format!("{}{}", prefix, "ParameterNameValues"),
+            &format!("{}{}", prefix, "ParameterNameValue"),
             &obj.parameter_name_values,
         );
     }
@@ -4889,7 +4889,7 @@ impl ModifyCacheSubnetGroupMessageSerializer {
         if let Some(ref field_value) = obj.subnet_ids {
             SubnetIdentifierListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "SubnetIds"),
+                &format!("{}{}", prefix, "SubnetIdentifier"),
                 field_value,
             );
         }
@@ -5025,7 +5025,7 @@ impl ModifyReplicationGroupMessageSerializer {
         if let Some(ref field_value) = obj.cache_security_group_names {
             CacheSecurityGroupNameListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "CacheSecurityGroupNames"),
+                &format!("{}{}", prefix, "CacheSecurityGroupName"),
                 field_value,
             );
         }
@@ -5078,7 +5078,7 @@ impl ModifyReplicationGroupMessageSerializer {
         if let Some(ref field_value) = obj.security_group_ids {
             SecurityGroupIdsListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "SecurityGroupIds"),
+                &format!("{}{}", prefix, "SecurityGroupId"),
                 field_value,
             );
         }
@@ -5188,7 +5188,7 @@ impl ModifyReplicationGroupShardConfigurationMessageSerializer {
         if let Some(ref field_value) = obj.node_groups_to_remove {
             NodeGroupsToRemoveListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "NodeGroupsToRemove"),
+                &format!("{}{}", prefix, "NodeGroupToRemove"),
                 field_value,
             );
         }
@@ -5413,7 +5413,7 @@ impl NodeGroupConfigurationSerializer {
         if let Some(ref field_value) = obj.replica_availability_zones {
             AvailabilityZonesListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "ReplicaAvailabilityZones"),
+                &format!("{}{}", prefix, "AvailabilityZone"),
                 field_value,
             );
         }
@@ -6239,7 +6239,7 @@ impl RebootCacheClusterMessageSerializer {
         );
         CacheNodeIdsListSerializer::serialize(
             params,
-            &format!("{}{}", prefix, "CacheNodeIdsToReboot"),
+            &format!("{}{}", prefix, "CacheNodeId"),
             &obj.cache_node_ids_to_reboot,
         );
     }
@@ -7190,7 +7190,7 @@ impl ResetCacheParameterGroupMessageSerializer {
         if let Some(ref field_value) = obj.parameter_name_values {
             ParameterNameValueListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "ParameterNameValues"),
+                &format!("{}{}", prefix, "ParameterNameValue"),
                 field_value,
             );
         }
@@ -7222,7 +7222,7 @@ impl ReshardingConfigurationSerializer {
         if let Some(ref field_value) = obj.preferred_availability_zones {
             AvailabilityZonesListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "PreferredAvailabilityZones"),
+                &format!("{}{}", prefix, "AvailabilityZone"),
                 field_value,
             );
         }

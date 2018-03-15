@@ -122,6 +122,7 @@ fn create_client() -> TestEtsClient {
 
 /// Generates a random name for an AWS service by appending a random sequence of
 /// ASCII characters to the specified prefix.
+/// Keeps it lower case to work with S3 requirements as of 3/1/2018.
 fn generate_unique_name(prefix: &str) -> String {
     format!("{}-{}",
             prefix,
@@ -129,6 +130,7 @@ fn generate_unique_name(prefix: &str) -> String {
                 .gen_ascii_chars()
                 .take(AWS_SERVICE_RANDOM_SUFFIX_LENGTH)
                 .collect::<String>())
+    .to_lowercase()
 }
 
 #[test]
