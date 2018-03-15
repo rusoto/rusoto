@@ -350,3 +350,25 @@ fn structs_should_impl_clone() {
 fn sstr(value: &'static str) -> Option<String> {
     Some(value.to_string())
 }
+
+#[test]
+fn test_parse_no_such_bucket_error() {
+    let mock = MockRequestDispatcher::with_status(404)
+        .with_body(r#"<?xml version="1.0" encoding="UTF-8"?>
+        <Error>
+            <Code>NoSuchBucket</Code>
+            <Message>The specified bucket does not exist</Message>
+            <RequestId>4442587FB7D0A2F9</RequestId>
+        </Error>"#);
+
+    let request = ListObjectsV2Request {
+        bucket: "no-such-bucket".to_owned(),
+        ..Default::default()
+    };
+
+    let client = S3Client::new(mock, MockCredentialsProvider, Region::UsEast1);
+    let result = client.list_objects_v2(&request).sync();
+    assert!(result.is_err());
+    let err = result.err().unwrap();
+    assert_eq!(ListObjectsV2Error::NoSuchBucket("The specified bucket does not exist".to_owned()), err);
+}
