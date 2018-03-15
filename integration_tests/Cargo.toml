@@ -235,6 +235,10 @@ path = "../rusoto/services/glue"
 optional = true
 path = "../rusoto/services/greengrass"
 
+[dependencies.rusoto_guardduty]
+optional = true
+path = "../rusoto/services/guardduty"
+
 [dependencies.rusoto_iam]
 optional = true
 path = "../rusoto/services/iam"
@@ -499,6 +503,7 @@ all = [
 		"glacier",
 		"glue",
 		"greengrass",
+		"guardduty",
 	   	"iam",
 	   	"importexport",
 	   	"inspector",
@@ -603,6 +608,7 @@ gamelift = ["rusoto_gamelift"]
 glacier = ["rusoto_glacier"]
 glue = ["rusoto_glue"]
 greengrass = ["rusoto_greengrass"]
+guardduty = ["rusoto_guardduty"]
 iam = ["rusoto_iam"]
 importexport = ["rusoto_importexport"]
 inspector = ["rusoto_inspector"]

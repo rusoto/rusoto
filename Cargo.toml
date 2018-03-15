@@ -55,6 +55,7 @@ members = [
     "rusoto/services/glacier",
     "rusoto/services/glue",
     "rusoto/services/greengrass",
+    "rusoto/services/guardduty",
     "rusoto/services/health",
     "rusoto/services/iam",
     "rusoto/services/importexport",

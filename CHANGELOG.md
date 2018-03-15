@@ -17,6 +17,8 @@
 - Allow AWS credentials in environment variables to have a custom prefix
 - Fix bug in presigned URLs for S3
 
+- Add GuardDuty service
+
 ## [0.33.1] - 2018-08-07
 
 - Fix `rusoto_mock` versions available
