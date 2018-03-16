@@ -2985,7 +2985,7 @@ impl DeleteAlarmsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "ResourceNotFound" => {
                     DeleteAlarmsError::ResourceNotFound(String::from(parsed_error.message))
@@ -2994,6 +2994,14 @@ impl DeleteAlarmsError {
             },
             Err(_) => DeleteAlarmsError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -3058,21 +3066,29 @@ impl DeleteDashboardsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "DashboardNotFoundError" => DeleteDashboardsError::DashboardNotFoundError(
-                    String::from(parsed_error.message),
-                ),
-                "InternalServiceFault" => {
+                "ResourceNotFound" => DeleteDashboardsError::DashboardNotFoundError(String::from(
+                    parsed_error.message,
+                )),
+                "InternalServiceError" => {
                     DeleteDashboardsError::InternalServiceFault(String::from(parsed_error.message))
                 }
-                "InvalidParameterValueException" => {
+                "InvalidParameterValue" => {
                     DeleteDashboardsError::InvalidParameterValue(String::from(parsed_error.message))
                 }
                 _ => DeleteDashboardsError::Unknown(String::from(body)),
             },
             Err(_) => DeleteDashboardsError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -3135,7 +3151,7 @@ impl DescribeAlarmHistoryError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "InvalidNextToken" => {
                     DescribeAlarmHistoryError::InvalidNextToken(String::from(parsed_error.message))
@@ -3144,6 +3160,14 @@ impl DescribeAlarmHistoryError {
             },
             Err(_) => DescribeAlarmHistoryError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -3206,7 +3230,7 @@ impl DescribeAlarmsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "InvalidNextToken" => {
                     DescribeAlarmsError::InvalidNextToken(String::from(parsed_error.message))
@@ -3215,6 +3239,14 @@ impl DescribeAlarmsError {
             },
             Err(_) => DescribeAlarmsError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -3273,12 +3305,20 @@ impl DescribeAlarmsForMetricError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeAlarmsForMetricError::Unknown(String::from(body)),
             },
             Err(_) => DescribeAlarmsForMetricError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -3338,12 +3378,20 @@ impl DisableAlarmActionsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DisableAlarmActionsError::Unknown(String::from(body)),
             },
             Err(_) => DisableAlarmActionsError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -3403,12 +3451,20 @@ impl EnableAlarmActionsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => EnableAlarmActionsError::Unknown(String::from(body)),
             },
             Err(_) => EnableAlarmActionsError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -3474,21 +3530,29 @@ impl GetDashboardError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "DashboardNotFoundError" => {
+                "ResourceNotFound" => {
                     GetDashboardError::DashboardNotFoundError(String::from(parsed_error.message))
                 }
-                "InternalServiceFault" => {
+                "InternalServiceError" => {
                     GetDashboardError::InternalServiceFault(String::from(parsed_error.message))
                 }
-                "InvalidParameterValueException" => {
+                "InvalidParameterValue" => {
                     GetDashboardError::InvalidParameterValue(String::from(parsed_error.message))
                 }
                 _ => GetDashboardError::Unknown(String::from(body)),
             },
             Err(_) => GetDashboardError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -3557,30 +3621,34 @@ impl GetMetricStatisticsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "InternalServiceFault" => GetMetricStatisticsError::InternalServiceFault(
+                "InternalServiceError" => GetMetricStatisticsError::InternalServiceFault(
                     String::from(parsed_error.message),
                 ),
-                "InvalidParameterCombinationException" => {
+                "InvalidParameterCombination" => {
                     GetMetricStatisticsError::InvalidParameterCombination(String::from(
                         parsed_error.message,
                     ))
                 }
-                "InvalidParameterValueException" => {
-                    GetMetricStatisticsError::InvalidParameterValue(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "MissingRequiredParameterException" => {
-                    GetMetricStatisticsError::MissingRequiredParameter(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "InvalidParameterValue" => GetMetricStatisticsError::InvalidParameterValue(
+                    String::from(parsed_error.message),
+                ),
+                "MissingParameter" => GetMetricStatisticsError::MissingRequiredParameter(
+                    String::from(parsed_error.message),
+                ),
                 _ => GetMetricStatisticsError::Unknown(String::from(body)),
             },
             Err(_) => GetMetricStatisticsError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -3648,18 +3716,26 @@ impl ListDashboardsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "InternalServiceFault" => {
+                "InternalServiceError" => {
                     ListDashboardsError::InternalServiceFault(String::from(parsed_error.message))
                 }
-                "InvalidParameterValueException" => {
+                "InvalidParameterValue" => {
                     ListDashboardsError::InvalidParameterValue(String::from(parsed_error.message))
                 }
                 _ => ListDashboardsError::Unknown(String::from(body)),
             },
             Err(_) => ListDashboardsError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -3723,18 +3799,26 @@ impl ListMetricsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "InternalServiceFault" => {
+                "InternalServiceError" => {
                     ListMetricsError::InternalServiceFault(String::from(parsed_error.message))
                 }
-                "InvalidParameterValueException" => {
+                "InvalidParameterValue" => {
                     ListMetricsError::InvalidParameterValue(String::from(parsed_error.message))
                 }
                 _ => ListMetricsError::Unknown(String::from(body)),
             },
             Err(_) => ListMetricsError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -3798,18 +3882,26 @@ impl PutDashboardError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "DashboardInvalidInputError" => PutDashboardError::DashboardInvalidInputError(
+                "InvalidParameterInput" => PutDashboardError::DashboardInvalidInputError(
                     String::from(parsed_error.message),
                 ),
-                "InternalServiceFault" => {
+                "InternalServiceError" => {
                     PutDashboardError::InternalServiceFault(String::from(parsed_error.message))
                 }
                 _ => PutDashboardError::Unknown(String::from(body)),
             },
             Err(_) => PutDashboardError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -3871,15 +3963,23 @@ impl PutMetricAlarmError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "LimitExceededFault" => {
+                "LimitExceeded" => {
                     PutMetricAlarmError::LimitExceededFault(String::from(parsed_error.message))
                 }
                 _ => PutMetricAlarmError::Unknown(String::from(body)),
             },
             Err(_) => PutMetricAlarmError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -3946,26 +4046,32 @@ impl PutMetricDataError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "InternalServiceFault" => {
+                "InternalServiceError" => {
                     PutMetricDataError::InternalServiceFault(String::from(parsed_error.message))
                 }
-                "InvalidParameterCombinationException" => {
-                    PutMetricDataError::InvalidParameterCombination(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "InvalidParameterValueException" => {
+                "InvalidParameterCombination" => PutMetricDataError::InvalidParameterCombination(
+                    String::from(parsed_error.message),
+                ),
+                "InvalidParameterValue" => {
                     PutMetricDataError::InvalidParameterValue(String::from(parsed_error.message))
                 }
-                "MissingRequiredParameterException" => {
+                "MissingParameter" => {
                     PutMetricDataError::MissingRequiredParameter(String::from(parsed_error.message))
                 }
                 _ => PutMetricDataError::Unknown(String::from(body)),
             },
             Err(_) => PutMetricDataError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -4031,9 +4137,9 @@ impl SetAlarmStateError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidFormatFault" => {
+                "InvalidFormat" => {
                     SetAlarmStateError::InvalidFormatFault(String::from(parsed_error.message))
                 }
                 "ResourceNotFound" => {
@@ -4043,6 +4149,14 @@ impl SetAlarmStateError {
             },
             Err(_) => SetAlarmStateError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 

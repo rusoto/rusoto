@@ -54233,12 +54233,21 @@ impl AcceptReservedInstancesExchangeQuoteError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => AcceptReservedInstancesExchangeQuoteError::Unknown(String::from(body)),
             },
             Err(_) => AcceptReservedInstancesExchangeQuoteError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -54298,12 +54307,21 @@ impl AcceptVpcEndpointConnectionsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => AcceptVpcEndpointConnectionsError::Unknown(String::from(body)),
             },
             Err(_) => AcceptVpcEndpointConnectionsError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -54363,12 +54381,21 @@ impl AcceptVpcPeeringConnectionError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => AcceptVpcPeeringConnectionError::Unknown(String::from(body)),
             },
             Err(_) => AcceptVpcPeeringConnectionError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -54428,12 +54455,21 @@ impl AllocateAddressError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => AllocateAddressError::Unknown(String::from(body)),
             },
             Err(_) => AllocateAddressError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -54491,12 +54527,21 @@ impl AllocateHostsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => AllocateHostsError::Unknown(String::from(body)),
             },
             Err(_) => AllocateHostsError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -54554,12 +54599,21 @@ impl AssignIpv6AddressesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => AssignIpv6AddressesError::Unknown(String::from(body)),
             },
             Err(_) => AssignIpv6AddressesError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -54619,12 +54673,21 @@ impl AssignPrivateIpAddressesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => AssignPrivateIpAddressesError::Unknown(String::from(body)),
             },
             Err(_) => AssignPrivateIpAddressesError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -54684,12 +54747,21 @@ impl AssociateAddressError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => AssociateAddressError::Unknown(String::from(body)),
             },
             Err(_) => AssociateAddressError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -54747,12 +54819,21 @@ impl AssociateDhcpOptionsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => AssociateDhcpOptionsError::Unknown(String::from(body)),
             },
             Err(_) => AssociateDhcpOptionsError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -54812,12 +54893,21 @@ impl AssociateIamInstanceProfileError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => AssociateIamInstanceProfileError::Unknown(String::from(body)),
             },
             Err(_) => AssociateIamInstanceProfileError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -54877,12 +54967,21 @@ impl AssociateRouteTableError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => AssociateRouteTableError::Unknown(String::from(body)),
             },
             Err(_) => AssociateRouteTableError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -54942,12 +55041,21 @@ impl AssociateSubnetCidrBlockError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => AssociateSubnetCidrBlockError::Unknown(String::from(body)),
             },
             Err(_) => AssociateSubnetCidrBlockError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -55007,12 +55115,21 @@ impl AssociateVpcCidrBlockError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => AssociateVpcCidrBlockError::Unknown(String::from(body)),
             },
             Err(_) => AssociateVpcCidrBlockError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -55072,12 +55189,21 @@ impl AttachClassicLinkVpcError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => AttachClassicLinkVpcError::Unknown(String::from(body)),
             },
             Err(_) => AttachClassicLinkVpcError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -55137,12 +55263,21 @@ impl AttachInternetGatewayError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => AttachInternetGatewayError::Unknown(String::from(body)),
             },
             Err(_) => AttachInternetGatewayError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -55202,12 +55337,21 @@ impl AttachNetworkInterfaceError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => AttachNetworkInterfaceError::Unknown(String::from(body)),
             },
             Err(_) => AttachNetworkInterfaceError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -55267,12 +55411,21 @@ impl AttachVolumeError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => AttachVolumeError::Unknown(String::from(body)),
             },
             Err(_) => AttachVolumeError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -55330,12 +55483,21 @@ impl AttachVpnGatewayError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => AttachVpnGatewayError::Unknown(String::from(body)),
             },
             Err(_) => AttachVpnGatewayError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -55393,12 +55555,21 @@ impl AuthorizeSecurityGroupEgressError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => AuthorizeSecurityGroupEgressError::Unknown(String::from(body)),
             },
             Err(_) => AuthorizeSecurityGroupEgressError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -55458,12 +55629,21 @@ impl AuthorizeSecurityGroupIngressError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => AuthorizeSecurityGroupIngressError::Unknown(String::from(body)),
             },
             Err(_) => AuthorizeSecurityGroupIngressError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -55523,12 +55703,21 @@ impl BundleInstanceError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => BundleInstanceError::Unknown(String::from(body)),
             },
             Err(_) => BundleInstanceError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -55586,12 +55775,21 @@ impl CancelBundleTaskError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CancelBundleTaskError::Unknown(String::from(body)),
             },
             Err(_) => CancelBundleTaskError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -55649,12 +55847,21 @@ impl CancelConversionTaskError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CancelConversionTaskError::Unknown(String::from(body)),
             },
             Err(_) => CancelConversionTaskError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -55714,12 +55921,21 @@ impl CancelExportTaskError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CancelExportTaskError::Unknown(String::from(body)),
             },
             Err(_) => CancelExportTaskError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -55777,12 +55993,21 @@ impl CancelImportTaskError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CancelImportTaskError::Unknown(String::from(body)),
             },
             Err(_) => CancelImportTaskError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -55840,12 +56065,21 @@ impl CancelReservedInstancesListingError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CancelReservedInstancesListingError::Unknown(String::from(body)),
             },
             Err(_) => CancelReservedInstancesListingError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -55905,12 +56139,21 @@ impl EC2CancelSpotFleetRequestsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => EC2CancelSpotFleetRequestsError::Unknown(String::from(body)),
             },
             Err(_) => EC2CancelSpotFleetRequestsError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -55970,12 +56213,21 @@ impl CancelSpotInstanceRequestsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CancelSpotInstanceRequestsError::Unknown(String::from(body)),
             },
             Err(_) => CancelSpotInstanceRequestsError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -56035,12 +56287,21 @@ impl ConfirmProductInstanceError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ConfirmProductInstanceError::Unknown(String::from(body)),
             },
             Err(_) => ConfirmProductInstanceError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -56100,12 +56361,21 @@ impl CopyFpgaImageError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CopyFpgaImageError::Unknown(String::from(body)),
             },
             Err(_) => CopyFpgaImageError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -56163,12 +56433,21 @@ impl CopyImageError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CopyImageError::Unknown(String::from(body)),
             },
             Err(_) => CopyImageError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -56226,12 +56505,21 @@ impl CopySnapshotError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CopySnapshotError::Unknown(String::from(body)),
             },
             Err(_) => CopySnapshotError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -56289,12 +56577,21 @@ impl CreateCustomerGatewayError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CreateCustomerGatewayError::Unknown(String::from(body)),
             },
             Err(_) => CreateCustomerGatewayError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -56354,12 +56651,21 @@ impl CreateDefaultSubnetError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CreateDefaultSubnetError::Unknown(String::from(body)),
             },
             Err(_) => CreateDefaultSubnetError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -56419,12 +56725,21 @@ impl CreateDefaultVpcError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CreateDefaultVpcError::Unknown(String::from(body)),
             },
             Err(_) => CreateDefaultVpcError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -56482,12 +56797,21 @@ impl CreateDhcpOptionsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CreateDhcpOptionsError::Unknown(String::from(body)),
             },
             Err(_) => CreateDhcpOptionsError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -56547,12 +56871,21 @@ impl CreateEgressOnlyInternetGatewayError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CreateEgressOnlyInternetGatewayError::Unknown(String::from(body)),
             },
             Err(_) => CreateEgressOnlyInternetGatewayError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -56612,12 +56945,21 @@ impl CreateFlowLogsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CreateFlowLogsError::Unknown(String::from(body)),
             },
             Err(_) => CreateFlowLogsError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -56675,12 +57017,21 @@ impl CreateFpgaImageError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CreateFpgaImageError::Unknown(String::from(body)),
             },
             Err(_) => CreateFpgaImageError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -56738,12 +57089,21 @@ impl CreateImageError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CreateImageError::Unknown(String::from(body)),
             },
             Err(_) => CreateImageError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -56801,12 +57161,21 @@ impl CreateInstanceExportTaskError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CreateInstanceExportTaskError::Unknown(String::from(body)),
             },
             Err(_) => CreateInstanceExportTaskError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -56866,12 +57235,21 @@ impl CreateInternetGatewayError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CreateInternetGatewayError::Unknown(String::from(body)),
             },
             Err(_) => CreateInternetGatewayError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -56931,12 +57309,21 @@ impl CreateKeyPairError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CreateKeyPairError::Unknown(String::from(body)),
             },
             Err(_) => CreateKeyPairError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -56994,12 +57381,21 @@ impl CreateLaunchTemplateError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CreateLaunchTemplateError::Unknown(String::from(body)),
             },
             Err(_) => CreateLaunchTemplateError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -57059,12 +57455,21 @@ impl CreateLaunchTemplateVersionError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CreateLaunchTemplateVersionError::Unknown(String::from(body)),
             },
             Err(_) => CreateLaunchTemplateVersionError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -57124,12 +57529,21 @@ impl CreateNatGatewayError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CreateNatGatewayError::Unknown(String::from(body)),
             },
             Err(_) => CreateNatGatewayError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -57187,12 +57601,21 @@ impl CreateNetworkAclError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CreateNetworkAclError::Unknown(String::from(body)),
             },
             Err(_) => CreateNetworkAclError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -57250,12 +57673,21 @@ impl CreateNetworkAclEntryError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CreateNetworkAclEntryError::Unknown(String::from(body)),
             },
             Err(_) => CreateNetworkAclEntryError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -57315,12 +57747,21 @@ impl CreateNetworkInterfaceError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CreateNetworkInterfaceError::Unknown(String::from(body)),
             },
             Err(_) => CreateNetworkInterfaceError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -57380,12 +57821,21 @@ impl CreateNetworkInterfacePermissionError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CreateNetworkInterfacePermissionError::Unknown(String::from(body)),
             },
             Err(_) => CreateNetworkInterfacePermissionError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -57445,12 +57895,21 @@ impl CreatePlacementGroupError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CreatePlacementGroupError::Unknown(String::from(body)),
             },
             Err(_) => CreatePlacementGroupError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -57510,12 +57969,21 @@ impl CreateReservedInstancesListingError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CreateReservedInstancesListingError::Unknown(String::from(body)),
             },
             Err(_) => CreateReservedInstancesListingError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -57575,12 +58043,21 @@ impl CreateRouteError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CreateRouteError::Unknown(String::from(body)),
             },
             Err(_) => CreateRouteError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -57638,12 +58115,21 @@ impl CreateRouteTableError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CreateRouteTableError::Unknown(String::from(body)),
             },
             Err(_) => CreateRouteTableError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -57701,12 +58187,21 @@ impl CreateSecurityGroupError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CreateSecurityGroupError::Unknown(String::from(body)),
             },
             Err(_) => CreateSecurityGroupError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -57766,12 +58261,21 @@ impl CreateSnapshotError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CreateSnapshotError::Unknown(String::from(body)),
             },
             Err(_) => CreateSnapshotError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -57829,12 +58333,21 @@ impl CreateSpotDatafeedSubscriptionError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CreateSpotDatafeedSubscriptionError::Unknown(String::from(body)),
             },
             Err(_) => CreateSpotDatafeedSubscriptionError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -57894,12 +58407,21 @@ impl CreateSubnetError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CreateSubnetError::Unknown(String::from(body)),
             },
             Err(_) => CreateSubnetError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -57957,12 +58479,21 @@ impl CreateTagsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CreateTagsError::Unknown(String::from(body)),
             },
             Err(_) => CreateTagsError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -58020,12 +58551,21 @@ impl CreateVolumeError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CreateVolumeError::Unknown(String::from(body)),
             },
             Err(_) => CreateVolumeError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -58083,12 +58623,21 @@ impl CreateVpcError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CreateVpcError::Unknown(String::from(body)),
             },
             Err(_) => CreateVpcError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -58146,12 +58695,21 @@ impl CreateVpcEndpointError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CreateVpcEndpointError::Unknown(String::from(body)),
             },
             Err(_) => CreateVpcEndpointError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -58211,12 +58769,21 @@ impl CreateVpcEndpointConnectionNotificationError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CreateVpcEndpointConnectionNotificationError::Unknown(String::from(body)),
             },
             Err(_) => CreateVpcEndpointConnectionNotificationError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -58276,12 +58843,21 @@ impl CreateVpcEndpointServiceConfigurationError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CreateVpcEndpointServiceConfigurationError::Unknown(String::from(body)),
             },
             Err(_) => CreateVpcEndpointServiceConfigurationError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -58341,12 +58917,21 @@ impl CreateVpcPeeringConnectionError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CreateVpcPeeringConnectionError::Unknown(String::from(body)),
             },
             Err(_) => CreateVpcPeeringConnectionError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -58406,12 +58991,21 @@ impl CreateVpnConnectionError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CreateVpnConnectionError::Unknown(String::from(body)),
             },
             Err(_) => CreateVpnConnectionError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -58471,12 +59065,21 @@ impl CreateVpnConnectionRouteError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CreateVpnConnectionRouteError::Unknown(String::from(body)),
             },
             Err(_) => CreateVpnConnectionRouteError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -58536,12 +59139,21 @@ impl CreateVpnGatewayError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => CreateVpnGatewayError::Unknown(String::from(body)),
             },
             Err(_) => CreateVpnGatewayError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -58599,12 +59211,21 @@ impl DeleteCustomerGatewayError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteCustomerGatewayError::Unknown(String::from(body)),
             },
             Err(_) => DeleteCustomerGatewayError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -58664,12 +59285,21 @@ impl DeleteDhcpOptionsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteDhcpOptionsError::Unknown(String::from(body)),
             },
             Err(_) => DeleteDhcpOptionsError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -58729,12 +59359,21 @@ impl DeleteEgressOnlyInternetGatewayError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteEgressOnlyInternetGatewayError::Unknown(String::from(body)),
             },
             Err(_) => DeleteEgressOnlyInternetGatewayError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -58794,12 +59433,21 @@ impl DeleteFlowLogsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteFlowLogsError::Unknown(String::from(body)),
             },
             Err(_) => DeleteFlowLogsError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -58857,12 +59505,21 @@ impl DeleteFpgaImageError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteFpgaImageError::Unknown(String::from(body)),
             },
             Err(_) => DeleteFpgaImageError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -58920,12 +59577,21 @@ impl DeleteInternetGatewayError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteInternetGatewayError::Unknown(String::from(body)),
             },
             Err(_) => DeleteInternetGatewayError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -58985,12 +59651,21 @@ impl DeleteKeyPairError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteKeyPairError::Unknown(String::from(body)),
             },
             Err(_) => DeleteKeyPairError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -59048,12 +59723,21 @@ impl DeleteLaunchTemplateError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteLaunchTemplateError::Unknown(String::from(body)),
             },
             Err(_) => DeleteLaunchTemplateError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -59113,12 +59797,21 @@ impl DeleteLaunchTemplateVersionsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteLaunchTemplateVersionsError::Unknown(String::from(body)),
             },
             Err(_) => DeleteLaunchTemplateVersionsError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -59178,12 +59871,21 @@ impl DeleteNatGatewayError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteNatGatewayError::Unknown(String::from(body)),
             },
             Err(_) => DeleteNatGatewayError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -59241,12 +59943,21 @@ impl DeleteNetworkAclError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteNetworkAclError::Unknown(String::from(body)),
             },
             Err(_) => DeleteNetworkAclError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -59304,12 +60015,21 @@ impl DeleteNetworkAclEntryError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteNetworkAclEntryError::Unknown(String::from(body)),
             },
             Err(_) => DeleteNetworkAclEntryError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -59369,12 +60089,21 @@ impl DeleteNetworkInterfaceError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteNetworkInterfaceError::Unknown(String::from(body)),
             },
             Err(_) => DeleteNetworkInterfaceError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -59434,12 +60163,21 @@ impl DeleteNetworkInterfacePermissionError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteNetworkInterfacePermissionError::Unknown(String::from(body)),
             },
             Err(_) => DeleteNetworkInterfacePermissionError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -59499,12 +60237,21 @@ impl DeletePlacementGroupError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeletePlacementGroupError::Unknown(String::from(body)),
             },
             Err(_) => DeletePlacementGroupError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -59564,12 +60311,21 @@ impl DeleteRouteError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteRouteError::Unknown(String::from(body)),
             },
             Err(_) => DeleteRouteError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -59627,12 +60383,21 @@ impl DeleteRouteTableError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteRouteTableError::Unknown(String::from(body)),
             },
             Err(_) => DeleteRouteTableError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -59690,12 +60455,21 @@ impl DeleteSecurityGroupError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteSecurityGroupError::Unknown(String::from(body)),
             },
             Err(_) => DeleteSecurityGroupError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -59755,12 +60529,21 @@ impl DeleteSnapshotError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteSnapshotError::Unknown(String::from(body)),
             },
             Err(_) => DeleteSnapshotError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -59818,12 +60601,21 @@ impl DeleteSpotDatafeedSubscriptionError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteSpotDatafeedSubscriptionError::Unknown(String::from(body)),
             },
             Err(_) => DeleteSpotDatafeedSubscriptionError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -59883,12 +60675,21 @@ impl DeleteSubnetError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteSubnetError::Unknown(String::from(body)),
             },
             Err(_) => DeleteSubnetError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -59946,12 +60747,21 @@ impl DeleteTagsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteTagsError::Unknown(String::from(body)),
             },
             Err(_) => DeleteTagsError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -60009,12 +60819,21 @@ impl DeleteVolumeError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteVolumeError::Unknown(String::from(body)),
             },
             Err(_) => DeleteVolumeError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -60072,12 +60891,21 @@ impl DeleteVpcError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteVpcError::Unknown(String::from(body)),
             },
             Err(_) => DeleteVpcError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -60135,12 +60963,21 @@ impl DeleteVpcEndpointConnectionNotificationsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteVpcEndpointConnectionNotificationsError::Unknown(String::from(body)),
             },
             Err(_) => DeleteVpcEndpointConnectionNotificationsError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -60202,12 +61039,21 @@ impl DeleteVpcEndpointServiceConfigurationsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteVpcEndpointServiceConfigurationsError::Unknown(String::from(body)),
             },
             Err(_) => DeleteVpcEndpointServiceConfigurationsError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -60267,12 +61113,21 @@ impl DeleteVpcEndpointsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteVpcEndpointsError::Unknown(String::from(body)),
             },
             Err(_) => DeleteVpcEndpointsError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -60332,12 +61187,21 @@ impl DeleteVpcPeeringConnectionError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteVpcPeeringConnectionError::Unknown(String::from(body)),
             },
             Err(_) => DeleteVpcPeeringConnectionError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -60397,12 +61261,21 @@ impl DeleteVpnConnectionError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteVpnConnectionError::Unknown(String::from(body)),
             },
             Err(_) => DeleteVpnConnectionError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -60462,12 +61335,21 @@ impl DeleteVpnConnectionRouteError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteVpnConnectionRouteError::Unknown(String::from(body)),
             },
             Err(_) => DeleteVpnConnectionRouteError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -60527,12 +61409,21 @@ impl DeleteVpnGatewayError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteVpnGatewayError::Unknown(String::from(body)),
             },
             Err(_) => DeleteVpnGatewayError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -60590,12 +61481,21 @@ impl DeregisterImageError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeregisterImageError::Unknown(String::from(body)),
             },
             Err(_) => DeregisterImageError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -60653,12 +61553,21 @@ impl DescribeAccountAttributesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeAccountAttributesError::Unknown(String::from(body)),
             },
             Err(_) => DescribeAccountAttributesError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -60718,12 +61627,21 @@ impl DescribeAddressesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeAddressesError::Unknown(String::from(body)),
             },
             Err(_) => DescribeAddressesError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -60783,12 +61701,21 @@ impl DescribeAvailabilityZonesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeAvailabilityZonesError::Unknown(String::from(body)),
             },
             Err(_) => DescribeAvailabilityZonesError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -60848,12 +61775,21 @@ impl DescribeBundleTasksError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeBundleTasksError::Unknown(String::from(body)),
             },
             Err(_) => DescribeBundleTasksError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -60913,12 +61849,21 @@ impl DescribeClassicLinkInstancesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeClassicLinkInstancesError::Unknown(String::from(body)),
             },
             Err(_) => DescribeClassicLinkInstancesError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -60978,12 +61923,21 @@ impl DescribeConversionTasksError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeConversionTasksError::Unknown(String::from(body)),
             },
             Err(_) => DescribeConversionTasksError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -61043,12 +61997,21 @@ impl DescribeCustomerGatewaysError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeCustomerGatewaysError::Unknown(String::from(body)),
             },
             Err(_) => DescribeCustomerGatewaysError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -61108,12 +62071,21 @@ impl DescribeDhcpOptionsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeDhcpOptionsError::Unknown(String::from(body)),
             },
             Err(_) => DescribeDhcpOptionsError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -61173,12 +62145,21 @@ impl DescribeEgressOnlyInternetGatewaysError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeEgressOnlyInternetGatewaysError::Unknown(String::from(body)),
             },
             Err(_) => DescribeEgressOnlyInternetGatewaysError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -61238,12 +62219,21 @@ impl DescribeElasticGpusError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeElasticGpusError::Unknown(String::from(body)),
             },
             Err(_) => DescribeElasticGpusError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -61303,12 +62293,21 @@ impl DescribeExportTasksError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeExportTasksError::Unknown(String::from(body)),
             },
             Err(_) => DescribeExportTasksError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -61368,12 +62367,21 @@ impl DescribeFlowLogsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeFlowLogsError::Unknown(String::from(body)),
             },
             Err(_) => DescribeFlowLogsError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -61431,12 +62439,21 @@ impl DescribeFpgaImageAttributeError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeFpgaImageAttributeError::Unknown(String::from(body)),
             },
             Err(_) => DescribeFpgaImageAttributeError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -61496,12 +62513,21 @@ impl DescribeFpgaImagesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeFpgaImagesError::Unknown(String::from(body)),
             },
             Err(_) => DescribeFpgaImagesError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -61561,12 +62587,21 @@ impl DescribeHostReservationOfferingsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeHostReservationOfferingsError::Unknown(String::from(body)),
             },
             Err(_) => DescribeHostReservationOfferingsError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -61626,12 +62661,21 @@ impl DescribeHostReservationsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeHostReservationsError::Unknown(String::from(body)),
             },
             Err(_) => DescribeHostReservationsError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -61691,12 +62735,21 @@ impl DescribeHostsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeHostsError::Unknown(String::from(body)),
             },
             Err(_) => DescribeHostsError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -61754,12 +62807,21 @@ impl DescribeIamInstanceProfileAssociationsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeIamInstanceProfileAssociationsError::Unknown(String::from(body)),
             },
             Err(_) => DescribeIamInstanceProfileAssociationsError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -61819,12 +62881,21 @@ impl DescribeIdFormatError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeIdFormatError::Unknown(String::from(body)),
             },
             Err(_) => DescribeIdFormatError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -61882,12 +62953,21 @@ impl DescribeIdentityIdFormatError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeIdentityIdFormatError::Unknown(String::from(body)),
             },
             Err(_) => DescribeIdentityIdFormatError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -61947,12 +63027,21 @@ impl DescribeImageAttributeError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeImageAttributeError::Unknown(String::from(body)),
             },
             Err(_) => DescribeImageAttributeError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -62012,12 +63101,21 @@ impl DescribeImagesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeImagesError::Unknown(String::from(body)),
             },
             Err(_) => DescribeImagesError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -62075,12 +63173,21 @@ impl DescribeImportImageTasksError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeImportImageTasksError::Unknown(String::from(body)),
             },
             Err(_) => DescribeImportImageTasksError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -62140,12 +63247,21 @@ impl DescribeImportSnapshotTasksError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeImportSnapshotTasksError::Unknown(String::from(body)),
             },
             Err(_) => DescribeImportSnapshotTasksError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -62205,12 +63321,21 @@ impl DescribeInstanceAttributeError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeInstanceAttributeError::Unknown(String::from(body)),
             },
             Err(_) => DescribeInstanceAttributeError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -62270,12 +63395,21 @@ impl DescribeInstanceCreditSpecificationsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeInstanceCreditSpecificationsError::Unknown(String::from(body)),
             },
             Err(_) => DescribeInstanceCreditSpecificationsError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -62335,12 +63469,21 @@ impl DescribeInstanceStatusError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeInstanceStatusError::Unknown(String::from(body)),
             },
             Err(_) => DescribeInstanceStatusError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -62400,12 +63543,21 @@ impl DescribeInstancesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeInstancesError::Unknown(String::from(body)),
             },
             Err(_) => DescribeInstancesError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -62465,12 +63617,21 @@ impl DescribeInternetGatewaysError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeInternetGatewaysError::Unknown(String::from(body)),
             },
             Err(_) => DescribeInternetGatewaysError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -62530,12 +63691,21 @@ impl DescribeKeyPairsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeKeyPairsError::Unknown(String::from(body)),
             },
             Err(_) => DescribeKeyPairsError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -62593,12 +63763,21 @@ impl DescribeLaunchTemplateVersionsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeLaunchTemplateVersionsError::Unknown(String::from(body)),
             },
             Err(_) => DescribeLaunchTemplateVersionsError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -62658,12 +63837,21 @@ impl DescribeLaunchTemplatesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeLaunchTemplatesError::Unknown(String::from(body)),
             },
             Err(_) => DescribeLaunchTemplatesError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -62723,12 +63911,21 @@ impl DescribeMovingAddressesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeMovingAddressesError::Unknown(String::from(body)),
             },
             Err(_) => DescribeMovingAddressesError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -62788,12 +63985,21 @@ impl DescribeNatGatewaysError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeNatGatewaysError::Unknown(String::from(body)),
             },
             Err(_) => DescribeNatGatewaysError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -62853,12 +64059,21 @@ impl DescribeNetworkAclsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeNetworkAclsError::Unknown(String::from(body)),
             },
             Err(_) => DescribeNetworkAclsError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -62918,12 +64133,21 @@ impl DescribeNetworkInterfaceAttributeError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeNetworkInterfaceAttributeError::Unknown(String::from(body)),
             },
             Err(_) => DescribeNetworkInterfaceAttributeError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -62983,12 +64207,21 @@ impl DescribeNetworkInterfacePermissionsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeNetworkInterfacePermissionsError::Unknown(String::from(body)),
             },
             Err(_) => DescribeNetworkInterfacePermissionsError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -63048,12 +64281,21 @@ impl DescribeNetworkInterfacesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeNetworkInterfacesError::Unknown(String::from(body)),
             },
             Err(_) => DescribeNetworkInterfacesError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -63113,12 +64355,21 @@ impl DescribePlacementGroupsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribePlacementGroupsError::Unknown(String::from(body)),
             },
             Err(_) => DescribePlacementGroupsError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -63178,12 +64429,21 @@ impl DescribePrefixListsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribePrefixListsError::Unknown(String::from(body)),
             },
             Err(_) => DescribePrefixListsError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -63243,12 +64503,21 @@ impl DescribeRegionsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeRegionsError::Unknown(String::from(body)),
             },
             Err(_) => DescribeRegionsError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -63306,12 +64575,21 @@ impl DescribeReservedInstancesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeReservedInstancesError::Unknown(String::from(body)),
             },
             Err(_) => DescribeReservedInstancesError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -63371,12 +64649,21 @@ impl DescribeReservedInstancesListingsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeReservedInstancesListingsError::Unknown(String::from(body)),
             },
             Err(_) => DescribeReservedInstancesListingsError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -63436,12 +64723,21 @@ impl DescribeReservedInstancesModificationsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeReservedInstancesModificationsError::Unknown(String::from(body)),
             },
             Err(_) => DescribeReservedInstancesModificationsError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -63501,12 +64797,21 @@ impl DescribeReservedInstancesOfferingsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeReservedInstancesOfferingsError::Unknown(String::from(body)),
             },
             Err(_) => DescribeReservedInstancesOfferingsError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -63566,12 +64871,21 @@ impl DescribeRouteTablesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeRouteTablesError::Unknown(String::from(body)),
             },
             Err(_) => DescribeRouteTablesError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -63631,12 +64945,21 @@ impl DescribeScheduledInstanceAvailabilityError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeScheduledInstanceAvailabilityError::Unknown(String::from(body)),
             },
             Err(_) => DescribeScheduledInstanceAvailabilityError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -63696,12 +65019,21 @@ impl DescribeScheduledInstancesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeScheduledInstancesError::Unknown(String::from(body)),
             },
             Err(_) => DescribeScheduledInstancesError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -63761,12 +65093,21 @@ impl DescribeSecurityGroupReferencesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeSecurityGroupReferencesError::Unknown(String::from(body)),
             },
             Err(_) => DescribeSecurityGroupReferencesError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -63826,12 +65167,21 @@ impl DescribeSecurityGroupsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeSecurityGroupsError::Unknown(String::from(body)),
             },
             Err(_) => DescribeSecurityGroupsError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -63891,12 +65241,21 @@ impl DescribeSnapshotAttributeError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeSnapshotAttributeError::Unknown(String::from(body)),
             },
             Err(_) => DescribeSnapshotAttributeError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -63956,12 +65315,21 @@ impl DescribeSnapshotsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeSnapshotsError::Unknown(String::from(body)),
             },
             Err(_) => DescribeSnapshotsError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -64021,12 +65389,21 @@ impl DescribeSpotDatafeedSubscriptionError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeSpotDatafeedSubscriptionError::Unknown(String::from(body)),
             },
             Err(_) => DescribeSpotDatafeedSubscriptionError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -64086,12 +65463,21 @@ impl DescribeSpotFleetInstancesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeSpotFleetInstancesError::Unknown(String::from(body)),
             },
             Err(_) => DescribeSpotFleetInstancesError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -64151,12 +65537,21 @@ impl DescribeSpotFleetRequestHistoryError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeSpotFleetRequestHistoryError::Unknown(String::from(body)),
             },
             Err(_) => DescribeSpotFleetRequestHistoryError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -64216,12 +65611,21 @@ impl DescribeSpotFleetRequestsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeSpotFleetRequestsError::Unknown(String::from(body)),
             },
             Err(_) => DescribeSpotFleetRequestsError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -64281,12 +65685,21 @@ impl DescribeSpotInstanceRequestsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeSpotInstanceRequestsError::Unknown(String::from(body)),
             },
             Err(_) => DescribeSpotInstanceRequestsError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -64346,12 +65759,21 @@ impl DescribeSpotPriceHistoryError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeSpotPriceHistoryError::Unknown(String::from(body)),
             },
             Err(_) => DescribeSpotPriceHistoryError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -64411,12 +65833,21 @@ impl DescribeStaleSecurityGroupsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeStaleSecurityGroupsError::Unknown(String::from(body)),
             },
             Err(_) => DescribeStaleSecurityGroupsError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -64476,12 +65907,21 @@ impl DescribeSubnetsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeSubnetsError::Unknown(String::from(body)),
             },
             Err(_) => DescribeSubnetsError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -64539,12 +65979,21 @@ impl DescribeTagsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeTagsError::Unknown(String::from(body)),
             },
             Err(_) => DescribeTagsError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -64602,12 +66051,21 @@ impl DescribeVolumeAttributeError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeVolumeAttributeError::Unknown(String::from(body)),
             },
             Err(_) => DescribeVolumeAttributeError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -64667,12 +66125,21 @@ impl DescribeVolumeStatusError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeVolumeStatusError::Unknown(String::from(body)),
             },
             Err(_) => DescribeVolumeStatusError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -64732,12 +66199,21 @@ impl DescribeVolumesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeVolumesError::Unknown(String::from(body)),
             },
             Err(_) => DescribeVolumesError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -64795,12 +66271,21 @@ impl DescribeVolumesModificationsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeVolumesModificationsError::Unknown(String::from(body)),
             },
             Err(_) => DescribeVolumesModificationsError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -64860,12 +66345,21 @@ impl DescribeVpcAttributeError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeVpcAttributeError::Unknown(String::from(body)),
             },
             Err(_) => DescribeVpcAttributeError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -64925,12 +66419,21 @@ impl DescribeVpcClassicLinkError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeVpcClassicLinkError::Unknown(String::from(body)),
             },
             Err(_) => DescribeVpcClassicLinkError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -64990,12 +66493,21 @@ impl DescribeVpcClassicLinkDnsSupportError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeVpcClassicLinkDnsSupportError::Unknown(String::from(body)),
             },
             Err(_) => DescribeVpcClassicLinkDnsSupportError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -65055,12 +66567,21 @@ impl DescribeVpcEndpointConnectionNotificationsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeVpcEndpointConnectionNotificationsError::Unknown(String::from(body)),
             },
             Err(_) => DescribeVpcEndpointConnectionNotificationsError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -65122,12 +66643,21 @@ impl DescribeVpcEndpointConnectionsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeVpcEndpointConnectionsError::Unknown(String::from(body)),
             },
             Err(_) => DescribeVpcEndpointConnectionsError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -65187,12 +66717,21 @@ impl DescribeVpcEndpointServiceConfigurationsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeVpcEndpointServiceConfigurationsError::Unknown(String::from(body)),
             },
             Err(_) => DescribeVpcEndpointServiceConfigurationsError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -65254,12 +66793,21 @@ impl DescribeVpcEndpointServicePermissionsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeVpcEndpointServicePermissionsError::Unknown(String::from(body)),
             },
             Err(_) => DescribeVpcEndpointServicePermissionsError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -65319,12 +66867,21 @@ impl DescribeVpcEndpointServicesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeVpcEndpointServicesError::Unknown(String::from(body)),
             },
             Err(_) => DescribeVpcEndpointServicesError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -65384,12 +66941,21 @@ impl DescribeVpcEndpointsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeVpcEndpointsError::Unknown(String::from(body)),
             },
             Err(_) => DescribeVpcEndpointsError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -65449,12 +67015,21 @@ impl DescribeVpcPeeringConnectionsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeVpcPeeringConnectionsError::Unknown(String::from(body)),
             },
             Err(_) => DescribeVpcPeeringConnectionsError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -65514,12 +67089,21 @@ impl DescribeVpcsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeVpcsError::Unknown(String::from(body)),
             },
             Err(_) => DescribeVpcsError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -65577,12 +67161,21 @@ impl DescribeVpnConnectionsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeVpnConnectionsError::Unknown(String::from(body)),
             },
             Err(_) => DescribeVpnConnectionsError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -65642,12 +67235,21 @@ impl DescribeVpnGatewaysError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeVpnGatewaysError::Unknown(String::from(body)),
             },
             Err(_) => DescribeVpnGatewaysError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -65707,12 +67309,21 @@ impl DetachClassicLinkVpcError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DetachClassicLinkVpcError::Unknown(String::from(body)),
             },
             Err(_) => DetachClassicLinkVpcError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -65772,12 +67383,21 @@ impl DetachInternetGatewayError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DetachInternetGatewayError::Unknown(String::from(body)),
             },
             Err(_) => DetachInternetGatewayError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -65837,12 +67457,21 @@ impl DetachNetworkInterfaceError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DetachNetworkInterfaceError::Unknown(String::from(body)),
             },
             Err(_) => DetachNetworkInterfaceError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -65902,12 +67531,21 @@ impl DetachVolumeError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DetachVolumeError::Unknown(String::from(body)),
             },
             Err(_) => DetachVolumeError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -65965,12 +67603,21 @@ impl DetachVpnGatewayError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DetachVpnGatewayError::Unknown(String::from(body)),
             },
             Err(_) => DetachVpnGatewayError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -66028,12 +67675,21 @@ impl DisableVgwRoutePropagationError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DisableVgwRoutePropagationError::Unknown(String::from(body)),
             },
             Err(_) => DisableVgwRoutePropagationError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -66093,12 +67749,21 @@ impl DisableVpcClassicLinkError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DisableVpcClassicLinkError::Unknown(String::from(body)),
             },
             Err(_) => DisableVpcClassicLinkError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -66158,12 +67823,21 @@ impl DisableVpcClassicLinkDnsSupportError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DisableVpcClassicLinkDnsSupportError::Unknown(String::from(body)),
             },
             Err(_) => DisableVpcClassicLinkDnsSupportError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -66223,12 +67897,21 @@ impl DisassociateAddressError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DisassociateAddressError::Unknown(String::from(body)),
             },
             Err(_) => DisassociateAddressError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -66288,12 +67971,21 @@ impl DisassociateIamInstanceProfileError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DisassociateIamInstanceProfileError::Unknown(String::from(body)),
             },
             Err(_) => DisassociateIamInstanceProfileError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -66353,12 +68045,21 @@ impl DisassociateRouteTableError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DisassociateRouteTableError::Unknown(String::from(body)),
             },
             Err(_) => DisassociateRouteTableError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -66418,12 +68119,21 @@ impl DisassociateSubnetCidrBlockError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DisassociateSubnetCidrBlockError::Unknown(String::from(body)),
             },
             Err(_) => DisassociateSubnetCidrBlockError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -66483,12 +68193,21 @@ impl DisassociateVpcCidrBlockError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DisassociateVpcCidrBlockError::Unknown(String::from(body)),
             },
             Err(_) => DisassociateVpcCidrBlockError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -66548,12 +68267,21 @@ impl EnableVgwRoutePropagationError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => EnableVgwRoutePropagationError::Unknown(String::from(body)),
             },
             Err(_) => EnableVgwRoutePropagationError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -66613,12 +68341,21 @@ impl EnableVolumeIOError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => EnableVolumeIOError::Unknown(String::from(body)),
             },
             Err(_) => EnableVolumeIOError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -66676,12 +68413,21 @@ impl EnableVpcClassicLinkError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => EnableVpcClassicLinkError::Unknown(String::from(body)),
             },
             Err(_) => EnableVpcClassicLinkError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -66741,12 +68487,21 @@ impl EnableVpcClassicLinkDnsSupportError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => EnableVpcClassicLinkDnsSupportError::Unknown(String::from(body)),
             },
             Err(_) => EnableVpcClassicLinkDnsSupportError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -66806,12 +68561,21 @@ impl GetConsoleOutputError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => GetConsoleOutputError::Unknown(String::from(body)),
             },
             Err(_) => GetConsoleOutputError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -66869,12 +68633,21 @@ impl GetConsoleScreenshotError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => GetConsoleScreenshotError::Unknown(String::from(body)),
             },
             Err(_) => GetConsoleScreenshotError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -66934,12 +68707,21 @@ impl GetHostReservationPurchasePreviewError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => GetHostReservationPurchasePreviewError::Unknown(String::from(body)),
             },
             Err(_) => GetHostReservationPurchasePreviewError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -66999,12 +68781,21 @@ impl GetLaunchTemplateDataError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => GetLaunchTemplateDataError::Unknown(String::from(body)),
             },
             Err(_) => GetLaunchTemplateDataError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -67064,12 +68855,21 @@ impl GetPasswordDataError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => GetPasswordDataError::Unknown(String::from(body)),
             },
             Err(_) => GetPasswordDataError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -67127,12 +68927,21 @@ impl GetReservedInstancesExchangeQuoteError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => GetReservedInstancesExchangeQuoteError::Unknown(String::from(body)),
             },
             Err(_) => GetReservedInstancesExchangeQuoteError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -67192,12 +69001,21 @@ impl ImportImageError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ImportImageError::Unknown(String::from(body)),
             },
             Err(_) => ImportImageError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -67255,12 +69073,21 @@ impl ImportInstanceError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ImportInstanceError::Unknown(String::from(body)),
             },
             Err(_) => ImportInstanceError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -67318,12 +69145,21 @@ impl ImportKeyPairError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ImportKeyPairError::Unknown(String::from(body)),
             },
             Err(_) => ImportKeyPairError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -67381,12 +69217,21 @@ impl ImportSnapshotError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ImportSnapshotError::Unknown(String::from(body)),
             },
             Err(_) => ImportSnapshotError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -67444,12 +69289,21 @@ impl ImportVolumeError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ImportVolumeError::Unknown(String::from(body)),
             },
             Err(_) => ImportVolumeError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -67507,12 +69361,21 @@ impl ModifyFpgaImageAttributeError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ModifyFpgaImageAttributeError::Unknown(String::from(body)),
             },
             Err(_) => ModifyFpgaImageAttributeError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -67572,12 +69435,21 @@ impl ModifyHostsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ModifyHostsError::Unknown(String::from(body)),
             },
             Err(_) => ModifyHostsError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -67635,12 +69507,21 @@ impl ModifyIdFormatError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ModifyIdFormatError::Unknown(String::from(body)),
             },
             Err(_) => ModifyIdFormatError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -67698,12 +69579,21 @@ impl ModifyIdentityIdFormatError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ModifyIdentityIdFormatError::Unknown(String::from(body)),
             },
             Err(_) => ModifyIdentityIdFormatError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -67763,12 +69653,21 @@ impl ModifyImageAttributeError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ModifyImageAttributeError::Unknown(String::from(body)),
             },
             Err(_) => ModifyImageAttributeError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -67828,12 +69727,21 @@ impl ModifyInstanceAttributeError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ModifyInstanceAttributeError::Unknown(String::from(body)),
             },
             Err(_) => ModifyInstanceAttributeError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -67893,12 +69801,21 @@ impl ModifyInstanceCreditSpecificationError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ModifyInstanceCreditSpecificationError::Unknown(String::from(body)),
             },
             Err(_) => ModifyInstanceCreditSpecificationError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -67958,12 +69875,21 @@ impl ModifyInstancePlacementError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ModifyInstancePlacementError::Unknown(String::from(body)),
             },
             Err(_) => ModifyInstancePlacementError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -68023,12 +69949,21 @@ impl ModifyLaunchTemplateError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ModifyLaunchTemplateError::Unknown(String::from(body)),
             },
             Err(_) => ModifyLaunchTemplateError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -68088,12 +70023,21 @@ impl ModifyNetworkInterfaceAttributeError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ModifyNetworkInterfaceAttributeError::Unknown(String::from(body)),
             },
             Err(_) => ModifyNetworkInterfaceAttributeError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -68153,12 +70097,21 @@ impl ModifyReservedInstancesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ModifyReservedInstancesError::Unknown(String::from(body)),
             },
             Err(_) => ModifyReservedInstancesError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -68218,12 +70171,21 @@ impl ModifySnapshotAttributeError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ModifySnapshotAttributeError::Unknown(String::from(body)),
             },
             Err(_) => ModifySnapshotAttributeError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -68283,12 +70245,21 @@ impl ModifySpotFleetRequestError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ModifySpotFleetRequestError::Unknown(String::from(body)),
             },
             Err(_) => ModifySpotFleetRequestError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -68348,12 +70319,21 @@ impl ModifySubnetAttributeError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ModifySubnetAttributeError::Unknown(String::from(body)),
             },
             Err(_) => ModifySubnetAttributeError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -68413,12 +70393,21 @@ impl ModifyVolumeError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ModifyVolumeError::Unknown(String::from(body)),
             },
             Err(_) => ModifyVolumeError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -68476,12 +70465,21 @@ impl ModifyVolumeAttributeError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ModifyVolumeAttributeError::Unknown(String::from(body)),
             },
             Err(_) => ModifyVolumeAttributeError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -68541,12 +70539,21 @@ impl ModifyVpcAttributeError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ModifyVpcAttributeError::Unknown(String::from(body)),
             },
             Err(_) => ModifyVpcAttributeError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -68606,12 +70613,21 @@ impl ModifyVpcEndpointError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ModifyVpcEndpointError::Unknown(String::from(body)),
             },
             Err(_) => ModifyVpcEndpointError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -68671,12 +70687,21 @@ impl ModifyVpcEndpointConnectionNotificationError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ModifyVpcEndpointConnectionNotificationError::Unknown(String::from(body)),
             },
             Err(_) => ModifyVpcEndpointConnectionNotificationError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -68736,12 +70761,21 @@ impl ModifyVpcEndpointServiceConfigurationError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ModifyVpcEndpointServiceConfigurationError::Unknown(String::from(body)),
             },
             Err(_) => ModifyVpcEndpointServiceConfigurationError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -68801,12 +70835,21 @@ impl ModifyVpcEndpointServicePermissionsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ModifyVpcEndpointServicePermissionsError::Unknown(String::from(body)),
             },
             Err(_) => ModifyVpcEndpointServicePermissionsError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -68866,12 +70909,21 @@ impl ModifyVpcPeeringConnectionOptionsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ModifyVpcPeeringConnectionOptionsError::Unknown(String::from(body)),
             },
             Err(_) => ModifyVpcPeeringConnectionOptionsError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -68931,12 +70983,21 @@ impl ModifyVpcTenancyError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ModifyVpcTenancyError::Unknown(String::from(body)),
             },
             Err(_) => ModifyVpcTenancyError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -68994,12 +71055,21 @@ impl MonitorInstancesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => MonitorInstancesError::Unknown(String::from(body)),
             },
             Err(_) => MonitorInstancesError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -69057,12 +71127,21 @@ impl MoveAddressToVpcError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => MoveAddressToVpcError::Unknown(String::from(body)),
             },
             Err(_) => MoveAddressToVpcError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -69120,12 +71199,21 @@ impl PurchaseHostReservationError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => PurchaseHostReservationError::Unknown(String::from(body)),
             },
             Err(_) => PurchaseHostReservationError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -69185,12 +71273,21 @@ impl PurchaseReservedInstancesOfferingError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => PurchaseReservedInstancesOfferingError::Unknown(String::from(body)),
             },
             Err(_) => PurchaseReservedInstancesOfferingError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -69250,12 +71347,21 @@ impl PurchaseScheduledInstancesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => PurchaseScheduledInstancesError::Unknown(String::from(body)),
             },
             Err(_) => PurchaseScheduledInstancesError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -69315,12 +71421,21 @@ impl RebootInstancesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => RebootInstancesError::Unknown(String::from(body)),
             },
             Err(_) => RebootInstancesError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -69378,12 +71493,21 @@ impl RegisterImageError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => RegisterImageError::Unknown(String::from(body)),
             },
             Err(_) => RegisterImageError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -69441,12 +71565,21 @@ impl RejectVpcEndpointConnectionsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => RejectVpcEndpointConnectionsError::Unknown(String::from(body)),
             },
             Err(_) => RejectVpcEndpointConnectionsError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -69506,12 +71639,21 @@ impl RejectVpcPeeringConnectionError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => RejectVpcPeeringConnectionError::Unknown(String::from(body)),
             },
             Err(_) => RejectVpcPeeringConnectionError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -69571,12 +71713,21 @@ impl ReleaseAddressError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ReleaseAddressError::Unknown(String::from(body)),
             },
             Err(_) => ReleaseAddressError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -69634,12 +71785,21 @@ impl ReleaseHostsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ReleaseHostsError::Unknown(String::from(body)),
             },
             Err(_) => ReleaseHostsError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -69697,12 +71857,21 @@ impl ReplaceIamInstanceProfileAssociationError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ReplaceIamInstanceProfileAssociationError::Unknown(String::from(body)),
             },
             Err(_) => ReplaceIamInstanceProfileAssociationError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -69762,12 +71931,21 @@ impl ReplaceNetworkAclAssociationError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ReplaceNetworkAclAssociationError::Unknown(String::from(body)),
             },
             Err(_) => ReplaceNetworkAclAssociationError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -69827,12 +72005,21 @@ impl ReplaceNetworkAclEntryError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ReplaceNetworkAclEntryError::Unknown(String::from(body)),
             },
             Err(_) => ReplaceNetworkAclEntryError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -69892,12 +72079,21 @@ impl ReplaceRouteError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ReplaceRouteError::Unknown(String::from(body)),
             },
             Err(_) => ReplaceRouteError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -69955,12 +72151,21 @@ impl ReplaceRouteTableAssociationError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ReplaceRouteTableAssociationError::Unknown(String::from(body)),
             },
             Err(_) => ReplaceRouteTableAssociationError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -70020,12 +72225,21 @@ impl ReportInstanceStatusError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ReportInstanceStatusError::Unknown(String::from(body)),
             },
             Err(_) => ReportInstanceStatusError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -70085,12 +72299,21 @@ impl RequestSpotFleetError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => RequestSpotFleetError::Unknown(String::from(body)),
             },
             Err(_) => RequestSpotFleetError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -70148,12 +72371,21 @@ impl RequestSpotInstancesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => RequestSpotInstancesError::Unknown(String::from(body)),
             },
             Err(_) => RequestSpotInstancesError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -70213,12 +72445,21 @@ impl ResetFpgaImageAttributeError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ResetFpgaImageAttributeError::Unknown(String::from(body)),
             },
             Err(_) => ResetFpgaImageAttributeError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -70278,12 +72519,21 @@ impl ResetImageAttributeError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ResetImageAttributeError::Unknown(String::from(body)),
             },
             Err(_) => ResetImageAttributeError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -70343,12 +72593,21 @@ impl ResetInstanceAttributeError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ResetInstanceAttributeError::Unknown(String::from(body)),
             },
             Err(_) => ResetInstanceAttributeError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -70408,12 +72667,21 @@ impl ResetNetworkInterfaceAttributeError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ResetNetworkInterfaceAttributeError::Unknown(String::from(body)),
             },
             Err(_) => ResetNetworkInterfaceAttributeError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -70473,12 +72741,21 @@ impl ResetSnapshotAttributeError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ResetSnapshotAttributeError::Unknown(String::from(body)),
             },
             Err(_) => ResetSnapshotAttributeError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -70538,12 +72815,21 @@ impl RestoreAddressToClassicError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => RestoreAddressToClassicError::Unknown(String::from(body)),
             },
             Err(_) => RestoreAddressToClassicError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -70603,12 +72889,21 @@ impl RevokeSecurityGroupEgressError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => RevokeSecurityGroupEgressError::Unknown(String::from(body)),
             },
             Err(_) => RevokeSecurityGroupEgressError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -70668,12 +72963,21 @@ impl RevokeSecurityGroupIngressError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => RevokeSecurityGroupIngressError::Unknown(String::from(body)),
             },
             Err(_) => RevokeSecurityGroupIngressError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -70733,12 +73037,21 @@ impl RunInstancesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => RunInstancesError::Unknown(String::from(body)),
             },
             Err(_) => RunInstancesError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -70796,12 +73109,21 @@ impl RunScheduledInstancesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => RunScheduledInstancesError::Unknown(String::from(body)),
             },
             Err(_) => RunScheduledInstancesError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -70861,12 +73183,21 @@ impl StartInstancesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => StartInstancesError::Unknown(String::from(body)),
             },
             Err(_) => StartInstancesError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -70924,12 +73255,21 @@ impl StopInstancesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => StopInstancesError::Unknown(String::from(body)),
             },
             Err(_) => StopInstancesError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -70987,12 +73327,21 @@ impl TerminateInstancesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => TerminateInstancesError::Unknown(String::from(body)),
             },
             Err(_) => TerminateInstancesError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -71052,12 +73401,21 @@ impl UnassignIpv6AddressesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => UnassignIpv6AddressesError::Unknown(String::from(body)),
             },
             Err(_) => UnassignIpv6AddressesError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -71117,12 +73475,21 @@ impl UnassignPrivateIpAddressesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => UnassignPrivateIpAddressesError::Unknown(String::from(body)),
             },
             Err(_) => UnassignPrivateIpAddressesError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -71182,12 +73549,21 @@ impl UnmonitorInstancesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => UnmonitorInstancesError::Unknown(String::from(body)),
             },
             Err(_) => UnmonitorInstancesError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -71247,12 +73623,21 @@ impl UpdateSecurityGroupRuleDescriptionsEgressError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => UpdateSecurityGroupRuleDescriptionsEgressError::Unknown(String::from(body)),
             },
             Err(_) => UpdateSecurityGroupRuleDescriptionsEgressError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -71314,12 +73699,21 @@ impl UpdateSecurityGroupRuleDescriptionsIngressError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => UpdateSecurityGroupRuleDescriptionsIngressError::Unknown(String::from(body)),
             },
             Err(_) => UpdateSecurityGroupRuleDescriptionsIngressError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 

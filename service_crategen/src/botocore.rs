@@ -102,10 +102,6 @@ pub struct Output {
 
 #[derive(Debug, Deserialize, PartialEq, Eq, PartialOrd, Ord)]
 pub struct Error {
-    pub documentation: Option<String>,
-    pub error: Option<HttpError>,
-    pub exception: Option<bool>,
-    pub fault: Option<bool>,
     pub shape: String,
 }
 
@@ -341,6 +337,8 @@ pub struct Metadata {
     pub service_abbreviation: Option<String>,
     #[serde(rename="serviceFullName")]
     pub service_full_name: String,
+    #[serde(rename="serviceId")]
+    pub service_id: Option<String>,
     #[serde(rename="signatureVersion")]
     pub signature_version: String,
     #[serde(rename="signingName")]

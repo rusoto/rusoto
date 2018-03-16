@@ -8583,15 +8583,23 @@ impl AttachInstancesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ResourceContentionFault" => AttachInstancesError::ResourceContentionFault(
+                "ResourceContention" => AttachInstancesError::ResourceContentionFault(
                     String::from(parsed_error.message),
                 ),
                 _ => AttachInstancesError::Unknown(String::from(body)),
             },
             Err(_) => AttachInstancesError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -8652,9 +8660,9 @@ impl AttachLoadBalancerTargetGroupsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ResourceContentionFault" => {
+                "ResourceContention" => {
                     AttachLoadBalancerTargetGroupsError::ResourceContentionFault(String::from(
                         parsed_error.message,
                     ))
@@ -8663,6 +8671,14 @@ impl AttachLoadBalancerTargetGroupsError {
             },
             Err(_) => AttachLoadBalancerTargetGroupsError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -8725,15 +8741,23 @@ impl AttachLoadBalancersError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ResourceContentionFault" => AttachLoadBalancersError::ResourceContentionFault(
+                "ResourceContention" => AttachLoadBalancersError::ResourceContentionFault(
                     String::from(parsed_error.message),
                 ),
                 _ => AttachLoadBalancersError::Unknown(String::from(body)),
             },
             Err(_) => AttachLoadBalancersError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -8796,17 +8820,23 @@ impl CompleteLifecycleActionError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ResourceContentionFault" => {
-                    CompleteLifecycleActionError::ResourceContentionFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "ResourceContention" => CompleteLifecycleActionError::ResourceContentionFault(
+                    String::from(parsed_error.message),
+                ),
                 _ => CompleteLifecycleActionError::Unknown(String::from(body)),
             },
             Err(_) => CompleteLifecycleActionError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -8873,21 +8903,29 @@ impl CreateAutoScalingGroupError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "AlreadyExistsFault" => CreateAutoScalingGroupError::AlreadyExistsFault(
-                    String::from(parsed_error.message),
-                ),
-                "LimitExceededFault" => CreateAutoScalingGroupError::LimitExceededFault(
-                    String::from(parsed_error.message),
-                ),
-                "ResourceContentionFault" => CreateAutoScalingGroupError::ResourceContentionFault(
+                "AlreadyExists" => CreateAutoScalingGroupError::AlreadyExistsFault(String::from(
+                    parsed_error.message,
+                )),
+                "LimitExceeded" => CreateAutoScalingGroupError::LimitExceededFault(String::from(
+                    parsed_error.message,
+                )),
+                "ResourceContention" => CreateAutoScalingGroupError::ResourceContentionFault(
                     String::from(parsed_error.message),
                 ),
                 _ => CreateAutoScalingGroupError::Unknown(String::from(body)),
             },
             Err(_) => CreateAutoScalingGroupError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -8956,23 +8994,29 @@ impl CreateLaunchConfigurationError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "AlreadyExistsFault" => CreateLaunchConfigurationError::AlreadyExistsFault(
+                "AlreadyExists" => CreateLaunchConfigurationError::AlreadyExistsFault(
                     String::from(parsed_error.message),
                 ),
-                "LimitExceededFault" => CreateLaunchConfigurationError::LimitExceededFault(
+                "LimitExceeded" => CreateLaunchConfigurationError::LimitExceededFault(
                     String::from(parsed_error.message),
                 ),
-                "ResourceContentionFault" => {
-                    CreateLaunchConfigurationError::ResourceContentionFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "ResourceContention" => CreateLaunchConfigurationError::ResourceContentionFault(
+                    String::from(parsed_error.message),
+                ),
                 _ => CreateLaunchConfigurationError::Unknown(String::from(body)),
             },
             Err(_) => CreateLaunchConfigurationError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -9043,24 +9087,32 @@ impl CreateOrUpdateTagsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "AlreadyExistsFault" => {
+                "AlreadyExists" => {
                     CreateOrUpdateTagsError::AlreadyExistsFault(String::from(parsed_error.message))
                 }
-                "LimitExceededFault" => {
+                "LimitExceeded" => {
                     CreateOrUpdateTagsError::LimitExceededFault(String::from(parsed_error.message))
                 }
-                "ResourceContentionFault" => CreateOrUpdateTagsError::ResourceContentionFault(
+                "ResourceContention" => CreateOrUpdateTagsError::ResourceContentionFault(
                     String::from(parsed_error.message),
                 ),
-                "ResourceInUseFault" => {
+                "ResourceInUse" => {
                     CreateOrUpdateTagsError::ResourceInUseFault(String::from(parsed_error.message))
                 }
                 _ => CreateOrUpdateTagsError::Unknown(String::from(body)),
             },
             Err(_) => CreateOrUpdateTagsError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -9130,15 +9182,15 @@ impl DeleteAutoScalingGroupError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ResourceContentionFault" => DeleteAutoScalingGroupError::ResourceContentionFault(
+                "ResourceContention" => DeleteAutoScalingGroupError::ResourceContentionFault(
                     String::from(parsed_error.message),
                 ),
-                "ResourceInUseFault" => DeleteAutoScalingGroupError::ResourceInUseFault(
-                    String::from(parsed_error.message),
-                ),
-                "ScalingActivityInProgressFault" => {
+                "ResourceInUse" => DeleteAutoScalingGroupError::ResourceInUseFault(String::from(
+                    parsed_error.message,
+                )),
+                "ScalingActivityInProgress" => {
                     DeleteAutoScalingGroupError::ScalingActivityInProgressFault(String::from(
                         parsed_error.message,
                     ))
@@ -9147,6 +9199,14 @@ impl DeleteAutoScalingGroupError {
             },
             Err(_) => DeleteAutoScalingGroupError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -9213,20 +9273,26 @@ impl DeleteLaunchConfigurationError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ResourceContentionFault" => {
-                    DeleteLaunchConfigurationError::ResourceContentionFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "ResourceInUseFault" => DeleteLaunchConfigurationError::ResourceInUseFault(
+                "ResourceContention" => DeleteLaunchConfigurationError::ResourceContentionFault(
+                    String::from(parsed_error.message),
+                ),
+                "ResourceInUse" => DeleteLaunchConfigurationError::ResourceInUseFault(
                     String::from(parsed_error.message),
                 ),
                 _ => DeleteLaunchConfigurationError::Unknown(String::from(body)),
             },
             Err(_) => DeleteLaunchConfigurationError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -9290,15 +9356,23 @@ impl DeleteLifecycleHookError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ResourceContentionFault" => DeleteLifecycleHookError::ResourceContentionFault(
+                "ResourceContention" => DeleteLifecycleHookError::ResourceContentionFault(
                     String::from(parsed_error.message),
                 ),
                 _ => DeleteLifecycleHookError::Unknown(String::from(body)),
             },
             Err(_) => DeleteLifecycleHookError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -9361,9 +9435,9 @@ impl DeleteNotificationConfigurationError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ResourceContentionFault" => {
+                "ResourceContention" => {
                     DeleteNotificationConfigurationError::ResourceContentionFault(String::from(
                         parsed_error.message,
                     ))
@@ -9372,6 +9446,14 @@ impl DeleteNotificationConfigurationError {
             },
             Err(_) => DeleteNotificationConfigurationError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -9434,15 +9516,23 @@ impl DeletePolicyError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ResourceContentionFault" => {
+                "ResourceContention" => {
                     DeletePolicyError::ResourceContentionFault(String::from(parsed_error.message))
                 }
                 _ => DeletePolicyError::Unknown(String::from(body)),
             },
             Err(_) => DeletePolicyError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -9503,15 +9593,23 @@ impl DeleteScheduledActionError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ResourceContentionFault" => DeleteScheduledActionError::ResourceContentionFault(
+                "ResourceContention" => DeleteScheduledActionError::ResourceContentionFault(
                     String::from(parsed_error.message),
                 ),
                 _ => DeleteScheduledActionError::Unknown(String::from(body)),
             },
             Err(_) => DeleteScheduledActionError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -9576,18 +9674,26 @@ impl DeleteTagsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ResourceContentionFault" => {
+                "ResourceContention" => {
                     DeleteTagsError::ResourceContentionFault(String::from(parsed_error.message))
                 }
-                "ResourceInUseFault" => {
+                "ResourceInUse" => {
                     DeleteTagsError::ResourceInUseFault(String::from(parsed_error.message))
                 }
                 _ => DeleteTagsError::Unknown(String::from(body)),
             },
             Err(_) => DeleteTagsError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -9649,15 +9755,23 @@ impl DescribeAccountLimitsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ResourceContentionFault" => DescribeAccountLimitsError::ResourceContentionFault(
+                "ResourceContention" => DescribeAccountLimitsError::ResourceContentionFault(
                     String::from(parsed_error.message),
                 ),
                 _ => DescribeAccountLimitsError::Unknown(String::from(body)),
             },
             Err(_) => DescribeAccountLimitsError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -9720,17 +9834,23 @@ impl DescribeAdjustmentTypesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ResourceContentionFault" => {
-                    DescribeAdjustmentTypesError::ResourceContentionFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "ResourceContention" => DescribeAdjustmentTypesError::ResourceContentionFault(
+                    String::from(parsed_error.message),
+                ),
                 _ => DescribeAdjustmentTypesError::Unknown(String::from(body)),
             },
             Err(_) => DescribeAdjustmentTypesError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -9795,20 +9915,26 @@ impl DescribeAutoScalingGroupsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "InvalidNextToken" => DescribeAutoScalingGroupsError::InvalidNextToken(
                     String::from(parsed_error.message),
                 ),
-                "ResourceContentionFault" => {
-                    DescribeAutoScalingGroupsError::ResourceContentionFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "ResourceContention" => DescribeAutoScalingGroupsError::ResourceContentionFault(
+                    String::from(parsed_error.message),
+                ),
                 _ => DescribeAutoScalingGroupsError::Unknown(String::from(body)),
             },
             Err(_) => DescribeAutoScalingGroupsError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -9874,12 +10000,12 @@ impl DescribeAutoScalingInstancesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "InvalidNextToken" => DescribeAutoScalingInstancesError::InvalidNextToken(
                     String::from(parsed_error.message),
                 ),
-                "ResourceContentionFault" => {
+                "ResourceContention" => {
                     DescribeAutoScalingInstancesError::ResourceContentionFault(String::from(
                         parsed_error.message,
                     ))
@@ -9888,6 +10014,14 @@ impl DescribeAutoScalingInstancesError {
             },
             Err(_) => DescribeAutoScalingInstancesError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -9951,9 +10085,9 @@ impl DescribeAutoScalingNotificationTypesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ResourceContentionFault" => {
+                "ResourceContention" => {
                     DescribeAutoScalingNotificationTypesError::ResourceContentionFault(
                         String::from(parsed_error.message),
                     )
@@ -9962,6 +10096,14 @@ impl DescribeAutoScalingNotificationTypesError {
             },
             Err(_) => DescribeAutoScalingNotificationTypesError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -10026,12 +10168,12 @@ impl DescribeLaunchConfigurationsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "InvalidNextToken" => DescribeLaunchConfigurationsError::InvalidNextToken(
                     String::from(parsed_error.message),
                 ),
-                "ResourceContentionFault" => {
+                "ResourceContention" => {
                     DescribeLaunchConfigurationsError::ResourceContentionFault(String::from(
                         parsed_error.message,
                     ))
@@ -10040,6 +10182,14 @@ impl DescribeLaunchConfigurationsError {
             },
             Err(_) => DescribeLaunchConfigurationsError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -10103,17 +10253,23 @@ impl DescribeLifecycleHookTypesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ResourceContentionFault" => {
-                    DescribeLifecycleHookTypesError::ResourceContentionFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "ResourceContention" => DescribeLifecycleHookTypesError::ResourceContentionFault(
+                    String::from(parsed_error.message),
+                ),
                 _ => DescribeLifecycleHookTypesError::Unknown(String::from(body)),
             },
             Err(_) => DescribeLifecycleHookTypesError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -10176,15 +10332,23 @@ impl DescribeLifecycleHooksError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ResourceContentionFault" => DescribeLifecycleHooksError::ResourceContentionFault(
+                "ResourceContention" => DescribeLifecycleHooksError::ResourceContentionFault(
                     String::from(parsed_error.message),
                 ),
                 _ => DescribeLifecycleHooksError::Unknown(String::from(body)),
             },
             Err(_) => DescribeLifecycleHooksError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -10247,9 +10411,9 @@ impl DescribeLoadBalancerTargetGroupsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ResourceContentionFault" => {
+                "ResourceContention" => {
                     DescribeLoadBalancerTargetGroupsError::ResourceContentionFault(String::from(
                         parsed_error.message,
                     ))
@@ -10258,6 +10422,14 @@ impl DescribeLoadBalancerTargetGroupsError {
             },
             Err(_) => DescribeLoadBalancerTargetGroupsError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -10320,15 +10492,23 @@ impl DescribeLoadBalancersError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ResourceContentionFault" => DescribeLoadBalancersError::ResourceContentionFault(
+                "ResourceContention" => DescribeLoadBalancersError::ResourceContentionFault(
                     String::from(parsed_error.message),
                 ),
                 _ => DescribeLoadBalancersError::Unknown(String::from(body)),
             },
             Err(_) => DescribeLoadBalancersError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -10391,9 +10571,9 @@ impl DescribeMetricCollectionTypesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ResourceContentionFault" => {
+                "ResourceContention" => {
                     DescribeMetricCollectionTypesError::ResourceContentionFault(String::from(
                         parsed_error.message,
                     ))
@@ -10402,6 +10582,14 @@ impl DescribeMetricCollectionTypesError {
             },
             Err(_) => DescribeMetricCollectionTypesError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -10466,12 +10654,12 @@ impl DescribeNotificationConfigurationsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "InvalidNextToken" => DescribeNotificationConfigurationsError::InvalidNextToken(
                     String::from(parsed_error.message),
                 ),
-                "ResourceContentionFault" => {
+                "ResourceContention" => {
                     DescribeNotificationConfigurationsError::ResourceContentionFault(String::from(
                         parsed_error.message,
                     ))
@@ -10480,6 +10668,14 @@ impl DescribeNotificationConfigurationsError {
             },
             Err(_) => DescribeNotificationConfigurationsError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -10545,18 +10741,26 @@ impl DescribePoliciesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "InvalidNextToken" => {
                     DescribePoliciesError::InvalidNextToken(String::from(parsed_error.message))
                 }
-                "ResourceContentionFault" => DescribePoliciesError::ResourceContentionFault(
+                "ResourceContention" => DescribePoliciesError::ResourceContentionFault(
                     String::from(parsed_error.message),
                 ),
                 _ => DescribePoliciesError::Unknown(String::from(body)),
             },
             Err(_) => DescribePoliciesError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -10620,20 +10824,26 @@ impl DescribeScalingActivitiesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "InvalidNextToken" => DescribeScalingActivitiesError::InvalidNextToken(
                     String::from(parsed_error.message),
                 ),
-                "ResourceContentionFault" => {
-                    DescribeScalingActivitiesError::ResourceContentionFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "ResourceContention" => DescribeScalingActivitiesError::ResourceContentionFault(
+                    String::from(parsed_error.message),
+                ),
                 _ => DescribeScalingActivitiesError::Unknown(String::from(body)),
             },
             Err(_) => DescribeScalingActivitiesError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -10697,17 +10907,23 @@ impl DescribeScalingProcessTypesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ResourceContentionFault" => {
-                    DescribeScalingProcessTypesError::ResourceContentionFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "ResourceContention" => DescribeScalingProcessTypesError::ResourceContentionFault(
+                    String::from(parsed_error.message),
+                ),
                 _ => DescribeScalingProcessTypesError::Unknown(String::from(body)),
             },
             Err(_) => DescribeScalingProcessTypesError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -10772,20 +10988,26 @@ impl DescribeScheduledActionsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "InvalidNextToken" => DescribeScheduledActionsError::InvalidNextToken(
                     String::from(parsed_error.message),
                 ),
-                "ResourceContentionFault" => {
-                    DescribeScheduledActionsError::ResourceContentionFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "ResourceContention" => DescribeScheduledActionsError::ResourceContentionFault(
+                    String::from(parsed_error.message),
+                ),
                 _ => DescribeScheduledActionsError::Unknown(String::from(body)),
             },
             Err(_) => DescribeScheduledActionsError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -10851,18 +11073,26 @@ impl DescribeTagsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "InvalidNextToken" => {
                     DescribeTagsError::InvalidNextToken(String::from(parsed_error.message))
                 }
-                "ResourceContentionFault" => {
+                "ResourceContention" => {
                     DescribeTagsError::ResourceContentionFault(String::from(parsed_error.message))
                 }
                 _ => DescribeTagsError::Unknown(String::from(body)),
             },
             Err(_) => DescribeTagsError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -10924,9 +11154,9 @@ impl DescribeTerminationPolicyTypesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ResourceContentionFault" => {
+                "ResourceContention" => {
                     DescribeTerminationPolicyTypesError::ResourceContentionFault(String::from(
                         parsed_error.message,
                     ))
@@ -10935,6 +11165,14 @@ impl DescribeTerminationPolicyTypesError {
             },
             Err(_) => DescribeTerminationPolicyTypesError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -10997,15 +11235,23 @@ impl DetachInstancesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ResourceContentionFault" => DetachInstancesError::ResourceContentionFault(
+                "ResourceContention" => DetachInstancesError::ResourceContentionFault(
                     String::from(parsed_error.message),
                 ),
                 _ => DetachInstancesError::Unknown(String::from(body)),
             },
             Err(_) => DetachInstancesError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -11066,9 +11312,9 @@ impl DetachLoadBalancerTargetGroupsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ResourceContentionFault" => {
+                "ResourceContention" => {
                     DetachLoadBalancerTargetGroupsError::ResourceContentionFault(String::from(
                         parsed_error.message,
                     ))
@@ -11077,6 +11323,14 @@ impl DetachLoadBalancerTargetGroupsError {
             },
             Err(_) => DetachLoadBalancerTargetGroupsError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -11139,15 +11393,23 @@ impl DetachLoadBalancersError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ResourceContentionFault" => DetachLoadBalancersError::ResourceContentionFault(
+                "ResourceContention" => DetachLoadBalancersError::ResourceContentionFault(
                     String::from(parsed_error.message),
                 ),
                 _ => DetachLoadBalancersError::Unknown(String::from(body)),
             },
             Err(_) => DetachLoadBalancersError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -11210,17 +11472,23 @@ impl DisableMetricsCollectionError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ResourceContentionFault" => {
-                    DisableMetricsCollectionError::ResourceContentionFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "ResourceContention" => DisableMetricsCollectionError::ResourceContentionFault(
+                    String::from(parsed_error.message),
+                ),
                 _ => DisableMetricsCollectionError::Unknown(String::from(body)),
             },
             Err(_) => DisableMetricsCollectionError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -11283,17 +11551,23 @@ impl EnableMetricsCollectionError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ResourceContentionFault" => {
-                    EnableMetricsCollectionError::ResourceContentionFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "ResourceContention" => EnableMetricsCollectionError::ResourceContentionFault(
+                    String::from(parsed_error.message),
+                ),
                 _ => EnableMetricsCollectionError::Unknown(String::from(body)),
             },
             Err(_) => EnableMetricsCollectionError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -11356,15 +11630,23 @@ impl EnterStandbyError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ResourceContentionFault" => {
+                "ResourceContention" => {
                     EnterStandbyError::ResourceContentionFault(String::from(parsed_error.message))
                 }
                 _ => EnterStandbyError::Unknown(String::from(body)),
             },
             Err(_) => EnterStandbyError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -11427,20 +11709,26 @@ impl ExecutePolicyError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ResourceContentionFault" => {
+                "ResourceContention" => {
                     ExecutePolicyError::ResourceContentionFault(String::from(parsed_error.message))
                 }
-                "ScalingActivityInProgressFault" => {
-                    ExecutePolicyError::ScalingActivityInProgressFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "ScalingActivityInProgress" => ExecutePolicyError::ScalingActivityInProgressFault(
+                    String::from(parsed_error.message),
+                ),
                 _ => ExecutePolicyError::Unknown(String::from(body)),
             },
             Err(_) => ExecutePolicyError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -11502,15 +11790,23 @@ impl ExitStandbyError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ResourceContentionFault" => {
+                "ResourceContention" => {
                     ExitStandbyError::ResourceContentionFault(String::from(parsed_error.message))
                 }
                 _ => ExitStandbyError::Unknown(String::from(body)),
             },
             Err(_) => ExitStandbyError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -11573,18 +11869,26 @@ impl PutLifecycleHookError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "LimitExceededFault" => {
+                "LimitExceeded" => {
                     PutLifecycleHookError::LimitExceededFault(String::from(parsed_error.message))
                 }
-                "ResourceContentionFault" => PutLifecycleHookError::ResourceContentionFault(
+                "ResourceContention" => PutLifecycleHookError::ResourceContentionFault(
                     String::from(parsed_error.message),
                 ),
                 _ => PutLifecycleHookError::Unknown(String::from(body)),
             },
             Err(_) => PutLifecycleHookError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -11648,12 +11952,12 @@ impl PutNotificationConfigurationError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "LimitExceededFault" => PutNotificationConfigurationError::LimitExceededFault(
+                "LimitExceeded" => PutNotificationConfigurationError::LimitExceededFault(
                     String::from(parsed_error.message),
                 ),
-                "ResourceContentionFault" => {
+                "ResourceContention" => {
                     PutNotificationConfigurationError::ResourceContentionFault(String::from(
                         parsed_error.message,
                     ))
@@ -11662,6 +11966,14 @@ impl PutNotificationConfigurationError {
             },
             Err(_) => PutNotificationConfigurationError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -11727,18 +12039,26 @@ impl PutScalingPolicyError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "LimitExceededFault" => {
+                "LimitExceeded" => {
                     PutScalingPolicyError::LimitExceededFault(String::from(parsed_error.message))
                 }
-                "ResourceContentionFault" => PutScalingPolicyError::ResourceContentionFault(
+                "ResourceContention" => PutScalingPolicyError::ResourceContentionFault(
                     String::from(parsed_error.message),
                 ),
                 _ => PutScalingPolicyError::Unknown(String::from(body)),
             },
             Err(_) => PutScalingPolicyError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -11804,15 +12124,15 @@ impl PutScheduledUpdateGroupActionError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "AlreadyExistsFault" => PutScheduledUpdateGroupActionError::AlreadyExistsFault(
+                "AlreadyExists" => PutScheduledUpdateGroupActionError::AlreadyExistsFault(
                     String::from(parsed_error.message),
                 ),
-                "LimitExceededFault" => PutScheduledUpdateGroupActionError::LimitExceededFault(
+                "LimitExceeded" => PutScheduledUpdateGroupActionError::LimitExceededFault(
                     String::from(parsed_error.message),
                 ),
-                "ResourceContentionFault" => {
+                "ResourceContention" => {
                     PutScheduledUpdateGroupActionError::ResourceContentionFault(String::from(
                         parsed_error.message,
                     ))
@@ -11821,6 +12141,14 @@ impl PutScheduledUpdateGroupActionError {
             },
             Err(_) => PutScheduledUpdateGroupActionError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -11885,9 +12213,9 @@ impl RecordLifecycleActionHeartbeatError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ResourceContentionFault" => {
+                "ResourceContention" => {
                     RecordLifecycleActionHeartbeatError::ResourceContentionFault(String::from(
                         parsed_error.message,
                     ))
@@ -11896,6 +12224,14 @@ impl RecordLifecycleActionHeartbeatError {
             },
             Err(_) => RecordLifecycleActionHeartbeatError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -11960,18 +12296,26 @@ impl ResumeProcessesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ResourceContentionFault" => ResumeProcessesError::ResourceContentionFault(
+                "ResourceContention" => ResumeProcessesError::ResourceContentionFault(
                     String::from(parsed_error.message),
                 ),
-                "ResourceInUseFault" => {
+                "ResourceInUse" => {
                     ResumeProcessesError::ResourceInUseFault(String::from(parsed_error.message))
                 }
                 _ => ResumeProcessesError::Unknown(String::from(body)),
             },
             Err(_) => ResumeProcessesError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -12035,12 +12379,12 @@ impl SetDesiredCapacityError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ResourceContentionFault" => SetDesiredCapacityError::ResourceContentionFault(
+                "ResourceContention" => SetDesiredCapacityError::ResourceContentionFault(
                     String::from(parsed_error.message),
                 ),
-                "ScalingActivityInProgressFault" => {
+                "ScalingActivityInProgress" => {
                     SetDesiredCapacityError::ScalingActivityInProgressFault(String::from(
                         parsed_error.message,
                     ))
@@ -12049,6 +12393,14 @@ impl SetDesiredCapacityError {
             },
             Err(_) => SetDesiredCapacityError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -12112,15 +12464,23 @@ impl SetInstanceHealthError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ResourceContentionFault" => SetInstanceHealthError::ResourceContentionFault(
+                "ResourceContention" => SetInstanceHealthError::ResourceContentionFault(
                     String::from(parsed_error.message),
                 ),
                 _ => SetInstanceHealthError::Unknown(String::from(body)),
             },
             Err(_) => SetInstanceHealthError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -12185,18 +12545,26 @@ impl SetInstanceProtectionError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "LimitExceededFault" => SetInstanceProtectionError::LimitExceededFault(
-                    String::from(parsed_error.message),
-                ),
-                "ResourceContentionFault" => SetInstanceProtectionError::ResourceContentionFault(
+                "LimitExceeded" => SetInstanceProtectionError::LimitExceededFault(String::from(
+                    parsed_error.message,
+                )),
+                "ResourceContention" => SetInstanceProtectionError::ResourceContentionFault(
                     String::from(parsed_error.message),
                 ),
                 _ => SetInstanceProtectionError::Unknown(String::from(body)),
             },
             Err(_) => SetInstanceProtectionError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -12262,18 +12630,26 @@ impl SuspendProcessesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ResourceContentionFault" => SuspendProcessesError::ResourceContentionFault(
+                "ResourceContention" => SuspendProcessesError::ResourceContentionFault(
                     String::from(parsed_error.message),
                 ),
-                "ResourceInUseFault" => {
+                "ResourceInUse" => {
                     SuspendProcessesError::ResourceInUseFault(String::from(parsed_error.message))
                 }
                 _ => SuspendProcessesError::Unknown(String::from(body)),
             },
             Err(_) => SuspendProcessesError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -12337,14 +12713,14 @@ impl TerminateInstanceInAutoScalingGroupError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ResourceContentionFault" => {
+                "ResourceContention" => {
                     TerminateInstanceInAutoScalingGroupError::ResourceContentionFault(
                         String::from(parsed_error.message),
                     )
                 }
-                "ScalingActivityInProgressFault" => {
+                "ScalingActivityInProgress" => {
                     TerminateInstanceInAutoScalingGroupError::ScalingActivityInProgressFault(
                         String::from(parsed_error.message),
                     )
@@ -12353,6 +12729,14 @@ impl TerminateInstanceInAutoScalingGroupError {
             },
             Err(_) => TerminateInstanceInAutoScalingGroupError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -12420,12 +12804,12 @@ impl UpdateAutoScalingGroupError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ResourceContentionFault" => UpdateAutoScalingGroupError::ResourceContentionFault(
+                "ResourceContention" => UpdateAutoScalingGroupError::ResourceContentionFault(
                     String::from(parsed_error.message),
                 ),
-                "ScalingActivityInProgressFault" => {
+                "ScalingActivityInProgress" => {
                     UpdateAutoScalingGroupError::ScalingActivityInProgressFault(String::from(
                         parsed_error.message,
                     ))
@@ -12434,6 +12818,14 @@ impl UpdateAutoScalingGroupError {
             },
             Err(_) => UpdateAutoScalingGroupError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 

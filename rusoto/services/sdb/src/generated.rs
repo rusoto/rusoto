@@ -1101,12 +1101,20 @@ impl BatchDeleteAttributesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => BatchDeleteAttributesError::Unknown(String::from(body)),
             },
             Err(_) => BatchDeleteAttributesError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -1153,20 +1161,20 @@ impl Error for BatchDeleteAttributesError {
 pub enum BatchPutAttributesError {
     /// <p>The item name was specified more than once. </p>
     DuplicateItemName(String),
+    /// <p>The value for a parameter is invalid.</p>
+    InvalidParameterValue(String),
     /// <p>The request must contain the specified missing parameter.</p>
     MissingParameter(String),
     /// <p>The specified domain does not exist.</p>
     NoSuchDomain(String),
-    /// <p>The value for a parameter is invalid.</p>
-    InvalidParameterValue(String),
-    /// <p>Too many attributes exist in a single call.</p>
-    NumberSubmittedAttributesExceeded(String),
     /// <p>Too many attributes in this domain.</p>
     NumberDomainAttributesExceeded(String),
-    /// <p>Too many attributes in this item.</p>
-    NumberItemAttributesExceeded(String),
     /// <p>Too many bytes in this domain.</p>
     NumberDomainBytesExceeded(String),
+    /// <p>Too many attributes in this item.</p>
+    NumberItemAttributesExceeded(String),
+    /// <p>Too many attributes exist in a single call.</p>
+    NumberSubmittedAttributesExceeded(String),
     /// <p>Too many items exist in a single call.</p>
     NumberSubmittedItemsExceeded(String),
     /// An error occurred dispatching the HTTP request
@@ -1184,38 +1192,38 @@ impl BatchPutAttributesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "DuplicateItemName" => {
                     BatchPutAttributesError::DuplicateItemName(String::from(parsed_error.message))
                 }
+                "InvalidParameterValue" => BatchPutAttributesError::InvalidParameterValue(
+                    String::from(parsed_error.message),
+                ),
                 "MissingParameter" => {
                     BatchPutAttributesError::MissingParameter(String::from(parsed_error.message))
                 }
                 "NoSuchDomain" => {
                     BatchPutAttributesError::NoSuchDomain(String::from(parsed_error.message))
                 }
-                "InvalidParameterValue" => BatchPutAttributesError::InvalidParameterValue(
-                    String::from(parsed_error.message),
-                ),
-                "NumberSubmittedAttributesExceeded" => {
-                    BatchPutAttributesError::NumberSubmittedAttributesExceeded(String::from(
-                        parsed_error.message,
-                    ))
-                }
                 "NumberDomainAttributesExceeded" => {
                     BatchPutAttributesError::NumberDomainAttributesExceeded(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "NumberItemAttributesExceeded" => {
-                    BatchPutAttributesError::NumberItemAttributesExceeded(String::from(
                         parsed_error.message,
                     ))
                 }
                 "NumberDomainBytesExceeded" => BatchPutAttributesError::NumberDomainBytesExceeded(
                     String::from(parsed_error.message),
                 ),
+                "NumberItemAttributesExceeded" => {
+                    BatchPutAttributesError::NumberItemAttributesExceeded(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                "NumberSubmittedAttributesExceeded" => {
+                    BatchPutAttributesError::NumberSubmittedAttributesExceeded(String::from(
+                        parsed_error.message,
+                    ))
+                }
                 "NumberSubmittedItemsExceeded" => {
                     BatchPutAttributesError::NumberSubmittedItemsExceeded(String::from(
                         parsed_error.message,
@@ -1225,6 +1233,14 @@ impl BatchPutAttributesError {
             },
             Err(_) => BatchPutAttributesError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -1258,13 +1274,13 @@ impl Error for BatchPutAttributesError {
     fn description(&self) -> &str {
         match *self {
             BatchPutAttributesError::DuplicateItemName(ref cause) => cause,
+            BatchPutAttributesError::InvalidParameterValue(ref cause) => cause,
             BatchPutAttributesError::MissingParameter(ref cause) => cause,
             BatchPutAttributesError::NoSuchDomain(ref cause) => cause,
-            BatchPutAttributesError::InvalidParameterValue(ref cause) => cause,
-            BatchPutAttributesError::NumberSubmittedAttributesExceeded(ref cause) => cause,
             BatchPutAttributesError::NumberDomainAttributesExceeded(ref cause) => cause,
-            BatchPutAttributesError::NumberItemAttributesExceeded(ref cause) => cause,
             BatchPutAttributesError::NumberDomainBytesExceeded(ref cause) => cause,
+            BatchPutAttributesError::NumberItemAttributesExceeded(ref cause) => cause,
+            BatchPutAttributesError::NumberSubmittedAttributesExceeded(ref cause) => cause,
             BatchPutAttributesError::NumberSubmittedItemsExceeded(ref cause) => cause,
             BatchPutAttributesError::Validation(ref cause) => cause,
             BatchPutAttributesError::Credentials(ref err) => err.description(),
@@ -1278,10 +1294,10 @@ impl Error for BatchPutAttributesError {
 /// Errors returned by CreateDomain
 #[derive(Debug, PartialEq)]
 pub enum CreateDomainError {
-    /// <p>The request must contain the specified missing parameter.</p>
-    MissingParameter(String),
     /// <p>The value for a parameter is invalid.</p>
     InvalidParameterValue(String),
+    /// <p>The request must contain the specified missing parameter.</p>
+    MissingParameter(String),
     /// <p>Too many domains exist per this account.</p>
     NumberDomainsExceeded(String),
     /// An error occurred dispatching the HTTP request
@@ -1299,13 +1315,13 @@ impl CreateDomainError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "MissingParameter" => {
-                    CreateDomainError::MissingParameter(String::from(parsed_error.message))
-                }
                 "InvalidParameterValue" => {
                     CreateDomainError::InvalidParameterValue(String::from(parsed_error.message))
+                }
+                "MissingParameter" => {
+                    CreateDomainError::MissingParameter(String::from(parsed_error.message))
                 }
                 "NumberDomainsExceeded" => {
                     CreateDomainError::NumberDomainsExceeded(String::from(parsed_error.message))
@@ -1314,6 +1330,14 @@ impl CreateDomainError {
             },
             Err(_) => CreateDomainError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -1346,8 +1370,8 @@ impl fmt::Display for CreateDomainError {
 impl Error for CreateDomainError {
     fn description(&self) -> &str {
         match *self {
-            CreateDomainError::MissingParameter(ref cause) => cause,
             CreateDomainError::InvalidParameterValue(ref cause) => cause,
+            CreateDomainError::MissingParameter(ref cause) => cause,
             CreateDomainError::NumberDomainsExceeded(ref cause) => cause,
             CreateDomainError::Validation(ref cause) => cause,
             CreateDomainError::Credentials(ref err) => err.description(),
@@ -1359,14 +1383,14 @@ impl Error for CreateDomainError {
 /// Errors returned by DeleteAttributes
 #[derive(Debug, PartialEq)]
 pub enum DeleteAttributesError {
-    /// <p>The request must contain the specified missing parameter.</p>
-    MissingParameter(String),
     /// <p>The specified attribute does not exist.</p>
     AttributeDoesNotExist(String),
-    /// <p>The specified domain does not exist.</p>
-    NoSuchDomain(String),
     /// <p>The value for a parameter is invalid.</p>
     InvalidParameterValue(String),
+    /// <p>The request must contain the specified missing parameter.</p>
+    MissingParameter(String),
+    /// <p>The specified domain does not exist.</p>
+    NoSuchDomain(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -1382,24 +1406,32 @@ impl DeleteAttributesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "MissingParameter" => {
-                    DeleteAttributesError::MissingParameter(String::from(parsed_error.message))
-                }
                 "AttributeDoesNotExist" => {
                     DeleteAttributesError::AttributeDoesNotExist(String::from(parsed_error.message))
                 }
-                "NoSuchDomain" => {
-                    DeleteAttributesError::NoSuchDomain(String::from(parsed_error.message))
-                }
                 "InvalidParameterValue" => {
                     DeleteAttributesError::InvalidParameterValue(String::from(parsed_error.message))
+                }
+                "MissingParameter" => {
+                    DeleteAttributesError::MissingParameter(String::from(parsed_error.message))
+                }
+                "NoSuchDomain" => {
+                    DeleteAttributesError::NoSuchDomain(String::from(parsed_error.message))
                 }
                 _ => DeleteAttributesError::Unknown(String::from(body)),
             },
             Err(_) => DeleteAttributesError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -1432,10 +1464,10 @@ impl fmt::Display for DeleteAttributesError {
 impl Error for DeleteAttributesError {
     fn description(&self) -> &str {
         match *self {
-            DeleteAttributesError::MissingParameter(ref cause) => cause,
             DeleteAttributesError::AttributeDoesNotExist(ref cause) => cause,
-            DeleteAttributesError::NoSuchDomain(ref cause) => cause,
             DeleteAttributesError::InvalidParameterValue(ref cause) => cause,
+            DeleteAttributesError::MissingParameter(ref cause) => cause,
+            DeleteAttributesError::NoSuchDomain(ref cause) => cause,
             DeleteAttributesError::Validation(ref cause) => cause,
             DeleteAttributesError::Credentials(ref err) => err.description(),
             DeleteAttributesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
@@ -1463,7 +1495,7 @@ impl DeleteDomainError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "MissingParameter" => {
                     DeleteDomainError::MissingParameter(String::from(parsed_error.message))
@@ -1472,6 +1504,14 @@ impl DeleteDomainError {
             },
             Err(_) => DeleteDomainError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -1534,7 +1574,7 @@ impl DomainMetadataError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "MissingParameter" => {
                     DomainMetadataError::MissingParameter(String::from(parsed_error.message))
@@ -1546,6 +1586,14 @@ impl DomainMetadataError {
             },
             Err(_) => DomainMetadataError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -1590,12 +1638,12 @@ impl Error for DomainMetadataError {
 /// Errors returned by GetAttributes
 #[derive(Debug, PartialEq)]
 pub enum GetAttributesError {
+    /// <p>The value for a parameter is invalid.</p>
+    InvalidParameterValue(String),
     /// <p>The request must contain the specified missing parameter.</p>
     MissingParameter(String),
     /// <p>The specified domain does not exist.</p>
     NoSuchDomain(String),
-    /// <p>The value for a parameter is invalid.</p>
-    InvalidParameterValue(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -1611,21 +1659,29 @@ impl GetAttributesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
+                "InvalidParameterValue" => {
+                    GetAttributesError::InvalidParameterValue(String::from(parsed_error.message))
+                }
                 "MissingParameter" => {
                     GetAttributesError::MissingParameter(String::from(parsed_error.message))
                 }
                 "NoSuchDomain" => {
                     GetAttributesError::NoSuchDomain(String::from(parsed_error.message))
                 }
-                "InvalidParameterValue" => {
-                    GetAttributesError::InvalidParameterValue(String::from(parsed_error.message))
-                }
                 _ => GetAttributesError::Unknown(String::from(body)),
             },
             Err(_) => GetAttributesError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -1658,9 +1714,9 @@ impl fmt::Display for GetAttributesError {
 impl Error for GetAttributesError {
     fn description(&self) -> &str {
         match *self {
+            GetAttributesError::InvalidParameterValue(ref cause) => cause,
             GetAttributesError::MissingParameter(ref cause) => cause,
             GetAttributesError::NoSuchDomain(ref cause) => cause,
-            GetAttributesError::InvalidParameterValue(ref cause) => cause,
             GetAttributesError::Validation(ref cause) => cause,
             GetAttributesError::Credentials(ref err) => err.description(),
             GetAttributesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
@@ -1690,7 +1746,7 @@ impl ListDomainsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "InvalidNextToken" => {
                     ListDomainsError::InvalidNextToken(String::from(parsed_error.message))
@@ -1702,6 +1758,14 @@ impl ListDomainsError {
             },
             Err(_) => ListDomainsError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -1746,20 +1810,20 @@ impl Error for ListDomainsError {
 /// Errors returned by PutAttributes
 #[derive(Debug, PartialEq)]
 pub enum PutAttributesError {
-    /// <p>The request must contain the specified missing parameter.</p>
-    MissingParameter(String),
     /// <p>The specified attribute does not exist.</p>
     AttributeDoesNotExist(String),
-    /// <p>The specified domain does not exist.</p>
-    NoSuchDomain(String),
     /// <p>The value for a parameter is invalid.</p>
     InvalidParameterValue(String),
+    /// <p>The request must contain the specified missing parameter.</p>
+    MissingParameter(String),
+    /// <p>The specified domain does not exist.</p>
+    NoSuchDomain(String),
     /// <p>Too many attributes in this domain.</p>
     NumberDomainAttributesExceeded(String),
-    /// <p>Too many attributes in this item.</p>
-    NumberItemAttributesExceeded(String),
     /// <p>Too many bytes in this domain.</p>
     NumberDomainBytesExceeded(String),
+    /// <p>Too many attributes in this item.</p>
+    NumberItemAttributesExceeded(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -1775,37 +1839,45 @@ impl PutAttributesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "MissingParameter" => {
-                    PutAttributesError::MissingParameter(String::from(parsed_error.message))
-                }
                 "AttributeDoesNotExist" => {
                     PutAttributesError::AttributeDoesNotExist(String::from(parsed_error.message))
                 }
-                "NoSuchDomain" => {
-                    PutAttributesError::NoSuchDomain(String::from(parsed_error.message))
-                }
                 "InvalidParameterValue" => {
                     PutAttributesError::InvalidParameterValue(String::from(parsed_error.message))
+                }
+                "MissingParameter" => {
+                    PutAttributesError::MissingParameter(String::from(parsed_error.message))
+                }
+                "NoSuchDomain" => {
+                    PutAttributesError::NoSuchDomain(String::from(parsed_error.message))
                 }
                 "NumberDomainAttributesExceeded" => {
                     PutAttributesError::NumberDomainAttributesExceeded(String::from(
                         parsed_error.message,
                     ))
                 }
+                "NumberDomainBytesExceeded" => PutAttributesError::NumberDomainBytesExceeded(
+                    String::from(parsed_error.message),
+                ),
                 "NumberItemAttributesExceeded" => {
                     PutAttributesError::NumberItemAttributesExceeded(String::from(
                         parsed_error.message,
                     ))
                 }
-                "NumberDomainBytesExceeded" => PutAttributesError::NumberDomainBytesExceeded(
-                    String::from(parsed_error.message),
-                ),
                 _ => PutAttributesError::Unknown(String::from(body)),
             },
             Err(_) => PutAttributesError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -1838,13 +1910,13 @@ impl fmt::Display for PutAttributesError {
 impl Error for PutAttributesError {
     fn description(&self) -> &str {
         match *self {
-            PutAttributesError::MissingParameter(ref cause) => cause,
             PutAttributesError::AttributeDoesNotExist(ref cause) => cause,
-            PutAttributesError::NoSuchDomain(ref cause) => cause,
             PutAttributesError::InvalidParameterValue(ref cause) => cause,
+            PutAttributesError::MissingParameter(ref cause) => cause,
+            PutAttributesError::NoSuchDomain(ref cause) => cause,
             PutAttributesError::NumberDomainAttributesExceeded(ref cause) => cause,
-            PutAttributesError::NumberItemAttributesExceeded(ref cause) => cause,
             PutAttributesError::NumberDomainBytesExceeded(ref cause) => cause,
+            PutAttributesError::NumberItemAttributesExceeded(ref cause) => cause,
             PutAttributesError::Validation(ref cause) => cause,
             PutAttributesError::Credentials(ref err) => err.description(),
             PutAttributesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
@@ -1855,24 +1927,24 @@ impl Error for PutAttributesError {
 /// Errors returned by Select
 #[derive(Debug, PartialEq)]
 pub enum SelectError {
-    /// <p>A timeout occurred when attempting to query the specified domain with specified query expression.</p>
-    RequestTimeout(String),
-    /// <p>The request must contain the specified missing parameter.</p>
-    MissingParameter(String),
     /// <p>The specified NextToken is not valid. </p>
     InvalidNextToken(String),
-    /// <p>The specified domain does not exist.</p>
-    NoSuchDomain(String),
-    /// <p>The specified query expression syntax is not valid.</p>
-    InvalidQueryExpression(String),
-    /// <p>The value for a parameter is invalid.</p>
-    InvalidParameterValue(String),
-    /// <p>Too many attributes requested.</p>
-    TooManyRequestedAttributes(String),
     /// <p>Too many predicates exist in the query expression.</p>
     InvalidNumberPredicates(String),
     /// <p>Too many predicates exist in the query expression.</p>
     InvalidNumberValueTests(String),
+    /// <p>The value for a parameter is invalid.</p>
+    InvalidParameterValue(String),
+    /// <p>The specified query expression syntax is not valid.</p>
+    InvalidQueryExpression(String),
+    /// <p>The request must contain the specified missing parameter.</p>
+    MissingParameter(String),
+    /// <p>The specified domain does not exist.</p>
+    NoSuchDomain(String),
+    /// <p>A timeout occurred when attempting to query the specified domain with specified query expression.</p>
+    RequestTimeout(String),
+    /// <p>Too many attributes requested.</p>
+    TooManyRequestedAttributes(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -1888,24 +1960,10 @@ impl SelectError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "RequestTimeout" => SelectError::RequestTimeout(String::from(parsed_error.message)),
-                "MissingParameter" => {
-                    SelectError::MissingParameter(String::from(parsed_error.message))
-                }
                 "InvalidNextToken" => {
                     SelectError::InvalidNextToken(String::from(parsed_error.message))
-                }
-                "NoSuchDomain" => SelectError::NoSuchDomain(String::from(parsed_error.message)),
-                "InvalidQueryExpression" => {
-                    SelectError::InvalidQueryExpression(String::from(parsed_error.message))
-                }
-                "InvalidParameterValue" => {
-                    SelectError::InvalidParameterValue(String::from(parsed_error.message))
-                }
-                "TooManyRequestedAttributes" => {
-                    SelectError::TooManyRequestedAttributes(String::from(parsed_error.message))
                 }
                 "InvalidNumberPredicates" => {
                     SelectError::InvalidNumberPredicates(String::from(parsed_error.message))
@@ -1913,10 +1971,32 @@ impl SelectError {
                 "InvalidNumberValueTests" => {
                     SelectError::InvalidNumberValueTests(String::from(parsed_error.message))
                 }
+                "InvalidParameterValue" => {
+                    SelectError::InvalidParameterValue(String::from(parsed_error.message))
+                }
+                "InvalidQueryExpression" => {
+                    SelectError::InvalidQueryExpression(String::from(parsed_error.message))
+                }
+                "MissingParameter" => {
+                    SelectError::MissingParameter(String::from(parsed_error.message))
+                }
+                "NoSuchDomain" => SelectError::NoSuchDomain(String::from(parsed_error.message)),
+                "RequestTimeout" => SelectError::RequestTimeout(String::from(parsed_error.message)),
+                "TooManyRequestedAttributes" => {
+                    SelectError::TooManyRequestedAttributes(String::from(parsed_error.message))
+                }
                 _ => SelectError::Unknown(String::from(body)),
             },
             Err(_) => SelectError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -1949,15 +2029,15 @@ impl fmt::Display for SelectError {
 impl Error for SelectError {
     fn description(&self) -> &str {
         match *self {
-            SelectError::RequestTimeout(ref cause) => cause,
-            SelectError::MissingParameter(ref cause) => cause,
             SelectError::InvalidNextToken(ref cause) => cause,
-            SelectError::NoSuchDomain(ref cause) => cause,
-            SelectError::InvalidQueryExpression(ref cause) => cause,
-            SelectError::InvalidParameterValue(ref cause) => cause,
-            SelectError::TooManyRequestedAttributes(ref cause) => cause,
             SelectError::InvalidNumberPredicates(ref cause) => cause,
             SelectError::InvalidNumberValueTests(ref cause) => cause,
+            SelectError::InvalidParameterValue(ref cause) => cause,
+            SelectError::InvalidQueryExpression(ref cause) => cause,
+            SelectError::MissingParameter(ref cause) => cause,
+            SelectError::NoSuchDomain(ref cause) => cause,
+            SelectError::RequestTimeout(ref cause) => cause,
+            SelectError::TooManyRequestedAttributes(ref cause) => cause,
             SelectError::Validation(ref cause) => cause,
             SelectError::Credentials(ref err) => err.description(),
             SelectError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
