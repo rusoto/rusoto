@@ -1,0 +1,29 @@
+[package]
+authors = ["Anthony DiMarco <ocramida@gmail.com>", "Jimmy Cuadra <jimmy@jimmycuadra.com>", "Matthew Mayer <matthewkmayer@gmail.com>", "Nikita Pekin <contact@nikitapek.in>"]
+description = "AWS SDK for Rust - AWSServerlessApplicationRepository @ 2017-09-08"
+documentation = "https://rusoto.github.io/rusoto/rusoto_serverlessrepo/index.html"
+keywords = ["AWS", "Amazon", "serverlessrepo"]
+license = "MIT"
+name = "rusoto_serverlessrepo"
+readme = "README.md"
+repository = "https://github.com/rusoto/rusoto"
+version = "0.32.0"
+homepage = "https://www.rusoto.org/"
+
+[build-dependencies]
+
+[dependencies]
+futures = "0.1.16"
+hyper = "0.11.0"
+log = "0.4.1"
+serde = "1.0.2"
+serde_derive = "1.0.2"
+serde_json = "1.0.1"
+tokio-core = "0.1.10"
+
+[dependencies.rusoto_core]
+version = "0.32.0"
+path = "../../core"
+[dev-dependencies.rusoto_mock]
+version = "0.26.0"
+path = "../../../mock"
