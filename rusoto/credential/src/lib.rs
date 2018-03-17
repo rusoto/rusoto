@@ -288,8 +288,8 @@ impl<P: ProvideAwsCredentials + 'static> Future for AutoRefreshingProviderFuture
 }
 
 /// Threadsafe `AutoRefreshingProvider` that locks cached credentials with a `Mutex`
-pub type AutoRefreshingProviderSync<P: ProvideAwsCredentials + 'static> =
-    BaseAutoRefreshingProvider<P, Mutex<Shared<P::Future>>>;
+pub type AutoRefreshingProviderSync<P> =
+    BaseAutoRefreshingProvider<P, Mutex<Shared<<P as ProvideAwsCredentials>::Future>>>;
 
 impl<P: ProvideAwsCredentials + 'static> AutoRefreshingProviderSync<P> {
     /// Grab a RefreshingProvider that locks it's credentials with a Mutex so it's thread safe.
@@ -316,8 +316,8 @@ impl<P: ProvideAwsCredentials + 'static> ProvideAwsCredentials for AutoRefreshin
 }
 
 /// `!Sync` `AutoRefreshingProvider` that caches credentials in a `RefCell`
-pub type AutoRefreshingProvider<P: ProvideAwsCredentials + 'static> =
-    BaseAutoRefreshingProvider<P, RefCell<Shared<P::Future>>>;
+pub type AutoRefreshingProvider<P> =
+    BaseAutoRefreshingProvider<P, RefCell<Shared<<P as ProvideAwsCredentials>::Future>>>;
 
 impl<P: ProvideAwsCredentials + 'static> AutoRefreshingProvider<P> {
     /// Grab a provider that locks it's credentials with a RefCell. If you're looking for
