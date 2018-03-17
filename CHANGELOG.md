@@ -7,6 +7,7 @@
 - Prevent reactor from hanging indefinitely when using the new tokio release
 - Fixed bug in query services where lists had incorrect parent item in request
 - Improve deserializer of XML error responses
+- Adds Serverless Repo service
 
 ## [0.32.0] - 2018-03-03
 
