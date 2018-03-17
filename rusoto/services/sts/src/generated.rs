@@ -1240,12 +1240,12 @@ impl AssumeRoleError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "MalformedPolicyDocumentException" => {
+                "MalformedPolicyDocument" => {
                     AssumeRoleError::MalformedPolicyDocument(String::from(parsed_error.message))
                 }
-                "PackedPolicyTooLargeException" => {
+                "PackedPolicyTooLarge" => {
                     AssumeRoleError::PackedPolicyTooLarge(String::from(parsed_error.message))
                 }
                 "RegionDisabledException" => {
@@ -1255,6 +1255,14 @@ impl AssumeRoleError {
             },
             Err(_) => AssumeRoleError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -1327,23 +1335,21 @@ impl AssumeRoleWithSAMLError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "ExpiredTokenException" => {
                     AssumeRoleWithSAMLError::ExpiredToken(String::from(parsed_error.message))
                 }
-                "IDPRejectedClaimException" => {
+                "IDPRejectedClaim" => {
                     AssumeRoleWithSAMLError::IDPRejectedClaim(String::from(parsed_error.message))
                 }
-                "InvalidIdentityTokenException" => AssumeRoleWithSAMLError::InvalidIdentityToken(
+                "InvalidIdentityToken" => AssumeRoleWithSAMLError::InvalidIdentityToken(
                     String::from(parsed_error.message),
                 ),
-                "MalformedPolicyDocumentException" => {
-                    AssumeRoleWithSAMLError::MalformedPolicyDocument(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "PackedPolicyTooLargeException" => AssumeRoleWithSAMLError::PackedPolicyTooLarge(
+                "MalformedPolicyDocument" => AssumeRoleWithSAMLError::MalformedPolicyDocument(
+                    String::from(parsed_error.message),
+                ),
+                "PackedPolicyTooLarge" => AssumeRoleWithSAMLError::PackedPolicyTooLarge(
                     String::from(parsed_error.message),
                 ),
                 "RegionDisabledException" => {
@@ -1353,6 +1359,14 @@ impl AssumeRoleWithSAMLError {
             },
             Err(_) => AssumeRoleWithSAMLError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -1432,34 +1446,28 @@ impl AssumeRoleWithWebIdentityError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "ExpiredTokenException" => {
                     AssumeRoleWithWebIdentityError::ExpiredToken(String::from(parsed_error.message))
                 }
-                "IDPCommunicationErrorException" => {
-                    AssumeRoleWithWebIdentityError::IDPCommunicationError(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "IDPRejectedClaimException" => AssumeRoleWithWebIdentityError::IDPRejectedClaim(
+                "IDPCommunicationError" => AssumeRoleWithWebIdentityError::IDPCommunicationError(
                     String::from(parsed_error.message),
                 ),
-                "InvalidIdentityTokenException" => {
-                    AssumeRoleWithWebIdentityError::InvalidIdentityToken(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "MalformedPolicyDocumentException" => {
+                "IDPRejectedClaim" => AssumeRoleWithWebIdentityError::IDPRejectedClaim(
+                    String::from(parsed_error.message),
+                ),
+                "InvalidIdentityToken" => AssumeRoleWithWebIdentityError::InvalidIdentityToken(
+                    String::from(parsed_error.message),
+                ),
+                "MalformedPolicyDocument" => {
                     AssumeRoleWithWebIdentityError::MalformedPolicyDocument(String::from(
                         parsed_error.message,
                     ))
                 }
-                "PackedPolicyTooLargeException" => {
-                    AssumeRoleWithWebIdentityError::PackedPolicyTooLarge(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "PackedPolicyTooLarge" => AssumeRoleWithWebIdentityError::PackedPolicyTooLarge(
+                    String::from(parsed_error.message),
+                ),
                 "RegionDisabledException" => AssumeRoleWithWebIdentityError::RegionDisabled(
                     String::from(parsed_error.message),
                 ),
@@ -1467,6 +1475,14 @@ impl AssumeRoleWithWebIdentityError {
             },
             Err(_) => AssumeRoleWithWebIdentityError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -1535,7 +1551,7 @@ impl DecodeAuthorizationMessageError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "InvalidAuthorizationMessageException" => {
                     DecodeAuthorizationMessageError::InvalidAuthorizationMessage(String::from(
@@ -1546,6 +1562,14 @@ impl DecodeAuthorizationMessageError {
             },
             Err(_) => DecodeAuthorizationMessageError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -1606,12 +1630,20 @@ impl GetCallerIdentityError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => GetCallerIdentityError::Unknown(String::from(body)),
             },
             Err(_) => GetCallerIdentityError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -1677,14 +1709,12 @@ impl GetFederationTokenError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "MalformedPolicyDocumentException" => {
-                    GetFederationTokenError::MalformedPolicyDocument(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "PackedPolicyTooLargeException" => GetFederationTokenError::PackedPolicyTooLarge(
+                "MalformedPolicyDocument" => GetFederationTokenError::MalformedPolicyDocument(
+                    String::from(parsed_error.message),
+                ),
+                "PackedPolicyTooLarge" => GetFederationTokenError::PackedPolicyTooLarge(
                     String::from(parsed_error.message),
                 ),
                 "RegionDisabledException" => {
@@ -1694,6 +1724,14 @@ impl GetFederationTokenError {
             },
             Err(_) => GetFederationTokenError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -1758,7 +1796,7 @@ impl GetSessionTokenError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "RegionDisabledException" => {
                     GetSessionTokenError::RegionDisabled(String::from(parsed_error.message))
@@ -1767,6 +1805,14 @@ impl GetSessionTokenError {
             },
             Err(_) => GetSessionTokenError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 

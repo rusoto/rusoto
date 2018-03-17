@@ -2397,7 +2397,7 @@ impl CreateClusterMessageSerializer {
         if let Some(ref field_value) = obj.cluster_security_groups {
             ClusterSecurityGroupNameListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "ClusterSecurityGroups"),
+                &format!("{}{}", prefix, "ClusterSecurityGroupName"),
                 field_value,
             );
         }
@@ -2458,7 +2458,7 @@ impl CreateClusterMessageSerializer {
         if let Some(ref field_value) = obj.iam_roles {
             IamRoleArnListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "IamRoles"),
+                &format!("{}{}", prefix, "IamRoleArn"),
                 field_value,
             );
         }
@@ -2505,12 +2505,12 @@ impl CreateClusterMessageSerializer {
             );
         }
         if let Some(ref field_value) = obj.tags {
-            TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tags"), field_value);
+            TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tag"), field_value);
         }
         if let Some(ref field_value) = obj.vpc_security_group_ids {
             VpcSecurityGroupIdListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "VpcSecurityGroupIds"),
+                &format!("{}{}", prefix, "VpcSecurityGroupId"),
                 field_value,
             );
         }
@@ -2552,7 +2552,7 @@ impl CreateClusterParameterGroupMessageSerializer {
             &obj.parameter_group_name.replace("+", "%2B"),
         );
         if let Some(ref field_value) = obj.tags {
-            TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tags"), field_value);
+            TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tag"), field_value);
         }
     }
 }
@@ -2679,7 +2679,7 @@ impl CreateClusterSecurityGroupMessageSerializer {
             &obj.description.replace("+", "%2B"),
         );
         if let Some(ref field_value) = obj.tags {
-            TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tags"), field_value);
+            TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tag"), field_value);
         }
     }
 }
@@ -2761,7 +2761,7 @@ impl CreateClusterSnapshotMessageSerializer {
             &obj.snapshot_identifier.replace("+", "%2B"),
         );
         if let Some(ref field_value) = obj.tags {
-            TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tags"), field_value);
+            TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tag"), field_value);
         }
     }
 }
@@ -2843,11 +2843,11 @@ impl CreateClusterSubnetGroupMessageSerializer {
         );
         SubnetIdentifierListSerializer::serialize(
             params,
-            &format!("{}{}", prefix, "SubnetIds"),
+            &format!("{}{}", prefix, "SubnetIdentifier"),
             &obj.subnet_ids,
         );
         if let Some(ref field_value) = obj.tags {
-            TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tags"), field_value);
+            TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tag"), field_value);
         }
     }
 }
@@ -2939,7 +2939,7 @@ impl CreateEventSubscriptionMessageSerializer {
         if let Some(ref field_value) = obj.event_categories {
             EventCategoriesListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "EventCategories"),
+                &format!("{}{}", prefix, "EventCategory"),
                 field_value,
             );
         }
@@ -2956,7 +2956,7 @@ impl CreateEventSubscriptionMessageSerializer {
         if let Some(ref field_value) = obj.source_ids {
             SourceIdsListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "SourceIds"),
+                &format!("{}{}", prefix, "SourceId"),
                 field_value,
             );
         }
@@ -2971,7 +2971,7 @@ impl CreateEventSubscriptionMessageSerializer {
             &obj.subscription_name.replace("+", "%2B"),
         );
         if let Some(ref field_value) = obj.tags {
-            TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tags"), field_value);
+            TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tag"), field_value);
         }
     }
 }
@@ -3045,7 +3045,7 @@ impl CreateHsmClientCertificateMessageSerializer {
             &obj.hsm_client_certificate_identifier.replace("+", "%2B"),
         );
         if let Some(ref field_value) = obj.tags {
-            TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tags"), field_value);
+            TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tag"), field_value);
         }
     }
 }
@@ -3151,7 +3151,7 @@ impl CreateHsmConfigurationMessageSerializer {
             &obj.hsm_server_public_certificate.replace("+", "%2B"),
         );
         if let Some(ref field_value) = obj.tags {
-            TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tags"), field_value);
+            TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tag"), field_value);
         }
     }
 }
@@ -3233,7 +3233,7 @@ impl CreateSnapshotCopyGrantMessageSerializer {
             &obj.snapshot_copy_grant_name.replace("+", "%2B"),
         );
         if let Some(ref field_value) = obj.tags {
-            TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tags"), field_value);
+            TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tag"), field_value);
         }
     }
 }
@@ -3306,7 +3306,7 @@ impl CreateTagsMessageSerializer {
             &format!("{}{}", prefix, "ResourceName"),
             &obj.resource_name.replace("+", "%2B"),
         );
-        TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tags"), &obj.tags);
+        TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tag"), &obj.tags);
     }
 }
 
@@ -3726,7 +3726,7 @@ impl DeleteTagsMessageSerializer {
             &format!("{}{}", prefix, "ResourceName"),
             &obj.resource_name.replace("+", "%2B"),
         );
-        TagKeyListSerializer::serialize(params, &format!("{}{}", prefix, "TagKeys"), &obj.tag_keys);
+        TagKeyListSerializer::serialize(params, &format!("{}{}", prefix, "TagKey"), &obj.tag_keys);
     }
 }
 
@@ -3775,14 +3775,14 @@ impl DescribeClusterParameterGroupsMessageSerializer {
         if let Some(ref field_value) = obj.tag_keys {
             TagKeyListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "TagKeys"),
+                &format!("{}{}", prefix, "TagKey"),
                 field_value,
             );
         }
         if let Some(ref field_value) = obj.tag_values {
             TagValueListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "TagValues"),
+                &format!("{}{}", prefix, "TagValue"),
                 field_value,
             );
         }
@@ -3881,14 +3881,14 @@ impl DescribeClusterSecurityGroupsMessageSerializer {
         if let Some(ref field_value) = obj.tag_keys {
             TagKeyListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "TagKeys"),
+                &format!("{}{}", prefix, "TagKey"),
                 field_value,
             );
         }
         if let Some(ref field_value) = obj.tag_values {
             TagValueListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "TagValues"),
+                &format!("{}{}", prefix, "TagValue"),
                 field_value,
             );
         }
@@ -3980,14 +3980,14 @@ impl DescribeClusterSnapshotsMessageSerializer {
         if let Some(ref field_value) = obj.tag_keys {
             TagKeyListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "TagKeys"),
+                &format!("{}{}", prefix, "TagKey"),
                 field_value,
             );
         }
         if let Some(ref field_value) = obj.tag_values {
             TagValueListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "TagValues"),
+                &format!("{}{}", prefix, "TagValue"),
                 field_value,
             );
         }
@@ -4039,14 +4039,14 @@ impl DescribeClusterSubnetGroupsMessageSerializer {
         if let Some(ref field_value) = obj.tag_keys {
             TagKeyListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "TagKeys"),
+                &format!("{}{}", prefix, "TagKey"),
                 field_value,
             );
         }
         if let Some(ref field_value) = obj.tag_values {
             TagValueListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "TagValues"),
+                &format!("{}{}", prefix, "TagValue"),
                 field_value,
             );
         }
@@ -4147,14 +4147,14 @@ impl DescribeClustersMessageSerializer {
         if let Some(ref field_value) = obj.tag_keys {
             TagKeyListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "TagKeys"),
+                &format!("{}{}", prefix, "TagKey"),
                 field_value,
             );
         }
         if let Some(ref field_value) = obj.tag_values {
             TagValueListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "TagValues"),
+                &format!("{}{}", prefix, "TagValue"),
                 field_value,
             );
         }
@@ -4318,14 +4318,14 @@ impl DescribeEventSubscriptionsMessageSerializer {
         if let Some(ref field_value) = obj.tag_keys {
             TagKeyListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "TagKeys"),
+                &format!("{}{}", prefix, "TagKey"),
                 field_value,
             );
         }
         if let Some(ref field_value) = obj.tag_values {
             TagValueListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "TagValues"),
+                &format!("{}{}", prefix, "TagValue"),
                 field_value,
             );
         }
@@ -4450,14 +4450,14 @@ impl DescribeHsmClientCertificatesMessageSerializer {
         if let Some(ref field_value) = obj.tag_keys {
             TagKeyListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "TagKeys"),
+                &format!("{}{}", prefix, "TagKey"),
                 field_value,
             );
         }
         if let Some(ref field_value) = obj.tag_values {
             TagValueListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "TagValues"),
+                &format!("{}{}", prefix, "TagValue"),
                 field_value,
             );
         }
@@ -4509,14 +4509,14 @@ impl DescribeHsmConfigurationsMessageSerializer {
         if let Some(ref field_value) = obj.tag_keys {
             TagKeyListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "TagKeys"),
+                &format!("{}{}", prefix, "TagKey"),
                 field_value,
             );
         }
         if let Some(ref field_value) = obj.tag_values {
             TagValueListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "TagValues"),
+                &format!("{}{}", prefix, "TagValue"),
                 field_value,
             );
         }
@@ -4745,14 +4745,14 @@ impl DescribeSnapshotCopyGrantsMessageSerializer {
         if let Some(ref field_value) = obj.tag_keys {
             TagKeyListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "TagKeys"),
+                &format!("{}{}", prefix, "TagKey"),
                 field_value,
             );
         }
         if let Some(ref field_value) = obj.tag_values {
             TagValueListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "TagValues"),
+                &format!("{}{}", prefix, "TagValue"),
                 field_value,
             );
         }
@@ -4861,14 +4861,14 @@ impl DescribeTagsMessageSerializer {
         if let Some(ref field_value) = obj.tag_keys {
             TagKeyListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "TagKeys"),
+                &format!("{}{}", prefix, "TagKey"),
                 field_value,
             );
         }
         if let Some(ref field_value) = obj.tag_values {
             TagValueListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "TagValues"),
+                &format!("{}{}", prefix, "TagValue"),
                 field_value,
             );
         }
@@ -6077,7 +6077,7 @@ impl GetClusterCredentialsMessageSerializer {
         if let Some(ref field_value) = obj.db_groups {
             DbGroupListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "DbGroups"),
+                &format!("{}{}", prefix, "DbGroup"),
                 field_value,
             );
         }
@@ -6884,7 +6884,7 @@ impl ModifyClusterIamRolesMessageSerializer {
         if let Some(ref field_value) = obj.add_iam_roles {
             IamRoleArnListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "AddIamRoles"),
+                &format!("{}{}", prefix, "IamRoleArn"),
                 field_value,
             );
         }
@@ -6895,7 +6895,7 @@ impl ModifyClusterIamRolesMessageSerializer {
         if let Some(ref field_value) = obj.remove_iam_roles {
             IamRoleArnListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "RemoveIamRoles"),
+                &format!("{}{}", prefix, "IamRoleArn"),
                 field_value,
             );
         }
@@ -7022,7 +7022,7 @@ impl ModifyClusterMessageSerializer {
         if let Some(ref field_value) = obj.cluster_security_groups {
             ClusterSecurityGroupNameListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "ClusterSecurityGroups"),
+                &format!("{}{}", prefix, "ClusterSecurityGroupName"),
                 field_value,
             );
         }
@@ -7101,7 +7101,7 @@ impl ModifyClusterMessageSerializer {
         if let Some(ref field_value) = obj.vpc_security_group_ids {
             VpcSecurityGroupIdListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "VpcSecurityGroupIds"),
+                &format!("{}{}", prefix, "VpcSecurityGroupId"),
                 field_value,
             );
         }
@@ -7132,7 +7132,7 @@ impl ModifyClusterParameterGroupMessageSerializer {
         );
         ParametersListSerializer::serialize(
             params,
-            &format!("{}{}", prefix, "Parameters"),
+            &format!("{}{}", prefix, "Parameter"),
             &obj.parameters,
         );
     }
@@ -7215,7 +7215,7 @@ impl ModifyClusterSubnetGroupMessageSerializer {
         }
         SubnetIdentifierListSerializer::serialize(
             params,
-            &format!("{}{}", prefix, "SubnetIds"),
+            &format!("{}{}", prefix, "SubnetIdentifier"),
             &obj.subnet_ids,
         );
     }
@@ -7306,7 +7306,7 @@ impl ModifyEventSubscriptionMessageSerializer {
         if let Some(ref field_value) = obj.event_categories {
             EventCategoriesListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "EventCategories"),
+                &format!("{}{}", prefix, "EventCategory"),
                 field_value,
             );
         }
@@ -7325,7 +7325,7 @@ impl ModifyEventSubscriptionMessageSerializer {
         if let Some(ref field_value) = obj.source_ids {
             SourceIdsListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "SourceIds"),
+                &format!("{}{}", prefix, "SourceId"),
                 field_value,
             );
         }
@@ -8692,7 +8692,7 @@ impl ResetClusterParameterGroupMessageSerializer {
         if let Some(ref field_value) = obj.parameters {
             ParametersListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "Parameters"),
+                &format!("{}{}", prefix, "Parameter"),
                 field_value,
             );
         }
@@ -8977,7 +8977,7 @@ impl RestoreFromClusterSnapshotMessageSerializer {
         if let Some(ref field_value) = obj.cluster_security_groups {
             ClusterSecurityGroupNameListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "ClusterSecurityGroups"),
+                &format!("{}{}", prefix, "ClusterSecurityGroupName"),
                 field_value,
             );
         }
@@ -9014,7 +9014,7 @@ impl RestoreFromClusterSnapshotMessageSerializer {
         if let Some(ref field_value) = obj.iam_roles {
             IamRoleArnListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "IamRoles"),
+                &format!("{}{}", prefix, "IamRoleArn"),
                 field_value,
             );
         }
@@ -9067,7 +9067,7 @@ impl RestoreFromClusterSnapshotMessageSerializer {
         if let Some(ref field_value) = obj.vpc_security_group_ids {
             VpcSecurityGroupIdListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "VpcSecurityGroupIds"),
+                &format!("{}{}", prefix, "VpcSecurityGroupId"),
                 field_value,
             );
         }
@@ -10986,14 +10986,22 @@ impl AuthorizeClusterSecurityGroupIngressError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "AuthorizationAlreadyExistsFault" => AuthorizeClusterSecurityGroupIngressError::AuthorizationAlreadyExistsFault(String::from(parsed_error.message)),"AuthorizationQuotaExceededFault" => AuthorizeClusterSecurityGroupIngressError::AuthorizationQuotaExceededFault(String::from(parsed_error.message)),"ClusterSecurityGroupNotFoundFault" => AuthorizeClusterSecurityGroupIngressError::ClusterSecurityGroupNotFoundFault(String::from(parsed_error.message)),"InvalidClusterSecurityGroupStateFault" => AuthorizeClusterSecurityGroupIngressError::InvalidClusterSecurityGroupStateFault(String::from(parsed_error.message)),_ => AuthorizeClusterSecurityGroupIngressError::Unknown(String::from(body))
+                                    "AuthorizationAlreadyExists" => AuthorizeClusterSecurityGroupIngressError::AuthorizationAlreadyExistsFault(String::from(parsed_error.message)),"AuthorizationQuotaExceeded" => AuthorizeClusterSecurityGroupIngressError::AuthorizationQuotaExceededFault(String::from(parsed_error.message)),"ClusterSecurityGroupNotFound" => AuthorizeClusterSecurityGroupIngressError::ClusterSecurityGroupNotFoundFault(String::from(parsed_error.message)),"InvalidClusterSecurityGroupState" => AuthorizeClusterSecurityGroupIngressError::InvalidClusterSecurityGroupStateFault(String::from(parsed_error.message)),_ => AuthorizeClusterSecurityGroupIngressError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => AuthorizeClusterSecurityGroupIngressError::Unknown(body.to_string())
                        }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -11077,19 +11085,19 @@ impl AuthorizeSnapshotAccessError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "AuthorizationAlreadyExistsFault" => {
+                "AuthorizationAlreadyExists" => {
                     AuthorizeSnapshotAccessError::AuthorizationAlreadyExistsFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "AuthorizationQuotaExceededFault" => {
+                "AuthorizationQuotaExceeded" => {
                     AuthorizeSnapshotAccessError::AuthorizationQuotaExceededFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "ClusterSnapshotNotFoundFault" => {
+                "ClusterSnapshotNotFound" => {
                     AuthorizeSnapshotAccessError::ClusterSnapshotNotFoundFault(String::from(
                         parsed_error.message,
                     ))
@@ -11099,7 +11107,7 @@ impl AuthorizeSnapshotAccessError {
                         String::from(parsed_error.message),
                     )
                 }
-                "InvalidClusterSnapshotStateFault" => {
+                "InvalidClusterSnapshotState" => {
                     AuthorizeSnapshotAccessError::InvalidClusterSnapshotStateFault(String::from(
                         parsed_error.message,
                     ))
@@ -11111,6 +11119,14 @@ impl AuthorizeSnapshotAccessError {
             },
             Err(_) => AuthorizeSnapshotAccessError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -11186,24 +11202,24 @@ impl CopyClusterSnapshotError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ClusterSnapshotAlreadyExistsFault" => {
+                "ClusterSnapshotAlreadyExists" => {
                     CopyClusterSnapshotError::ClusterSnapshotAlreadyExistsFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "ClusterSnapshotNotFoundFault" => {
+                "ClusterSnapshotNotFound" => {
                     CopyClusterSnapshotError::ClusterSnapshotNotFoundFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "ClusterSnapshotQuotaExceededFault" => {
+                "ClusterSnapshotQuotaExceeded" => {
                     CopyClusterSnapshotError::ClusterSnapshotQuotaExceededFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "InvalidClusterSnapshotStateFault" => {
+                "InvalidClusterSnapshotState" => {
                     CopyClusterSnapshotError::InvalidClusterSnapshotStateFault(String::from(
                         parsed_error.message,
                     ))
@@ -11212,6 +11228,14 @@ impl CopyClusterSnapshotError {
             },
             Err(_) => CopyClusterSnapshotError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -11313,20 +11337,20 @@ impl CreateClusterError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ClusterAlreadyExistsFault" => CreateClusterError::ClusterAlreadyExistsFault(
+                "ClusterAlreadyExists" => CreateClusterError::ClusterAlreadyExistsFault(
                     String::from(parsed_error.message),
                 ),
-                "ClusterParameterGroupNotFoundFault" => {
+                "ClusterParameterGroupNotFound" => {
                     CreateClusterError::ClusterParameterGroupNotFoundFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "ClusterQuotaExceededFault" => CreateClusterError::ClusterQuotaExceededFault(
+                "ClusterQuotaExceeded" => CreateClusterError::ClusterQuotaExceededFault(
                     String::from(parsed_error.message),
                 ),
-                "ClusterSecurityGroupNotFoundFault" => {
+                "ClusterSecurityGroupNotFound" => {
                     CreateClusterError::ClusterSecurityGroupNotFoundFault(String::from(
                         parsed_error.message,
                     ))
@@ -11351,7 +11375,7 @@ impl CreateClusterError {
                         parsed_error.message,
                     ))
                 }
-                "InsufficientClusterCapacityFault" => {
+                "InsufficientClusterCapacity" => {
                     CreateClusterError::InsufficientClusterCapacityFault(String::from(
                         parsed_error.message,
                     ))
@@ -11376,12 +11400,12 @@ impl CreateClusterError {
                 "LimitExceededFault" => {
                     CreateClusterError::LimitExceededFault(String::from(parsed_error.message))
                 }
-                "NumberOfNodesPerClusterLimitExceededFault" => {
+                "NumberOfNodesPerClusterLimitExceeded" => {
                     CreateClusterError::NumberOfNodesPerClusterLimitExceededFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "NumberOfNodesQuotaExceededFault" => {
+                "NumberOfNodesQuotaExceeded" => {
                     CreateClusterError::NumberOfNodesQuotaExceededFault(String::from(
                         parsed_error.message,
                     ))
@@ -11396,6 +11420,14 @@ impl CreateClusterError {
             },
             Err(_) => CreateClusterError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -11480,14 +11512,14 @@ impl CreateClusterParameterGroupError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ClusterParameterGroupAlreadyExistsFault" => {
+                "ClusterParameterGroupAlreadyExists" => {
                     CreateClusterParameterGroupError::ClusterParameterGroupAlreadyExistsFault(
                         String::from(parsed_error.message),
                     )
                 }
-                "ClusterParameterGroupQuotaExceededFault" => {
+                "ClusterParameterGroupQuotaExceeded" => {
                     CreateClusterParameterGroupError::ClusterParameterGroupQuotaExceededFault(
                         String::from(parsed_error.message),
                     )
@@ -11504,6 +11536,14 @@ impl CreateClusterParameterGroupError {
             },
             Err(_) => CreateClusterParameterGroupError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -11579,14 +11619,14 @@ impl CreateClusterSecurityGroupError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ClusterSecurityGroupAlreadyExistsFault" => {
+                "ClusterSecurityGroupAlreadyExists" => {
                     CreateClusterSecurityGroupError::ClusterSecurityGroupAlreadyExistsFault(
                         String::from(parsed_error.message),
                     )
                 }
-                "ClusterSecurityGroupQuotaExceededFault" => {
+                "QuotaExceeded.ClusterSecurityGroup" => {
                     CreateClusterSecurityGroupError::ClusterSecurityGroupQuotaExceededFault(
                         String::from(parsed_error.message),
                     )
@@ -11601,6 +11641,14 @@ impl CreateClusterSecurityGroupError {
             },
             Err(_) => CreateClusterSecurityGroupError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -11680,26 +11728,24 @@ impl CreateClusterSnapshotError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ClusterNotFoundFault" => CreateClusterSnapshotError::ClusterNotFoundFault(
+                "ClusterNotFound" => CreateClusterSnapshotError::ClusterNotFoundFault(
                     String::from(parsed_error.message),
                 ),
-                "ClusterSnapshotAlreadyExistsFault" => {
+                "ClusterSnapshotAlreadyExists" => {
                     CreateClusterSnapshotError::ClusterSnapshotAlreadyExistsFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "ClusterSnapshotQuotaExceededFault" => {
+                "ClusterSnapshotQuotaExceeded" => {
                     CreateClusterSnapshotError::ClusterSnapshotQuotaExceededFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "InvalidClusterStateFault" => {
-                    CreateClusterSnapshotError::InvalidClusterStateFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "InvalidClusterState" => CreateClusterSnapshotError::InvalidClusterStateFault(
+                    String::from(parsed_error.message),
+                ),
                 "InvalidTagFault" => {
                     CreateClusterSnapshotError::InvalidTagFault(String::from(parsed_error.message))
                 }
@@ -11710,6 +11756,14 @@ impl CreateClusterSnapshotError {
             },
             Err(_) => CreateClusterSnapshotError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -11791,14 +11845,14 @@ impl CreateClusterSubnetGroupError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ClusterSubnetGroupAlreadyExistsFault" => {
+                "ClusterSubnetGroupAlreadyExists" => {
                     CreateClusterSubnetGroupError::ClusterSubnetGroupAlreadyExistsFault(
                         String::from(parsed_error.message),
                     )
                 }
-                "ClusterSubnetGroupQuotaExceededFault" => {
+                "ClusterSubnetGroupQuotaExceeded" => {
                     CreateClusterSubnetGroupError::ClusterSubnetGroupQuotaExceededFault(
                         String::from(parsed_error.message),
                     )
@@ -11829,6 +11883,14 @@ impl CreateClusterSubnetGroupError {
             },
             Err(_) => CreateClusterSubnetGroupError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -11920,9 +11982,9 @@ impl CreateEventSubscriptionError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "EventSubscriptionQuotaExceededFault" => {
+                "EventSubscriptionQuotaExceeded" => {
                     CreateEventSubscriptionError::EventSubscriptionQuotaExceededFault(
                         String::from(parsed_error.message),
                     )
@@ -11930,38 +11992,34 @@ impl CreateEventSubscriptionError {
                 "InvalidTagFault" => CreateEventSubscriptionError::InvalidTagFault(String::from(
                     parsed_error.message,
                 )),
-                "SNSInvalidTopicFault" => CreateEventSubscriptionError::SNSInvalidTopicFault(
+                "SNSInvalidTopic" => CreateEventSubscriptionError::SNSInvalidTopicFault(
                     String::from(parsed_error.message),
                 ),
-                "SNSNoAuthorizationFault" => {
-                    CreateEventSubscriptionError::SNSNoAuthorizationFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "SNSTopicArnNotFoundFault" => {
-                    CreateEventSubscriptionError::SNSTopicArnNotFoundFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "SourceNotFoundFault" => CreateEventSubscriptionError::SourceNotFoundFault(
+                "SNSNoAuthorization" => CreateEventSubscriptionError::SNSNoAuthorizationFault(
                     String::from(parsed_error.message),
                 ),
-                "SubscriptionAlreadyExistFault" => {
+                "SNSTopicArnNotFound" => CreateEventSubscriptionError::SNSTopicArnNotFoundFault(
+                    String::from(parsed_error.message),
+                ),
+                "SourceNotFound" => CreateEventSubscriptionError::SourceNotFoundFault(
+                    String::from(parsed_error.message),
+                ),
+                "SubscriptionAlreadyExist" => {
                     CreateEventSubscriptionError::SubscriptionAlreadyExistFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "SubscriptionCategoryNotFoundFault" => {
+                "SubscriptionCategoryNotFound" => {
                     CreateEventSubscriptionError::SubscriptionCategoryNotFoundFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "SubscriptionEventIdNotFoundFault" => {
+                "SubscriptionEventIdNotFound" => {
                     CreateEventSubscriptionError::SubscriptionEventIdNotFoundFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "SubscriptionSeverityNotFoundFault" => {
+                "SubscriptionSeverityNotFound" => {
                     CreateEventSubscriptionError::SubscriptionSeverityNotFoundFault(String::from(
                         parsed_error.message,
                     ))
@@ -11973,6 +12031,14 @@ impl CreateEventSubscriptionError {
             },
             Err(_) => CreateEventSubscriptionError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -12051,7 +12117,7 @@ impl CreateHsmClientCertificateError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "HsmClientCertificateAlreadyExistsFault" => {
                     CreateHsmClientCertificateError::HsmClientCertificateAlreadyExistsFault(
@@ -12073,6 +12139,14 @@ impl CreateHsmClientCertificateError {
             },
             Err(_) => CreateHsmClientCertificateError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -12148,7 +12222,7 @@ impl CreateHsmConfigurationError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "HsmConfigurationAlreadyExistsFault" => {
                     CreateHsmConfigurationError::HsmConfigurationAlreadyExistsFault(String::from(
@@ -12170,6 +12244,14 @@ impl CreateHsmConfigurationError {
             },
             Err(_) => CreateHsmConfigurationError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -12245,7 +12327,7 @@ impl CreateSnapshotCopyGrantError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "DependentServiceRequestThrottlingFault" => {
                     CreateSnapshotCopyGrantError::DependentServiceRequestThrottlingFault(
@@ -12275,6 +12357,14 @@ impl CreateSnapshotCopyGrantError {
             },
             Err(_) => CreateSnapshotCopyGrantError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -12348,7 +12438,7 @@ impl CreateTagsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "InvalidTagFault" => {
                     CreateTagsError::InvalidTagFault(String::from(parsed_error.message))
@@ -12363,6 +12453,14 @@ impl CreateTagsError {
             },
             Err(_) => CreateTagsError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -12431,28 +12529,36 @@ impl DeleteClusterError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ClusterNotFoundFault" => {
+                "ClusterNotFound" => {
                     DeleteClusterError::ClusterNotFoundFault(String::from(parsed_error.message))
                 }
-                "ClusterSnapshotAlreadyExistsFault" => {
+                "ClusterSnapshotAlreadyExists" => {
                     DeleteClusterError::ClusterSnapshotAlreadyExistsFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "ClusterSnapshotQuotaExceededFault" => {
+                "ClusterSnapshotQuotaExceeded" => {
                     DeleteClusterError::ClusterSnapshotQuotaExceededFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "InvalidClusterStateFault" => {
+                "InvalidClusterState" => {
                     DeleteClusterError::InvalidClusterStateFault(String::from(parsed_error.message))
                 }
                 _ => DeleteClusterError::Unknown(String::from(body)),
             },
             Err(_) => DeleteClusterError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -12518,14 +12624,14 @@ impl DeleteClusterParameterGroupError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ClusterParameterGroupNotFoundFault" => {
+                "ClusterParameterGroupNotFound" => {
                     DeleteClusterParameterGroupError::ClusterParameterGroupNotFoundFault(
                         String::from(parsed_error.message),
                     )
                 }
-                "InvalidClusterParameterGroupStateFault" => {
+                "InvalidClusterParameterGroupState" => {
                     DeleteClusterParameterGroupError::InvalidClusterParameterGroupStateFault(
                         String::from(parsed_error.message),
                     )
@@ -12534,6 +12640,14 @@ impl DeleteClusterParameterGroupError {
             },
             Err(_) => DeleteClusterParameterGroupError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -12603,14 +12717,14 @@ impl DeleteClusterSecurityGroupError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ClusterSecurityGroupNotFoundFault" => {
+                "ClusterSecurityGroupNotFound" => {
                     DeleteClusterSecurityGroupError::ClusterSecurityGroupNotFoundFault(
                         String::from(parsed_error.message),
                     )
                 }
-                "InvalidClusterSecurityGroupStateFault" => {
+                "InvalidClusterSecurityGroupState" => {
                     DeleteClusterSecurityGroupError::InvalidClusterSecurityGroupStateFault(
                         String::from(parsed_error.message),
                     )
@@ -12619,6 +12733,14 @@ impl DeleteClusterSecurityGroupError {
             },
             Err(_) => DeleteClusterSecurityGroupError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -12686,14 +12808,14 @@ impl DeleteClusterSnapshotError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ClusterSnapshotNotFoundFault" => {
+                "ClusterSnapshotNotFound" => {
                     DeleteClusterSnapshotError::ClusterSnapshotNotFoundFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "InvalidClusterSnapshotStateFault" => {
+                "InvalidClusterSnapshotState" => {
                     DeleteClusterSnapshotError::InvalidClusterSnapshotStateFault(String::from(
                         parsed_error.message,
                     ))
@@ -12702,6 +12824,14 @@ impl DeleteClusterSnapshotError {
             },
             Err(_) => DeleteClusterSnapshotError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -12769,7 +12899,7 @@ impl DeleteClusterSubnetGroupError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "ClusterSubnetGroupNotFoundFault" => {
                     DeleteClusterSubnetGroupError::ClusterSubnetGroupNotFoundFault(String::from(
@@ -12790,6 +12920,14 @@ impl DeleteClusterSubnetGroupError {
             },
             Err(_) => DeleteClusterSubnetGroupError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -12856,22 +12994,28 @@ impl DeleteEventSubscriptionError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "InvalidSubscriptionStateFault" => {
                     DeleteEventSubscriptionError::InvalidSubscriptionStateFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "SubscriptionNotFoundFault" => {
-                    DeleteEventSubscriptionError::SubscriptionNotFoundFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "SubscriptionNotFound" => DeleteEventSubscriptionError::SubscriptionNotFoundFault(
+                    String::from(parsed_error.message),
+                ),
                 _ => DeleteEventSubscriptionError::Unknown(String::from(body)),
             },
             Err(_) => DeleteEventSubscriptionError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -12937,7 +13081,7 @@ impl DeleteHsmClientCertificateError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "HsmClientCertificateNotFoundFault" => {
                     DeleteHsmClientCertificateError::HsmClientCertificateNotFoundFault(
@@ -12953,6 +13097,14 @@ impl DeleteHsmClientCertificateError {
             },
             Err(_) => DeleteHsmClientCertificateError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -13020,7 +13172,7 @@ impl DeleteHsmConfigurationError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "HsmConfigurationNotFoundFault" => {
                     DeleteHsmConfigurationError::HsmConfigurationNotFoundFault(String::from(
@@ -13036,6 +13188,14 @@ impl DeleteHsmConfigurationError {
             },
             Err(_) => DeleteHsmConfigurationError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -13101,7 +13261,7 @@ impl DeleteSnapshotCopyGrantError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "InvalidSnapshotCopyGrantStateFault" => {
                     DeleteSnapshotCopyGrantError::InvalidSnapshotCopyGrantStateFault(String::from(
@@ -13117,6 +13277,14 @@ impl DeleteSnapshotCopyGrantError {
             },
             Err(_) => DeleteSnapshotCopyGrantError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -13182,7 +13350,7 @@ impl DeleteTagsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "InvalidTagFault" => {
                     DeleteTagsError::InvalidTagFault(String::from(parsed_error.message))
@@ -13194,6 +13362,14 @@ impl DeleteTagsError {
             },
             Err(_) => DeleteTagsError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -13257,9 +13433,9 @@ impl DescribeClusterParameterGroupsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ClusterParameterGroupNotFoundFault" => {
+                "ClusterParameterGroupNotFound" => {
                     DescribeClusterParameterGroupsError::ClusterParameterGroupNotFoundFault(
                         String::from(parsed_error.message),
                     )
@@ -13271,6 +13447,14 @@ impl DescribeClusterParameterGroupsError {
             },
             Err(_) => DescribeClusterParameterGroupsError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -13336,9 +13520,9 @@ impl DescribeClusterParametersError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ClusterParameterGroupNotFoundFault" => {
+                "ClusterParameterGroupNotFound" => {
                     DescribeClusterParametersError::ClusterParameterGroupNotFoundFault(
                         String::from(parsed_error.message),
                     )
@@ -13347,6 +13531,14 @@ impl DescribeClusterParametersError {
             },
             Err(_) => DescribeClusterParametersError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -13411,9 +13603,9 @@ impl DescribeClusterSecurityGroupsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ClusterSecurityGroupNotFoundFault" => {
+                "ClusterSecurityGroupNotFound" => {
                     DescribeClusterSecurityGroupsError::ClusterSecurityGroupNotFoundFault(
                         String::from(parsed_error.message),
                     )
@@ -13425,6 +13617,14 @@ impl DescribeClusterSecurityGroupsError {
             },
             Err(_) => DescribeClusterSecurityGroupsError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -13492,9 +13692,9 @@ impl DescribeClusterSnapshotsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ClusterSnapshotNotFoundFault" => {
+                "ClusterSnapshotNotFound" => {
                     DescribeClusterSnapshotsError::ClusterSnapshotNotFoundFault(String::from(
                         parsed_error.message,
                     ))
@@ -13506,6 +13706,14 @@ impl DescribeClusterSnapshotsError {
             },
             Err(_) => DescribeClusterSnapshotsError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -13571,7 +13779,7 @@ impl DescribeClusterSubnetGroupsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "ClusterSubnetGroupNotFoundFault" => {
                     DescribeClusterSubnetGroupsError::ClusterSubnetGroupNotFoundFault(
@@ -13585,6 +13793,14 @@ impl DescribeClusterSubnetGroupsError {
             },
             Err(_) => DescribeClusterSubnetGroupsError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -13646,12 +13862,20 @@ impl DescribeClusterVersionsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeClusterVersionsError::Unknown(String::from(body)),
             },
             Err(_) => DescribeClusterVersionsError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -13715,9 +13939,9 @@ impl DescribeClustersError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ClusterNotFoundFault" => {
+                "ClusterNotFound" => {
                     DescribeClustersError::ClusterNotFoundFault(String::from(parsed_error.message))
                 }
                 "InvalidTagFault" => {
@@ -13727,6 +13951,14 @@ impl DescribeClustersError {
             },
             Err(_) => DescribeClustersError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -13786,12 +14018,20 @@ impl DescribeDefaultClusterParametersError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeDefaultClusterParametersError::Unknown(String::from(body)),
             },
             Err(_) => DescribeDefaultClusterParametersError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -13851,12 +14091,20 @@ impl DescribeEventCategoriesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeEventCategoriesError::Unknown(String::from(body)),
             },
             Err(_) => DescribeEventCategoriesError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -13920,12 +14168,12 @@ impl DescribeEventSubscriptionsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "InvalidTagFault" => DescribeEventSubscriptionsError::InvalidTagFault(
                     String::from(parsed_error.message),
                 ),
-                "SubscriptionNotFoundFault" => {
+                "SubscriptionNotFound" => {
                     DescribeEventSubscriptionsError::SubscriptionNotFoundFault(String::from(
                         parsed_error.message,
                     ))
@@ -13934,6 +14182,14 @@ impl DescribeEventSubscriptionsError {
             },
             Err(_) => DescribeEventSubscriptionsError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -13995,12 +14251,20 @@ impl DescribeEventsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeEventsError::Unknown(String::from(body)),
             },
             Err(_) => DescribeEventsError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -14062,7 +14326,7 @@ impl DescribeHsmClientCertificatesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "HsmClientCertificateNotFoundFault" => {
                     DescribeHsmClientCertificatesError::HsmClientCertificateNotFoundFault(
@@ -14076,6 +14340,14 @@ impl DescribeHsmClientCertificatesError {
             },
             Err(_) => DescribeHsmClientCertificatesError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -14143,7 +14415,7 @@ impl DescribeHsmConfigurationsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "HsmConfigurationNotFoundFault" => {
                     DescribeHsmConfigurationsError::HsmConfigurationNotFoundFault(String::from(
@@ -14157,6 +14429,14 @@ impl DescribeHsmConfigurationsError {
             },
             Err(_) => DescribeHsmConfigurationsError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -14220,15 +14500,23 @@ impl DescribeLoggingStatusError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ClusterNotFoundFault" => DescribeLoggingStatusError::ClusterNotFoundFault(
+                "ClusterNotFound" => DescribeLoggingStatusError::ClusterNotFoundFault(
                     String::from(parsed_error.message),
                 ),
                 _ => DescribeLoggingStatusError::Unknown(String::from(body)),
             },
             Err(_) => DescribeLoggingStatusError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -14289,12 +14577,20 @@ impl DescribeOrderableClusterOptionsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeOrderableClusterOptionsError::Unknown(String::from(body)),
             },
             Err(_) => DescribeOrderableClusterOptionsError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -14360,19 +14656,19 @@ impl DescribeReservedNodeOfferingsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "DependentServiceUnavailableFault" => {
                     DescribeReservedNodeOfferingsError::DependentServiceUnavailableFault(
                         String::from(parsed_error.message),
                     )
                 }
-                "ReservedNodeOfferingNotFoundFault" => {
+                "ReservedNodeOfferingNotFound" => {
                     DescribeReservedNodeOfferingsError::ReservedNodeOfferingNotFoundFault(
                         String::from(parsed_error.message),
                     )
                 }
-                "UnsupportedOperationFault" => {
+                "UnsupportedOperation" => {
                     DescribeReservedNodeOfferingsError::UnsupportedOperationFault(String::from(
                         parsed_error.message,
                     ))
@@ -14381,6 +14677,14 @@ impl DescribeReservedNodeOfferingsError {
             },
             Err(_) => DescribeReservedNodeOfferingsError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -14451,22 +14755,28 @@ impl DescribeReservedNodesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "DependentServiceUnavailableFault" => {
                     DescribeReservedNodesError::DependentServiceUnavailableFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "ReservedNodeNotFoundFault" => {
-                    DescribeReservedNodesError::ReservedNodeNotFoundFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "ReservedNodeNotFound" => DescribeReservedNodesError::ReservedNodeNotFoundFault(
+                    String::from(parsed_error.message),
+                ),
                 _ => DescribeReservedNodesError::Unknown(String::from(body)),
             },
             Err(_) => DescribeReservedNodesError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -14532,18 +14842,26 @@ impl DescribeResizeError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ClusterNotFoundFault" => {
+                "ClusterNotFound" => {
                     DescribeResizeError::ClusterNotFoundFault(String::from(parsed_error.message))
                 }
-                "ResizeNotFoundFault" => {
+                "ResizeNotFound" => {
                     DescribeResizeError::ResizeNotFoundFault(String::from(parsed_error.message))
                 }
                 _ => DescribeResizeError::Unknown(String::from(body)),
             },
             Err(_) => DescribeResizeError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -14607,7 +14925,7 @@ impl DescribeSnapshotCopyGrantsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "InvalidTagFault" => DescribeSnapshotCopyGrantsError::InvalidTagFault(
                     String::from(parsed_error.message),
@@ -14621,6 +14939,14 @@ impl DescribeSnapshotCopyGrantsError {
             },
             Err(_) => DescribeSnapshotCopyGrantsError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -14686,9 +15012,9 @@ impl DescribeTableRestoreStatusError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ClusterNotFoundFault" => DescribeTableRestoreStatusError::ClusterNotFoundFault(
+                "ClusterNotFound" => DescribeTableRestoreStatusError::ClusterNotFoundFault(
                     String::from(parsed_error.message),
                 ),
                 "TableRestoreNotFoundFault" => {
@@ -14700,6 +15026,14 @@ impl DescribeTableRestoreStatusError {
             },
             Err(_) => DescribeTableRestoreStatusError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -14765,7 +15099,7 @@ impl DescribeTagsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "InvalidTagFault" => {
                     DescribeTagsError::InvalidTagFault(String::from(parsed_error.message))
@@ -14777,6 +15111,14 @@ impl DescribeTagsError {
             },
             Err(_) => DescribeTagsError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -14838,15 +15180,23 @@ impl DisableLoggingError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ClusterNotFoundFault" => {
+                "ClusterNotFound" => {
                     DisableLoggingError::ClusterNotFoundFault(String::from(parsed_error.message))
                 }
                 _ => DisableLoggingError::Unknown(String::from(body)),
             },
             Err(_) => DisableLoggingError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -14913,12 +15263,12 @@ impl DisableSnapshotCopyError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ClusterNotFoundFault" => DisableSnapshotCopyError::ClusterNotFoundFault(
-                    String::from(parsed_error.message),
-                ),
-                "InvalidClusterStateFault" => DisableSnapshotCopyError::InvalidClusterStateFault(
+                "ClusterNotFound" => DisableSnapshotCopyError::ClusterNotFoundFault(String::from(
+                    parsed_error.message,
+                )),
+                "InvalidClusterState" => DisableSnapshotCopyError::InvalidClusterStateFault(
                     String::from(parsed_error.message),
                 ),
                 "SnapshotCopyAlreadyDisabledFault" => {
@@ -14933,6 +15283,14 @@ impl DisableSnapshotCopyError {
             },
             Err(_) => DisableSnapshotCopyError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -15006,12 +15364,12 @@ impl EnableLoggingError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "BucketNotFoundFault" => {
                     EnableLoggingError::BucketNotFoundFault(String::from(parsed_error.message))
                 }
-                "ClusterNotFoundFault" => {
+                "ClusterNotFound" => {
                     EnableLoggingError::ClusterNotFoundFault(String::from(parsed_error.message))
                 }
                 "InsufficientS3BucketPolicyFault" => {
@@ -15029,6 +15387,14 @@ impl EnableLoggingError {
             },
             Err(_) => EnableLoggingError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -15111,11 +15477,11 @@ impl EnableSnapshotCopyError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ClusterNotFoundFault" => EnableSnapshotCopyError::ClusterNotFoundFault(
-                    String::from(parsed_error.message),
-                ),
+                "ClusterNotFound" => EnableSnapshotCopyError::ClusterNotFoundFault(String::from(
+                    parsed_error.message,
+                )),
                 "CopyToRegionDisabledFault" => EnableSnapshotCopyError::CopyToRegionDisabledFault(
                     String::from(parsed_error.message),
                 ),
@@ -15129,7 +15495,7 @@ impl EnableSnapshotCopyError {
                         parsed_error.message,
                     ))
                 }
-                "InvalidClusterStateFault" => EnableSnapshotCopyError::InvalidClusterStateFault(
+                "InvalidClusterState" => EnableSnapshotCopyError::InvalidClusterStateFault(
                     String::from(parsed_error.message),
                 ),
                 "LimitExceededFault" => {
@@ -15157,6 +15523,14 @@ impl EnableSnapshotCopyError {
             },
             Err(_) => EnableSnapshotCopyError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -15230,20 +15604,26 @@ impl GetClusterCredentialsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ClusterNotFoundFault" => GetClusterCredentialsError::ClusterNotFoundFault(
+                "ClusterNotFound" => GetClusterCredentialsError::ClusterNotFoundFault(
                     String::from(parsed_error.message),
                 ),
-                "UnsupportedOperationFault" => {
-                    GetClusterCredentialsError::UnsupportedOperationFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "UnsupportedOperation" => GetClusterCredentialsError::UnsupportedOperationFault(
+                    String::from(parsed_error.message),
+                ),
                 _ => GetClusterCredentialsError::Unknown(String::from(body)),
             },
             Err(_) => GetClusterCredentialsError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -15337,20 +15717,20 @@ impl ModifyClusterError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ClusterAlreadyExistsFault" => ModifyClusterError::ClusterAlreadyExistsFault(
+                "ClusterAlreadyExists" => ModifyClusterError::ClusterAlreadyExistsFault(
                     String::from(parsed_error.message),
                 ),
-                "ClusterNotFoundFault" => {
+                "ClusterNotFound" => {
                     ModifyClusterError::ClusterNotFoundFault(String::from(parsed_error.message))
                 }
-                "ClusterParameterGroupNotFoundFault" => {
+                "ClusterParameterGroupNotFound" => {
                     ModifyClusterError::ClusterParameterGroupNotFoundFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "ClusterSecurityGroupNotFoundFault" => {
+                "ClusterSecurityGroupNotFound" => {
                     ModifyClusterError::ClusterSecurityGroupNotFoundFault(String::from(
                         parsed_error.message,
                     ))
@@ -15370,17 +15750,17 @@ impl ModifyClusterError {
                         parsed_error.message,
                     ))
                 }
-                "InsufficientClusterCapacityFault" => {
+                "InsufficientClusterCapacity" => {
                     ModifyClusterError::InsufficientClusterCapacityFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "InvalidClusterSecurityGroupStateFault" => {
+                "InvalidClusterSecurityGroupState" => {
                     ModifyClusterError::InvalidClusterSecurityGroupStateFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "InvalidClusterStateFault" => {
+                "InvalidClusterState" => {
                     ModifyClusterError::InvalidClusterStateFault(String::from(parsed_error.message))
                 }
                 "InvalidElasticIpFault" => {
@@ -15389,12 +15769,12 @@ impl ModifyClusterError {
                 "LimitExceededFault" => {
                     ModifyClusterError::LimitExceededFault(String::from(parsed_error.message))
                 }
-                "NumberOfNodesPerClusterLimitExceededFault" => {
+                "NumberOfNodesPerClusterLimitExceeded" => {
                     ModifyClusterError::NumberOfNodesPerClusterLimitExceededFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "NumberOfNodesQuotaExceededFault" => {
+                "NumberOfNodesQuotaExceeded" => {
                     ModifyClusterError::NumberOfNodesQuotaExceededFault(String::from(
                         parsed_error.message,
                     ))
@@ -15409,6 +15789,14 @@ impl ModifyClusterError {
             },
             Err(_) => ModifyClusterError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -15486,20 +15874,26 @@ impl ModifyClusterIamRolesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ClusterNotFoundFault" => ModifyClusterIamRolesError::ClusterNotFoundFault(
+                "ClusterNotFound" => ModifyClusterIamRolesError::ClusterNotFoundFault(
                     String::from(parsed_error.message),
                 ),
-                "InvalidClusterStateFault" => {
-                    ModifyClusterIamRolesError::InvalidClusterStateFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "InvalidClusterState" => ModifyClusterIamRolesError::InvalidClusterStateFault(
+                    String::from(parsed_error.message),
+                ),
                 _ => ModifyClusterIamRolesError::Unknown(String::from(body)),
             },
             Err(_) => ModifyClusterIamRolesError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -15565,14 +15959,14 @@ impl ModifyClusterParameterGroupError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ClusterParameterGroupNotFoundFault" => {
+                "ClusterParameterGroupNotFound" => {
                     ModifyClusterParameterGroupError::ClusterParameterGroupNotFoundFault(
                         String::from(parsed_error.message),
                     )
                 }
-                "InvalidClusterParameterGroupStateFault" => {
+                "InvalidClusterParameterGroupState" => {
                     ModifyClusterParameterGroupError::InvalidClusterParameterGroupStateFault(
                         String::from(parsed_error.message),
                     )
@@ -15581,6 +15975,14 @@ impl ModifyClusterParameterGroupError {
             },
             Err(_) => ModifyClusterParameterGroupError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -15658,7 +16060,7 @@ impl ModifyClusterSubnetGroupError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "ClusterSubnetGroupNotFoundFault" => {
                     ModifyClusterSubnetGroupError::ClusterSubnetGroupNotFoundFault(String::from(
@@ -15688,6 +16090,14 @@ impl ModifyClusterSubnetGroupError {
             },
             Err(_) => ModifyClusterSubnetGroupError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -15773,45 +16183,39 @@ impl ModifyEventSubscriptionError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "InvalidSubscriptionStateFault" => {
                     ModifyEventSubscriptionError::InvalidSubscriptionStateFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "SNSInvalidTopicFault" => ModifyEventSubscriptionError::SNSInvalidTopicFault(
+                "SNSInvalidTopic" => ModifyEventSubscriptionError::SNSInvalidTopicFault(
                     String::from(parsed_error.message),
                 ),
-                "SNSNoAuthorizationFault" => {
-                    ModifyEventSubscriptionError::SNSNoAuthorizationFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "SNSTopicArnNotFoundFault" => {
-                    ModifyEventSubscriptionError::SNSTopicArnNotFoundFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "SourceNotFoundFault" => ModifyEventSubscriptionError::SourceNotFoundFault(
+                "SNSNoAuthorization" => ModifyEventSubscriptionError::SNSNoAuthorizationFault(
                     String::from(parsed_error.message),
                 ),
-                "SubscriptionCategoryNotFoundFault" => {
+                "SNSTopicArnNotFound" => ModifyEventSubscriptionError::SNSTopicArnNotFoundFault(
+                    String::from(parsed_error.message),
+                ),
+                "SourceNotFound" => ModifyEventSubscriptionError::SourceNotFoundFault(
+                    String::from(parsed_error.message),
+                ),
+                "SubscriptionCategoryNotFound" => {
                     ModifyEventSubscriptionError::SubscriptionCategoryNotFoundFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "SubscriptionEventIdNotFoundFault" => {
+                "SubscriptionEventIdNotFound" => {
                     ModifyEventSubscriptionError::SubscriptionEventIdNotFoundFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "SubscriptionNotFoundFault" => {
-                    ModifyEventSubscriptionError::SubscriptionNotFoundFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "SubscriptionSeverityNotFoundFault" => {
+                "SubscriptionNotFound" => ModifyEventSubscriptionError::SubscriptionNotFoundFault(
+                    String::from(parsed_error.message),
+                ),
+                "SubscriptionSeverityNotFound" => {
                     ModifyEventSubscriptionError::SubscriptionSeverityNotFoundFault(String::from(
                         parsed_error.message,
                     ))
@@ -15820,6 +16224,14 @@ impl ModifyEventSubscriptionError {
             },
             Err(_) => ModifyEventSubscriptionError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -15896,14 +16308,12 @@ impl ModifySnapshotCopyRetentionPeriodError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ClusterNotFoundFault" => {
-                    ModifySnapshotCopyRetentionPeriodError::ClusterNotFoundFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "InvalidClusterStateFault" => {
+                "ClusterNotFound" => ModifySnapshotCopyRetentionPeriodError::ClusterNotFoundFault(
+                    String::from(parsed_error.message),
+                ),
+                "InvalidClusterState" => {
                     ModifySnapshotCopyRetentionPeriodError::InvalidClusterStateFault(String::from(
                         parsed_error.message,
                     ))
@@ -15922,6 +16332,14 @@ impl ModifySnapshotCopyRetentionPeriodError {
             },
             Err(_) => ModifySnapshotCopyRetentionPeriodError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -15993,24 +16411,24 @@ impl PurchaseReservedNodeOfferingError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ReservedNodeAlreadyExistsFault" => {
+                "ReservedNodeAlreadyExists" => {
                     PurchaseReservedNodeOfferingError::ReservedNodeAlreadyExistsFault(
                         String::from(parsed_error.message),
                     )
                 }
-                "ReservedNodeOfferingNotFoundFault" => {
+                "ReservedNodeOfferingNotFound" => {
                     PurchaseReservedNodeOfferingError::ReservedNodeOfferingNotFoundFault(
                         String::from(parsed_error.message),
                     )
                 }
-                "ReservedNodeQuotaExceededFault" => {
+                "ReservedNodeQuotaExceeded" => {
                     PurchaseReservedNodeOfferingError::ReservedNodeQuotaExceededFault(
                         String::from(parsed_error.message),
                     )
                 }
-                "UnsupportedOperationFault" => {
+                "UnsupportedOperation" => {
                     PurchaseReservedNodeOfferingError::UnsupportedOperationFault(String::from(
                         parsed_error.message,
                     ))
@@ -16019,6 +16437,14 @@ impl PurchaseReservedNodeOfferingError {
             },
             Err(_) => PurchaseReservedNodeOfferingError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -16088,18 +16514,26 @@ impl RebootClusterError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ClusterNotFoundFault" => {
+                "ClusterNotFound" => {
                     RebootClusterError::ClusterNotFoundFault(String::from(parsed_error.message))
                 }
-                "InvalidClusterStateFault" => {
+                "InvalidClusterState" => {
                     RebootClusterError::InvalidClusterStateFault(String::from(parsed_error.message))
                 }
                 _ => RebootClusterError::Unknown(String::from(body)),
             },
             Err(_) => RebootClusterError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -16163,14 +16597,14 @@ impl ResetClusterParameterGroupError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ClusterParameterGroupNotFoundFault" => {
+                "ClusterParameterGroupNotFound" => {
                     ResetClusterParameterGroupError::ClusterParameterGroupNotFoundFault(
                         String::from(parsed_error.message),
                     )
                 }
-                "InvalidClusterParameterGroupStateFault" => {
+                "InvalidClusterParameterGroupState" => {
                     ResetClusterParameterGroupError::InvalidClusterParameterGroupStateFault(
                         String::from(parsed_error.message),
                     )
@@ -16179,6 +16613,14 @@ impl ResetClusterParameterGroupError {
             },
             Err(_) => ResetClusterParameterGroupError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -16284,34 +16726,34 @@ impl RestoreFromClusterSnapshotError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "AccessToSnapshotDeniedFault" => {
+                "AccessToSnapshotDenied" => {
                     RestoreFromClusterSnapshotError::AccessToSnapshotDeniedFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "ClusterAlreadyExistsFault" => {
+                "ClusterAlreadyExists" => {
                     RestoreFromClusterSnapshotError::ClusterAlreadyExistsFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "ClusterParameterGroupNotFoundFault" => {
+                "ClusterParameterGroupNotFound" => {
                     RestoreFromClusterSnapshotError::ClusterParameterGroupNotFoundFault(
                         String::from(parsed_error.message),
                     )
                 }
-                "ClusterQuotaExceededFault" => {
+                "ClusterQuotaExceeded" => {
                     RestoreFromClusterSnapshotError::ClusterQuotaExceededFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "ClusterSecurityGroupNotFoundFault" => {
+                "ClusterSecurityGroupNotFound" => {
                     RestoreFromClusterSnapshotError::ClusterSecurityGroupNotFoundFault(
                         String::from(parsed_error.message),
                     )
                 }
-                "ClusterSnapshotNotFoundFault" => {
+                "ClusterSnapshotNotFound" => {
                     RestoreFromClusterSnapshotError::ClusterSnapshotNotFoundFault(String::from(
                         parsed_error.message,
                     ))
@@ -16336,12 +16778,12 @@ impl RestoreFromClusterSnapshotError {
                         parsed_error.message,
                     ))
                 }
-                "InsufficientClusterCapacityFault" => {
+                "InsufficientClusterCapacity" => {
                     RestoreFromClusterSnapshotError::InsufficientClusterCapacityFault(
                         String::from(parsed_error.message),
                     )
                 }
-                "InvalidClusterSnapshotStateFault" => {
+                "InvalidClusterSnapshotState" => {
                     RestoreFromClusterSnapshotError::InvalidClusterSnapshotStateFault(
                         String::from(parsed_error.message),
                     )
@@ -16354,7 +16796,7 @@ impl RestoreFromClusterSnapshotError {
                 "InvalidElasticIpFault" => RestoreFromClusterSnapshotError::InvalidElasticIpFault(
                     String::from(parsed_error.message),
                 ),
-                "InvalidRestoreFault" => RestoreFromClusterSnapshotError::InvalidRestoreFault(
+                "InvalidRestore" => RestoreFromClusterSnapshotError::InvalidRestoreFault(
                     String::from(parsed_error.message),
                 ),
                 "InvalidSubnet" => RestoreFromClusterSnapshotError::InvalidSubnet(String::from(
@@ -16368,12 +16810,12 @@ impl RestoreFromClusterSnapshotError {
                 "LimitExceededFault" => RestoreFromClusterSnapshotError::LimitExceededFault(
                     String::from(parsed_error.message),
                 ),
-                "NumberOfNodesPerClusterLimitExceededFault" => {
+                "NumberOfNodesPerClusterLimitExceeded" => {
                     RestoreFromClusterSnapshotError::NumberOfNodesPerClusterLimitExceededFault(
                         String::from(parsed_error.message),
                     )
                 }
-                "NumberOfNodesQuotaExceededFault" => {
+                "NumberOfNodesQuotaExceeded" => {
                     RestoreFromClusterSnapshotError::NumberOfNodesQuotaExceededFault(String::from(
                         parsed_error.message,
                     ))
@@ -16385,6 +16827,14 @@ impl RestoreFromClusterSnapshotError {
             },
             Err(_) => RestoreFromClusterSnapshotError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -16485,14 +16935,12 @@ impl RestoreTableFromClusterSnapshotError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ClusterNotFoundFault" => {
-                    RestoreTableFromClusterSnapshotError::ClusterNotFoundFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "ClusterSnapshotNotFoundFault" => {
+                "ClusterNotFound" => RestoreTableFromClusterSnapshotError::ClusterNotFoundFault(
+                    String::from(parsed_error.message),
+                ),
+                "ClusterSnapshotNotFound" => {
                     RestoreTableFromClusterSnapshotError::ClusterSnapshotNotFoundFault(
                         String::from(parsed_error.message),
                     )
@@ -16502,22 +16950,22 @@ impl RestoreTableFromClusterSnapshotError {
                         String::from(parsed_error.message),
                     )
                 }
-                "InvalidClusterSnapshotStateFault" => {
+                "InvalidClusterSnapshotState" => {
                     RestoreTableFromClusterSnapshotError::InvalidClusterSnapshotStateFault(
                         String::from(parsed_error.message),
                     )
                 }
-                "InvalidClusterStateFault" => {
+                "InvalidClusterState" => {
                     RestoreTableFromClusterSnapshotError::InvalidClusterStateFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "InvalidTableRestoreArgumentFault" => {
+                "InvalidTableRestoreArgument" => {
                     RestoreTableFromClusterSnapshotError::InvalidTableRestoreArgumentFault(
                         String::from(parsed_error.message),
                     )
                 }
-                "UnsupportedOperationFault" => {
+                "UnsupportedOperation" => {
                     RestoreTableFromClusterSnapshotError::UnsupportedOperationFault(String::from(
                         parsed_error.message,
                     ))
@@ -16526,6 +16974,14 @@ impl RestoreTableFromClusterSnapshotError {
             },
             Err(_) => RestoreTableFromClusterSnapshotError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -16604,19 +17060,19 @@ impl RevokeClusterSecurityGroupIngressError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "AuthorizationNotFoundFault" => {
+                "AuthorizationNotFound" => {
                     RevokeClusterSecurityGroupIngressError::AuthorizationNotFoundFault(
                         String::from(parsed_error.message),
                     )
                 }
-                "ClusterSecurityGroupNotFoundFault" => {
+                "ClusterSecurityGroupNotFound" => {
                     RevokeClusterSecurityGroupIngressError::ClusterSecurityGroupNotFoundFault(
                         String::from(parsed_error.message),
                     )
                 }
-                "InvalidClusterSecurityGroupStateFault" => {
+                "InvalidClusterSecurityGroupState" => {
                     RevokeClusterSecurityGroupIngressError::InvalidClusterSecurityGroupStateFault(
                         String::from(parsed_error.message),
                     )
@@ -16625,6 +17081,14 @@ impl RevokeClusterSecurityGroupIngressError {
             },
             Err(_) => RevokeClusterSecurityGroupIngressError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -16697,19 +17161,17 @@ impl RevokeSnapshotAccessError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "AccessToSnapshotDeniedFault" => {
+                "AccessToSnapshotDenied" => {
                     RevokeSnapshotAccessError::AccessToSnapshotDeniedFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "AuthorizationNotFoundFault" => {
-                    RevokeSnapshotAccessError::AuthorizationNotFoundFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "ClusterSnapshotNotFoundFault" => {
+                "AuthorizationNotFound" => RevokeSnapshotAccessError::AuthorizationNotFoundFault(
+                    String::from(parsed_error.message),
+                ),
+                "ClusterSnapshotNotFound" => {
                     RevokeSnapshotAccessError::ClusterSnapshotNotFoundFault(String::from(
                         parsed_error.message,
                     ))
@@ -16718,6 +17180,14 @@ impl RevokeSnapshotAccessError {
             },
             Err(_) => RevokeSnapshotAccessError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -16786,23 +17256,31 @@ impl RotateEncryptionKeyError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ClusterNotFoundFault" => RotateEncryptionKeyError::ClusterNotFoundFault(
-                    String::from(parsed_error.message),
-                ),
+                "ClusterNotFound" => RotateEncryptionKeyError::ClusterNotFoundFault(String::from(
+                    parsed_error.message,
+                )),
                 "DependentServiceRequestThrottlingFault" => {
                     RotateEncryptionKeyError::DependentServiceRequestThrottlingFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "InvalidClusterStateFault" => RotateEncryptionKeyError::InvalidClusterStateFault(
+                "InvalidClusterState" => RotateEncryptionKeyError::InvalidClusterStateFault(
                     String::from(parsed_error.message),
                 ),
                 _ => RotateEncryptionKeyError::Unknown(String::from(body)),
             },
             Err(_) => RotateEncryptionKeyError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 

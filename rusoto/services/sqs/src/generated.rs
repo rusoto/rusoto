@@ -89,12 +89,12 @@ impl AddPermissionRequestSerializer {
 
         AWSAccountIdListSerializer::serialize(
             params,
-            &format!("{}{}", prefix, "AWSAccountIds"),
+            &format!("{}{}", prefix, "AWSAccountId"),
             &obj.aws_account_ids,
         );
         ActionNameListSerializer::serialize(
             params,
-            &format!("{}{}", prefix, "Actions"),
+            &format!("{}{}", prefix, "ActionName"),
             &obj.actions,
         );
         params.put(
@@ -312,7 +312,7 @@ impl ChangeMessageVisibilityBatchRequestSerializer {
 
         ChangeMessageVisibilityBatchRequestEntryListSerializer::serialize(
             params,
-            &format!("{}{}", prefix, "Entries"),
+            &format!("{}{}", prefix, "ChangeMessageVisibilityBatchRequestEntry"),
             &obj.entries,
         );
         params.put(
@@ -636,7 +636,7 @@ impl DeleteMessageBatchRequestSerializer {
 
         DeleteMessageBatchRequestEntryListSerializer::serialize(
             params,
-            &format!("{}{}", prefix, "Entries"),
+            &format!("{}{}", prefix, "DeleteMessageBatchRequestEntry"),
             &obj.entries,
         );
         params.put(
@@ -887,7 +887,7 @@ impl GetQueueAttributesRequestSerializer {
         if let Some(ref field_value) = obj.attribute_names {
             AttributeNameListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "AttributeNames"),
+                &format!("{}{}", prefix, "AttributeName"),
                 field_value,
             );
         }
@@ -1692,7 +1692,7 @@ impl ReceiveMessageRequestSerializer {
         if let Some(ref field_value) = obj.attribute_names {
             AttributeNameListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "AttributeNames"),
+                &format!("{}{}", prefix, "AttributeName"),
                 field_value,
             );
         }
@@ -1705,7 +1705,7 @@ impl ReceiveMessageRequestSerializer {
         if let Some(ref field_value) = obj.message_attribute_names {
             MessageAttributeNameListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "MessageAttributeNames"),
+                &format!("{}{}", prefix, "MessageAttributeName"),
                 field_value,
             );
         }
@@ -1830,7 +1830,7 @@ impl SendMessageBatchRequestSerializer {
 
         SendMessageBatchRequestEntryListSerializer::serialize(
             params,
-            &format!("{}{}", prefix, "Entries"),
+            &format!("{}{}", prefix, "SendMessageBatchRequestEntry"),
             &obj.entries,
         );
         params.put(
@@ -2422,7 +2422,7 @@ impl UntagQueueRequestSerializer {
             &format!("{}{}", prefix, "QueueUrl"),
             &obj.queue_url.replace("+", "%2B"),
         );
-        TagKeyListSerializer::serialize(params, &format!("{}{}", prefix, "TagKeys"), &obj.tag_keys);
+        TagKeyListSerializer::serialize(params, &format!("{}{}", prefix, "TagKey"), &obj.tag_keys);
     }
 }
 
@@ -2446,13 +2446,21 @@ impl AddPermissionError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "OverLimit" => AddPermissionError::OverLimit(String::from(parsed_error.message)),
                 _ => AddPermissionError::Unknown(String::from(body)),
             },
             Err(_) => AddPermissionError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -2515,11 +2523,13 @@ impl ChangeMessageVisibilityError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "MessageNotInflight" => ChangeMessageVisibilityError::MessageNotInflight(
-                    String::from(parsed_error.message),
-                ),
+                "AWS.SimpleQueueService.MessageNotInflight" => {
+                    ChangeMessageVisibilityError::MessageNotInflight(String::from(
+                        parsed_error.message,
+                    ))
+                }
                 "ReceiptHandleIsInvalid" => ChangeMessageVisibilityError::ReceiptHandleIsInvalid(
                     String::from(parsed_error.message),
                 ),
@@ -2527,6 +2537,14 @@ impl ChangeMessageVisibilityError {
             },
             Err(_) => ChangeMessageVisibilityError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -2596,20 +2614,24 @@ impl ChangeMessageVisibilityBatchError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "BatchEntryIdsNotDistinct" => {
+                "AWS.SimpleQueueService.BatchEntryIdsNotDistinct" => {
                     ChangeMessageVisibilityBatchError::BatchEntryIdsNotDistinct(String::from(
                         parsed_error.message,
                     ))
                 }
-                "EmptyBatchRequest" => ChangeMessageVisibilityBatchError::EmptyBatchRequest(
-                    String::from(parsed_error.message),
-                ),
-                "InvalidBatchEntryId" => ChangeMessageVisibilityBatchError::InvalidBatchEntryId(
-                    String::from(parsed_error.message),
-                ),
-                "TooManyEntriesInBatchRequest" => {
+                "AWS.SimpleQueueService.EmptyBatchRequest" => {
+                    ChangeMessageVisibilityBatchError::EmptyBatchRequest(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                "AWS.SimpleQueueService.InvalidBatchEntryId" => {
+                    ChangeMessageVisibilityBatchError::InvalidBatchEntryId(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                "AWS.SimpleQueueService.TooManyEntriesInBatchRequest" => {
                     ChangeMessageVisibilityBatchError::TooManyEntriesInBatchRequest(String::from(
                         parsed_error.message,
                     ))
@@ -2618,6 +2640,14 @@ impl ChangeMessageVisibilityBatchError {
             },
             Err(_) => ChangeMessageVisibilityBatchError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -2685,18 +2715,26 @@ impl CreateQueueError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "QueueDeletedRecently" => {
+                "AWS.SimpleQueueService.QueueDeletedRecently" => {
                     CreateQueueError::QueueDeletedRecently(String::from(parsed_error.message))
                 }
-                "QueueNameExists" => {
+                "QueueAlreadyExists" => {
                     CreateQueueError::QueueNameExists(String::from(parsed_error.message))
                 }
                 _ => CreateQueueError::Unknown(String::from(body)),
             },
             Err(_) => CreateQueueError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -2760,7 +2798,7 @@ impl DeleteMessageError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "InvalidIdFormat" => {
                     DeleteMessageError::InvalidIdFormat(String::from(parsed_error.message))
@@ -2772,6 +2810,14 @@ impl DeleteMessageError {
             },
             Err(_) => DeleteMessageError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -2839,18 +2885,20 @@ impl DeleteMessageBatchError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "BatchEntryIdsNotDistinct" => DeleteMessageBatchError::BatchEntryIdsNotDistinct(
-                    String::from(parsed_error.message),
-                ),
-                "EmptyBatchRequest" => {
+                "AWS.SimpleQueueService.BatchEntryIdsNotDistinct" => {
+                    DeleteMessageBatchError::BatchEntryIdsNotDistinct(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                "AWS.SimpleQueueService.EmptyBatchRequest" => {
                     DeleteMessageBatchError::EmptyBatchRequest(String::from(parsed_error.message))
                 }
-                "InvalidBatchEntryId" => {
+                "AWS.SimpleQueueService.InvalidBatchEntryId" => {
                     DeleteMessageBatchError::InvalidBatchEntryId(String::from(parsed_error.message))
                 }
-                "TooManyEntriesInBatchRequest" => {
+                "AWS.SimpleQueueService.TooManyEntriesInBatchRequest" => {
                     DeleteMessageBatchError::TooManyEntriesInBatchRequest(String::from(
                         parsed_error.message,
                     ))
@@ -2859,6 +2907,14 @@ impl DeleteMessageBatchError {
             },
             Err(_) => DeleteMessageBatchError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -2922,12 +2978,20 @@ impl DeleteQueueError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteQueueError::Unknown(String::from(body)),
             },
             Err(_) => DeleteQueueError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -2987,7 +3051,7 @@ impl GetQueueAttributesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "InvalidAttributeName" => GetQueueAttributesError::InvalidAttributeName(
                     String::from(parsed_error.message),
@@ -2996,6 +3060,14 @@ impl GetQueueAttributesError {
             },
             Err(_) => GetQueueAttributesError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -3058,15 +3130,23 @@ impl GetQueueUrlError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "QueueDoesNotExist" => {
+                "AWS.SimpleQueueService.NonExistentQueue" => {
                     GetQueueUrlError::QueueDoesNotExist(String::from(parsed_error.message))
                 }
                 _ => GetQueueUrlError::Unknown(String::from(body)),
             },
             Err(_) => GetQueueUrlError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -3127,15 +3207,25 @@ impl ListDeadLetterSourceQueuesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "QueueDoesNotExist" => ListDeadLetterSourceQueuesError::QueueDoesNotExist(
-                    String::from(parsed_error.message),
-                ),
+                "AWS.SimpleQueueService.NonExistentQueue" => {
+                    ListDeadLetterSourceQueuesError::QueueDoesNotExist(String::from(
+                        parsed_error.message,
+                    ))
+                }
                 _ => ListDeadLetterSourceQueuesError::Unknown(String::from(body)),
             },
             Err(_) => ListDeadLetterSourceQueuesError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -3196,12 +3286,20 @@ impl ListQueueTagsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ListQueueTagsError::Unknown(String::from(body)),
             },
             Err(_) => ListQueueTagsError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -3259,12 +3357,20 @@ impl ListQueuesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => ListQueuesError::Unknown(String::from(body)),
             },
             Err(_) => ListQueuesError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -3326,18 +3432,26 @@ impl PurgeQueueError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "PurgeQueueInProgress" => {
+                "AWS.SimpleQueueService.PurgeQueueInProgress" => {
                     PurgeQueueError::PurgeQueueInProgress(String::from(parsed_error.message))
                 }
-                "QueueDoesNotExist" => {
+                "AWS.SimpleQueueService.NonExistentQueue" => {
                     PurgeQueueError::QueueDoesNotExist(String::from(parsed_error.message))
                 }
                 _ => PurgeQueueError::Unknown(String::from(body)),
             },
             Err(_) => PurgeQueueError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -3399,13 +3513,21 @@ impl ReceiveMessageError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "OverLimit" => ReceiveMessageError::OverLimit(String::from(parsed_error.message)),
                 _ => ReceiveMessageError::Unknown(String::from(body)),
             },
             Err(_) => ReceiveMessageError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -3464,12 +3586,20 @@ impl RemovePermissionError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => RemovePermissionError::Unknown(String::from(body)),
             },
             Err(_) => RemovePermissionError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -3531,18 +3661,26 @@ impl SendMessageError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "InvalidMessageContents" => {
                     SendMessageError::InvalidMessageContents(String::from(parsed_error.message))
                 }
-                "UnsupportedOperation" => {
+                "AWS.SimpleQueueService.UnsupportedOperation" => {
                     SendMessageError::UnsupportedOperation(String::from(parsed_error.message))
                 }
                 _ => SendMessageError::Unknown(String::from(body)),
             },
             Err(_) => SendMessageError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -3614,32 +3752,42 @@ impl SendMessageBatchError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "BatchEntryIdsNotDistinct" => SendMessageBatchError::BatchEntryIdsNotDistinct(
-                    String::from(parsed_error.message),
-                ),
-                "BatchRequestTooLong" => {
+                "AWS.SimpleQueueService.BatchEntryIdsNotDistinct" => {
+                    SendMessageBatchError::BatchEntryIdsNotDistinct(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                "AWS.SimpleQueueService.BatchRequestTooLong" => {
                     SendMessageBatchError::BatchRequestTooLong(String::from(parsed_error.message))
                 }
-                "EmptyBatchRequest" => {
+                "AWS.SimpleQueueService.EmptyBatchRequest" => {
                     SendMessageBatchError::EmptyBatchRequest(String::from(parsed_error.message))
                 }
-                "InvalidBatchEntryId" => {
+                "AWS.SimpleQueueService.InvalidBatchEntryId" => {
                     SendMessageBatchError::InvalidBatchEntryId(String::from(parsed_error.message))
                 }
-                "TooManyEntriesInBatchRequest" => {
+                "AWS.SimpleQueueService.TooManyEntriesInBatchRequest" => {
                     SendMessageBatchError::TooManyEntriesInBatchRequest(String::from(
                         parsed_error.message,
                     ))
                 }
-                "UnsupportedOperation" => {
+                "AWS.SimpleQueueService.UnsupportedOperation" => {
                     SendMessageBatchError::UnsupportedOperation(String::from(parsed_error.message))
                 }
                 _ => SendMessageBatchError::Unknown(String::from(body)),
             },
             Err(_) => SendMessageBatchError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -3705,7 +3853,7 @@ impl SetQueueAttributesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "InvalidAttributeName" => SetQueueAttributesError::InvalidAttributeName(
                     String::from(parsed_error.message),
@@ -3714,6 +3862,14 @@ impl SetQueueAttributesError {
             },
             Err(_) => SetQueueAttributesError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -3774,12 +3930,20 @@ impl TagQueueError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => TagQueueError::Unknown(String::from(body)),
             },
             Err(_) => TagQueueError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -3837,12 +4001,20 @@ impl UntagQueueError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => UntagQueueError::Unknown(String::from(body)),
             },
             Err(_) => UntagQueueError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 

@@ -5614,21 +5614,27 @@ impl AddTagsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "AccessPointNotFoundException" => {
+                "LoadBalancerNotFound" => {
                     AddTagsError::AccessPointNotFound(String::from(parsed_error.message))
                 }
-                "DuplicateTagKeysException" => {
+                "DuplicateTagKeys" => {
                     AddTagsError::DuplicateTagKeys(String::from(parsed_error.message))
                 }
-                "TooManyTagsException" => {
-                    AddTagsError::TooManyTags(String::from(parsed_error.message))
-                }
+                "TooManyTags" => AddTagsError::TooManyTags(String::from(parsed_error.message)),
                 _ => AddTagsError::Unknown(String::from(body)),
             },
             Err(_) => AddTagsError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -5695,19 +5701,19 @@ impl ApplySecurityGroupsToLoadBalancerError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "AccessPointNotFoundException" => {
+                "LoadBalancerNotFound" => {
                     ApplySecurityGroupsToLoadBalancerError::AccessPointNotFound(String::from(
                         parsed_error.message,
                     ))
                 }
-                "InvalidConfigurationRequestException" => {
+                "InvalidConfigurationRequest" => {
                     ApplySecurityGroupsToLoadBalancerError::InvalidConfigurationRequest(
                         String::from(parsed_error.message),
                     )
                 }
-                "InvalidSecurityGroupException" => {
+                "InvalidSecurityGroup" => {
                     ApplySecurityGroupsToLoadBalancerError::InvalidSecurityGroup(String::from(
                         parsed_error.message,
                     ))
@@ -5716,6 +5722,14 @@ impl ApplySecurityGroupsToLoadBalancerError {
             },
             Err(_) => ApplySecurityGroupsToLoadBalancerError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -5786,28 +5800,34 @@ impl AttachLoadBalancerToSubnetsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "AccessPointNotFoundException" => {
-                    AttachLoadBalancerToSubnetsError::AccessPointNotFound(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "InvalidConfigurationRequestException" => {
+                "LoadBalancerNotFound" => AttachLoadBalancerToSubnetsError::AccessPointNotFound(
+                    String::from(parsed_error.message),
+                ),
+                "InvalidConfigurationRequest" => {
                     AttachLoadBalancerToSubnetsError::InvalidConfigurationRequest(String::from(
                         parsed_error.message,
                     ))
                 }
-                "InvalidSubnetException" => AttachLoadBalancerToSubnetsError::InvalidSubnet(
-                    String::from(parsed_error.message),
-                ),
-                "SubnetNotFoundException" => AttachLoadBalancerToSubnetsError::SubnetNotFound(
+                "InvalidSubnet" => AttachLoadBalancerToSubnetsError::InvalidSubnet(String::from(
+                    parsed_error.message,
+                )),
+                "SubnetNotFound" => AttachLoadBalancerToSubnetsError::SubnetNotFound(
                     String::from(parsed_error.message),
                 ),
                 _ => AttachLoadBalancerToSubnetsError::Unknown(String::from(body)),
             },
             Err(_) => AttachLoadBalancerToSubnetsError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -5873,15 +5893,23 @@ impl ConfigureHealthCheckError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "AccessPointNotFoundException" => ConfigureHealthCheckError::AccessPointNotFound(
+                "LoadBalancerNotFound" => ConfigureHealthCheckError::AccessPointNotFound(
                     String::from(parsed_error.message),
                 ),
                 _ => ConfigureHealthCheckError::Unknown(String::from(body)),
             },
             Err(_) => ConfigureHealthCheckError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -5950,32 +5978,38 @@ impl CreateAppCookieStickinessPolicyError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "AccessPointNotFoundException" => {
+                "LoadBalancerNotFound" => {
                     CreateAppCookieStickinessPolicyError::AccessPointNotFound(String::from(
                         parsed_error.message,
                     ))
                 }
-                "DuplicatePolicyNameException" => {
+                "DuplicatePolicyName" => {
                     CreateAppCookieStickinessPolicyError::DuplicatePolicyName(String::from(
                         parsed_error.message,
                     ))
                 }
-                "InvalidConfigurationRequestException" => {
+                "InvalidConfigurationRequest" => {
                     CreateAppCookieStickinessPolicyError::InvalidConfigurationRequest(
                         String::from(parsed_error.message),
                     )
                 }
-                "TooManyPoliciesException" => {
-                    CreateAppCookieStickinessPolicyError::TooManyPolicies(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "TooManyPolicies" => CreateAppCookieStickinessPolicyError::TooManyPolicies(
+                    String::from(parsed_error.message),
+                ),
                 _ => CreateAppCookieStickinessPolicyError::Unknown(String::from(body)),
             },
             Err(_) => CreateAppCookieStickinessPolicyError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -6047,32 +6081,36 @@ impl CreateLBCookieStickinessPolicyError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "AccessPointNotFoundException" => {
+                "LoadBalancerNotFound" => {
                     CreateLBCookieStickinessPolicyError::AccessPointNotFound(String::from(
                         parsed_error.message,
                     ))
                 }
-                "DuplicatePolicyNameException" => {
-                    CreateLBCookieStickinessPolicyError::DuplicatePolicyName(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "InvalidConfigurationRequestException" => {
+                "DuplicatePolicyName" => CreateLBCookieStickinessPolicyError::DuplicatePolicyName(
+                    String::from(parsed_error.message),
+                ),
+                "InvalidConfigurationRequest" => {
                     CreateLBCookieStickinessPolicyError::InvalidConfigurationRequest(String::from(
                         parsed_error.message,
                     ))
                 }
-                "TooManyPoliciesException" => {
-                    CreateLBCookieStickinessPolicyError::TooManyPolicies(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "TooManyPolicies" => CreateLBCookieStickinessPolicyError::TooManyPolicies(
+                    String::from(parsed_error.message),
+                ),
                 _ => CreateLBCookieStickinessPolicyError::Unknown(String::from(body)),
             },
             Err(_) => CreateLBCookieStickinessPolicyError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -6158,49 +6196,55 @@ impl CreateLoadBalancerError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "CertificateNotFoundException" => {
+                "CertificateNotFound" => {
                     CreateLoadBalancerError::CertificateNotFound(String::from(parsed_error.message))
                 }
-                "DuplicateAccessPointNameException" => {
-                    CreateLoadBalancerError::DuplicateAccessPointName(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "DuplicateTagKeysException" => {
+                "DuplicateLoadBalancerName" => CreateLoadBalancerError::DuplicateAccessPointName(
+                    String::from(parsed_error.message),
+                ),
+                "DuplicateTagKeys" => {
                     CreateLoadBalancerError::DuplicateTagKeys(String::from(parsed_error.message))
                 }
-                "InvalidConfigurationRequestException" => {
+                "InvalidConfigurationRequest" => {
                     CreateLoadBalancerError::InvalidConfigurationRequest(String::from(
                         parsed_error.message,
                     ))
                 }
-                "InvalidSchemeException" => {
+                "InvalidScheme" => {
                     CreateLoadBalancerError::InvalidScheme(String::from(parsed_error.message))
                 }
-                "InvalidSecurityGroupException" => CreateLoadBalancerError::InvalidSecurityGroup(
+                "InvalidSecurityGroup" => CreateLoadBalancerError::InvalidSecurityGroup(
                     String::from(parsed_error.message),
                 ),
-                "InvalidSubnetException" => {
+                "InvalidSubnet" => {
                     CreateLoadBalancerError::InvalidSubnet(String::from(parsed_error.message))
                 }
-                "SubnetNotFoundException" => {
+                "SubnetNotFound" => {
                     CreateLoadBalancerError::SubnetNotFound(String::from(parsed_error.message))
                 }
-                "TooManyAccessPointsException" => {
+                "TooManyLoadBalancers" => {
                     CreateLoadBalancerError::TooManyAccessPoints(String::from(parsed_error.message))
                 }
-                "TooManyTagsException" => {
+                "TooManyTags" => {
                     CreateLoadBalancerError::TooManyTags(String::from(parsed_error.message))
                 }
-                "UnsupportedProtocolException" => {
+                "UnsupportedProtocol" => {
                     CreateLoadBalancerError::UnsupportedProtocol(String::from(parsed_error.message))
                 }
                 _ => CreateLoadBalancerError::Unknown(String::from(body)),
             },
             Err(_) => CreateLoadBalancerError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -6281,37 +6325,37 @@ impl CreateLoadBalancerListenersError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "AccessPointNotFoundException" => {
-                    CreateLoadBalancerListenersError::AccessPointNotFound(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "CertificateNotFoundException" => {
-                    CreateLoadBalancerListenersError::CertificateNotFound(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "DuplicateListenerException" => {
-                    CreateLoadBalancerListenersError::DuplicateListener(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "InvalidConfigurationRequestException" => {
+                "LoadBalancerNotFound" => CreateLoadBalancerListenersError::AccessPointNotFound(
+                    String::from(parsed_error.message),
+                ),
+                "CertificateNotFound" => CreateLoadBalancerListenersError::CertificateNotFound(
+                    String::from(parsed_error.message),
+                ),
+                "DuplicateListener" => CreateLoadBalancerListenersError::DuplicateListener(
+                    String::from(parsed_error.message),
+                ),
+                "InvalidConfigurationRequest" => {
                     CreateLoadBalancerListenersError::InvalidConfigurationRequest(String::from(
                         parsed_error.message,
                     ))
                 }
-                "UnsupportedProtocolException" => {
-                    CreateLoadBalancerListenersError::UnsupportedProtocol(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "UnsupportedProtocol" => CreateLoadBalancerListenersError::UnsupportedProtocol(
+                    String::from(parsed_error.message),
+                ),
                 _ => CreateLoadBalancerListenersError::Unknown(String::from(body)),
             },
             Err(_) => CreateLoadBalancerListenersError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -6386,35 +6430,37 @@ impl CreateLoadBalancerPolicyError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "AccessPointNotFoundException" => {
-                    CreateLoadBalancerPolicyError::AccessPointNotFound(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "DuplicatePolicyNameException" => {
-                    CreateLoadBalancerPolicyError::DuplicatePolicyName(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "InvalidConfigurationRequestException" => {
+                "LoadBalancerNotFound" => CreateLoadBalancerPolicyError::AccessPointNotFound(
+                    String::from(parsed_error.message),
+                ),
+                "DuplicatePolicyName" => CreateLoadBalancerPolicyError::DuplicatePolicyName(
+                    String::from(parsed_error.message),
+                ),
+                "InvalidConfigurationRequest" => {
                     CreateLoadBalancerPolicyError::InvalidConfigurationRequest(String::from(
                         parsed_error.message,
                     ))
                 }
-                "PolicyTypeNotFoundException" => {
-                    CreateLoadBalancerPolicyError::PolicyTypeNotFound(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "TooManyPoliciesException" => CreateLoadBalancerPolicyError::TooManyPolicies(
+                "PolicyTypeNotFound" => CreateLoadBalancerPolicyError::PolicyTypeNotFound(
                     String::from(parsed_error.message),
                 ),
+                "TooManyPolicies" => CreateLoadBalancerPolicyError::TooManyPolicies(String::from(
+                    parsed_error.message,
+                )),
                 _ => CreateLoadBalancerPolicyError::Unknown(String::from(body)),
             },
             Err(_) => CreateLoadBalancerPolicyError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -6479,12 +6525,20 @@ impl DeleteLoadBalancerError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DeleteLoadBalancerError::Unknown(String::from(body)),
             },
             Err(_) => DeleteLoadBalancerError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -6546,17 +6600,23 @@ impl DeleteLoadBalancerListenersError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "AccessPointNotFoundException" => {
-                    DeleteLoadBalancerListenersError::AccessPointNotFound(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "LoadBalancerNotFound" => DeleteLoadBalancerListenersError::AccessPointNotFound(
+                    String::from(parsed_error.message),
+                ),
                 _ => DeleteLoadBalancerListenersError::Unknown(String::from(body)),
             },
             Err(_) => DeleteLoadBalancerListenersError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -6621,14 +6681,12 @@ impl DeleteLoadBalancerPolicyError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "AccessPointNotFoundException" => {
-                    DeleteLoadBalancerPolicyError::AccessPointNotFound(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "InvalidConfigurationRequestException" => {
+                "LoadBalancerNotFound" => DeleteLoadBalancerPolicyError::AccessPointNotFound(
+                    String::from(parsed_error.message),
+                ),
+                "InvalidConfigurationRequest" => {
                     DeleteLoadBalancerPolicyError::InvalidConfigurationRequest(String::from(
                         parsed_error.message,
                     ))
@@ -6637,6 +6695,14 @@ impl DeleteLoadBalancerPolicyError {
             },
             Err(_) => DeleteLoadBalancerPolicyError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -6702,22 +6768,28 @@ impl DeregisterInstancesFromLoadBalancerError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "AccessPointNotFoundException" => {
+                "LoadBalancerNotFound" => {
                     DeregisterInstancesFromLoadBalancerError::AccessPointNotFound(String::from(
                         parsed_error.message,
                     ))
                 }
-                "InvalidEndPointException" => {
-                    DeregisterInstancesFromLoadBalancerError::InvalidEndPoint(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "InvalidInstance" => DeregisterInstancesFromLoadBalancerError::InvalidEndPoint(
+                    String::from(parsed_error.message),
+                ),
                 _ => DeregisterInstancesFromLoadBalancerError::Unknown(String::from(body)),
             },
             Err(_) => DeregisterInstancesFromLoadBalancerError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -6779,12 +6851,20 @@ impl DescribeAccountLimitsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeAccountLimitsError::Unknown(String::from(body)),
             },
             Err(_) => DescribeAccountLimitsError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -6848,20 +6928,26 @@ impl DescribeInstanceHealthError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "AccessPointNotFoundException" => {
-                    DescribeInstanceHealthError::AccessPointNotFound(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "InvalidEndPointException" => {
+                "LoadBalancerNotFound" => DescribeInstanceHealthError::AccessPointNotFound(
+                    String::from(parsed_error.message),
+                ),
+                "InvalidInstance" => {
                     DescribeInstanceHealthError::InvalidEndPoint(String::from(parsed_error.message))
                 }
                 _ => DescribeInstanceHealthError::Unknown(String::from(body)),
             },
             Err(_) => DescribeInstanceHealthError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -6927,14 +7013,14 @@ impl DescribeLoadBalancerAttributesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "AccessPointNotFoundException" => {
+                "LoadBalancerNotFound" => {
                     DescribeLoadBalancerAttributesError::AccessPointNotFound(String::from(
                         parsed_error.message,
                     ))
                 }
-                "LoadBalancerAttributeNotFoundException" => {
+                "LoadBalancerAttributeNotFound" => {
                     DescribeLoadBalancerAttributesError::LoadBalancerAttributeNotFound(
                         String::from(parsed_error.message),
                     )
@@ -6943,6 +7029,14 @@ impl DescribeLoadBalancerAttributesError {
             },
             Err(_) => DescribeLoadBalancerAttributesError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -7008,20 +7102,26 @@ impl DescribeLoadBalancerPoliciesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "AccessPointNotFoundException" => {
-                    DescribeLoadBalancerPoliciesError::AccessPointNotFound(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "PolicyNotFoundException" => DescribeLoadBalancerPoliciesError::PolicyNotFound(
+                "LoadBalancerNotFound" => DescribeLoadBalancerPoliciesError::AccessPointNotFound(
+                    String::from(parsed_error.message),
+                ),
+                "PolicyNotFound" => DescribeLoadBalancerPoliciesError::PolicyNotFound(
                     String::from(parsed_error.message),
                 ),
                 _ => DescribeLoadBalancerPoliciesError::Unknown(String::from(body)),
             },
             Err(_) => DescribeLoadBalancerPoliciesError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -7085,17 +7185,23 @@ impl DescribeLoadBalancerPolicyTypesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "PolicyTypeNotFoundException" => {
-                    DescribeLoadBalancerPolicyTypesError::PolicyTypeNotFound(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "PolicyTypeNotFound" => DescribeLoadBalancerPolicyTypesError::PolicyTypeNotFound(
+                    String::from(parsed_error.message),
+                ),
                 _ => DescribeLoadBalancerPolicyTypesError::Unknown(String::from(body)),
             },
             Err(_) => DescribeLoadBalancerPolicyTypesError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -7160,18 +7266,26 @@ impl DescribeLoadBalancersError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "AccessPointNotFoundException" => DescribeLoadBalancersError::AccessPointNotFound(
+                "LoadBalancerNotFound" => DescribeLoadBalancersError::AccessPointNotFound(
                     String::from(parsed_error.message),
                 ),
-                "DependencyThrottleException" => DescribeLoadBalancersError::DependencyThrottle(
+                "DependencyThrottle" => DescribeLoadBalancersError::DependencyThrottle(
                     String::from(parsed_error.message),
                 ),
                 _ => DescribeLoadBalancersError::Unknown(String::from(body)),
             },
             Err(_) => DescribeLoadBalancersError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -7235,15 +7349,23 @@ impl DescribeTagsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "AccessPointNotFoundException" => {
+                "LoadBalancerNotFound" => {
                     DescribeTagsError::AccessPointNotFound(String::from(parsed_error.message))
                 }
                 _ => DescribeTagsError::Unknown(String::from(body)),
             },
             Err(_) => DescribeTagsError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -7306,14 +7428,12 @@ impl DetachLoadBalancerFromSubnetsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "AccessPointNotFoundException" => {
-                    DetachLoadBalancerFromSubnetsError::AccessPointNotFound(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "InvalidConfigurationRequestException" => {
+                "LoadBalancerNotFound" => DetachLoadBalancerFromSubnetsError::AccessPointNotFound(
+                    String::from(parsed_error.message),
+                ),
+                "InvalidConfigurationRequest" => {
                     DetachLoadBalancerFromSubnetsError::InvalidConfigurationRequest(String::from(
                         parsed_error.message,
                     ))
@@ -7322,6 +7442,14 @@ impl DetachLoadBalancerFromSubnetsError {
             },
             Err(_) => DetachLoadBalancerFromSubnetsError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -7387,14 +7515,14 @@ impl DisableAvailabilityZonesForLoadBalancerError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "AccessPointNotFoundException" => {
+                "LoadBalancerNotFound" => {
                     DisableAvailabilityZonesForLoadBalancerError::AccessPointNotFound(
                         String::from(parsed_error.message),
                     )
                 }
-                "InvalidConfigurationRequestException" => {
+                "InvalidConfigurationRequest" => {
                     DisableAvailabilityZonesForLoadBalancerError::InvalidConfigurationRequest(
                         String::from(parsed_error.message),
                     )
@@ -7403,6 +7531,14 @@ impl DisableAvailabilityZonesForLoadBalancerError {
             },
             Err(_) => DisableAvailabilityZonesForLoadBalancerError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -7468,9 +7604,9 @@ impl EnableAvailabilityZonesForLoadBalancerError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "AccessPointNotFoundException" => {
+                "LoadBalancerNotFound" => {
                     EnableAvailabilityZonesForLoadBalancerError::AccessPointNotFound(String::from(
                         parsed_error.message,
                     ))
@@ -7479,6 +7615,14 @@ impl EnableAvailabilityZonesForLoadBalancerError {
             },
             Err(_) => EnableAvailabilityZonesForLoadBalancerError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -7545,19 +7689,17 @@ impl ModifyLoadBalancerAttributesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "AccessPointNotFoundException" => {
-                    ModifyLoadBalancerAttributesError::AccessPointNotFound(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "InvalidConfigurationRequestException" => {
+                "LoadBalancerNotFound" => ModifyLoadBalancerAttributesError::AccessPointNotFound(
+                    String::from(parsed_error.message),
+                ),
+                "InvalidConfigurationRequest" => {
                     ModifyLoadBalancerAttributesError::InvalidConfigurationRequest(String::from(
                         parsed_error.message,
                     ))
                 }
-                "LoadBalancerAttributeNotFoundException" => {
+                "LoadBalancerAttributeNotFound" => {
                     ModifyLoadBalancerAttributesError::LoadBalancerAttributeNotFound(String::from(
                         parsed_error.message,
                     ))
@@ -7566,6 +7708,14 @@ impl ModifyLoadBalancerAttributesError {
             },
             Err(_) => ModifyLoadBalancerAttributesError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -7632,22 +7782,28 @@ impl RegisterInstancesWithLoadBalancerError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "AccessPointNotFoundException" => {
+                "LoadBalancerNotFound" => {
                     RegisterInstancesWithLoadBalancerError::AccessPointNotFound(String::from(
                         parsed_error.message,
                     ))
                 }
-                "InvalidEndPointException" => {
-                    RegisterInstancesWithLoadBalancerError::InvalidEndPoint(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "InvalidInstance" => RegisterInstancesWithLoadBalancerError::InvalidEndPoint(
+                    String::from(parsed_error.message),
+                ),
                 _ => RegisterInstancesWithLoadBalancerError::Unknown(String::from(body)),
             },
             Err(_) => RegisterInstancesWithLoadBalancerError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -7711,15 +7867,23 @@ impl RemoveTagsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "AccessPointNotFoundException" => {
+                "LoadBalancerNotFound" => {
                     RemoveTagsError::AccessPointNotFound(String::from(parsed_error.message))
                 }
                 _ => RemoveTagsError::Unknown(String::from(body)),
             },
             Err(_) => RemoveTagsError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -7788,29 +7952,29 @@ impl SetLoadBalancerListenerSSLCertificateError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "AccessPointNotFoundException" => {
+                "LoadBalancerNotFound" => {
                     SetLoadBalancerListenerSSLCertificateError::AccessPointNotFound(String::from(
                         parsed_error.message,
                     ))
                 }
-                "CertificateNotFoundException" => {
+                "CertificateNotFound" => {
                     SetLoadBalancerListenerSSLCertificateError::CertificateNotFound(String::from(
                         parsed_error.message,
                     ))
                 }
-                "InvalidConfigurationRequestException" => {
+                "InvalidConfigurationRequest" => {
                     SetLoadBalancerListenerSSLCertificateError::InvalidConfigurationRequest(
                         String::from(parsed_error.message),
                     )
                 }
-                "ListenerNotFoundException" => {
+                "ListenerNotFound" => {
                     SetLoadBalancerListenerSSLCertificateError::ListenerNotFound(String::from(
                         parsed_error.message,
                     ))
                 }
-                "UnsupportedProtocolException" => {
+                "UnsupportedProtocol" => {
                     SetLoadBalancerListenerSSLCertificateError::UnsupportedProtocol(String::from(
                         parsed_error.message,
                     ))
@@ -7819,6 +7983,14 @@ impl SetLoadBalancerListenerSSLCertificateError {
             },
             Err(_) => SetLoadBalancerListenerSSLCertificateError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -7891,27 +8063,33 @@ impl SetLoadBalancerPoliciesForBackendServerError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "AccessPointNotFoundException" => {
+                "LoadBalancerNotFound" => {
                     SetLoadBalancerPoliciesForBackendServerError::AccessPointNotFound(
                         String::from(parsed_error.message),
                     )
                 }
-                "InvalidConfigurationRequestException" => {
+                "InvalidConfigurationRequest" => {
                     SetLoadBalancerPoliciesForBackendServerError::InvalidConfigurationRequest(
                         String::from(parsed_error.message),
                     )
                 }
-                "PolicyNotFoundException" => {
-                    SetLoadBalancerPoliciesForBackendServerError::PolicyNotFound(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "PolicyNotFound" => SetLoadBalancerPoliciesForBackendServerError::PolicyNotFound(
+                    String::from(parsed_error.message),
+                ),
                 _ => SetLoadBalancerPoliciesForBackendServerError::Unknown(String::from(body)),
             },
             Err(_) => SetLoadBalancerPoliciesForBackendServerError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -7984,32 +8162,36 @@ impl SetLoadBalancerPoliciesOfListenerError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "AccessPointNotFoundException" => {
+                "LoadBalancerNotFound" => {
                     SetLoadBalancerPoliciesOfListenerError::AccessPointNotFound(String::from(
                         parsed_error.message,
                     ))
                 }
-                "InvalidConfigurationRequestException" => {
+                "InvalidConfigurationRequest" => {
                     SetLoadBalancerPoliciesOfListenerError::InvalidConfigurationRequest(
                         String::from(parsed_error.message),
                     )
                 }
-                "ListenerNotFoundException" => {
-                    SetLoadBalancerPoliciesOfListenerError::ListenerNotFound(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "PolicyNotFoundException" => {
-                    SetLoadBalancerPoliciesOfListenerError::PolicyNotFound(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "ListenerNotFound" => SetLoadBalancerPoliciesOfListenerError::ListenerNotFound(
+                    String::from(parsed_error.message),
+                ),
+                "PolicyNotFound" => SetLoadBalancerPoliciesOfListenerError::PolicyNotFound(
+                    String::from(parsed_error.message),
+                ),
                 _ => SetLoadBalancerPoliciesOfListenerError::Unknown(String::from(body)),
             },
             Err(_) => SetLoadBalancerPoliciesOfListenerError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 

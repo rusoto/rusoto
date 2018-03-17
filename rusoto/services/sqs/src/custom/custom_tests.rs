@@ -1,7 +1,7 @@
 extern crate rusoto_mock;
 
 use std::collections::HashMap;
-use ::{Sqs, SqsClient, SendMessageRequest, ReceiveMessageRequest, MessageAttributeValue};
+use ::{Sqs, SqsClient, SendMessageRequest, ReceiveMessageRequest, MessageAttributeValue, GetQueueUrlRequest, GetQueueUrlError};
 
 use rusoto_core::{Region, SignedRequest};
 use self::rusoto_mock::*;
@@ -116,4 +116,30 @@ fn should_fix_issue_323() {
 
     let client = SqsClient::new(mock, MockCredentialsProvider, Region::UsEast1);
     let _result = client.receive_message(&request).sync().unwrap();
+}
+
+#[test]
+fn test_parse_queue_does_not_exist_error() {
+    let mock = MockRequestDispatcher::with_status(400)
+        .with_body(r#"<?xml version="1.0"?>
+        <ErrorResponse xmlns="http://queue.amazonaws.com/doc/2012-11-05/">
+            <Error>
+                <Type>Sender</Type>
+                <Code>AWS.SimpleQueueService.NonExistentQueue</Code>
+                <Message>The specified queue does not exist for this wsdl version.</Message>
+                <Detail/>
+            </Error>
+            <RequestId>8f8f9957-c0d9-536a-9ca6-ca7483be06ad</RequestId>
+        </ErrorResponse>"#);
+
+    let request = GetQueueUrlRequest {
+        queue_name: "no-such-queue".to_owned(),
+        ..Default::default()
+    };
+
+    let client = SqsClient::new(mock, MockCredentialsProvider, Region::UsEast1);
+    let result = client.get_queue_url(&request).sync();
+    assert!(result.is_err());
+    let err = result.err().unwrap();
+    assert_eq!(GetQueueUrlError::QueueDoesNotExist("The specified queue does not exist for this wsdl version.".to_owned()), err);
 }

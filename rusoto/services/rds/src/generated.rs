@@ -317,7 +317,7 @@ impl AddTagsToResourceMessageSerializer {
             &format!("{}{}", prefix, "ResourceName"),
             &obj.resource_name.replace("+", "%2B"),
         );
-        TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tags"), &obj.tags);
+        TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tag"), &obj.tags);
     }
 }
 
@@ -1009,7 +1009,7 @@ impl CopyDBClusterParameterGroupMessageSerializer {
                 .replace("+", "%2B"),
         );
         if let Some(ref field_value) = obj.tags {
-            TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tags"), field_value);
+            TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tag"), field_value);
         }
         params.put(
             &format!("{}{}", prefix, "TargetDBClusterParameterGroupDescription"),
@@ -1121,7 +1121,7 @@ impl CopyDBClusterSnapshotMessageSerializer {
                 .replace("+", "%2B"),
         );
         if let Some(ref field_value) = obj.tags {
-            TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tags"), field_value);
+            TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tag"), field_value);
         }
         params.put(
             &format!("{}{}", prefix, "TargetDBClusterSnapshotIdentifier"),
@@ -1203,7 +1203,7 @@ impl CopyDBParameterGroupMessageSerializer {
             &obj.source_db_parameter_group_identifier.replace("+", "%2B"),
         );
         if let Some(ref field_value) = obj.tags {
-            TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tags"), field_value);
+            TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tag"), field_value);
         }
         params.put(
             &format!("{}{}", prefix, "TargetDBParameterGroupDescription"),
@@ -1319,7 +1319,7 @@ impl CopyDBSnapshotMessageSerializer {
             &obj.source_db_snapshot_identifier.replace("+", "%2B"),
         );
         if let Some(ref field_value) = obj.tags {
-            TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tags"), field_value);
+            TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tag"), field_value);
         }
         params.put(
             &format!("{}{}", prefix, "TargetDBSnapshotIdentifier"),
@@ -1401,7 +1401,7 @@ impl CopyOptionGroupMessageSerializer {
             &obj.source_option_group_identifier.replace("+", "%2B"),
         );
         if let Some(ref field_value) = obj.tags {
-            TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tags"), field_value);
+            TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tag"), field_value);
         }
         params.put(
             &format!("{}{}", prefix, "TargetOptionGroupDescription"),
@@ -1521,7 +1521,7 @@ impl CreateDBClusterMessageSerializer {
         if let Some(ref field_value) = obj.availability_zones {
             AvailabilityZonesSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "AvailabilityZones"),
+                &format!("{}{}", prefix, "AvailabilityZone"),
                 field_value,
             );
         }
@@ -1636,12 +1636,12 @@ impl CreateDBClusterMessageSerializer {
             );
         }
         if let Some(ref field_value) = obj.tags {
-            TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tags"), field_value);
+            TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tag"), field_value);
         }
         if let Some(ref field_value) = obj.vpc_security_group_ids {
             VpcSecurityGroupIdListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "VpcSecurityGroupIds"),
+                &format!("{}{}", prefix, "VpcSecurityGroupId"),
                 field_value,
             );
         }
@@ -1682,7 +1682,7 @@ impl CreateDBClusterParameterGroupMessageSerializer {
             &obj.description.replace("+", "%2B"),
         );
         if let Some(ref field_value) = obj.tags {
-            TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tags"), field_value);
+            TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tag"), field_value);
         }
     }
 }
@@ -1809,7 +1809,7 @@ impl CreateDBClusterSnapshotMessageSerializer {
             &obj.db_cluster_snapshot_identifier.replace("+", "%2B"),
         );
         if let Some(ref field_value) = obj.tags {
-            TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tags"), field_value);
+            TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tag"), field_value);
         }
     }
 }
@@ -2020,7 +2020,7 @@ impl CreateDBInstanceMessageSerializer {
         if let Some(ref field_value) = obj.db_security_groups {
             DBSecurityGroupNameListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "DBSecurityGroups"),
+                &format!("{}{}", prefix, "DBSecurityGroupName"),
                 field_value,
             );
         }
@@ -2167,7 +2167,7 @@ impl CreateDBInstanceMessageSerializer {
             );
         }
         if let Some(ref field_value) = obj.tags {
-            TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tags"), field_value);
+            TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tag"), field_value);
         }
         if let Some(ref field_value) = obj.tde_credential_arn {
             params.put(
@@ -2190,7 +2190,7 @@ impl CreateDBInstanceMessageSerializer {
         if let Some(ref field_value) = obj.vpc_security_group_ids {
             VpcSecurityGroupIdListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "VpcSecurityGroupIds"),
+                &format!("{}{}", prefix, "VpcSecurityGroupId"),
                 field_value,
             );
         }
@@ -2360,7 +2360,7 @@ impl CreateDBInstanceReadReplicaMessageSerializer {
             );
         }
         if let Some(ref field_value) = obj.tags {
-            TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tags"), field_value);
+            TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tag"), field_value);
         }
     }
 }
@@ -2493,7 +2493,7 @@ impl CreateDBParameterGroupMessageSerializer {
             &obj.description.replace("+", "%2B"),
         );
         if let Some(ref field_value) = obj.tags {
-            TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tags"), field_value);
+            TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tag"), field_value);
         }
     }
 }
@@ -2572,7 +2572,7 @@ impl CreateDBSecurityGroupMessageSerializer {
             &obj.db_security_group_name.replace("+", "%2B"),
         );
         if let Some(ref field_value) = obj.tags {
-            TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tags"), field_value);
+            TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tag"), field_value);
         }
     }
 }
@@ -2651,7 +2651,7 @@ impl CreateDBSnapshotMessageSerializer {
             &obj.db_snapshot_identifier.replace("+", "%2B"),
         );
         if let Some(ref field_value) = obj.tags {
-            TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tags"), field_value);
+            TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tag"), field_value);
         }
     }
 }
@@ -2734,11 +2734,11 @@ impl CreateDBSubnetGroupMessageSerializer {
         );
         SubnetIdentifierListSerializer::serialize(
             params,
-            &format!("{}{}", prefix, "SubnetIds"),
+            &format!("{}{}", prefix, "SubnetIdentifier"),
             &obj.subnet_ids,
         );
         if let Some(ref field_value) = obj.tags {
-            TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tags"), field_value);
+            TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tag"), field_value);
         }
     }
 }
@@ -2826,7 +2826,7 @@ impl CreateEventSubscriptionMessageSerializer {
         if let Some(ref field_value) = obj.event_categories {
             EventCategoriesListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "EventCategories"),
+                &format!("{}{}", prefix, "EventCategory"),
                 field_value,
             );
         }
@@ -2837,7 +2837,7 @@ impl CreateEventSubscriptionMessageSerializer {
         if let Some(ref field_value) = obj.source_ids {
             SourceIdsListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "SourceIds"),
+                &format!("{}{}", prefix, "SourceId"),
                 field_value,
             );
         }
@@ -2852,7 +2852,7 @@ impl CreateEventSubscriptionMessageSerializer {
             &obj.subscription_name.replace("+", "%2B"),
         );
         if let Some(ref field_value) = obj.tags {
-            TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tags"), field_value);
+            TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tag"), field_value);
         }
     }
 }
@@ -2943,7 +2943,7 @@ impl CreateOptionGroupMessageSerializer {
             &obj.option_group_name.replace("+", "%2B"),
         );
         if let Some(ref field_value) = obj.tags {
-            TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tags"), field_value);
+            TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tag"), field_value);
         }
     }
 }
@@ -7107,7 +7107,7 @@ impl DescribeCertificatesMessageSerializer {
         if let Some(ref field_value) = obj.filters {
             FilterListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "Filters"),
+                &format!("{}{}", prefix, "Filter"),
                 field_value,
             );
         }
@@ -7157,7 +7157,7 @@ impl DescribeDBClusterParameterGroupsMessageSerializer {
         if let Some(ref field_value) = obj.filters {
             FilterListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "Filters"),
+                &format!("{}{}", prefix, "Filter"),
                 field_value,
             );
         }
@@ -7207,7 +7207,7 @@ impl DescribeDBClusterParametersMessageSerializer {
         if let Some(ref field_value) = obj.filters {
             FilterListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "Filters"),
+                &format!("{}{}", prefix, "Filter"),
                 field_value,
             );
         }
@@ -7353,7 +7353,7 @@ impl DescribeDBClusterSnapshotsMessageSerializer {
         if let Some(ref field_value) = obj.filters {
             FilterListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "Filters"),
+                &format!("{}{}", prefix, "Filter"),
                 field_value,
             );
         }
@@ -7421,7 +7421,7 @@ impl DescribeDBClustersMessageSerializer {
         if let Some(ref field_value) = obj.filters {
             FilterListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "Filters"),
+                &format!("{}{}", prefix, "Filter"),
                 field_value,
             );
         }
@@ -7498,7 +7498,7 @@ impl DescribeDBEngineVersionsMessageSerializer {
         if let Some(ref field_value) = obj.filters {
             FilterListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "Filters"),
+                &format!("{}{}", prefix, "Filter"),
                 field_value,
             );
         }
@@ -7560,7 +7560,7 @@ impl DescribeDBInstancesMessageSerializer {
         if let Some(ref field_value) = obj.filters {
             FilterListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "Filters"),
+                &format!("{}{}", prefix, "Filter"),
                 field_value,
             );
         }
@@ -7733,7 +7733,7 @@ impl DescribeDBLogFilesMessageSerializer {
         if let Some(ref field_value) = obj.filters {
             FilterListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "Filters"),
+                &format!("{}{}", prefix, "Filter"),
                 field_value,
             );
         }
@@ -7838,7 +7838,7 @@ impl DescribeDBParameterGroupsMessageSerializer {
         if let Some(ref field_value) = obj.filters {
             FilterListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "Filters"),
+                &format!("{}{}", prefix, "Filter"),
                 field_value,
             );
         }
@@ -7887,7 +7887,7 @@ impl DescribeDBParametersMessageSerializer {
         if let Some(ref field_value) = obj.filters {
             FilterListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "Filters"),
+                &format!("{}{}", prefix, "Filter"),
                 field_value,
             );
         }
@@ -7943,7 +7943,7 @@ impl DescribeDBSecurityGroupsMessageSerializer {
         if let Some(ref field_value) = obj.filters {
             FilterListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "Filters"),
+                &format!("{}{}", prefix, "Filter"),
                 field_value,
             );
         }
@@ -8078,7 +8078,7 @@ impl DescribeDBSnapshotsMessageSerializer {
         if let Some(ref field_value) = obj.filters {
             FilterListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "Filters"),
+                &format!("{}{}", prefix, "Filter"),
                 field_value,
             );
         }
@@ -8146,7 +8146,7 @@ impl DescribeDBSubnetGroupsMessageSerializer {
         if let Some(ref field_value) = obj.filters {
             FilterListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "Filters"),
+                &format!("{}{}", prefix, "Filter"),
                 field_value,
             );
         }
@@ -8198,7 +8198,7 @@ impl DescribeEngineDefaultClusterParametersMessageSerializer {
         if let Some(ref field_value) = obj.filters {
             FilterListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "Filters"),
+                &format!("{}{}", prefix, "Filter"),
                 field_value,
             );
         }
@@ -8293,7 +8293,7 @@ impl DescribeEngineDefaultParametersMessageSerializer {
         if let Some(ref field_value) = obj.filters {
             FilterListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "Filters"),
+                &format!("{}{}", prefix, "Filter"),
                 field_value,
             );
         }
@@ -8380,7 +8380,7 @@ impl DescribeEventCategoriesMessageSerializer {
         if let Some(ref field_value) = obj.filters {
             FilterListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "Filters"),
+                &format!("{}{}", prefix, "Filter"),
                 field_value,
             );
         }
@@ -8418,7 +8418,7 @@ impl DescribeEventSubscriptionsMessageSerializer {
         if let Some(ref field_value) = obj.filters {
             FilterListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "Filters"),
+                &format!("{}{}", prefix, "Filter"),
                 field_value,
             );
         }
@@ -8490,14 +8490,14 @@ impl DescribeEventsMessageSerializer {
         if let Some(ref field_value) = obj.event_categories {
             EventCategoriesListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "EventCategories"),
+                &format!("{}{}", prefix, "EventCategory"),
                 field_value,
             );
         }
         if let Some(ref field_value) = obj.filters {
             FilterListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "Filters"),
+                &format!("{}{}", prefix, "Filter"),
                 field_value,
             );
         }
@@ -8565,7 +8565,7 @@ impl DescribeOptionGroupOptionsMessageSerializer {
         if let Some(ref field_value) = obj.filters {
             FilterListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "Filters"),
+                &format!("{}{}", prefix, "Filter"),
                 field_value,
             );
         }
@@ -8625,7 +8625,7 @@ impl DescribeOptionGroupsMessageSerializer {
         if let Some(ref field_value) = obj.filters {
             FilterListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "Filters"),
+                &format!("{}{}", prefix, "Filter"),
                 field_value,
             );
         }
@@ -8705,7 +8705,7 @@ impl DescribeOrderableDBInstanceOptionsMessageSerializer {
         if let Some(ref field_value) = obj.filters {
             FilterListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "Filters"),
+                &format!("{}{}", prefix, "Filter"),
                 field_value,
             );
         }
@@ -8761,7 +8761,7 @@ impl DescribePendingMaintenanceActionsMessageSerializer {
         if let Some(ref field_value) = obj.filters {
             FilterListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "Filters"),
+                &format!("{}{}", prefix, "Filter"),
                 field_value,
             );
         }
@@ -8835,7 +8835,7 @@ impl DescribeReservedDBInstancesMessageSerializer {
         if let Some(ref field_value) = obj.filters {
             FilterListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "Filters"),
+                &format!("{}{}", prefix, "Filter"),
                 field_value,
             );
         }
@@ -8935,7 +8935,7 @@ impl DescribeReservedDBInstancesOfferingsMessageSerializer {
         if let Some(ref field_value) = obj.filters {
             FilterListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "Filters"),
+                &format!("{}{}", prefix, "Filter"),
                 field_value,
             );
         }
@@ -9003,7 +9003,7 @@ impl DescribeSourceRegionsMessageSerializer {
         if let Some(ref field_value) = obj.filters {
             FilterListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "Filters"),
+                &format!("{}{}", prefix, "Filter"),
                 field_value,
             );
         }
@@ -10351,7 +10351,7 @@ impl FilterSerializer {
         );
         FilterValueListSerializer::serialize(
             params,
-            &format!("{}{}", prefix, "Values"),
+            &format!("{}{}", prefix, "Value"),
             &obj.values,
         );
     }
@@ -10531,7 +10531,7 @@ impl ListTagsForResourceMessageSerializer {
         if let Some(ref field_value) = obj.filters {
             FilterListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "Filters"),
+                &format!("{}{}", prefix, "Filter"),
                 field_value,
             );
         }
@@ -10661,7 +10661,7 @@ impl ModifyDBClusterMessageSerializer {
         if let Some(ref field_value) = obj.vpc_security_group_ids {
             VpcSecurityGroupIdListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "VpcSecurityGroupIds"),
+                &format!("{}{}", prefix, "VpcSecurityGroupId"),
                 field_value,
             );
         }
@@ -10692,7 +10692,7 @@ impl ModifyDBClusterParameterGroupMessageSerializer {
         );
         ParametersListSerializer::serialize(
             params,
-            &format!("{}{}", prefix, "Parameters"),
+            &format!("{}{}", prefix, "Parameter"),
             &obj.parameters,
         );
     }
@@ -10776,14 +10776,14 @@ impl ModifyDBClusterSnapshotAttributeMessageSerializer {
         if let Some(ref field_value) = obj.values_to_add {
             AttributeValueListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "ValuesToAdd"),
+                &format!("{}{}", prefix, "AttributeValue"),
                 field_value,
             );
         }
         if let Some(ref field_value) = obj.values_to_remove {
             AttributeValueListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "ValuesToRemove"),
+                &format!("{}{}", prefix, "AttributeValue"),
                 field_value,
             );
         }
@@ -10990,7 +10990,7 @@ impl ModifyDBInstanceMessageSerializer {
         if let Some(ref field_value) = obj.db_security_groups {
             DBSecurityGroupNameListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "DBSecurityGroups"),
+                &format!("{}{}", prefix, "DBSecurityGroupName"),
                 field_value,
             );
         }
@@ -11129,7 +11129,7 @@ impl ModifyDBInstanceMessageSerializer {
         if let Some(ref field_value) = obj.vpc_security_group_ids {
             VpcSecurityGroupIdListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "VpcSecurityGroupIds"),
+                &format!("{}{}", prefix, "VpcSecurityGroupId"),
                 field_value,
             );
         }
@@ -11207,7 +11207,7 @@ impl ModifyDBParameterGroupMessageSerializer {
         );
         ParametersListSerializer::serialize(
             params,
-            &format!("{}{}", prefix, "Parameters"),
+            &format!("{}{}", prefix, "Parameter"),
             &obj.parameters,
         );
     }
@@ -11246,14 +11246,14 @@ impl ModifyDBSnapshotAttributeMessageSerializer {
         if let Some(ref field_value) = obj.values_to_add {
             AttributeValueListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "ValuesToAdd"),
+                &format!("{}{}", prefix, "AttributeValue"),
                 field_value,
             );
         }
         if let Some(ref field_value) = obj.values_to_remove {
             AttributeValueListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "ValuesToRemove"),
+                &format!("{}{}", prefix, "AttributeValue"),
                 field_value,
             );
         }
@@ -11425,7 +11425,7 @@ impl ModifyDBSubnetGroupMessageSerializer {
         );
         SubnetIdentifierListSerializer::serialize(
             params,
-            &format!("{}{}", prefix, "SubnetIds"),
+            &format!("{}{}", prefix, "SubnetIdentifier"),
             &obj.subnet_ids,
         );
     }
@@ -11511,7 +11511,7 @@ impl ModifyEventSubscriptionMessageSerializer {
         if let Some(ref field_value) = obj.event_categories {
             EventCategoriesListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "EventCategories"),
+                &format!("{}{}", prefix, "EventCategory"),
                 field_value,
             );
         }
@@ -11615,7 +11615,7 @@ impl ModifyOptionGroupMessageSerializer {
         if let Some(ref field_value) = obj.options_to_include {
             OptionConfigurationListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "OptionsToInclude"),
+                &format!("{}{}", prefix, "OptionConfiguration"),
                 field_value,
             );
         }
@@ -11818,7 +11818,7 @@ impl OptionConfigurationSerializer {
         if let Some(ref field_value) = obj.db_security_group_memberships {
             DBSecurityGroupNameListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "DBSecurityGroupMemberships"),
+                &format!("{}{}", prefix, "DBSecurityGroupName"),
                 field_value,
             );
         }
@@ -11829,7 +11829,7 @@ impl OptionConfigurationSerializer {
         if let Some(ref field_value) = obj.option_settings {
             OptionSettingsListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "OptionSettings"),
+                &format!("{}{}", prefix, "OptionSetting"),
                 field_value,
             );
         }
@@ -11848,7 +11848,7 @@ impl OptionConfigurationSerializer {
         if let Some(ref field_value) = obj.vpc_security_group_memberships {
             VpcSecurityGroupIdListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "VpcSecurityGroupMemberships"),
+                &format!("{}{}", prefix, "VpcSecurityGroupId"),
                 field_value,
             );
         }
@@ -14074,7 +14074,7 @@ impl PurchaseReservedDBInstancesOfferingMessageSerializer {
             &obj.reserved_db_instances_offering_id.replace("+", "%2B"),
         );
         if let Some(ref field_value) = obj.tags {
-            TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tags"), field_value);
+            TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tag"), field_value);
         }
     }
 }
@@ -15137,7 +15137,7 @@ impl ResetDBClusterParameterGroupMessageSerializer {
         if let Some(ref field_value) = obj.parameters {
             ParametersListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "Parameters"),
+                &format!("{}{}", prefix, "Parameter"),
                 field_value,
             );
         }
@@ -15177,7 +15177,7 @@ impl ResetDBParameterGroupMessageSerializer {
         if let Some(ref field_value) = obj.parameters {
             ParametersListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "Parameters"),
+                &format!("{}{}", prefix, "Parameter"),
                 field_value,
             );
         }
@@ -15314,7 +15314,7 @@ impl RestoreDBClusterFromS3MessageSerializer {
         if let Some(ref field_value) = obj.availability_zones {
             AvailabilityZonesSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "AvailabilityZones"),
+                &format!("{}{}", prefix, "AvailabilityZone"),
                 field_value,
             );
         }
@@ -15435,12 +15435,12 @@ impl RestoreDBClusterFromS3MessageSerializer {
             );
         }
         if let Some(ref field_value) = obj.tags {
-            TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tags"), field_value);
+            TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tag"), field_value);
         }
         if let Some(ref field_value) = obj.vpc_security_group_ids {
             VpcSecurityGroupIdListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "VpcSecurityGroupIds"),
+                &format!("{}{}", prefix, "VpcSecurityGroupId"),
                 field_value,
             );
         }
@@ -15535,7 +15535,7 @@ impl RestoreDBClusterFromSnapshotMessageSerializer {
         if let Some(ref field_value) = obj.availability_zones {
             AvailabilityZonesSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "AvailabilityZones"),
+                &format!("{}{}", prefix, "AvailabilityZone"),
                 field_value,
             );
         }
@@ -15594,12 +15594,12 @@ impl RestoreDBClusterFromSnapshotMessageSerializer {
             &obj.snapshot_identifier.replace("+", "%2B"),
         );
         if let Some(ref field_value) = obj.tags {
-            TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tags"), field_value);
+            TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tag"), field_value);
         }
         if let Some(ref field_value) = obj.vpc_security_group_ids {
             VpcSecurityGroupIdListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "VpcSecurityGroupIds"),
+                &format!("{}{}", prefix, "VpcSecurityGroupId"),
                 field_value,
             );
         }
@@ -15739,7 +15739,7 @@ impl RestoreDBClusterToPointInTimeMessageSerializer {
             &obj.source_db_cluster_identifier.replace("+", "%2B"),
         );
         if let Some(ref field_value) = obj.tags {
-            TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tags"), field_value);
+            TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tag"), field_value);
         }
         if let Some(ref field_value) = obj.use_latest_restorable_time {
             params.put(
@@ -15750,7 +15750,7 @@ impl RestoreDBClusterToPointInTimeMessageSerializer {
         if let Some(ref field_value) = obj.vpc_security_group_ids {
             VpcSecurityGroupIdListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "VpcSecurityGroupIds"),
+                &format!("{}{}", prefix, "VpcSecurityGroupId"),
                 field_value,
             );
         }
@@ -15970,7 +15970,7 @@ impl RestoreDBInstanceFromDBSnapshotMessageSerializer {
             );
         }
         if let Some(ref field_value) = obj.tags {
-            TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tags"), field_value);
+            TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tag"), field_value);
         }
         if let Some(ref field_value) = obj.tde_credential_arn {
             params.put(
@@ -16176,7 +16176,7 @@ impl RestoreDBInstanceFromS3MessageSerializer {
         if let Some(ref field_value) = obj.db_security_groups {
             DBSecurityGroupNameListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "DBSecurityGroups"),
+                &format!("{}{}", prefix, "DBSecurityGroupName"),
                 field_value,
             );
         }
@@ -16327,12 +16327,12 @@ impl RestoreDBInstanceFromS3MessageSerializer {
             );
         }
         if let Some(ref field_value) = obj.tags {
-            TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tags"), field_value);
+            TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tag"), field_value);
         }
         if let Some(ref field_value) = obj.vpc_security_group_ids {
             VpcSecurityGroupIdListSerializer::serialize(
                 params,
-                &format!("{}{}", prefix, "VpcSecurityGroupIds"),
+                &format!("{}{}", prefix, "VpcSecurityGroupId"),
                 field_value,
             );
         }
@@ -16560,7 +16560,7 @@ impl RestoreDBInstanceToPointInTimeMessageSerializer {
             );
         }
         if let Some(ref field_value) = obj.tags {
-            TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tags"), field_value);
+            TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tag"), field_value);
         }
         params.put(
             &format!("{}{}", prefix, "TargetDBInstanceIdentifier"),
@@ -17961,17 +17961,17 @@ impl AddRoleToDBClusterError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "DBClusterNotFoundFault" => AddRoleToDBClusterError::DBClusterNotFoundFault(
                     String::from(parsed_error.message),
                 ),
-                "DBClusterRoleAlreadyExistsFault" => {
+                "DBClusterRoleAlreadyExists" => {
                     AddRoleToDBClusterError::DBClusterRoleAlreadyExistsFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "DBClusterRoleQuotaExceededFault" => {
+                "DBClusterRoleQuotaExceeded" => {
                     AddRoleToDBClusterError::DBClusterRoleQuotaExceededFault(String::from(
                         parsed_error.message,
                     ))
@@ -17985,6 +17985,14 @@ impl AddRoleToDBClusterError {
             },
             Err(_) => AddRoleToDBClusterError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -18052,14 +18060,12 @@ impl AddSourceIdentifierToSubscriptionError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "SourceNotFoundFault" => {
-                    AddSourceIdentifierToSubscriptionError::SourceNotFoundFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "SubscriptionNotFoundFault" => {
+                "SourceNotFound" => AddSourceIdentifierToSubscriptionError::SourceNotFoundFault(
+                    String::from(parsed_error.message),
+                ),
+                "SubscriptionNotFound" => {
                     AddSourceIdentifierToSubscriptionError::SubscriptionNotFoundFault(
                         String::from(parsed_error.message),
                     )
@@ -18068,6 +18074,14 @@ impl AddSourceIdentifierToSubscriptionError {
             },
             Err(_) => AddSourceIdentifierToSubscriptionError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -18135,21 +18149,29 @@ impl AddTagsToResourceError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "DBClusterNotFoundFault" => AddTagsToResourceError::DBClusterNotFoundFault(
                     String::from(parsed_error.message),
                 ),
-                "DBInstanceNotFoundFault" => AddTagsToResourceError::DBInstanceNotFoundFault(
+                "DBInstanceNotFound" => AddTagsToResourceError::DBInstanceNotFoundFault(
                     String::from(parsed_error.message),
                 ),
-                "DBSnapshotNotFoundFault" => AddTagsToResourceError::DBSnapshotNotFoundFault(
+                "DBSnapshotNotFound" => AddTagsToResourceError::DBSnapshotNotFoundFault(
                     String::from(parsed_error.message),
                 ),
                 _ => AddTagsToResourceError::Unknown(String::from(body)),
             },
             Err(_) => AddTagsToResourceError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -18214,7 +18236,7 @@ impl ApplyPendingMaintenanceActionError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "ResourceNotFoundFault" => {
                     ApplyPendingMaintenanceActionError::ResourceNotFoundFault(String::from(
@@ -18225,6 +18247,14 @@ impl ApplyPendingMaintenanceActionError {
             },
             Err(_) => ApplyPendingMaintenanceActionError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -18293,24 +18323,24 @@ impl AuthorizeDBSecurityGroupIngressError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "AuthorizationAlreadyExistsFault" => {
+                "AuthorizationAlreadyExists" => {
                     AuthorizeDBSecurityGroupIngressError::AuthorizationAlreadyExistsFault(
                         String::from(parsed_error.message),
                     )
                 }
-                "AuthorizationQuotaExceededFault" => {
+                "AuthorizationQuotaExceeded" => {
                     AuthorizeDBSecurityGroupIngressError::AuthorizationQuotaExceededFault(
                         String::from(parsed_error.message),
                     )
                 }
-                "DBSecurityGroupNotFoundFault" => {
+                "DBSecurityGroupNotFound" => {
                     AuthorizeDBSecurityGroupIngressError::DBSecurityGroupNotFoundFault(
                         String::from(parsed_error.message),
                     )
                 }
-                "InvalidDBSecurityGroupStateFault" => {
+                "InvalidDBSecurityGroupState" => {
                     AuthorizeDBSecurityGroupIngressError::InvalidDBSecurityGroupStateFault(
                         String::from(parsed_error.message),
                     )
@@ -18319,6 +18349,14 @@ impl AuthorizeDBSecurityGroupIngressError {
             },
             Err(_) => AuthorizeDBSecurityGroupIngressError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -18394,19 +18432,19 @@ impl CopyDBClusterParameterGroupError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "DBParameterGroupAlreadyExistsFault" => {
+                "DBParameterGroupAlreadyExists" => {
                     CopyDBClusterParameterGroupError::DBParameterGroupAlreadyExistsFault(
                         String::from(parsed_error.message),
                     )
                 }
-                "DBParameterGroupNotFoundFault" => {
+                "DBParameterGroupNotFound" => {
                     CopyDBClusterParameterGroupError::DBParameterGroupNotFoundFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "DBParameterGroupQuotaExceededFault" => {
+                "DBParameterGroupQuotaExceeded" => {
                     CopyDBClusterParameterGroupError::DBParameterGroupQuotaExceededFault(
                         String::from(parsed_error.message),
                     )
@@ -18415,6 +18453,14 @@ impl CopyDBClusterParameterGroupError {
             },
             Err(_) => CopyDBClusterParameterGroupError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -18493,7 +18539,7 @@ impl CopyDBClusterSnapshotError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "DBClusterSnapshotAlreadyExistsFault" => {
                     CopyDBClusterSnapshotError::DBClusterSnapshotAlreadyExistsFault(String::from(
@@ -18520,15 +18566,21 @@ impl CopyDBClusterSnapshotError {
                         parsed_error.message,
                     ))
                 }
-                "SnapshotQuotaExceededFault" => {
-                    CopyDBClusterSnapshotError::SnapshotQuotaExceededFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "SnapshotQuotaExceeded" => CopyDBClusterSnapshotError::SnapshotQuotaExceededFault(
+                    String::from(parsed_error.message),
+                ),
                 _ => CopyDBClusterSnapshotError::Unknown(String::from(body)),
             },
             Err(_) => CopyDBClusterSnapshotError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -18600,19 +18652,19 @@ impl CopyDBParameterGroupError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "DBParameterGroupAlreadyExistsFault" => {
+                "DBParameterGroupAlreadyExists" => {
                     CopyDBParameterGroupError::DBParameterGroupAlreadyExistsFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "DBParameterGroupNotFoundFault" => {
+                "DBParameterGroupNotFound" => {
                     CopyDBParameterGroupError::DBParameterGroupNotFoundFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "DBParameterGroupQuotaExceededFault" => {
+                "DBParameterGroupQuotaExceeded" => {
                     CopyDBParameterGroupError::DBParameterGroupQuotaExceededFault(String::from(
                         parsed_error.message,
                     ))
@@ -18621,6 +18673,14 @@ impl CopyDBParameterGroupError {
             },
             Err(_) => CopyDBParameterGroupError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -18693,29 +18753,35 @@ impl CopyDBSnapshotError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "DBSnapshotAlreadyExistsFault" => {
-                    CopyDBSnapshotError::DBSnapshotAlreadyExistsFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "DBSnapshotNotFoundFault" => {
+                "DBSnapshotAlreadyExists" => CopyDBSnapshotError::DBSnapshotAlreadyExistsFault(
+                    String::from(parsed_error.message),
+                ),
+                "DBSnapshotNotFound" => {
                     CopyDBSnapshotError::DBSnapshotNotFoundFault(String::from(parsed_error.message))
                 }
-                "InvalidDBSnapshotStateFault" => CopyDBSnapshotError::InvalidDBSnapshotStateFault(
+                "InvalidDBSnapshotState" => CopyDBSnapshotError::InvalidDBSnapshotStateFault(
                     String::from(parsed_error.message),
                 ),
                 "KMSKeyNotAccessibleFault" => CopyDBSnapshotError::KMSKeyNotAccessibleFault(
                     String::from(parsed_error.message),
                 ),
-                "SnapshotQuotaExceededFault" => CopyDBSnapshotError::SnapshotQuotaExceededFault(
+                "SnapshotQuotaExceeded" => CopyDBSnapshotError::SnapshotQuotaExceededFault(
                     String::from(parsed_error.message),
                 ),
                 _ => CopyDBSnapshotError::Unknown(String::from(body)),
             },
             Err(_) => CopyDBSnapshotError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -18784,7 +18850,7 @@ impl CopyOptionGroupError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "OptionGroupAlreadyExistsFault" => {
                     CopyOptionGroupError::OptionGroupAlreadyExistsFault(String::from(
@@ -18803,6 +18869,14 @@ impl CopyOptionGroupError {
             },
             Err(_) => CopyOptionGroupError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -18893,7 +18967,7 @@ impl CreateDBClusterError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "DBClusterAlreadyExistsFault" => {
                     CreateDBClusterError::DBClusterAlreadyExistsFault(String::from(
@@ -18903,7 +18977,7 @@ impl CreateDBClusterError {
                 "DBClusterNotFoundFault" => {
                     CreateDBClusterError::DBClusterNotFoundFault(String::from(parsed_error.message))
                 }
-                "DBClusterParameterGroupNotFoundFault" => {
+                "DBClusterParameterGroupNotFound" => {
                     CreateDBClusterError::DBClusterParameterGroupNotFoundFault(String::from(
                         parsed_error.message,
                     ))
@@ -18913,7 +18987,7 @@ impl CreateDBClusterError {
                         parsed_error.message,
                     ))
                 }
-                "DBInstanceNotFoundFault" => CreateDBClusterError::DBInstanceNotFoundFault(
+                "DBInstanceNotFound" => CreateDBClusterError::DBInstanceNotFoundFault(
                     String::from(parsed_error.message),
                 ),
                 "DBSubnetGroupDoesNotCoverEnoughAZs" => {
@@ -18924,7 +18998,7 @@ impl CreateDBClusterError {
                 "DBSubnetGroupNotFoundFault" => CreateDBClusterError::DBSubnetGroupNotFoundFault(
                     String::from(parsed_error.message),
                 ),
-                "InsufficientStorageClusterCapacityFault" => {
+                "InsufficientStorageClusterCapacity" => {
                     CreateDBClusterError::InsufficientStorageClusterCapacityFault(String::from(
                         parsed_error.message,
                     ))
@@ -18932,11 +19006,9 @@ impl CreateDBClusterError {
                 "InvalidDBClusterStateFault" => CreateDBClusterError::InvalidDBClusterStateFault(
                     String::from(parsed_error.message),
                 ),
-                "InvalidDBInstanceStateFault" => {
-                    CreateDBClusterError::InvalidDBInstanceStateFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "InvalidDBInstanceState" => CreateDBClusterError::InvalidDBInstanceStateFault(
+                    String::from(parsed_error.message),
+                ),
                 "InvalidDBSubnetGroupStateFault" => {
                     CreateDBClusterError::InvalidDBSubnetGroupStateFault(String::from(
                         parsed_error.message,
@@ -18953,13 +19025,21 @@ impl CreateDBClusterError {
                 "KMSKeyNotAccessibleFault" => CreateDBClusterError::KMSKeyNotAccessibleFault(
                     String::from(parsed_error.message),
                 ),
-                "StorageQuotaExceededFault" => CreateDBClusterError::StorageQuotaExceededFault(
+                "StorageQuotaExceeded" => CreateDBClusterError::StorageQuotaExceededFault(
                     String::from(parsed_error.message),
                 ),
                 _ => CreateDBClusterError::Unknown(String::from(body)),
             },
             Err(_) => CreateDBClusterError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -19036,14 +19116,14 @@ impl CreateDBClusterParameterGroupError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "DBParameterGroupAlreadyExistsFault" => {
+                "DBParameterGroupAlreadyExists" => {
                     CreateDBClusterParameterGroupError::DBParameterGroupAlreadyExistsFault(
                         String::from(parsed_error.message),
                     )
                 }
-                "DBParameterGroupQuotaExceededFault" => {
+                "DBParameterGroupQuotaExceeded" => {
                     CreateDBClusterParameterGroupError::DBParameterGroupQuotaExceededFault(
                         String::from(parsed_error.message),
                     )
@@ -19052,6 +19132,14 @@ impl CreateDBClusterParameterGroupError {
             },
             Err(_) => CreateDBClusterParameterGroupError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -19127,7 +19215,7 @@ impl CreateDBClusterSnapshotError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "DBClusterNotFoundFault" => CreateDBClusterSnapshotError::DBClusterNotFoundFault(
                     String::from(parsed_error.message),
@@ -19147,7 +19235,7 @@ impl CreateDBClusterSnapshotError {
                         parsed_error.message,
                     ))
                 }
-                "SnapshotQuotaExceededFault" => {
+                "SnapshotQuotaExceeded" => {
                     CreateDBClusterSnapshotError::SnapshotQuotaExceededFault(String::from(
                         parsed_error.message,
                     ))
@@ -19156,6 +19244,14 @@ impl CreateDBClusterSnapshotError {
             },
             Err(_) => CreateDBClusterSnapshotError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -19256,29 +19352,25 @@ impl CreateDBInstanceError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "AuthorizationNotFoundFault" => CreateDBInstanceError::AuthorizationNotFoundFault(
+                "AuthorizationNotFound" => CreateDBInstanceError::AuthorizationNotFoundFault(
                     String::from(parsed_error.message),
                 ),
                 "DBClusterNotFoundFault" => CreateDBInstanceError::DBClusterNotFoundFault(
                     String::from(parsed_error.message),
                 ),
-                "DBInstanceAlreadyExistsFault" => {
-                    CreateDBInstanceError::DBInstanceAlreadyExistsFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "DBParameterGroupNotFoundFault" => {
+                "DBInstanceAlreadyExists" => CreateDBInstanceError::DBInstanceAlreadyExistsFault(
+                    String::from(parsed_error.message),
+                ),
+                "DBParameterGroupNotFound" => {
                     CreateDBInstanceError::DBParameterGroupNotFoundFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "DBSecurityGroupNotFoundFault" => {
-                    CreateDBInstanceError::DBSecurityGroupNotFoundFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "DBSecurityGroupNotFound" => CreateDBInstanceError::DBSecurityGroupNotFoundFault(
+                    String::from(parsed_error.message),
+                ),
                 "DBSubnetGroupDoesNotCoverEnoughAZs" => {
                     CreateDBInstanceError::DBSubnetGroupDoesNotCoverEnoughAZs(String::from(
                         parsed_error.message,
@@ -19290,10 +19382,10 @@ impl CreateDBInstanceError {
                 "DomainNotFoundFault" => {
                     CreateDBInstanceError::DomainNotFoundFault(String::from(parsed_error.message))
                 }
-                "InstanceQuotaExceededFault" => CreateDBInstanceError::InstanceQuotaExceededFault(
+                "InstanceQuotaExceeded" => CreateDBInstanceError::InstanceQuotaExceededFault(
                     String::from(parsed_error.message),
                 ),
-                "InsufficientDBInstanceCapacityFault" => {
+                "InsufficientDBInstanceCapacity" => {
                     CreateDBInstanceError::InsufficientDBInstanceCapacityFault(String::from(
                         parsed_error.message,
                     ))
@@ -19320,18 +19412,24 @@ impl CreateDBInstanceError {
                         parsed_error.message,
                     ))
                 }
-                "StorageQuotaExceededFault" => CreateDBInstanceError::StorageQuotaExceededFault(
+                "StorageQuotaExceeded" => CreateDBInstanceError::StorageQuotaExceededFault(
                     String::from(parsed_error.message),
                 ),
-                "StorageTypeNotSupportedFault" => {
-                    CreateDBInstanceError::StorageTypeNotSupportedFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "StorageTypeNotSupported" => CreateDBInstanceError::StorageTypeNotSupportedFault(
+                    String::from(parsed_error.message),
+                ),
                 _ => CreateDBInstanceError::Unknown(String::from(body)),
             },
             Err(_) => CreateDBInstanceError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -19443,24 +19541,22 @@ impl CreateDBInstanceReadReplicaError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "DBInstanceAlreadyExistsFault" => {
+                "DBInstanceAlreadyExists" => {
                     CreateDBInstanceReadReplicaError::DBInstanceAlreadyExistsFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "DBInstanceNotFoundFault" => {
-                    CreateDBInstanceReadReplicaError::DBInstanceNotFoundFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "DBParameterGroupNotFoundFault" => {
+                "DBInstanceNotFound" => CreateDBInstanceReadReplicaError::DBInstanceNotFoundFault(
+                    String::from(parsed_error.message),
+                ),
+                "DBParameterGroupNotFound" => {
                     CreateDBInstanceReadReplicaError::DBParameterGroupNotFoundFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "DBSecurityGroupNotFoundFault" => {
+                "DBSecurityGroupNotFound" => {
                     CreateDBInstanceReadReplicaError::DBSecurityGroupNotFoundFault(String::from(
                         parsed_error.message,
                     ))
@@ -19480,17 +19576,17 @@ impl CreateDBInstanceReadReplicaError {
                         parsed_error.message,
                     ))
                 }
-                "InstanceQuotaExceededFault" => {
+                "InstanceQuotaExceeded" => {
                     CreateDBInstanceReadReplicaError::InstanceQuotaExceededFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "InsufficientDBInstanceCapacityFault" => {
+                "InsufficientDBInstanceCapacity" => {
                     CreateDBInstanceReadReplicaError::InsufficientDBInstanceCapacityFault(
                         String::from(parsed_error.message),
                     )
                 }
-                "InvalidDBInstanceStateFault" => {
+                "InvalidDBInstanceState" => {
                     CreateDBInstanceReadReplicaError::InvalidDBInstanceStateFault(String::from(
                         parsed_error.message,
                     ))
@@ -19523,12 +19619,12 @@ impl CreateDBInstanceReadReplicaError {
                         String::from(parsed_error.message),
                     )
                 }
-                "StorageQuotaExceededFault" => {
+                "StorageQuotaExceeded" => {
                     CreateDBInstanceReadReplicaError::StorageQuotaExceededFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "StorageTypeNotSupportedFault" => {
+                "StorageTypeNotSupported" => {
                     CreateDBInstanceReadReplicaError::StorageTypeNotSupportedFault(String::from(
                         parsed_error.message,
                     ))
@@ -19537,6 +19633,14 @@ impl CreateDBInstanceReadReplicaError {
             },
             Err(_) => CreateDBInstanceReadReplicaError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -19624,14 +19728,14 @@ impl CreateDBParameterGroupError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "DBParameterGroupAlreadyExistsFault" => {
+                "DBParameterGroupAlreadyExists" => {
                     CreateDBParameterGroupError::DBParameterGroupAlreadyExistsFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "DBParameterGroupQuotaExceededFault" => {
+                "DBParameterGroupQuotaExceeded" => {
                     CreateDBParameterGroupError::DBParameterGroupQuotaExceededFault(String::from(
                         parsed_error.message,
                     ))
@@ -19640,6 +19744,14 @@ impl CreateDBParameterGroupError {
             },
             Err(_) => CreateDBParameterGroupError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -19707,19 +19819,19 @@ impl CreateDBSecurityGroupError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "DBSecurityGroupAlreadyExistsFault" => {
+                "DBSecurityGroupAlreadyExists" => {
                     CreateDBSecurityGroupError::DBSecurityGroupAlreadyExistsFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "DBSecurityGroupNotSupportedFault" => {
+                "DBSecurityGroupNotSupported" => {
                     CreateDBSecurityGroupError::DBSecurityGroupNotSupportedFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "DBSecurityGroupQuotaExceededFault" => {
+                "QuotaExceeded.DBSecurityGroup" => {
                     CreateDBSecurityGroupError::DBSecurityGroupQuotaExceededFault(String::from(
                         parsed_error.message,
                     ))
@@ -19728,6 +19840,14 @@ impl CreateDBSecurityGroupError {
             },
             Err(_) => CreateDBSecurityGroupError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -19798,28 +19918,32 @@ impl CreateDBSnapshotError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "DBInstanceNotFoundFault" => CreateDBSnapshotError::DBInstanceNotFoundFault(
+                "DBInstanceNotFound" => CreateDBSnapshotError::DBInstanceNotFoundFault(
                     String::from(parsed_error.message),
                 ),
-                "DBSnapshotAlreadyExistsFault" => {
-                    CreateDBSnapshotError::DBSnapshotAlreadyExistsFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "InvalidDBInstanceStateFault" => {
-                    CreateDBSnapshotError::InvalidDBInstanceStateFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "SnapshotQuotaExceededFault" => CreateDBSnapshotError::SnapshotQuotaExceededFault(
+                "DBSnapshotAlreadyExists" => CreateDBSnapshotError::DBSnapshotAlreadyExistsFault(
+                    String::from(parsed_error.message),
+                ),
+                "InvalidDBInstanceState" => CreateDBSnapshotError::InvalidDBInstanceStateFault(
+                    String::from(parsed_error.message),
+                ),
+                "SnapshotQuotaExceeded" => CreateDBSnapshotError::SnapshotQuotaExceededFault(
                     String::from(parsed_error.message),
                 ),
                 _ => CreateDBSnapshotError::Unknown(String::from(body)),
             },
             Err(_) => CreateDBSnapshotError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -19891,9 +20015,9 @@ impl CreateDBSubnetGroupError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "DBSubnetGroupAlreadyExistsFault" => {
+                "DBSubnetGroupAlreadyExists" => {
                     CreateDBSubnetGroupError::DBSubnetGroupAlreadyExistsFault(String::from(
                         parsed_error.message,
                     ))
@@ -19903,7 +20027,7 @@ impl CreateDBSubnetGroupError {
                         parsed_error.message,
                     ))
                 }
-                "DBSubnetGroupQuotaExceededFault" => {
+                "DBSubnetGroupQuotaExceeded" => {
                     CreateDBSubnetGroupError::DBSubnetGroupQuotaExceededFault(String::from(
                         parsed_error.message,
                     ))
@@ -19920,6 +20044,14 @@ impl CreateDBSubnetGroupError {
             },
             Err(_) => CreateDBSubnetGroupError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -19998,35 +20130,31 @@ impl CreateEventSubscriptionError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "EventSubscriptionQuotaExceededFault" => {
+                "EventSubscriptionQuotaExceeded" => {
                     CreateEventSubscriptionError::EventSubscriptionQuotaExceededFault(
                         String::from(parsed_error.message),
                     )
                 }
-                "SNSInvalidTopicFault" => CreateEventSubscriptionError::SNSInvalidTopicFault(
+                "SNSInvalidTopic" => CreateEventSubscriptionError::SNSInvalidTopicFault(
                     String::from(parsed_error.message),
                 ),
-                "SNSNoAuthorizationFault" => {
-                    CreateEventSubscriptionError::SNSNoAuthorizationFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "SNSTopicArnNotFoundFault" => {
-                    CreateEventSubscriptionError::SNSTopicArnNotFoundFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "SourceNotFoundFault" => CreateEventSubscriptionError::SourceNotFoundFault(
+                "SNSNoAuthorization" => CreateEventSubscriptionError::SNSNoAuthorizationFault(
                     String::from(parsed_error.message),
                 ),
-                "SubscriptionAlreadyExistFault" => {
+                "SNSTopicArnNotFound" => CreateEventSubscriptionError::SNSTopicArnNotFoundFault(
+                    String::from(parsed_error.message),
+                ),
+                "SourceNotFound" => CreateEventSubscriptionError::SourceNotFoundFault(
+                    String::from(parsed_error.message),
+                ),
+                "SubscriptionAlreadyExist" => {
                     CreateEventSubscriptionError::SubscriptionAlreadyExistFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "SubscriptionCategoryNotFoundFault" => {
+                "SubscriptionCategoryNotFound" => {
                     CreateEventSubscriptionError::SubscriptionCategoryNotFoundFault(String::from(
                         parsed_error.message,
                     ))
@@ -20035,6 +20163,14 @@ impl CreateEventSubscriptionError {
             },
             Err(_) => CreateEventSubscriptionError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -20105,7 +20241,7 @@ impl CreateOptionGroupError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "OptionGroupAlreadyExistsFault" => {
                     CreateOptionGroupError::OptionGroupAlreadyExistsFault(String::from(
@@ -20121,6 +20257,14 @@ impl CreateOptionGroupError {
             },
             Err(_) => CreateOptionGroupError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -20192,7 +20336,7 @@ impl DeleteDBClusterError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "DBClusterNotFoundFault" => {
                     DeleteDBClusterError::DBClusterNotFoundFault(String::from(parsed_error.message))
@@ -20210,13 +20354,21 @@ impl DeleteDBClusterError {
                 "InvalidDBClusterStateFault" => DeleteDBClusterError::InvalidDBClusterStateFault(
                     String::from(parsed_error.message),
                 ),
-                "SnapshotQuotaExceededFault" => DeleteDBClusterError::SnapshotQuotaExceededFault(
+                "SnapshotQuotaExceeded" => DeleteDBClusterError::SnapshotQuotaExceededFault(
                     String::from(parsed_error.message),
                 ),
                 _ => DeleteDBClusterError::Unknown(String::from(body)),
             },
             Err(_) => DeleteDBClusterError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -20283,14 +20435,14 @@ impl DeleteDBClusterParameterGroupError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "DBParameterGroupNotFoundFault" => {
+                "DBParameterGroupNotFound" => {
                     DeleteDBClusterParameterGroupError::DBParameterGroupNotFoundFault(
                         String::from(parsed_error.message),
                     )
                 }
-                "InvalidDBParameterGroupStateFault" => {
+                "InvalidDBParameterGroupState" => {
                     DeleteDBClusterParameterGroupError::InvalidDBParameterGroupStateFault(
                         String::from(parsed_error.message),
                     )
@@ -20299,6 +20451,14 @@ impl DeleteDBClusterParameterGroupError {
             },
             Err(_) => DeleteDBClusterParameterGroupError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -20366,7 +20526,7 @@ impl DeleteDBClusterSnapshotError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "DBClusterSnapshotNotFoundFault" => {
                     DeleteDBClusterSnapshotError::DBClusterSnapshotNotFoundFault(String::from(
@@ -20382,6 +20542,14 @@ impl DeleteDBClusterSnapshotError {
             },
             Err(_) => DeleteDBClusterSnapshotError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -20453,31 +20621,35 @@ impl DeleteDBInstanceError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "DBInstanceNotFoundFault" => DeleteDBInstanceError::DBInstanceNotFoundFault(
+                "DBInstanceNotFound" => DeleteDBInstanceError::DBInstanceNotFoundFault(
                     String::from(parsed_error.message),
                 ),
-                "DBSnapshotAlreadyExistsFault" => {
-                    DeleteDBInstanceError::DBSnapshotAlreadyExistsFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "DBSnapshotAlreadyExists" => DeleteDBInstanceError::DBSnapshotAlreadyExistsFault(
+                    String::from(parsed_error.message),
+                ),
                 "InvalidDBClusterStateFault" => DeleteDBInstanceError::InvalidDBClusterStateFault(
                     String::from(parsed_error.message),
                 ),
-                "InvalidDBInstanceStateFault" => {
-                    DeleteDBInstanceError::InvalidDBInstanceStateFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "SnapshotQuotaExceededFault" => DeleteDBInstanceError::SnapshotQuotaExceededFault(
+                "InvalidDBInstanceState" => DeleteDBInstanceError::InvalidDBInstanceStateFault(
+                    String::from(parsed_error.message),
+                ),
+                "SnapshotQuotaExceeded" => DeleteDBInstanceError::SnapshotQuotaExceededFault(
                     String::from(parsed_error.message),
                 ),
                 _ => DeleteDBInstanceError::Unknown(String::from(body)),
             },
             Err(_) => DeleteDBInstanceError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -20544,14 +20716,14 @@ impl DeleteDBParameterGroupError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "DBParameterGroupNotFoundFault" => {
+                "DBParameterGroupNotFound" => {
                     DeleteDBParameterGroupError::DBParameterGroupNotFoundFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "InvalidDBParameterGroupStateFault" => {
+                "InvalidDBParameterGroupState" => {
                     DeleteDBParameterGroupError::InvalidDBParameterGroupStateFault(String::from(
                         parsed_error.message,
                     ))
@@ -20560,6 +20732,14 @@ impl DeleteDBParameterGroupError {
             },
             Err(_) => DeleteDBParameterGroupError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -20625,14 +20805,14 @@ impl DeleteDBSecurityGroupError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "DBSecurityGroupNotFoundFault" => {
+                "DBSecurityGroupNotFound" => {
                     DeleteDBSecurityGroupError::DBSecurityGroupNotFoundFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "InvalidDBSecurityGroupStateFault" => {
+                "InvalidDBSecurityGroupState" => {
                     DeleteDBSecurityGroupError::InvalidDBSecurityGroupStateFault(String::from(
                         parsed_error.message,
                     ))
@@ -20641,6 +20821,14 @@ impl DeleteDBSecurityGroupError {
             },
             Err(_) => DeleteDBSecurityGroupError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -20706,20 +20894,26 @@ impl DeleteDBSnapshotError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "DBSnapshotNotFoundFault" => DeleteDBSnapshotError::DBSnapshotNotFoundFault(
+                "DBSnapshotNotFound" => DeleteDBSnapshotError::DBSnapshotNotFoundFault(
                     String::from(parsed_error.message),
                 ),
-                "InvalidDBSnapshotStateFault" => {
-                    DeleteDBSnapshotError::InvalidDBSnapshotStateFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "InvalidDBSnapshotState" => DeleteDBSnapshotError::InvalidDBSnapshotStateFault(
+                    String::from(parsed_error.message),
+                ),
                 _ => DeleteDBSnapshotError::Unknown(String::from(body)),
             },
             Err(_) => DeleteDBSnapshotError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -20785,7 +20979,7 @@ impl DeleteDBSubnetGroupError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "DBSubnetGroupNotFoundFault" => {
                     DeleteDBSubnetGroupError::DBSubnetGroupNotFoundFault(String::from(
@@ -20806,6 +21000,14 @@ impl DeleteDBSubnetGroupError {
             },
             Err(_) => DeleteDBSubnetGroupError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -20872,22 +21074,28 @@ impl DeleteEventSubscriptionError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidEventSubscriptionStateFault" => {
+                "InvalidEventSubscriptionState" => {
                     DeleteEventSubscriptionError::InvalidEventSubscriptionStateFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "SubscriptionNotFoundFault" => {
-                    DeleteEventSubscriptionError::SubscriptionNotFoundFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "SubscriptionNotFound" => DeleteEventSubscriptionError::SubscriptionNotFoundFault(
+                    String::from(parsed_error.message),
+                ),
                 _ => DeleteEventSubscriptionError::Unknown(String::from(body)),
             },
             Err(_) => DeleteEventSubscriptionError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -20953,7 +21161,7 @@ impl DeleteOptionGroupError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "InvalidOptionGroupStateFault" => {
                     DeleteOptionGroupError::InvalidOptionGroupStateFault(String::from(
@@ -20967,6 +21175,14 @@ impl DeleteOptionGroupError {
             },
             Err(_) => DeleteOptionGroupError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -21028,12 +21244,20 @@ impl DescribeAccountAttributesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeAccountAttributesError::Unknown(String::from(body)),
             },
             Err(_) => DescribeAccountAttributesError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -21095,15 +21319,23 @@ impl DescribeCertificatesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "CertificateNotFoundFault" => DescribeCertificatesError::CertificateNotFoundFault(
+                "CertificateNotFound" => DescribeCertificatesError::CertificateNotFoundFault(
                     String::from(parsed_error.message),
                 ),
                 _ => DescribeCertificatesError::Unknown(String::from(body)),
             },
             Err(_) => DescribeCertificatesError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -21166,9 +21398,9 @@ impl DescribeDBClusterParameterGroupsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "DBParameterGroupNotFoundFault" => {
+                "DBParameterGroupNotFound" => {
                     DescribeDBClusterParameterGroupsError::DBParameterGroupNotFoundFault(
                         String::from(parsed_error.message),
                     )
@@ -21177,6 +21409,14 @@ impl DescribeDBClusterParameterGroupsError {
             },
             Err(_) => DescribeDBClusterParameterGroupsError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -21241,9 +21481,9 @@ impl DescribeDBClusterParametersError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "DBParameterGroupNotFoundFault" => {
+                "DBParameterGroupNotFound" => {
                     DescribeDBClusterParametersError::DBParameterGroupNotFoundFault(String::from(
                         parsed_error.message,
                     ))
@@ -21252,6 +21492,14 @@ impl DescribeDBClusterParametersError {
             },
             Err(_) => DescribeDBClusterParametersError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -21314,7 +21562,7 @@ impl DescribeDBClusterSnapshotAttributesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "DBClusterSnapshotNotFoundFault" => {
                     DescribeDBClusterSnapshotAttributesError::DBClusterSnapshotNotFoundFault(
@@ -21325,6 +21573,14 @@ impl DescribeDBClusterSnapshotAttributesError {
             },
             Err(_) => DescribeDBClusterSnapshotAttributesError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -21389,7 +21645,7 @@ impl DescribeDBClusterSnapshotsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "DBClusterSnapshotNotFoundFault" => {
                     DescribeDBClusterSnapshotsError::DBClusterSnapshotNotFoundFault(String::from(
@@ -21400,6 +21656,14 @@ impl DescribeDBClusterSnapshotsError {
             },
             Err(_) => DescribeDBClusterSnapshotsError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -21462,7 +21726,7 @@ impl DescribeDBClustersError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "DBClusterNotFoundFault" => DescribeDBClustersError::DBClusterNotFoundFault(
                     String::from(parsed_error.message),
@@ -21471,6 +21735,14 @@ impl DescribeDBClustersError {
             },
             Err(_) => DescribeDBClustersError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -21531,12 +21803,20 @@ impl DescribeDBEngineVersionsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeDBEngineVersionsError::Unknown(String::from(body)),
             },
             Err(_) => DescribeDBEngineVersionsError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -21598,15 +21878,23 @@ impl DescribeDBInstancesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "DBInstanceNotFoundFault" => DescribeDBInstancesError::DBInstanceNotFoundFault(
+                "DBInstanceNotFound" => DescribeDBInstancesError::DBInstanceNotFoundFault(
                     String::from(parsed_error.message),
                 ),
                 _ => DescribeDBInstancesError::Unknown(String::from(body)),
             },
             Err(_) => DescribeDBInstancesError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -21669,15 +21957,23 @@ impl DescribeDBLogFilesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "DBInstanceNotFoundFault" => DescribeDBLogFilesError::DBInstanceNotFoundFault(
+                "DBInstanceNotFound" => DescribeDBLogFilesError::DBInstanceNotFoundFault(
                     String::from(parsed_error.message),
                 ),
                 _ => DescribeDBLogFilesError::Unknown(String::from(body)),
             },
             Err(_) => DescribeDBLogFilesError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -21740,9 +22036,9 @@ impl DescribeDBParameterGroupsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "DBParameterGroupNotFoundFault" => {
+                "DBParameterGroupNotFound" => {
                     DescribeDBParameterGroupsError::DBParameterGroupNotFoundFault(String::from(
                         parsed_error.message,
                     ))
@@ -21751,6 +22047,14 @@ impl DescribeDBParameterGroupsError {
             },
             Err(_) => DescribeDBParameterGroupsError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -21813,9 +22117,9 @@ impl DescribeDBParametersError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "DBParameterGroupNotFoundFault" => {
+                "DBParameterGroupNotFound" => {
                     DescribeDBParametersError::DBParameterGroupNotFoundFault(String::from(
                         parsed_error.message,
                     ))
@@ -21824,6 +22128,14 @@ impl DescribeDBParametersError {
             },
             Err(_) => DescribeDBParametersError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -21886,9 +22198,9 @@ impl DescribeDBSecurityGroupsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "DBSecurityGroupNotFoundFault" => {
+                "DBSecurityGroupNotFound" => {
                     DescribeDBSecurityGroupsError::DBSecurityGroupNotFoundFault(String::from(
                         parsed_error.message,
                     ))
@@ -21897,6 +22209,14 @@ impl DescribeDBSecurityGroupsError {
             },
             Err(_) => DescribeDBSecurityGroupsError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -21959,9 +22279,9 @@ impl DescribeDBSnapshotAttributesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "DBSnapshotNotFoundFault" => {
+                "DBSnapshotNotFound" => {
                     DescribeDBSnapshotAttributesError::DBSnapshotNotFoundFault(String::from(
                         parsed_error.message,
                     ))
@@ -21970,6 +22290,14 @@ impl DescribeDBSnapshotAttributesError {
             },
             Err(_) => DescribeDBSnapshotAttributesError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -22032,15 +22360,23 @@ impl DescribeDBSnapshotsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "DBSnapshotNotFoundFault" => DescribeDBSnapshotsError::DBSnapshotNotFoundFault(
+                "DBSnapshotNotFound" => DescribeDBSnapshotsError::DBSnapshotNotFoundFault(
                     String::from(parsed_error.message),
                 ),
                 _ => DescribeDBSnapshotsError::Unknown(String::from(body)),
             },
             Err(_) => DescribeDBSnapshotsError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -22103,7 +22439,7 @@ impl DescribeDBSubnetGroupsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "DBSubnetGroupNotFoundFault" => {
                     DescribeDBSubnetGroupsError::DBSubnetGroupNotFoundFault(String::from(
@@ -22114,6 +22450,14 @@ impl DescribeDBSubnetGroupsError {
             },
             Err(_) => DescribeDBSubnetGroupsError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -22174,12 +22518,20 @@ impl DescribeEngineDefaultClusterParametersError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeEngineDefaultClusterParametersError::Unknown(String::from(body)),
             },
             Err(_) => DescribeEngineDefaultClusterParametersError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -22239,12 +22591,20 @@ impl DescribeEngineDefaultParametersError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeEngineDefaultParametersError::Unknown(String::from(body)),
             },
             Err(_) => DescribeEngineDefaultParametersError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -22304,12 +22664,20 @@ impl DescribeEventCategoriesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeEventCategoriesError::Unknown(String::from(body)),
             },
             Err(_) => DescribeEventCategoriesError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -22371,9 +22739,9 @@ impl DescribeEventSubscriptionsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "SubscriptionNotFoundFault" => {
+                "SubscriptionNotFound" => {
                     DescribeEventSubscriptionsError::SubscriptionNotFoundFault(String::from(
                         parsed_error.message,
                     ))
@@ -22382,6 +22750,14 @@ impl DescribeEventSubscriptionsError {
             },
             Err(_) => DescribeEventSubscriptionsError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -22442,12 +22818,20 @@ impl DescribeEventsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeEventsError::Unknown(String::from(body)),
             },
             Err(_) => DescribeEventsError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -22505,12 +22889,20 @@ impl DescribeOptionGroupOptionsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeOptionGroupOptionsError::Unknown(String::from(body)),
             },
             Err(_) => DescribeOptionGroupOptionsError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -22572,7 +22964,7 @@ impl DescribeOptionGroupsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "OptionGroupNotFoundFault" => DescribeOptionGroupsError::OptionGroupNotFoundFault(
                     String::from(parsed_error.message),
@@ -22581,6 +22973,14 @@ impl DescribeOptionGroupsError {
             },
             Err(_) => DescribeOptionGroupsError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -22641,12 +23041,20 @@ impl DescribeOrderableDBInstanceOptionsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeOrderableDBInstanceOptionsError::Unknown(String::from(body)),
             },
             Err(_) => DescribeOrderableDBInstanceOptionsError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -22708,7 +23116,7 @@ impl DescribePendingMaintenanceActionsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "ResourceNotFoundFault" => {
                     DescribePendingMaintenanceActionsError::ResourceNotFoundFault(String::from(
@@ -22719,6 +23127,14 @@ impl DescribePendingMaintenanceActionsError {
             },
             Err(_) => DescribePendingMaintenanceActionsError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -22781,9 +23197,9 @@ impl DescribeReservedDBInstancesError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ReservedDBInstanceNotFoundFault" => {
+                "ReservedDBInstanceNotFound" => {
                     DescribeReservedDBInstancesError::ReservedDBInstanceNotFoundFault(
                         String::from(parsed_error.message),
                     )
@@ -22792,6 +23208,14 @@ impl DescribeReservedDBInstancesError {
             },
             Err(_) => DescribeReservedDBInstancesError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -22854,14 +23278,22 @@ impl DescribeReservedDBInstancesOfferingsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "ReservedDBInstancesOfferingNotFoundFault" => DescribeReservedDBInstancesOfferingsError::ReservedDBInstancesOfferingNotFoundFault(String::from(parsed_error.message)),_ => DescribeReservedDBInstancesOfferingsError::Unknown(String::from(body))
+                                    "ReservedDBInstancesOfferingNotFound" => DescribeReservedDBInstancesOfferingsError::ReservedDBInstancesOfferingNotFoundFault(String::from(parsed_error.message)),_ => DescribeReservedDBInstancesOfferingsError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => DescribeReservedDBInstancesOfferingsError::Unknown(body.to_string())
                        }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -22920,12 +23352,20 @@ impl DescribeSourceRegionsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 _ => DescribeSourceRegionsError::Unknown(String::from(body)),
             },
             Err(_) => DescribeSourceRegionsError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -22989,14 +23429,14 @@ impl DescribeValidDBInstanceModificationsError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "DBInstanceNotFoundFault" => {
+                "DBInstanceNotFound" => {
                     DescribeValidDBInstanceModificationsError::DBInstanceNotFoundFault(
                         String::from(parsed_error.message),
                     )
                 }
-                "InvalidDBInstanceStateFault" => {
+                "InvalidDBInstanceState" => {
                     DescribeValidDBInstanceModificationsError::InvalidDBInstanceStateFault(
                         String::from(parsed_error.message),
                     )
@@ -23005,6 +23445,14 @@ impl DescribeValidDBInstanceModificationsError {
             },
             Err(_) => DescribeValidDBInstanceModificationsError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -23072,13 +23520,11 @@ impl DownloadDBLogFilePortionError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "DBInstanceNotFoundFault" => {
-                    DownloadDBLogFilePortionError::DBInstanceNotFoundFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "DBInstanceNotFound" => DownloadDBLogFilePortionError::DBInstanceNotFoundFault(
+                    String::from(parsed_error.message),
+                ),
                 "DBLogFileNotFoundFault" => DownloadDBLogFilePortionError::DBLogFileNotFoundFault(
                     String::from(parsed_error.message),
                 ),
@@ -23086,6 +23532,14 @@ impl DownloadDBLogFilePortionError {
             },
             Err(_) => DownloadDBLogFilePortionError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -23153,7 +23607,7 @@ impl FailoverDBClusterError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "DBClusterNotFoundFault" => FailoverDBClusterError::DBClusterNotFoundFault(
                     String::from(parsed_error.message),
@@ -23163,15 +23617,21 @@ impl FailoverDBClusterError {
                         parsed_error.message,
                     ))
                 }
-                "InvalidDBInstanceStateFault" => {
-                    FailoverDBClusterError::InvalidDBInstanceStateFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "InvalidDBInstanceState" => FailoverDBClusterError::InvalidDBInstanceStateFault(
+                    String::from(parsed_error.message),
+                ),
                 _ => FailoverDBClusterError::Unknown(String::from(body)),
             },
             Err(_) => FailoverDBClusterError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -23240,21 +23700,29 @@ impl ListTagsForResourceError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "DBClusterNotFoundFault" => ListTagsForResourceError::DBClusterNotFoundFault(
                     String::from(parsed_error.message),
                 ),
-                "DBInstanceNotFoundFault" => ListTagsForResourceError::DBInstanceNotFoundFault(
+                "DBInstanceNotFound" => ListTagsForResourceError::DBInstanceNotFoundFault(
                     String::from(parsed_error.message),
                 ),
-                "DBSnapshotNotFoundFault" => ListTagsForResourceError::DBSnapshotNotFoundFault(
+                "DBSnapshotNotFound" => ListTagsForResourceError::DBSnapshotNotFoundFault(
                     String::from(parsed_error.message),
                 ),
                 _ => ListTagsForResourceError::Unknown(String::from(body)),
             },
             Err(_) => ListTagsForResourceError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -23339,7 +23807,7 @@ impl ModifyDBClusterError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "DBClusterAlreadyExistsFault" => {
                     ModifyDBClusterError::DBClusterAlreadyExistsFault(String::from(
@@ -23349,7 +23817,7 @@ impl ModifyDBClusterError {
                 "DBClusterNotFoundFault" => {
                     ModifyDBClusterError::DBClusterNotFoundFault(String::from(parsed_error.message))
                 }
-                "DBClusterParameterGroupNotFoundFault" => {
+                "DBClusterParameterGroupNotFound" => {
                     ModifyDBClusterError::DBClusterParameterGroupNotFoundFault(String::from(
                         parsed_error.message,
                     ))
@@ -23360,12 +23828,10 @@ impl ModifyDBClusterError {
                 "InvalidDBClusterStateFault" => ModifyDBClusterError::InvalidDBClusterStateFault(
                     String::from(parsed_error.message),
                 ),
-                "InvalidDBInstanceStateFault" => {
-                    ModifyDBClusterError::InvalidDBInstanceStateFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "InvalidDBSecurityGroupStateFault" => {
+                "InvalidDBInstanceState" => ModifyDBClusterError::InvalidDBInstanceStateFault(
+                    String::from(parsed_error.message),
+                ),
+                "InvalidDBSecurityGroupState" => {
                     ModifyDBClusterError::InvalidDBSecurityGroupStateFault(String::from(
                         parsed_error.message,
                     ))
@@ -23383,13 +23849,21 @@ impl ModifyDBClusterError {
                         parsed_error.message,
                     ))
                 }
-                "StorageQuotaExceededFault" => ModifyDBClusterError::StorageQuotaExceededFault(
+                "StorageQuotaExceeded" => ModifyDBClusterError::StorageQuotaExceededFault(
                     String::from(parsed_error.message),
                 ),
                 _ => ModifyDBClusterError::Unknown(String::from(body)),
             },
             Err(_) => ModifyDBClusterError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -23462,14 +23936,14 @@ impl ModifyDBClusterParameterGroupError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "DBParameterGroupNotFoundFault" => {
+                "DBParameterGroupNotFound" => {
                     ModifyDBClusterParameterGroupError::DBParameterGroupNotFoundFault(
                         String::from(parsed_error.message),
                     )
                 }
-                "InvalidDBParameterGroupStateFault" => {
+                "InvalidDBParameterGroupState" => {
                     ModifyDBClusterParameterGroupError::InvalidDBParameterGroupStateFault(
                         String::from(parsed_error.message),
                     )
@@ -23478,6 +23952,14 @@ impl ModifyDBClusterParameterGroupError {
             },
             Err(_) => ModifyDBClusterParameterGroupError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -23547,7 +24029,7 @@ impl ModifyDBClusterSnapshotAttributeError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "DBClusterSnapshotNotFoundFault" => {
                     ModifyDBClusterSnapshotAttributeError::DBClusterSnapshotNotFoundFault(
@@ -23559,7 +24041,7 @@ impl ModifyDBClusterSnapshotAttributeError {
                         String::from(parsed_error.message),
                     )
                 }
-                "SharedSnapshotQuotaExceededFault" => {
+                "SharedSnapshotQuotaExceeded" => {
                     ModifyDBClusterSnapshotAttributeError::SharedSnapshotQuotaExceededFault(
                         String::from(parsed_error.message),
                     )
@@ -23568,6 +24050,14 @@ impl ModifyDBClusterSnapshotAttributeError {
             },
             Err(_) => ModifyDBClusterSnapshotAttributeError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -23668,33 +24158,29 @@ impl ModifyDBInstanceError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "AuthorizationNotFoundFault" => ModifyDBInstanceError::AuthorizationNotFoundFault(
+                "AuthorizationNotFound" => ModifyDBInstanceError::AuthorizationNotFoundFault(
                     String::from(parsed_error.message),
                 ),
-                "CertificateNotFoundFault" => ModifyDBInstanceError::CertificateNotFoundFault(
+                "CertificateNotFound" => ModifyDBInstanceError::CertificateNotFoundFault(
                     String::from(parsed_error.message),
                 ),
-                "DBInstanceAlreadyExistsFault" => {
-                    ModifyDBInstanceError::DBInstanceAlreadyExistsFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "DBInstanceNotFoundFault" => ModifyDBInstanceError::DBInstanceNotFoundFault(
+                "DBInstanceAlreadyExists" => ModifyDBInstanceError::DBInstanceAlreadyExistsFault(
                     String::from(parsed_error.message),
                 ),
-                "DBParameterGroupNotFoundFault" => {
+                "DBInstanceNotFound" => ModifyDBInstanceError::DBInstanceNotFoundFault(
+                    String::from(parsed_error.message),
+                ),
+                "DBParameterGroupNotFound" => {
                     ModifyDBInstanceError::DBParameterGroupNotFoundFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "DBSecurityGroupNotFoundFault" => {
-                    ModifyDBInstanceError::DBSecurityGroupNotFoundFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "DBUpgradeDependencyFailureFault" => {
+                "DBSecurityGroupNotFound" => ModifyDBInstanceError::DBSecurityGroupNotFoundFault(
+                    String::from(parsed_error.message),
+                ),
+                "DBUpgradeDependencyFailure" => {
                     ModifyDBInstanceError::DBUpgradeDependencyFailureFault(String::from(
                         parsed_error.message,
                     ))
@@ -23702,17 +24188,15 @@ impl ModifyDBInstanceError {
                 "DomainNotFoundFault" => {
                     ModifyDBInstanceError::DomainNotFoundFault(String::from(parsed_error.message))
                 }
-                "InsufficientDBInstanceCapacityFault" => {
+                "InsufficientDBInstanceCapacity" => {
                     ModifyDBInstanceError::InsufficientDBInstanceCapacityFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "InvalidDBInstanceStateFault" => {
-                    ModifyDBInstanceError::InvalidDBInstanceStateFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "InvalidDBSecurityGroupStateFault" => {
+                "InvalidDBInstanceState" => ModifyDBInstanceError::InvalidDBInstanceStateFault(
+                    String::from(parsed_error.message),
+                ),
+                "InvalidDBSecurityGroupState" => {
                     ModifyDBInstanceError::InvalidDBSecurityGroupStateFault(String::from(
                         parsed_error.message,
                     ))
@@ -23730,18 +24214,24 @@ impl ModifyDBInstanceError {
                         parsed_error.message,
                     ))
                 }
-                "StorageQuotaExceededFault" => ModifyDBInstanceError::StorageQuotaExceededFault(
+                "StorageQuotaExceeded" => ModifyDBInstanceError::StorageQuotaExceededFault(
                     String::from(parsed_error.message),
                 ),
-                "StorageTypeNotSupportedFault" => {
-                    ModifyDBInstanceError::StorageTypeNotSupportedFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "StorageTypeNotSupported" => ModifyDBInstanceError::StorageTypeNotSupportedFault(
+                    String::from(parsed_error.message),
+                ),
                 _ => ModifyDBInstanceError::Unknown(String::from(body)),
             },
             Err(_) => ModifyDBInstanceError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -23819,14 +24309,14 @@ impl ModifyDBParameterGroupError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "DBParameterGroupNotFoundFault" => {
+                "DBParameterGroupNotFound" => {
                     ModifyDBParameterGroupError::DBParameterGroupNotFoundFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "InvalidDBParameterGroupStateFault" => {
+                "InvalidDBParameterGroupState" => {
                     ModifyDBParameterGroupError::InvalidDBParameterGroupStateFault(String::from(
                         parsed_error.message,
                     ))
@@ -23835,6 +24325,14 @@ impl ModifyDBParameterGroupError {
             },
             Err(_) => ModifyDBParameterGroupError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -23898,15 +24396,23 @@ impl ModifyDBSnapshotError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "DBSnapshotNotFoundFault" => ModifyDBSnapshotError::DBSnapshotNotFoundFault(
+                "DBSnapshotNotFound" => ModifyDBSnapshotError::DBSnapshotNotFoundFault(
                     String::from(parsed_error.message),
                 ),
                 _ => ModifyDBSnapshotError::Unknown(String::from(body)),
             },
             Err(_) => ModifyDBSnapshotError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -23971,19 +24477,17 @@ impl ModifyDBSnapshotAttributeError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "DBSnapshotNotFoundFault" => {
-                    ModifyDBSnapshotAttributeError::DBSnapshotNotFoundFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "InvalidDBSnapshotStateFault" => {
+                "DBSnapshotNotFound" => ModifyDBSnapshotAttributeError::DBSnapshotNotFoundFault(
+                    String::from(parsed_error.message),
+                ),
+                "InvalidDBSnapshotState" => {
                     ModifyDBSnapshotAttributeError::InvalidDBSnapshotStateFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "SharedSnapshotQuotaExceededFault" => {
+                "SharedSnapshotQuotaExceeded" => {
                     ModifyDBSnapshotAttributeError::SharedSnapshotQuotaExceededFault(String::from(
                         parsed_error.message,
                     ))
@@ -23992,6 +24496,14 @@ impl ModifyDBSnapshotAttributeError {
             },
             Err(_) => ModifyDBSnapshotAttributeError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -24064,7 +24576,7 @@ impl ModifyDBSubnetGroupError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "DBSubnetGroupDoesNotCoverEnoughAZs" => {
                     ModifyDBSubnetGroupError::DBSubnetGroupDoesNotCoverEnoughAZs(String::from(
@@ -24091,6 +24603,14 @@ impl ModifyDBSubnetGroupError {
             },
             Err(_) => ModifyDBSubnetGroupError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -24167,40 +24687,42 @@ impl ModifyEventSubscriptionError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "EventSubscriptionQuotaExceededFault" => {
+                "EventSubscriptionQuotaExceeded" => {
                     ModifyEventSubscriptionError::EventSubscriptionQuotaExceededFault(
                         String::from(parsed_error.message),
                     )
                 }
-                "SNSInvalidTopicFault" => ModifyEventSubscriptionError::SNSInvalidTopicFault(
+                "SNSInvalidTopic" => ModifyEventSubscriptionError::SNSInvalidTopicFault(
                     String::from(parsed_error.message),
                 ),
-                "SNSNoAuthorizationFault" => {
-                    ModifyEventSubscriptionError::SNSNoAuthorizationFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "SNSTopicArnNotFoundFault" => {
-                    ModifyEventSubscriptionError::SNSTopicArnNotFoundFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "SubscriptionCategoryNotFoundFault" => {
+                "SNSNoAuthorization" => ModifyEventSubscriptionError::SNSNoAuthorizationFault(
+                    String::from(parsed_error.message),
+                ),
+                "SNSTopicArnNotFound" => ModifyEventSubscriptionError::SNSTopicArnNotFoundFault(
+                    String::from(parsed_error.message),
+                ),
+                "SubscriptionCategoryNotFound" => {
                     ModifyEventSubscriptionError::SubscriptionCategoryNotFoundFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "SubscriptionNotFoundFault" => {
-                    ModifyEventSubscriptionError::SubscriptionNotFoundFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "SubscriptionNotFound" => ModifyEventSubscriptionError::SubscriptionNotFoundFault(
+                    String::from(parsed_error.message),
+                ),
                 _ => ModifyEventSubscriptionError::Unknown(String::from(body)),
             },
             Err(_) => ModifyEventSubscriptionError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -24270,7 +24792,7 @@ impl ModifyOptionGroupError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "InvalidOptionGroupStateFault" => {
                     ModifyOptionGroupError::InvalidOptionGroupStateFault(String::from(
@@ -24284,6 +24806,14 @@ impl ModifyOptionGroupError {
             },
             Err(_) => ModifyOptionGroupError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -24349,20 +24879,26 @@ impl PromoteReadReplicaError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "DBInstanceNotFoundFault" => PromoteReadReplicaError::DBInstanceNotFoundFault(
+                "DBInstanceNotFound" => PromoteReadReplicaError::DBInstanceNotFoundFault(
                     String::from(parsed_error.message),
                 ),
-                "InvalidDBInstanceStateFault" => {
-                    PromoteReadReplicaError::InvalidDBInstanceStateFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "InvalidDBInstanceState" => PromoteReadReplicaError::InvalidDBInstanceStateFault(
+                    String::from(parsed_error.message),
+                ),
                 _ => PromoteReadReplicaError::Unknown(String::from(body)),
             },
             Err(_) => PromoteReadReplicaError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -24428,7 +24964,7 @@ impl PromoteReadReplicaDBClusterError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "DBClusterNotFoundFault" => {
                     PromoteReadReplicaDBClusterError::DBClusterNotFoundFault(String::from(
@@ -24444,6 +24980,14 @@ impl PromoteReadReplicaDBClusterError {
             },
             Err(_) => PromoteReadReplicaDBClusterError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -24511,14 +25055,22 @@ impl PurchaseReservedDBInstancesOfferingError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
                             Ok(parsed_error) => {
                                 match &parsed_error.code[..] {
-                                    "ReservedDBInstanceAlreadyExistsFault" => PurchaseReservedDBInstancesOfferingError::ReservedDBInstanceAlreadyExistsFault(String::from(parsed_error.message)),"ReservedDBInstanceQuotaExceededFault" => PurchaseReservedDBInstancesOfferingError::ReservedDBInstanceQuotaExceededFault(String::from(parsed_error.message)),"ReservedDBInstancesOfferingNotFoundFault" => PurchaseReservedDBInstancesOfferingError::ReservedDBInstancesOfferingNotFoundFault(String::from(parsed_error.message)),_ => PurchaseReservedDBInstancesOfferingError::Unknown(String::from(body))
+                                    "ReservedDBInstanceAlreadyExists" => PurchaseReservedDBInstancesOfferingError::ReservedDBInstanceAlreadyExistsFault(String::from(parsed_error.message)),"ReservedDBInstanceQuotaExceeded" => PurchaseReservedDBInstancesOfferingError::ReservedDBInstanceQuotaExceededFault(String::from(parsed_error.message)),"ReservedDBInstancesOfferingNotFound" => PurchaseReservedDBInstancesOfferingError::ReservedDBInstancesOfferingNotFoundFault(String::from(parsed_error.message)),_ => PurchaseReservedDBInstancesOfferingError::Unknown(String::from(body))
                                 }
                            },
                            Err(_) => PurchaseReservedDBInstancesOfferingError::Unknown(body.to_string())
                        }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -24583,20 +25135,26 @@ impl RebootDBInstanceError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "DBInstanceNotFoundFault" => RebootDBInstanceError::DBInstanceNotFoundFault(
+                "DBInstanceNotFound" => RebootDBInstanceError::DBInstanceNotFoundFault(
                     String::from(parsed_error.message),
                 ),
-                "InvalidDBInstanceStateFault" => {
-                    RebootDBInstanceError::InvalidDBInstanceStateFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "InvalidDBInstanceState" => RebootDBInstanceError::InvalidDBInstanceStateFault(
+                    String::from(parsed_error.message),
+                ),
                 _ => RebootDBInstanceError::Unknown(String::from(body)),
             },
             Err(_) => RebootDBInstanceError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -24662,12 +25220,12 @@ impl RemoveRoleFromDBClusterError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "DBClusterNotFoundFault" => RemoveRoleFromDBClusterError::DBClusterNotFoundFault(
                     String::from(parsed_error.message),
                 ),
-                "DBClusterRoleNotFoundFault" => {
+                "DBClusterRoleNotFound" => {
                     RemoveRoleFromDBClusterError::DBClusterRoleNotFoundFault(String::from(
                         parsed_error.message,
                     ))
@@ -24681,6 +25239,14 @@ impl RemoveRoleFromDBClusterError {
             },
             Err(_) => RemoveRoleFromDBClusterError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -24747,14 +25313,14 @@ impl RemoveSourceIdentifierFromSubscriptionError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "SourceNotFoundFault" => {
+                "SourceNotFound" => {
                     RemoveSourceIdentifierFromSubscriptionError::SourceNotFoundFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "SubscriptionNotFoundFault" => {
+                "SubscriptionNotFound" => {
                     RemoveSourceIdentifierFromSubscriptionError::SubscriptionNotFoundFault(
                         String::from(parsed_error.message),
                     )
@@ -24763,6 +25329,14 @@ impl RemoveSourceIdentifierFromSubscriptionError {
             },
             Err(_) => RemoveSourceIdentifierFromSubscriptionError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -24832,21 +25406,29 @@ impl RemoveTagsFromResourceError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "DBClusterNotFoundFault" => RemoveTagsFromResourceError::DBClusterNotFoundFault(
                     String::from(parsed_error.message),
                 ),
-                "DBInstanceNotFoundFault" => RemoveTagsFromResourceError::DBInstanceNotFoundFault(
+                "DBInstanceNotFound" => RemoveTagsFromResourceError::DBInstanceNotFoundFault(
                     String::from(parsed_error.message),
                 ),
-                "DBSnapshotNotFoundFault" => RemoveTagsFromResourceError::DBSnapshotNotFoundFault(
+                "DBSnapshotNotFound" => RemoveTagsFromResourceError::DBSnapshotNotFoundFault(
                     String::from(parsed_error.message),
                 ),
                 _ => RemoveTagsFromResourceError::Unknown(String::from(body)),
             },
             Err(_) => RemoveTagsFromResourceError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -24913,14 +25495,14 @@ impl ResetDBClusterParameterGroupError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "DBParameterGroupNotFoundFault" => {
+                "DBParameterGroupNotFound" => {
                     ResetDBClusterParameterGroupError::DBParameterGroupNotFoundFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "InvalidDBParameterGroupStateFault" => {
+                "InvalidDBParameterGroupState" => {
                     ResetDBClusterParameterGroupError::InvalidDBParameterGroupStateFault(
                         String::from(parsed_error.message),
                     )
@@ -24929,6 +25511,14 @@ impl ResetDBClusterParameterGroupError {
             },
             Err(_) => ResetDBClusterParameterGroupError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -24996,14 +25586,14 @@ impl ResetDBParameterGroupError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "DBParameterGroupNotFoundFault" => {
+                "DBParameterGroupNotFound" => {
                     ResetDBParameterGroupError::DBParameterGroupNotFoundFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "InvalidDBParameterGroupStateFault" => {
+                "InvalidDBParameterGroupState" => {
                     ResetDBParameterGroupError::InvalidDBParameterGroupStateFault(String::from(
                         parsed_error.message,
                     ))
@@ -25012,6 +25602,14 @@ impl ResetDBParameterGroupError {
             },
             Err(_) => ResetDBParameterGroupError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -25099,7 +25697,7 @@ impl RestoreDBClusterFromS3Error {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "DBClusterAlreadyExistsFault" => {
                     RestoreDBClusterFromS3Error::DBClusterAlreadyExistsFault(String::from(
@@ -25109,7 +25707,7 @@ impl RestoreDBClusterFromS3Error {
                 "DBClusterNotFoundFault" => RestoreDBClusterFromS3Error::DBClusterNotFoundFault(
                     String::from(parsed_error.message),
                 ),
-                "DBClusterParameterGroupNotFoundFault" => {
+                "DBClusterParameterGroupNotFound" => {
                     RestoreDBClusterFromS3Error::DBClusterParameterGroupNotFoundFault(
                         String::from(parsed_error.message),
                     )
@@ -25124,7 +25722,7 @@ impl RestoreDBClusterFromS3Error {
                         parsed_error.message,
                     ))
                 }
-                "InsufficientStorageClusterCapacityFault" => {
+                "InsufficientStorageClusterCapacity" => {
                     RestoreDBClusterFromS3Error::InsufficientStorageClusterCapacityFault(
                         String::from(parsed_error.message),
                     )
@@ -25155,15 +25753,21 @@ impl RestoreDBClusterFromS3Error {
                         parsed_error.message,
                     ))
                 }
-                "StorageQuotaExceededFault" => {
-                    RestoreDBClusterFromS3Error::StorageQuotaExceededFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "StorageQuotaExceeded" => RestoreDBClusterFromS3Error::StorageQuotaExceededFault(
+                    String::from(parsed_error.message),
+                ),
                 _ => RestoreDBClusterFromS3Error::Unknown(String::from(body)),
             },
             Err(_) => RestoreDBClusterFromS3Error::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -25268,7 +25872,7 @@ impl RestoreDBClusterFromSnapshotError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "DBClusterAlreadyExistsFault" => {
                     RestoreDBClusterFromSnapshotError::DBClusterAlreadyExistsFault(String::from(
@@ -25285,7 +25889,7 @@ impl RestoreDBClusterFromSnapshotError {
                         String::from(parsed_error.message),
                     )
                 }
-                "DBSnapshotNotFoundFault" => {
+                "DBSnapshotNotFound" => {
                     RestoreDBClusterFromSnapshotError::DBSnapshotNotFoundFault(String::from(
                         parsed_error.message,
                     ))
@@ -25300,7 +25904,7 @@ impl RestoreDBClusterFromSnapshotError {
                         String::from(parsed_error.message),
                     )
                 }
-                "InsufficientStorageClusterCapacityFault" => {
+                "InsufficientStorageClusterCapacity" => {
                     RestoreDBClusterFromSnapshotError::InsufficientStorageClusterCapacityFault(
                         String::from(parsed_error.message),
                     )
@@ -25310,7 +25914,7 @@ impl RestoreDBClusterFromSnapshotError {
                         String::from(parsed_error.message),
                     )
                 }
-                "InvalidDBSnapshotStateFault" => {
+                "InvalidDBSnapshotState" => {
                     RestoreDBClusterFromSnapshotError::InvalidDBSnapshotStateFault(String::from(
                         parsed_error.message,
                     ))
@@ -25336,7 +25940,7 @@ impl RestoreDBClusterFromSnapshotError {
                         parsed_error.message,
                     ))
                 }
-                "StorageQuotaExceededFault" => {
+                "StorageQuotaExceeded" => {
                     RestoreDBClusterFromSnapshotError::StorageQuotaExceededFault(String::from(
                         parsed_error.message,
                     ))
@@ -25345,6 +25949,14 @@ impl RestoreDBClusterFromSnapshotError {
             },
             Err(_) => RestoreDBClusterFromSnapshotError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -25457,7 +26069,7 @@ impl RestoreDBClusterToPointInTimeError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "DBClusterAlreadyExistsFault" => {
                     RestoreDBClusterToPointInTimeError::DBClusterAlreadyExistsFault(String::from(
@@ -25489,7 +26101,7 @@ impl RestoreDBClusterToPointInTimeError {
                         String::from(parsed_error.message),
                     )
                 }
-                "InsufficientStorageClusterCapacityFault" => {
+                "InsufficientStorageClusterCapacity" => {
                     RestoreDBClusterToPointInTimeError::InsufficientStorageClusterCapacityFault(
                         String::from(parsed_error.message),
                     )
@@ -25504,7 +26116,7 @@ impl RestoreDBClusterToPointInTimeError {
                         parsed_error.message,
                     ))
                 }
-                "InvalidDBSnapshotStateFault" => {
+                "InvalidDBSnapshotState" => {
                     RestoreDBClusterToPointInTimeError::InvalidDBSnapshotStateFault(String::from(
                         parsed_error.message,
                     ))
@@ -25530,7 +26142,7 @@ impl RestoreDBClusterToPointInTimeError {
                         parsed_error.message,
                     ))
                 }
-                "StorageQuotaExceededFault" => {
+                "StorageQuotaExceeded" => {
                     RestoreDBClusterToPointInTimeError::StorageQuotaExceededFault(String::from(
                         parsed_error.message,
                     ))
@@ -25539,6 +26151,14 @@ impl RestoreDBClusterToPointInTimeError {
             },
             Err(_) => RestoreDBClusterToPointInTimeError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -25656,24 +26276,24 @@ impl RestoreDBInstanceFromDBSnapshotError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "AuthorizationNotFoundFault" => {
+                "AuthorizationNotFound" => {
                     RestoreDBInstanceFromDBSnapshotError::AuthorizationNotFoundFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "DBInstanceAlreadyExistsFault" => {
+                "DBInstanceAlreadyExists" => {
                     RestoreDBInstanceFromDBSnapshotError::DBInstanceAlreadyExistsFault(
                         String::from(parsed_error.message),
                     )
                 }
-                "DBSecurityGroupNotFoundFault" => {
+                "DBSecurityGroupNotFound" => {
                     RestoreDBInstanceFromDBSnapshotError::DBSecurityGroupNotFoundFault(
                         String::from(parsed_error.message),
                     )
                 }
-                "DBSnapshotNotFoundFault" => {
+                "DBSnapshotNotFound" => {
                     RestoreDBInstanceFromDBSnapshotError::DBSnapshotNotFoundFault(String::from(
                         parsed_error.message,
                     ))
@@ -25693,17 +26313,17 @@ impl RestoreDBInstanceFromDBSnapshotError {
                         parsed_error.message,
                     ))
                 }
-                "InstanceQuotaExceededFault" => {
+                "InstanceQuotaExceeded" => {
                     RestoreDBInstanceFromDBSnapshotError::InstanceQuotaExceededFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "InsufficientDBInstanceCapacityFault" => {
+                "InsufficientDBInstanceCapacity" => {
                     RestoreDBInstanceFromDBSnapshotError::InsufficientDBInstanceCapacityFault(
                         String::from(parsed_error.message),
                     )
                 }
-                "InvalidDBSnapshotStateFault" => {
+                "InvalidDBSnapshotState" => {
                     RestoreDBInstanceFromDBSnapshotError::InvalidDBSnapshotStateFault(
                         String::from(parsed_error.message),
                     )
@@ -25736,12 +26356,12 @@ impl RestoreDBInstanceFromDBSnapshotError {
                         String::from(parsed_error.message),
                     )
                 }
-                "StorageQuotaExceededFault" => {
+                "StorageQuotaExceeded" => {
                     RestoreDBInstanceFromDBSnapshotError::StorageQuotaExceededFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "StorageTypeNotSupportedFault" => {
+                "StorageTypeNotSupported" => {
                     RestoreDBInstanceFromDBSnapshotError::StorageTypeNotSupportedFault(
                         String::from(parsed_error.message),
                     )
@@ -25750,6 +26370,14 @@ impl RestoreDBInstanceFromDBSnapshotError {
             },
             Err(_) => RestoreDBInstanceFromDBSnapshotError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -25865,24 +26493,24 @@ impl RestoreDBInstanceFromS3Error {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "AuthorizationNotFoundFault" => {
+                "AuthorizationNotFound" => {
                     RestoreDBInstanceFromS3Error::AuthorizationNotFoundFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "DBInstanceAlreadyExistsFault" => {
+                "DBInstanceAlreadyExists" => {
                     RestoreDBInstanceFromS3Error::DBInstanceAlreadyExistsFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "DBParameterGroupNotFoundFault" => {
+                "DBParameterGroupNotFound" => {
                     RestoreDBInstanceFromS3Error::DBParameterGroupNotFoundFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "DBSecurityGroupNotFoundFault" => {
+                "DBSecurityGroupNotFound" => {
                     RestoreDBInstanceFromS3Error::DBSecurityGroupNotFoundFault(String::from(
                         parsed_error.message,
                     ))
@@ -25897,12 +26525,12 @@ impl RestoreDBInstanceFromS3Error {
                         parsed_error.message,
                     ))
                 }
-                "InstanceQuotaExceededFault" => {
+                "InstanceQuotaExceeded" => {
                     RestoreDBInstanceFromS3Error::InstanceQuotaExceededFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "InsufficientDBInstanceCapacityFault" => {
+                "InsufficientDBInstanceCapacity" => {
                     RestoreDBInstanceFromS3Error::InsufficientDBInstanceCapacityFault(
                         String::from(parsed_error.message),
                     )
@@ -25933,12 +26561,10 @@ impl RestoreDBInstanceFromS3Error {
                         String::from(parsed_error.message),
                     )
                 }
-                "StorageQuotaExceededFault" => {
-                    RestoreDBInstanceFromS3Error::StorageQuotaExceededFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
-                "StorageTypeNotSupportedFault" => {
+                "StorageQuotaExceeded" => RestoreDBInstanceFromS3Error::StorageQuotaExceededFault(
+                    String::from(parsed_error.message),
+                ),
+                "StorageTypeNotSupported" => {
                     RestoreDBInstanceFromS3Error::StorageTypeNotSupportedFault(String::from(
                         parsed_error.message,
                     ))
@@ -25947,6 +26573,14 @@ impl RestoreDBInstanceFromS3Error {
             },
             Err(_) => RestoreDBInstanceFromS3Error::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -26060,24 +26694,24 @@ impl RestoreDBInstanceToPointInTimeError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "AuthorizationNotFoundFault" => {
+                "AuthorizationNotFound" => {
                     RestoreDBInstanceToPointInTimeError::AuthorizationNotFoundFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "DBInstanceAlreadyExistsFault" => {
+                "DBInstanceAlreadyExists" => {
                     RestoreDBInstanceToPointInTimeError::DBInstanceAlreadyExistsFault(
                         String::from(parsed_error.message),
                     )
                 }
-                "DBInstanceNotFoundFault" => {
+                "DBInstanceNotFound" => {
                     RestoreDBInstanceToPointInTimeError::DBInstanceNotFoundFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "DBSecurityGroupNotFoundFault" => {
+                "DBSecurityGroupNotFound" => {
                     RestoreDBInstanceToPointInTimeError::DBSecurityGroupNotFoundFault(
                         String::from(parsed_error.message),
                     )
@@ -26095,17 +26729,17 @@ impl RestoreDBInstanceToPointInTimeError {
                 "DomainNotFoundFault" => RestoreDBInstanceToPointInTimeError::DomainNotFoundFault(
                     String::from(parsed_error.message),
                 ),
-                "InstanceQuotaExceededFault" => {
+                "InstanceQuotaExceeded" => {
                     RestoreDBInstanceToPointInTimeError::InstanceQuotaExceededFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "InsufficientDBInstanceCapacityFault" => {
+                "InsufficientDBInstanceCapacity" => {
                     RestoreDBInstanceToPointInTimeError::InsufficientDBInstanceCapacityFault(
                         String::from(parsed_error.message),
                     )
                 }
-                "InvalidDBInstanceStateFault" => {
+                "InvalidDBInstanceState" => {
                     RestoreDBInstanceToPointInTimeError::InvalidDBInstanceStateFault(String::from(
                         parsed_error.message,
                     ))
@@ -26131,7 +26765,7 @@ impl RestoreDBInstanceToPointInTimeError {
                         parsed_error.message,
                     ))
                 }
-                "PointInTimeRestoreNotEnabledFault" => {
+                "PointInTimeRestoreNotEnabled" => {
                     RestoreDBInstanceToPointInTimeError::PointInTimeRestoreNotEnabledFault(
                         String::from(parsed_error.message),
                     )
@@ -26141,12 +26775,12 @@ impl RestoreDBInstanceToPointInTimeError {
                         String::from(parsed_error.message),
                     )
                 }
-                "StorageQuotaExceededFault" => {
+                "StorageQuotaExceeded" => {
                     RestoreDBInstanceToPointInTimeError::StorageQuotaExceededFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "StorageTypeNotSupportedFault" => {
+                "StorageTypeNotSupported" => {
                     RestoreDBInstanceToPointInTimeError::StorageTypeNotSupportedFault(
                         String::from(parsed_error.message),
                     )
@@ -26155,6 +26789,14 @@ impl RestoreDBInstanceToPointInTimeError {
             },
             Err(_) => RestoreDBInstanceToPointInTimeError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -26247,19 +26889,19 @@ impl RevokeDBSecurityGroupIngressError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "AuthorizationNotFoundFault" => {
+                "AuthorizationNotFound" => {
                     RevokeDBSecurityGroupIngressError::AuthorizationNotFoundFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "DBSecurityGroupNotFoundFault" => {
+                "DBSecurityGroupNotFound" => {
                     RevokeDBSecurityGroupIngressError::DBSecurityGroupNotFoundFault(String::from(
                         parsed_error.message,
                     ))
                 }
-                "InvalidDBSecurityGroupStateFault" => {
+                "InvalidDBSecurityGroupState" => {
                     RevokeDBSecurityGroupIngressError::InvalidDBSecurityGroupStateFault(
                         String::from(parsed_error.message),
                     )
@@ -26268,6 +26910,14 @@ impl RevokeDBSecurityGroupIngressError {
             },
             Err(_) => RevokeDBSecurityGroupIngressError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -26352,15 +27002,15 @@ impl StartDBInstanceError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "AuthorizationNotFoundFault" => StartDBInstanceError::AuthorizationNotFoundFault(
+                "AuthorizationNotFound" => StartDBInstanceError::AuthorizationNotFoundFault(
                     String::from(parsed_error.message),
                 ),
                 "DBClusterNotFoundFault" => {
                     StartDBInstanceError::DBClusterNotFoundFault(String::from(parsed_error.message))
                 }
-                "DBInstanceNotFoundFault" => StartDBInstanceError::DBInstanceNotFoundFault(
+                "DBInstanceNotFound" => StartDBInstanceError::DBInstanceNotFoundFault(
                     String::from(parsed_error.message),
                 ),
                 "DBSubnetGroupDoesNotCoverEnoughAZs" => {
@@ -26371,7 +27021,7 @@ impl StartDBInstanceError {
                 "DBSubnetGroupNotFoundFault" => StartDBInstanceError::DBSubnetGroupNotFoundFault(
                     String::from(parsed_error.message),
                 ),
-                "InsufficientDBInstanceCapacityFault" => {
+                "InsufficientDBInstanceCapacity" => {
                     StartDBInstanceError::InsufficientDBInstanceCapacityFault(String::from(
                         parsed_error.message,
                     ))
@@ -26379,11 +27029,9 @@ impl StartDBInstanceError {
                 "InvalidDBClusterStateFault" => StartDBInstanceError::InvalidDBClusterStateFault(
                     String::from(parsed_error.message),
                 ),
-                "InvalidDBInstanceStateFault" => {
-                    StartDBInstanceError::InvalidDBInstanceStateFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "InvalidDBInstanceState" => StartDBInstanceError::InvalidDBInstanceStateFault(
+                    String::from(parsed_error.message),
+                ),
                 "InvalidSubnet" => {
                     StartDBInstanceError::InvalidSubnet(String::from(parsed_error.message))
                 }
@@ -26399,6 +27047,14 @@ impl StartDBInstanceError {
             },
             Err(_) => StartDBInstanceError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 
@@ -26477,29 +27133,35 @@ impl StopDBInstanceError {
         let reader = EventReader::new(body.as_bytes());
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
-        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+        match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "DBInstanceNotFoundFault" => {
+                "DBInstanceNotFound" => {
                     StopDBInstanceError::DBInstanceNotFoundFault(String::from(parsed_error.message))
                 }
-                "DBSnapshotAlreadyExistsFault" => {
-                    StopDBInstanceError::DBSnapshotAlreadyExistsFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "DBSnapshotAlreadyExists" => StopDBInstanceError::DBSnapshotAlreadyExistsFault(
+                    String::from(parsed_error.message),
+                ),
                 "InvalidDBClusterStateFault" => StopDBInstanceError::InvalidDBClusterStateFault(
                     String::from(parsed_error.message),
                 ),
-                "InvalidDBInstanceStateFault" => StopDBInstanceError::InvalidDBInstanceStateFault(
+                "InvalidDBInstanceState" => StopDBInstanceError::InvalidDBInstanceStateFault(
                     String::from(parsed_error.message),
                 ),
-                "SnapshotQuotaExceededFault" => StopDBInstanceError::SnapshotQuotaExceededFault(
+                "SnapshotQuotaExceeded" => StopDBInstanceError::SnapshotQuotaExceededFault(
                     String::from(parsed_error.message),
                 ),
                 _ => StopDBInstanceError::Unknown(String::from(body)),
             },
             Err(_) => StopDBInstanceError::Unknown(body.to_string()),
         }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
 

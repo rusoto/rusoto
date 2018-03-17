@@ -1583,15 +1583,16 @@ pub struct UpdateMLModelOutput {
 /// Errors returned by AddTags
 #[derive(Debug, PartialEq)]
 pub enum AddTagsError {
-    InvalidTag(String),
-
-    TagLimitExceeded(String),
-    /// <p>A specified resource cannot be located.</p>
-    ResourceNotFound(String),
-    /// <p>An error on the client occurred. Typically, the cause is an invalid input value.</p>
-    InvalidInput(String),
     /// <p>An error on the server occurred when trying to process a request.</p>
     InternalServer(String),
+    /// <p>An error on the client occurred. Typically, the cause is an invalid input value.</p>
+    InvalidInput(String),
+
+    InvalidTag(String),
+    /// <p>A specified resource cannot be located.</p>
+    ResourceNotFound(String),
+
+    TagLimitExceeded(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -1615,18 +1616,18 @@ impl AddTagsError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "InvalidTagException" => AddTagsError::InvalidTag(String::from(error_message)),
-                    "TagLimitExceededException" => {
-                        AddTagsError::TagLimitExceeded(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        AddTagsError::ResourceNotFound(String::from(error_message))
+                    "InternalServerException" => {
+                        AddTagsError::InternalServer(String::from(error_message))
                     }
                     "InvalidInputException" => {
                         AddTagsError::InvalidInput(String::from(error_message))
                     }
-                    "InternalServerException" => {
-                        AddTagsError::InternalServer(String::from(error_message))
+                    "InvalidTagException" => AddTagsError::InvalidTag(String::from(error_message)),
+                    "ResourceNotFoundException" => {
+                        AddTagsError::ResourceNotFound(String::from(error_message))
+                    }
+                    "TagLimitExceededException" => {
+                        AddTagsError::TagLimitExceeded(String::from(error_message))
                     }
                     "ValidationException" => AddTagsError::Validation(error_message.to_string()),
                     _ => AddTagsError::Unknown(String::from(body)),
@@ -1665,11 +1666,11 @@ impl fmt::Display for AddTagsError {
 impl Error for AddTagsError {
     fn description(&self) -> &str {
         match *self {
-            AddTagsError::InvalidTag(ref cause) => cause,
-            AddTagsError::TagLimitExceeded(ref cause) => cause,
-            AddTagsError::ResourceNotFound(ref cause) => cause,
-            AddTagsError::InvalidInput(ref cause) => cause,
             AddTagsError::InternalServer(ref cause) => cause,
+            AddTagsError::InvalidInput(ref cause) => cause,
+            AddTagsError::InvalidTag(ref cause) => cause,
+            AddTagsError::ResourceNotFound(ref cause) => cause,
+            AddTagsError::TagLimitExceeded(ref cause) => cause,
             AddTagsError::Validation(ref cause) => cause,
             AddTagsError::Credentials(ref err) => err.description(),
             AddTagsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
@@ -1682,10 +1683,10 @@ impl Error for AddTagsError {
 pub enum CreateBatchPredictionError {
     /// <p>A second request to use or change an object was not allowed. This can result from retrying a request using a parameter that was not present in the original request.</p>
     IdempotentParameterMismatch(String),
-    /// <p>An error on the client occurred. Typically, the cause is an invalid input value.</p>
-    InvalidInput(String),
     /// <p>An error on the server occurred when trying to process a request.</p>
     InternalServer(String),
+    /// <p>An error on the client occurred. Typically, the cause is an invalid input value.</p>
+    InvalidInput(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -1714,11 +1715,11 @@ impl CreateBatchPredictionError {
                             error_message,
                         ))
                     }
-                    "InvalidInputException" => {
-                        CreateBatchPredictionError::InvalidInput(String::from(error_message))
-                    }
                     "InternalServerException" => {
                         CreateBatchPredictionError::InternalServer(String::from(error_message))
+                    }
+                    "InvalidInputException" => {
+                        CreateBatchPredictionError::InvalidInput(String::from(error_message))
                     }
                     "ValidationException" => {
                         CreateBatchPredictionError::Validation(error_message.to_string())
@@ -1760,8 +1761,8 @@ impl Error for CreateBatchPredictionError {
     fn description(&self) -> &str {
         match *self {
             CreateBatchPredictionError::IdempotentParameterMismatch(ref cause) => cause,
-            CreateBatchPredictionError::InvalidInput(ref cause) => cause,
             CreateBatchPredictionError::InternalServer(ref cause) => cause,
+            CreateBatchPredictionError::InvalidInput(ref cause) => cause,
             CreateBatchPredictionError::Validation(ref cause) => cause,
             CreateBatchPredictionError::Credentials(ref err) => err.description(),
             CreateBatchPredictionError::HttpDispatch(ref dispatch_error) => {
@@ -1776,10 +1777,10 @@ impl Error for CreateBatchPredictionError {
 pub enum CreateDataSourceFromRDSError {
     /// <p>A second request to use or change an object was not allowed. This can result from retrying a request using a parameter that was not present in the original request.</p>
     IdempotentParameterMismatch(String),
-    /// <p>An error on the client occurred. Typically, the cause is an invalid input value.</p>
-    InvalidInput(String),
     /// <p>An error on the server occurred when trying to process a request.</p>
     InternalServer(String),
+    /// <p>An error on the client occurred. Typically, the cause is an invalid input value.</p>
+    InvalidInput(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -1808,11 +1809,11 @@ impl CreateDataSourceFromRDSError {
                             error_message,
                         ))
                     }
-                    "InvalidInputException" => {
-                        CreateDataSourceFromRDSError::InvalidInput(String::from(error_message))
-                    }
                     "InternalServerException" => {
                         CreateDataSourceFromRDSError::InternalServer(String::from(error_message))
+                    }
+                    "InvalidInputException" => {
+                        CreateDataSourceFromRDSError::InvalidInput(String::from(error_message))
                     }
                     "ValidationException" => {
                         CreateDataSourceFromRDSError::Validation(error_message.to_string())
@@ -1854,8 +1855,8 @@ impl Error for CreateDataSourceFromRDSError {
     fn description(&self) -> &str {
         match *self {
             CreateDataSourceFromRDSError::IdempotentParameterMismatch(ref cause) => cause,
-            CreateDataSourceFromRDSError::InvalidInput(ref cause) => cause,
             CreateDataSourceFromRDSError::InternalServer(ref cause) => cause,
+            CreateDataSourceFromRDSError::InvalidInput(ref cause) => cause,
             CreateDataSourceFromRDSError::Validation(ref cause) => cause,
             CreateDataSourceFromRDSError::Credentials(ref err) => err.description(),
             CreateDataSourceFromRDSError::HttpDispatch(ref dispatch_error) => {
@@ -1870,10 +1871,10 @@ impl Error for CreateDataSourceFromRDSError {
 pub enum CreateDataSourceFromRedshiftError {
     /// <p>A second request to use or change an object was not allowed. This can result from retrying a request using a parameter that was not present in the original request.</p>
     IdempotentParameterMismatch(String),
-    /// <p>An error on the client occurred. Typically, the cause is an invalid input value.</p>
-    InvalidInput(String),
     /// <p>An error on the server occurred when trying to process a request.</p>
     InternalServer(String),
+    /// <p>An error on the client occurred. Typically, the cause is an invalid input value.</p>
+    InvalidInput(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -1902,13 +1903,13 @@ impl CreateDataSourceFromRedshiftError {
                             String::from(error_message),
                         )
                     }
-                    "InvalidInputException" => {
-                        CreateDataSourceFromRedshiftError::InvalidInput(String::from(error_message))
-                    }
                     "InternalServerException" => {
                         CreateDataSourceFromRedshiftError::InternalServer(String::from(
                             error_message,
                         ))
+                    }
+                    "InvalidInputException" => {
+                        CreateDataSourceFromRedshiftError::InvalidInput(String::from(error_message))
                     }
                     "ValidationException" => {
                         CreateDataSourceFromRedshiftError::Validation(error_message.to_string())
@@ -1950,8 +1951,8 @@ impl Error for CreateDataSourceFromRedshiftError {
     fn description(&self) -> &str {
         match *self {
             CreateDataSourceFromRedshiftError::IdempotentParameterMismatch(ref cause) => cause,
-            CreateDataSourceFromRedshiftError::InvalidInput(ref cause) => cause,
             CreateDataSourceFromRedshiftError::InternalServer(ref cause) => cause,
+            CreateDataSourceFromRedshiftError::InvalidInput(ref cause) => cause,
             CreateDataSourceFromRedshiftError::Validation(ref cause) => cause,
             CreateDataSourceFromRedshiftError::Credentials(ref err) => err.description(),
             CreateDataSourceFromRedshiftError::HttpDispatch(ref dispatch_error) => {
@@ -1966,10 +1967,10 @@ impl Error for CreateDataSourceFromRedshiftError {
 pub enum CreateDataSourceFromS3Error {
     /// <p>A second request to use or change an object was not allowed. This can result from retrying a request using a parameter that was not present in the original request.</p>
     IdempotentParameterMismatch(String),
-    /// <p>An error on the client occurred. Typically, the cause is an invalid input value.</p>
-    InvalidInput(String),
     /// <p>An error on the server occurred when trying to process a request.</p>
     InternalServer(String),
+    /// <p>An error on the client occurred. Typically, the cause is an invalid input value.</p>
+    InvalidInput(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -1998,11 +1999,11 @@ impl CreateDataSourceFromS3Error {
                             error_message,
                         ))
                     }
-                    "InvalidInputException" => {
-                        CreateDataSourceFromS3Error::InvalidInput(String::from(error_message))
-                    }
                     "InternalServerException" => {
                         CreateDataSourceFromS3Error::InternalServer(String::from(error_message))
+                    }
+                    "InvalidInputException" => {
+                        CreateDataSourceFromS3Error::InvalidInput(String::from(error_message))
                     }
                     "ValidationException" => {
                         CreateDataSourceFromS3Error::Validation(error_message.to_string())
@@ -2044,8 +2045,8 @@ impl Error for CreateDataSourceFromS3Error {
     fn description(&self) -> &str {
         match *self {
             CreateDataSourceFromS3Error::IdempotentParameterMismatch(ref cause) => cause,
-            CreateDataSourceFromS3Error::InvalidInput(ref cause) => cause,
             CreateDataSourceFromS3Error::InternalServer(ref cause) => cause,
+            CreateDataSourceFromS3Error::InvalidInput(ref cause) => cause,
             CreateDataSourceFromS3Error::Validation(ref cause) => cause,
             CreateDataSourceFromS3Error::Credentials(ref err) => err.description(),
             CreateDataSourceFromS3Error::HttpDispatch(ref dispatch_error) => {
@@ -2060,10 +2061,10 @@ impl Error for CreateDataSourceFromS3Error {
 pub enum CreateEvaluationError {
     /// <p>A second request to use or change an object was not allowed. This can result from retrying a request using a parameter that was not present in the original request.</p>
     IdempotentParameterMismatch(String),
-    /// <p>An error on the client occurred. Typically, the cause is an invalid input value.</p>
-    InvalidInput(String),
     /// <p>An error on the server occurred when trying to process a request.</p>
     InternalServer(String),
+    /// <p>An error on the client occurred. Typically, the cause is an invalid input value.</p>
+    InvalidInput(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -2092,11 +2093,11 @@ impl CreateEvaluationError {
                             error_message,
                         ))
                     }
-                    "InvalidInputException" => {
-                        CreateEvaluationError::InvalidInput(String::from(error_message))
-                    }
                     "InternalServerException" => {
                         CreateEvaluationError::InternalServer(String::from(error_message))
+                    }
+                    "InvalidInputException" => {
+                        CreateEvaluationError::InvalidInput(String::from(error_message))
                     }
                     "ValidationException" => {
                         CreateEvaluationError::Validation(error_message.to_string())
@@ -2138,8 +2139,8 @@ impl Error for CreateEvaluationError {
     fn description(&self) -> &str {
         match *self {
             CreateEvaluationError::IdempotentParameterMismatch(ref cause) => cause,
-            CreateEvaluationError::InvalidInput(ref cause) => cause,
             CreateEvaluationError::InternalServer(ref cause) => cause,
+            CreateEvaluationError::InvalidInput(ref cause) => cause,
             CreateEvaluationError::Validation(ref cause) => cause,
             CreateEvaluationError::Credentials(ref err) => err.description(),
             CreateEvaluationError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
@@ -2152,10 +2153,10 @@ impl Error for CreateEvaluationError {
 pub enum CreateMLModelError {
     /// <p>A second request to use or change an object was not allowed. This can result from retrying a request using a parameter that was not present in the original request.</p>
     IdempotentParameterMismatch(String),
-    /// <p>An error on the client occurred. Typically, the cause is an invalid input value.</p>
-    InvalidInput(String),
     /// <p>An error on the server occurred when trying to process a request.</p>
     InternalServer(String),
+    /// <p>An error on the client occurred. Typically, the cause is an invalid input value.</p>
+    InvalidInput(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -2182,11 +2183,11 @@ impl CreateMLModelError {
                     "IdempotentParameterMismatchException" => {
                         CreateMLModelError::IdempotentParameterMismatch(String::from(error_message))
                     }
-                    "InvalidInputException" => {
-                        CreateMLModelError::InvalidInput(String::from(error_message))
-                    }
                     "InternalServerException" => {
                         CreateMLModelError::InternalServer(String::from(error_message))
+                    }
+                    "InvalidInputException" => {
+                        CreateMLModelError::InvalidInput(String::from(error_message))
                     }
                     "ValidationException" => {
                         CreateMLModelError::Validation(error_message.to_string())
@@ -2228,8 +2229,8 @@ impl Error for CreateMLModelError {
     fn description(&self) -> &str {
         match *self {
             CreateMLModelError::IdempotentParameterMismatch(ref cause) => cause,
-            CreateMLModelError::InvalidInput(ref cause) => cause,
             CreateMLModelError::InternalServer(ref cause) => cause,
+            CreateMLModelError::InvalidInput(ref cause) => cause,
             CreateMLModelError::Validation(ref cause) => cause,
             CreateMLModelError::Credentials(ref err) => err.description(),
             CreateMLModelError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
@@ -2240,12 +2241,12 @@ impl Error for CreateMLModelError {
 /// Errors returned by CreateRealtimeEndpoint
 #[derive(Debug, PartialEq)]
 pub enum CreateRealtimeEndpointError {
-    /// <p>A specified resource cannot be located.</p>
-    ResourceNotFound(String),
-    /// <p>An error on the client occurred. Typically, the cause is an invalid input value.</p>
-    InvalidInput(String),
     /// <p>An error on the server occurred when trying to process a request.</p>
     InternalServer(String),
+    /// <p>An error on the client occurred. Typically, the cause is an invalid input value.</p>
+    InvalidInput(String),
+    /// <p>A specified resource cannot be located.</p>
+    ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -2269,14 +2270,14 @@ impl CreateRealtimeEndpointError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "ResourceNotFoundException" => {
-                        CreateRealtimeEndpointError::ResourceNotFound(String::from(error_message))
+                    "InternalServerException" => {
+                        CreateRealtimeEndpointError::InternalServer(String::from(error_message))
                     }
                     "InvalidInputException" => {
                         CreateRealtimeEndpointError::InvalidInput(String::from(error_message))
                     }
-                    "InternalServerException" => {
-                        CreateRealtimeEndpointError::InternalServer(String::from(error_message))
+                    "ResourceNotFoundException" => {
+                        CreateRealtimeEndpointError::ResourceNotFound(String::from(error_message))
                     }
                     "ValidationException" => {
                         CreateRealtimeEndpointError::Validation(error_message.to_string())
@@ -2317,9 +2318,9 @@ impl fmt::Display for CreateRealtimeEndpointError {
 impl Error for CreateRealtimeEndpointError {
     fn description(&self) -> &str {
         match *self {
-            CreateRealtimeEndpointError::ResourceNotFound(ref cause) => cause,
-            CreateRealtimeEndpointError::InvalidInput(ref cause) => cause,
             CreateRealtimeEndpointError::InternalServer(ref cause) => cause,
+            CreateRealtimeEndpointError::InvalidInput(ref cause) => cause,
+            CreateRealtimeEndpointError::ResourceNotFound(ref cause) => cause,
             CreateRealtimeEndpointError::Validation(ref cause) => cause,
             CreateRealtimeEndpointError::Credentials(ref err) => err.description(),
             CreateRealtimeEndpointError::HttpDispatch(ref dispatch_error) => {
@@ -2332,12 +2333,12 @@ impl Error for CreateRealtimeEndpointError {
 /// Errors returned by DeleteBatchPrediction
 #[derive(Debug, PartialEq)]
 pub enum DeleteBatchPredictionError {
-    /// <p>A specified resource cannot be located.</p>
-    ResourceNotFound(String),
-    /// <p>An error on the client occurred. Typically, the cause is an invalid input value.</p>
-    InvalidInput(String),
     /// <p>An error on the server occurred when trying to process a request.</p>
     InternalServer(String),
+    /// <p>An error on the client occurred. Typically, the cause is an invalid input value.</p>
+    InvalidInput(String),
+    /// <p>A specified resource cannot be located.</p>
+    ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -2361,14 +2362,14 @@ impl DeleteBatchPredictionError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "ResourceNotFoundException" => {
-                        DeleteBatchPredictionError::ResourceNotFound(String::from(error_message))
+                    "InternalServerException" => {
+                        DeleteBatchPredictionError::InternalServer(String::from(error_message))
                     }
                     "InvalidInputException" => {
                         DeleteBatchPredictionError::InvalidInput(String::from(error_message))
                     }
-                    "InternalServerException" => {
-                        DeleteBatchPredictionError::InternalServer(String::from(error_message))
+                    "ResourceNotFoundException" => {
+                        DeleteBatchPredictionError::ResourceNotFound(String::from(error_message))
                     }
                     "ValidationException" => {
                         DeleteBatchPredictionError::Validation(error_message.to_string())
@@ -2409,9 +2410,9 @@ impl fmt::Display for DeleteBatchPredictionError {
 impl Error for DeleteBatchPredictionError {
     fn description(&self) -> &str {
         match *self {
-            DeleteBatchPredictionError::ResourceNotFound(ref cause) => cause,
-            DeleteBatchPredictionError::InvalidInput(ref cause) => cause,
             DeleteBatchPredictionError::InternalServer(ref cause) => cause,
+            DeleteBatchPredictionError::InvalidInput(ref cause) => cause,
+            DeleteBatchPredictionError::ResourceNotFound(ref cause) => cause,
             DeleteBatchPredictionError::Validation(ref cause) => cause,
             DeleteBatchPredictionError::Credentials(ref err) => err.description(),
             DeleteBatchPredictionError::HttpDispatch(ref dispatch_error) => {
@@ -2424,12 +2425,12 @@ impl Error for DeleteBatchPredictionError {
 /// Errors returned by DeleteDataSource
 #[derive(Debug, PartialEq)]
 pub enum DeleteDataSourceError {
-    /// <p>A specified resource cannot be located.</p>
-    ResourceNotFound(String),
-    /// <p>An error on the client occurred. Typically, the cause is an invalid input value.</p>
-    InvalidInput(String),
     /// <p>An error on the server occurred when trying to process a request.</p>
     InternalServer(String),
+    /// <p>An error on the client occurred. Typically, the cause is an invalid input value.</p>
+    InvalidInput(String),
+    /// <p>A specified resource cannot be located.</p>
+    ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -2453,14 +2454,14 @@ impl DeleteDataSourceError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "ResourceNotFoundException" => {
-                        DeleteDataSourceError::ResourceNotFound(String::from(error_message))
+                    "InternalServerException" => {
+                        DeleteDataSourceError::InternalServer(String::from(error_message))
                     }
                     "InvalidInputException" => {
                         DeleteDataSourceError::InvalidInput(String::from(error_message))
                     }
-                    "InternalServerException" => {
-                        DeleteDataSourceError::InternalServer(String::from(error_message))
+                    "ResourceNotFoundException" => {
+                        DeleteDataSourceError::ResourceNotFound(String::from(error_message))
                     }
                     "ValidationException" => {
                         DeleteDataSourceError::Validation(error_message.to_string())
@@ -2501,9 +2502,9 @@ impl fmt::Display for DeleteDataSourceError {
 impl Error for DeleteDataSourceError {
     fn description(&self) -> &str {
         match *self {
-            DeleteDataSourceError::ResourceNotFound(ref cause) => cause,
-            DeleteDataSourceError::InvalidInput(ref cause) => cause,
             DeleteDataSourceError::InternalServer(ref cause) => cause,
+            DeleteDataSourceError::InvalidInput(ref cause) => cause,
+            DeleteDataSourceError::ResourceNotFound(ref cause) => cause,
             DeleteDataSourceError::Validation(ref cause) => cause,
             DeleteDataSourceError::Credentials(ref err) => err.description(),
             DeleteDataSourceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
@@ -2514,12 +2515,12 @@ impl Error for DeleteDataSourceError {
 /// Errors returned by DeleteEvaluation
 #[derive(Debug, PartialEq)]
 pub enum DeleteEvaluationError {
-    /// <p>A specified resource cannot be located.</p>
-    ResourceNotFound(String),
-    /// <p>An error on the client occurred. Typically, the cause is an invalid input value.</p>
-    InvalidInput(String),
     /// <p>An error on the server occurred when trying to process a request.</p>
     InternalServer(String),
+    /// <p>An error on the client occurred. Typically, the cause is an invalid input value.</p>
+    InvalidInput(String),
+    /// <p>A specified resource cannot be located.</p>
+    ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -2543,14 +2544,14 @@ impl DeleteEvaluationError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "ResourceNotFoundException" => {
-                        DeleteEvaluationError::ResourceNotFound(String::from(error_message))
+                    "InternalServerException" => {
+                        DeleteEvaluationError::InternalServer(String::from(error_message))
                     }
                     "InvalidInputException" => {
                         DeleteEvaluationError::InvalidInput(String::from(error_message))
                     }
-                    "InternalServerException" => {
-                        DeleteEvaluationError::InternalServer(String::from(error_message))
+                    "ResourceNotFoundException" => {
+                        DeleteEvaluationError::ResourceNotFound(String::from(error_message))
                     }
                     "ValidationException" => {
                         DeleteEvaluationError::Validation(error_message.to_string())
@@ -2591,9 +2592,9 @@ impl fmt::Display for DeleteEvaluationError {
 impl Error for DeleteEvaluationError {
     fn description(&self) -> &str {
         match *self {
-            DeleteEvaluationError::ResourceNotFound(ref cause) => cause,
-            DeleteEvaluationError::InvalidInput(ref cause) => cause,
             DeleteEvaluationError::InternalServer(ref cause) => cause,
+            DeleteEvaluationError::InvalidInput(ref cause) => cause,
+            DeleteEvaluationError::ResourceNotFound(ref cause) => cause,
             DeleteEvaluationError::Validation(ref cause) => cause,
             DeleteEvaluationError::Credentials(ref err) => err.description(),
             DeleteEvaluationError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
@@ -2604,12 +2605,12 @@ impl Error for DeleteEvaluationError {
 /// Errors returned by DeleteMLModel
 #[derive(Debug, PartialEq)]
 pub enum DeleteMLModelError {
-    /// <p>A specified resource cannot be located.</p>
-    ResourceNotFound(String),
-    /// <p>An error on the client occurred. Typically, the cause is an invalid input value.</p>
-    InvalidInput(String),
     /// <p>An error on the server occurred when trying to process a request.</p>
     InternalServer(String),
+    /// <p>An error on the client occurred. Typically, the cause is an invalid input value.</p>
+    InvalidInput(String),
+    /// <p>A specified resource cannot be located.</p>
+    ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -2633,14 +2634,14 @@ impl DeleteMLModelError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "ResourceNotFoundException" => {
-                        DeleteMLModelError::ResourceNotFound(String::from(error_message))
+                    "InternalServerException" => {
+                        DeleteMLModelError::InternalServer(String::from(error_message))
                     }
                     "InvalidInputException" => {
                         DeleteMLModelError::InvalidInput(String::from(error_message))
                     }
-                    "InternalServerException" => {
-                        DeleteMLModelError::InternalServer(String::from(error_message))
+                    "ResourceNotFoundException" => {
+                        DeleteMLModelError::ResourceNotFound(String::from(error_message))
                     }
                     "ValidationException" => {
                         DeleteMLModelError::Validation(error_message.to_string())
@@ -2681,9 +2682,9 @@ impl fmt::Display for DeleteMLModelError {
 impl Error for DeleteMLModelError {
     fn description(&self) -> &str {
         match *self {
-            DeleteMLModelError::ResourceNotFound(ref cause) => cause,
-            DeleteMLModelError::InvalidInput(ref cause) => cause,
             DeleteMLModelError::InternalServer(ref cause) => cause,
+            DeleteMLModelError::InvalidInput(ref cause) => cause,
+            DeleteMLModelError::ResourceNotFound(ref cause) => cause,
             DeleteMLModelError::Validation(ref cause) => cause,
             DeleteMLModelError::Credentials(ref err) => err.description(),
             DeleteMLModelError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
@@ -2694,12 +2695,12 @@ impl Error for DeleteMLModelError {
 /// Errors returned by DeleteRealtimeEndpoint
 #[derive(Debug, PartialEq)]
 pub enum DeleteRealtimeEndpointError {
-    /// <p>A specified resource cannot be located.</p>
-    ResourceNotFound(String),
-    /// <p>An error on the client occurred. Typically, the cause is an invalid input value.</p>
-    InvalidInput(String),
     /// <p>An error on the server occurred when trying to process a request.</p>
     InternalServer(String),
+    /// <p>An error on the client occurred. Typically, the cause is an invalid input value.</p>
+    InvalidInput(String),
+    /// <p>A specified resource cannot be located.</p>
+    ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -2723,14 +2724,14 @@ impl DeleteRealtimeEndpointError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "ResourceNotFoundException" => {
-                        DeleteRealtimeEndpointError::ResourceNotFound(String::from(error_message))
+                    "InternalServerException" => {
+                        DeleteRealtimeEndpointError::InternalServer(String::from(error_message))
                     }
                     "InvalidInputException" => {
                         DeleteRealtimeEndpointError::InvalidInput(String::from(error_message))
                     }
-                    "InternalServerException" => {
-                        DeleteRealtimeEndpointError::InternalServer(String::from(error_message))
+                    "ResourceNotFoundException" => {
+                        DeleteRealtimeEndpointError::ResourceNotFound(String::from(error_message))
                     }
                     "ValidationException" => {
                         DeleteRealtimeEndpointError::Validation(error_message.to_string())
@@ -2771,9 +2772,9 @@ impl fmt::Display for DeleteRealtimeEndpointError {
 impl Error for DeleteRealtimeEndpointError {
     fn description(&self) -> &str {
         match *self {
-            DeleteRealtimeEndpointError::ResourceNotFound(ref cause) => cause,
-            DeleteRealtimeEndpointError::InvalidInput(ref cause) => cause,
             DeleteRealtimeEndpointError::InternalServer(ref cause) => cause,
+            DeleteRealtimeEndpointError::InvalidInput(ref cause) => cause,
+            DeleteRealtimeEndpointError::ResourceNotFound(ref cause) => cause,
             DeleteRealtimeEndpointError::Validation(ref cause) => cause,
             DeleteRealtimeEndpointError::Credentials(ref err) => err.description(),
             DeleteRealtimeEndpointError::HttpDispatch(ref dispatch_error) => {
@@ -2786,13 +2787,14 @@ impl Error for DeleteRealtimeEndpointError {
 /// Errors returned by DeleteTags
 #[derive(Debug, PartialEq)]
 pub enum DeleteTagsError {
+    /// <p>An error on the server occurred when trying to process a request.</p>
+    InternalServer(String),
+    /// <p>An error on the client occurred. Typically, the cause is an invalid input value.</p>
+    InvalidInput(String),
+
     InvalidTag(String),
     /// <p>A specified resource cannot be located.</p>
     ResourceNotFound(String),
-    /// <p>An error on the client occurred. Typically, the cause is an invalid input value.</p>
-    InvalidInput(String),
-    /// <p>An error on the server occurred when trying to process a request.</p>
-    InternalServer(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -2816,17 +2818,17 @@ impl DeleteTagsError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
+                    "InternalServerException" => {
+                        DeleteTagsError::InternalServer(String::from(error_message))
+                    }
+                    "InvalidInputException" => {
+                        DeleteTagsError::InvalidInput(String::from(error_message))
+                    }
                     "InvalidTagException" => {
                         DeleteTagsError::InvalidTag(String::from(error_message))
                     }
                     "ResourceNotFoundException" => {
                         DeleteTagsError::ResourceNotFound(String::from(error_message))
-                    }
-                    "InvalidInputException" => {
-                        DeleteTagsError::InvalidInput(String::from(error_message))
-                    }
-                    "InternalServerException" => {
-                        DeleteTagsError::InternalServer(String::from(error_message))
                     }
                     "ValidationException" => DeleteTagsError::Validation(error_message.to_string()),
                     _ => DeleteTagsError::Unknown(String::from(body)),
@@ -2865,10 +2867,10 @@ impl fmt::Display for DeleteTagsError {
 impl Error for DeleteTagsError {
     fn description(&self) -> &str {
         match *self {
+            DeleteTagsError::InternalServer(ref cause) => cause,
+            DeleteTagsError::InvalidInput(ref cause) => cause,
             DeleteTagsError::InvalidTag(ref cause) => cause,
             DeleteTagsError::ResourceNotFound(ref cause) => cause,
-            DeleteTagsError::InvalidInput(ref cause) => cause,
-            DeleteTagsError::InternalServer(ref cause) => cause,
             DeleteTagsError::Validation(ref cause) => cause,
             DeleteTagsError::Credentials(ref err) => err.description(),
             DeleteTagsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
@@ -2879,10 +2881,10 @@ impl Error for DeleteTagsError {
 /// Errors returned by DescribeBatchPredictions
 #[derive(Debug, PartialEq)]
 pub enum DescribeBatchPredictionsError {
-    /// <p>An error on the client occurred. Typically, the cause is an invalid input value.</p>
-    InvalidInput(String),
     /// <p>An error on the server occurred when trying to process a request.</p>
     InternalServer(String),
+    /// <p>An error on the client occurred. Typically, the cause is an invalid input value.</p>
+    InvalidInput(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -2906,11 +2908,11 @@ impl DescribeBatchPredictionsError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "InvalidInputException" => {
-                        DescribeBatchPredictionsError::InvalidInput(String::from(error_message))
-                    }
                     "InternalServerException" => {
                         DescribeBatchPredictionsError::InternalServer(String::from(error_message))
+                    }
+                    "InvalidInputException" => {
+                        DescribeBatchPredictionsError::InvalidInput(String::from(error_message))
                     }
                     "ValidationException" => {
                         DescribeBatchPredictionsError::Validation(error_message.to_string())
@@ -2951,8 +2953,8 @@ impl fmt::Display for DescribeBatchPredictionsError {
 impl Error for DescribeBatchPredictionsError {
     fn description(&self) -> &str {
         match *self {
-            DescribeBatchPredictionsError::InvalidInput(ref cause) => cause,
             DescribeBatchPredictionsError::InternalServer(ref cause) => cause,
+            DescribeBatchPredictionsError::InvalidInput(ref cause) => cause,
             DescribeBatchPredictionsError::Validation(ref cause) => cause,
             DescribeBatchPredictionsError::Credentials(ref err) => err.description(),
             DescribeBatchPredictionsError::HttpDispatch(ref dispatch_error) => {
@@ -2965,10 +2967,10 @@ impl Error for DescribeBatchPredictionsError {
 /// Errors returned by DescribeDataSources
 #[derive(Debug, PartialEq)]
 pub enum DescribeDataSourcesError {
-    /// <p>An error on the client occurred. Typically, the cause is an invalid input value.</p>
-    InvalidInput(String),
     /// <p>An error on the server occurred when trying to process a request.</p>
     InternalServer(String),
+    /// <p>An error on the client occurred. Typically, the cause is an invalid input value.</p>
+    InvalidInput(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -2992,11 +2994,11 @@ impl DescribeDataSourcesError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "InvalidInputException" => {
-                        DescribeDataSourcesError::InvalidInput(String::from(error_message))
-                    }
                     "InternalServerException" => {
                         DescribeDataSourcesError::InternalServer(String::from(error_message))
+                    }
+                    "InvalidInputException" => {
+                        DescribeDataSourcesError::InvalidInput(String::from(error_message))
                     }
                     "ValidationException" => {
                         DescribeDataSourcesError::Validation(error_message.to_string())
@@ -3037,8 +3039,8 @@ impl fmt::Display for DescribeDataSourcesError {
 impl Error for DescribeDataSourcesError {
     fn description(&self) -> &str {
         match *self {
-            DescribeDataSourcesError::InvalidInput(ref cause) => cause,
             DescribeDataSourcesError::InternalServer(ref cause) => cause,
+            DescribeDataSourcesError::InvalidInput(ref cause) => cause,
             DescribeDataSourcesError::Validation(ref cause) => cause,
             DescribeDataSourcesError::Credentials(ref err) => err.description(),
             DescribeDataSourcesError::HttpDispatch(ref dispatch_error) => {
@@ -3051,10 +3053,10 @@ impl Error for DescribeDataSourcesError {
 /// Errors returned by DescribeEvaluations
 #[derive(Debug, PartialEq)]
 pub enum DescribeEvaluationsError {
-    /// <p>An error on the client occurred. Typically, the cause is an invalid input value.</p>
-    InvalidInput(String),
     /// <p>An error on the server occurred when trying to process a request.</p>
     InternalServer(String),
+    /// <p>An error on the client occurred. Typically, the cause is an invalid input value.</p>
+    InvalidInput(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -3078,11 +3080,11 @@ impl DescribeEvaluationsError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "InvalidInputException" => {
-                        DescribeEvaluationsError::InvalidInput(String::from(error_message))
-                    }
                     "InternalServerException" => {
                         DescribeEvaluationsError::InternalServer(String::from(error_message))
+                    }
+                    "InvalidInputException" => {
+                        DescribeEvaluationsError::InvalidInput(String::from(error_message))
                     }
                     "ValidationException" => {
                         DescribeEvaluationsError::Validation(error_message.to_string())
@@ -3123,8 +3125,8 @@ impl fmt::Display for DescribeEvaluationsError {
 impl Error for DescribeEvaluationsError {
     fn description(&self) -> &str {
         match *self {
-            DescribeEvaluationsError::InvalidInput(ref cause) => cause,
             DescribeEvaluationsError::InternalServer(ref cause) => cause,
+            DescribeEvaluationsError::InvalidInput(ref cause) => cause,
             DescribeEvaluationsError::Validation(ref cause) => cause,
             DescribeEvaluationsError::Credentials(ref err) => err.description(),
             DescribeEvaluationsError::HttpDispatch(ref dispatch_error) => {
@@ -3137,10 +3139,10 @@ impl Error for DescribeEvaluationsError {
 /// Errors returned by DescribeMLModels
 #[derive(Debug, PartialEq)]
 pub enum DescribeMLModelsError {
-    /// <p>An error on the client occurred. Typically, the cause is an invalid input value.</p>
-    InvalidInput(String),
     /// <p>An error on the server occurred when trying to process a request.</p>
     InternalServer(String),
+    /// <p>An error on the client occurred. Typically, the cause is an invalid input value.</p>
+    InvalidInput(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -3164,11 +3166,11 @@ impl DescribeMLModelsError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "InvalidInputException" => {
-                        DescribeMLModelsError::InvalidInput(String::from(error_message))
-                    }
                     "InternalServerException" => {
                         DescribeMLModelsError::InternalServer(String::from(error_message))
+                    }
+                    "InvalidInputException" => {
+                        DescribeMLModelsError::InvalidInput(String::from(error_message))
                     }
                     "ValidationException" => {
                         DescribeMLModelsError::Validation(error_message.to_string())
@@ -3209,8 +3211,8 @@ impl fmt::Display for DescribeMLModelsError {
 impl Error for DescribeMLModelsError {
     fn description(&self) -> &str {
         match *self {
-            DescribeMLModelsError::InvalidInput(ref cause) => cause,
             DescribeMLModelsError::InternalServer(ref cause) => cause,
+            DescribeMLModelsError::InvalidInput(ref cause) => cause,
             DescribeMLModelsError::Validation(ref cause) => cause,
             DescribeMLModelsError::Credentials(ref err) => err.description(),
             DescribeMLModelsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
@@ -3221,12 +3223,12 @@ impl Error for DescribeMLModelsError {
 /// Errors returned by DescribeTags
 #[derive(Debug, PartialEq)]
 pub enum DescribeTagsError {
-    /// <p>A specified resource cannot be located.</p>
-    ResourceNotFound(String),
-    /// <p>An error on the client occurred. Typically, the cause is an invalid input value.</p>
-    InvalidInput(String),
     /// <p>An error on the server occurred when trying to process a request.</p>
     InternalServer(String),
+    /// <p>An error on the client occurred. Typically, the cause is an invalid input value.</p>
+    InvalidInput(String),
+    /// <p>A specified resource cannot be located.</p>
+    ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -3250,14 +3252,14 @@ impl DescribeTagsError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "ResourceNotFoundException" => {
-                        DescribeTagsError::ResourceNotFound(String::from(error_message))
+                    "InternalServerException" => {
+                        DescribeTagsError::InternalServer(String::from(error_message))
                     }
                     "InvalidInputException" => {
                         DescribeTagsError::InvalidInput(String::from(error_message))
                     }
-                    "InternalServerException" => {
-                        DescribeTagsError::InternalServer(String::from(error_message))
+                    "ResourceNotFoundException" => {
+                        DescribeTagsError::ResourceNotFound(String::from(error_message))
                     }
                     "ValidationException" => {
                         DescribeTagsError::Validation(error_message.to_string())
@@ -3298,9 +3300,9 @@ impl fmt::Display for DescribeTagsError {
 impl Error for DescribeTagsError {
     fn description(&self) -> &str {
         match *self {
-            DescribeTagsError::ResourceNotFound(ref cause) => cause,
-            DescribeTagsError::InvalidInput(ref cause) => cause,
             DescribeTagsError::InternalServer(ref cause) => cause,
+            DescribeTagsError::InvalidInput(ref cause) => cause,
+            DescribeTagsError::ResourceNotFound(ref cause) => cause,
             DescribeTagsError::Validation(ref cause) => cause,
             DescribeTagsError::Credentials(ref err) => err.description(),
             DescribeTagsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
@@ -3311,12 +3313,12 @@ impl Error for DescribeTagsError {
 /// Errors returned by GetBatchPrediction
 #[derive(Debug, PartialEq)]
 pub enum GetBatchPredictionError {
-    /// <p>A specified resource cannot be located.</p>
-    ResourceNotFound(String),
-    /// <p>An error on the client occurred. Typically, the cause is an invalid input value.</p>
-    InvalidInput(String),
     /// <p>An error on the server occurred when trying to process a request.</p>
     InternalServer(String),
+    /// <p>An error on the client occurred. Typically, the cause is an invalid input value.</p>
+    InvalidInput(String),
+    /// <p>A specified resource cannot be located.</p>
+    ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -3340,14 +3342,14 @@ impl GetBatchPredictionError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "ResourceNotFoundException" => {
-                        GetBatchPredictionError::ResourceNotFound(String::from(error_message))
+                    "InternalServerException" => {
+                        GetBatchPredictionError::InternalServer(String::from(error_message))
                     }
                     "InvalidInputException" => {
                         GetBatchPredictionError::InvalidInput(String::from(error_message))
                     }
-                    "InternalServerException" => {
-                        GetBatchPredictionError::InternalServer(String::from(error_message))
+                    "ResourceNotFoundException" => {
+                        GetBatchPredictionError::ResourceNotFound(String::from(error_message))
                     }
                     "ValidationException" => {
                         GetBatchPredictionError::Validation(error_message.to_string())
@@ -3388,9 +3390,9 @@ impl fmt::Display for GetBatchPredictionError {
 impl Error for GetBatchPredictionError {
     fn description(&self) -> &str {
         match *self {
-            GetBatchPredictionError::ResourceNotFound(ref cause) => cause,
-            GetBatchPredictionError::InvalidInput(ref cause) => cause,
             GetBatchPredictionError::InternalServer(ref cause) => cause,
+            GetBatchPredictionError::InvalidInput(ref cause) => cause,
+            GetBatchPredictionError::ResourceNotFound(ref cause) => cause,
             GetBatchPredictionError::Validation(ref cause) => cause,
             GetBatchPredictionError::Credentials(ref err) => err.description(),
             GetBatchPredictionError::HttpDispatch(ref dispatch_error) => {
@@ -3403,12 +3405,12 @@ impl Error for GetBatchPredictionError {
 /// Errors returned by GetDataSource
 #[derive(Debug, PartialEq)]
 pub enum GetDataSourceError {
-    /// <p>A specified resource cannot be located.</p>
-    ResourceNotFound(String),
-    /// <p>An error on the client occurred. Typically, the cause is an invalid input value.</p>
-    InvalidInput(String),
     /// <p>An error on the server occurred when trying to process a request.</p>
     InternalServer(String),
+    /// <p>An error on the client occurred. Typically, the cause is an invalid input value.</p>
+    InvalidInput(String),
+    /// <p>A specified resource cannot be located.</p>
+    ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -3432,14 +3434,14 @@ impl GetDataSourceError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "ResourceNotFoundException" => {
-                        GetDataSourceError::ResourceNotFound(String::from(error_message))
+                    "InternalServerException" => {
+                        GetDataSourceError::InternalServer(String::from(error_message))
                     }
                     "InvalidInputException" => {
                         GetDataSourceError::InvalidInput(String::from(error_message))
                     }
-                    "InternalServerException" => {
-                        GetDataSourceError::InternalServer(String::from(error_message))
+                    "ResourceNotFoundException" => {
+                        GetDataSourceError::ResourceNotFound(String::from(error_message))
                     }
                     "ValidationException" => {
                         GetDataSourceError::Validation(error_message.to_string())
@@ -3480,9 +3482,9 @@ impl fmt::Display for GetDataSourceError {
 impl Error for GetDataSourceError {
     fn description(&self) -> &str {
         match *self {
-            GetDataSourceError::ResourceNotFound(ref cause) => cause,
-            GetDataSourceError::InvalidInput(ref cause) => cause,
             GetDataSourceError::InternalServer(ref cause) => cause,
+            GetDataSourceError::InvalidInput(ref cause) => cause,
+            GetDataSourceError::ResourceNotFound(ref cause) => cause,
             GetDataSourceError::Validation(ref cause) => cause,
             GetDataSourceError::Credentials(ref err) => err.description(),
             GetDataSourceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
@@ -3493,12 +3495,12 @@ impl Error for GetDataSourceError {
 /// Errors returned by GetEvaluation
 #[derive(Debug, PartialEq)]
 pub enum GetEvaluationError {
-    /// <p>A specified resource cannot be located.</p>
-    ResourceNotFound(String),
-    /// <p>An error on the client occurred. Typically, the cause is an invalid input value.</p>
-    InvalidInput(String),
     /// <p>An error on the server occurred when trying to process a request.</p>
     InternalServer(String),
+    /// <p>An error on the client occurred. Typically, the cause is an invalid input value.</p>
+    InvalidInput(String),
+    /// <p>A specified resource cannot be located.</p>
+    ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -3522,14 +3524,14 @@ impl GetEvaluationError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "ResourceNotFoundException" => {
-                        GetEvaluationError::ResourceNotFound(String::from(error_message))
+                    "InternalServerException" => {
+                        GetEvaluationError::InternalServer(String::from(error_message))
                     }
                     "InvalidInputException" => {
                         GetEvaluationError::InvalidInput(String::from(error_message))
                     }
-                    "InternalServerException" => {
-                        GetEvaluationError::InternalServer(String::from(error_message))
+                    "ResourceNotFoundException" => {
+                        GetEvaluationError::ResourceNotFound(String::from(error_message))
                     }
                     "ValidationException" => {
                         GetEvaluationError::Validation(error_message.to_string())
@@ -3570,9 +3572,9 @@ impl fmt::Display for GetEvaluationError {
 impl Error for GetEvaluationError {
     fn description(&self) -> &str {
         match *self {
-            GetEvaluationError::ResourceNotFound(ref cause) => cause,
-            GetEvaluationError::InvalidInput(ref cause) => cause,
             GetEvaluationError::InternalServer(ref cause) => cause,
+            GetEvaluationError::InvalidInput(ref cause) => cause,
+            GetEvaluationError::ResourceNotFound(ref cause) => cause,
             GetEvaluationError::Validation(ref cause) => cause,
             GetEvaluationError::Credentials(ref err) => err.description(),
             GetEvaluationError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
@@ -3583,12 +3585,12 @@ impl Error for GetEvaluationError {
 /// Errors returned by GetMLModel
 #[derive(Debug, PartialEq)]
 pub enum GetMLModelError {
-    /// <p>A specified resource cannot be located.</p>
-    ResourceNotFound(String),
-    /// <p>An error on the client occurred. Typically, the cause is an invalid input value.</p>
-    InvalidInput(String),
     /// <p>An error on the server occurred when trying to process a request.</p>
     InternalServer(String),
+    /// <p>An error on the client occurred. Typically, the cause is an invalid input value.</p>
+    InvalidInput(String),
+    /// <p>A specified resource cannot be located.</p>
+    ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -3612,14 +3614,14 @@ impl GetMLModelError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "ResourceNotFoundException" => {
-                        GetMLModelError::ResourceNotFound(String::from(error_message))
+                    "InternalServerException" => {
+                        GetMLModelError::InternalServer(String::from(error_message))
                     }
                     "InvalidInputException" => {
                         GetMLModelError::InvalidInput(String::from(error_message))
                     }
-                    "InternalServerException" => {
-                        GetMLModelError::InternalServer(String::from(error_message))
+                    "ResourceNotFoundException" => {
+                        GetMLModelError::ResourceNotFound(String::from(error_message))
                     }
                     "ValidationException" => GetMLModelError::Validation(error_message.to_string()),
                     _ => GetMLModelError::Unknown(String::from(body)),
@@ -3658,9 +3660,9 @@ impl fmt::Display for GetMLModelError {
 impl Error for GetMLModelError {
     fn description(&self) -> &str {
         match *self {
-            GetMLModelError::ResourceNotFound(ref cause) => cause,
-            GetMLModelError::InvalidInput(ref cause) => cause,
             GetMLModelError::InternalServer(ref cause) => cause,
+            GetMLModelError::InvalidInput(ref cause) => cause,
+            GetMLModelError::ResourceNotFound(ref cause) => cause,
             GetMLModelError::Validation(ref cause) => cause,
             GetMLModelError::Credentials(ref err) => err.description(),
             GetMLModelError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
@@ -3671,16 +3673,16 @@ impl Error for GetMLModelError {
 /// Errors returned by Predict
 #[derive(Debug, PartialEq)]
 pub enum PredictError {
-    /// <p>A specified resource cannot be located.</p>
-    ResourceNotFound(String),
-    /// <p>An error on the client occurred. Typically, the cause is an invalid input value.</p>
-    InvalidInput(String),
     /// <p>An error on the server occurred when trying to process a request.</p>
     InternalServer(String),
-    /// <p>The exception is thrown when a predict request is made to an unmounted <code>MLModel</code>.</p>
-    PredictorNotMounted(String),
+    /// <p>An error on the client occurred. Typically, the cause is an invalid input value.</p>
+    InvalidInput(String),
     /// <p>The subscriber exceeded the maximum number of operations. This exception can occur when listing objects such as <code>DataSource</code>.</p>
     LimitExceeded(String),
+    /// <p>The exception is thrown when a predict request is made to an unmounted <code>MLModel</code>.</p>
+    PredictorNotMounted(String),
+    /// <p>A specified resource cannot be located.</p>
+    ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -3704,20 +3706,20 @@ impl PredictError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "ResourceNotFoundException" => {
-                        PredictError::ResourceNotFound(String::from(error_message))
+                    "InternalServerException" => {
+                        PredictError::InternalServer(String::from(error_message))
                     }
                     "InvalidInputException" => {
                         PredictError::InvalidInput(String::from(error_message))
                     }
-                    "InternalServerException" => {
-                        PredictError::InternalServer(String::from(error_message))
+                    "LimitExceededException" => {
+                        PredictError::LimitExceeded(String::from(error_message))
                     }
                     "PredictorNotMountedException" => {
                         PredictError::PredictorNotMounted(String::from(error_message))
                     }
-                    "LimitExceededException" => {
-                        PredictError::LimitExceeded(String::from(error_message))
+                    "ResourceNotFoundException" => {
+                        PredictError::ResourceNotFound(String::from(error_message))
                     }
                     "ValidationException" => PredictError::Validation(error_message.to_string()),
                     _ => PredictError::Unknown(String::from(body)),
@@ -3756,11 +3758,11 @@ impl fmt::Display for PredictError {
 impl Error for PredictError {
     fn description(&self) -> &str {
         match *self {
-            PredictError::ResourceNotFound(ref cause) => cause,
-            PredictError::InvalidInput(ref cause) => cause,
             PredictError::InternalServer(ref cause) => cause,
-            PredictError::PredictorNotMounted(ref cause) => cause,
+            PredictError::InvalidInput(ref cause) => cause,
             PredictError::LimitExceeded(ref cause) => cause,
+            PredictError::PredictorNotMounted(ref cause) => cause,
+            PredictError::ResourceNotFound(ref cause) => cause,
             PredictError::Validation(ref cause) => cause,
             PredictError::Credentials(ref err) => err.description(),
             PredictError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
@@ -3771,12 +3773,12 @@ impl Error for PredictError {
 /// Errors returned by UpdateBatchPrediction
 #[derive(Debug, PartialEq)]
 pub enum UpdateBatchPredictionError {
-    /// <p>A specified resource cannot be located.</p>
-    ResourceNotFound(String),
-    /// <p>An error on the client occurred. Typically, the cause is an invalid input value.</p>
-    InvalidInput(String),
     /// <p>An error on the server occurred when trying to process a request.</p>
     InternalServer(String),
+    /// <p>An error on the client occurred. Typically, the cause is an invalid input value.</p>
+    InvalidInput(String),
+    /// <p>A specified resource cannot be located.</p>
+    ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -3800,14 +3802,14 @@ impl UpdateBatchPredictionError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "ResourceNotFoundException" => {
-                        UpdateBatchPredictionError::ResourceNotFound(String::from(error_message))
+                    "InternalServerException" => {
+                        UpdateBatchPredictionError::InternalServer(String::from(error_message))
                     }
                     "InvalidInputException" => {
                         UpdateBatchPredictionError::InvalidInput(String::from(error_message))
                     }
-                    "InternalServerException" => {
-                        UpdateBatchPredictionError::InternalServer(String::from(error_message))
+                    "ResourceNotFoundException" => {
+                        UpdateBatchPredictionError::ResourceNotFound(String::from(error_message))
                     }
                     "ValidationException" => {
                         UpdateBatchPredictionError::Validation(error_message.to_string())
@@ -3848,9 +3850,9 @@ impl fmt::Display for UpdateBatchPredictionError {
 impl Error for UpdateBatchPredictionError {
     fn description(&self) -> &str {
         match *self {
-            UpdateBatchPredictionError::ResourceNotFound(ref cause) => cause,
-            UpdateBatchPredictionError::InvalidInput(ref cause) => cause,
             UpdateBatchPredictionError::InternalServer(ref cause) => cause,
+            UpdateBatchPredictionError::InvalidInput(ref cause) => cause,
+            UpdateBatchPredictionError::ResourceNotFound(ref cause) => cause,
             UpdateBatchPredictionError::Validation(ref cause) => cause,
             UpdateBatchPredictionError::Credentials(ref err) => err.description(),
             UpdateBatchPredictionError::HttpDispatch(ref dispatch_error) => {
@@ -3863,12 +3865,12 @@ impl Error for UpdateBatchPredictionError {
 /// Errors returned by UpdateDataSource
 #[derive(Debug, PartialEq)]
 pub enum UpdateDataSourceError {
-    /// <p>A specified resource cannot be located.</p>
-    ResourceNotFound(String),
-    /// <p>An error on the client occurred. Typically, the cause is an invalid input value.</p>
-    InvalidInput(String),
     /// <p>An error on the server occurred when trying to process a request.</p>
     InternalServer(String),
+    /// <p>An error on the client occurred. Typically, the cause is an invalid input value.</p>
+    InvalidInput(String),
+    /// <p>A specified resource cannot be located.</p>
+    ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -3892,14 +3894,14 @@ impl UpdateDataSourceError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "ResourceNotFoundException" => {
-                        UpdateDataSourceError::ResourceNotFound(String::from(error_message))
+                    "InternalServerException" => {
+                        UpdateDataSourceError::InternalServer(String::from(error_message))
                     }
                     "InvalidInputException" => {
                         UpdateDataSourceError::InvalidInput(String::from(error_message))
                     }
-                    "InternalServerException" => {
-                        UpdateDataSourceError::InternalServer(String::from(error_message))
+                    "ResourceNotFoundException" => {
+                        UpdateDataSourceError::ResourceNotFound(String::from(error_message))
                     }
                     "ValidationException" => {
                         UpdateDataSourceError::Validation(error_message.to_string())
@@ -3940,9 +3942,9 @@ impl fmt::Display for UpdateDataSourceError {
 impl Error for UpdateDataSourceError {
     fn description(&self) -> &str {
         match *self {
-            UpdateDataSourceError::ResourceNotFound(ref cause) => cause,
-            UpdateDataSourceError::InvalidInput(ref cause) => cause,
             UpdateDataSourceError::InternalServer(ref cause) => cause,
+            UpdateDataSourceError::InvalidInput(ref cause) => cause,
+            UpdateDataSourceError::ResourceNotFound(ref cause) => cause,
             UpdateDataSourceError::Validation(ref cause) => cause,
             UpdateDataSourceError::Credentials(ref err) => err.description(),
             UpdateDataSourceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
@@ -3953,12 +3955,12 @@ impl Error for UpdateDataSourceError {
 /// Errors returned by UpdateEvaluation
 #[derive(Debug, PartialEq)]
 pub enum UpdateEvaluationError {
-    /// <p>A specified resource cannot be located.</p>
-    ResourceNotFound(String),
-    /// <p>An error on the client occurred. Typically, the cause is an invalid input value.</p>
-    InvalidInput(String),
     /// <p>An error on the server occurred when trying to process a request.</p>
     InternalServer(String),
+    /// <p>An error on the client occurred. Typically, the cause is an invalid input value.</p>
+    InvalidInput(String),
+    /// <p>A specified resource cannot be located.</p>
+    ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -3982,14 +3984,14 @@ impl UpdateEvaluationError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "ResourceNotFoundException" => {
-                        UpdateEvaluationError::ResourceNotFound(String::from(error_message))
+                    "InternalServerException" => {
+                        UpdateEvaluationError::InternalServer(String::from(error_message))
                     }
                     "InvalidInputException" => {
                         UpdateEvaluationError::InvalidInput(String::from(error_message))
                     }
-                    "InternalServerException" => {
-                        UpdateEvaluationError::InternalServer(String::from(error_message))
+                    "ResourceNotFoundException" => {
+                        UpdateEvaluationError::ResourceNotFound(String::from(error_message))
                     }
                     "ValidationException" => {
                         UpdateEvaluationError::Validation(error_message.to_string())
@@ -4030,9 +4032,9 @@ impl fmt::Display for UpdateEvaluationError {
 impl Error for UpdateEvaluationError {
     fn description(&self) -> &str {
         match *self {
-            UpdateEvaluationError::ResourceNotFound(ref cause) => cause,
-            UpdateEvaluationError::InvalidInput(ref cause) => cause,
             UpdateEvaluationError::InternalServer(ref cause) => cause,
+            UpdateEvaluationError::InvalidInput(ref cause) => cause,
+            UpdateEvaluationError::ResourceNotFound(ref cause) => cause,
             UpdateEvaluationError::Validation(ref cause) => cause,
             UpdateEvaluationError::Credentials(ref err) => err.description(),
             UpdateEvaluationError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
@@ -4043,12 +4045,12 @@ impl Error for UpdateEvaluationError {
 /// Errors returned by UpdateMLModel
 #[derive(Debug, PartialEq)]
 pub enum UpdateMLModelError {
-    /// <p>A specified resource cannot be located.</p>
-    ResourceNotFound(String),
-    /// <p>An error on the client occurred. Typically, the cause is an invalid input value.</p>
-    InvalidInput(String),
     /// <p>An error on the server occurred when trying to process a request.</p>
     InternalServer(String),
+    /// <p>An error on the client occurred. Typically, the cause is an invalid input value.</p>
+    InvalidInput(String),
+    /// <p>A specified resource cannot be located.</p>
+    ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -4072,14 +4074,14 @@ impl UpdateMLModelError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "ResourceNotFoundException" => {
-                        UpdateMLModelError::ResourceNotFound(String::from(error_message))
+                    "InternalServerException" => {
+                        UpdateMLModelError::InternalServer(String::from(error_message))
                     }
                     "InvalidInputException" => {
                         UpdateMLModelError::InvalidInput(String::from(error_message))
                     }
-                    "InternalServerException" => {
-                        UpdateMLModelError::InternalServer(String::from(error_message))
+                    "ResourceNotFoundException" => {
+                        UpdateMLModelError::ResourceNotFound(String::from(error_message))
                     }
                     "ValidationException" => {
                         UpdateMLModelError::Validation(error_message.to_string())
@@ -4120,9 +4122,9 @@ impl fmt::Display for UpdateMLModelError {
 impl Error for UpdateMLModelError {
     fn description(&self) -> &str {
         match *self {
-            UpdateMLModelError::ResourceNotFound(ref cause) => cause,
-            UpdateMLModelError::InvalidInput(ref cause) => cause,
             UpdateMLModelError::InternalServer(ref cause) => cause,
+            UpdateMLModelError::InvalidInput(ref cause) => cause,
+            UpdateMLModelError::ResourceNotFound(ref cause) => cause,
             UpdateMLModelError::Validation(ref cause) => cause,
             UpdateMLModelError::Credentials(ref err) => err.description(),
             UpdateMLModelError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),

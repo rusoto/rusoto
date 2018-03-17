@@ -665,12 +665,12 @@ pub enum BulkPublishError {
     DuplicateRequest(String),
     /// <p>Indicates an internal service error.</p>
     InternalError(String),
-    /// <p>Thrown if the resource doesn&#39;t exist.</p>
-    ResourceNotFound(String),
     /// <p>Thrown when a request parameter does not comply with the associated constraints.</p>
     InvalidParameter(String),
     /// <p>Thrown when a user is not authorized to access the requested resource.</p>
     NotAuthorized(String),
+    /// <p>Thrown if the resource doesn&#39;t exist.</p>
+    ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -703,14 +703,14 @@ impl BulkPublishError {
                     "InternalErrorException" => {
                         BulkPublishError::InternalError(String::from(error_message))
                     }
-                    "ResourceNotFoundException" => {
-                        BulkPublishError::ResourceNotFound(String::from(error_message))
-                    }
                     "InvalidParameterException" => {
                         BulkPublishError::InvalidParameter(String::from(error_message))
                     }
                     "NotAuthorizedException" => {
                         BulkPublishError::NotAuthorized(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        BulkPublishError::ResourceNotFound(String::from(error_message))
                     }
                     "ValidationException" => {
                         BulkPublishError::Validation(error_message.to_string())
@@ -754,9 +754,9 @@ impl Error for BulkPublishError {
             BulkPublishError::AlreadyStreamed(ref cause) => cause,
             BulkPublishError::DuplicateRequest(ref cause) => cause,
             BulkPublishError::InternalError(ref cause) => cause,
-            BulkPublishError::ResourceNotFound(ref cause) => cause,
             BulkPublishError::InvalidParameter(ref cause) => cause,
             BulkPublishError::NotAuthorized(ref cause) => cause,
+            BulkPublishError::ResourceNotFound(ref cause) => cause,
             BulkPublishError::Validation(ref cause) => cause,
             BulkPublishError::Credentials(ref err) => err.description(),
             BulkPublishError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
@@ -769,16 +769,16 @@ impl Error for BulkPublishError {
 pub enum DeleteDatasetError {
     /// <p>Indicates an internal service error.</p>
     InternalError(String),
-    /// <p>Thrown if an update can&#39;t be applied because the resource was changed by another call and this would result in a conflict.</p>
-    ResourceConflict(String),
-    /// <p>Thrown if the request is throttled.</p>
-    TooManyRequests(String),
-    /// <p>Thrown if the resource doesn&#39;t exist.</p>
-    ResourceNotFound(String),
     /// <p>Thrown when a request parameter does not comply with the associated constraints.</p>
     InvalidParameter(String),
     /// <p>Thrown when a user is not authorized to access the requested resource.</p>
     NotAuthorized(String),
+    /// <p>Thrown if an update can&#39;t be applied because the resource was changed by another call and this would result in a conflict.</p>
+    ResourceConflict(String),
+    /// <p>Thrown if the resource doesn&#39;t exist.</p>
+    ResourceNotFound(String),
+    /// <p>Thrown if the request is throttled.</p>
+    TooManyRequests(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -805,20 +805,20 @@ impl DeleteDatasetError {
                     "InternalErrorException" => {
                         DeleteDatasetError::InternalError(String::from(error_message))
                     }
-                    "ResourceConflictException" => {
-                        DeleteDatasetError::ResourceConflict(String::from(error_message))
-                    }
-                    "TooManyRequestsException" => {
-                        DeleteDatasetError::TooManyRequests(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        DeleteDatasetError::ResourceNotFound(String::from(error_message))
-                    }
                     "InvalidParameterException" => {
                         DeleteDatasetError::InvalidParameter(String::from(error_message))
                     }
                     "NotAuthorizedException" => {
                         DeleteDatasetError::NotAuthorized(String::from(error_message))
+                    }
+                    "ResourceConflictException" => {
+                        DeleteDatasetError::ResourceConflict(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        DeleteDatasetError::ResourceNotFound(String::from(error_message))
+                    }
+                    "TooManyRequestsException" => {
+                        DeleteDatasetError::TooManyRequests(String::from(error_message))
                     }
                     "ValidationException" => {
                         DeleteDatasetError::Validation(error_message.to_string())
@@ -860,11 +860,11 @@ impl Error for DeleteDatasetError {
     fn description(&self) -> &str {
         match *self {
             DeleteDatasetError::InternalError(ref cause) => cause,
-            DeleteDatasetError::ResourceConflict(ref cause) => cause,
-            DeleteDatasetError::TooManyRequests(ref cause) => cause,
-            DeleteDatasetError::ResourceNotFound(ref cause) => cause,
             DeleteDatasetError::InvalidParameter(ref cause) => cause,
             DeleteDatasetError::NotAuthorized(ref cause) => cause,
+            DeleteDatasetError::ResourceConflict(ref cause) => cause,
+            DeleteDatasetError::ResourceNotFound(ref cause) => cause,
+            DeleteDatasetError::TooManyRequests(ref cause) => cause,
             DeleteDatasetError::Validation(ref cause) => cause,
             DeleteDatasetError::Credentials(ref err) => err.description(),
             DeleteDatasetError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
@@ -877,14 +877,14 @@ impl Error for DeleteDatasetError {
 pub enum DescribeDatasetError {
     /// <p>Indicates an internal service error.</p>
     InternalError(String),
-    /// <p>Thrown if the request is throttled.</p>
-    TooManyRequests(String),
-    /// <p>Thrown if the resource doesn&#39;t exist.</p>
-    ResourceNotFound(String),
     /// <p>Thrown when a request parameter does not comply with the associated constraints.</p>
     InvalidParameter(String),
     /// <p>Thrown when a user is not authorized to access the requested resource.</p>
     NotAuthorized(String),
+    /// <p>Thrown if the resource doesn&#39;t exist.</p>
+    ResourceNotFound(String),
+    /// <p>Thrown if the request is throttled.</p>
+    TooManyRequests(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -911,17 +911,17 @@ impl DescribeDatasetError {
                     "InternalErrorException" => {
                         DescribeDatasetError::InternalError(String::from(error_message))
                     }
-                    "TooManyRequestsException" => {
-                        DescribeDatasetError::TooManyRequests(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        DescribeDatasetError::ResourceNotFound(String::from(error_message))
-                    }
                     "InvalidParameterException" => {
                         DescribeDatasetError::InvalidParameter(String::from(error_message))
                     }
                     "NotAuthorizedException" => {
                         DescribeDatasetError::NotAuthorized(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        DescribeDatasetError::ResourceNotFound(String::from(error_message))
+                    }
+                    "TooManyRequestsException" => {
+                        DescribeDatasetError::TooManyRequests(String::from(error_message))
                     }
                     "ValidationException" => {
                         DescribeDatasetError::Validation(error_message.to_string())
@@ -963,10 +963,10 @@ impl Error for DescribeDatasetError {
     fn description(&self) -> &str {
         match *self {
             DescribeDatasetError::InternalError(ref cause) => cause,
-            DescribeDatasetError::TooManyRequests(ref cause) => cause,
-            DescribeDatasetError::ResourceNotFound(ref cause) => cause,
             DescribeDatasetError::InvalidParameter(ref cause) => cause,
             DescribeDatasetError::NotAuthorized(ref cause) => cause,
+            DescribeDatasetError::ResourceNotFound(ref cause) => cause,
+            DescribeDatasetError::TooManyRequests(ref cause) => cause,
             DescribeDatasetError::Validation(ref cause) => cause,
             DescribeDatasetError::Credentials(ref err) => err.description(),
             DescribeDatasetError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
@@ -979,14 +979,14 @@ impl Error for DescribeDatasetError {
 pub enum DescribeIdentityPoolUsageError {
     /// <p>Indicates an internal service error.</p>
     InternalError(String),
-    /// <p>Thrown if the request is throttled.</p>
-    TooManyRequests(String),
-    /// <p>Thrown if the resource doesn&#39;t exist.</p>
-    ResourceNotFound(String),
     /// <p>Thrown when a request parameter does not comply with the associated constraints.</p>
     InvalidParameter(String),
     /// <p>Thrown when a user is not authorized to access the requested resource.</p>
     NotAuthorized(String),
+    /// <p>Thrown if the resource doesn&#39;t exist.</p>
+    ResourceNotFound(String),
+    /// <p>Thrown if the request is throttled.</p>
+    TooManyRequests(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -1013,14 +1013,6 @@ impl DescribeIdentityPoolUsageError {
                     "InternalErrorException" => {
                         DescribeIdentityPoolUsageError::InternalError(String::from(error_message))
                     }
-                    "TooManyRequestsException" => {
-                        DescribeIdentityPoolUsageError::TooManyRequests(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        DescribeIdentityPoolUsageError::ResourceNotFound(String::from(
-                            error_message,
-                        ))
-                    }
                     "InvalidParameterException" => {
                         DescribeIdentityPoolUsageError::InvalidParameter(String::from(
                             error_message,
@@ -1028,6 +1020,14 @@ impl DescribeIdentityPoolUsageError {
                     }
                     "NotAuthorizedException" => {
                         DescribeIdentityPoolUsageError::NotAuthorized(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        DescribeIdentityPoolUsageError::ResourceNotFound(String::from(
+                            error_message,
+                        ))
+                    }
+                    "TooManyRequestsException" => {
+                        DescribeIdentityPoolUsageError::TooManyRequests(String::from(error_message))
                     }
                     "ValidationException" => {
                         DescribeIdentityPoolUsageError::Validation(error_message.to_string())
@@ -1069,10 +1069,10 @@ impl Error for DescribeIdentityPoolUsageError {
     fn description(&self) -> &str {
         match *self {
             DescribeIdentityPoolUsageError::InternalError(ref cause) => cause,
-            DescribeIdentityPoolUsageError::TooManyRequests(ref cause) => cause,
-            DescribeIdentityPoolUsageError::ResourceNotFound(ref cause) => cause,
             DescribeIdentityPoolUsageError::InvalidParameter(ref cause) => cause,
             DescribeIdentityPoolUsageError::NotAuthorized(ref cause) => cause,
+            DescribeIdentityPoolUsageError::ResourceNotFound(ref cause) => cause,
+            DescribeIdentityPoolUsageError::TooManyRequests(ref cause) => cause,
             DescribeIdentityPoolUsageError::Validation(ref cause) => cause,
             DescribeIdentityPoolUsageError::Credentials(ref err) => err.description(),
             DescribeIdentityPoolUsageError::HttpDispatch(ref dispatch_error) => {
@@ -1087,14 +1087,14 @@ impl Error for DescribeIdentityPoolUsageError {
 pub enum DescribeIdentityUsageError {
     /// <p>Indicates an internal service error.</p>
     InternalError(String),
-    /// <p>Thrown if the request is throttled.</p>
-    TooManyRequests(String),
-    /// <p>Thrown if the resource doesn&#39;t exist.</p>
-    ResourceNotFound(String),
     /// <p>Thrown when a request parameter does not comply with the associated constraints.</p>
     InvalidParameter(String),
     /// <p>Thrown when a user is not authorized to access the requested resource.</p>
     NotAuthorized(String),
+    /// <p>Thrown if the resource doesn&#39;t exist.</p>
+    ResourceNotFound(String),
+    /// <p>Thrown if the request is throttled.</p>
+    TooManyRequests(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -1121,17 +1121,17 @@ impl DescribeIdentityUsageError {
                     "InternalErrorException" => {
                         DescribeIdentityUsageError::InternalError(String::from(error_message))
                     }
-                    "TooManyRequestsException" => {
-                        DescribeIdentityUsageError::TooManyRequests(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        DescribeIdentityUsageError::ResourceNotFound(String::from(error_message))
-                    }
                     "InvalidParameterException" => {
                         DescribeIdentityUsageError::InvalidParameter(String::from(error_message))
                     }
                     "NotAuthorizedException" => {
                         DescribeIdentityUsageError::NotAuthorized(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        DescribeIdentityUsageError::ResourceNotFound(String::from(error_message))
+                    }
+                    "TooManyRequestsException" => {
+                        DescribeIdentityUsageError::TooManyRequests(String::from(error_message))
                     }
                     "ValidationException" => {
                         DescribeIdentityUsageError::Validation(error_message.to_string())
@@ -1173,10 +1173,10 @@ impl Error for DescribeIdentityUsageError {
     fn description(&self) -> &str {
         match *self {
             DescribeIdentityUsageError::InternalError(ref cause) => cause,
-            DescribeIdentityUsageError::TooManyRequests(ref cause) => cause,
-            DescribeIdentityUsageError::ResourceNotFound(ref cause) => cause,
             DescribeIdentityUsageError::InvalidParameter(ref cause) => cause,
             DescribeIdentityUsageError::NotAuthorized(ref cause) => cause,
+            DescribeIdentityUsageError::ResourceNotFound(ref cause) => cause,
+            DescribeIdentityUsageError::TooManyRequests(ref cause) => cause,
             DescribeIdentityUsageError::Validation(ref cause) => cause,
             DescribeIdentityUsageError::Credentials(ref err) => err.description(),
             DescribeIdentityUsageError::HttpDispatch(ref dispatch_error) => {
@@ -1191,12 +1191,12 @@ impl Error for DescribeIdentityUsageError {
 pub enum GetBulkPublishDetailsError {
     /// <p>Indicates an internal service error.</p>
     InternalError(String),
-    /// <p>Thrown if the resource doesn&#39;t exist.</p>
-    ResourceNotFound(String),
     /// <p>Thrown when a request parameter does not comply with the associated constraints.</p>
     InvalidParameter(String),
     /// <p>Thrown when a user is not authorized to access the requested resource.</p>
     NotAuthorized(String),
+    /// <p>Thrown if the resource doesn&#39;t exist.</p>
+    ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -1223,14 +1223,14 @@ impl GetBulkPublishDetailsError {
                     "InternalErrorException" => {
                         GetBulkPublishDetailsError::InternalError(String::from(error_message))
                     }
-                    "ResourceNotFoundException" => {
-                        GetBulkPublishDetailsError::ResourceNotFound(String::from(error_message))
-                    }
                     "InvalidParameterException" => {
                         GetBulkPublishDetailsError::InvalidParameter(String::from(error_message))
                     }
                     "NotAuthorizedException" => {
                         GetBulkPublishDetailsError::NotAuthorized(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        GetBulkPublishDetailsError::ResourceNotFound(String::from(error_message))
                     }
                     "ValidationException" => {
                         GetBulkPublishDetailsError::Validation(error_message.to_string())
@@ -1272,9 +1272,9 @@ impl Error for GetBulkPublishDetailsError {
     fn description(&self) -> &str {
         match *self {
             GetBulkPublishDetailsError::InternalError(ref cause) => cause,
-            GetBulkPublishDetailsError::ResourceNotFound(ref cause) => cause,
             GetBulkPublishDetailsError::InvalidParameter(ref cause) => cause,
             GetBulkPublishDetailsError::NotAuthorized(ref cause) => cause,
+            GetBulkPublishDetailsError::ResourceNotFound(ref cause) => cause,
             GetBulkPublishDetailsError::Validation(ref cause) => cause,
             GetBulkPublishDetailsError::Credentials(ref err) => err.description(),
             GetBulkPublishDetailsError::HttpDispatch(ref dispatch_error) => {
@@ -1289,14 +1289,14 @@ impl Error for GetBulkPublishDetailsError {
 pub enum GetCognitoEventsError {
     /// <p>Indicates an internal service error.</p>
     InternalError(String),
-    /// <p>Thrown if the request is throttled.</p>
-    TooManyRequests(String),
-    /// <p>Thrown if the resource doesn&#39;t exist.</p>
-    ResourceNotFound(String),
     /// <p>Thrown when a request parameter does not comply with the associated constraints.</p>
     InvalidParameter(String),
     /// <p>Thrown when a user is not authorized to access the requested resource.</p>
     NotAuthorized(String),
+    /// <p>Thrown if the resource doesn&#39;t exist.</p>
+    ResourceNotFound(String),
+    /// <p>Thrown if the request is throttled.</p>
+    TooManyRequests(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -1323,17 +1323,17 @@ impl GetCognitoEventsError {
                     "InternalErrorException" => {
                         GetCognitoEventsError::InternalError(String::from(error_message))
                     }
-                    "TooManyRequestsException" => {
-                        GetCognitoEventsError::TooManyRequests(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        GetCognitoEventsError::ResourceNotFound(String::from(error_message))
-                    }
                     "InvalidParameterException" => {
                         GetCognitoEventsError::InvalidParameter(String::from(error_message))
                     }
                     "NotAuthorizedException" => {
                         GetCognitoEventsError::NotAuthorized(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        GetCognitoEventsError::ResourceNotFound(String::from(error_message))
+                    }
+                    "TooManyRequestsException" => {
+                        GetCognitoEventsError::TooManyRequests(String::from(error_message))
                     }
                     "ValidationException" => {
                         GetCognitoEventsError::Validation(error_message.to_string())
@@ -1375,10 +1375,10 @@ impl Error for GetCognitoEventsError {
     fn description(&self) -> &str {
         match *self {
             GetCognitoEventsError::InternalError(ref cause) => cause,
-            GetCognitoEventsError::TooManyRequests(ref cause) => cause,
-            GetCognitoEventsError::ResourceNotFound(ref cause) => cause,
             GetCognitoEventsError::InvalidParameter(ref cause) => cause,
             GetCognitoEventsError::NotAuthorized(ref cause) => cause,
+            GetCognitoEventsError::ResourceNotFound(ref cause) => cause,
+            GetCognitoEventsError::TooManyRequests(ref cause) => cause,
             GetCognitoEventsError::Validation(ref cause) => cause,
             GetCognitoEventsError::Credentials(ref err) => err.description(),
             GetCognitoEventsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
@@ -1391,14 +1391,14 @@ impl Error for GetCognitoEventsError {
 pub enum GetIdentityPoolConfigurationError {
     /// <p>Indicates an internal service error.</p>
     InternalError(String),
-    /// <p>Thrown if the request is throttled.</p>
-    TooManyRequests(String),
-    /// <p>Thrown if the resource doesn&#39;t exist.</p>
-    ResourceNotFound(String),
     /// <p>Thrown when a request parameter does not comply with the associated constraints.</p>
     InvalidParameter(String),
     /// <p>Thrown when a user is not authorized to access the requested resource.</p>
     NotAuthorized(String),
+    /// <p>Thrown if the resource doesn&#39;t exist.</p>
+    ResourceNotFound(String),
+    /// <p>Thrown if the request is throttled.</p>
+    TooManyRequests(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -1425,16 +1425,6 @@ impl GetIdentityPoolConfigurationError {
                     "InternalErrorException" => GetIdentityPoolConfigurationError::InternalError(
                         String::from(error_message),
                     ),
-                    "TooManyRequestsException" => {
-                        GetIdentityPoolConfigurationError::TooManyRequests(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ResourceNotFoundException" => {
-                        GetIdentityPoolConfigurationError::ResourceNotFound(String::from(
-                            error_message,
-                        ))
-                    }
                     "InvalidParameterException" => {
                         GetIdentityPoolConfigurationError::InvalidParameter(String::from(
                             error_message,
@@ -1443,6 +1433,16 @@ impl GetIdentityPoolConfigurationError {
                     "NotAuthorizedException" => GetIdentityPoolConfigurationError::NotAuthorized(
                         String::from(error_message),
                     ),
+                    "ResourceNotFoundException" => {
+                        GetIdentityPoolConfigurationError::ResourceNotFound(String::from(
+                            error_message,
+                        ))
+                    }
+                    "TooManyRequestsException" => {
+                        GetIdentityPoolConfigurationError::TooManyRequests(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         GetIdentityPoolConfigurationError::Validation(error_message.to_string())
                     }
@@ -1483,10 +1483,10 @@ impl Error for GetIdentityPoolConfigurationError {
     fn description(&self) -> &str {
         match *self {
             GetIdentityPoolConfigurationError::InternalError(ref cause) => cause,
-            GetIdentityPoolConfigurationError::TooManyRequests(ref cause) => cause,
-            GetIdentityPoolConfigurationError::ResourceNotFound(ref cause) => cause,
             GetIdentityPoolConfigurationError::InvalidParameter(ref cause) => cause,
             GetIdentityPoolConfigurationError::NotAuthorized(ref cause) => cause,
+            GetIdentityPoolConfigurationError::ResourceNotFound(ref cause) => cause,
+            GetIdentityPoolConfigurationError::TooManyRequests(ref cause) => cause,
             GetIdentityPoolConfigurationError::Validation(ref cause) => cause,
             GetIdentityPoolConfigurationError::Credentials(ref err) => err.description(),
             GetIdentityPoolConfigurationError::HttpDispatch(ref dispatch_error) => {
@@ -1501,12 +1501,12 @@ impl Error for GetIdentityPoolConfigurationError {
 pub enum ListDatasetsError {
     /// <p>Indicates an internal service error.</p>
     InternalError(String),
-    /// <p>Thrown if the request is throttled.</p>
-    TooManyRequests(String),
     /// <p>Thrown when a request parameter does not comply with the associated constraints.</p>
     InvalidParameter(String),
     /// <p>Thrown when a user is not authorized to access the requested resource.</p>
     NotAuthorized(String),
+    /// <p>Thrown if the request is throttled.</p>
+    TooManyRequests(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -1533,14 +1533,14 @@ impl ListDatasetsError {
                     "InternalErrorException" => {
                         ListDatasetsError::InternalError(String::from(error_message))
                     }
-                    "TooManyRequestsException" => {
-                        ListDatasetsError::TooManyRequests(String::from(error_message))
-                    }
                     "InvalidParameterException" => {
                         ListDatasetsError::InvalidParameter(String::from(error_message))
                     }
                     "NotAuthorizedException" => {
                         ListDatasetsError::NotAuthorized(String::from(error_message))
+                    }
+                    "TooManyRequestsException" => {
+                        ListDatasetsError::TooManyRequests(String::from(error_message))
                     }
                     "ValidationException" => {
                         ListDatasetsError::Validation(error_message.to_string())
@@ -1582,9 +1582,9 @@ impl Error for ListDatasetsError {
     fn description(&self) -> &str {
         match *self {
             ListDatasetsError::InternalError(ref cause) => cause,
-            ListDatasetsError::TooManyRequests(ref cause) => cause,
             ListDatasetsError::InvalidParameter(ref cause) => cause,
             ListDatasetsError::NotAuthorized(ref cause) => cause,
+            ListDatasetsError::TooManyRequests(ref cause) => cause,
             ListDatasetsError::Validation(ref cause) => cause,
             ListDatasetsError::Credentials(ref err) => err.description(),
             ListDatasetsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
@@ -1597,12 +1597,12 @@ impl Error for ListDatasetsError {
 pub enum ListIdentityPoolUsageError {
     /// <p>Indicates an internal service error.</p>
     InternalError(String),
-    /// <p>Thrown if the request is throttled.</p>
-    TooManyRequests(String),
     /// <p>Thrown when a request parameter does not comply with the associated constraints.</p>
     InvalidParameter(String),
     /// <p>Thrown when a user is not authorized to access the requested resource.</p>
     NotAuthorized(String),
+    /// <p>Thrown if the request is throttled.</p>
+    TooManyRequests(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -1629,14 +1629,14 @@ impl ListIdentityPoolUsageError {
                     "InternalErrorException" => {
                         ListIdentityPoolUsageError::InternalError(String::from(error_message))
                     }
-                    "TooManyRequestsException" => {
-                        ListIdentityPoolUsageError::TooManyRequests(String::from(error_message))
-                    }
                     "InvalidParameterException" => {
                         ListIdentityPoolUsageError::InvalidParameter(String::from(error_message))
                     }
                     "NotAuthorizedException" => {
                         ListIdentityPoolUsageError::NotAuthorized(String::from(error_message))
+                    }
+                    "TooManyRequestsException" => {
+                        ListIdentityPoolUsageError::TooManyRequests(String::from(error_message))
                     }
                     "ValidationException" => {
                         ListIdentityPoolUsageError::Validation(error_message.to_string())
@@ -1678,9 +1678,9 @@ impl Error for ListIdentityPoolUsageError {
     fn description(&self) -> &str {
         match *self {
             ListIdentityPoolUsageError::InternalError(ref cause) => cause,
-            ListIdentityPoolUsageError::TooManyRequests(ref cause) => cause,
             ListIdentityPoolUsageError::InvalidParameter(ref cause) => cause,
             ListIdentityPoolUsageError::NotAuthorized(ref cause) => cause,
+            ListIdentityPoolUsageError::TooManyRequests(ref cause) => cause,
             ListIdentityPoolUsageError::Validation(ref cause) => cause,
             ListIdentityPoolUsageError::Credentials(ref err) => err.description(),
             ListIdentityPoolUsageError::HttpDispatch(ref dispatch_error) => {
@@ -1695,12 +1695,12 @@ impl Error for ListIdentityPoolUsageError {
 pub enum ListRecordsError {
     /// <p>Indicates an internal service error.</p>
     InternalError(String),
-    /// <p>Thrown if the request is throttled.</p>
-    TooManyRequests(String),
     /// <p>Thrown when a request parameter does not comply with the associated constraints.</p>
     InvalidParameter(String),
     /// <p>Thrown when a user is not authorized to access the requested resource.</p>
     NotAuthorized(String),
+    /// <p>Thrown if the request is throttled.</p>
+    TooManyRequests(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -1727,14 +1727,14 @@ impl ListRecordsError {
                     "InternalErrorException" => {
                         ListRecordsError::InternalError(String::from(error_message))
                     }
-                    "TooManyRequestsException" => {
-                        ListRecordsError::TooManyRequests(String::from(error_message))
-                    }
                     "InvalidParameterException" => {
                         ListRecordsError::InvalidParameter(String::from(error_message))
                     }
                     "NotAuthorizedException" => {
                         ListRecordsError::NotAuthorized(String::from(error_message))
+                    }
+                    "TooManyRequestsException" => {
+                        ListRecordsError::TooManyRequests(String::from(error_message))
                     }
                     "ValidationException" => {
                         ListRecordsError::Validation(error_message.to_string())
@@ -1776,9 +1776,9 @@ impl Error for ListRecordsError {
     fn description(&self) -> &str {
         match *self {
             ListRecordsError::InternalError(ref cause) => cause,
-            ListRecordsError::TooManyRequests(ref cause) => cause,
             ListRecordsError::InvalidParameter(ref cause) => cause,
             ListRecordsError::NotAuthorized(ref cause) => cause,
+            ListRecordsError::TooManyRequests(ref cause) => cause,
             ListRecordsError::Validation(ref cause) => cause,
             ListRecordsError::Credentials(ref err) => err.description(),
             ListRecordsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
@@ -1789,17 +1789,18 @@ impl Error for ListRecordsError {
 /// Errors returned by RegisterDevice
 #[derive(Debug, PartialEq)]
 pub enum RegisterDeviceError {
-    InvalidConfiguration(String),
     /// <p>Indicates an internal service error.</p>
     InternalError(String),
-    /// <p>Thrown if the request is throttled.</p>
-    TooManyRequests(String),
-    /// <p>Thrown if the resource doesn&#39;t exist.</p>
-    ResourceNotFound(String),
+
+    InvalidConfiguration(String),
     /// <p>Thrown when a request parameter does not comply with the associated constraints.</p>
     InvalidParameter(String),
     /// <p>Thrown when a user is not authorized to access the requested resource.</p>
     NotAuthorized(String),
+    /// <p>Thrown if the resource doesn&#39;t exist.</p>
+    ResourceNotFound(String),
+    /// <p>Thrown if the request is throttled.</p>
+    TooManyRequests(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -1823,23 +1824,23 @@ impl RegisterDeviceError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "InvalidConfigurationException" => {
-                        RegisterDeviceError::InvalidConfiguration(String::from(error_message))
-                    }
                     "InternalErrorException" => {
                         RegisterDeviceError::InternalError(String::from(error_message))
                     }
-                    "TooManyRequestsException" => {
-                        RegisterDeviceError::TooManyRequests(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        RegisterDeviceError::ResourceNotFound(String::from(error_message))
+                    "InvalidConfigurationException" => {
+                        RegisterDeviceError::InvalidConfiguration(String::from(error_message))
                     }
                     "InvalidParameterException" => {
                         RegisterDeviceError::InvalidParameter(String::from(error_message))
                     }
                     "NotAuthorizedException" => {
                         RegisterDeviceError::NotAuthorized(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        RegisterDeviceError::ResourceNotFound(String::from(error_message))
+                    }
+                    "TooManyRequestsException" => {
+                        RegisterDeviceError::TooManyRequests(String::from(error_message))
                     }
                     "ValidationException" => {
                         RegisterDeviceError::Validation(error_message.to_string())
@@ -1880,12 +1881,12 @@ impl fmt::Display for RegisterDeviceError {
 impl Error for RegisterDeviceError {
     fn description(&self) -> &str {
         match *self {
-            RegisterDeviceError::InvalidConfiguration(ref cause) => cause,
             RegisterDeviceError::InternalError(ref cause) => cause,
-            RegisterDeviceError::TooManyRequests(ref cause) => cause,
-            RegisterDeviceError::ResourceNotFound(ref cause) => cause,
+            RegisterDeviceError::InvalidConfiguration(ref cause) => cause,
             RegisterDeviceError::InvalidParameter(ref cause) => cause,
             RegisterDeviceError::NotAuthorized(ref cause) => cause,
+            RegisterDeviceError::ResourceNotFound(ref cause) => cause,
+            RegisterDeviceError::TooManyRequests(ref cause) => cause,
             RegisterDeviceError::Validation(ref cause) => cause,
             RegisterDeviceError::Credentials(ref err) => err.description(),
             RegisterDeviceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
@@ -1898,14 +1899,14 @@ impl Error for RegisterDeviceError {
 pub enum SetCognitoEventsError {
     /// <p>Indicates an internal service error.</p>
     InternalError(String),
-    /// <p>Thrown if the request is throttled.</p>
-    TooManyRequests(String),
-    /// <p>Thrown if the resource doesn&#39;t exist.</p>
-    ResourceNotFound(String),
     /// <p>Thrown when a request parameter does not comply with the associated constraints.</p>
     InvalidParameter(String),
     /// <p>Thrown when a user is not authorized to access the requested resource.</p>
     NotAuthorized(String),
+    /// <p>Thrown if the resource doesn&#39;t exist.</p>
+    ResourceNotFound(String),
+    /// <p>Thrown if the request is throttled.</p>
+    TooManyRequests(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -1932,17 +1933,17 @@ impl SetCognitoEventsError {
                     "InternalErrorException" => {
                         SetCognitoEventsError::InternalError(String::from(error_message))
                     }
-                    "TooManyRequestsException" => {
-                        SetCognitoEventsError::TooManyRequests(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        SetCognitoEventsError::ResourceNotFound(String::from(error_message))
-                    }
                     "InvalidParameterException" => {
                         SetCognitoEventsError::InvalidParameter(String::from(error_message))
                     }
                     "NotAuthorizedException" => {
                         SetCognitoEventsError::NotAuthorized(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        SetCognitoEventsError::ResourceNotFound(String::from(error_message))
+                    }
+                    "TooManyRequestsException" => {
+                        SetCognitoEventsError::TooManyRequests(String::from(error_message))
                     }
                     "ValidationException" => {
                         SetCognitoEventsError::Validation(error_message.to_string())
@@ -1984,10 +1985,10 @@ impl Error for SetCognitoEventsError {
     fn description(&self) -> &str {
         match *self {
             SetCognitoEventsError::InternalError(ref cause) => cause,
-            SetCognitoEventsError::TooManyRequests(ref cause) => cause,
-            SetCognitoEventsError::ResourceNotFound(ref cause) => cause,
             SetCognitoEventsError::InvalidParameter(ref cause) => cause,
             SetCognitoEventsError::NotAuthorized(ref cause) => cause,
+            SetCognitoEventsError::ResourceNotFound(ref cause) => cause,
+            SetCognitoEventsError::TooManyRequests(ref cause) => cause,
             SetCognitoEventsError::Validation(ref cause) => cause,
             SetCognitoEventsError::Credentials(ref err) => err.description(),
             SetCognitoEventsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
@@ -2002,14 +2003,14 @@ pub enum SetIdentityPoolConfigurationError {
     ConcurrentModification(String),
     /// <p>Indicates an internal service error.</p>
     InternalError(String),
-    /// <p>Thrown if the request is throttled.</p>
-    TooManyRequests(String),
-    /// <p>Thrown if the resource doesn&#39;t exist.</p>
-    ResourceNotFound(String),
     /// <p>Thrown when a request parameter does not comply with the associated constraints.</p>
     InvalidParameter(String),
     /// <p>Thrown when a user is not authorized to access the requested resource.</p>
     NotAuthorized(String),
+    /// <p>Thrown if the resource doesn&#39;t exist.</p>
+    ResourceNotFound(String),
+    /// <p>Thrown if the request is throttled.</p>
+    TooManyRequests(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -2041,16 +2042,6 @@ impl SetIdentityPoolConfigurationError {
                     "InternalErrorException" => SetIdentityPoolConfigurationError::InternalError(
                         String::from(error_message),
                     ),
-                    "TooManyRequestsException" => {
-                        SetIdentityPoolConfigurationError::TooManyRequests(String::from(
-                            error_message,
-                        ))
-                    }
-                    "ResourceNotFoundException" => {
-                        SetIdentityPoolConfigurationError::ResourceNotFound(String::from(
-                            error_message,
-                        ))
-                    }
                     "InvalidParameterException" => {
                         SetIdentityPoolConfigurationError::InvalidParameter(String::from(
                             error_message,
@@ -2059,6 +2050,16 @@ impl SetIdentityPoolConfigurationError {
                     "NotAuthorizedException" => SetIdentityPoolConfigurationError::NotAuthorized(
                         String::from(error_message),
                     ),
+                    "ResourceNotFoundException" => {
+                        SetIdentityPoolConfigurationError::ResourceNotFound(String::from(
+                            error_message,
+                        ))
+                    }
+                    "TooManyRequestsException" => {
+                        SetIdentityPoolConfigurationError::TooManyRequests(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         SetIdentityPoolConfigurationError::Validation(error_message.to_string())
                     }
@@ -2100,10 +2101,10 @@ impl Error for SetIdentityPoolConfigurationError {
         match *self {
             SetIdentityPoolConfigurationError::ConcurrentModification(ref cause) => cause,
             SetIdentityPoolConfigurationError::InternalError(ref cause) => cause,
-            SetIdentityPoolConfigurationError::TooManyRequests(ref cause) => cause,
-            SetIdentityPoolConfigurationError::ResourceNotFound(ref cause) => cause,
             SetIdentityPoolConfigurationError::InvalidParameter(ref cause) => cause,
             SetIdentityPoolConfigurationError::NotAuthorized(ref cause) => cause,
+            SetIdentityPoolConfigurationError::ResourceNotFound(ref cause) => cause,
+            SetIdentityPoolConfigurationError::TooManyRequests(ref cause) => cause,
             SetIdentityPoolConfigurationError::Validation(ref cause) => cause,
             SetIdentityPoolConfigurationError::Credentials(ref err) => err.description(),
             SetIdentityPoolConfigurationError::HttpDispatch(ref dispatch_error) => {
@@ -2116,17 +2117,18 @@ impl Error for SetIdentityPoolConfigurationError {
 /// Errors returned by SubscribeToDataset
 #[derive(Debug, PartialEq)]
 pub enum SubscribeToDatasetError {
-    InvalidConfiguration(String),
     /// <p>Indicates an internal service error.</p>
     InternalError(String),
-    /// <p>Thrown if the request is throttled.</p>
-    TooManyRequests(String),
-    /// <p>Thrown if the resource doesn&#39;t exist.</p>
-    ResourceNotFound(String),
+
+    InvalidConfiguration(String),
     /// <p>Thrown when a request parameter does not comply with the associated constraints.</p>
     InvalidParameter(String),
     /// <p>Thrown when a user is not authorized to access the requested resource.</p>
     NotAuthorized(String),
+    /// <p>Thrown if the resource doesn&#39;t exist.</p>
+    ResourceNotFound(String),
+    /// <p>Thrown if the request is throttled.</p>
+    TooManyRequests(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -2150,23 +2152,23 @@ impl SubscribeToDatasetError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "InvalidConfigurationException" => {
-                        SubscribeToDatasetError::InvalidConfiguration(String::from(error_message))
-                    }
                     "InternalErrorException" => {
                         SubscribeToDatasetError::InternalError(String::from(error_message))
                     }
-                    "TooManyRequestsException" => {
-                        SubscribeToDatasetError::TooManyRequests(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        SubscribeToDatasetError::ResourceNotFound(String::from(error_message))
+                    "InvalidConfigurationException" => {
+                        SubscribeToDatasetError::InvalidConfiguration(String::from(error_message))
                     }
                     "InvalidParameterException" => {
                         SubscribeToDatasetError::InvalidParameter(String::from(error_message))
                     }
                     "NotAuthorizedException" => {
                         SubscribeToDatasetError::NotAuthorized(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        SubscribeToDatasetError::ResourceNotFound(String::from(error_message))
+                    }
+                    "TooManyRequestsException" => {
+                        SubscribeToDatasetError::TooManyRequests(String::from(error_message))
                     }
                     "ValidationException" => {
                         SubscribeToDatasetError::Validation(error_message.to_string())
@@ -2207,12 +2209,12 @@ impl fmt::Display for SubscribeToDatasetError {
 impl Error for SubscribeToDatasetError {
     fn description(&self) -> &str {
         match *self {
-            SubscribeToDatasetError::InvalidConfiguration(ref cause) => cause,
             SubscribeToDatasetError::InternalError(ref cause) => cause,
-            SubscribeToDatasetError::TooManyRequests(ref cause) => cause,
-            SubscribeToDatasetError::ResourceNotFound(ref cause) => cause,
+            SubscribeToDatasetError::InvalidConfiguration(ref cause) => cause,
             SubscribeToDatasetError::InvalidParameter(ref cause) => cause,
             SubscribeToDatasetError::NotAuthorized(ref cause) => cause,
+            SubscribeToDatasetError::ResourceNotFound(ref cause) => cause,
+            SubscribeToDatasetError::TooManyRequests(ref cause) => cause,
             SubscribeToDatasetError::Validation(ref cause) => cause,
             SubscribeToDatasetError::Credentials(ref err) => err.description(),
             SubscribeToDatasetError::HttpDispatch(ref dispatch_error) => {
@@ -2225,17 +2227,18 @@ impl Error for SubscribeToDatasetError {
 /// Errors returned by UnsubscribeFromDataset
 #[derive(Debug, PartialEq)]
 pub enum UnsubscribeFromDatasetError {
-    InvalidConfiguration(String),
     /// <p>Indicates an internal service error.</p>
     InternalError(String),
-    /// <p>Thrown if the request is throttled.</p>
-    TooManyRequests(String),
-    /// <p>Thrown if the resource doesn&#39;t exist.</p>
-    ResourceNotFound(String),
+
+    InvalidConfiguration(String),
     /// <p>Thrown when a request parameter does not comply with the associated constraints.</p>
     InvalidParameter(String),
     /// <p>Thrown when a user is not authorized to access the requested resource.</p>
     NotAuthorized(String),
+    /// <p>Thrown if the resource doesn&#39;t exist.</p>
+    ResourceNotFound(String),
+    /// <p>Thrown if the request is throttled.</p>
+    TooManyRequests(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -2259,25 +2262,25 @@ impl UnsubscribeFromDatasetError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
+                    "InternalErrorException" => {
+                        UnsubscribeFromDatasetError::InternalError(String::from(error_message))
+                    }
                     "InvalidConfigurationException" => {
                         UnsubscribeFromDatasetError::InvalidConfiguration(String::from(
                             error_message,
                         ))
-                    }
-                    "InternalErrorException" => {
-                        UnsubscribeFromDatasetError::InternalError(String::from(error_message))
-                    }
-                    "TooManyRequestsException" => {
-                        UnsubscribeFromDatasetError::TooManyRequests(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        UnsubscribeFromDatasetError::ResourceNotFound(String::from(error_message))
                     }
                     "InvalidParameterException" => {
                         UnsubscribeFromDatasetError::InvalidParameter(String::from(error_message))
                     }
                     "NotAuthorizedException" => {
                         UnsubscribeFromDatasetError::NotAuthorized(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        UnsubscribeFromDatasetError::ResourceNotFound(String::from(error_message))
+                    }
+                    "TooManyRequestsException" => {
+                        UnsubscribeFromDatasetError::TooManyRequests(String::from(error_message))
                     }
                     "ValidationException" => {
                         UnsubscribeFromDatasetError::Validation(error_message.to_string())
@@ -2318,12 +2321,12 @@ impl fmt::Display for UnsubscribeFromDatasetError {
 impl Error for UnsubscribeFromDatasetError {
     fn description(&self) -> &str {
         match *self {
-            UnsubscribeFromDatasetError::InvalidConfiguration(ref cause) => cause,
             UnsubscribeFromDatasetError::InternalError(ref cause) => cause,
-            UnsubscribeFromDatasetError::TooManyRequests(ref cause) => cause,
-            UnsubscribeFromDatasetError::ResourceNotFound(ref cause) => cause,
+            UnsubscribeFromDatasetError::InvalidConfiguration(ref cause) => cause,
             UnsubscribeFromDatasetError::InvalidParameter(ref cause) => cause,
             UnsubscribeFromDatasetError::NotAuthorized(ref cause) => cause,
+            UnsubscribeFromDatasetError::ResourceNotFound(ref cause) => cause,
+            UnsubscribeFromDatasetError::TooManyRequests(ref cause) => cause,
             UnsubscribeFromDatasetError::Validation(ref cause) => cause,
             UnsubscribeFromDatasetError::Credentials(ref err) => err.description(),
             UnsubscribeFromDatasetError::HttpDispatch(ref dispatch_error) => {
@@ -2336,24 +2339,24 @@ impl Error for UnsubscribeFromDatasetError {
 /// Errors returned by UpdateRecords
 #[derive(Debug, PartialEq)]
 pub enum UpdateRecordsError {
-    /// <p>AWS Lambda throttled your account, please contact AWS Support</p>
-    LambdaThrottled(String),
-    /// <p>The AWS Lambda function returned invalid output or an exception.</p>
-    InvalidLambdaFunctionOutput(String),
     /// <p>Indicates an internal service error.</p>
     InternalError(String),
-    /// <p>Thrown if an update can&#39;t be applied because the resource was changed by another call and this would result in a conflict.</p>
-    ResourceConflict(String),
-    /// <p>Thrown if the request is throttled.</p>
-    TooManyRequests(String),
-    /// <p>Thrown if the resource doesn&#39;t exist.</p>
-    ResourceNotFound(String),
+    /// <p>The AWS Lambda function returned invalid output or an exception.</p>
+    InvalidLambdaFunctionOutput(String),
     /// <p>Thrown when a request parameter does not comply with the associated constraints.</p>
     InvalidParameter(String),
-    /// <p>Thrown when a user is not authorized to access the requested resource.</p>
-    NotAuthorized(String),
+    /// <p>AWS Lambda throttled your account, please contact AWS Support</p>
+    LambdaThrottled(String),
     /// <p>Thrown when the limit on the number of objects or operations has been exceeded.</p>
     LimitExceeded(String),
+    /// <p>Thrown when a user is not authorized to access the requested resource.</p>
+    NotAuthorized(String),
+    /// <p>Thrown if an update can&#39;t be applied because the resource was changed by another call and this would result in a conflict.</p>
+    ResourceConflict(String),
+    /// <p>Thrown if the resource doesn&#39;t exist.</p>
+    ResourceNotFound(String),
+    /// <p>Thrown if the request is throttled.</p>
+    TooManyRequests(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -2377,32 +2380,32 @@ impl UpdateRecordsError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "LambdaThrottledException" => {
-                        UpdateRecordsError::LambdaThrottled(String::from(error_message))
+                    "InternalErrorException" => {
+                        UpdateRecordsError::InternalError(String::from(error_message))
                     }
                     "InvalidLambdaFunctionOutputException" => {
                         UpdateRecordsError::InvalidLambdaFunctionOutput(String::from(error_message))
                     }
-                    "InternalErrorException" => {
-                        UpdateRecordsError::InternalError(String::from(error_message))
-                    }
-                    "ResourceConflictException" => {
-                        UpdateRecordsError::ResourceConflict(String::from(error_message))
-                    }
-                    "TooManyRequestsException" => {
-                        UpdateRecordsError::TooManyRequests(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        UpdateRecordsError::ResourceNotFound(String::from(error_message))
-                    }
                     "InvalidParameterException" => {
                         UpdateRecordsError::InvalidParameter(String::from(error_message))
+                    }
+                    "LambdaThrottledException" => {
+                        UpdateRecordsError::LambdaThrottled(String::from(error_message))
+                    }
+                    "LimitExceededException" => {
+                        UpdateRecordsError::LimitExceeded(String::from(error_message))
                     }
                     "NotAuthorizedException" => {
                         UpdateRecordsError::NotAuthorized(String::from(error_message))
                     }
-                    "LimitExceededException" => {
-                        UpdateRecordsError::LimitExceeded(String::from(error_message))
+                    "ResourceConflictException" => {
+                        UpdateRecordsError::ResourceConflict(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        UpdateRecordsError::ResourceNotFound(String::from(error_message))
+                    }
+                    "TooManyRequestsException" => {
+                        UpdateRecordsError::TooManyRequests(String::from(error_message))
                     }
                     "ValidationException" => {
                         UpdateRecordsError::Validation(error_message.to_string())
@@ -2443,15 +2446,15 @@ impl fmt::Display for UpdateRecordsError {
 impl Error for UpdateRecordsError {
     fn description(&self) -> &str {
         match *self {
-            UpdateRecordsError::LambdaThrottled(ref cause) => cause,
-            UpdateRecordsError::InvalidLambdaFunctionOutput(ref cause) => cause,
             UpdateRecordsError::InternalError(ref cause) => cause,
-            UpdateRecordsError::ResourceConflict(ref cause) => cause,
-            UpdateRecordsError::TooManyRequests(ref cause) => cause,
-            UpdateRecordsError::ResourceNotFound(ref cause) => cause,
+            UpdateRecordsError::InvalidLambdaFunctionOutput(ref cause) => cause,
             UpdateRecordsError::InvalidParameter(ref cause) => cause,
-            UpdateRecordsError::NotAuthorized(ref cause) => cause,
+            UpdateRecordsError::LambdaThrottled(ref cause) => cause,
             UpdateRecordsError::LimitExceeded(ref cause) => cause,
+            UpdateRecordsError::NotAuthorized(ref cause) => cause,
+            UpdateRecordsError::ResourceConflict(ref cause) => cause,
+            UpdateRecordsError::ResourceNotFound(ref cause) => cause,
+            UpdateRecordsError::TooManyRequests(ref cause) => cause,
             UpdateRecordsError::Validation(ref cause) => cause,
             UpdateRecordsError::Credentials(ref err) => err.description(),
             UpdateRecordsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),

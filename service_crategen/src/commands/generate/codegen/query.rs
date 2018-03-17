@@ -240,6 +240,15 @@ fn value_name(service: &Service, shape: &Shape) -> String {
 }
 
 fn member_location(service: &Service, member: &Member, default: &str) -> String {
+    // Seems a bit hacky to avoid doing this just for EC2:
+    if let Some (ref shape) = service.shape_for_member(member) {
+        if service.protocol() != "ec2" && !shape.is_primitive() {
+            if let Some(ref shape_member) = shape.member {
+                let inner_name = member_location(service, shape_member, default);
+                return capitalize_if_ec2(service, &inner_name);
+            }
+        }
+    }
     let member_location = member.location_name.clone().unwrap_or_else(|| default.to_owned());
     capitalize_if_ec2(service, &member_location)
 }

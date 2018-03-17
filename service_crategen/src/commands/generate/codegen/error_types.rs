@@ -159,7 +159,7 @@ impl GenerateErrorTypes for XmlErrorTypes {
                         let reader = EventReader::new(body.as_bytes());
                         let mut stack = XmlResponse::new(reader.into_iter().peekable());
                         find_start_element(&mut stack);
-                        match XmlErrorDeserializer::deserialize(\"Error\", &mut stack) {{
+                        match Self::deserialize(&mut stack) {{
                             Ok(parsed_error) => {{
                                 match &parsed_error.code[..] {{
                                     {type_matchers}
@@ -168,8 +168,13 @@ impl GenerateErrorTypes for XmlErrorTypes {
                            Err(_) => {type_name}::Unknown(body.to_string())
                        }}
                     }}
+
+                    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError> where T: Peek + Next {{
+                        {error_deserializer}
+                    }}
                 }}",
                 type_name = error_type_name(service, operation_name),
+                error_deserializer = self.generate_error_deserializer(service),
                 type_matchers = self.generate_error_type_matchers(operation_name, operation, service))
     }
 
@@ -186,6 +191,25 @@ impl GenerateErrorTypes for XmlErrorTypes {
 }
 
 impl XmlErrorTypes {
+    fn generate_error_deserializer(&self, service: &Service) -> String {
+        if service.service_id() == Some("EC2") {
+            // https://docs.aws.amazon.com/AWSEC2/latest/APIReference/errors-overview.html
+            "
+            start_element(\"Response\", stack)?;
+            start_element(\"Errors\", stack)?;
+            XmlErrorDeserializer::deserialize(\"Error\", stack)
+            ".to_owned()
+        } else if service.service_id() == Some("S3") {
+            // https://docs.aws.amazon.com/AmazonS3/latest/API/ErrorResponses.html
+            "XmlErrorDeserializer::deserialize(\"Error\", stack)".to_owned()
+        } else {
+            "
+            start_element(\"ErrorResponse\", stack)?;
+            XmlErrorDeserializer::deserialize(\"Error\", stack)
+            ".to_owned()
+        }
+    }
+
     /// generate the arms for a match expression that maps an error name string from the response XML
     /// to a concrete error type from this operation's errors enum
     fn generate_error_type_matchers(&self, operation_name: &str, operation: &Operation, service: &Service) -> String {
@@ -194,8 +218,10 @@ impl XmlErrorTypes {
 
         if operation.errors.is_some() {
             for error in operation.errors() {
-                type_matchers.push(format!("\"{error_shape}\" => {error_type}::{error_name}(String::from(parsed_error.message))",
-                    error_shape = error.shape,
+                let shape = service.get_shape(&error.shape).unwrap();
+                let error_code = shape.error.as_ref().and_then(|http_error| http_error.code.as_ref()).unwrap_or(&error.shape);
+                type_matchers.push(format!("\"{error_code}\" => {error_type}::{error_name}(String::from(parsed_error.message))",
+                    error_code = error_code,
                     error_type = error_type,
                     error_name = error.idiomatic_error_name()))
             }
