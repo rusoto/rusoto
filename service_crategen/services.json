@@ -5,6 +5,12 @@
     "protocolVersion": "2015-12-08",
     "baseTypeName": "Acm"
   },
+  "alexaforbusiness": {
+    "version": "0.32.0",
+    "coreVersion": "0.32.0",
+    "protocolVersion": "2017-11-09",
+    "baseTypeName": "AlexaForBusiness"
+  },
   "apigateway": {
     "version": "0.32.0",
     "coreVersion": "0.32.0",

@@ -27,6 +27,10 @@ path = "../rusoto/core"
 optional = true
 path = "../rusoto/services/acm"
 
+[dependencies.rusoto_alexaforbusiness]
+optional = true
+path = "../rusoto/services/alexaforbusiness"
+
 [dependencies.rusoto_apigateway]
 optional = true
 path = "../rusoto/services/apigateway"
@@ -433,6 +437,7 @@ time = "0.1.37"
 [features]
 all = [
 		"acm",
+		"alexaforbusiness",
         "apigateway",
 		"application-autoscaling",
 		"appstream",
@@ -534,6 +539,7 @@ all = [
 		"xray"
 	]
 acm = ["rusoto_acm"]
+alexaforbusiness = ["rusoto_alexaforbusiness"]
 apigateway = ["rusoto_apigateway"]
 application-autoscaling = ["rusoto_application_autoscaling"]
 appstream = ["rusoto_appstream"]
