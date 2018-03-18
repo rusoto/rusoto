@@ -44,7 +44,7 @@ pub struct AddApplicationCloudWatchLoggingOptionRequest {
 }
 
 #[derive(Default, Debug, Clone, Deserialize)]
-pub struct AddApplicationCloudWatchLoggingOptionResponse;
+pub struct AddApplicationCloudWatchLoggingOptionResponse {}
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct AddApplicationInputProcessingConfigurationRequest {
@@ -63,7 +63,7 @@ pub struct AddApplicationInputProcessingConfigurationRequest {
 }
 
 #[derive(Default, Debug, Clone, Deserialize)]
-pub struct AddApplicationInputProcessingConfigurationResponse;
+pub struct AddApplicationInputProcessingConfigurationResponse {}
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, Serialize)]
@@ -81,7 +81,7 @@ pub struct AddApplicationInputRequest {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, Deserialize)]
-pub struct AddApplicationInputResponse;
+pub struct AddApplicationInputResponse {}
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, Serialize)]
@@ -99,7 +99,7 @@ pub struct AddApplicationOutputRequest {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, Deserialize)]
-pub struct AddApplicationOutputResponse;
+pub struct AddApplicationOutputResponse {}
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, Serialize)]
@@ -117,7 +117,7 @@ pub struct AddApplicationReferenceDataSourceRequest {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, Deserialize)]
-pub struct AddApplicationReferenceDataSourceResponse;
+pub struct AddApplicationReferenceDataSourceResponse {}
 
 /// <p>Provides a description of the application, including the application Amazon Resource Name (ARN), status, latest version, and input and output configuration.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
@@ -310,7 +310,7 @@ pub struct DeleteApplicationCloudWatchLoggingOptionRequest {
 }
 
 #[derive(Default, Debug, Clone, Deserialize)]
-pub struct DeleteApplicationCloudWatchLoggingOptionResponse;
+pub struct DeleteApplicationCloudWatchLoggingOptionResponse {}
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteApplicationInputProcessingConfigurationRequest {
@@ -326,7 +326,7 @@ pub struct DeleteApplicationInputProcessingConfigurationRequest {
 }
 
 #[derive(Default, Debug, Clone, Deserialize)]
-pub struct DeleteApplicationInputProcessingConfigurationResponse;
+pub struct DeleteApplicationInputProcessingConfigurationResponse {}
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, Serialize)]
@@ -344,7 +344,7 @@ pub struct DeleteApplicationOutputRequest {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, Deserialize)]
-pub struct DeleteApplicationOutputResponse;
+pub struct DeleteApplicationOutputResponse {}
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteApplicationReferenceDataSourceRequest {
@@ -360,7 +360,7 @@ pub struct DeleteApplicationReferenceDataSourceRequest {
 }
 
 #[derive(Default, Debug, Clone, Deserialize)]
-pub struct DeleteApplicationReferenceDataSourceResponse;
+pub struct DeleteApplicationReferenceDataSourceResponse {}
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, Serialize)]
@@ -375,7 +375,7 @@ pub struct DeleteApplicationRequest {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, Deserialize)]
-pub struct DeleteApplicationResponse;
+pub struct DeleteApplicationResponse {}
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, Serialize)]
@@ -1141,7 +1141,7 @@ pub struct StartApplicationRequest {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, Deserialize)]
-pub struct StartApplicationResponse;
+pub struct StartApplicationResponse {}
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, Serialize)]
@@ -1153,7 +1153,7 @@ pub struct StopApplicationRequest {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, Deserialize)]
-pub struct StopApplicationResponse;
+pub struct StopApplicationResponse {}
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct UpdateApplicationRequest {
@@ -1169,7 +1169,7 @@ pub struct UpdateApplicationRequest {
 }
 
 #[derive(Default, Debug, Clone, Deserialize)]
-pub struct UpdateApplicationResponse;
+pub struct UpdateApplicationResponse {}
 
 /// Errors returned by AddApplicationCloudWatchLoggingOption
 #[derive(Debug, PartialEq)]
@@ -3059,8 +3059,14 @@ where
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
                     serde_json::from_str::<AddApplicationCloudWatchLoggingOptionResponse>(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
                     ).unwrap()
                 }))
             } else {
@@ -3093,8 +3099,14 @@ where
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
                     serde_json::from_str::<AddApplicationInputResponse>(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
                     ).unwrap()
                 }))
             } else {
@@ -3130,8 +3142,14 @@ where
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
                     serde_json::from_str::<AddApplicationInputProcessingConfigurationResponse>(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
                     ).unwrap()
                 }))
             } else {
@@ -3164,8 +3182,14 @@ where
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
                     serde_json::from_str::<AddApplicationOutputResponse>(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
                     ).unwrap()
                 }))
             } else {
@@ -3201,8 +3225,14 @@ where
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
                     serde_json::from_str::<AddApplicationReferenceDataSourceResponse>(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
                     ).unwrap()
                 }))
             } else {
@@ -3235,8 +3265,14 @@ where
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
                     serde_json::from_str::<CreateApplicationResponse>(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
                     ).unwrap()
                 }))
             } else {
@@ -3269,8 +3305,14 @@ where
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
                     serde_json::from_str::<DeleteApplicationResponse>(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
                     ).unwrap()
                 }))
             } else {
@@ -3306,8 +3348,14 @@ where
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
                     serde_json::from_str::<DeleteApplicationCloudWatchLoggingOptionResponse>(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
                     ).unwrap()
                 }))
             } else {
@@ -3343,8 +3391,14 @@ where
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
                     serde_json::from_str::<DeleteApplicationInputProcessingConfigurationResponse>(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
                     ).unwrap()
                 }))
             } else {
@@ -3379,8 +3433,14 @@ where
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
                     serde_json::from_str::<DeleteApplicationOutputResponse>(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
                     ).unwrap()
                 }))
             } else {
@@ -3416,8 +3476,14 @@ where
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
                     serde_json::from_str::<DeleteApplicationReferenceDataSourceResponse>(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
                     ).unwrap()
                 }))
             } else {
@@ -3450,8 +3516,14 @@ where
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
                     serde_json::from_str::<DescribeApplicationResponse>(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
                     ).unwrap()
                 }))
             } else {
@@ -3484,8 +3556,14 @@ where
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
                     serde_json::from_str::<DiscoverInputSchemaResponse>(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
                     ).unwrap()
                 }))
             } else {
@@ -3515,8 +3593,14 @@ where
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
                     serde_json::from_str::<ListApplicationsResponse>(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
                     ).unwrap()
                 }))
             } else {
@@ -3546,8 +3630,14 @@ where
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
                     serde_json::from_str::<StartApplicationResponse>(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
                     ).unwrap()
                 }))
             } else {
@@ -3577,8 +3667,14 @@ where
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
                     serde_json::from_str::<StopApplicationResponse>(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
                     ).unwrap()
                 }))
             } else {
@@ -3611,8 +3707,14 @@ where
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
                     serde_json::from_str::<UpdateApplicationResponse>(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
                     ).unwrap()
                 }))
             } else {

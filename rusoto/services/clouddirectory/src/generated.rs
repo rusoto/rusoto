@@ -47,7 +47,7 @@ pub struct AddFacetToObjectRequest {
 }
 
 #[derive(Default, Debug, Clone, Deserialize)]
-pub struct AddFacetToObjectResponse;
+pub struct AddFacetToObjectResponse {}
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct ApplySchemaRequest {
@@ -110,7 +110,7 @@ pub struct AttachPolicyRequest {
 }
 
 #[derive(Default, Debug, Clone, Deserialize)]
-pub struct AttachPolicyResponse;
+pub struct AttachPolicyResponse {}
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct AttachToIndexRequest {
@@ -212,7 +212,7 @@ pub struct BatchAddFacetToObject {
 
 /// <p>The result of a batch add facet to object operation.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
-pub struct BatchAddFacetToObjectResponse;
+pub struct BatchAddFacetToObjectResponse {}
 
 /// <p>Represents the output of an <a>AttachObject</a> operation.</p>
 #[derive(Default, Debug, Clone, Serialize)]
@@ -250,7 +250,7 @@ pub struct BatchAttachPolicy {
 
 /// <p>Represents the output of an <a>AttachPolicy</a> response operation.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
-pub struct BatchAttachPolicyResponse;
+pub struct BatchAttachPolicyResponse {}
 
 /// <p>Attaches the specified object to the specified index inside a <a>BatchRead</a> operation. For more information, see <a>AttachToIndex</a> and <a>BatchReadRequest$Operations</a>.</p>
 #[derive(Default, Debug, Clone, Serialize)]
@@ -369,7 +369,7 @@ pub struct BatchDeleteObject {
 
 /// <p>Represents the output of a <a>DeleteObject</a> response operation.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
-pub struct BatchDeleteObjectResponse;
+pub struct BatchDeleteObjectResponse {}
 
 /// <p>Detaches the specified object from the specified index inside a <a>BatchRead</a> operation. For more information, see <a>DetachFromIndex</a> and <a>BatchReadRequest$Operations</a>.</p>
 #[derive(Default, Debug, Clone, Serialize)]
@@ -427,7 +427,7 @@ pub struct BatchDetachPolicy {
 
 /// <p>Represents the output of a <a>DetachPolicy</a> response operation.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
-pub struct BatchDetachPolicyResponse;
+pub struct BatchDetachPolicyResponse {}
 
 /// <p>Detaches a typed link from a specified source and target object inside a <a>BatchRead</a> operation. For more information, see <a>DetachTypedLink</a> and <a>BatchReadRequest$Operations</a>.</p>
 #[derive(Default, Debug, Clone, Serialize)]
@@ -439,7 +439,7 @@ pub struct BatchDetachTypedLink {
 
 /// <p>Represents the output of a <a>DetachTypedLink</a> response operation.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
-pub struct BatchDetachTypedLinkResponse;
+pub struct BatchDetachTypedLinkResponse {}
 
 /// <p>Retrieves metadata about an object inside a <a>BatchRead</a> operation. For more information, see <a>GetObjectInformation</a> and <a>BatchReadRequest$Operations</a>.</p>
 #[derive(Default, Debug, Clone, Serialize)]
@@ -935,7 +935,7 @@ pub struct BatchRemoveFacetFromObject {
 
 /// <p>An empty result that represents success.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
-pub struct BatchRemoveFacetFromObjectResponse;
+pub struct BatchRemoveFacetFromObjectResponse {}
 
 /// <p>Represents the output of a <code>BatchUpdate</code> operation. </p>
 #[derive(Default, Debug, Clone, Serialize)]
@@ -1141,7 +1141,7 @@ pub struct CreateFacetRequest {
 }
 
 #[derive(Default, Debug, Clone, Deserialize)]
-pub struct CreateFacetResponse;
+pub struct CreateFacetResponse {}
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateIndexRequest {
@@ -1228,7 +1228,7 @@ pub struct CreateTypedLinkFacetRequest {
 }
 
 #[derive(Default, Debug, Clone, Deserialize)]
-pub struct CreateTypedLinkFacetResponse;
+pub struct CreateTypedLinkFacetResponse {}
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteDirectoryRequest {
@@ -1255,7 +1255,7 @@ pub struct DeleteFacetRequest {
 }
 
 #[derive(Default, Debug, Clone, Deserialize)]
-pub struct DeleteFacetResponse;
+pub struct DeleteFacetResponse {}
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteObjectRequest {
@@ -1268,7 +1268,7 @@ pub struct DeleteObjectRequest {
 }
 
 #[derive(Default, Debug, Clone, Deserialize)]
-pub struct DeleteObjectResponse;
+pub struct DeleteObjectResponse {}
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteSchemaRequest {
@@ -1296,7 +1296,7 @@ pub struct DeleteTypedLinkFacetRequest {
 }
 
 #[derive(Default, Debug, Clone, Deserialize)]
-pub struct DeleteTypedLinkFacetResponse;
+pub struct DeleteTypedLinkFacetResponse {}
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DetachFromIndexRequest {
@@ -1354,7 +1354,7 @@ pub struct DetachPolicyRequest {
 }
 
 #[derive(Default, Debug, Clone, Deserialize)]
-pub struct DetachPolicyResponse;
+pub struct DetachPolicyResponse {}
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DetachTypedLinkRequest {
@@ -2405,7 +2405,7 @@ pub struct RemoveFacetFromObjectRequest {
 }
 
 #[derive(Default, Debug, Clone, Deserialize)]
-pub struct RemoveFacetFromObjectResponse;
+pub struct RemoveFacetFromObjectResponse {}
 
 /// <p>Contains an Amazon Resource Name (ARN) and parameters that are associated with the rule.</p>
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
@@ -2457,7 +2457,7 @@ pub struct TagResourceRequest {
 }
 
 #[derive(Default, Debug, Clone, Deserialize)]
-pub struct TagResourceResponse;
+pub struct TagResourceResponse {}
 
 /// <p>Represents the data for a typed attribute. You can set one, and only one, of the elements. Each attribute in an item is a name-value pair. Attributes have a single value.</p>
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
@@ -2606,7 +2606,7 @@ pub struct UntagResourceRequest {
 }
 
 #[derive(Default, Debug, Clone, Deserialize)]
-pub struct UntagResourceResponse;
+pub struct UntagResourceResponse {}
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct UpdateFacetRequest {
@@ -2627,7 +2627,7 @@ pub struct UpdateFacetRequest {
 }
 
 #[derive(Default, Debug, Clone, Deserialize)]
-pub struct UpdateFacetResponse;
+pub struct UpdateFacetResponse {}
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct UpdateObjectAttributesRequest {
@@ -2685,7 +2685,7 @@ pub struct UpdateTypedLinkFacetRequest {
 }
 
 #[derive(Default, Debug, Clone, Deserialize)]
-pub struct UpdateTypedLinkFacetResponse;
+pub struct UpdateTypedLinkFacetResponse {}
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct UpgradeAppliedSchemaRequest {
@@ -10585,8 +10585,8 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"{}" {
-                        body = b"null".to_vec();
+                    if body == b"null" {
+                        body = b"{}".to_vec();
                     }
 
                     debug!("Response body: {:?}", body);
@@ -10626,8 +10626,8 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"{}" {
-                        body = b"null".to_vec();
+                    if body == b"null" {
+                        body = b"{}".to_vec();
                     }
 
                     debug!("Response body: {:?}", body);
@@ -10667,8 +10667,8 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"{}" {
-                        body = b"null".to_vec();
+                    if body == b"null" {
+                        body = b"{}".to_vec();
                     }
 
                     debug!("Response body: {:?}", body);
@@ -10711,8 +10711,8 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"{}" {
-                        body = b"null".to_vec();
+                    if body == b"null" {
+                        body = b"{}".to_vec();
                     }
 
                     debug!("Response body: {:?}", body);
@@ -10752,8 +10752,8 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"{}" {
-                        body = b"null".to_vec();
+                    if body == b"null" {
+                        body = b"{}".to_vec();
                     }
 
                     debug!("Response body: {:?}", body);
@@ -10793,8 +10793,8 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"{}" {
-                        body = b"null".to_vec();
+                    if body == b"null" {
+                        body = b"{}".to_vec();
                     }
 
                     debug!("Response body: {:?}", body);
@@ -10838,8 +10838,8 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"{}" {
-                        body = b"null".to_vec();
+                    if body == b"null" {
+                        body = b"{}".to_vec();
                     }
 
                     debug!("Response body: {:?}", body);
@@ -10879,8 +10879,8 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"{}" {
-                        body = b"null".to_vec();
+                    if body == b"null" {
+                        body = b"{}".to_vec();
                     }
 
                     debug!("Response body: {:?}", body);
@@ -10920,8 +10920,8 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"{}" {
-                        body = b"null".to_vec();
+                    if body == b"null" {
+                        body = b"{}".to_vec();
                     }
 
                     debug!("Response body: {:?}", body);
@@ -10961,8 +10961,8 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"{}" {
-                        body = b"null".to_vec();
+                    if body == b"null" {
+                        body = b"{}".to_vec();
                     }
 
                     debug!("Response body: {:?}", body);
@@ -11002,8 +11002,8 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"{}" {
-                        body = b"null".to_vec();
+                    if body == b"null" {
+                        body = b"{}".to_vec();
                     }
 
                     debug!("Response body: {:?}", body);
@@ -11043,8 +11043,8 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"{}" {
-                        body = b"null".to_vec();
+                    if body == b"null" {
+                        body = b"{}".to_vec();
                     }
 
                     debug!("Response body: {:?}", body);
@@ -11083,8 +11083,8 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"{}" {
-                        body = b"null".to_vec();
+                    if body == b"null" {
+                        body = b"{}".to_vec();
                     }
 
                     debug!("Response body: {:?}", body);
@@ -11124,8 +11124,8 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"{}" {
-                        body = b"null".to_vec();
+                    if body == b"null" {
+                        body = b"{}".to_vec();
                     }
 
                     debug!("Response body: {:?}", body);
@@ -11164,8 +11164,8 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"{}" {
-                        body = b"null".to_vec();
+                    if body == b"null" {
+                        body = b"{}".to_vec();
                     }
 
                     debug!("Response body: {:?}", body);
@@ -11205,8 +11205,8 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"{}" {
-                        body = b"null".to_vec();
+                    if body == b"null" {
+                        body = b"{}".to_vec();
                     }
 
                     debug!("Response body: {:?}", body);
@@ -11246,8 +11246,8 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"{}" {
-                        body = b"null".to_vec();
+                    if body == b"null" {
+                        body = b"{}".to_vec();
                     }
 
                     debug!("Response body: {:?}", body);
@@ -11285,8 +11285,8 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"{}" {
-                        body = b"null".to_vec();
+                    if body == b"null" {
+                        body = b"{}".to_vec();
                     }
 
                     debug!("Response body: {:?}", body);
@@ -11326,8 +11326,8 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"{}" {
-                        body = b"null".to_vec();
+                    if body == b"null" {
+                        body = b"{}".to_vec();
                     }
 
                     debug!("Response body: {:?}", body);
@@ -11368,8 +11368,8 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"{}" {
-                        body = b"null".to_vec();
+                    if body == b"null" {
+                        body = b"{}".to_vec();
                     }
 
                     debug!("Response body: {:?}", body);
@@ -11409,8 +11409,8 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"{}" {
-                        body = b"null".to_vec();
+                    if body == b"null" {
+                        body = b"{}".to_vec();
                     }
 
                     debug!("Response body: {:?}", body);
@@ -11450,8 +11450,8 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"{}" {
-                        body = b"null".to_vec();
+                    if body == b"null" {
+                        body = b"{}".to_vec();
                     }
 
                     debug!("Response body: {:?}", body);
@@ -11522,8 +11522,8 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"{}" {
-                        body = b"null".to_vec();
+                    if body == b"null" {
+                        body = b"{}".to_vec();
                     }
 
                     debug!("Response body: {:?}", body);
@@ -11561,8 +11561,8 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"{}" {
-                        body = b"null".to_vec();
+                    if body == b"null" {
+                        body = b"{}".to_vec();
                     }
 
                     debug!("Response body: {:?}", body);
@@ -11601,8 +11601,8 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"{}" {
-                        body = b"null".to_vec();
+                    if body == b"null" {
+                        body = b"{}".to_vec();
                     }
 
                     debug!("Response body: {:?}", body);
@@ -11641,8 +11641,8 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"{}" {
-                        body = b"null".to_vec();
+                    if body == b"null" {
+                        body = b"{}".to_vec();
                     }
 
                     debug!("Response body: {:?}", body);
@@ -11679,8 +11679,8 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"{}" {
-                        body = b"null".to_vec();
+                    if body == b"null" {
+                        body = b"{}".to_vec();
                     }
 
                     debug!("Response body: {:?}", body);
@@ -11724,8 +11724,8 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"{}" {
-                        body = b"null".to_vec();
+                    if body == b"null" {
+                        body = b"{}".to_vec();
                     }
 
                     debug!("Response body: {:?}", body);
@@ -11764,8 +11764,8 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"{}" {
-                        body = b"null".to_vec();
+                    if body == b"null" {
+                        body = b"{}".to_vec();
                     }
 
                     debug!("Response body: {:?}", body);
@@ -11805,8 +11805,8 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"{}" {
-                        body = b"null".to_vec();
+                    if body == b"null" {
+                        body = b"{}".to_vec();
                     }
 
                     debug!("Response body: {:?}", body);
@@ -11847,8 +11847,8 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"{}" {
-                        body = b"null".to_vec();
+                    if body == b"null" {
+                        body = b"{}".to_vec();
                     }
 
                     debug!("Response body: {:?}", body);
@@ -11893,8 +11893,8 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"{}" {
-                        body = b"null".to_vec();
+                    if body == b"null" {
+                        body = b"{}".to_vec();
                     }
 
                     debug!("Response body: {:?}", body);
@@ -11934,8 +11934,8 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"{}" {
-                        body = b"null".to_vec();
+                    if body == b"null" {
+                        body = b"{}".to_vec();
                     }
 
                     debug!("Response body: {:?}", body);
@@ -11975,8 +11975,8 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"{}" {
-                        body = b"null".to_vec();
+                    if body == b"null" {
+                        body = b"{}".to_vec();
                     }
 
                     debug!("Response body: {:?}", body);
@@ -12016,8 +12016,8 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"{}" {
-                        body = b"null".to_vec();
+                    if body == b"null" {
+                        body = b"{}".to_vec();
                     }
 
                     debug!("Response body: {:?}", body);
@@ -12058,8 +12058,8 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"{}" {
-                        body = b"null".to_vec();
+                    if body == b"null" {
+                        body = b"{}".to_vec();
                     }
 
                     debug!("Response body: {:?}", body);
@@ -12099,8 +12099,8 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"{}" {
-                        body = b"null".to_vec();
+                    if body == b"null" {
+                        body = b"{}".to_vec();
                     }
 
                     debug!("Response body: {:?}", body);
@@ -12145,8 +12145,8 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"{}" {
-                        body = b"null".to_vec();
+                    if body == b"null" {
+                        body = b"{}".to_vec();
                     }
 
                     debug!("Response body: {:?}", body);
@@ -12190,8 +12190,8 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"{}" {
-                        body = b"null".to_vec();
+                    if body == b"null" {
+                        body = b"{}".to_vec();
                     }
 
                     debug!("Response body: {:?}", body);
@@ -12236,8 +12236,8 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"{}" {
-                        body = b"null".to_vec();
+                    if body == b"null" {
+                        body = b"{}".to_vec();
                     }
 
                     debug!("Response body: {:?}", body);
@@ -12278,8 +12278,8 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"{}" {
-                        body = b"null".to_vec();
+                    if body == b"null" {
+                        body = b"{}".to_vec();
                     }
 
                     debug!("Response body: {:?}", body);
@@ -12324,8 +12324,8 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"{}" {
-                        body = b"null".to_vec();
+                    if body == b"null" {
+                        body = b"{}".to_vec();
                     }
 
                     debug!("Response body: {:?}", body);
@@ -12370,8 +12370,8 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"{}" {
-                        body = b"null".to_vec();
+                    if body == b"null" {
+                        body = b"{}".to_vec();
                     }
 
                     debug!("Response body: {:?}", body);
@@ -12412,8 +12412,8 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"{}" {
-                        body = b"null".to_vec();
+                    if body == b"null" {
+                        body = b"{}".to_vec();
                     }
 
                     debug!("Response body: {:?}", body);
@@ -12458,8 +12458,8 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"{}" {
-                        body = b"null".to_vec();
+                    if body == b"null" {
+                        body = b"{}".to_vec();
                     }
 
                     debug!("Response body: {:?}", body);
@@ -12499,8 +12499,8 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"{}" {
-                        body = b"null".to_vec();
+                    if body == b"null" {
+                        body = b"{}".to_vec();
                     }
 
                     debug!("Response body: {:?}", body);
@@ -12540,8 +12540,8 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"{}" {
-                        body = b"null".to_vec();
+                    if body == b"null" {
+                        body = b"{}".to_vec();
                     }
 
                     debug!("Response body: {:?}", body);
@@ -12582,8 +12582,8 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"{}" {
-                        body = b"null".to_vec();
+                    if body == b"null" {
+                        body = b"{}".to_vec();
                     }
 
                     debug!("Response body: {:?}", body);
@@ -12625,8 +12625,8 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"{}" {
-                        body = b"null".to_vec();
+                    if body == b"null" {
+                        body = b"{}".to_vec();
                     }
 
                     debug!("Response body: {:?}", body);
@@ -12667,8 +12667,8 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"{}" {
-                        body = b"null".to_vec();
+                    if body == b"null" {
+                        body = b"{}".to_vec();
                     }
 
                     debug!("Response body: {:?}", body);
@@ -12708,8 +12708,8 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"{}" {
-                        body = b"null".to_vec();
+                    if body == b"null" {
+                        body = b"{}".to_vec();
                     }
 
                     debug!("Response body: {:?}", body);
@@ -12749,8 +12749,8 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"{}" {
-                        body = b"null".to_vec();
+                    if body == b"null" {
+                        body = b"{}".to_vec();
                     }
 
                     debug!("Response body: {:?}", body);
@@ -12791,8 +12791,8 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"{}" {
-                        body = b"null".to_vec();
+                    if body == b"null" {
+                        body = b"{}".to_vec();
                     }
 
                     debug!("Response body: {:?}", body);
@@ -12832,8 +12832,8 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"{}" {
-                        body = b"null".to_vec();
+                    if body == b"null" {
+                        body = b"{}".to_vec();
                     }
 
                     debug!("Response body: {:?}", body);
@@ -12872,8 +12872,8 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"{}" {
-                        body = b"null".to_vec();
+                    if body == b"null" {
+                        body = b"{}".to_vec();
                     }
 
                     debug!("Response body: {:?}", body);
@@ -12913,8 +12913,8 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"{}" {
-                        body = b"null".to_vec();
+                    if body == b"null" {
+                        body = b"{}".to_vec();
                     }
 
                     debug!("Response body: {:?}", body);
@@ -12954,8 +12954,8 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"{}" {
-                        body = b"null".to_vec();
+                    if body == b"null" {
+                        body = b"{}".to_vec();
                     }
 
                     debug!("Response body: {:?}", body);
@@ -12996,8 +12996,8 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"{}" {
-                        body = b"null".to_vec();
+                    if body == b"null" {
+                        body = b"{}".to_vec();
                     }
 
                     debug!("Response body: {:?}", body);
@@ -13037,8 +13037,8 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"{}" {
-                        body = b"null".to_vec();
+                    if body == b"null" {
+                        body = b"{}".to_vec();
                     }
 
                     debug!("Response body: {:?}", body);
@@ -13078,8 +13078,8 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"{}" {
-                        body = b"null".to_vec();
+                    if body == b"null" {
+                        body = b"{}".to_vec();
                     }
 
                     debug!("Response body: {:?}", body);
@@ -13119,8 +13119,8 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"{}" {
-                        body = b"null".to_vec();
+                    if body == b"null" {
+                        body = b"{}".to_vec();
                     }
 
                     debug!("Response body: {:?}", body);

@@ -77,7 +77,7 @@ pub struct PutReportDefinitionRequest {
 
 /// <p>Response of PutReportDefinition</p>
 #[derive(Default, Debug, Clone, Deserialize)]
-pub struct PutReportDefinitionResponse;
+pub struct PutReportDefinitionResponse {}
 
 /// <p>The definition of AWS Cost and Usage Report. Customer can specify the report name, time unit, report format, compression format, S3 bucket and additional artifacts and schema elements in the definition.</p>
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
@@ -436,8 +436,14 @@ where
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
                     serde_json::from_str::<DeleteReportDefinitionResponse>(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
                     ).unwrap()
                 }))
             } else {
@@ -470,8 +476,14 @@ where
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
                     serde_json::from_str::<DescribeReportDefinitionsResponse>(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
                     ).unwrap()
                 }))
             } else {
@@ -504,8 +516,14 @@ where
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
                     serde_json::from_str::<PutReportDefinitionResponse>(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
                     ).unwrap()
                 }))
             } else {

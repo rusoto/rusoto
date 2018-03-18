@@ -694,7 +694,7 @@ pub struct GetByteMatchSetResponse {
 }
 
 #[derive(Default, Debug, Clone, Serialize)]
-pub struct GetChangeTokenRequest;
+pub struct GetChangeTokenRequest {}
 
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetChangeTokenResponse {
@@ -9298,8 +9298,14 @@ where
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
                     serde_json::from_str::<CreateByteMatchSetResponse>(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
                     ).unwrap()
                 }))
             } else {
@@ -9329,8 +9335,14 @@ where
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
                     serde_json::from_str::<CreateGeoMatchSetResponse>(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
                     ).unwrap()
                 }))
             } else {
@@ -9360,8 +9372,14 @@ where
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
                     serde_json::from_str::<CreateIPSetResponse>(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
                     ).unwrap()
                 }))
             } else {
@@ -9391,8 +9409,14 @@ where
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
                     serde_json::from_str::<CreateRateBasedRuleResponse>(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
                     ).unwrap()
                 }))
             } else {
@@ -9422,8 +9446,14 @@ where
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
                     serde_json::from_str::<CreateRegexMatchSetResponse>(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
                     ).unwrap()
                 }))
             } else {
@@ -9453,8 +9483,14 @@ where
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
                     serde_json::from_str::<CreateRegexPatternSetResponse>(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
                     ).unwrap()
                 }))
             } else {
@@ -9484,8 +9520,14 @@ where
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
                     serde_json::from_str::<CreateRuleResponse>(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
                     ).unwrap()
                 }))
             } else {
@@ -9515,8 +9557,14 @@ where
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
                     serde_json::from_str::<CreateRuleGroupResponse>(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
                     ).unwrap()
                 }))
             } else {
@@ -9546,8 +9594,14 @@ where
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
                     serde_json::from_str::<CreateSizeConstraintSetResponse>(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
                     ).unwrap()
                 }))
             } else {
@@ -9577,8 +9631,14 @@ where
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
                     serde_json::from_str::<CreateSqlInjectionMatchSetResponse>(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
                     ).unwrap()
                 }))
             } else {
@@ -9608,8 +9668,14 @@ where
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
                     serde_json::from_str::<CreateWebACLResponse>(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
                     ).unwrap()
                 }))
             } else {
@@ -9639,8 +9705,14 @@ where
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
                     serde_json::from_str::<CreateXssMatchSetResponse>(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
                     ).unwrap()
                 }))
             } else {
@@ -9670,8 +9742,14 @@ where
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
                     serde_json::from_str::<DeleteByteMatchSetResponse>(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
                     ).unwrap()
                 }))
             } else {
@@ -9701,8 +9779,14 @@ where
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
                     serde_json::from_str::<DeleteGeoMatchSetResponse>(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
                     ).unwrap()
                 }))
             } else {
@@ -9732,8 +9816,14 @@ where
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
                     serde_json::from_str::<DeleteIPSetResponse>(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
                     ).unwrap()
                 }))
             } else {
@@ -9763,8 +9853,14 @@ where
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
                     serde_json::from_str::<DeleteRateBasedRuleResponse>(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
                     ).unwrap()
                 }))
             } else {
@@ -9794,8 +9890,14 @@ where
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
                     serde_json::from_str::<DeleteRegexMatchSetResponse>(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
                     ).unwrap()
                 }))
             } else {
@@ -9825,8 +9927,14 @@ where
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
                     serde_json::from_str::<DeleteRegexPatternSetResponse>(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
                     ).unwrap()
                 }))
             } else {
@@ -9856,8 +9964,14 @@ where
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
                     serde_json::from_str::<DeleteRuleResponse>(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
                     ).unwrap()
                 }))
             } else {
@@ -9887,8 +10001,14 @@ where
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
                     serde_json::from_str::<DeleteRuleGroupResponse>(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
                     ).unwrap()
                 }))
             } else {
@@ -9918,8 +10038,14 @@ where
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
                     serde_json::from_str::<DeleteSizeConstraintSetResponse>(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
                     ).unwrap()
                 }))
             } else {
@@ -9949,8 +10075,14 @@ where
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
                     serde_json::from_str::<DeleteSqlInjectionMatchSetResponse>(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
                     ).unwrap()
                 }))
             } else {
@@ -9980,8 +10112,14 @@ where
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
                     serde_json::from_str::<DeleteWebACLResponse>(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
                     ).unwrap()
                 }))
             } else {
@@ -10011,8 +10149,14 @@ where
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
                     serde_json::from_str::<DeleteXssMatchSetResponse>(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
                     ).unwrap()
                 }))
             } else {
@@ -10042,8 +10186,14 @@ where
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
                     serde_json::from_str::<GetByteMatchSetResponse>(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
                     ).unwrap()
                 }))
             } else {
@@ -10069,8 +10219,14 @@ where
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
                     serde_json::from_str::<GetChangeTokenResponse>(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
                     ).unwrap()
                 }))
             } else {
@@ -10100,8 +10256,14 @@ where
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
                     serde_json::from_str::<GetChangeTokenStatusResponse>(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
                     ).unwrap()
                 }))
             } else {
@@ -10131,8 +10293,14 @@ where
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
                     serde_json::from_str::<GetGeoMatchSetResponse>(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
                     ).unwrap()
                 }))
             } else {
@@ -10159,8 +10327,14 @@ where
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
                     serde_json::from_str::<GetIPSetResponse>(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
                     ).unwrap()
                 }))
             } else {
@@ -10190,8 +10364,14 @@ where
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
                     serde_json::from_str::<GetRateBasedRuleResponse>(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
                     ).unwrap()
                 }))
             } else {
@@ -10224,8 +10404,14 @@ where
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
                     serde_json::from_str::<GetRateBasedRuleManagedKeysResponse>(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
                     ).unwrap()
                 }))
             } else {
@@ -10255,8 +10441,14 @@ where
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
                     serde_json::from_str::<GetRegexMatchSetResponse>(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
                     ).unwrap()
                 }))
             } else {
@@ -10286,8 +10478,14 @@ where
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
                     serde_json::from_str::<GetRegexPatternSetResponse>(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
                     ).unwrap()
                 }))
             } else {
@@ -10314,8 +10512,14 @@ where
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
                     serde_json::from_str::<GetRuleResponse>(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
                     ).unwrap()
                 }))
             } else {
@@ -10345,8 +10549,14 @@ where
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
                     serde_json::from_str::<GetRuleGroupResponse>(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
                     ).unwrap()
                 }))
             } else {
@@ -10376,8 +10586,14 @@ where
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
                     serde_json::from_str::<GetSampledRequestsResponse>(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
                     ).unwrap()
                 }))
             } else {
@@ -10407,8 +10623,14 @@ where
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
                     serde_json::from_str::<GetSizeConstraintSetResponse>(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
                     ).unwrap()
                 }))
             } else {
@@ -10438,8 +10660,14 @@ where
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
                     serde_json::from_str::<GetSqlInjectionMatchSetResponse>(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
                     ).unwrap()
                 }))
             } else {
@@ -10469,8 +10697,14 @@ where
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
                     serde_json::from_str::<GetWebACLResponse>(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
                     ).unwrap()
                 }))
             } else {
@@ -10500,8 +10734,14 @@ where
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
                     serde_json::from_str::<GetXssMatchSetResponse>(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
                     ).unwrap()
                 }))
             } else {
@@ -10535,8 +10775,14 @@ where
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
                     serde_json::from_str::<ListActivatedRulesInRuleGroupResponse>(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
                     ).unwrap()
                 }))
             } else {
@@ -10566,8 +10812,14 @@ where
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
                     serde_json::from_str::<ListByteMatchSetsResponse>(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
                     ).unwrap()
                 }))
             } else {
@@ -10597,8 +10849,14 @@ where
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
                     serde_json::from_str::<ListGeoMatchSetsResponse>(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
                     ).unwrap()
                 }))
             } else {
@@ -10628,8 +10886,14 @@ where
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
                     serde_json::from_str::<ListIPSetsResponse>(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
                     ).unwrap()
                 }))
             } else {
@@ -10659,8 +10923,14 @@ where
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
                     serde_json::from_str::<ListRateBasedRulesResponse>(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
                     ).unwrap()
                 }))
             } else {
@@ -10690,8 +10960,14 @@ where
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
                     serde_json::from_str::<ListRegexMatchSetsResponse>(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
                     ).unwrap()
                 }))
             } else {
@@ -10721,8 +10997,14 @@ where
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
                     serde_json::from_str::<ListRegexPatternSetsResponse>(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
                     ).unwrap()
                 }))
             } else {
@@ -10752,8 +11034,14 @@ where
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
                     serde_json::from_str::<ListRuleGroupsResponse>(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
                     ).unwrap()
                 }))
             } else {
@@ -10783,8 +11071,14 @@ where
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
                     serde_json::from_str::<ListRulesResponse>(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
                     ).unwrap()
                 }))
             } else {
@@ -10814,8 +11108,14 @@ where
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
                     serde_json::from_str::<ListSizeConstraintSetsResponse>(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
                     ).unwrap()
                 }))
             } else {
@@ -10845,8 +11145,14 @@ where
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
                     serde_json::from_str::<ListSqlInjectionMatchSetsResponse>(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
                     ).unwrap()
                 }))
             } else {
@@ -10876,8 +11182,14 @@ where
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
                     serde_json::from_str::<ListSubscribedRuleGroupsResponse>(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
                     ).unwrap()
                 }))
             } else {
@@ -10907,8 +11219,14 @@ where
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
                     serde_json::from_str::<ListWebACLsResponse>(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
                     ).unwrap()
                 }))
             } else {
@@ -10938,8 +11256,14 @@ where
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
                     serde_json::from_str::<ListXssMatchSetsResponse>(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
                     ).unwrap()
                 }))
             } else {
@@ -10969,8 +11293,14 @@ where
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
                     serde_json::from_str::<UpdateByteMatchSetResponse>(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
                     ).unwrap()
                 }))
             } else {
@@ -11000,8 +11330,14 @@ where
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
                     serde_json::from_str::<UpdateGeoMatchSetResponse>(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
                     ).unwrap()
                 }))
             } else {
@@ -11031,8 +11367,14 @@ where
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
                     serde_json::from_str::<UpdateIPSetResponse>(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
                     ).unwrap()
                 }))
             } else {
@@ -11062,8 +11404,14 @@ where
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
                     serde_json::from_str::<UpdateRateBasedRuleResponse>(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
                     ).unwrap()
                 }))
             } else {
@@ -11093,8 +11441,14 @@ where
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
                     serde_json::from_str::<UpdateRegexMatchSetResponse>(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
                     ).unwrap()
                 }))
             } else {
@@ -11124,8 +11478,14 @@ where
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
                     serde_json::from_str::<UpdateRegexPatternSetResponse>(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
                     ).unwrap()
                 }))
             } else {
@@ -11155,8 +11515,14 @@ where
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
                     serde_json::from_str::<UpdateRuleResponse>(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
                     ).unwrap()
                 }))
             } else {
@@ -11186,8 +11552,14 @@ where
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
                     serde_json::from_str::<UpdateRuleGroupResponse>(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
                     ).unwrap()
                 }))
             } else {
@@ -11217,8 +11589,14 @@ where
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
                     serde_json::from_str::<UpdateSizeConstraintSetResponse>(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
                     ).unwrap()
                 }))
             } else {
@@ -11248,8 +11626,14 @@ where
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
                     serde_json::from_str::<UpdateSqlInjectionMatchSetResponse>(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
                     ).unwrap()
                 }))
             } else {
@@ -11279,8 +11663,14 @@ where
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
                     serde_json::from_str::<UpdateWebACLResponse>(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
                     ).unwrap()
                 }))
             } else {
@@ -11310,8 +11700,14 @@ where
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
                     serde_json::from_str::<UpdateXssMatchSetResponse>(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
                     ).unwrap()
                 }))
             } else {

@@ -754,7 +754,7 @@ impl DeleteDashboardsInputSerializer {
 }
 
 #[derive(Default, Debug, Clone)]
-pub struct DeleteDashboardsOutput;
+pub struct DeleteDashboardsOutput {}
 
 struct DeleteDashboardsOutputDeserializer;
 impl DeleteDashboardsOutputDeserializer {

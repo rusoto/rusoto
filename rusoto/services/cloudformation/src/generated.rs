@@ -842,7 +842,7 @@ impl ContinueUpdateRollbackInputSerializer {
 
 /// <p>The output for a <a>ContinueUpdateRollback</a> action.</p>
 #[derive(Default, Debug, Clone)]
-pub struct ContinueUpdateRollbackOutput;
+pub struct ContinueUpdateRollbackOutput {}
 
 struct ContinueUpdateRollbackOutputDeserializer;
 impl ContinueUpdateRollbackOutputDeserializer {
@@ -1524,7 +1524,7 @@ impl DeleteChangeSetInputSerializer {
 
 /// <p>The output for the <a>DeleteChangeSet</a> action.</p>
 #[derive(Default, Debug, Clone)]
-pub struct DeleteChangeSetOutput;
+pub struct DeleteChangeSetOutput {}
 
 struct DeleteChangeSetOutputDeserializer;
 impl DeleteChangeSetOutputDeserializer {
@@ -1715,7 +1715,7 @@ impl DeleteStackSetInputSerializer {
 }
 
 #[derive(Default, Debug, Clone)]
-pub struct DeleteStackSetOutput;
+pub struct DeleteStackSetOutput {}
 
 struct DeleteStackSetOutputDeserializer;
 impl DeleteStackSetOutputDeserializer {
@@ -2787,7 +2787,7 @@ impl ExecuteChangeSetInputSerializer {
 
 /// <p>The output for the <a>ExecuteChangeSet</a> action.</p>
 #[derive(Default, Debug, Clone)]
-pub struct ExecuteChangeSetOutput;
+pub struct ExecuteChangeSetOutput {}
 
 struct ExecuteChangeSetOutputDeserializer;
 impl ExecuteChangeSetOutputDeserializer {
@@ -7869,7 +7869,7 @@ impl StopStackSetOperationInputSerializer {
 }
 
 #[derive(Default, Debug, Clone)]
-pub struct StopStackSetOperationOutput;
+pub struct StopStackSetOperationOutput {}
 
 struct StopStackSetOperationOutputDeserializer;
 impl StopStackSetOperationOutputDeserializer {

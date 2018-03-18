@@ -7063,7 +7063,7 @@ impl DeleteOptionGroupMessageSerializer {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone)]
-pub struct DescribeAccountAttributesMessage;
+pub struct DescribeAccountAttributesMessage {}
 
 /// Serialize `DescribeAccountAttributesMessage` contents to a `SignedRequest`.
 struct DescribeAccountAttributesMessageSerializer;

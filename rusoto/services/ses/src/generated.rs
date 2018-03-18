@@ -664,7 +664,7 @@ impl CloneReceiptRuleSetRequestSerializer {
 
 /// <p>An empty element returned on a successful request.</p>
 #[derive(Default, Debug, Clone)]
-pub struct CloneReceiptRuleSetResponse;
+pub struct CloneReceiptRuleSetResponse {}
 
 struct CloneReceiptRuleSetResponseDeserializer;
 impl CloneReceiptRuleSetResponseDeserializer {
@@ -1112,7 +1112,7 @@ impl CreateConfigurationSetEventDestinationRequestSerializer {
 
 /// <p>An empty element returned on a successful request.</p>
 #[derive(Default, Debug, Clone)]
-pub struct CreateConfigurationSetEventDestinationResponse;
+pub struct CreateConfigurationSetEventDestinationResponse {}
 
 struct CreateConfigurationSetEventDestinationResponseDeserializer;
 impl CreateConfigurationSetEventDestinationResponseDeserializer {
@@ -1156,7 +1156,7 @@ impl CreateConfigurationSetRequestSerializer {
 
 /// <p>An empty element returned on a successful request.</p>
 #[derive(Default, Debug, Clone)]
-pub struct CreateConfigurationSetResponse;
+pub struct CreateConfigurationSetResponse {}
 
 struct CreateConfigurationSetResponseDeserializer;
 impl CreateConfigurationSetResponseDeserializer {
@@ -1209,7 +1209,7 @@ impl CreateConfigurationSetTrackingOptionsRequestSerializer {
 
 /// <p>An empty element returned on a successful request.</p>
 #[derive(Default, Debug, Clone)]
-pub struct CreateConfigurationSetTrackingOptionsResponse;
+pub struct CreateConfigurationSetTrackingOptionsResponse {}
 
 struct CreateConfigurationSetTrackingOptionsResponseDeserializer;
 impl CreateConfigurationSetTrackingOptionsResponseDeserializer {
@@ -1306,7 +1306,7 @@ impl CreateReceiptFilterRequestSerializer {
 
 /// <p>An empty element returned on a successful request.</p>
 #[derive(Default, Debug, Clone)]
-pub struct CreateReceiptFilterResponse;
+pub struct CreateReceiptFilterResponse {}
 
 struct CreateReceiptFilterResponseDeserializer;
 impl CreateReceiptFilterResponseDeserializer {
@@ -1360,7 +1360,7 @@ impl CreateReceiptRuleRequestSerializer {
 
 /// <p>An empty element returned on a successful request.</p>
 #[derive(Default, Debug, Clone)]
-pub struct CreateReceiptRuleResponse;
+pub struct CreateReceiptRuleResponse {}
 
 struct CreateReceiptRuleResponseDeserializer;
 impl CreateReceiptRuleResponseDeserializer {
@@ -1403,7 +1403,7 @@ impl CreateReceiptRuleSetRequestSerializer {
 
 /// <p>An empty element returned on a successful request.</p>
 #[derive(Default, Debug, Clone)]
-pub struct CreateReceiptRuleSetResponse;
+pub struct CreateReceiptRuleSetResponse {}
 
 struct CreateReceiptRuleSetResponseDeserializer;
 impl CreateReceiptRuleSetResponseDeserializer {
@@ -1442,7 +1442,7 @@ impl CreateTemplateRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone)]
-pub struct CreateTemplateResponse;
+pub struct CreateTemplateResponse {}
 
 struct CreateTemplateResponseDeserializer;
 impl CreateTemplateResponseDeserializer {
@@ -1665,7 +1665,7 @@ impl DeleteConfigurationSetEventDestinationRequestSerializer {
 
 /// <p>An empty element returned on a successful request.</p>
 #[derive(Default, Debug, Clone)]
-pub struct DeleteConfigurationSetEventDestinationResponse;
+pub struct DeleteConfigurationSetEventDestinationResponse {}
 
 struct DeleteConfigurationSetEventDestinationResponseDeserializer;
 impl DeleteConfigurationSetEventDestinationResponseDeserializer {
@@ -1708,7 +1708,7 @@ impl DeleteConfigurationSetRequestSerializer {
 
 /// <p>An empty element returned on a successful request.</p>
 #[derive(Default, Debug, Clone)]
-pub struct DeleteConfigurationSetResponse;
+pub struct DeleteConfigurationSetResponse {}
 
 struct DeleteConfigurationSetResponseDeserializer;
 impl DeleteConfigurationSetResponseDeserializer {
@@ -1755,7 +1755,7 @@ impl DeleteConfigurationSetTrackingOptionsRequestSerializer {
 
 /// <p>An empty element returned on a successful request.</p>
 #[derive(Default, Debug, Clone)]
-pub struct DeleteConfigurationSetTrackingOptionsResponse;
+pub struct DeleteConfigurationSetTrackingOptionsResponse {}
 
 struct DeleteConfigurationSetTrackingOptionsResponseDeserializer;
 impl DeleteConfigurationSetTrackingOptionsResponseDeserializer {
@@ -1831,7 +1831,7 @@ impl DeleteIdentityPolicyRequestSerializer {
 
 /// <p>An empty element returned on a successful request.</p>
 #[derive(Default, Debug, Clone)]
-pub struct DeleteIdentityPolicyResponse;
+pub struct DeleteIdentityPolicyResponse {}
 
 struct DeleteIdentityPolicyResponseDeserializer;
 impl DeleteIdentityPolicyResponseDeserializer {
@@ -1874,7 +1874,7 @@ impl DeleteIdentityRequestSerializer {
 
 /// <p>An empty element returned on a successful request.</p>
 #[derive(Default, Debug, Clone)]
-pub struct DeleteIdentityResponse;
+pub struct DeleteIdentityResponse {}
 
 struct DeleteIdentityResponseDeserializer;
 impl DeleteIdentityResponseDeserializer {
@@ -1917,7 +1917,7 @@ impl DeleteReceiptFilterRequestSerializer {
 
 /// <p>An empty element returned on a successful request.</p>
 #[derive(Default, Debug, Clone)]
-pub struct DeleteReceiptFilterResponse;
+pub struct DeleteReceiptFilterResponse {}
 
 struct DeleteReceiptFilterResponseDeserializer;
 impl DeleteReceiptFilterResponseDeserializer {
@@ -1966,7 +1966,7 @@ impl DeleteReceiptRuleRequestSerializer {
 
 /// <p>An empty element returned on a successful request.</p>
 #[derive(Default, Debug, Clone)]
-pub struct DeleteReceiptRuleResponse;
+pub struct DeleteReceiptRuleResponse {}
 
 struct DeleteReceiptRuleResponseDeserializer;
 impl DeleteReceiptRuleResponseDeserializer {
@@ -2009,7 +2009,7 @@ impl DeleteReceiptRuleSetRequestSerializer {
 
 /// <p>An empty element returned on a successful request.</p>
 #[derive(Default, Debug, Clone)]
-pub struct DeleteReceiptRuleSetResponse;
+pub struct DeleteReceiptRuleSetResponse {}
 
 struct DeleteReceiptRuleSetResponseDeserializer;
 impl DeleteReceiptRuleSetResponseDeserializer {
@@ -2051,7 +2051,7 @@ impl DeleteTemplateRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone)]
-pub struct DeleteTemplateResponse;
+pub struct DeleteTemplateResponse {}
 
 struct DeleteTemplateResponseDeserializer;
 impl DeleteTemplateResponseDeserializer {
@@ -2094,7 +2094,7 @@ impl DeleteVerifiedEmailAddressRequestSerializer {
 
 /// <p>Represents a request to return the metadata and receipt rules for the receipt rule set that is currently active. You use receipt rule sets to receive email with Amazon SES. For more information, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-concepts.html">Amazon SES Developer Guide</a>.</p>
 #[derive(Default, Debug, Clone)]
-pub struct DescribeActiveReceiptRuleSetRequest;
+pub struct DescribeActiveReceiptRuleSetRequest {}
 
 /// Serialize `DescribeActiveReceiptRuleSetRequest` contents to a `SignedRequest`.
 struct DescribeActiveReceiptRuleSetRequestSerializer;
@@ -4529,7 +4529,7 @@ impl ListIdentityPoliciesResponseDeserializer {
 }
 /// <p>Represents a request to list the IP address filters that exist under your AWS account. You use IP address filters when you receive email with Amazon SES. For more information, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-concepts.html">Amazon SES Developer Guide</a>.</p>
 #[derive(Default, Debug, Clone)]
-pub struct ListReceiptFiltersRequest;
+pub struct ListReceiptFiltersRequest {}
 
 /// Serialize `ListReceiptFiltersRequest` contents to a `SignedRequest`.
 struct ListReceiptFiltersRequestSerializer;
@@ -5187,7 +5187,7 @@ impl PutIdentityPolicyRequestSerializer {
 
 /// <p>An empty element returned on a successful request.</p>
 #[derive(Default, Debug, Clone)]
-pub struct PutIdentityPolicyResponse;
+pub struct PutIdentityPolicyResponse {}
 
 struct PutIdentityPolicyResponseDeserializer;
 impl PutIdentityPolicyResponseDeserializer {
@@ -6150,7 +6150,7 @@ impl ReorderReceiptRuleSetRequestSerializer {
 
 /// <p>An empty element returned on a successful request.</p>
 #[derive(Default, Debug, Clone)]
-pub struct ReorderReceiptRuleSetResponse;
+pub struct ReorderReceiptRuleSetResponse {}
 
 struct ReorderReceiptRuleSetResponseDeserializer;
 impl ReorderReceiptRuleSetResponseDeserializer {
@@ -7429,7 +7429,7 @@ impl SetActiveReceiptRuleSetRequestSerializer {
 
 /// <p>An empty element returned on a successful request.</p>
 #[derive(Default, Debug, Clone)]
-pub struct SetActiveReceiptRuleSetResponse;
+pub struct SetActiveReceiptRuleSetResponse {}
 
 struct SetActiveReceiptRuleSetResponseDeserializer;
 impl SetActiveReceiptRuleSetResponseDeserializer {
@@ -7478,7 +7478,7 @@ impl SetIdentityDkimEnabledRequestSerializer {
 
 /// <p>An empty element returned on a successful request.</p>
 #[derive(Default, Debug, Clone)]
-pub struct SetIdentityDkimEnabledResponse;
+pub struct SetIdentityDkimEnabledResponse {}
 
 struct SetIdentityDkimEnabledResponseDeserializer;
 impl SetIdentityDkimEnabledResponseDeserializer {
@@ -7531,7 +7531,7 @@ impl SetIdentityFeedbackForwardingEnabledRequestSerializer {
 
 /// <p>An empty element returned on a successful request.</p>
 #[derive(Default, Debug, Clone)]
-pub struct SetIdentityFeedbackForwardingEnabledResponse;
+pub struct SetIdentityFeedbackForwardingEnabledResponse {}
 
 struct SetIdentityFeedbackForwardingEnabledResponseDeserializer;
 impl SetIdentityFeedbackForwardingEnabledResponseDeserializer {
@@ -7590,7 +7590,7 @@ impl SetIdentityHeadersInNotificationsEnabledRequestSerializer {
 
 /// <p>An empty element returned on a successful request.</p>
 #[derive(Default, Debug, Clone)]
-pub struct SetIdentityHeadersInNotificationsEnabledResponse;
+pub struct SetIdentityHeadersInNotificationsEnabledResponse {}
 
 struct SetIdentityHeadersInNotificationsEnabledResponseDeserializer;
 impl SetIdentityHeadersInNotificationsEnabledResponseDeserializer {
@@ -7649,7 +7649,7 @@ impl SetIdentityMailFromDomainRequestSerializer {
 
 /// <p>An empty element returned on a successful request.</p>
 #[derive(Default, Debug, Clone)]
-pub struct SetIdentityMailFromDomainResponse;
+pub struct SetIdentityMailFromDomainResponse {}
 
 struct SetIdentityMailFromDomainResponseDeserializer;
 impl SetIdentityMailFromDomainResponseDeserializer {
@@ -7706,7 +7706,7 @@ impl SetIdentityNotificationTopicRequestSerializer {
 
 /// <p>An empty element returned on a successful request.</p>
 #[derive(Default, Debug, Clone)]
-pub struct SetIdentityNotificationTopicResponse;
+pub struct SetIdentityNotificationTopicResponse {}
 
 struct SetIdentityNotificationTopicResponseDeserializer;
 impl SetIdentityNotificationTopicResponseDeserializer {
@@ -7763,7 +7763,7 @@ impl SetReceiptRulePositionRequestSerializer {
 
 /// <p>An empty element returned on a successful request.</p>
 #[derive(Default, Debug, Clone)]
-pub struct SetReceiptRulePositionResponse;
+pub struct SetReceiptRulePositionResponse {}
 
 struct SetReceiptRulePositionResponseDeserializer;
 impl SetReceiptRulePositionResponseDeserializer {
@@ -8388,7 +8388,7 @@ impl UpdateConfigurationSetEventDestinationRequestSerializer {
 
 /// <p>An empty element returned on a successful request.</p>
 #[derive(Default, Debug, Clone)]
-pub struct UpdateConfigurationSetEventDestinationResponse;
+pub struct UpdateConfigurationSetEventDestinationResponse {}
 
 struct UpdateConfigurationSetEventDestinationResponseDeserializer;
 impl UpdateConfigurationSetEventDestinationResponseDeserializer {
@@ -8507,7 +8507,7 @@ impl UpdateConfigurationSetTrackingOptionsRequestSerializer {
 
 /// <p>An empty element returned on a successful request.</p>
 #[derive(Default, Debug, Clone)]
-pub struct UpdateConfigurationSetTrackingOptionsResponse;
+pub struct UpdateConfigurationSetTrackingOptionsResponse {}
 
 struct UpdateConfigurationSetTrackingOptionsResponseDeserializer;
 impl UpdateConfigurationSetTrackingOptionsResponseDeserializer {
@@ -8620,7 +8620,7 @@ impl UpdateReceiptRuleRequestSerializer {
 
 /// <p>An empty element returned on a successful request.</p>
 #[derive(Default, Debug, Clone)]
-pub struct UpdateReceiptRuleResponse;
+pub struct UpdateReceiptRuleResponse {}
 
 struct UpdateReceiptRuleResponseDeserializer;
 impl UpdateReceiptRuleResponseDeserializer {
@@ -8657,7 +8657,7 @@ impl UpdateTemplateRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone)]
-pub struct UpdateTemplateResponse;
+pub struct UpdateTemplateResponse {}
 
 struct UpdateTemplateResponseDeserializer;
 impl UpdateTemplateResponseDeserializer {
@@ -8965,7 +8965,7 @@ impl VerifyEmailIdentityRequestSerializer {
 
 /// <p>An empty element returned on a successful request.</p>
 #[derive(Default, Debug, Clone)]
-pub struct VerifyEmailIdentityResponse;
+pub struct VerifyEmailIdentityResponse {}
 
 struct VerifyEmailIdentityResponseDeserializer;
 impl VerifyEmailIdentityResponseDeserializer {

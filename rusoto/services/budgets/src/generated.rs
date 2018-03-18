@@ -119,7 +119,7 @@ pub struct CreateBudgetRequest {
 
 /// <p>Response of CreateBudget</p>
 #[derive(Default, Debug, Clone, Deserialize)]
-pub struct CreateBudgetResponse;
+pub struct CreateBudgetResponse {}
 
 /// <p>Request of CreateNotification</p>
 #[derive(Default, Debug, Clone, Serialize)]
@@ -136,7 +136,7 @@ pub struct CreateNotificationRequest {
 
 /// <p>Response of CreateNotification</p>
 #[derive(Default, Debug, Clone, Deserialize)]
-pub struct CreateNotificationResponse;
+pub struct CreateNotificationResponse {}
 
 /// <p>Request of CreateSubscriber</p>
 #[derive(Default, Debug, Clone, Serialize)]
@@ -153,7 +153,7 @@ pub struct CreateSubscriberRequest {
 
 /// <p>Response of CreateSubscriber</p>
 #[derive(Default, Debug, Clone, Deserialize)]
-pub struct CreateSubscriberResponse;
+pub struct CreateSubscriberResponse {}
 
 /// <p>Request of DeleteBudget</p>
 #[derive(Default, Debug, Clone, Serialize)]
@@ -166,7 +166,7 @@ pub struct DeleteBudgetRequest {
 
 /// <p>Response of DeleteBudget</p>
 #[derive(Default, Debug, Clone, Deserialize)]
-pub struct DeleteBudgetResponse;
+pub struct DeleteBudgetResponse {}
 
 /// <p>Request of DeleteNotification</p>
 #[derive(Default, Debug, Clone, Serialize)]
@@ -181,7 +181,7 @@ pub struct DeleteNotificationRequest {
 
 /// <p>Response of DeleteNotification</p>
 #[derive(Default, Debug, Clone, Deserialize)]
-pub struct DeleteNotificationResponse;
+pub struct DeleteNotificationResponse {}
 
 /// <p>Request of DeleteSubscriber</p>
 #[derive(Default, Debug, Clone, Serialize)]
@@ -198,7 +198,7 @@ pub struct DeleteSubscriberRequest {
 
 /// <p>Response of DeleteSubscriber</p>
 #[derive(Default, Debug, Clone, Deserialize)]
-pub struct DeleteSubscriberResponse;
+pub struct DeleteSubscriberResponse {}
 
 /// <p>Request of DescribeBudget</p>
 #[derive(Default, Debug, Clone, Serialize)]
@@ -356,7 +356,7 @@ pub struct UpdateBudgetRequest {
 
 /// <p>Response of UpdateBudget</p>
 #[derive(Default, Debug, Clone, Deserialize)]
-pub struct UpdateBudgetResponse;
+pub struct UpdateBudgetResponse {}
 
 /// <p>Request of UpdateNotification</p>
 #[derive(Default, Debug, Clone, Serialize)]
@@ -373,7 +373,7 @@ pub struct UpdateNotificationRequest {
 
 /// <p>Response of UpdateNotification</p>
 #[derive(Default, Debug, Clone, Deserialize)]
-pub struct UpdateNotificationResponse;
+pub struct UpdateNotificationResponse {}
 
 /// <p>Request of UpdateSubscriber</p>
 #[derive(Default, Debug, Clone, Serialize)]
@@ -392,7 +392,7 @@ pub struct UpdateSubscriberRequest {
 
 /// <p>Response of UpdateSubscriber</p>
 #[derive(Default, Debug, Clone, Deserialize)]
-pub struct UpdateSubscriberResponse;
+pub struct UpdateSubscriberResponse {}
 
 /// Errors returned by CreateBudget
 #[derive(Debug, PartialEq)]
@@ -1805,8 +1805,14 @@ where
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
                     serde_json::from_str::<CreateBudgetResponse>(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
                     ).unwrap()
                 }))
             } else {
@@ -1836,8 +1842,14 @@ where
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
                     serde_json::from_str::<CreateNotificationResponse>(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
                     ).unwrap()
                 }))
             } else {
@@ -1867,8 +1879,14 @@ where
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
                     serde_json::from_str::<CreateSubscriberResponse>(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
                     ).unwrap()
                 }))
             } else {
@@ -1898,8 +1916,14 @@ where
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
                     serde_json::from_str::<DeleteBudgetResponse>(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
                     ).unwrap()
                 }))
             } else {
@@ -1929,8 +1953,14 @@ where
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
                     serde_json::from_str::<DeleteNotificationResponse>(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
                     ).unwrap()
                 }))
             } else {
@@ -1960,8 +1990,14 @@ where
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
                     serde_json::from_str::<DeleteSubscriberResponse>(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
                     ).unwrap()
                 }))
             } else {
@@ -1991,8 +2027,14 @@ where
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
                     serde_json::from_str::<DescribeBudgetResponse>(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
                     ).unwrap()
                 }))
             } else {
@@ -2022,8 +2064,14 @@ where
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
                     serde_json::from_str::<DescribeBudgetsResponse>(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
                     ).unwrap()
                 }))
             } else {
@@ -2057,8 +2105,14 @@ where
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
                     serde_json::from_str::<DescribeNotificationsForBudgetResponse>(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
                     ).unwrap()
                 }))
             } else {
@@ -2094,8 +2148,14 @@ where
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
                     serde_json::from_str::<DescribeSubscribersForNotificationResponse>(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
                     ).unwrap()
                 }))
             } else {
@@ -2125,8 +2185,14 @@ where
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
                     serde_json::from_str::<UpdateBudgetResponse>(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
                     ).unwrap()
                 }))
             } else {
@@ -2156,8 +2222,14 @@ where
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
                     serde_json::from_str::<UpdateNotificationResponse>(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
                     ).unwrap()
                 }))
             } else {
@@ -2187,8 +2259,14 @@ where
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
                     serde_json::from_str::<UpdateSubscriberResponse>(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
                     ).unwrap()
                 }))
             } else {

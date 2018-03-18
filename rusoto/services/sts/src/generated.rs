@@ -840,7 +840,7 @@ impl FederatedUserDeserializer {
     }
 }
 #[derive(Default, Debug, Clone)]
-pub struct GetCallerIdentityRequest;
+pub struct GetCallerIdentityRequest {}
 
 /// Serialize `GetCallerIdentityRequest` contents to a `SignedRequest`.
 struct GetCallerIdentityRequestSerializer;

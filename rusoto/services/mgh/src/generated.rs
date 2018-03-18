@@ -48,7 +48,7 @@ pub struct AssociateCreatedArtifactRequest {
 }
 
 #[derive(Default, Debug, Clone, Deserialize)]
-pub struct AssociateCreatedArtifactResult;
+pub struct AssociateCreatedArtifactResult {}
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct AssociateDiscoveredResourceRequest {
@@ -68,7 +68,7 @@ pub struct AssociateDiscoveredResourceRequest {
 }
 
 #[derive(Default, Debug, Clone, Deserialize)]
-pub struct AssociateDiscoveredResourceResult;
+pub struct AssociateDiscoveredResourceResult {}
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateProgressUpdateStreamRequest {
@@ -82,7 +82,7 @@ pub struct CreateProgressUpdateStreamRequest {
 }
 
 #[derive(Default, Debug, Clone, Deserialize)]
-pub struct CreateProgressUpdateStreamResult;
+pub struct CreateProgressUpdateStreamResult {}
 
 /// <p>An ARN of the AWS cloud resource target receiving the migration (e.g., AMI, EC2 instance, RDS instance, etc.).</p>
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
@@ -108,7 +108,7 @@ pub struct DeleteProgressUpdateStreamRequest {
 }
 
 #[derive(Default, Debug, Clone, Deserialize)]
-pub struct DeleteProgressUpdateStreamResult;
+pub struct DeleteProgressUpdateStreamResult {}
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeApplicationStateRequest {
@@ -165,7 +165,7 @@ pub struct DisassociateCreatedArtifactRequest {
 }
 
 #[derive(Default, Debug, Clone, Deserialize)]
-pub struct DisassociateCreatedArtifactResult;
+pub struct DisassociateCreatedArtifactResult {}
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DisassociateDiscoveredResourceRequest {
@@ -185,7 +185,7 @@ pub struct DisassociateDiscoveredResourceRequest {
 }
 
 #[derive(Default, Debug, Clone, Deserialize)]
-pub struct DisassociateDiscoveredResourceResult;
+pub struct DisassociateDiscoveredResourceResult {}
 
 /// <p>Object representing the on-premises resource being migrated.</p>
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
@@ -214,7 +214,7 @@ pub struct ImportMigrationTaskRequest {
 }
 
 #[derive(Default, Debug, Clone, Deserialize)]
-pub struct ImportMigrationTaskResult;
+pub struct ImportMigrationTaskResult {}
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct ListCreatedArtifactsRequest {
@@ -397,7 +397,7 @@ pub struct NotifyApplicationStateRequest {
 }
 
 #[derive(Default, Debug, Clone, Deserialize)]
-pub struct NotifyApplicationStateResult;
+pub struct NotifyApplicationStateResult {}
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct NotifyMigrationTaskStateRequest {
@@ -423,7 +423,7 @@ pub struct NotifyMigrationTaskStateRequest {
 }
 
 #[derive(Default, Debug, Clone, Deserialize)]
-pub struct NotifyMigrationTaskStateResult;
+pub struct NotifyMigrationTaskStateResult {}
 
 /// <p>Summary of the AWS resource used for access control that is implicitly linked to your AWS account.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
@@ -452,7 +452,7 @@ pub struct PutResourceAttributesRequest {
 }
 
 #[derive(Default, Debug, Clone, Deserialize)]
-pub struct PutResourceAttributesResult;
+pub struct PutResourceAttributesResult {}
 
 /// <p>Attribute associated with a resource.</p>
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
@@ -2481,8 +2481,14 @@ where
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
                     serde_json::from_str::<AssociateCreatedArtifactResult>(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
                     ).unwrap()
                 }))
             } else {
@@ -2515,8 +2521,14 @@ where
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
                     serde_json::from_str::<AssociateDiscoveredResourceResult>(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
                     ).unwrap()
                 }))
             } else {
@@ -2546,8 +2558,14 @@ where
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
                     serde_json::from_str::<CreateProgressUpdateStreamResult>(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
                     ).unwrap()
                 }))
             } else {
@@ -2577,8 +2595,14 @@ where
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
                     serde_json::from_str::<DeleteProgressUpdateStreamResult>(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
                     ).unwrap()
                 }))
             } else {
@@ -2608,8 +2632,14 @@ where
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
                     serde_json::from_str::<DescribeApplicationStateResult>(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
                     ).unwrap()
                 }))
             } else {
@@ -2639,8 +2669,14 @@ where
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
                     serde_json::from_str::<DescribeMigrationTaskResult>(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
                     ).unwrap()
                 }))
             } else {
@@ -2673,8 +2709,14 @@ where
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
                     serde_json::from_str::<DisassociateCreatedArtifactResult>(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
                     ).unwrap()
                 }))
             } else {
@@ -2708,8 +2750,14 @@ where
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
                     serde_json::from_str::<DisassociateDiscoveredResourceResult>(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
                     ).unwrap()
                 }))
             } else {
@@ -2739,8 +2787,14 @@ where
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
                     serde_json::from_str::<ImportMigrationTaskResult>(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
                     ).unwrap()
                 }))
             } else {
@@ -2770,8 +2824,14 @@ where
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
                     serde_json::from_str::<ListCreatedArtifactsResult>(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
                     ).unwrap()
                 }))
             } else {
@@ -2801,8 +2861,14 @@ where
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
                     serde_json::from_str::<ListDiscoveredResourcesResult>(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
                     ).unwrap()
                 }))
             } else {
@@ -2832,8 +2898,14 @@ where
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
                     serde_json::from_str::<ListMigrationTasksResult>(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
                     ).unwrap()
                 }))
             } else {
@@ -2863,8 +2935,14 @@ where
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
                     serde_json::from_str::<ListProgressUpdateStreamsResult>(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
                     ).unwrap()
                 }))
             } else {
@@ -2894,8 +2972,14 @@ where
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
                     serde_json::from_str::<NotifyApplicationStateResult>(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
                     ).unwrap()
                 }))
             } else {
@@ -2925,8 +3009,14 @@ where
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
                     serde_json::from_str::<NotifyMigrationTaskStateResult>(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
                     ).unwrap()
                 }))
             } else {
@@ -2956,8 +3046,14 @@ where
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status == StatusCode::Ok {
                 future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
                     serde_json::from_str::<PutResourceAttributesResult>(
-                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
                     ).unwrap()
                 }))
             } else {
