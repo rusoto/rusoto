@@ -17,4 +17,5 @@ cd "$GIT_ROOT/integration_tests"
     --run-opt=--env=MON_IP=127.0.0.1 \
     --run-opt=--env=CEPH_PUBLIC_NETWORK=0.0.0.0/0 \
     --run-opt=--hostname=localhost \
+    "--run-opt=-v=$GIT_ROOT/.semaphoreci/ceph.conf:/etc/ceph.conf:ro" \
     -- cargo test --features s3,disable_ceph_unsupported
