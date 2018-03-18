@@ -2,7 +2,11 @@ sudo: required
 dist: trusty
 language: rust
 # cache dependencies: https://docs.travis-ci.com/user/caching/#Rust-Cargo-cache
-cache: cargo
+cache:
+  cargo: true
+  directories:
+    - service_crategen/target
+    - integration_tests/target
 # run builds for all the trains (and more)
 rust:
   - 1.23.0 # test against minimum Rust version supported
@@ -12,9 +16,6 @@ rust:
 os:
   - linux
   - osx
-cache:
-  directories:
-    - $HOME/.cargo
 before_install:
   - if [ "$TRAVIS_OS_NAME" = "osx" ]; then ulimit -n 1024; fi
   - rustup install nightly

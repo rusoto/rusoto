@@ -13,6 +13,8 @@ environment:
       CHANNEL: beta
 cache:
   - 'C:\Users\appveyor\.cargo'
+  - 'target'
+  - 'integration_tests\target'
 # Install Rust and Cargo
 # (Based on from https://github.com/rust-lang/libc/blob/master/appveyor.yml)
 install:
