@@ -47,7 +47,7 @@ after_success:
 env:
   global:
     - RUST_BACKTRACE=1
-
+    - CARGO_INCREMENTAL=0
 branches:
   only:
     - master

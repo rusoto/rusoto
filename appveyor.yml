@@ -6,6 +6,7 @@ environment:
   global:
     # This will be used as part of the zipfile name
     PROJECT_NAME: rusoto
+    CARGO_INCREMENTAL: 1
   matrix:
     - TARGET: x86_64-pc-windows-msvc
       CHANNEL: stable
