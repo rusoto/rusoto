@@ -502,6 +502,12 @@
     "protocolVersion": "2009-04-15",
     "baseTypeName": "SimpleDb"
   },
+  "serverlessrepo": {
+    "version": "0.32.0",
+    "coreVersion": "0.32.0",
+    "protocolVersion": "2017-09-08",
+    "baseTypeName": "ServerlessRepo"
+  },
   "servicecatalog": {
     "version": "0.32.0",
     "coreVersion": "0.32.0",
