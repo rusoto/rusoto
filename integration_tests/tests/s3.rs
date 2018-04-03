@@ -46,6 +46,9 @@ fn test_all_the_things() {
     let multipart_filename = format!("test_multipart_file_{}", get_time().sec);
     let metadata_filename = format!("test_metadata_file_{}", get_time().sec);
 
+    // generate a presigned url
+    test_generate_presigned_url(&Region::UsEast1, &DefaultCredentialsProvider::new().unwrap().credentials().unwrap(), &test_bucket, &multipart_filename);
+
     // get a list of list_buckets
     test_list_buckets(&client);
 
@@ -460,4 +463,16 @@ fn test_get_object_with_metadata(client: &TestClient, bucket: &str, filename: &s
 
     let head_metadata = result.metadata.as_ref().expect("No metadata available");
     assert_eq!(metadata, head_metadata);
+}
+
+fn test_generate_presigned_url(region: &Region, credentials: &AwsCredentials, _bucket: &str, _filename: &str) {
+    let get_req = GetObjectRequest {
+        bucket: "example_bucket".to_string(),
+        key: "example_file".to_string(),
+        ..Default::default()
+    };
+
+    let result = rusoto_s3::util::generate_presigned_url(region, credentials, &get_req).unwrap();
+    println!("get object result: {:#?}", result);
+    assert_eq!(result, "tomato");
 }
