@@ -14,6 +14,7 @@ use time::get_time;
 
 use futures::{Future, Stream};
 use rusoto_core::Region;
+use rusoto_core::credential::AwsCredentials;
 use rusoto_s3::{S3, S3Client, HeadObjectRequest, CopyObjectRequest, GetObjectError, GetObjectRequest,
                  PutObjectRequest, DeleteObjectRequest, PutBucketCorsRequest, CORSConfiguration,
                  CORSRule, CreateBucketRequest, DeleteBucketRequest, CreateMultipartUploadRequest,
