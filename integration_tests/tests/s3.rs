@@ -37,6 +37,7 @@ fn test_all_the_things() {
     } else {
         Region::UsEast1
     };
+    let credentials = AwsCredentials::new("xxx".to_string(), "xxx".to_string(), None, None);
 
     let client = S3Client::simple(region);
 
@@ -48,7 +49,7 @@ fn test_all_the_things() {
     let metadata_filename = format!("test_metadata_file_{}", get_time().sec);
 
     // generate a presigned url
-    test_generate_presigned_url(&Region::UsEast1, &DefaultCredentialsProvider::new().unwrap().credentials().unwrap(), &test_bucket, &multipart_filename);
+    test_generate_presigned_url(&Region::UsEast1, &credentials, &test_bucket, &filename);
 
     // get a list of list_buckets
     test_list_buckets(&client);
@@ -466,10 +467,10 @@ fn test_get_object_with_metadata(client: &TestClient, bucket: &str, filename: &s
     assert_eq!(metadata, head_metadata);
 }
 
-fn test_generate_presigned_url(region: &Region, credentials: &AwsCredentials, _bucket: &str, _filename: &str) {
+fn test_generate_presigned_url(region: &Region, credentials: &AwsCredentials, bucket: &str, filename: &str) {
     let get_req = GetObjectRequest {
-        bucket: "example_bucket".to_string(),
-        key: "example_file".to_string(),
+        bucket: bucket.to_owned(),
+        key: filename.to_owned(),
         ..Default::default()
     };
 
