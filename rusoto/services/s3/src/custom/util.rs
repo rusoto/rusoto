@@ -25,7 +25,39 @@ pub fn encode_key<T: AsRef<str>>(key: T) -> String {
 }
 
 
-/// TODO: document this
+/// Generate a presigned url given arguments.
+/// 
+/// TODO: support another method like put, delete...
+/// 
+/// ```
+/// extern crate rusoto_core;
+/// extern crate rusoto_s3;
+/// 
+/// use rusoto_core::region::Region;
+/// use rusoto_core::credential::AwsCredentials;
+/// use rusoto_s3::util::generate_presigned_url;
+/// use rusoto_s3::{GetObjectRequest, GetObjectError};
+/// 
+/// fn main() {
+///     let region = Region::ApNortheast1;
+///     let creds = AwsCredentials::new(
+///         "xxx".to_string(),
+///         "xxx".to_string(),
+///         None,
+///         None,
+///     );
+///     let req = GetObjectRequest {
+///         bucket: "xxx".to_string(),
+///         key: "xxx.jpg".to_string(),
+///         ..Default::default()
+///     };
+///     let res = generate_presigned_url(&region, &creds, &req);
+///     match res {
+///       Ok(url) => { println!("{}", url); },
+///       Err(err) => { println!("{}", err); },
+///     }
+/// }
+/// ```
 pub fn generate_presigned_url(region: &Region, credentials: &AwsCredentials, input: &GetObjectRequest) -> Result<String, GetObjectError> {
     let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
 
