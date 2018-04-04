@@ -3,10 +3,8 @@ dist: trusty
 language: rust
 # cache dependencies: https://docs.travis-ci.com/user/caching/#Rust-Cargo-cache
 cache:
-  cargo: true
   directories:
-    - service_crategen/target
-    - integration_tests/target
+    - ~/.cargo
 # run builds for all the trains (and more)
 rust:
   - 1.23.0 # test against minimum Rust version supported
