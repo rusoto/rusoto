@@ -1354,6 +1354,8 @@ impl CreateStackOutputDeserializer {
 }
 #[derive(Default, Debug, Clone)]
 pub struct CreateStackSetInput {
+    /// <p>The Amazon Resource Number (ARN) of the IAM role to use to create this stack set. </p> <p>Specify an IAM role only if you are using customized administrator roles to control which users or groups can manage specific stack sets within the same administrator account. For more information, see <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stacksets-prereqs.html">Define Permissions for Multiple Administrators</a> in the <i>AWS CloudFormation User Guide</i>.</p>
+    pub administration_role_arn: Option<String>,
     /// <p>A list of values that you must specify before AWS CloudFormation can create certain stack sets. Some stack set templates might include resources that can affect permissions in your AWS account—for example, by creating new AWS Identity and Access Management (IAM) users. For those stack sets, you must explicitly acknowledge their capabilities by specifying this parameter.</p> <p>The only valid values are CAPABILITY_IAM and CAPABILITY_NAMED_IAM. The following resources require you to specify this parameter: </p> <ul> <li> <p>AWS::IAM::AccessKey</p> </li> <li> <p>AWS::IAM::Group</p> </li> <li> <p>AWS::IAM::InstanceProfile</p> </li> <li> <p>AWS::IAM::Policy</p> </li> <li> <p>AWS::IAM::Role</p> </li> <li> <p>AWS::IAM::User</p> </li> <li> <p>AWS::IAM::UserToGroupAddition</p> </li> </ul> <p>If your stack template contains these resources, we recommend that you review all permissions that are associated with them and edit their permissions if necessary.</p> <p>If you have IAM resources, you can specify either capability. If you have IAM resources with custom names, you must specify CAPABILITY_NAMED_IAM. If you don't specify this parameter, this action returns an <code>InsufficientCapabilities</code> error.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-iam-template.html#capabilities">Acknowledging IAM Resources in AWS CloudFormation Templates.</a> </p>
     pub capabilities: Option<Vec<String>>,
     /// <p>A unique identifier for this <code>CreateStackSet</code> request. Specify this token if you plan to retry requests so that AWS CloudFormation knows that you're not attempting to create another stack set with the same name. You might retry <code>CreateStackSet</code> requests to ensure that AWS CloudFormation successfully received them.</p> <p>If you don't specify an operation ID, the SDK generates one automatically. </p>
@@ -1381,6 +1383,12 @@ impl CreateStackSetInputSerializer {
             prefix.push_str(".");
         }
 
+        if let Some(ref field_value) = obj.administration_role_arn {
+            params.put(
+                &format!("{}{}", prefix, "AdministrationRoleARN"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
         if let Some(ref field_value) = obj.capabilities {
             CapabilitiesSerializer::serialize(
                 params,
@@ -5453,12 +5461,12 @@ impl RoleARNDeserializer {
         Ok(obj)
     }
 }
-/// <p>Structure containing the rollback triggers for AWS CloudFormation to monitor during stack creation and updating operations, and for the specified monitoring period afterwards.</p> <p>Rollback triggers enable you to have AWS CloudFormation monitor the state of your application during stack creation and updating, and to roll back that operation if the application breaches the threshold of any of the alarms you've specified. For each rollback trigger you create, you specify the Cloudwatch alarm that CloudFormation should monitor. CloudFormation monitors the specified alarms during the stack create or update operation, and for the specified amount of time after all resources have been deployed. If any of the alarms goes to ALERT state during the stack operation or the monitoring period, CloudFormation rolls back the entire stack operation. If the monitoring period expires without any alarms going to ALERT state, CloudFormation proceeds to dispose of old resources as usual.</p> <p>By default, CloudFormation only rolls back stack operations if an alarm goes to ALERT state, not INSUFFICIENT_DATA state. To have CloudFormation roll back the stack operation if an alarm goes to INSUFFICIENT_DATA state as well, edit the CloudWatch alarm to treat missing data as <code>breaching</code>. For more information, see <a href="http://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/AlarmThatSendsEmail.html">Configuring How CloudWatch Alarms Treats Missing Data</a>.</p> <p>AWS CloudFormation does not monitor rollback triggers when it rolls back a stack during an update operation.</p>
+/// <p>Structure containing the rollback triggers for AWS CloudFormation to monitor during stack creation and updating operations, and for the specified monitoring period afterwards.</p> <p>Rollback triggers enable you to have AWS CloudFormation monitor the state of your application during stack creation and updating, and to roll back that operation if the application breaches the threshold of any of the alarms you've specified. For more information, see <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-rollback-triggers.html">Monitor and Roll Back Stack Operations</a>.</p>
 #[derive(Default, Debug, Clone)]
 pub struct RollbackConfiguration {
-    /// <p>The amount of time, in minutes, during which CloudFormation should monitor all the rollback triggers after the stack creation or update operation deploys all necessary resources. If any of the alarms goes to ALERT state during the stack operation or this monitoring period, CloudFormation rolls back the entire stack operation. Then, for update operations, if the monitoring period expires without any alarms going to ALERT state CloudFormation proceeds to dispose of old resources as usual.</p> <p>If you specify a monitoring period but do not specify any rollback triggers, CloudFormation still waits the specified period of time before cleaning up old resources for update operations. You can use this monitoring period to perform any manual stack validation desired, and manually cancel the stack creation or update (using <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_CancelUpdateStack.html">CancelUpdateStack</a>, for example) as necessary.</p> <p>If you specify 0 for this parameter, CloudFormation still monitors the specified rollback triggers during stack creation and update operations. Then, for update operations, it begins disposing of old resources immediately once the operation completes.</p>
+    /// <p>The amount of time, in minutes, during which CloudFormation should monitor all the rollback triggers after the stack creation or update operation deploys all necessary resources.</p> <p>The default is 0 minutes.</p> <p>If you specify a monitoring period but do not specify any rollback triggers, CloudFormation still waits the specified period of time before cleaning up old resources after update operations. You can use this monitoring period to perform any manual stack validation desired, and manually cancel the stack creation or update (using <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_CancelUpdateStack.html">CancelUpdateStack</a>, for example) as necessary.</p> <p>If you specify 0 for this parameter, CloudFormation still monitors the specified rollback triggers during stack creation and update operations. Then, for update operations, it begins disposing of old resources immediately once the operation completes.</p>
     pub monitoring_time_in_minutes: Option<i64>,
-    /// <p>The triggers to monitor during stack creation or update actions. </p> <p>By default, AWS CloudFormation saves the rollback triggers specified for a stack and applies them to any subsequent update operations for the stack, unless you specify otherwise. If you do specify rollback triggers for this parameter, those triggers replace any list of triggers previously specified for the stack. This means:</p> <ul> <li> <p>If you don't specify this parameter, AWS CloudFormation uses the rollback triggers previously specified for this stack, if any.</p> </li> <li> <p>If you specify any rollback triggers using this parameter, you must specify all the triggers that you want used for this stack, even triggers you've specifed before (for example, when creating the stack or during a previous stack update). Any triggers that you don't include in the updated list of triggers are no longer applied to the stack.</p> </li> <li> <p>If you specify an empty list, AWS CloudFormation removes all currently specified triggers.</p> </li> </ul> <p>If a specified Cloudwatch alarm is missing, the entire stack operation fails and is rolled back. </p>
+    /// <p>The triggers to monitor during stack creation or update actions. </p> <p>By default, AWS CloudFormation saves the rollback triggers specified for a stack and applies them to any subsequent update operations for the stack, unless you specify otherwise. If you do specify rollback triggers for this parameter, those triggers replace any list of triggers previously specified for the stack. This means:</p> <ul> <li> <p>To use the rollback triggers previously specified for this stack, if any, don't specify this parameter.</p> </li> <li> <p>To specify new or updated rollback triggers, you must specify <i>all</i> the triggers that you want used for this stack, even triggers you've specifed before (for example, when creating the stack or during a previous stack update). Any triggers that you don't include in the updated list of triggers are no longer applied to the stack.</p> </li> <li> <p>To remove all currently specified triggers, specify an empty list for this parameter.</p> </li> </ul> <p>If a specified trigger is missing, the entire stack operation fails and is rolled back. </p>
     pub rollback_triggers: Option<Vec<RollbackTrigger>>,
 }
 
@@ -5536,10 +5544,10 @@ impl RollbackConfigurationSerializer {
     }
 }
 
-/// <p>A rollback trigger AWS CloudFormation monitors during creation and updating of stacks. If any of the alarms you specify goes to ALERT state during the stack operation or within the specified monitoring period afterwards, CloudFormation rolls back the entire stack operation. </p>
+/// <p>A rollback trigger AWS CloudFormation monitors during creation and updating of stacks. If any of the alarms you specify goes to ALARM state during the stack operation or within the specified monitoring period afterwards, CloudFormation rolls back the entire stack operation. </p>
 #[derive(Default, Debug, Clone)]
 pub struct RollbackTrigger {
-    /// <p>The Amazon Resource Name (ARN) of the rollback trigger.</p>
+    /// <p>The Amazon Resource Name (ARN) of the rollback trigger.</p> <p>If a specified trigger is missing, the entire stack operation fails and is rolled back. </p>
     pub arn: String,
     /// <p>The resource type of the rollback trigger. Currently, <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cw-alarm.html">AWS::CloudWatch::Alarm</a> is the only supported resource type.</p>
     pub type_: String,
@@ -6798,12 +6806,16 @@ impl StackResourcesDeserializer {
 /// <p>A structure that contains information about a stack set. A stack set enables you to provision stacks into AWS accounts and across regions by using a single CloudFormation template. In the stack set, you specify the template to use, as well as any parameters and capabilities that the template requires. </p>
 #[derive(Default, Debug, Clone)]
 pub struct StackSet {
+    /// <p>The Amazon Resource Number (ARN) of the IAM role used to create or update the stack set.</p> <p>Use customized administrator roles to control which users or groups can manage specific stack sets within the same administrator account. For more information, see <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stacksets-prereqs.html">Define Permissions for Multiple Administrators</a> in the <i>AWS CloudFormation User Guide</i>.</p>
+    pub administration_role_arn: Option<String>,
     /// <p>The capabilities that are allowed in the stack set. Some stack set templates might include resources that can affect permissions in your AWS account—for example, by creating new AWS Identity and Access Management (IAM) users. For more information, see <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-iam-template.html#capabilities">Acknowledging IAM Resources in AWS CloudFormation Templates.</a> </p>
     pub capabilities: Option<Vec<String>>,
     /// <p>A description of the stack set that you specify when the stack set is created or updated.</p>
     pub description: Option<String>,
     /// <p>A list of input parameters for a stack set.</p>
     pub parameters: Option<Vec<Parameter>>,
+    /// <p>The Amazon Resource Number (ARN) of the stack set.</p>
+    pub stack_set_arn: Option<String>,
     /// <p>The ID of the stack set.</p>
     pub stack_set_id: Option<String>,
     /// <p>The name that's associated with the stack set.</p>
@@ -6838,6 +6850,11 @@ impl StackSetDeserializer {
 
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
+                    "AdministrationRoleARN" => {
+                        obj.administration_role_arn = Some(try!(
+                            RoleARNDeserializer::deserialize("AdministrationRoleARN", stack)
+                        ));
+                    }
                     "Capabilities" => {
                         obj.capabilities = Some(try!(CapabilitiesDeserializer::deserialize(
                             "Capabilities",
@@ -6853,6 +6870,12 @@ impl StackSetDeserializer {
                     "Parameters" => {
                         obj.parameters = Some(try!(ParametersDeserializer::deserialize(
                             "Parameters",
+                            stack
+                        )));
+                    }
+                    "StackSetARN" => {
+                        obj.stack_set_arn = Some(try!(StackSetARNDeserializer::deserialize(
+                            "StackSetARN",
                             stack
                         )));
                     }
@@ -6897,6 +6920,20 @@ impl StackSetDeserializer {
         Ok(obj)
     }
 }
+struct StackSetARNDeserializer;
+impl StackSetARNDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let obj = try!(characters(stack));
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
 struct StackSetIdDeserializer;
 impl StackSetIdDeserializer {
     #[allow(unused_variables)]
@@ -6930,6 +6967,8 @@ impl StackSetNameDeserializer {
 pub struct StackSetOperation {
     /// <p>The type of stack set operation: <code>CREATE</code>, <code>UPDATE</code>, or <code>DELETE</code>. Create and delete operations affect only the specified stack set instances that are associated with the specified stack set. Update operations affect both the stack set itself, as well as <i>all</i> associated stack set instances.</p>
     pub action: Option<String>,
+    /// <p>The Amazon Resource Number (ARN) of the IAM role used to perform this stack set operation. </p> <p>Use customized administrator roles to control which users or groups can manage specific stack sets within the same administrator account. For more information, see <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stacksets-prereqs.html">Define Permissions for Multiple Administrators</a> in the <i>AWS CloudFormation User Guide</i>.</p>
+    pub administration_role_arn: Option<String>,
     /// <p>The time at which the operation was initiated. Note that the creation times for the stack set operation might differ from the creation time of the individual stacks themselves. This is because AWS CloudFormation needs to perform preparatory work for the operation, such as dispatching the work to the requested regions, before actually creating the first stacks.</p>
     pub creation_timestamp: Option<String>,
     /// <p>The time at which the stack set operation ended, across all accounts and regions specified. Note that this doesn't necessarily mean that the stack set operation was successful, or even attempted, in each account or region.</p>
@@ -6973,6 +7012,11 @@ impl StackSetOperationDeserializer {
                             "Action",
                             stack
                         )));
+                    }
+                    "AdministrationRoleARN" => {
+                        obj.administration_role_arn = Some(try!(
+                            RoleARNDeserializer::deserialize("AdministrationRoleARN", stack)
+                        ));
                     }
                     "CreationTimestamp" => {
                         obj.creation_timestamp = Some(try!(TimestampDeserializer::deserialize(
@@ -8592,6 +8636,8 @@ impl UpdateStackOutputDeserializer {
 }
 #[derive(Default, Debug, Clone)]
 pub struct UpdateStackSetInput {
+    /// <p>The Amazon Resource Number (ARN) of the IAM role to use to update this stack set.</p> <p>Specify an IAM role only if you are using customized administrator roles to control which users or groups can manage specific stack sets within the same administrator account. For more information, see <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stacksets-prereqs.html">Define Permissions for Multiple Administrators</a> in the <i>AWS CloudFormation User Guide</i>.</p> <p> If you specify a customized administrator role, AWS CloudFormation uses that role to update the stack. If you do not specify a customized administrator role, AWS CloudFormation performs the update using the role previously associated with the stack set, so long as you have permissions to perform operations on the stack set.</p>
+    pub administration_role_arn: Option<String>,
     /// <p>A list of values that you must specify before AWS CloudFormation can create certain stack sets. Some stack set templates might include resources that can affect permissions in your AWS account—for example, by creating new AWS Identity and Access Management (IAM) users. For those stack sets, you must explicitly acknowledge their capabilities by specifying this parameter.</p> <p>The only valid values are CAPABILITY_IAM and CAPABILITY_NAMED_IAM. The following resources require you to specify this parameter: </p> <ul> <li> <p>AWS::IAM::AccessKey</p> </li> <li> <p>AWS::IAM::Group</p> </li> <li> <p>AWS::IAM::InstanceProfile</p> </li> <li> <p>AWS::IAM::Policy</p> </li> <li> <p>AWS::IAM::Role</p> </li> <li> <p>AWS::IAM::User</p> </li> <li> <p>AWS::IAM::UserToGroupAddition</p> </li> </ul> <p>If your stack template contains these resources, we recommend that you review all permissions that are associated with them and edit their permissions if necessary.</p> <p>If you have IAM resources, you can specify either capability. If you have IAM resources with custom names, you must specify CAPABILITY_NAMED_IAM. If you don't specify this parameter, this action returns an <code>InsufficientCapabilities</code> error.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-iam-template.html#capabilities">Acknowledging IAM Resources in AWS CloudFormation Templates.</a> </p>
     pub capabilities: Option<Vec<String>>,
     /// <p>A brief description of updates that you are making.</p>
@@ -8623,6 +8669,12 @@ impl UpdateStackSetInputSerializer {
             prefix.push_str(".");
         }
 
+        if let Some(ref field_value) = obj.administration_role_arn {
+            params.put(
+                &format!("{}{}", prefix, "AdministrationRoleARN"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
         if let Some(ref field_value) = obj.capabilities {
             CapabilitiesSerializer::serialize(
                 params,

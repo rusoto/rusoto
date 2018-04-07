@@ -6173,6 +6173,8 @@ pub enum CreateLoadBalancerError {
     InvalidSecurityGroup(String),
     /// <p>The specified VPC has no associated Internet gateway.</p>
     InvalidSubnet(String),
+    /// <p>This operation is not allowed.</p>
+    OperationNotPermitted(String),
     /// <p>One or more of the specified subnets do not exist.</p>
     SubnetNotFound(String),
     /// <p>The quota for the number of load balancers has been reached.</p>
@@ -6221,6 +6223,9 @@ impl CreateLoadBalancerError {
                 "InvalidSubnet" => {
                     CreateLoadBalancerError::InvalidSubnet(String::from(parsed_error.message))
                 }
+                "OperationNotPermitted" => CreateLoadBalancerError::OperationNotPermitted(
+                    String::from(parsed_error.message),
+                ),
                 "SubnetNotFound" => {
                     CreateLoadBalancerError::SubnetNotFound(String::from(parsed_error.message))
                 }
@@ -6284,6 +6289,7 @@ impl Error for CreateLoadBalancerError {
             CreateLoadBalancerError::InvalidScheme(ref cause) => cause,
             CreateLoadBalancerError::InvalidSecurityGroup(ref cause) => cause,
             CreateLoadBalancerError::InvalidSubnet(ref cause) => cause,
+            CreateLoadBalancerError::OperationNotPermitted(ref cause) => cause,
             CreateLoadBalancerError::SubnetNotFound(ref cause) => cause,
             CreateLoadBalancerError::TooManyAccessPoints(ref cause) => cause,
             CreateLoadBalancerError::TooManyTags(ref cause) => cause,

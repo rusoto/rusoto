@@ -167,7 +167,7 @@ pub struct CreateEndpointMessage {
     /// <p>The type of endpoint.</p>
     #[serde(rename = "EndpointType")]
     pub endpoint_type: String,
-    /// <p>The type of engine for the endpoint. Valid values, depending on the EndPointType, include MYSQL, ORACLE, POSTGRES, MARIADB, AURORA, REDSHIFT, S3, SYBASE, DYNAMODB, MONGODB, and SQLSERVER.</p>
+    /// <p>The type of engine for the endpoint. Valid values, depending on the EndPointType, include mysql, oracle, postgres, mariadb, aurora, redshift, S3, sybase, dynamodb, mongodb, and sqlserver.</p>
     #[serde(rename = "EngineName")]
     pub engine_name: String,
     /// <p>Additional attributes associated with the connection.</p>
@@ -775,6 +775,37 @@ pub struct DescribeRefreshSchemasStatusResponse {
     pub refresh_schemas_status: Option<RefreshSchemasStatus>,
 }
 
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct DescribeReplicationInstanceTaskLogsMessage {
+    /// <p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>.</p>
+    #[serde(rename = "Marker")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub marker: Option<String>,
+    /// <p> The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a pagination token called a marker is included in the response so that the remaining results can be retrieved. </p> <p>Default: 100</p> <p>Constraints: Minimum 20, maximum 100.</p>
+    #[serde(rename = "MaxRecords")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_records: Option<i64>,
+    /// <p>The Amazon Resource Name (ARN) of the replication instance.</p>
+    #[serde(rename = "ReplicationInstanceArn")]
+    pub replication_instance_arn: String,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct DescribeReplicationInstanceTaskLogsResponse {
+    /// <p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>.</p>
+    #[serde(rename = "Marker")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub marker: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) of the replication instance.</p>
+    #[serde(rename = "ReplicationInstanceArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub replication_instance_arn: Option<String>,
+    /// <p>An array of replication task log metadata. Each member of the array contains the replication task name, ARN, and task log size (in bytes).</p>
+    #[serde(rename = "ReplicationInstanceTaskLogs")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub replication_instance_task_logs: Option<Vec<ReplicationInstanceTaskLog>>,
+}
+
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeReplicationInstancesMessage {
@@ -1000,7 +1031,7 @@ pub struct Endpoint {
     #[serde(rename = "EndpointType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub endpoint_type: Option<String>,
-    /// <p>The database engine name. Valid values, depending on the EndPointType, include MYSQL, ORACLE, POSTGRES, MARIADB, AURORA, REDSHIFT, S3, SYBASE, DYNAMODB, MONGODB, and SQLSERVER.</p>
+    /// <p>The database engine name. Valid values, depending on the EndPointType, include mysql, oracle, postgres, mariadb, aurora, redshift, S3, sybase, dynamodb, mongodb, and sqlserver.</p>
     #[serde(rename = "EngineName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub engine_name: Option<String>,
@@ -1207,7 +1238,7 @@ pub struct ModifyEndpointMessage {
     #[serde(rename = "EndpointType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub endpoint_type: Option<String>,
-    /// <p>The type of engine for the endpoint. Valid values, depending on the EndPointType, include MYSQL, ORACLE, POSTGRES, MARIADB, AURORA, REDSHIFT, S3, DYNAMODB, MONGODB, SYBASE, and SQLSERVER.</p>
+    /// <p>The type of engine for the endpoint. Valid values, depending on the EndPointType, include mysql, oracle, postgres, mariadb, aurora, redshift, S3, sybase, dynamodb, mongodb, and sqlserver.</p>
     #[serde(rename = "EngineName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub engine_name: Option<String>,
@@ -1487,6 +1518,25 @@ pub struct OrderableReplicationInstance {
     pub storage_type: Option<String>,
 }
 
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct RebootReplicationInstanceMessage {
+    /// <p>If this parameter is <code>true</code>, the reboot is conducted through a Multi-AZ failover. (If the instance isn't configured for Multi-AZ, then you can't specify <code>true</code>.)</p>
+    #[serde(rename = "ForceFailover")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub force_failover: Option<bool>,
+    /// <p>The Amazon Resource Name (ARN) of the replication instance.</p>
+    #[serde(rename = "ReplicationInstanceArn")]
+    pub replication_instance_arn: String,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct RebootReplicationInstanceResponse {
+    /// <p>The replication instance that is being rebooted. </p>
+    #[serde(rename = "ReplicationInstance")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub replication_instance: Option<ReplicationInstance>,
+}
+
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct RefreshSchemasMessage {
@@ -1644,6 +1694,23 @@ pub struct ReplicationInstance {
     #[serde(rename = "VpcSecurityGroups")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub vpc_security_groups: Option<Vec<VpcSecurityGroupMembership>>,
+}
+
+/// <p>Contains metadata for a replication instance task log.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct ReplicationInstanceTaskLog {
+    /// <p>The size, in bytes, of the replication task log.</p>
+    #[serde(rename = "ReplicationInstanceTaskLogSize")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub replication_instance_task_log_size: Option<i64>,
+    /// <p>The Amazon Resource Name (ARN) of the replication task.</p>
+    #[serde(rename = "ReplicationTaskArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub replication_task_arn: Option<String>,
+    /// <p>The name of the replication task.</p>
+    #[serde(rename = "ReplicationTaskName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub replication_task_name: Option<String>,
 }
 
 /// <p><p/></p>
@@ -1930,7 +1997,7 @@ pub struct SupportedEndpointType {
     #[serde(rename = "EndpointType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub endpoint_type: Option<String>,
-    /// <p>The database engine name. Valid values, depending on the EndPointType, include MYSQL, ORACLE, POSTGRES, MARIADB, AURORA, REDSHIFT, S3, SYBASE, DYNAMODB, MONGODB, and SQLSERVER.</p>
+    /// <p>The database engine name. Valid values, depending on the EndPointType, include mysql, oracle, postgres, mariadb, aurora, redshift, S3, sybase, dynamodb, mongodb, and sqlserver.</p>
     #[serde(rename = "EngineName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub engine_name: Option<String>,
@@ -4006,6 +4073,96 @@ impl Error for DescribeRefreshSchemasStatusError {
         }
     }
 }
+/// Errors returned by DescribeReplicationInstanceTaskLogs
+#[derive(Debug, PartialEq)]
+pub enum DescribeReplicationInstanceTaskLogsError {
+    /// <p>The resource is in a state that prevents it from being used for database migration.</p>
+    InvalidResourceStateFault(String),
+    /// <p>The resource could not be found.</p>
+    ResourceNotFoundFault(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl DescribeReplicationInstanceTaskLogsError {
+    pub fn from_body(body: &str) -> DescribeReplicationInstanceTaskLogsError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InvalidResourceStateFault" => {
+                        DescribeReplicationInstanceTaskLogsError::InvalidResourceStateFault(
+                            String::from(error_message),
+                        )
+                    }
+                    "ResourceNotFoundFault" => {
+                        DescribeReplicationInstanceTaskLogsError::ResourceNotFoundFault(
+                            String::from(error_message),
+                        )
+                    }
+                    "ValidationException" => DescribeReplicationInstanceTaskLogsError::Validation(
+                        error_message.to_string(),
+                    ),
+                    _ => DescribeReplicationInstanceTaskLogsError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => DescribeReplicationInstanceTaskLogsError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for DescribeReplicationInstanceTaskLogsError {
+    fn from(err: serde_json::error::Error) -> DescribeReplicationInstanceTaskLogsError {
+        DescribeReplicationInstanceTaskLogsError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DescribeReplicationInstanceTaskLogsError {
+    fn from(err: CredentialsError) -> DescribeReplicationInstanceTaskLogsError {
+        DescribeReplicationInstanceTaskLogsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DescribeReplicationInstanceTaskLogsError {
+    fn from(err: HttpDispatchError) -> DescribeReplicationInstanceTaskLogsError {
+        DescribeReplicationInstanceTaskLogsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeReplicationInstanceTaskLogsError {
+    fn from(err: io::Error) -> DescribeReplicationInstanceTaskLogsError {
+        DescribeReplicationInstanceTaskLogsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DescribeReplicationInstanceTaskLogsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeReplicationInstanceTaskLogsError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeReplicationInstanceTaskLogsError::InvalidResourceStateFault(ref cause) => cause,
+            DescribeReplicationInstanceTaskLogsError::ResourceNotFoundFault(ref cause) => cause,
+            DescribeReplicationInstanceTaskLogsError::Validation(ref cause) => cause,
+            DescribeReplicationInstanceTaskLogsError::Credentials(ref err) => err.description(),
+            DescribeReplicationInstanceTaskLogsError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DescribeReplicationInstanceTaskLogsError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by DescribeReplicationInstances
 #[derive(Debug, PartialEq)]
 pub enum DescribeReplicationInstancesError {
@@ -4521,6 +4678,8 @@ pub enum ImportCertificateError {
     InvalidCertificateFault(String),
     /// <p>The resource you are attempting to create already exists.</p>
     ResourceAlreadyExistsFault(String),
+    /// <p>The quota for this resource quota has been exceeded.</p>
+    ResourceQuotaExceededFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -4549,6 +4708,11 @@ impl ImportCertificateError {
                     }
                     "ResourceAlreadyExistsFault" => {
                         ImportCertificateError::ResourceAlreadyExistsFault(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ResourceQuotaExceededFault" => {
+                        ImportCertificateError::ResourceQuotaExceededFault(String::from(
                             error_message,
                         ))
                     }
@@ -4593,6 +4757,7 @@ impl Error for ImportCertificateError {
         match *self {
             ImportCertificateError::InvalidCertificateFault(ref cause) => cause,
             ImportCertificateError::ResourceAlreadyExistsFault(ref cause) => cause,
+            ImportCertificateError::ResourceQuotaExceededFault(ref cause) => cause,
             ImportCertificateError::Validation(ref cause) => cause,
             ImportCertificateError::Credentials(ref err) => err.description(),
             ImportCertificateError::HttpDispatch(ref dispatch_error) => {
@@ -5209,6 +5374,96 @@ impl Error for ModifyReplicationTaskError {
                 dispatch_error.description()
             }
             ModifyReplicationTaskError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by RebootReplicationInstance
+#[derive(Debug, PartialEq)]
+pub enum RebootReplicationInstanceError {
+    /// <p>The resource is in a state that prevents it from being used for database migration.</p>
+    InvalidResourceStateFault(String),
+    /// <p>The resource could not be found.</p>
+    ResourceNotFoundFault(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl RebootReplicationInstanceError {
+    pub fn from_body(body: &str) -> RebootReplicationInstanceError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InvalidResourceStateFault" => {
+                        RebootReplicationInstanceError::InvalidResourceStateFault(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ResourceNotFoundFault" => {
+                        RebootReplicationInstanceError::ResourceNotFoundFault(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ValidationException" => {
+                        RebootReplicationInstanceError::Validation(error_message.to_string())
+                    }
+                    _ => RebootReplicationInstanceError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => RebootReplicationInstanceError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for RebootReplicationInstanceError {
+    fn from(err: serde_json::error::Error) -> RebootReplicationInstanceError {
+        RebootReplicationInstanceError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for RebootReplicationInstanceError {
+    fn from(err: CredentialsError) -> RebootReplicationInstanceError {
+        RebootReplicationInstanceError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for RebootReplicationInstanceError {
+    fn from(err: HttpDispatchError) -> RebootReplicationInstanceError {
+        RebootReplicationInstanceError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for RebootReplicationInstanceError {
+    fn from(err: io::Error) -> RebootReplicationInstanceError {
+        RebootReplicationInstanceError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for RebootReplicationInstanceError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for RebootReplicationInstanceError {
+    fn description(&self) -> &str {
+        match *self {
+            RebootReplicationInstanceError::InvalidResourceStateFault(ref cause) => cause,
+            RebootReplicationInstanceError::ResourceNotFoundFault(ref cause) => cause,
+            RebootReplicationInstanceError::Validation(ref cause) => cause,
+            RebootReplicationInstanceError::Credentials(ref err) => err.description(),
+            RebootReplicationInstanceError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            RebootReplicationInstanceError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -5970,6 +6225,15 @@ pub trait DatabaseMigrationService {
         input: &DescribeRefreshSchemasStatusMessage,
     ) -> RusotoFuture<DescribeRefreshSchemasStatusResponse, DescribeRefreshSchemasStatusError>;
 
+    /// <p>Returns information about the task logs for the specified task.</p>
+    fn describe_replication_instance_task_logs(
+        &self,
+        input: &DescribeReplicationInstanceTaskLogsMessage,
+    ) -> RusotoFuture<
+        DescribeReplicationInstanceTaskLogsResponse,
+        DescribeReplicationInstanceTaskLogsError,
+    >;
+
     /// <p>Returns information about replication instances for your account in the current region.</p>
     fn describe_replication_instances(
         &self,
@@ -6050,6 +6314,12 @@ pub trait DatabaseMigrationService {
         &self,
         input: &ModifyReplicationTaskMessage,
     ) -> RusotoFuture<ModifyReplicationTaskResponse, ModifyReplicationTaskError>;
+
+    /// <p>Reboots a replication instance. Rebooting results in a momentary outage, until the replication instance becomes available again.</p>
+    fn reboot_replication_instance(
+        &self,
+        input: &RebootReplicationInstanceMessage,
+    ) -> RusotoFuture<RebootReplicationInstanceResponse, RebootReplicationInstanceError>;
 
     /// <p>Populates the schema for the specified endpoint. This is an asynchronous operation and can take several minutes. You can check the status of this operation by calling the DescribeRefreshSchemasStatus operation.</p>
     fn refresh_schemas(
@@ -6975,6 +7245,49 @@ where
         RusotoFuture::new(future)
     }
 
+    /// <p>Returns information about the task logs for the specified task.</p>
+    fn describe_replication_instance_task_logs(
+        &self,
+        input: &DescribeReplicationInstanceTaskLogsMessage,
+    ) -> RusotoFuture<
+        DescribeReplicationInstanceTaskLogsResponse,
+        DescribeReplicationInstanceTaskLogsError,
+    > {
+        let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "AmazonDMSv20160101.DescribeReplicationInstanceTaskLogs",
+        );
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        let future = self.inner.sign_and_dispatch(request, |response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<DescribeReplicationInstanceTaskLogsResponse>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeReplicationInstanceTaskLogsError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        });
+
+        RusotoFuture::new(future)
+    }
+
     /// <p>Returns information about replication instances for your account in the current region.</p>
     fn describe_replication_instances(
         &self,
@@ -7469,6 +7782,46 @@ where
             } else {
                 future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ModifyReplicationTaskError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        });
+
+        RusotoFuture::new(future)
+    }
+
+    /// <p>Reboots a replication instance. Rebooting results in a momentary outage, until the replication instance becomes available again.</p>
+    fn reboot_replication_instance(
+        &self,
+        input: &RebootReplicationInstanceMessage,
+    ) -> RusotoFuture<RebootReplicationInstanceResponse, RebootReplicationInstanceError> {
+        let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "AmazonDMSv20160101.RebootReplicationInstance",
+        );
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        let future = self.inner.sign_and_dispatch(request, |response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<RebootReplicationInstanceResponse>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(RebootReplicationInstanceError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))

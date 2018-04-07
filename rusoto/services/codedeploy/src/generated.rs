@@ -320,7 +320,8 @@ pub struct CreateDeploymentConfigInput {
     pub deployment_config_name: String,
     /// <p>The minimum number of healthy instances that should be available at any time during the deployment. There are two parameters expected in the input: type and value.</p> <p>The type parameter takes either of the following values:</p> <ul> <li> <p>HOST_COUNT: The value parameter represents the minimum number of healthy instances as an absolute value.</p> </li> <li> <p>FLEET_PERCENT: The value parameter represents the minimum number of healthy instances as a percentage of the total number of instances in the deployment. If you specify FLEET_PERCENT, at the start of the deployment, AWS CodeDeploy converts the percentage to the equivalent number of instance and rounds up fractional instances.</p> </li> </ul> <p>The value parameter takes an integer.</p> <p>For example, to set a minimum of 95% healthy instance, specify a type of FLEET_PERCENT and a value of 95.</p>
     #[serde(rename = "minimumHealthyHosts")]
-    pub minimum_healthy_hosts: MinimumHealthyHosts,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub minimum_healthy_hosts: Option<MinimumHealthyHosts>,
     /// <p>The configuration that specifies how the deployment traffic will be routed.</p>
     #[serde(rename = "trafficRoutingConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -494,6 +495,24 @@ pub struct DeleteDeploymentGroupOutput {
     #[serde(rename = "hooksNotCleanedUp")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub hooks_not_cleaned_up: Option<Vec<AutoScalingGroup>>,
+}
+
+/// <p>Represents the input of a DeleteGitHubAccount operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct DeleteGitHubAccountTokenInput {
+    /// <p>The name of the GitHub account connection to delete.</p>
+    #[serde(rename = "tokenName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub token_name: Option<String>,
+}
+
+/// <p>Represents the output of a DeleteGitHubAccountToken operation.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct DeleteGitHubAccountTokenOutput {
+    /// <p>The name of the GitHub account connection that was deleted.</p>
+    #[serde(rename = "tokenName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub token_name: Option<String>,
 }
 
 /// <p>Information about a deployment configuration.</p>
@@ -1837,6 +1856,8 @@ pub enum AddTagsToOnPremisesInstancesError {
     InstanceNameRequired(String),
     /// <p>The specified on-premises instance is not registered.</p>
     InstanceNotRegistered(String),
+    /// <p>The specified on-premises instance name was specified in an invalid format.</p>
+    InvalidInstanceName(String),
     /// <p>The specified tag was specified in an invalid format.</p>
     InvalidTag(String),
     /// <p>The maximum allowed number of tags was exceeded.</p>
@@ -1878,6 +1899,11 @@ impl AddTagsToOnPremisesInstancesError {
                     }
                     "InstanceNotRegisteredException" => {
                         AddTagsToOnPremisesInstancesError::InstanceNotRegistered(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidInstanceNameException" => {
+                        AddTagsToOnPremisesInstancesError::InvalidInstanceName(String::from(
                             error_message,
                         ))
                     }
@@ -1934,6 +1960,7 @@ impl Error for AddTagsToOnPremisesInstancesError {
             AddTagsToOnPremisesInstancesError::InstanceLimitExceeded(ref cause) => cause,
             AddTagsToOnPremisesInstancesError::InstanceNameRequired(ref cause) => cause,
             AddTagsToOnPremisesInstancesError::InstanceNotRegistered(ref cause) => cause,
+            AddTagsToOnPremisesInstancesError::InvalidInstanceName(ref cause) => cause,
             AddTagsToOnPremisesInstancesError::InvalidTag(ref cause) => cause,
             AddTagsToOnPremisesInstancesError::TagLimitExceeded(ref cause) => cause,
             AddTagsToOnPremisesInstancesError::TagRequired(ref cause) => cause,
@@ -3757,6 +3784,120 @@ impl Error for DeleteDeploymentGroupError {
                 dispatch_error.description()
             }
             DeleteDeploymentGroupError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DeleteGitHubAccountToken
+#[derive(Debug, PartialEq)]
+pub enum DeleteGitHubAccountTokenError {
+    /// <p>No GitHub account connection exists with the named specified in the call.</p>
+    GitHubAccountTokenDoesNotExist(String),
+    /// <p>The call is missing a required GitHub account connection name.</p>
+    GitHubAccountTokenNameRequired(String),
+    /// <p>The format of the specified GitHub account connection name is invalid.</p>
+    InvalidGitHubAccountTokenName(String),
+    /// <p>The API used does not support the deployment.</p>
+    OperationNotSupported(String),
+    /// <p>The specified resource could not be validated.</p>
+    ResourceValidation(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl DeleteGitHubAccountTokenError {
+    pub fn from_body(body: &str) -> DeleteGitHubAccountTokenError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "GitHubAccountTokenDoesNotExistException" => {
+                        DeleteGitHubAccountTokenError::GitHubAccountTokenDoesNotExist(
+                            String::from(error_message),
+                        )
+                    }
+                    "GitHubAccountTokenNameRequiredException" => {
+                        DeleteGitHubAccountTokenError::GitHubAccountTokenNameRequired(
+                            String::from(error_message),
+                        )
+                    }
+                    "InvalidGitHubAccountTokenNameException" => {
+                        DeleteGitHubAccountTokenError::InvalidGitHubAccountTokenName(String::from(
+                            error_message,
+                        ))
+                    }
+                    "OperationNotSupportedException" => {
+                        DeleteGitHubAccountTokenError::OperationNotSupported(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ResourceValidationException" => {
+                        DeleteGitHubAccountTokenError::ResourceValidation(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ValidationException" => {
+                        DeleteGitHubAccountTokenError::Validation(error_message.to_string())
+                    }
+                    _ => DeleteGitHubAccountTokenError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => DeleteGitHubAccountTokenError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for DeleteGitHubAccountTokenError {
+    fn from(err: serde_json::error::Error) -> DeleteGitHubAccountTokenError {
+        DeleteGitHubAccountTokenError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DeleteGitHubAccountTokenError {
+    fn from(err: CredentialsError) -> DeleteGitHubAccountTokenError {
+        DeleteGitHubAccountTokenError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DeleteGitHubAccountTokenError {
+    fn from(err: HttpDispatchError) -> DeleteGitHubAccountTokenError {
+        DeleteGitHubAccountTokenError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteGitHubAccountTokenError {
+    fn from(err: io::Error) -> DeleteGitHubAccountTokenError {
+        DeleteGitHubAccountTokenError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DeleteGitHubAccountTokenError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeleteGitHubAccountTokenError {
+    fn description(&self) -> &str {
+        match *self {
+            DeleteGitHubAccountTokenError::GitHubAccountTokenDoesNotExist(ref cause) => cause,
+            DeleteGitHubAccountTokenError::GitHubAccountTokenNameRequired(ref cause) => cause,
+            DeleteGitHubAccountTokenError::InvalidGitHubAccountTokenName(ref cause) => cause,
+            DeleteGitHubAccountTokenError::OperationNotSupported(ref cause) => cause,
+            DeleteGitHubAccountTokenError::ResourceValidation(ref cause) => cause,
+            DeleteGitHubAccountTokenError::Validation(ref cause) => cause,
+            DeleteGitHubAccountTokenError::Credentials(ref err) => err.description(),
+            DeleteGitHubAccountTokenError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DeleteGitHubAccountTokenError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -5829,6 +5970,8 @@ pub enum RemoveTagsFromOnPremisesInstancesError {
     InstanceNameRequired(String),
     /// <p>The specified on-premises instance is not registered.</p>
     InstanceNotRegistered(String),
+    /// <p>The specified on-premises instance name was specified in an invalid format.</p>
+    InvalidInstanceName(String),
     /// <p>The specified tag was specified in an invalid format.</p>
     InvalidTag(String),
     /// <p>The maximum allowed number of tags was exceeded.</p>
@@ -5872,6 +6015,11 @@ impl RemoveTagsFromOnPremisesInstancesError {
                         RemoveTagsFromOnPremisesInstancesError::InstanceNotRegistered(
                             String::from(error_message),
                         )
+                    }
+                    "InvalidInstanceNameException" => {
+                        RemoveTagsFromOnPremisesInstancesError::InvalidInstanceName(String::from(
+                            error_message,
+                        ))
                     }
                     "InvalidTagException" => RemoveTagsFromOnPremisesInstancesError::InvalidTag(
                         String::from(error_message),
@@ -5926,6 +6074,7 @@ impl Error for RemoveTagsFromOnPremisesInstancesError {
             RemoveTagsFromOnPremisesInstancesError::InstanceLimitExceeded(ref cause) => cause,
             RemoveTagsFromOnPremisesInstancesError::InstanceNameRequired(ref cause) => cause,
             RemoveTagsFromOnPremisesInstancesError::InstanceNotRegistered(ref cause) => cause,
+            RemoveTagsFromOnPremisesInstancesError::InvalidInstanceName(ref cause) => cause,
             RemoveTagsFromOnPremisesInstancesError::InvalidTag(ref cause) => cause,
             RemoveTagsFromOnPremisesInstancesError::TagLimitExceeded(ref cause) => cause,
             RemoveTagsFromOnPremisesInstancesError::TagRequired(ref cause) => cause,
@@ -6593,6 +6742,12 @@ pub trait CodeDeploy {
         &self,
         input: &DeleteDeploymentGroupInput,
     ) -> RusotoFuture<DeleteDeploymentGroupOutput, DeleteDeploymentGroupError>;
+
+    /// <p>Deletes a GitHub account connection.</p>
+    fn delete_git_hub_account_token(
+        &self,
+        input: &DeleteGitHubAccountTokenInput,
+    ) -> RusotoFuture<DeleteGitHubAccountTokenOutput, DeleteGitHubAccountTokenError>;
 
     /// <p>Deregisters an on-premises instance.</p>
     fn deregister_on_premises_instance(
@@ -7305,6 +7460,46 @@ where
             } else {
                 future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteDeploymentGroupError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        });
+
+        RusotoFuture::new(future)
+    }
+
+    /// <p>Deletes a GitHub account connection.</p>
+    fn delete_git_hub_account_token(
+        &self,
+        input: &DeleteGitHubAccountTokenInput,
+    ) -> RusotoFuture<DeleteGitHubAccountTokenOutput, DeleteGitHubAccountTokenError> {
+        let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "CodeDeploy_20141006.DeleteGitHubAccountToken",
+        );
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        let future = self.inner.sign_and_dispatch(request, |response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<DeleteGitHubAccountTokenOutput>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DeleteGitHubAccountTokenError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))

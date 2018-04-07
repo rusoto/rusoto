@@ -211,7 +211,7 @@ pub struct Commit {
     #[serde(rename = "message")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub message: Option<String>,
-    /// <p>The parent list for the specified commit.</p>
+    /// <p>A list of parent commits for the specified commit. Each parent commit ID is the full commit ID.</p>
     #[serde(rename = "parents")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub parents: Option<Vec<String>>,
@@ -1088,6 +1088,57 @@ pub struct PullRequestTarget {
     pub source_reference: Option<String>,
 }
 
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct PutFileInput {
+    /// <p>The name of the branch where you want to add or update the file.</p>
+    #[serde(rename = "branchName")]
+    pub branch_name: String,
+    /// <p>A message about why this file was added or updated. While optional, adding a message is strongly encouraged in order to provide a more useful commit history for your repository.</p>
+    #[serde(rename = "commitMessage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub commit_message: Option<String>,
+    /// <p>An email address for the person adding or updating the file.</p>
+    #[serde(rename = "email")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub email: Option<String>,
+    /// <p>The content of the file, in binary object format. </p>
+    #[serde(rename = "fileContent")]
+    #[serde(deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
+            serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob", default)]
+    pub file_content: Vec<u8>,
+    /// <p>The file mode permissions of the blob. Valid file mode permissions are listed below.</p>
+    #[serde(rename = "fileMode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub file_mode: Option<String>,
+    /// <p><p>The name of the file you want to add or update, including the relative path to the file in the repository.</p> <note> <p>If the path does not currently exist in the repository, the path will be created as part of adding the file.</p> </note></p>
+    #[serde(rename = "filePath")]
+    pub file_path: String,
+    /// <p>The name of the person adding or updating the file. While optional, adding a name is strongly encouraged in order to provide a more useful commit history for your repository.</p>
+    #[serde(rename = "name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The full commit ID of the head commit in the branch where you want to add or update the file. If the commit ID does not match the ID of the head commit at the time of the operation, an error will occur, and the file will not be added or updated.</p>
+    #[serde(rename = "parentCommitId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub parent_commit_id: Option<String>,
+    /// <p>The name of the repository where you want to add or update the file.</p>
+    #[serde(rename = "repositoryName")]
+    pub repository_name: String,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct PutFileOutput {
+    /// <p>The ID of the blob, which is its SHA-1 pointer.</p>
+    #[serde(rename = "blobId")]
+    pub blob_id: String,
+    /// <p>The full SHA of the commit that contains this file change.</p>
+    #[serde(rename = "commitId")]
+    pub commit_id: String,
+    /// <p>Tree information for the commit that contains this file change.</p>
+    #[serde(rename = "treeId")]
+    pub tree_id: String,
+}
+
 /// <p>Represents the input ofa put repository triggers operation.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct PutRepositoryTriggersInput {
@@ -1346,7 +1397,7 @@ pub struct UpdateRepositoryNameInput {
 /// <p>Information about the user who made a specified commit.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct UserInfo {
-    /// <p>The date when the specified commit was pushed to the repository.</p>
+    /// <p>The date when the specified commit was commited, in timestamp format with GMT offset.</p>
     #[serde(rename = "date")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub date: Option<String>,
@@ -5444,6 +5495,242 @@ impl Error for PostCommentReplyError {
         }
     }
 }
+/// Errors returned by PutFile
+#[derive(Debug, PartialEq)]
+pub enum PutFileError {
+    /// <p>The specified branch does not exist.</p>
+    BranchDoesNotExist(String),
+    /// <p>The specified branch name is not valid because it is a tag name. Type the name of a current branch in the repository. For a list of valid branch names, use <a>ListBranches</a>.</p>
+    BranchNameIsTagName(String),
+    /// <p>A branch name is required but was not specified.</p>
+    BranchNameRequired(String),
+    /// <p>The commit message is too long. Provide a shorter string. </p>
+    CommitMessageLengthExceeded(String),
+    /// <p>A file cannot be added to the repository because the specified path name has the same name as a file that already exists in this repository. Either provide a different name for the file, or specify a different path for the file.</p>
+    DirectoryNameConflictsWithFileName(String),
+    /// <p>An encryption integrity check failed.</p>
+    EncryptionIntegrityChecksFailed(String),
+    /// <p>An encryption key could not be accessed.</p>
+    EncryptionKeyAccessDenied(String),
+    /// <p>The encryption key is disabled.</p>
+    EncryptionKeyDisabled(String),
+    /// <p>No encryption key was found.</p>
+    EncryptionKeyNotFound(String),
+    /// <p>The encryption key is not available.</p>
+    EncryptionKeyUnavailable(String),
+    /// <p>The file cannot be added because it is empty. Empty files cannot be added to the repository with this API.</p>
+    FileContentRequired(String),
+    /// <p>The file cannot be added because it is too large. The maximum file size that can be added using PutFile is 6 MB. For files larger than 6 MB but smaller than 2 GB, add them using a Git client.</p>
+    FileContentSizeLimitExceeded(String),
+    /// <p>A file cannot be added to the repository because the specified file name has the same name as a directory in this repository. Either provide another name for the file, or add the file in a directory that does not match the file name.</p>
+    FileNameConflictsWithDirectoryName(String),
+    /// <p>The specified reference name is not valid.</p>
+    InvalidBranchName(String),
+    /// <p>The specified email address either contains one or more characters that are not allowed, or it exceeds the maximum number of characters allowed for an email address.</p>
+    InvalidEmail(String),
+    /// <p>The specified file mode permission is not valid. For a list of valid file mode permissions, see <a>PutFile</a>. </p>
+    InvalidFileMode(String),
+    /// <p>The parent commit ID is not valid. The commit ID cannot be empty, and must match the head commit ID for the branch of the repository where you want to add or update a file.</p>
+    InvalidParentCommitId(String),
+    /// <p>The specified path is not valid.</p>
+    InvalidPath(String),
+    /// <p><p>At least one specified repository name is not valid.</p> <note> <p>This exception only occurs when a specified repository name is not valid. Other exceptions occur when a required repository parameter is missing, or when a specified repository does not exist.</p> </note></p>
+    InvalidRepositoryName(String),
+    /// <p>The file name is not valid because it has exceeded the character limit for file names. File names, including the path to the file, cannot exceed the character limit. </p>
+    NameLengthExceeded(String),
+    /// <p>The parent commit ID is not valid. The specified parent commit ID does not exist in the specified branch of the repository.</p>
+    ParentCommitDoesNotExist(String),
+    /// <p>The file could not be added because the provided parent commit ID is not the current tip of the specified branch. To view the full commit ID of the current head of the branch, use <a>GetBranch</a>.</p>
+    ParentCommitIdOutdated(String),
+    /// <p>A parent commit ID is required. To view the full commit ID of a branch in a repository, use <a>GetBranch</a> or a Git command (for example, git pull or git log).</p>
+    ParentCommitIdRequired(String),
+    /// <p>The filePath for a location cannot be empty or null.</p>
+    PathRequired(String),
+    /// <p>The specified repository does not exist.</p>
+    RepositoryDoesNotExist(String),
+    /// <p>A repository name is required but was not specified.</p>
+    RepositoryNameRequired(String),
+    /// <p>The file was not added or updated because the content of the file is exactly the same as the content of that file in the repository and branch that you specified.</p>
+    SameFileContent(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl PutFileError {
+    pub fn from_body(body: &str) -> PutFileError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "BranchDoesNotExistException" => {
+                        PutFileError::BranchDoesNotExist(String::from(error_message))
+                    }
+                    "BranchNameIsTagNameException" => {
+                        PutFileError::BranchNameIsTagName(String::from(error_message))
+                    }
+                    "BranchNameRequiredException" => {
+                        PutFileError::BranchNameRequired(String::from(error_message))
+                    }
+                    "CommitMessageLengthExceededException" => {
+                        PutFileError::CommitMessageLengthExceeded(String::from(error_message))
+                    }
+                    "DirectoryNameConflictsWithFileNameException" => {
+                        PutFileError::DirectoryNameConflictsWithFileName(String::from(
+                            error_message,
+                        ))
+                    }
+                    "EncryptionIntegrityChecksFailedException" => {
+                        PutFileError::EncryptionIntegrityChecksFailed(String::from(error_message))
+                    }
+                    "EncryptionKeyAccessDeniedException" => {
+                        PutFileError::EncryptionKeyAccessDenied(String::from(error_message))
+                    }
+                    "EncryptionKeyDisabledException" => {
+                        PutFileError::EncryptionKeyDisabled(String::from(error_message))
+                    }
+                    "EncryptionKeyNotFoundException" => {
+                        PutFileError::EncryptionKeyNotFound(String::from(error_message))
+                    }
+                    "EncryptionKeyUnavailableException" => {
+                        PutFileError::EncryptionKeyUnavailable(String::from(error_message))
+                    }
+                    "FileContentRequiredException" => {
+                        PutFileError::FileContentRequired(String::from(error_message))
+                    }
+                    "FileContentSizeLimitExceededException" => {
+                        PutFileError::FileContentSizeLimitExceeded(String::from(error_message))
+                    }
+                    "FileNameConflictsWithDirectoryNameException" => {
+                        PutFileError::FileNameConflictsWithDirectoryName(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidBranchNameException" => {
+                        PutFileError::InvalidBranchName(String::from(error_message))
+                    }
+                    "InvalidEmailException" => {
+                        PutFileError::InvalidEmail(String::from(error_message))
+                    }
+                    "InvalidFileModeException" => {
+                        PutFileError::InvalidFileMode(String::from(error_message))
+                    }
+                    "InvalidParentCommitIdException" => {
+                        PutFileError::InvalidParentCommitId(String::from(error_message))
+                    }
+                    "InvalidPathException" => {
+                        PutFileError::InvalidPath(String::from(error_message))
+                    }
+                    "InvalidRepositoryNameException" => {
+                        PutFileError::InvalidRepositoryName(String::from(error_message))
+                    }
+                    "NameLengthExceededException" => {
+                        PutFileError::NameLengthExceeded(String::from(error_message))
+                    }
+                    "ParentCommitDoesNotExistException" => {
+                        PutFileError::ParentCommitDoesNotExist(String::from(error_message))
+                    }
+                    "ParentCommitIdOutdatedException" => {
+                        PutFileError::ParentCommitIdOutdated(String::from(error_message))
+                    }
+                    "ParentCommitIdRequiredException" => {
+                        PutFileError::ParentCommitIdRequired(String::from(error_message))
+                    }
+                    "PathRequiredException" => {
+                        PutFileError::PathRequired(String::from(error_message))
+                    }
+                    "RepositoryDoesNotExistException" => {
+                        PutFileError::RepositoryDoesNotExist(String::from(error_message))
+                    }
+                    "RepositoryNameRequiredException" => {
+                        PutFileError::RepositoryNameRequired(String::from(error_message))
+                    }
+                    "SameFileContentException" => {
+                        PutFileError::SameFileContent(String::from(error_message))
+                    }
+                    "ValidationException" => PutFileError::Validation(error_message.to_string()),
+                    _ => PutFileError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => PutFileError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for PutFileError {
+    fn from(err: serde_json::error::Error) -> PutFileError {
+        PutFileError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for PutFileError {
+    fn from(err: CredentialsError) -> PutFileError {
+        PutFileError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for PutFileError {
+    fn from(err: HttpDispatchError) -> PutFileError {
+        PutFileError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for PutFileError {
+    fn from(err: io::Error) -> PutFileError {
+        PutFileError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for PutFileError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for PutFileError {
+    fn description(&self) -> &str {
+        match *self {
+            PutFileError::BranchDoesNotExist(ref cause) => cause,
+            PutFileError::BranchNameIsTagName(ref cause) => cause,
+            PutFileError::BranchNameRequired(ref cause) => cause,
+            PutFileError::CommitMessageLengthExceeded(ref cause) => cause,
+            PutFileError::DirectoryNameConflictsWithFileName(ref cause) => cause,
+            PutFileError::EncryptionIntegrityChecksFailed(ref cause) => cause,
+            PutFileError::EncryptionKeyAccessDenied(ref cause) => cause,
+            PutFileError::EncryptionKeyDisabled(ref cause) => cause,
+            PutFileError::EncryptionKeyNotFound(ref cause) => cause,
+            PutFileError::EncryptionKeyUnavailable(ref cause) => cause,
+            PutFileError::FileContentRequired(ref cause) => cause,
+            PutFileError::FileContentSizeLimitExceeded(ref cause) => cause,
+            PutFileError::FileNameConflictsWithDirectoryName(ref cause) => cause,
+            PutFileError::InvalidBranchName(ref cause) => cause,
+            PutFileError::InvalidEmail(ref cause) => cause,
+            PutFileError::InvalidFileMode(ref cause) => cause,
+            PutFileError::InvalidParentCommitId(ref cause) => cause,
+            PutFileError::InvalidPath(ref cause) => cause,
+            PutFileError::InvalidRepositoryName(ref cause) => cause,
+            PutFileError::NameLengthExceeded(ref cause) => cause,
+            PutFileError::ParentCommitDoesNotExist(ref cause) => cause,
+            PutFileError::ParentCommitIdOutdated(ref cause) => cause,
+            PutFileError::ParentCommitIdRequired(ref cause) => cause,
+            PutFileError::PathRequired(ref cause) => cause,
+            PutFileError::RepositoryDoesNotExist(ref cause) => cause,
+            PutFileError::RepositoryNameRequired(ref cause) => cause,
+            PutFileError::SameFileContent(ref cause) => cause,
+            PutFileError::Validation(ref cause) => cause,
+            PutFileError::Credentials(ref err) => err.description(),
+            PutFileError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            PutFileError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by PutRepositoryTriggers
 #[derive(Debug, PartialEq)]
 pub enum PutRepositoryTriggersError {
@@ -6988,6 +7275,9 @@ pub trait CodeCommit {
         input: &PostCommentReplyInput,
     ) -> RusotoFuture<PostCommentReplyOutput, PostCommentReplyError>;
 
+    /// <p>Adds or updates a file in an AWS CodeCommit repository.</p>
+    fn put_file(&self, input: &PutFileInput) -> RusotoFuture<PutFileOutput, PutFileError>;
+
     /// <p>Replaces all triggers for a repository. This can be used to create or delete triggers.</p>
     fn put_repository_triggers(
         &self,
@@ -8034,6 +8324,40 @@ where
             } else {
                 future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(PostCommentReplyError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        });
+
+        RusotoFuture::new(future)
+    }
+
+    /// <p>Adds or updates a file in an AWS CodeCommit repository.</p>
+    fn put_file(&self, input: &PutFileInput) -> RusotoFuture<PutFileOutput, PutFileError> {
+        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "CodeCommit_20150413.PutFile");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        let future = self.inner.sign_and_dispatch(request, |response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<PutFileOutput>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(PutFileError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))

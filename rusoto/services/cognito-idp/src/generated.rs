@@ -340,10 +340,10 @@ pub struct AdminInitiateAuthRequest {
     #[serde(rename = "AnalyticsMetadata")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub analytics_metadata: Option<AnalyticsMetadataType>,
-    /// <p><p>The authentication flow for this call to execute. The API action will depend on this value. For example:</p> <ul> <li> <p> <code>REFRESH<em>TOKEN</em>AUTH</code> will take in a valid refresh token and return new tokens.</p> </li> <li> <p> <code>USER<em>SRP</em>AUTH</code> will take in <code>USERNAME</code> and <code>SRP<em>A</code> and return the SRP variables to be used for next challenge execution.</p> </li> </ul> <p>Valid values include:</p> <ul> <li> <p> <code>USER</em>SRP<em>AUTH</code>: Authentication flow for the Secure Remote Password (SRP) protocol.</p> </li> <li> <p> <code>REFRESH</em>TOKEN<em>AUTH</code>/<code>REFRESH</em>TOKEN</code>: Authentication flow for refreshing the access token and ID token by supplying a valid refresh token.</p> </li> <li> <p> <code>CUSTOM<em>AUTH</code>: Custom authentication flow.</p> </li> <li> <p> <code>ADMIN</em>NO<em>SRP</em>AUTH</code>: Non-SRP authentication flow; you can pass in the USERNAME and PASSWORD directly if the flow is enabled for calling the app client.</p> </li> </ul></p>
+    /// <p><p>The authentication flow for this call to execute. The API action will depend on this value. For example:</p> <ul> <li> <p> <code>REFRESH<em>TOKEN</em>AUTH</code> will take in a valid refresh token and return new tokens.</p> </li> <li> <p> <code>USER<em>SRP</em>AUTH</code> will take in <code>USERNAME</code> and <code>SRP<em>A</code> and return the SRP variables to be used for next challenge execution.</p> </li> <li> <p> <code>USER</em>PASSWORD<em>AUTH</code> will take in <code>USERNAME</code> and <code>PASSWORD</code> and return the next challenge or tokens.</p> </li> </ul> <p>Valid values include:</p> <ul> <li> <p> <code>USER</em>SRP<em>AUTH</code>: Authentication flow for the Secure Remote Password (SRP) protocol.</p> </li> <li> <p> <code>REFRESH</em>TOKEN<em>AUTH</code>/<code>REFRESH</em>TOKEN</code>: Authentication flow for refreshing the access token and ID token by supplying a valid refresh token.</p> </li> <li> <p> <code>CUSTOM<em>AUTH</code>: Custom authentication flow.</p> </li> <li> <p> <code>ADMIN</em>NO<em>SRP</em>AUTH</code>: Non-SRP authentication flow; you can pass in the USERNAME and PASSWORD directly if the flow is enabled for calling the app client.</p> </li> <li> <p> <code>USER<em>PASSWORD</em>AUTH</code>: Non-SRP authentication flow; USERNAME and PASSWORD are passed directly. If a user migration Lambda trigger is set, this flow will invoke the user migration Lambda if the USERNAME is not found in the user pool. </p> </li> </ul></p>
     #[serde(rename = "AuthFlow")]
     pub auth_flow: String,
-    /// <p><p>The authentication parameters. These are inputs corresponding to the <code>AuthFlow</code> that you are invoking. The required values depend on the value of <code>AuthFlow</code>:</p> <ul> <li> <p>For <code>USER<em>SRP</em>AUTH</code>: <code>USERNAME</code> (required), <code>SRP<em>A</code> (required), <code>SECRET</em>HASH</code> (required if the app client is configured with a client secret), <code>DEVICE<em>KEY</code> </p> </li> <li> <p>For <code>REFRESH</em>TOKEN<em>AUTH/REFRESH</em>TOKEN</code>: <code>USERNAME</code> (required), <code>SECRET<em>HASH</code> (required if the app client is configured with a client secret), <code>REFRESH</em>TOKEN</code> (required), <code>DEVICE<em>KEY</code> </p> </li> <li> <p>For <code>ADMIN</em>NO<em>SRP</em>AUTH</code>: <code>USERNAME</code> (required), <code>SECRET<em>HASH</code> (if app client is configured with client secret), <code>PASSWORD</code> (required), <code>DEVICE</em>KEY</code> </p> </li> <li> <p>For <code>CUSTOM<em>AUTH</code>: <code>USERNAME</code> (required), <code>SECRET</em>HASH</code> (if app client is configured with client secret), <code>DEVICE_KEY</code> </p> </li> </ul></p>
+    /// <p><p>The authentication parameters. These are inputs corresponding to the <code>AuthFlow</code> that you are invoking. The required values depend on the value of <code>AuthFlow</code>:</p> <ul> <li> <p>For <code>USER<em>SRP</em>AUTH</code>: <code>USERNAME</code> (required), <code>SRP<em>A</code> (required), <code>SECRET</em>HASH</code> (required if the app client is configured with a client secret), <code>DEVICE<em>KEY</code> </p> </li> <li> <p>For <code>REFRESH</em>TOKEN<em>AUTH/REFRESH</em>TOKEN</code>: <code>REFRESH<em>TOKEN</code> (required), <code>SECRET</em>HASH</code> (required if the app client is configured with a client secret), <code>DEVICE<em>KEY</code> </p> </li> <li> <p>For <code>ADMIN</em>NO<em>SRP</em>AUTH</code>: <code>USERNAME</code> (required), <code>SECRET<em>HASH</code> (if app client is configured with client secret), <code>PASSWORD</code> (required), <code>DEVICE</em>KEY</code> </p> </li> <li> <p>For <code>CUSTOM<em>AUTH</code>: <code>USERNAME</code> (required), <code>SECRET</em>HASH</code> (if app client is configured with client secret), <code>DEVICE_KEY</code> </p> </li> </ul></p>
     #[serde(rename = "AuthParameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub auth_parameters: Option<::std::collections::HashMap<String, String>>,
@@ -374,7 +374,7 @@ pub struct AdminInitiateAuthResponse {
     #[serde(rename = "ChallengeName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub challenge_name: Option<String>,
-    /// <p>The challenge parameters. These are returned to you in the <code>AdminInitiateAuth</code> response if you need to pass another challenge. The responses in this parameter should be used to compute inputs to the next call (<code>AdminRespondToAuthChallenge</code>).</p> <p>All challenges require <code>USERNAME</code> and <code>SECRET_HASH</code> (if applicable).</p> <p>The value of the <code>USER_IF_FOR_SRP</code> attribute will be the user's actual username, not an alias (such as email address or phone number), even if you specified an alias in your call to <code>AdminInitiateAuth</code>. This is because, in the <code>AdminRespondToAuthChallenge</code> API <code>ChallengeResponses</code>, the <code>USERNAME</code> attribute cannot be an alias.</p>
+    /// <p>The challenge parameters. These are returned to you in the <code>AdminInitiateAuth</code> response if you need to pass another challenge. The responses in this parameter should be used to compute inputs to the next call (<code>AdminRespondToAuthChallenge</code>).</p> <p>All challenges require <code>USERNAME</code> and <code>SECRET_HASH</code> (if applicable).</p> <p>The value of the <code>USER_ID_FOR_SRP</code> attribute will be the user's actual username, not an alias (such as email address or phone number), even if you specified an alias in your call to <code>AdminInitiateAuth</code>. This is because, in the <code>AdminRespondToAuthChallenge</code> API <code>ChallengeResponses</code>, the <code>USERNAME</code> attribute cannot be an alias.</p>
     #[serde(rename = "ChallengeParameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub challenge_parameters: Option<::std::collections::HashMap<String, String>>,
@@ -475,7 +475,7 @@ pub struct AdminListUserAuthEventsRequest {
     /// <p>The user pool ID.</p>
     #[serde(rename = "UserPoolId")]
     pub user_pool_id: String,
-    /// <p>The user pool username.</p>
+    /// <p>The user pool username or an alias.</p>
     #[serde(rename = "Username")]
     pub username: String,
 }
@@ -584,7 +584,7 @@ pub struct AdminSetUserMFAPreferenceRequest {
     /// <p>The user pool ID.</p>
     #[serde(rename = "UserPoolId")]
     pub user_pool_id: String,
-    /// <p>The user pool username.</p>
+    /// <p>The user pool username or alias.</p>
     #[serde(rename = "Username")]
     pub username: String,
 }
@@ -1221,7 +1221,7 @@ pub struct CreateUserPoolRequest {
     #[serde(rename = "EmailVerificationSubject")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub email_verification_subject: Option<String>,
-    /// <p>The Lambda trigger configuration information for the new user pool.</p>
+    /// <p><p>The Lambda trigger configuration information for the new user pool.</p> <note> <p>In a push model, event sources (such as Amazon S3 and custom applications) need permission to invoke a function. So you will need to make an extra call to add permission for these event sources to invoke your Lambda function.</p> <p/> <p>For more information on using the Lambda API to add permission, see <a href="https://docs.aws.amazon.com/lambda/latest/dg/API_AddPermission.html"> AddPermission </a>. </p> <p>For adding permission using the AWS CLI, see <a href="https://docs.aws.amazon.com/cli/latest/reference/lambda/add-permission.html"> add-permission </a>.</p> </note></p>
     #[serde(rename = "LambdaConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub lambda_config: Option<LambdaConfigType>,
@@ -1758,6 +1758,23 @@ pub struct GetIdentityProviderByIdentifierResponse {
     pub identity_provider: IdentityProviderType,
 }
 
+/// <p>Request to get a signing certificate from Cognito.</p>
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct GetSigningCertificateRequest {
+    /// <p>The user pool ID.</p>
+    #[serde(rename = "UserPoolId")]
+    pub user_pool_id: String,
+}
+
+/// <p>Response from Cognito for a signing certificate request.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct GetSigningCertificateResponse {
+    /// <p>The signing certificate.</p>
+    #[serde(rename = "Certificate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub certificate: Option<String>,
+}
+
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct GetUICustomizationRequest {
     /// <p>The client ID for the client app.</p>
@@ -1952,10 +1969,10 @@ pub struct InitiateAuthRequest {
     #[serde(rename = "AnalyticsMetadata")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub analytics_metadata: Option<AnalyticsMetadataType>,
-    /// <p>The authentication flow for this call to execute. The API action will depend on this value. For example: </p> <ul> <li> <p> <code>REFRESH_TOKEN_AUTH</code> will take in a valid refresh token and return new tokens.</p> </li> <li> <p> <code>USER_SRP_AUTH</code> will take in <code>USERNAME</code> and <code>SRP_A</code> and return the SRP variables to be used for next challenge execution.</p> </li> </ul> <p>Valid values include:</p> <ul> <li> <p> <code>USER_SRP_AUTH</code>: Authentication flow for the Secure Remote Password (SRP) protocol.</p> </li> <li> <p> <code>REFRESH_TOKEN_AUTH</code>/<code>REFRESH_TOKEN</code>: Authentication flow for refreshing the access token and ID token by supplying a valid refresh token.</p> </li> <li> <p> <code>CUSTOM_AUTH</code>: Custom authentication flow.</p> </li> </ul> <p> <code>ADMIN_NO_SRP_AUTH</code> is not a valid value.</p>
+    /// <p>The authentication flow for this call to execute. The API action will depend on this value. For example: </p> <ul> <li> <p> <code>REFRESH_TOKEN_AUTH</code> will take in a valid refresh token and return new tokens.</p> </li> <li> <p> <code>USER_SRP_AUTH</code> will take in <code>USERNAME</code> and <code>SRP_A</code> and return the SRP variables to be used for next challenge execution.</p> </li> <li> <p> <code>USER_PASSWORD_AUTH</code> will take in <code>USERNAME</code> and <code>PASSWORD</code> and return the next challenge or tokens.</p> </li> </ul> <p>Valid values include:</p> <ul> <li> <p> <code>USER_SRP_AUTH</code>: Authentication flow for the Secure Remote Password (SRP) protocol.</p> </li> <li> <p> <code>REFRESH_TOKEN_AUTH</code>/<code>REFRESH_TOKEN</code>: Authentication flow for refreshing the access token and ID token by supplying a valid refresh token.</p> </li> <li> <p> <code>CUSTOM_AUTH</code>: Custom authentication flow.</p> </li> <li> <p> <code>USER_PASSWORD_AUTH</code>: Non-SRP authentication flow; USERNAME and PASSWORD are passed directly. If a user migration Lambda trigger is set, this flow will invoke the user migration Lambda if the USERNAME is not found in the user pool. </p> </li> </ul> <p> <code>ADMIN_NO_SRP_AUTH</code> is not a valid value.</p>
     #[serde(rename = "AuthFlow")]
     pub auth_flow: String,
-    /// <p><p>The authentication parameters. These are inputs corresponding to the <code>AuthFlow</code> that you are invoking. The required values depend on the value of <code>AuthFlow</code>:</p> <ul> <li> <p>For <code>USER<em>SRP</em>AUTH</code>: <code>USERNAME</code> (required), <code>SRP<em>A</code> (required), <code>SECRET</em>HASH</code> (required if the app client is configured with a client secret), <code>DEVICE<em>KEY</code> </p> </li> <li> <p>For <code>REFRESH</em>TOKEN<em>AUTH/REFRESH</em>TOKEN</code>: <code>USERNAME</code> (required), <code>SECRET<em>HASH</code> (required if the app client is configured with a client secret), <code>REFRESH</em>TOKEN</code> (required), <code>DEVICE<em>KEY</code> </p> </li> <li> <p>For <code>CUSTOM</em>AUTH</code>: <code>USERNAME</code> (required), <code>SECRET<em>HASH</code> (if app client is configured with client secret), <code>DEVICE</em>KEY</code> </p> </li> </ul></p>
+    /// <p><p>The authentication parameters. These are inputs corresponding to the <code>AuthFlow</code> that you are invoking. The required values depend on the value of <code>AuthFlow</code>:</p> <ul> <li> <p>For <code>USER<em>SRP</em>AUTH</code>: <code>USERNAME</code> (required), <code>SRP<em>A</code> (required), <code>SECRET</em>HASH</code> (required if the app client is configured with a client secret), <code>DEVICE<em>KEY</code> </p> </li> <li> <p>For <code>REFRESH</em>TOKEN<em>AUTH/REFRESH</em>TOKEN</code>: <code>REFRESH<em>TOKEN</code> (required), <code>SECRET</em>HASH</code> (required if the app client is configured with a client secret), <code>DEVICE<em>KEY</code> </p> </li> <li> <p>For <code>CUSTOM</em>AUTH</code>: <code>USERNAME</code> (required), <code>SECRET<em>HASH</code> (if app client is configured with client secret), <code>DEVICE</em>KEY</code> </p> </li> </ul></p>
     #[serde(rename = "AuthParameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub auth_parameters: Option<::std::collections::HashMap<String, String>>,
@@ -2028,6 +2045,10 @@ pub struct LambdaConfigType {
     #[serde(rename = "PreTokenGeneration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub pre_token_generation: Option<String>,
+    /// <p>The user migration Lambda config type.</p>
+    #[serde(rename = "UserMigration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub user_migration: Option<String>,
     /// <p>Verifies the authentication challenge response.</p>
     #[serde(rename = "VerifyAuthChallengeResponse")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -10807,6 +10828,92 @@ impl Error for GetIdentityProviderByIdentifierError {
         }
     }
 }
+/// Errors returned by GetSigningCertificate
+#[derive(Debug, PartialEq)]
+pub enum GetSigningCertificateError {
+    /// <p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
+    InternalError(String),
+    /// <p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
+    ResourceNotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl GetSigningCertificateError {
+    pub fn from_body(body: &str) -> GetSigningCertificateError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InternalErrorException" => {
+                        GetSigningCertificateError::InternalError(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        GetSigningCertificateError::ResourceNotFound(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        GetSigningCertificateError::Validation(error_message.to_string())
+                    }
+                    _ => GetSigningCertificateError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => GetSigningCertificateError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for GetSigningCertificateError {
+    fn from(err: serde_json::error::Error) -> GetSigningCertificateError {
+        GetSigningCertificateError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for GetSigningCertificateError {
+    fn from(err: CredentialsError) -> GetSigningCertificateError {
+        GetSigningCertificateError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for GetSigningCertificateError {
+    fn from(err: HttpDispatchError) -> GetSigningCertificateError {
+        GetSigningCertificateError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetSigningCertificateError {
+    fn from(err: io::Error) -> GetSigningCertificateError {
+        GetSigningCertificateError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for GetSigningCertificateError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetSigningCertificateError {
+    fn description(&self) -> &str {
+        match *self {
+            GetSigningCertificateError::InternalError(ref cause) => cause,
+            GetSigningCertificateError::ResourceNotFound(ref cause) => cause,
+            GetSigningCertificateError::Validation(ref cause) => cause,
+            GetSigningCertificateError::Credentials(ref err) => err.description(),
+            GetSigningCertificateError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            GetSigningCertificateError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by GetUICustomization
 #[derive(Debug, PartialEq)]
 pub enum GetUICustomizationError {
@@ -15529,6 +15636,12 @@ pub trait CognitoIdentityProvider {
         input: &GetIdentityProviderByIdentifierRequest,
     ) -> RusotoFuture<GetIdentityProviderByIdentifierResponse, GetIdentityProviderByIdentifierError>;
 
+    /// <p>This method takes a user pool ID, and returns the signing certificate.</p>
+    fn get_signing_certificate(
+        &self,
+        input: &GetSigningCertificateRequest,
+    ) -> RusotoFuture<GetSigningCertificateResponse, GetSigningCertificateError>;
+
     /// <p>Gets the UI Customization information for a particular app client's app UI, if there is something set. If nothing is set for the particular client, but there is an existing pool level customization (app <code>clientId</code> will be <code>ALL</code>), then that is returned. If nothing is present, then an empty shape is returned.</p>
     fn get_ui_customization(
         &self,
@@ -18003,6 +18116,46 @@ where
             } else {
                 future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(GetIdentityProviderByIdentifierError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        });
+
+        RusotoFuture::new(future)
+    }
+
+    /// <p>This method takes a user pool ID, and returns the signing certificate.</p>
+    fn get_signing_certificate(
+        &self,
+        input: &GetSigningCertificateRequest,
+    ) -> RusotoFuture<GetSigningCertificateResponse, GetSigningCertificateError> {
+        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "AWSCognitoIdentityProviderService.GetSigningCertificate",
+        );
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        let future = self.inner.sign_and_dispatch(request, |response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<GetSigningCertificateResponse>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(GetSigningCertificateError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))

@@ -446,7 +446,7 @@ pub struct PutResourceAttributesRequest {
     /// <p>The name of the ProgressUpdateStream. </p>
     #[serde(rename = "ProgressUpdateStream")]
     pub progress_update_stream: String,
-    /// <p>Information about the resource that is being migrated. This data will be used to map the task to a resource in the Application Discovery Service (ADS)'s repository.</p>
+    /// <p><p>Information about the resource that is being migrated. This data will be used to map the task to a resource in the Application Discovery Service (ADS)&#39;s repository.</p> <note> <p>In the <code>ResourceAttribute</code> object array, the <code>Type</code> field is reserved for the following values: <code>IPV4<em>ADDRESS | IPV6</em>ADDRESS | MAC<em>ADDRESS | FQDN | VM</em>MANAGER<em>ID | VM</em>MANAGED<em>OBJECT</em>REFERENCE | VM<em>NAME | VM</em>PATH | BIOS<em>ID | MOTHERBOARD</em>SERIAL<em>NUMBER</code>, and the identifying value can be a string up to 256 characters.</p> </note> <important> <p>If any &quot;VM&quot; related value is used for a <code>ResourceAttribute</code> object, it is required that <code>VM</em>MANAGER_ID</code>, as a minimum, is always used. If it is not used, the server will not be associated in the Application Discovery Service (ADS)&#39;s repository using any of the other &quot;VM&quot; related values, and you will experience data loss. See the Example section below for a use case of specifying &quot;VM&quot; related values.</p> </important></p>
     #[serde(rename = "ResourceAttributeList")]
     pub resource_attribute_list: Vec<ResourceAttribute>,
 }
@@ -454,7 +454,7 @@ pub struct PutResourceAttributesRequest {
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct PutResourceAttributesResult {}
 
-/// <p>Attribute associated with a resource.</p>
+/// <p><p>Attribute associated with a resource.</p> <p>Note the corresponding format required per type listed below:</p> <dl> <dt>IPV4</dt> <dd> <p> <code>x.x.x.x</code> </p> <p> <i>where x is an integer in the range [0,255]</i> </p> </dd> <dt>IPV6</dt> <dd> <p> <code>y : y : y : y : y : y : y : y</code> </p> <p> <i>where y is a hexadecimal between 0 and FFFF. [0, FFFF]</i> </p> </dd> <dt>MAC_ADDRESS</dt> <dd> <p> <code>^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$</code> </p> </dd> <dt>FQDN</dt> <dd> <p> <code>^[^&lt;&gt;{}\\/?,=\p{Cntrl}]{1,256}$</code> </p> </dd> </dl></p>
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct ResourceAttribute {
     /// <p>Type of resource.</p>
@@ -484,7 +484,7 @@ pub struct Task {
 /// Errors returned by AssociateCreatedArtifact
 #[derive(Debug, PartialEq)]
 pub enum AssociateCreatedArtifactError {
-    /// <p>Exception raised when the account making the call is not whitelisted or there are other authentication errors.</p>
+    /// <p>You do not have sufficient access to perform this action.</p>
     AccessDenied(String),
     /// <p>Exception raised to indicate a successfully authorized action when the <code>DryRun</code> flag is set to "true".</p>
     DryRunOperation(String),
@@ -494,7 +494,7 @@ pub enum AssociateCreatedArtifactError {
     InvalidInput(String),
     /// <p>Exception raised when the request references a resource (ADS configuration, update stream, migration task, etc.) that does not exist in ADS (Application Discovery Service) or in Migration Hub's repository.</p>
     ResourceNotFound(String),
-    /// <p>Exception raised when the service encounters throttled communication with upstream dependencies or is overloaded with requests.</p>
+    /// <p>Exception raised when there is an internal, configuration, or dependency error encountered.</p>
     ServiceUnavailable(String),
     /// <p>Exception raised to indicate a request was not authorized when the <code>DryRun</code> flag is set to "true".</p>
     UnauthorizedOperation(String),
@@ -604,7 +604,7 @@ impl Error for AssociateCreatedArtifactError {
 /// Errors returned by AssociateDiscoveredResource
 #[derive(Debug, PartialEq)]
 pub enum AssociateDiscoveredResourceError {
-    /// <p>Exception raised when the account making the call is not whitelisted or there are other authentication errors.</p>
+    /// <p>You do not have sufficient access to perform this action.</p>
     AccessDenied(String),
     /// <p>Exception raised to indicate a successfully authorized action when the <code>DryRun</code> flag is set to "true".</p>
     DryRunOperation(String),
@@ -612,11 +612,11 @@ pub enum AssociateDiscoveredResourceError {
     InternalServerError(String),
     /// <p>Exception raised when the provided input violates a policy constraint or is entered in the wrong format or data type.</p>
     InvalidInput(String),
-    /// <p>Exception raised when there are problems accessing ADS (Application Discovery Service); most likely due to a misconfigured policy or the <code>ADSCaller</code> role is missing or not configured correctly.</p>
+    /// <p>Exception raised when there are problems accessing ADS (Application Discovery Service); most likely due to a misconfigured policy or the <code>migrationhub-discovery</code> role is missing or not configured correctly.</p>
     PolicyError(String),
     /// <p>Exception raised when the request references a resource (ADS configuration, update stream, migration task, etc.) that does not exist in ADS (Application Discovery Service) or in Migration Hub's repository.</p>
     ResourceNotFound(String),
-    /// <p>Exception raised when the service encounters throttled communication with upstream dependencies or is overloaded with requests.</p>
+    /// <p>Exception raised when there is an internal, configuration, or dependency error encountered.</p>
     ServiceUnavailable(String),
     /// <p>Exception raised to indicate a request was not authorized when the <code>DryRun</code> flag is set to "true".</p>
     UnauthorizedOperation(String),
@@ -734,7 +734,7 @@ impl Error for AssociateDiscoveredResourceError {
 /// Errors returned by CreateProgressUpdateStream
 #[derive(Debug, PartialEq)]
 pub enum CreateProgressUpdateStreamError {
-    /// <p>Exception raised when the account making the call is not whitelisted or there are other authentication errors.</p>
+    /// <p>You do not have sufficient access to perform this action.</p>
     AccessDenied(String),
     /// <p>Exception raised to indicate a successfully authorized action when the <code>DryRun</code> flag is set to "true".</p>
     DryRunOperation(String),
@@ -742,7 +742,7 @@ pub enum CreateProgressUpdateStreamError {
     InternalServerError(String),
     /// <p>Exception raised when the provided input violates a policy constraint or is entered in the wrong format or data type.</p>
     InvalidInput(String),
-    /// <p>Exception raised when the service encounters throttled communication with upstream dependencies or is overloaded with requests.</p>
+    /// <p>Exception raised when there is an internal, configuration, or dependency error encountered.</p>
     ServiceUnavailable(String),
     /// <p>Exception raised to indicate a request was not authorized when the <code>DryRun</code> flag is set to "true".</p>
     UnauthorizedOperation(String),
@@ -848,7 +848,7 @@ impl Error for CreateProgressUpdateStreamError {
 /// Errors returned by DeleteProgressUpdateStream
 #[derive(Debug, PartialEq)]
 pub enum DeleteProgressUpdateStreamError {
-    /// <p>Exception raised when the account making the call is not whitelisted or there are other authentication errors.</p>
+    /// <p>You do not have sufficient access to perform this action.</p>
     AccessDenied(String),
     /// <p>Exception raised to indicate a successfully authorized action when the <code>DryRun</code> flag is set to "true".</p>
     DryRunOperation(String),
@@ -858,7 +858,7 @@ pub enum DeleteProgressUpdateStreamError {
     InvalidInput(String),
     /// <p>Exception raised when the request references a resource (ADS configuration, update stream, migration task, etc.) that does not exist in ADS (Application Discovery Service) or in Migration Hub's repository.</p>
     ResourceNotFound(String),
-    /// <p>Exception raised when the service encounters throttled communication with upstream dependencies or is overloaded with requests.</p>
+    /// <p>Exception raised when there is an internal, configuration, or dependency error encountered.</p>
     ServiceUnavailable(String),
     /// <p>Exception raised to indicate a request was not authorized when the <code>DryRun</code> flag is set to "true".</p>
     UnauthorizedOperation(String),
@@ -970,17 +970,17 @@ impl Error for DeleteProgressUpdateStreamError {
 /// Errors returned by DescribeApplicationState
 #[derive(Debug, PartialEq)]
 pub enum DescribeApplicationStateError {
-    /// <p>Exception raised when the account making the call is not whitelisted or there are other authentication errors.</p>
+    /// <p>You do not have sufficient access to perform this action.</p>
     AccessDenied(String),
     /// <p>Exception raised when there is an internal, configuration, or dependency error encountered.</p>
     InternalServerError(String),
     /// <p>Exception raised when the provided input violates a policy constraint or is entered in the wrong format or data type.</p>
     InvalidInput(String),
-    /// <p>Exception raised when there are problems accessing ADS (Application Discovery Service); most likely due to a misconfigured policy or the <code>ADSCaller</code> role is missing or not configured correctly.</p>
+    /// <p>Exception raised when there are problems accessing ADS (Application Discovery Service); most likely due to a misconfigured policy or the <code>migrationhub-discovery</code> role is missing or not configured correctly.</p>
     PolicyError(String),
     /// <p>Exception raised when the request references a resource (ADS configuration, update stream, migration task, etc.) that does not exist in ADS (Application Discovery Service) or in Migration Hub's repository.</p>
     ResourceNotFound(String),
-    /// <p>Exception raised when the service encounters throttled communication with upstream dependencies or is overloaded with requests.</p>
+    /// <p>Exception raised when there is an internal, configuration, or dependency error encountered.</p>
     ServiceUnavailable(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1082,7 +1082,7 @@ impl Error for DescribeApplicationStateError {
 /// Errors returned by DescribeMigrationTask
 #[derive(Debug, PartialEq)]
 pub enum DescribeMigrationTaskError {
-    /// <p>Exception raised when the account making the call is not whitelisted or there are other authentication errors.</p>
+    /// <p>You do not have sufficient access to perform this action.</p>
     AccessDenied(String),
     /// <p>Exception raised when there is an internal, configuration, or dependency error encountered.</p>
     InternalServerError(String),
@@ -1090,7 +1090,7 @@ pub enum DescribeMigrationTaskError {
     InvalidInput(String),
     /// <p>Exception raised when the request references a resource (ADS configuration, update stream, migration task, etc.) that does not exist in ADS (Application Discovery Service) or in Migration Hub's repository.</p>
     ResourceNotFound(String),
-    /// <p>Exception raised when the service encounters throttled communication with upstream dependencies or is overloaded with requests.</p>
+    /// <p>Exception raised when there is an internal, configuration, or dependency error encountered.</p>
     ServiceUnavailable(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1186,7 +1186,7 @@ impl Error for DescribeMigrationTaskError {
 /// Errors returned by DisassociateCreatedArtifact
 #[derive(Debug, PartialEq)]
 pub enum DisassociateCreatedArtifactError {
-    /// <p>Exception raised when the account making the call is not whitelisted or there are other authentication errors.</p>
+    /// <p>You do not have sufficient access to perform this action.</p>
     AccessDenied(String),
     /// <p>Exception raised to indicate a successfully authorized action when the <code>DryRun</code> flag is set to "true".</p>
     DryRunOperation(String),
@@ -1196,7 +1196,7 @@ pub enum DisassociateCreatedArtifactError {
     InvalidInput(String),
     /// <p>Exception raised when the request references a resource (ADS configuration, update stream, migration task, etc.) that does not exist in ADS (Application Discovery Service) or in Migration Hub's repository.</p>
     ResourceNotFound(String),
-    /// <p>Exception raised when the service encounters throttled communication with upstream dependencies or is overloaded with requests.</p>
+    /// <p>Exception raised when there is an internal, configuration, or dependency error encountered.</p>
     ServiceUnavailable(String),
     /// <p>Exception raised to indicate a request was not authorized when the <code>DryRun</code> flag is set to "true".</p>
     UnauthorizedOperation(String),
@@ -1310,7 +1310,7 @@ impl Error for DisassociateCreatedArtifactError {
 /// Errors returned by DisassociateDiscoveredResource
 #[derive(Debug, PartialEq)]
 pub enum DisassociateDiscoveredResourceError {
-    /// <p>Exception raised when the account making the call is not whitelisted or there are other authentication errors.</p>
+    /// <p>You do not have sufficient access to perform this action.</p>
     AccessDenied(String),
     /// <p>Exception raised to indicate a successfully authorized action when the <code>DryRun</code> flag is set to "true".</p>
     DryRunOperation(String),
@@ -1320,7 +1320,7 @@ pub enum DisassociateDiscoveredResourceError {
     InvalidInput(String),
     /// <p>Exception raised when the request references a resource (ADS configuration, update stream, migration task, etc.) that does not exist in ADS (Application Discovery Service) or in Migration Hub's repository.</p>
     ResourceNotFound(String),
-    /// <p>Exception raised when the service encounters throttled communication with upstream dependencies or is overloaded with requests.</p>
+    /// <p>Exception raised when there is an internal, configuration, or dependency error encountered.</p>
     ServiceUnavailable(String),
     /// <p>Exception raised to indicate a request was not authorized when the <code>DryRun</code> flag is set to "true".</p>
     UnauthorizedOperation(String),
@@ -1434,7 +1434,7 @@ impl Error for DisassociateDiscoveredResourceError {
 /// Errors returned by ImportMigrationTask
 #[derive(Debug, PartialEq)]
 pub enum ImportMigrationTaskError {
-    /// <p>Exception raised when the account making the call is not whitelisted or there are other authentication errors.</p>
+    /// <p>You do not have sufficient access to perform this action.</p>
     AccessDenied(String),
     /// <p>Exception raised to indicate a successfully authorized action when the <code>DryRun</code> flag is set to "true".</p>
     DryRunOperation(String),
@@ -1444,7 +1444,7 @@ pub enum ImportMigrationTaskError {
     InvalidInput(String),
     /// <p>Exception raised when the request references a resource (ADS configuration, update stream, migration task, etc.) that does not exist in ADS (Application Discovery Service) or in Migration Hub's repository.</p>
     ResourceNotFound(String),
-    /// <p>Exception raised when the service encounters throttled communication with upstream dependencies or is overloaded with requests.</p>
+    /// <p>Exception raised when there is an internal, configuration, or dependency error encountered.</p>
     ServiceUnavailable(String),
     /// <p>Exception raised to indicate a request was not authorized when the <code>DryRun</code> flag is set to "true".</p>
     UnauthorizedOperation(String),
@@ -1550,7 +1550,7 @@ impl Error for ImportMigrationTaskError {
 /// Errors returned by ListCreatedArtifacts
 #[derive(Debug, PartialEq)]
 pub enum ListCreatedArtifactsError {
-    /// <p>Exception raised when the account making the call is not whitelisted or there are other authentication errors.</p>
+    /// <p>You do not have sufficient access to perform this action.</p>
     AccessDenied(String),
     /// <p>Exception raised when there is an internal, configuration, or dependency error encountered.</p>
     InternalServerError(String),
@@ -1558,7 +1558,7 @@ pub enum ListCreatedArtifactsError {
     InvalidInput(String),
     /// <p>Exception raised when the request references a resource (ADS configuration, update stream, migration task, etc.) that does not exist in ADS (Application Discovery Service) or in Migration Hub's repository.</p>
     ResourceNotFound(String),
-    /// <p>Exception raised when the service encounters throttled communication with upstream dependencies or is overloaded with requests.</p>
+    /// <p>Exception raised when there is an internal, configuration, or dependency error encountered.</p>
     ServiceUnavailable(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1654,7 +1654,7 @@ impl Error for ListCreatedArtifactsError {
 /// Errors returned by ListDiscoveredResources
 #[derive(Debug, PartialEq)]
 pub enum ListDiscoveredResourcesError {
-    /// <p>Exception raised when the account making the call is not whitelisted or there are other authentication errors.</p>
+    /// <p>You do not have sufficient access to perform this action.</p>
     AccessDenied(String),
     /// <p>Exception raised when there is an internal, configuration, or dependency error encountered.</p>
     InternalServerError(String),
@@ -1662,7 +1662,7 @@ pub enum ListDiscoveredResourcesError {
     InvalidInput(String),
     /// <p>Exception raised when the request references a resource (ADS configuration, update stream, migration task, etc.) that does not exist in ADS (Application Discovery Service) or in Migration Hub's repository.</p>
     ResourceNotFound(String),
-    /// <p>Exception raised when the service encounters throttled communication with upstream dependencies or is overloaded with requests.</p>
+    /// <p>Exception raised when there is an internal, configuration, or dependency error encountered.</p>
     ServiceUnavailable(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1760,17 +1760,17 @@ impl Error for ListDiscoveredResourcesError {
 /// Errors returned by ListMigrationTasks
 #[derive(Debug, PartialEq)]
 pub enum ListMigrationTasksError {
-    /// <p>Exception raised when the account making the call is not whitelisted or there are other authentication errors.</p>
+    /// <p>You do not have sufficient access to perform this action.</p>
     AccessDenied(String),
     /// <p>Exception raised when there is an internal, configuration, or dependency error encountered.</p>
     InternalServerError(String),
     /// <p>Exception raised when the provided input violates a policy constraint or is entered in the wrong format or data type.</p>
     InvalidInput(String),
-    /// <p>Exception raised when there are problems accessing ADS (Application Discovery Service); most likely due to a misconfigured policy or the <code>ADSCaller</code> role is missing or not configured correctly.</p>
+    /// <p>Exception raised when there are problems accessing ADS (Application Discovery Service); most likely due to a misconfigured policy or the <code>migrationhub-discovery</code> role is missing or not configured correctly.</p>
     PolicyError(String),
     /// <p>Exception raised when the request references a resource (ADS configuration, update stream, migration task, etc.) that does not exist in ADS (Application Discovery Service) or in Migration Hub's repository.</p>
     ResourceNotFound(String),
-    /// <p>Exception raised when the service encounters throttled communication with upstream dependencies or is overloaded with requests.</p>
+    /// <p>Exception raised when there is an internal, configuration, or dependency error encountered.</p>
     ServiceUnavailable(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1870,13 +1870,13 @@ impl Error for ListMigrationTasksError {
 /// Errors returned by ListProgressUpdateStreams
 #[derive(Debug, PartialEq)]
 pub enum ListProgressUpdateStreamsError {
-    /// <p>Exception raised when the account making the call is not whitelisted or there are other authentication errors.</p>
+    /// <p>You do not have sufficient access to perform this action.</p>
     AccessDenied(String),
     /// <p>Exception raised when there is an internal, configuration, or dependency error encountered.</p>
     InternalServerError(String),
     /// <p>Exception raised when the provided input violates a policy constraint or is entered in the wrong format or data type.</p>
     InvalidInput(String),
-    /// <p>Exception raised when the service encounters throttled communication with upstream dependencies or is overloaded with requests.</p>
+    /// <p>Exception raised when there is an internal, configuration, or dependency error encountered.</p>
     ServiceUnavailable(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1970,7 +1970,7 @@ impl Error for ListProgressUpdateStreamsError {
 /// Errors returned by NotifyApplicationState
 #[derive(Debug, PartialEq)]
 pub enum NotifyApplicationStateError {
-    /// <p>Exception raised when the account making the call is not whitelisted or there are other authentication errors.</p>
+    /// <p>You do not have sufficient access to perform this action.</p>
     AccessDenied(String),
     /// <p>Exception raised to indicate a successfully authorized action when the <code>DryRun</code> flag is set to "true".</p>
     DryRunOperation(String),
@@ -1978,11 +1978,11 @@ pub enum NotifyApplicationStateError {
     InternalServerError(String),
     /// <p>Exception raised when the provided input violates a policy constraint or is entered in the wrong format or data type.</p>
     InvalidInput(String),
-    /// <p>Exception raised when there are problems accessing ADS (Application Discovery Service); most likely due to a misconfigured policy or the <code>ADSCaller</code> role is missing or not configured correctly.</p>
+    /// <p>Exception raised when there are problems accessing ADS (Application Discovery Service); most likely due to a misconfigured policy or the <code>migrationhub-discovery</code> role is missing or not configured correctly.</p>
     PolicyError(String),
     /// <p>Exception raised when the request references a resource (ADS configuration, update stream, migration task, etc.) that does not exist in ADS (Application Discovery Service) or in Migration Hub's repository.</p>
     ResourceNotFound(String),
-    /// <p>Exception raised when the service encounters throttled communication with upstream dependencies or is overloaded with requests.</p>
+    /// <p>Exception raised when there is an internal, configuration, or dependency error encountered.</p>
     ServiceUnavailable(String),
     /// <p>Exception raised to indicate a request was not authorized when the <code>DryRun</code> flag is set to "true".</p>
     UnauthorizedOperation(String),
@@ -2092,7 +2092,7 @@ impl Error for NotifyApplicationStateError {
 /// Errors returned by NotifyMigrationTaskState
 #[derive(Debug, PartialEq)]
 pub enum NotifyMigrationTaskStateError {
-    /// <p>Exception raised when the account making the call is not whitelisted or there are other authentication errors.</p>
+    /// <p>You do not have sufficient access to perform this action.</p>
     AccessDenied(String),
     /// <p>Exception raised to indicate a successfully authorized action when the <code>DryRun</code> flag is set to "true".</p>
     DryRunOperation(String),
@@ -2102,7 +2102,7 @@ pub enum NotifyMigrationTaskStateError {
     InvalidInput(String),
     /// <p>Exception raised when the request references a resource (ADS configuration, update stream, migration task, etc.) that does not exist in ADS (Application Discovery Service) or in Migration Hub's repository.</p>
     ResourceNotFound(String),
-    /// <p>Exception raised when the service encounters throttled communication with upstream dependencies or is overloaded with requests.</p>
+    /// <p>Exception raised when there is an internal, configuration, or dependency error encountered.</p>
     ServiceUnavailable(String),
     /// <p>Exception raised to indicate a request was not authorized when the <code>DryRun</code> flag is set to "true".</p>
     UnauthorizedOperation(String),
@@ -2212,7 +2212,7 @@ impl Error for NotifyMigrationTaskStateError {
 /// Errors returned by PutResourceAttributes
 #[derive(Debug, PartialEq)]
 pub enum PutResourceAttributesError {
-    /// <p>Exception raised when the account making the call is not whitelisted or there are other authentication errors.</p>
+    /// <p>You do not have sufficient access to perform this action.</p>
     AccessDenied(String),
     /// <p>Exception raised to indicate a successfully authorized action when the <code>DryRun</code> flag is set to "true".</p>
     DryRunOperation(String),
@@ -2222,7 +2222,7 @@ pub enum PutResourceAttributesError {
     InvalidInput(String),
     /// <p>Exception raised when the request references a resource (ADS configuration, update stream, migration task, etc.) that does not exist in ADS (Application Discovery Service) or in Migration Hub's repository.</p>
     ResourceNotFound(String),
-    /// <p>Exception raised when the service encounters throttled communication with upstream dependencies or is overloaded with requests.</p>
+    /// <p>Exception raised when there is an internal, configuration, or dependency error encountered.</p>
     ServiceUnavailable(String),
     /// <p>Exception raised to indicate a request was not authorized when the <code>DryRun</code> flag is set to "true".</p>
     UnauthorizedOperation(String),
@@ -2345,7 +2345,7 @@ pub trait MigrationHub {
         input: &CreateProgressUpdateStreamRequest,
     ) -> RusotoFuture<CreateProgressUpdateStreamResult, CreateProgressUpdateStreamError>;
 
-    /// <p><p>Deletes a progress update stream, including all of its tasks, which was previously created as an AWS resource used for access control. This API has the following traits:</p> <ul> <li> <p>The only parameter needed for <code>DeleteProgressUpdateStream</code> is the stream name (same as a <code>CreateProgressUpdateStream</code> call).</p> </li> <li> <p>The call will return, and a background process will asynchronously be doing the actual delete of the stream and all of its resources (tasks, associated resources, resource attributes, created artifacts).</p> </li> <li> <p>If the stream takes time to be deleted, it might still show up on a <code>ListProgressUpdateStreams</code> call.</p> </li> <li> <p> <code>CreateProgressUpdateStream</code>, <code>ImportMigrationTask</code>, <code>NotifyMigrationTaskState</code>, and all Associate[*] APIs realted to the tasks belonging to the stream will throw &quot;InvalidInputException&quot; if the stream of the same name is in the process of being deleted.</p> </li> <li> <p>Once the stream and all of its resources are deleted, <code>CreateProgressUpdateStream</code> for a stream of the same name will succeed, and that stream will be an entirely new logical resource (without any resources associated with the old stream).</p> </li> </ul></p>
+    /// <p><p>Deletes a progress update stream, including all of its tasks, which was previously created as an AWS resource used for access control. This API has the following traits:</p> <ul> <li> <p>The only parameter needed for <code>DeleteProgressUpdateStream</code> is the stream name (same as a <code>CreateProgressUpdateStream</code> call).</p> </li> <li> <p>The call will return, and a background process will asynchronously delete the stream and all of its resources (tasks, associated resources, resource attributes, created artifacts).</p> </li> <li> <p>If the stream takes time to be deleted, it might still show up on a <code>ListProgressUpdateStreams</code> call.</p> </li> <li> <p> <code>CreateProgressUpdateStream</code>, <code>ImportMigrationTask</code>, <code>NotifyMigrationTaskState</code>, and all Associate[*] APIs realted to the tasks belonging to the stream will throw &quot;InvalidInputException&quot; if the stream of the same name is in the process of being deleted.</p> </li> <li> <p>Once the stream and all of its resources are deleted, <code>CreateProgressUpdateStream</code> for a stream of the same name will succeed, and that stream will be an entirely new logical resource (without any resources associated with the old stream).</p> </li> </ul></p>
     fn delete_progress_update_stream(
         &self,
         input: &DeleteProgressUpdateStreamRequest,
@@ -2417,7 +2417,7 @@ pub trait MigrationHub {
         input: &NotifyMigrationTaskStateRequest,
     ) -> RusotoFuture<NotifyMigrationTaskStateResult, NotifyMigrationTaskStateError>;
 
-    /// <p><p>Provides identifying details of the resource being migrated so that it can be associated in the Application Discovery Service (ADS)&#39;s repository. This association occurs asynchronously after <code>PutResourceAttributes</code> returns.</p> <important> <p>Keep in mind that subsequent calls to PutResourceAttributes will override previously stored attributes. For example, if it is first called with a MAC address, but later, it is desired to <i>add</i> an IP address, it will then be required to call it with <i>both</i> the IP and MAC addresses to prevent overiding the MAC address.</p> </important> <note> <p>Because this is an asynchronous call, it will always return 200, whether an association occurs or not. To confirm if an association was found based on the provided details, call <code>ListAssociatedResource</code>.</p> </note></p>
+    /// <p><p>Provides identifying details of the resource being migrated so that it can be associated in the Application Discovery Service (ADS)&#39;s repository. This association occurs asynchronously after <code>PutResourceAttributes</code> returns.</p> <important> <ul> <li> <p>Keep in mind that subsequent calls to PutResourceAttributes will override previously stored attributes. For example, if it is first called with a MAC address, but later, it is desired to <i>add</i> an IP address, it will then be required to call it with <i>both</i> the IP and MAC addresses to prevent overiding the MAC address.</p> </li> <li> <p>Note the instructions regarding the special use case of the <code>ResourceAttributeList</code> parameter when specifying any &quot;VM&quot; related value.</p> </li> </ul> </important> <note> <p>Because this is an asynchronous call, it will always return 200, whether an association occurs or not. To confirm if an association was found based on the provided details, call <code>ListDiscoveredResources</code>.</p> </note></p>
     fn put_resource_attributes(
         &self,
         input: &PutResourceAttributesRequest,
@@ -2580,7 +2580,7 @@ where
         RusotoFuture::new(future)
     }
 
-    /// <p><p>Deletes a progress update stream, including all of its tasks, which was previously created as an AWS resource used for access control. This API has the following traits:</p> <ul> <li> <p>The only parameter needed for <code>DeleteProgressUpdateStream</code> is the stream name (same as a <code>CreateProgressUpdateStream</code> call).</p> </li> <li> <p>The call will return, and a background process will asynchronously be doing the actual delete of the stream and all of its resources (tasks, associated resources, resource attributes, created artifacts).</p> </li> <li> <p>If the stream takes time to be deleted, it might still show up on a <code>ListProgressUpdateStreams</code> call.</p> </li> <li> <p> <code>CreateProgressUpdateStream</code>, <code>ImportMigrationTask</code>, <code>NotifyMigrationTaskState</code>, and all Associate[*] APIs realted to the tasks belonging to the stream will throw &quot;InvalidInputException&quot; if the stream of the same name is in the process of being deleted.</p> </li> <li> <p>Once the stream and all of its resources are deleted, <code>CreateProgressUpdateStream</code> for a stream of the same name will succeed, and that stream will be an entirely new logical resource (without any resources associated with the old stream).</p> </li> </ul></p>
+    /// <p><p>Deletes a progress update stream, including all of its tasks, which was previously created as an AWS resource used for access control. This API has the following traits:</p> <ul> <li> <p>The only parameter needed for <code>DeleteProgressUpdateStream</code> is the stream name (same as a <code>CreateProgressUpdateStream</code> call).</p> </li> <li> <p>The call will return, and a background process will asynchronously delete the stream and all of its resources (tasks, associated resources, resource attributes, created artifacts).</p> </li> <li> <p>If the stream takes time to be deleted, it might still show up on a <code>ListProgressUpdateStreams</code> call.</p> </li> <li> <p> <code>CreateProgressUpdateStream</code>, <code>ImportMigrationTask</code>, <code>NotifyMigrationTaskState</code>, and all Associate[*] APIs realted to the tasks belonging to the stream will throw &quot;InvalidInputException&quot; if the stream of the same name is in the process of being deleted.</p> </li> <li> <p>Once the stream and all of its resources are deleted, <code>CreateProgressUpdateStream</code> for a stream of the same name will succeed, and that stream will be an entirely new logical resource (without any resources associated with the old stream).</p> </li> </ul></p>
     fn delete_progress_update_stream(
         &self,
         input: &DeleteProgressUpdateStreamRequest,
@@ -3031,7 +3031,7 @@ where
         RusotoFuture::new(future)
     }
 
-    /// <p><p>Provides identifying details of the resource being migrated so that it can be associated in the Application Discovery Service (ADS)&#39;s repository. This association occurs asynchronously after <code>PutResourceAttributes</code> returns.</p> <important> <p>Keep in mind that subsequent calls to PutResourceAttributes will override previously stored attributes. For example, if it is first called with a MAC address, but later, it is desired to <i>add</i> an IP address, it will then be required to call it with <i>both</i> the IP and MAC addresses to prevent overiding the MAC address.</p> </important> <note> <p>Because this is an asynchronous call, it will always return 200, whether an association occurs or not. To confirm if an association was found based on the provided details, call <code>ListAssociatedResource</code>.</p> </note></p>
+    /// <p><p>Provides identifying details of the resource being migrated so that it can be associated in the Application Discovery Service (ADS)&#39;s repository. This association occurs asynchronously after <code>PutResourceAttributes</code> returns.</p> <important> <ul> <li> <p>Keep in mind that subsequent calls to PutResourceAttributes will override previously stored attributes. For example, if it is first called with a MAC address, but later, it is desired to <i>add</i> an IP address, it will then be required to call it with <i>both</i> the IP and MAC addresses to prevent overiding the MAC address.</p> </li> <li> <p>Note the instructions regarding the special use case of the <code>ResourceAttributeList</code> parameter when specifying any &quot;VM&quot; related value.</p> </li> </ul> </important> <note> <p>Because this is an asynchronous call, it will always return 200, whether an association occurs or not. To confirm if an association was found based on the provided details, call <code>ListDiscoveredResources</code>.</p> </note></p>
     fn put_resource_attributes(
         &self,
         input: &PutResourceAttributesRequest,

@@ -34,20 +34,23 @@ use serde_json::Value as SerdeJsonValue;
 #[derive(Default, Debug, Clone)]
 pub struct Application {
     /// <p>The application Amazon Resource Name (ARN).</p>
-    pub application_id: Option<String>,
-    /// <p>The name of the author publishing the app.\nMin Length=1. Max Length=127.\nPattern &quot;^<a href="(%5Ba-z0-9%5D%7C-(?!-))*%5Ba-z0-9%5D">a-z0-9</a>?$&quot;;</p>
-    pub author: Option<String>,
+    pub application_id: String,
+    /// <p>The name of the author publishing the app.</p><p>Min Length=1. Max Length=127.</p><p>Pattern "^[a-z0-9](([a-z0-9]|-(?!-))*[a-z0-9])?$";</p>
+    pub author: String,
     /// <p>The date/time this resource was created.</p>
     pub creation_time: Option<String>,
-    /// <p>The description of the application.\nMin Length=1. Max Length=256</p>
-    pub description: Option<String>,
-    /// <p>Labels to improve discovery of apps in search results.\nMin Length=1. Max Length=127. Maximum number of labels: 10\nPattern: &quot;^[a-zA-Z0-9+\-_:\/@]+$&quot;;</p>
+    /// <p>The description of the application.</p><p>Min Length=1. Max Length=256</p>
+    pub description: String,
+    /// <p>A URL with more information about the application, for example
+    /// the location of your GitHub repository for the application.</p>
+    pub home_page_url: Option<String>,
+    /// <p>Labels to improve discovery of apps in search results.</p><p>Min Length=1. Max Length=127. Maximum number of labels: 10</p><p>Pattern: "^[a-zA-Z0-9+\\-_:\\/@]+$";</p>
     pub labels: Option<Vec<String>>,
-    /// <p>A link to a license file of the app that matches the spdxLicenseID of your application.\nMax size 5 MB</p>
+    /// <p>A link to a license file of the app that matches the spdxLicenseID of your application.</p><p>Max size 5 MB</p>
     pub license_url: Option<String>,
-    /// <p>The name of the application.\nMin Length=1. Max Length=140\nPattern: &quot;[a-zA-Z0-9\-]+&quot;;</p>
-    pub name: Option<String>,
-    /// <p>A link to the Readme file that contains a more detailed description of the application and how it works in markdown language.\nMax size 5 MB</p>
+    /// <p>The name of the application.</p><p>Min Length=1. Max Length=140</p><p>Pattern: "[a-zA-Z0-9\\-]+";</p>
+    pub name: String,
+    /// <p>A link to the readme file that contains a more detailed description of the application and how it works in Markdown language.</p><p>Max size 5 MB</p>
     pub readme_url: Option<String>,
     /// <p>A valid identifier from https://spdx.org/licenses/.</p>
     pub spdx_license_id: Option<String>,
@@ -59,7 +62,7 @@ pub struct Application {
 #[derive(Default, Debug, Clone)]
 pub struct ApplicationPage {
     /// <p>Array of application summaries.</p>
-    pub applications: Option<Vec<ApplicationSummary>>,
+    pub applications: Vec<ApplicationSummary>,
     /// <p>The token to request the next page of results.</p>
     pub next_token: Option<String>,
 }
@@ -68,20 +71,27 @@ pub struct ApplicationPage {
 #[derive(Default, Debug, Clone)]
 pub struct ApplicationPolicy {
     /// <p>Array of policy statements applied to the application.</p>
-    pub statements: Option<Vec<ApplicationPolicyStatement>>,
+    pub statements: Vec<ApplicationPolicyStatement>,
 }
 
 /// <p>Policy statement applied to the application.</p>
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct ApplicationPolicyStatement {
-    /// <p>A list of supported actions:\n\n GetApplication \n \n\n CreateCloudFormationChangeSet \n \n\n ListApplicationVersions \n \n\n SearchApplications \n \n\n Deploy (Note: This action enables all other actions above.)</p>
+    /// <p>A list of supported actions:</p><p>
+    /// GetApplication
+    /// </p><p>
+    /// CreateCloudFormationChangeSet
+    /// </p><p>
+    /// ListApplicationVersions
+    /// </p><p>
+    /// SearchApplications
+    /// </p><p>
+    /// Deploy (Note: This action enables all other actions above.)</p>
     #[serde(rename = "Actions")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub actions: Option<Vec<String>>,
+    pub actions: Vec<String>,
     /// <p>An AWS account ID, or * to make the application public.</p>
     #[serde(rename = "Principals")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub principals: Option<Vec<String>>,
+    pub principals: Vec<String>,
     /// <p>A unique ID for the statement.</p>
     #[serde(rename = "StatementId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -93,29 +103,30 @@ pub struct ApplicationPolicyStatement {
 pub struct ApplicationSummary {
     /// <p>The application ARN.</p>
     #[serde(rename = "ApplicationId")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub application_id: Option<String>,
-    /// <p>The name of the author publishing the app\nMin Length=1. Max Length=127.\nPattern &quot;^<a href="(%5Ba-z0-9%5D%7C-(?!-))*%5Ba-z0-9%5D">a-z0-9</a>?$&quot;;</p>
+    pub application_id: String,
+    /// <p>The name of the author publishing the app.</p><p>Min Length=1. Max Length=127.</p><p>Pattern "^[a-z0-9](([a-z0-9]|-(?!-))*[a-z0-9])?$";</p>
     #[serde(rename = "Author")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub author: Option<String>,
+    pub author: String,
     /// <p>The date/time this resource was created.</p>
     #[serde(rename = "CreationTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_time: Option<String>,
-    /// <p>The description of the application.\nMin Length=1. Max Length=256</p>
+    /// <p>The description of the application.</p><p>Min Length=1. Max Length=256</p>
     #[serde(rename = "Description")]
+    pub description: String,
+    /// <p>A URL with more information about the application, for example
+    /// the location of your GitHub repository for the application.</p>
+    #[serde(rename = "HomePageUrl")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub description: Option<String>,
-    /// <p>Labels to improve discovery of apps in search results.\nMin Length=1. Max Length=127. Maximum number of labels: 10\nPattern: &quot;^[a-zA-Z0-9+\-_:\/@]+$&quot;;</p>
+    pub home_page_url: Option<String>,
+    /// <p>Labels to improve discovery of apps in search results.</p><p>Min Length=1. Max Length=127. Maximum number of labels: 10</p><p>Pattern: "^[a-zA-Z0-9+\\-_:\\/@]+$";</p>
     #[serde(rename = "Labels")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub labels: Option<Vec<String>>,
-    /// <p>The name of the application.\nMin Length=1. Max Length=140\nPattern: &quot;[a-zA-Z0-9\-]+&quot;;</p>
+    /// <p>The name of the application.</p><p>Min Length=1. Max Length=140</p><p>Pattern: "[a-zA-Z0-9\\-]+";</p>
     #[serde(rename = "Name")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub name: Option<String>,
-    /// <p>A valid identifier from https://spdx.org/licenses/ .</p>
+    pub name: String,
+    /// <p>A valid identifier from <a href="https://spdx.org/licenses/">https://spdx.org/licenses/</a>.</p>
     #[serde(rename = "SpdxLicenseId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub spdx_license_id: Option<String>,
@@ -127,88 +138,102 @@ pub struct ApplicationVersionPage {
     /// <p>The token to request the next page of results.</p>
     pub next_token: Option<String>,
     /// <p>Array of version summaries for the application.</p>
-    pub versions: Option<Vec<VersionSummary>>,
+    pub versions: Vec<VersionSummary>,
 }
 
 /// <p>Details of the change set.</p>
 #[derive(Default, Debug, Clone)]
 pub struct ChangeSetDetails {
     /// <p>The application Amazon Resource Name (ARN).</p>
-    pub application_id: Option<String>,
-    /// <p>The ARN of the change set.\nLength Constraints: Minimum length of 1.\nPattern: arn:[-a-zA-Z0-9:/]*</p>
-    pub change_set_id: Option<String>,
-    /// <p>The semantic version of the application:\n\n https://semver.org/</p>
-    pub semantic_version: Option<String>,
+    pub application_id: String,
+    /// <p>The ARN of the change set.</p><p>Length Constraints: Minimum length of 1.</p><p>Pattern: Amazon Resource Name (ARN):[-a-zA-Z0-9:/]*</p>
+    pub change_set_id: String,
+    /// <p>The semantic version of the application:</p><p>
+    /// <a href="https://semver.org/">https://semver.org/</a>
+    /// </p>
+    pub semantic_version: String,
     /// <p>The unique ID of the stack.</p>
-    pub stack_id: Option<String>,
+    pub stack_id: String,
 }
 
 /// <p>Create application request.</p>
 #[derive(Default, Debug, Clone)]
 pub struct CreateApplicationInput {
-    /// <p>The name of the author publishing the app.\nMin Length=1. Max Length=127.\nPattern &quot;^<a href="(%5Ba-z0-9%5D%7C-(?!-))*%5Ba-z0-9%5D">a-z0-9</a>?$&quot;;</p>
-    pub author: Option<String>,
-    /// <p>The description of the application.\nMin Length=1. Max Length=256</p>
-    pub description: Option<String>,
-    /// <p>Labels to improve discovery of apps in search results.\nMin Length=1. Max Length=127. Maximum number of labels: 10\nPattern: &quot;^[a-zA-Z0-9+\-_:\/@]+$&quot;;</p>
+    /// <p>The name of the author publishing the app.</p><p>Min Length=1. Max Length=127.</p><p>Pattern "^[a-z0-9](([a-z0-9]|-(?!-))*[a-z0-9])?$";</p>
+    pub author: String,
+    /// <p>The description of the application.</p><p>Min Length=1. Max Length=256</p>
+    pub description: String,
+    /// <p>A URL with more information about the application, for example
+    /// the location of your GitHub repository for the application.</p>
+    pub home_page_url: Option<String>,
+    /// <p>Labels to improve discovery of apps in search results.</p><p>Min Length=1. Max Length=127. Maximum number of labels: 10</p><p>Pattern: "^[a-zA-Z0-9+\\-_:\\/@]+$";</p>
     pub labels: Option<Vec<String>>,
-    /// <p>A raw text file that contains the license of the app that matches the spdxLicenseID of your application.\nMax size 5 MB</p>
+    /// <p>A raw text file that contains the license of the app that matches the spdxLicenseID of your application.</p><p>Max size 5 MB</p>
     pub license_body: Option<String>,
-    /// <p>A link to a license file of the app that matches the spdxLicenseID of your application.\nMax size 5 MB</p>
+    /// <p>A link to a license file of the app that matches the spdxLicenseID of your application.</p><p>Max size 5 MB</p>
     pub license_url: Option<String>,
-    /// <p>The name of the application you want to publish.\nMin Length=1. Max Length=140\nPattern: &quot;[a-zA-Z0-9\-]+&quot;;</p>
-    pub name: Option<String>,
-    /// <p>A raw text Readme file that contains a more detailed description of the application and how it works in markdown language.\nMax size 5 MB</p>
+    /// <p>The name of the application you want to publish.</p><p>Min Length=1. Max Length=140</p><p>Pattern: "[a-zA-Z0-9\\-]+";</p>
+    pub name: String,
+    /// <p>A raw text Readme file that contains a more detailed description of the application and how it works in markdown language.</p><p>Max size 5 MB</p>
     pub readme_body: Option<String>,
-    /// <p>A link to the Readme file that contains a more detailed description of the application and how it works in markdown language.\nMax size 5 MB</p>
+    /// <p>A link to the Readme file that contains a more detailed description of the application and how it works in markdown language.</p><p>Max size 5 MB</p>
     pub readme_url: Option<String>,
-    /// <p>The semantic version of the application:\n\n https://semver.org/</p>
+    /// <p>The semantic version of the application:</p><p>
+    /// <a href="https://semver.org/">https://semver.org/</a>
+    /// </p>
     pub semantic_version: Option<String>,
     /// <p>A link to a public repository for the source code of your application.</p>
     pub source_code_url: Option<String>,
-    /// <p>A valid identifier from https://spdx.org/licenses/ .</p>
+    /// <p>A valid identifier from <a href="https://spdx.org/licenses/">https://spdx.org/licenses/</a>.</p>
     pub spdx_license_id: Option<String>,
-    /// <p>The raw packaged SAM template of your application.</p>
+    /// <p>The raw packaged AWS SAM template of your application.</p>
     pub template_body: Option<String>,
-    /// <p>A link to the packaged SAM template of your application.</p>
+    /// <p>A link to the packaged AWS SAM template of your application.</p>
     pub template_url: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateApplicationRequest {
-    /// <p>The name of the author publishing the app.\nMin Length=1. Max Length=127.\nPattern &quot;^<a href="(%5Ba-z0-9%5D%7C-(?!-))*%5Ba-z0-9%5D">a-z0-9</a>?$&quot;;</p>
+    /// <p>The name of the author publishing the app.</p><p>Min Length=1. Max Length=127.</p><p>Pattern "^[a-z0-9](([a-z0-9]|-(?!-))*[a-z0-9])?$";</p>
     #[serde(rename = "Author")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub author: Option<String>,
-    /// <p>The description of the application.\nMin Length=1. Max Length=256</p>
+    /// <p>The description of the application.</p><p>Min Length=1. Max Length=256</p>
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p>Labels to improve discovery of apps in search results.\nMin Length=1. Max Length=127. Maximum number of labels: 10\nPattern: &quot;^[a-zA-Z0-9+\-_:\/@]+$&quot;;</p>
+    /// <p>A URL with more information about the application, for example
+    /// the location of your GitHub repository for the application.</p>
+    #[serde(rename = "HomePageUrl")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub home_page_url: Option<String>,
+    /// <p>Labels to improve discovery of apps in search results.</p><p>Min Length=1. Max Length=127. Maximum number of labels: 10</p><p>Pattern: "^[a-zA-Z0-9+\\-_:\\/@]+$";</p>
     #[serde(rename = "Labels")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub labels: Option<Vec<String>>,
-    /// <p>A raw text file that contains the license of the app that matches the spdxLicenseID of your application.\nMax size 5 MB</p>
+    /// <p>A raw text file that contains the license of the app that matches the spdxLicenseID of your application.</p><p>Max size 5 MB</p>
     #[serde(rename = "LicenseBody")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub license_body: Option<String>,
-    /// <p>A link to a license file of the app that matches the spdxLicenseID of your application.\nMax size 5 MB</p>
+    /// <p>A link to a license file of the app that matches the spdxLicenseID of your application.</p><p>Max size 5 MB</p>
     #[serde(rename = "LicenseUrl")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub license_url: Option<String>,
-    /// <p>The name of the application you want to publish.\nMin Length=1. Max Length=140\nPattern: &quot;[a-zA-Z0-9\-]+&quot;;</p>
+    /// <p>The name of the application you want to publish.</p><p>Min Length=1. Max Length=140</p><p>Pattern: "[a-zA-Z0-9\\-]+";</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p>A raw text Readme file that contains a more detailed description of the application and how it works in markdown language.\nMax size 5 MB</p>
+    /// <p>A raw text Readme file that contains a more detailed description of the application and how it works in markdown language.</p><p>Max size 5 MB</p>
     #[serde(rename = "ReadmeBody")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub readme_body: Option<String>,
-    /// <p>A link to the Readme file that contains a more detailed description of the application and how it works in markdown language.\nMax size 5 MB</p>
+    /// <p>A link to the Readme file that contains a more detailed description of the application and how it works in markdown language.</p><p>Max size 5 MB</p>
     #[serde(rename = "ReadmeUrl")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub readme_url: Option<String>,
-    /// <p>The semantic version of the application:\n\n https://semver.org/</p>
+    /// <p>The semantic version of the application:</p><p>
+    /// <a href="https://semver.org/">https://semver.org/</a>
+    /// </p>
     #[serde(rename = "SemanticVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub semantic_version: Option<String>,
@@ -216,15 +241,15 @@ pub struct CreateApplicationRequest {
     #[serde(rename = "SourceCodeUrl")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub source_code_url: Option<String>,
-    /// <p>A valid identifier from https://spdx.org/licenses/ .</p>
+    /// <p>A valid identifier from <a href="https://spdx.org/licenses/">https://spdx.org/licenses/</a>.</p>
     #[serde(rename = "SpdxLicenseId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub spdx_license_id: Option<String>,
-    /// <p>The raw packaged SAM template of your application.</p>
+    /// <p>The raw packaged AWS SAM template of your application.</p>
     #[serde(rename = "TemplateBody")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub template_body: Option<String>,
-    /// <p>A link to the packaged SAM template of your application.</p>
+    /// <p>A link to the packaged AWS SAM template of your application.</p>
     #[serde(rename = "TemplateUrl")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub template_url: Option<String>,
@@ -236,7 +261,7 @@ pub struct CreateApplicationResponse {
     #[serde(rename = "ApplicationId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub application_id: Option<String>,
-    /// <p>The name of the author publishing the app.\nMin Length=1. Max Length=127.\nPattern &quot;^<a href="(%5Ba-z0-9%5D%7C-(?!-))*%5Ba-z0-9%5D">a-z0-9</a>?$&quot;;</p>
+    /// <p>The name of the author publishing the app.</p><p>Min Length=1. Max Length=127.</p><p>Pattern "^[a-z0-9](([a-z0-9]|-(?!-))*[a-z0-9])?$";</p>
     #[serde(rename = "Author")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub author: Option<String>,
@@ -244,23 +269,28 @@ pub struct CreateApplicationResponse {
     #[serde(rename = "CreationTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_time: Option<String>,
-    /// <p>The description of the application.\nMin Length=1. Max Length=256</p>
+    /// <p>The description of the application.</p><p>Min Length=1. Max Length=256</p>
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p>Labels to improve discovery of apps in search results.\nMin Length=1. Max Length=127. Maximum number of labels: 10\nPattern: &quot;^[a-zA-Z0-9+\-_:\/@]+$&quot;;</p>
+    /// <p>A URL with more information about the application, for example
+    /// the location of your GitHub repository for the application.</p>
+    #[serde(rename = "HomePageUrl")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub home_page_url: Option<String>,
+    /// <p>Labels to improve discovery of apps in search results.</p><p>Min Length=1. Max Length=127. Maximum number of labels: 10</p><p>Pattern: "^[a-zA-Z0-9+\\-_:\\/@]+$";</p>
     #[serde(rename = "Labels")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub labels: Option<Vec<String>>,
-    /// <p>A link to a license file of the app that matches the spdxLicenseID of your application.\nMax size 5 MB</p>
+    /// <p>A link to a license file of the app that matches the spdxLicenseID of your application.</p><p>Max size 5 MB</p>
     #[serde(rename = "LicenseUrl")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub license_url: Option<String>,
-    /// <p>The name of the application.\nMin Length=1. Max Length=140\nPattern: &quot;[a-zA-Z0-9\-]+&quot;;</p>
+    /// <p>The name of the application.</p><p>Min Length=1. Max Length=140</p><p>Pattern: "[a-zA-Z0-9\\-]+";</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p>A link to the Readme file that contains a more detailed description of the application and how it works in markdown language.\nMax size 5 MB</p>
+    /// <p>A link to the readme file that contains a more detailed description of the application and how it works in Markdown language.</p><p>Max size 5 MB</p>
     #[serde(rename = "ReadmeUrl")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub readme_url: Option<String>,
@@ -279,29 +309,29 @@ pub struct CreateApplicationResponse {
 pub struct CreateApplicationVersionInput {
     /// <p>A link to a public repository for the source code of your application.</p>
     pub source_code_url: Option<String>,
-    /// <p>The raw packaged SAM template of your application.</p>
+    /// <p>The raw packaged AWS SAM template of your application.</p>
     pub template_body: Option<String>,
-    /// <p>A link to the packaged SAM template of your application.</p>
+    /// <p>A link to the packaged AWS SAM template of your application.</p>
     pub template_url: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateApplicationVersionRequest {
-    /// <p>The id of the application to create a new version for</p>
+    /// <p>The ID of the application to get.</p>
     #[serde(rename = "ApplicationId")]
     pub application_id: String,
-    /// <p>The semantic version of the new version</p>
+    /// <p>The semantic version of the new version.</p>
     #[serde(rename = "SemanticVersion")]
     pub semantic_version: String,
     /// <p>A link to a public repository for the source code of your application.</p>
     #[serde(rename = "SourceCodeUrl")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub source_code_url: Option<String>,
-    /// <p>The raw packaged SAM template of your application.</p>
+    /// <p>The raw packaged AWS SAM template of your application.</p>
     #[serde(rename = "TemplateBody")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub template_body: Option<String>,
-    /// <p>A link to the packaged SAM template of your application.</p>
+    /// <p>A link to the packaged AWS SAM template of your application.</p>
     #[serde(rename = "TemplateUrl")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub template_url: Option<String>,
@@ -321,7 +351,9 @@ pub struct CreateApplicationVersionResponse {
     #[serde(rename = "ParameterDefinitions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub parameter_definitions: Option<Vec<ParameterDefinition>>,
-    /// <p>The semantic version of the application:\n\n https://semver.org/</p>
+    /// <p>The semantic version of the application:</p><p>
+    /// <a href="https://semver.org/">https://semver.org/</a>
+    /// </p>
     #[serde(rename = "SemanticVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub semantic_version: Option<String>,
@@ -329,7 +361,7 @@ pub struct CreateApplicationVersionResponse {
     #[serde(rename = "SourceCodeUrl")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub source_code_url: Option<String>,
-    /// <p>A link to the packaged SAM template of your application.</p>
+    /// <p>A link to the packaged AWS SAM template of your application.</p>
     #[serde(rename = "TemplateUrl")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub template_url: Option<String>,
@@ -340,27 +372,34 @@ pub struct CreateApplicationVersionResponse {
 pub struct CreateCloudFormationChangeSetInput {
     /// <p>A list of parameter values for the parameters of the application.</p>
     pub parameter_overrides: Option<Vec<ParameterValue>>,
-    /// <p>The semantic version of the application:\n\n https://semver.org/</p>
+    /// <p>The semantic version of the application:</p><p>
+    /// <a href="https://semver.org/">https://semver.org/</a>
+    /// </p>
     pub semantic_version: Option<String>,
-    /// <p>The name or the unique ID of the stack for which you are creating a change set. AWS CloudFormation generates\n the change set by comparing this stack&#39;s information with the information that you submit, such as a modified\n template or different parameter input values. \nConstraints: Minimum length of 1.\nPattern: ([a-zA-Z][-a-zA-Z0-9]<em>)|(arn:\b(aws|aws-us-gov|aws-cn)\b:[-a-zA-Z0-9:/._+]</em>)</p>
-    pub stack_name: Option<String>,
+    /// <p>The name or the unique ID of the stack for which you are creating a change set. AWS CloudFormation generates
+    /// the change set by comparing this stack's information with the information that you submit, such as a modified
+    /// template or different parameter input values. </p><p>Constraints: Minimum length of 1.</p><p>Pattern: ([a-zA-Z][-a-zA-Z0-9]*)|(arn:\b(aws|aws-us-gov|aws-cn)\b:[-a-zA-Z0-9:/._+]*)</p>
+    pub stack_name: String,
 }
 
-/// <p>Create application ChangeSet request</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateCloudFormationChangeSetRequest {
-    /// <p>The id of the application to create the ChangeSet for</p>
+    /// <p>The ID of the application to get.</p>
     #[serde(rename = "ApplicationId")]
     pub application_id: String,
     /// <p>A list of parameter values for the parameters of the application.</p>
     #[serde(rename = "ParameterOverrides")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub parameter_overrides: Option<Vec<ParameterValue>>,
-    /// <p>The semantic version of the application:\n\n https://semver.org/</p>
+    /// <p>The semantic version of the application:</p><p>
+    /// <a href="https://semver.org/">https://semver.org/</a>
+    /// </p>
     #[serde(rename = "SemanticVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub semantic_version: Option<String>,
-    /// <p>The name or the unique ID of the stack for which you are creating a change set. AWS CloudFormation generates\n the change set by comparing this stack&#39;s information with the information that you submit, such as a modified\n template or different parameter input values. \nConstraints: Minimum length of 1.\nPattern: ([a-zA-Z][-a-zA-Z0-9]<em>)|(arn:\b(aws|aws-us-gov|aws-cn)\b:[-a-zA-Z0-9:/._+]</em>)</p>
+    /// <p>The name or the unique ID of the stack for which you are creating a change set. AWS CloudFormation generates
+    /// the change set by comparing this stack's information with the information that you submit, such as a modified
+    /// template or different parameter input values. </p><p>Constraints: Minimum length of 1.</p><p>Pattern: ([a-zA-Z][-a-zA-Z0-9]*)|(arn:\b(aws|aws-us-gov|aws-cn)\b:[-a-zA-Z0-9:/._+]*)</p>
     #[serde(rename = "StackName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub stack_name: Option<String>,
@@ -372,11 +411,13 @@ pub struct CreateCloudFormationChangeSetResponse {
     #[serde(rename = "ApplicationId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub application_id: Option<String>,
-    /// <p>The ARN of the change set.\nLength Constraints: Minimum length of 1.\nPattern: arn:[-a-zA-Z0-9:/]*</p>
+    /// <p>The ARN of the change set.</p><p>Length Constraints: Minimum length of 1.</p><p>Pattern: Amazon Resource Name (ARN):[-a-zA-Z0-9:/]*</p>
     #[serde(rename = "ChangeSetId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub change_set_id: Option<String>,
-    /// <p>The semantic version of the application:\n\n https://semver.org/</p>
+    /// <p>The semantic version of the application:</p><p>
+    /// <a href="https://semver.org/">https://semver.org/</a>
+    /// </p>
     #[serde(rename = "SemanticVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub semantic_version: Option<String>,
@@ -387,8 +428,15 @@ pub struct CreateCloudFormationChangeSetResponse {
 }
 
 #[derive(Default, Debug, Clone, Serialize)]
+pub struct DeleteApplicationRequest {
+    /// <p>The ID of the application to get.</p>
+    #[serde(rename = "ApplicationId")]
+    pub application_id: String,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetApplicationPolicyRequest {
-    /// <p>The id of the application to get policy for</p>
+    /// <p>The ID of the application to get.</p>
     #[serde(rename = "ApplicationId")]
     pub application_id: String,
 }
@@ -403,10 +451,10 @@ pub struct GetApplicationPolicyResponse {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct GetApplicationRequest {
-    /// <p>The id of the application to get</p>
+    /// <p>The ID of the application to get.</p>
     #[serde(rename = "ApplicationId")]
     pub application_id: String,
-    /// <p>The semantic version of the application to get</p>
+    /// <p>The semantic version of the application to get.</p>
     #[serde(rename = "SemanticVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub semantic_version: Option<String>,
@@ -418,7 +466,7 @@ pub struct GetApplicationResponse {
     #[serde(rename = "ApplicationId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub application_id: Option<String>,
-    /// <p>The name of the author publishing the app.\nMin Length=1. Max Length=127.\nPattern &quot;^<a href="(%5Ba-z0-9%5D%7C-(?!-))*%5Ba-z0-9%5D">a-z0-9</a>?$&quot;;</p>
+    /// <p>The name of the author publishing the app.</p><p>Min Length=1. Max Length=127.</p><p>Pattern "^[a-z0-9](([a-z0-9]|-(?!-))*[a-z0-9])?$";</p>
     #[serde(rename = "Author")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub author: Option<String>,
@@ -426,23 +474,28 @@ pub struct GetApplicationResponse {
     #[serde(rename = "CreationTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_time: Option<String>,
-    /// <p>The description of the application.\nMin Length=1. Max Length=256</p>
+    /// <p>The description of the application.</p><p>Min Length=1. Max Length=256</p>
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p>Labels to improve discovery of apps in search results.\nMin Length=1. Max Length=127. Maximum number of labels: 10\nPattern: &quot;^[a-zA-Z0-9+\-_:\/@]+$&quot;;</p>
+    /// <p>A URL with more information about the application, for example
+    /// the location of your GitHub repository for the application.</p>
+    #[serde(rename = "HomePageUrl")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub home_page_url: Option<String>,
+    /// <p>Labels to improve discovery of apps in search results.</p><p>Min Length=1. Max Length=127. Maximum number of labels: 10</p><p>Pattern: "^[a-zA-Z0-9+\\-_:\\/@]+$";</p>
     #[serde(rename = "Labels")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub labels: Option<Vec<String>>,
-    /// <p>A link to a license file of the app that matches the spdxLicenseID of your application.\nMax size 5 MB</p>
+    /// <p>A link to a license file of the app that matches the spdxLicenseID of your application.</p><p>Max size 5 MB</p>
     #[serde(rename = "LicenseUrl")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub license_url: Option<String>,
-    /// <p>The name of the application.\nMin Length=1. Max Length=140\nPattern: &quot;[a-zA-Z0-9\-]+&quot;;</p>
+    /// <p>The name of the application.</p><p>Min Length=1. Max Length=140</p><p>Pattern: "[a-zA-Z0-9\\-]+";</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p>A link to the Readme file that contains a more detailed description of the application and how it works in markdown language.\nMax size 5 MB</p>
+    /// <p>A link to the readme file that contains a more detailed description of the application and how it works in Markdown language.</p><p>Max size 5 MB</p>
     #[serde(rename = "ReadmeUrl")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub readme_url: Option<String>,
@@ -458,14 +511,14 @@ pub struct GetApplicationResponse {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct ListApplicationVersionsRequest {
-    /// <p>The id of the application to list</p>
+    /// <p>The ID of the application to get.</p>
     #[serde(rename = "ApplicationId")]
     pub application_id: String,
-    /// <p>The total number of items to return</p>
+    /// <p>The total number of items to return.</p>
     #[serde(rename = "MaxItems")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_items: Option<i64>,
-    /// <p>A token to specify where to start paginating</p>
+    /// <p>A token to specify where to start paginating.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -485,11 +538,11 @@ pub struct ListApplicationVersionsResponse {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct ListApplicationsRequest {
-    /// <p>The total number of items to return</p>
+    /// <p>The total number of items to return.</p>
     #[serde(rename = "MaxItems")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_items: Option<i64>,
-    /// <p>A token to specify where to start paginating</p>
+    /// <p>A token to specify where to start paginating.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -518,11 +571,19 @@ pub struct ParameterDefinition {
     #[serde(rename = "AllowedValues")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub allowed_values: Option<Vec<String>>,
-    /// <p>A string that explains a constraint when the constraint is violated. For example, without a constraint description,\n a parameter that has an allowed pattern of [A-Za-z0-9]+ displays the following error message when the user\n specifies an invalid value:\n\n Malformed input-Parameter MyParameter must match pattern [A-Za-z0-9]+ \n \nBy adding a constraint description, such as &quot;must contain only uppercase and lowercase letters, and numbers,&quot; you can display\n the following customized error message:\n\n Malformed input-Parameter MyParameter must contain only uppercase and lowercase letters and numbers.</p>
+    /// <p>A string that explains a constraint when the constraint is violated. For example, without a constraint description,
+    /// a parameter that has an allowed pattern of [A-Za-z0-9]+ displays the following error message when the user
+    /// specifies an invalid value:</p><p>
+    /// Malformed input-Parameter MyParameter must match pattern [A-Za-z0-9]+
+    /// </p><p>By adding a constraint description, such as "must contain only uppercase and lowercase letters, and numbers," you can display
+    /// the following customized error message:</p><p>
+    /// Malformed input-Parameter MyParameter must contain only uppercase and lowercase letters and numbers.
+    /// </p>
     #[serde(rename = "ConstraintDescription")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub constraint_description: Option<String>,
-    /// <p>A value of the appropriate type for the template to use if no value is specified when a stack is created.\n If you define constraints for the parameter, you must specify a value that adheres to those constraints.</p>
+    /// <p>A value of the appropriate type for the template to use if no value is specified when a stack is created.
+    /// If you define constraints for the parameter, you must specify a value that adheres to those constraints.</p>
     #[serde(rename = "DefaultValue")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub default_value: Option<String>,
@@ -548,17 +609,24 @@ pub struct ParameterDefinition {
     pub min_value: Option<i64>,
     /// <p>The name of the parameter.</p>
     #[serde(rename = "Name")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub name: Option<String>,
-    /// <p>Whether to mask the parameter value whenever anyone makes a call that describes the stack. If you set the\n value to true, the parameter value is masked with asterisks (*****).</p>
+    pub name: String,
+    /// <p>Whether to mask the parameter value whenever anyone makes a call that describes the stack. If you set the
+    /// value to true, the parameter value is masked with asterisks (*****).</p>
     #[serde(rename = "NoEcho")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub no_echo: Option<bool>,
-    /// <p>A list of SAM resources that use this parameter.</p>
+    /// <p>A list of AWS SAM resources that use this parameter.</p>
     #[serde(rename = "ReferencedByResources")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub referenced_by_resources: Option<Vec<String>>,
-    /// <p>The type of the parameter.\nValid values: String | Number | List<Number> | CommaDelimitedList \n \n\n String : A literal string.\nFor example, users could specify &quot;MyUserName&quot; .\n\n Number : An integer or float. AWS CloudFormation validates the parameter value as a number; however, when you use the\n parameter elsewhere in your template (for example, by using the Ref intrinsic function), the parameter value becomes a string.\nFor example, users could specify &quot;8888&quot; .\n\n List<Number> : An array of integers or floats that are separated by commas. AWS CloudFormation validates the parameter value as numbers; however, when\n you use the parameter elsewhere in your template (for example, by using the Ref intrinsic function), the parameter value becomes a list of strings.\nFor example, users could specify &quot;80,20&quot;, and a Ref results in [&quot;80&quot;,&quot;20&quot;] .\n\n CommaDelimitedList : An array of literal strings that are separated by commas. The total number of strings should be one more than the total number of commas.\n Also, each member string is space-trimmed.\nFor example, users could specify &quot;test,dev,prod&quot;, and a Ref results in [&quot;test&quot;,&quot;dev&quot;,&quot;prod&quot;] .</p>
+    pub referenced_by_resources: Vec<String>,
+    /// <p>The type of the parameter.</p><p>Valid values: String | Number | List&lt;Number> | CommaDelimitedList
+    /// </p><p>
+    /// String: A literal string.</p><p>For example, users could specify "MyUserName".</p><p>
+    /// Number: An integer or float. AWS CloudFormation validates the parameter value as a number; however, when you use the
+    /// parameter elsewhere in your template (for example, by using the Ref intrinsic function), the parameter value becomes a string.</p><p>For example, users could specify "8888".</p><p>
+    /// List&lt;Number>: An array of integers or floats that are separated by commas. AWS CloudFormation validates the parameter value as numbers; however, when
+    /// you use the parameter elsewhere in your template (for example, by using the Ref intrinsic function), the parameter value becomes a list of strings.</p><p>For example, users could specify "80,20", and a Ref results in ["80","20"].</p><p>
+    /// CommaDelimitedList: An array of literal strings that are separated by commas. The total number of strings should be one more than the total number of commas.
+    /// Also, each member string is space-trimmed.</p><p>For example, users could specify "test,dev,prod", and a Ref results in ["test","dev","prod"].</p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
@@ -567,20 +635,18 @@ pub struct ParameterDefinition {
 /// <p>Parameter value of the application.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct ParameterValue {
-    /// <p>The key associated with the parameter. If you don&#39;t specify a key and value for a particular parameter, AWS CloudFormation\n uses the default value that is specified in your template.</p>
+    /// <p>The key associated with the parameter. If you don't specify a key and value for a particular parameter, AWS CloudFormation
+    /// uses the default value that is specified in your template.</p>
     #[serde(rename = "Name")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub name: Option<String>,
+    pub name: String,
     /// <p>The input value associated with the parameter.</p>
     #[serde(rename = "Value")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub value: Option<String>,
+    pub value: String,
 }
 
-/// <p>Put policy request</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct PutApplicationPolicyRequest {
-    /// <p>The id of the application to put policy for</p>
+    /// <p>The ID of the application to get.</p>
     #[serde(rename = "ApplicationId")]
     pub application_id: String,
     /// <p>Array of policy statements applied to the application.</p>
@@ -600,40 +666,48 @@ pub struct PutApplicationPolicyResponse {
 /// <p>Update application request.</p>
 #[derive(Default, Debug, Clone)]
 pub struct UpdateApplicationInput {
-    /// <p>The name of the author publishing the app.\nMin Length=1. Max Length=127.\nPattern &quot;^<a href="(%5Ba-z0-9%5D%7C-(?!-))*%5Ba-z0-9%5D">a-z0-9</a>?$&quot;;</p>
+    /// <p>The name of the author publishing the app.</p><p>Min Length=1. Max Length=127.</p><p>Pattern "^[a-z0-9](([a-z0-9]|-(?!-))*[a-z0-9])?$";</p>
     pub author: Option<String>,
-    /// <p>The description of the application.\nMin Length=1. Max Length=256</p>
+    /// <p>The description of the application.</p><p>Min Length=1. Max Length=256</p>
     pub description: Option<String>,
-    /// <p>Labels to improve discovery of apps in search results.\nMin Length=1. Max Length=127. Maximum number of labels: 10\nPattern: &quot;^[a-zA-Z0-9+\-_:\/@]+$&quot;;</p>
+    /// <p>A URL with more information about the application, for example
+    /// the location of your GitHub repository for the application.</p>
+    pub home_page_url: Option<String>,
+    /// <p>Labels to improve discovery of apps in search results.</p><p>Min Length=1. Max Length=127. Maximum number of labels: 10</p><p>Pattern: "^[a-zA-Z0-9+\\-_:\\/@]+$";</p>
     pub labels: Option<Vec<String>>,
-    /// <p>A raw text Readme file that contains a more detailed description of the application and how it works in markdown language.\nMax size 5 MB</p>
+    /// <p>A raw text Readme file that contains a more detailed description of the application and how it works in markdown language.</p><p>Max size 5 MB</p>
     pub readme_body: Option<String>,
-    /// <p>A link to the Readme file that contains a more detailed description of the application and how it works in markdown language.\nMax size 5 MB</p>
+    /// <p>A link to the Readme file that contains a more detailed description of the application and how it works in markdown language.</p><p>Max size 5 MB</p>
     pub readme_url: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct UpdateApplicationRequest {
-    /// <p>The id of the application to update</p>
+    /// <p>The ID of the application to get.</p>
     #[serde(rename = "ApplicationId")]
     pub application_id: String,
-    /// <p>The name of the author publishing the app.\nMin Length=1. Max Length=127.\nPattern &quot;^<a href="(%5Ba-z0-9%5D%7C-(?!-))*%5Ba-z0-9%5D">a-z0-9</a>?$&quot;;</p>
+    /// <p>The name of the author publishing the app.</p><p>Min Length=1. Max Length=127.</p><p>Pattern "^[a-z0-9](([a-z0-9]|-(?!-))*[a-z0-9])?$";</p>
     #[serde(rename = "Author")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub author: Option<String>,
-    /// <p>The description of the application.\nMin Length=1. Max Length=256</p>
+    /// <p>The description of the application.</p><p>Min Length=1. Max Length=256</p>
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p>Labels to improve discovery of apps in search results.\nMin Length=1. Max Length=127. Maximum number of labels: 10\nPattern: &quot;^[a-zA-Z0-9+\-_:\/@]+$&quot;;</p>
+    /// <p>A URL with more information about the application, for example
+    /// the location of your GitHub repository for the application.</p>
+    #[serde(rename = "HomePageUrl")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub home_page_url: Option<String>,
+    /// <p>Labels to improve discovery of apps in search results.</p><p>Min Length=1. Max Length=127. Maximum number of labels: 10</p><p>Pattern: "^[a-zA-Z0-9+\\-_:\\/@]+$";</p>
     #[serde(rename = "Labels")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub labels: Option<Vec<String>>,
-    /// <p>A raw text Readme file that contains a more detailed description of the application and how it works in markdown language.\nMax size 5 MB</p>
+    /// <p>A raw text Readme file that contains a more detailed description of the application and how it works in markdown language.</p><p>Max size 5 MB</p>
     #[serde(rename = "ReadmeBody")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub readme_body: Option<String>,
-    /// <p>A link to the Readme file that contains a more detailed description of the application and how it works in markdown language.\nMax size 5 MB</p>
+    /// <p>A link to the Readme file that contains a more detailed description of the application and how it works in markdown language.</p><p>Max size 5 MB</p>
     #[serde(rename = "ReadmeUrl")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub readme_url: Option<String>,
@@ -645,7 +719,7 @@ pub struct UpdateApplicationResponse {
     #[serde(rename = "ApplicationId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub application_id: Option<String>,
-    /// <p>The name of the author publishing the app.\nMin Length=1. Max Length=127.\nPattern &quot;^<a href="(%5Ba-z0-9%5D%7C-(?!-))*%5Ba-z0-9%5D">a-z0-9</a>?$&quot;;</p>
+    /// <p>The name of the author publishing the app.</p><p>Min Length=1. Max Length=127.</p><p>Pattern "^[a-z0-9](([a-z0-9]|-(?!-))*[a-z0-9])?$";</p>
     #[serde(rename = "Author")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub author: Option<String>,
@@ -653,23 +727,28 @@ pub struct UpdateApplicationResponse {
     #[serde(rename = "CreationTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_time: Option<String>,
-    /// <p>The description of the application.\nMin Length=1. Max Length=256</p>
+    /// <p>The description of the application.</p><p>Min Length=1. Max Length=256</p>
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p>Labels to improve discovery of apps in search results.\nMin Length=1. Max Length=127. Maximum number of labels: 10\nPattern: &quot;^[a-zA-Z0-9+\-_:\/@]+$&quot;;</p>
+    /// <p>A URL with more information about the application, for example
+    /// the location of your GitHub repository for the application.</p>
+    #[serde(rename = "HomePageUrl")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub home_page_url: Option<String>,
+    /// <p>Labels to improve discovery of apps in search results.</p><p>Min Length=1. Max Length=127. Maximum number of labels: 10</p><p>Pattern: "^[a-zA-Z0-9+\\-_:\\/@]+$";</p>
     #[serde(rename = "Labels")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub labels: Option<Vec<String>>,
-    /// <p>A link to a license file of the app that matches the spdxLicenseID of your application.\nMax size 5 MB</p>
+    /// <p>A link to a license file of the app that matches the spdxLicenseID of your application.</p><p>Max size 5 MB</p>
     #[serde(rename = "LicenseUrl")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub license_url: Option<String>,
-    /// <p>The name of the application.\nMin Length=1. Max Length=140\nPattern: &quot;[a-zA-Z0-9\-]+&quot;;</p>
+    /// <p>The name of the application.</p><p>Min Length=1. Max Length=140</p><p>Pattern: "[a-zA-Z0-9\\-]+";</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p>A link to the Readme file that contains a more detailed description of the application and how it works in markdown language.\nMax size 5 MB</p>
+    /// <p>A link to the readme file that contains a more detailed description of the application and how it works in Markdown language.</p><p>Max size 5 MB</p>
     #[serde(rename = "ReadmeUrl")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub readme_url: Option<String>,
@@ -688,28 +767,25 @@ pub struct UpdateApplicationResponse {
 pub struct Version {
     /// <p>The application Amazon Resource Name (ARN).</p>
     #[serde(rename = "ApplicationId")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub application_id: Option<String>,
+    pub application_id: String,
     /// <p>The date/time this resource was created.</p>
     #[serde(rename = "CreationTime")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub creation_time: Option<String>,
+    pub creation_time: String,
     /// <p>Array of parameter types supported by the application.</p>
     #[serde(rename = "ParameterDefinitions")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub parameter_definitions: Option<Vec<ParameterDefinition>>,
-    /// <p>The semantic version of the application:\n\n https://semver.org/</p>
+    pub parameter_definitions: Vec<ParameterDefinition>,
+    /// <p>The semantic version of the application:</p><p>
+    /// <a href="https://semver.org/">https://semver.org/</a>
+    /// </p>
     #[serde(rename = "SemanticVersion")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub semantic_version: Option<String>,
+    pub semantic_version: String,
     /// <p>A link to a public repository for the source code of your application.</p>
     #[serde(rename = "SourceCodeUrl")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub source_code_url: Option<String>,
-    /// <p>A link to the packaged SAM template of your application.</p>
+    /// <p>A link to the packaged AWS SAM template of your application.</p>
     #[serde(rename = "TemplateUrl")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub template_url: Option<String>,
+    pub template_url: String,
 }
 
 /// <p>Application version summary.</p>
@@ -717,16 +793,15 @@ pub struct Version {
 pub struct VersionSummary {
     /// <p>The application Amazon Resource Name (ARN).</p>
     #[serde(rename = "ApplicationId")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub application_id: Option<String>,
+    pub application_id: String,
     /// <p>The date/time this resource was created.</p>
     #[serde(rename = "CreationTime")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub creation_time: Option<String>,
-    /// <p>The semantic version of the application:\n\n https://semver.org/</p>
+    pub creation_time: String,
+    /// <p>The semantic version of the application:</p><p>
+    /// <a href="https://semver.org/">https://semver.org/</a>
+    /// </p>
     #[serde(rename = "SemanticVersion")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub semantic_version: Option<String>,
+    pub semantic_version: String,
     /// <p>A link to a public repository for the source code of your application.</p>
     #[serde(rename = "SourceCodeUrl")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1042,6 +1117,116 @@ impl Error for CreateCloudFormationChangeSetError {
                 dispatch_error.description()
             }
             CreateCloudFormationChangeSetError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DeleteApplication
+#[derive(Debug, PartialEq)]
+pub enum DeleteApplicationError {
+    /// <p>One of the parameters in the request is invalid.</p>
+    BadRequest(String),
+    /// <p>The resource already exists.</p>
+    Conflict(String),
+    /// <p>The client is not authenticated.</p>
+    Forbidden(String),
+    /// <p>The AWS Serverless Application Repository service encountered an internal error.</p>
+    InternalServerError(String),
+    /// <p>The resource (for example, an access policy statement) specified in the request does not exist.</p>
+    NotFound(String),
+    /// <p>The client is sending more than the allowed number of requests per unit time.</p>
+    TooManyRequests(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl DeleteApplicationError {
+    pub fn from_body(body: &str) -> DeleteApplicationError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "BadRequestException" => {
+                        DeleteApplicationError::BadRequest(String::from(error_message))
+                    }
+                    "ConflictException" => {
+                        DeleteApplicationError::Conflict(String::from(error_message))
+                    }
+                    "ForbiddenException" => {
+                        DeleteApplicationError::Forbidden(String::from(error_message))
+                    }
+                    "InternalServerErrorException" => {
+                        DeleteApplicationError::InternalServerError(String::from(error_message))
+                    }
+                    "NotFoundException" => {
+                        DeleteApplicationError::NotFound(String::from(error_message))
+                    }
+                    "TooManyRequestsException" => {
+                        DeleteApplicationError::TooManyRequests(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        DeleteApplicationError::Validation(error_message.to_string())
+                    }
+                    _ => DeleteApplicationError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => DeleteApplicationError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for DeleteApplicationError {
+    fn from(err: serde_json::error::Error) -> DeleteApplicationError {
+        DeleteApplicationError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DeleteApplicationError {
+    fn from(err: CredentialsError) -> DeleteApplicationError {
+        DeleteApplicationError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DeleteApplicationError {
+    fn from(err: HttpDispatchError) -> DeleteApplicationError {
+        DeleteApplicationError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteApplicationError {
+    fn from(err: io::Error) -> DeleteApplicationError {
+        DeleteApplicationError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DeleteApplicationError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeleteApplicationError {
+    fn description(&self) -> &str {
+        match *self {
+            DeleteApplicationError::BadRequest(ref cause) => cause,
+            DeleteApplicationError::Conflict(ref cause) => cause,
+            DeleteApplicationError::Forbidden(ref cause) => cause,
+            DeleteApplicationError::InternalServerError(ref cause) => cause,
+            DeleteApplicationError::NotFound(ref cause) => cause,
+            DeleteApplicationError::TooManyRequests(ref cause) => cause,
+            DeleteApplicationError::Validation(ref cause) => cause,
+            DeleteApplicationError::Credentials(ref err) => err.description(),
+            DeleteApplicationError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DeleteApplicationError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -1687,6 +1872,12 @@ pub trait ServerlessRepo {
         input: &CreateCloudFormationChangeSetRequest,
     ) -> RusotoFuture<CreateCloudFormationChangeSetResponse, CreateCloudFormationChangeSetError>;
 
+    /// <p>Deletes the specified application.</p>
+    fn delete_application(
+        &self,
+        input: &DeleteApplicationRequest,
+    ) -> RusotoFuture<(), DeleteApplicationError>;
+
     /// <p>Gets the specified application.</p>
     fn get_application(
         &self,
@@ -1889,6 +2080,39 @@ where
             } else {
                 future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CreateCloudFormationChangeSetError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        });
+
+        RusotoFuture::new(future)
+    }
+
+    /// <p>Deletes the specified application.</p>
+    fn delete_application(
+        &self,
+        input: &DeleteApplicationRequest,
+    ) -> RusotoFuture<(), DeleteApplicationError> {
+        let request_uri = format!(
+            "/applications/{application_id}",
+            application_id = input.application_id
+        );
+
+        let mut request =
+            SignedRequest::new("DELETE", "serverlessrepo", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let future = self.inner.sign_and_dispatch(request, |response| {
+            if response.status.as_u16() == 204 {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let result = ::std::mem::drop(response);
+
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DeleteApplicationError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))

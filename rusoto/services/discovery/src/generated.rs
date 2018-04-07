@@ -627,7 +627,7 @@ pub struct StartExportTaskRequest {
     #[serde(rename = "endTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub end_time: Option<f64>,
-    /// <p>The file format for the returned export data. Default value is <code>CSV</code>.</p>
+    /// <p>The file format for the returned export data. Default value is <code>CSV</code>. <b>Note:</b> <i>The</i> <code>GRAPHML</code> <i>option has been deprecated.</i> </p>
     #[serde(rename = "exportDataFormat")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub export_data_format: Option<Vec<String>>,
@@ -2770,7 +2770,7 @@ pub trait Discovery {
         input: &StartDataCollectionByAgentIdsRequest,
     ) -> RusotoFuture<StartDataCollectionByAgentIdsResponse, StartDataCollectionByAgentIdsError>;
 
-    /// <p> Begins the export of discovered data to an S3 bucket.</p> <p> If you specify <code>agentId</code> in a filter, the task exports up to 72 hours of detailed data collected by the identified Application Discovery Agent, including network, process, and performance details. A time range for exported agent data may be set by using <code>startTime</code> and <code>endTime</code>. Export of detailed agent data is limited to five concurrently running exports. </p> <p> If you do not include an <code>agentId</code> filter, summary data is exported that includes both AWS Agentless Discovery Connector data and summary data from AWS Discovery Agents. Export of summary data is limited to two exports per day. </p>
+    /// <p> Begins the export of discovered data to an S3 bucket.</p> <p> If you specify <code>agentIds</code> in a filter, the task exports up to 72 hours of detailed data collected by the identified Application Discovery Agent, including network, process, and performance details. A time range for exported agent data may be set by using <code>startTime</code> and <code>endTime</code>. Export of detailed agent data is limited to five concurrently running exports. </p> <p> If you do not include an <code>agentIds</code> filter, summary data is exported that includes both AWS Agentless Discovery Connector data and summary data from AWS Discovery Agents. Export of summary data is limited to two exports per day. </p>
     fn start_export_task(
         &self,
         input: &StartExportTaskRequest,
@@ -3470,7 +3470,7 @@ where
         RusotoFuture::new(future)
     }
 
-    /// <p> Begins the export of discovered data to an S3 bucket.</p> <p> If you specify <code>agentId</code> in a filter, the task exports up to 72 hours of detailed data collected by the identified Application Discovery Agent, including network, process, and performance details. A time range for exported agent data may be set by using <code>startTime</code> and <code>endTime</code>. Export of detailed agent data is limited to five concurrently running exports. </p> <p> If you do not include an <code>agentId</code> filter, summary data is exported that includes both AWS Agentless Discovery Connector data and summary data from AWS Discovery Agents. Export of summary data is limited to two exports per day. </p>
+    /// <p> Begins the export of discovered data to an S3 bucket.</p> <p> If you specify <code>agentIds</code> in a filter, the task exports up to 72 hours of detailed data collected by the identified Application Discovery Agent, including network, process, and performance details. A time range for exported agent data may be set by using <code>startTime</code> and <code>endTime</code>. Export of detailed agent data is limited to five concurrently running exports. </p> <p> If you do not include an <code>agentIds</code> filter, summary data is exported that includes both AWS Agentless Discovery Connector data and summary data from AWS Discovery Agents. Export of summary data is limited to two exports per day. </p>
     fn start_export_task(
         &self,
         input: &StartExportTaskRequest,

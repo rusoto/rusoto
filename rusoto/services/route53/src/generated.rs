@@ -10976,6 +10976,8 @@ pub enum CreateTrafficPolicyVersionError {
     InvalidTrafficPolicyDocument(String),
     /// <p>No traffic policy exists with the specified ID.</p>
     NoSuchTrafficPolicy(String),
+    /// <p>This traffic policy version can't be created because you've reached the limit of 1000 on the number of versions that you can create for the current traffic policy.</p> <p>To create more traffic policy versions, you can use <a>GetTrafficPolicy</a> to get the traffic policy document for a specified traffic policy version, and then use <a>CreateTrafficPolicy</a> to create a new traffic policy using the traffic policy document.</p>
+    TooManyTrafficPolicyVersionsForCurrentPolicy(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -11009,6 +11011,11 @@ impl CreateTrafficPolicyVersionError {
                 "NoSuchTrafficPolicy" => CreateTrafficPolicyVersionError::NoSuchTrafficPolicy(
                     String::from(parsed_error.message),
                 ),
+                "TooManyTrafficPolicyVersionsForCurrentPolicy" => {
+                    CreateTrafficPolicyVersionError::TooManyTrafficPolicyVersionsForCurrentPolicy(
+                        String::from(parsed_error.message),
+                    )
+                }
                 _ => CreateTrafficPolicyVersionError::Unknown(String::from(body)),
             },
             Err(_) => CreateTrafficPolicyVersionError::Unknown(body.to_string()),
@@ -11057,6 +11064,9 @@ impl Error for CreateTrafficPolicyVersionError {
             CreateTrafficPolicyVersionError::InvalidInput(ref cause) => cause,
             CreateTrafficPolicyVersionError::InvalidTrafficPolicyDocument(ref cause) => cause,
             CreateTrafficPolicyVersionError::NoSuchTrafficPolicy(ref cause) => cause,
+            CreateTrafficPolicyVersionError::TooManyTrafficPolicyVersionsForCurrentPolicy(
+                ref cause,
+            ) => cause,
             CreateTrafficPolicyVersionError::Validation(ref cause) => cause,
             CreateTrafficPolicyVersionError::Credentials(ref err) => err.description(),
             CreateTrafficPolicyVersionError::HttpDispatch(ref dispatch_error) => {

@@ -832,15 +832,15 @@ pub struct CreateLoadBalancerInput {
     pub name: String,
     /// <p>The nodes of an Internet-facing load balancer have public IP addresses. The DNS name of an Internet-facing load balancer is publicly resolvable to the public IP addresses of the nodes. Therefore, Internet-facing load balancers can route requests from clients over the Internet.</p> <p>The nodes of an internal load balancer have only private IP addresses. The DNS name of an internal load balancer is publicly resolvable to the private IP addresses of the nodes. Therefore, internal load balancers can only route requests from clients with access to the VPC for the load balancer.</p> <p>The default is an Internet-facing load balancer.</p>
     pub scheme: Option<String>,
-    /// <p>[Application Load Balancers] The IDs of the security groups to assign to the load balancer.</p>
+    /// <p>[Application Load Balancers] The IDs of the security groups for the load balancer.</p>
     pub security_groups: Option<Vec<String>>,
-    /// <p>The IDs of the subnets to attach to the load balancer. You can specify only one subnet per Availability Zone. You must specify either subnets or subnet mappings.</p> <p>[Application Load Balancers] You must specify subnets from at least two Availability Zones. You cannot specify Elastic IP addresses for your subnets.</p> <p>[Network Load Balancers] You can specify subnets from one or more Availability Zones. You can specify one Elastic IP address per subnet.</p>
+    /// <p>The IDs of the public subnets. You can specify only one subnet per Availability Zone. You must specify either subnets or subnet mappings.</p> <p>[Application Load Balancers] You must specify subnets from at least two Availability Zones. You cannot specify Elastic IP addresses for your subnets.</p> <p>[Network Load Balancers] You can specify subnets from one or more Availability Zones. You can specify one Elastic IP address per subnet.</p>
     pub subnet_mappings: Option<Vec<SubnetMapping>>,
-    /// <p>The IDs of the subnets to attach to the load balancer. You can specify only one subnet per Availability Zone. You must specify either subnets or subnet mappings.</p> <p>[Application Load Balancers] You must specify subnets from at least two Availability Zones.</p> <p>[Network Load Balancers] You can specify subnets from one or more Availability Zones.</p>
+    /// <p>The IDs of the public subnets. You can specify only one subnet per Availability Zone. You must specify either subnets or subnet mappings.</p> <p>[Application Load Balancers] You must specify subnets from at least two Availability Zones.</p> <p>[Network Load Balancers] You can specify subnets from one or more Availability Zones.</p>
     pub subnets: Option<Vec<String>>,
     /// <p>One or more tags to assign to the load balancer.</p>
     pub tags: Option<Vec<Tag>>,
-    /// <p>The type of load balancer to create. The default is <code>application</code>.</p>
+    /// <p>The type of load balancer. The default is <code>application</code>.</p>
     pub type_: Option<String>,
 }
 
@@ -3143,7 +3143,7 @@ impl LoadBalancerArnsSerializer {
 /// <p>Information about a load balancer attribute.</p>
 #[derive(Default, Debug, Clone)]
 pub struct LoadBalancerAttribute {
-    /// <p><p>The name of the attribute.</p> <ul> <li> <p> <code>access<em>logs.s3.enabled</code> - [Application Load Balancers] Indicates whether access logs stored in Amazon S3 are enabled. The value is <code>true</code> or <code>false</code>.</p> </li> <li> <p> <code>access</em>logs.s3.bucket</code> - [Application Load Balancers] The name of the S3 bucket for the access logs. This attribute is required if access logs in Amazon S3 are enabled. The bucket must exist in the same region as the load balancer and have a bucket policy that grants Elastic Load Balancing permission to write to the bucket.</p> </li> <li> <p> <code>access<em>logs.s3.prefix</code> - [Application Load Balancers] The prefix for the location in the S3 bucket. If you don&#39;t specify a prefix, the access logs are stored in the root of the bucket.</p> </li> <li> <p> <code>deletion</em>protection.enabled</code> - Indicates whether deletion protection is enabled. The value is <code>true</code> or <code>false</code>.</p> </li> <li> <p> <code>idle<em>timeout.timeout</em>seconds</code> - [Application Load Balancers] The idle timeout value, in seconds. The valid range is 1-4000. The default is 60 seconds.</p> </li> </ul></p>
+    /// <p><p>The name of the attribute.</p> <ul> <li> <p> <code>access<em>logs.s3.enabled</code> - [Application Load Balancers] Indicates whether access logs stored in Amazon S3 are enabled. The value is <code>true</code> or <code>false</code>.</p> </li> <li> <p> <code>access</em>logs.s3.bucket</code> - [Application Load Balancers] The name of the S3 bucket for the access logs. This attribute is required if access logs in Amazon S3 are enabled. The bucket must exist in the same region as the load balancer and have a bucket policy that grants Elastic Load Balancing permission to write to the bucket.</p> </li> <li> <p> <code>access<em>logs.s3.prefix</code> - [Application Load Balancers] The prefix for the location in the S3 bucket. If you don&#39;t specify a prefix, the access logs are stored in the root of the bucket.</p> </li> <li> <p> <code>deletion</em>protection.enabled</code> - Indicates whether deletion protection is enabled. The value is <code>true</code> or <code>false</code>.</p> </li> <li> <p> <code>idle<em>timeout.timeout</em>seconds</code> - [Application Load Balancers] The idle timeout value, in seconds. The valid range is 1-4000. The default is 60 seconds.</p> </li> <li> <p> <code>load<em>balancing.cross</em>zone.enabled</code> - [Network Load Balancers] Indicates whether cross-zone load balancing is enabled. The value is <code>true</code> or <code>false</code>. The default is <code>false</code>.</p> </li> <li> <p> <code>routing.http2.enabled</code> - [Application Load Balancers] Indicates whether HTTP/2 is enabled. The value is <code>true</code> or <code>false</code>. The default is <code>true</code>.</p> </li> </ul></p>
     pub key: Option<String>,
     /// <p>The value of the attribute.</p>
     pub value: Option<String>,
@@ -4867,9 +4867,9 @@ impl SetSecurityGroupsOutputDeserializer {
 pub struct SetSubnetsInput {
     /// <p>The Amazon Resource Name (ARN) of the load balancer.</p>
     pub load_balancer_arn: String,
-    /// <p>The IDs of the subnets. You must specify subnets from at least two Availability Zones. You can specify only one subnet per Availability Zone. You must specify either subnets or subnet mappings.</p> <p>You cannot specify Elastic IP addresses for your subnets.</p>
+    /// <p>The IDs of the public subnets. You must specify subnets from at least two Availability Zones. You can specify only one subnet per Availability Zone. You must specify either subnets or subnet mappings.</p> <p>You cannot specify Elastic IP addresses for your subnets.</p>
     pub subnet_mappings: Option<Vec<SubnetMapping>>,
-    /// <p>The IDs of the subnets. You must specify subnets from at least two Availability Zones. You can specify only one subnet per Availability Zone. You must specify either subnets or subnet mappings.</p>
+    /// <p>The IDs of the public subnets. You must specify subnets from at least two Availability Zones. You can specify only one subnet per Availability Zone. You must specify either subnets or subnet mappings.</p>
     pub subnets: Vec<String>,
 }
 
@@ -6613,6 +6613,8 @@ pub enum CreateLoadBalancerError {
     InvalidSecurityGroup(String),
     /// <p>The specified subnet is out of available addresses.</p>
     InvalidSubnet(String),
+    /// <p>This operation is not allowed.</p>
+    OperationNotPermitted(String),
     /// <p>A specified resource is in use.</p>
     ResourceInUse(String),
     /// <p>The specified subnet does not exist.</p>
@@ -6666,6 +6668,9 @@ impl CreateLoadBalancerError {
                 "InvalidSubnet" => {
                     CreateLoadBalancerError::InvalidSubnet(String::from(parsed_error.message))
                 }
+                "OperationNotPermitted" => CreateLoadBalancerError::OperationNotPermitted(
+                    String::from(parsed_error.message),
+                ),
                 "ResourceInUse" => {
                     CreateLoadBalancerError::ResourceInUse(String::from(parsed_error.message))
                 }
@@ -6730,6 +6735,7 @@ impl Error for CreateLoadBalancerError {
             CreateLoadBalancerError::InvalidScheme(ref cause) => cause,
             CreateLoadBalancerError::InvalidSecurityGroup(ref cause) => cause,
             CreateLoadBalancerError::InvalidSubnet(ref cause) => cause,
+            CreateLoadBalancerError::OperationNotPermitted(ref cause) => cause,
             CreateLoadBalancerError::ResourceInUse(ref cause) => cause,
             CreateLoadBalancerError::SubnetNotFound(ref cause) => cause,
             CreateLoadBalancerError::TooManyLoadBalancers(ref cause) => cause,
@@ -9492,7 +9498,7 @@ pub trait Elb {
         input: &CreateListenerInput,
     ) -> RusotoFuture<CreateListenerOutput, CreateListenerError>;
 
-    /// <p>Creates an Application Load Balancer or a Network Load Balancer.</p> <p>When you create a load balancer, you can specify security groups, subnets, IP address type, and tags. Otherwise, you could do so later using <a>SetSecurityGroups</a>, <a>SetSubnets</a>, <a>SetIpAddressType</a>, and <a>AddTags</a>.</p> <p>To create listeners for your load balancer, use <a>CreateListener</a>. To describe your current load balancers, see <a>DescribeLoadBalancers</a>. When you are finished with a load balancer, you can delete it using <a>DeleteLoadBalancer</a>.</p> <p>For limit information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-limits.html">Limits for Your Application Load Balancer</a> in the <i>Application Load Balancers Guide</i> and <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/network/load-balancer-limits.html">Limits for Your Network Load Balancer</a> in the <i>Network Load Balancers Guide</i>.</p> <p>This operation is idempotent, which means that it completes at most one time. If you attempt to create multiple load balancers with the same settings, each call succeeds.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/application/application-load-balancers.html">Application Load Balancers</a> in the <i>Application Load Balancers Guide</i> and <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/network/network-load-balancers.html">Network Load Balancers</a> in the <i>Network Load Balancers Guide</i>.</p>
+    /// <p>Creates an Application Load Balancer or a Network Load Balancer.</p> <p>When you create a load balancer, you can specify security groups, public subnets, IP address type, and tags. Otherwise, you could do so later using <a>SetSecurityGroups</a>, <a>SetSubnets</a>, <a>SetIpAddressType</a>, and <a>AddTags</a>.</p> <p>To create listeners for your load balancer, use <a>CreateListener</a>. To describe your current load balancers, see <a>DescribeLoadBalancers</a>. When you are finished with a load balancer, you can delete it using <a>DeleteLoadBalancer</a>.</p> <p>For limit information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-limits.html">Limits for Your Application Load Balancer</a> in the <i>Application Load Balancers Guide</i> and <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/network/load-balancer-limits.html">Limits for Your Network Load Balancer</a> in the <i>Network Load Balancers Guide</i>.</p> <p>This operation is idempotent, which means that it completes at most one time. If you attempt to create multiple load balancers with the same settings, each call succeeds.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/application/application-load-balancers.html">Application Load Balancers</a> in the <i>Application Load Balancers Guide</i> and <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/network/network-load-balancers.html">Network Load Balancers</a> in the <i>Network Load Balancers Guide</i>.</p>
     fn create_load_balancer(
         &self,
         input: &CreateLoadBalancerInput,
@@ -9672,7 +9678,7 @@ pub trait Elb {
         input: &SetSecurityGroupsInput,
     ) -> RusotoFuture<SetSecurityGroupsOutput, SetSecurityGroupsError>;
 
-    /// <p>Enables the Availability Zone for the specified subnets for the specified Application Load Balancer. The specified subnets replace the previously enabled subnets.</p> <p>Note that you can't change the subnets for a Network Load Balancer.</p>
+    /// <p>Enables the Availability Zone for the specified public subnets for the specified Application Load Balancer. The specified subnets replace the previously enabled subnets.</p> <p>Note that you can't change the subnets for a Network Load Balancer.</p>
     fn set_subnets(
         &self,
         input: &SetSubnetsInput,
@@ -9871,7 +9877,7 @@ where
         RusotoFuture::new(future)
     }
 
-    /// <p>Creates an Application Load Balancer or a Network Load Balancer.</p> <p>When you create a load balancer, you can specify security groups, subnets, IP address type, and tags. Otherwise, you could do so later using <a>SetSecurityGroups</a>, <a>SetSubnets</a>, <a>SetIpAddressType</a>, and <a>AddTags</a>.</p> <p>To create listeners for your load balancer, use <a>CreateListener</a>. To describe your current load balancers, see <a>DescribeLoadBalancers</a>. When you are finished with a load balancer, you can delete it using <a>DeleteLoadBalancer</a>.</p> <p>For limit information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-limits.html">Limits for Your Application Load Balancer</a> in the <i>Application Load Balancers Guide</i> and <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/network/load-balancer-limits.html">Limits for Your Network Load Balancer</a> in the <i>Network Load Balancers Guide</i>.</p> <p>This operation is idempotent, which means that it completes at most one time. If you attempt to create multiple load balancers with the same settings, each call succeeds.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/application/application-load-balancers.html">Application Load Balancers</a> in the <i>Application Load Balancers Guide</i> and <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/network/network-load-balancers.html">Network Load Balancers</a> in the <i>Network Load Balancers Guide</i>.</p>
+    /// <p>Creates an Application Load Balancer or a Network Load Balancer.</p> <p>When you create a load balancer, you can specify security groups, public subnets, IP address type, and tags. Otherwise, you could do so later using <a>SetSecurityGroups</a>, <a>SetSubnets</a>, <a>SetIpAddressType</a>, and <a>AddTags</a>.</p> <p>To create listeners for your load balancer, use <a>CreateListener</a>. To describe your current load balancers, see <a>DescribeLoadBalancers</a>. When you are finished with a load balancer, you can delete it using <a>DeleteLoadBalancer</a>.</p> <p>For limit information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-limits.html">Limits for Your Application Load Balancer</a> in the <i>Application Load Balancers Guide</i> and <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/network/load-balancer-limits.html">Limits for Your Network Load Balancer</a> in the <i>Network Load Balancers Guide</i>.</p> <p>This operation is idempotent, which means that it completes at most one time. If you attempt to create multiple load balancers with the same settings, each call succeeds.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/application/application-load-balancers.html">Application Load Balancers</a> in the <i>Application Load Balancers Guide</i> and <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/network/network-load-balancers.html">Network Load Balancers</a> in the <i>Network Load Balancers Guide</i>.</p>
     fn create_load_balancer(
         &self,
         input: &CreateLoadBalancerInput,
@@ -11410,7 +11416,7 @@ where
         RusotoFuture::new(future)
     }
 
-    /// <p>Enables the Availability Zone for the specified subnets for the specified Application Load Balancer. The specified subnets replace the previously enabled subnets.</p> <p>Note that you can't change the subnets for a Network Load Balancer.</p>
+    /// <p>Enables the Availability Zone for the specified public subnets for the specified Application Load Balancer. The specified subnets replace the previously enabled subnets.</p> <p>Note that you can't change the subnets for a Network Load Balancer.</p>
     fn set_subnets(
         &self,
         input: &SetSubnetsInput,

@@ -269,6 +269,10 @@ pub struct CreateMicrosoftADRequest {
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
+    /// <p>AWS Microsoft AD is available in two editions: Standard and Enterprise. Enterprise is the default.</p>
+    #[serde(rename = "Edition")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub edition: Option<String>,
     /// <p>The fully qualified domain name for the directory, such as <code>corp.example.com</code>. This name will resolve inside your VPC only. It does not need to be publicly resolvable.</p>
     #[serde(rename = "Name")]
     pub name: String,
@@ -682,6 +686,10 @@ pub struct DirectoryDescription {
     #[serde(rename = "DnsIpAddrs")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub dns_ip_addrs: Option<Vec<String>>,
+    /// <p>The edition associated with this directory.</p>
+    #[serde(rename = "Edition")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub edition: Option<String>,
     /// <p>Specifies when the directory was created.</p>
     #[serde(rename = "LaunchTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -791,7 +799,7 @@ pub struct DirectoryVpcSettingsDescription {
     #[serde(rename = "AvailabilityZones")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub availability_zones: Option<Vec<String>>,
-    /// <p>The security group identifier for the directory. If the directory was created before 8/1/2014, this is the identifier of the directory members security group that was created when the directory was created. If the directory was created after this date, this value is null.</p>
+    /// <p>The domain controller security group identifier for the directory.</p>
     #[serde(rename = "SecurityGroupId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub security_group_id: Option<String>,

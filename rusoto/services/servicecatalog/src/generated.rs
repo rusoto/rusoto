@@ -111,6 +111,15 @@ pub struct AssociateTagOptionWithResourceInput {
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct AssociateTagOptionWithResourceOutput {}
 
+/// <p>Information about a CloudWatch dashboard.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct CloudWatchDashboard {
+    /// <p>The name of the CloudWatch dashboard.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+}
+
 /// <p>Information about a constraint.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct ConstraintDetail {
@@ -246,7 +255,7 @@ pub struct CreatePortfolioInput {
     /// <p>The name of the portfolio provider.</p>
     #[serde(rename = "ProviderName")]
     pub provider_name: String,
-    /// <p>The tags to associate with the portfolio.</p>
+    /// <p>One or more tags.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
@@ -322,7 +331,7 @@ pub struct CreateProductInput {
     #[serde(rename = "SupportUrl")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub support_url: Option<String>,
-    /// <p>The tags to associate with the product.</p>
+    /// <p>One or more tags.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
@@ -342,6 +351,72 @@ pub struct CreateProductOutput {
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct CreateProvisionedProductPlanInput {
+    /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
+    #[serde(rename = "AcceptLanguage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub accept_language: Option<String>,
+    /// <p>A unique identifier that you provide to ensure idempotency. If multiple requests differ only by the idempotency token, the same response is returned for each repeated request.</p>
+    #[serde(rename = "IdempotencyToken")]
+    pub idempotency_token: String,
+    /// <p>Passed to CloudFormation. The SNS topic ARNs to which to publish stack-related events.</p>
+    #[serde(rename = "NotificationArns")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub notification_arns: Option<Vec<String>>,
+    /// <p>The path identifier of the product. This value is optional if the product has a default path, and required if the product has more than one path. To list the paths for a product, use <a>ListLaunchPaths</a>.</p>
+    #[serde(rename = "PathId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub path_id: Option<String>,
+    /// <p>The name of the plan.</p>
+    #[serde(rename = "PlanName")]
+    pub plan_name: String,
+    /// <p>The plan type.</p>
+    #[serde(rename = "PlanType")]
+    pub plan_type: String,
+    /// <p>The product identifier.</p>
+    #[serde(rename = "ProductId")]
+    pub product_id: String,
+    /// <p>A user-friendly name for the provisioned product. This value must be unique for the AWS account and cannot be updated after the product is provisioned.</p>
+    #[serde(rename = "ProvisionedProductName")]
+    pub provisioned_product_name: String,
+    /// <p>The identifier of the provisioning artifact.</p>
+    #[serde(rename = "ProvisioningArtifactId")]
+    pub provisioning_artifact_id: String,
+    /// <p>Parameters specified by the administrator that are required for provisioning the product.</p>
+    #[serde(rename = "ProvisioningParameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub provisioning_parameters: Option<Vec<UpdateProvisioningParameter>>,
+    /// <p>One or more tags.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct CreateProvisionedProductPlanOutput {
+    /// <p>The plan identifier.</p>
+    #[serde(rename = "PlanId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub plan_id: Option<String>,
+    /// <p>The name of the plan.</p>
+    #[serde(rename = "PlanName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub plan_name: Option<String>,
+    /// <p>The product identifier.</p>
+    #[serde(rename = "ProvisionProductId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub provision_product_id: Option<String>,
+    /// <p>The user-friendly name of the provisioned product.</p>
+    #[serde(rename = "ProvisionedProductName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub provisioned_product_name: Option<String>,
+    /// <p>The identifier of the provisioning artifact.</p>
+    #[serde(rename = "ProvisioningArtifactId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub provisioning_artifact_id: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, Serialize)]
@@ -455,6 +530,24 @@ pub struct DeleteProductInput {
 pub struct DeleteProductOutput {}
 
 #[derive(Default, Debug, Clone, Serialize)]
+pub struct DeleteProvisionedProductPlanInput {
+    /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
+    #[serde(rename = "AcceptLanguage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub accept_language: Option<String>,
+    /// <p>If set to true, AWS Service Catalog stops managing the specified provisioned product even if it cannot delete the underlying resources.</p>
+    #[serde(rename = "IgnoreErrors")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ignore_errors: Option<bool>,
+    /// <p>The plan identifier.</p>
+    #[serde(rename = "PlanId")]
+    pub plan_id: String,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct DeleteProvisionedProductPlanOutput {}
+
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteProvisioningArtifactInput {
     /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
@@ -470,6 +563,16 @@ pub struct DeleteProvisioningArtifactInput {
 
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct DeleteProvisioningArtifactOutput {}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct DeleteTagOptionInput {
+    /// <p>The TagOption identifier.</p>
+    #[serde(rename = "Id")]
+    pub id: String,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct DeleteTagOptionOutput {}
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeConstraintInput {
@@ -642,10 +745,49 @@ pub struct DescribeProvisionedProductInput {
 
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeProvisionedProductOutput {
+    /// <p>Any CloudWatch dashboards that were created when provisioning the product.</p>
+    #[serde(rename = "CloudWatchDashboards")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cloud_watch_dashboards: Option<Vec<CloudWatchDashboard>>,
     /// <p>Information about the provisioned product.</p>
     #[serde(rename = "ProvisionedProductDetail")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub provisioned_product_detail: Option<ProvisionedProductDetail>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct DescribeProvisionedProductPlanInput {
+    /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
+    #[serde(rename = "AcceptLanguage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub accept_language: Option<String>,
+    /// <p>The maximum number of items to return with this call.</p>
+    #[serde(rename = "PageSize")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub page_size: Option<i64>,
+    /// <p>The page token for the next set of results. To retrieve the first set of results, use null.</p>
+    #[serde(rename = "PageToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub page_token: Option<String>,
+    /// <p>The plan identifier.</p>
+    #[serde(rename = "PlanId")]
+    pub plan_id: String,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct DescribeProvisionedProductPlanOutput {
+    /// <p>The page token to use to retrieve the next set of results. If there are no additional results, this value is null.</p>
+    #[serde(rename = "NextPageToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_page_token: Option<String>,
+    /// <p>Information about the plan.</p>
+    #[serde(rename = "ProvisionedProductPlanDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub provisioned_product_plan_details: Option<ProvisionedProductPlanDetails>,
+    /// <p>Information about the resource changes that will occur when the plan is executed.</p>
+    #[serde(rename = "ResourceChanges")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_changes: Option<Vec<ResourceChange>>,
 }
 
 #[derive(Default, Debug, Clone, Serialize)]
@@ -816,6 +958,28 @@ pub struct DisassociateTagOptionFromResourceInput {
 
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct DisassociateTagOptionFromResourceOutput {}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct ExecuteProvisionedProductPlanInput {
+    /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
+    #[serde(rename = "AcceptLanguage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub accept_language: Option<String>,
+    /// <p>A unique identifier that you provide to ensure idempotency. If multiple requests differ only by the idempotency token, the same response is returned for each repeated request.</p>
+    #[serde(rename = "IdempotencyToken")]
+    pub idempotency_token: String,
+    /// <p>The plan identifier.</p>
+    #[serde(rename = "PlanId")]
+    pub plan_id: String,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct ExecuteProvisionedProductPlanOutput {
+    /// <p>Information about the result of provisioning the product.</p>
+    #[serde(rename = "RecordDetail")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub record_detail: Option<RecordDetail>,
+}
 
 /// <p>Summary information about a product path for a user.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
@@ -1046,6 +1210,42 @@ pub struct ListPrincipalsForPortfolioOutput {
 }
 
 #[derive(Default, Debug, Clone, Serialize)]
+pub struct ListProvisionedProductPlansInput {
+    /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
+    #[serde(rename = "AcceptLanguage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub accept_language: Option<String>,
+    /// <p>The access level to use to obtain results. The default is <code>User</code>.</p>
+    #[serde(rename = "AccessLevelFilter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub access_level_filter: Option<AccessLevelFilter>,
+    /// <p>The maximum number of items to return with this call.</p>
+    #[serde(rename = "PageSize")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub page_size: Option<i64>,
+    /// <p>The page token for the next set of results. To retrieve the first set of results, use null.</p>
+    #[serde(rename = "PageToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub page_token: Option<String>,
+    /// <p>The product identifier.</p>
+    #[serde(rename = "ProvisionProductId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub provision_product_id: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct ListProvisionedProductPlansOutput {
+    /// <p>The page token to use to retrieve the next set of results. If there are no additional results, this value is null.</p>
+    #[serde(rename = "NextPageToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_page_token: Option<String>,
+    /// <p>Information about the plans.</p>
+    #[serde(rename = "ProvisionedProductPlans")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub provisioned_product_plans: Option<Vec<ProvisionedProductPlanSummary>>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListProvisioningArtifactsInput {
     /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
@@ -1209,7 +1409,7 @@ pub struct PortfolioDetail {
     #[serde(rename = "ARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub arn: Option<String>,
-    /// <p>The UTC timestamp of the creation time.</p>
+    /// <p>The UTC time stamp of the creation time.</p>
     #[serde(rename = "CreatedTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub created_time: Option<f64>,
@@ -1260,7 +1460,7 @@ pub struct ProductViewAggregationValue {
 /// <p>Information about a product view.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct ProductViewDetail {
-    /// <p>The UTC timestamp of the creation time.</p>
+    /// <p>The UTC time stamp of the creation time.</p>
     #[serde(rename = "CreatedTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub created_time: Option<f64>,
@@ -1357,7 +1557,7 @@ pub struct ProvisionProductInput {
     #[serde(rename = "ProvisioningParameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub provisioning_parameters: Option<Vec<ProvisioningParameter>>,
-    /// <p>The tags to use as provisioning options.</p>
+    /// <p>One or more tags.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
@@ -1365,10 +1565,75 @@ pub struct ProvisionProductInput {
 
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct ProvisionProductOutput {
-    /// <p>Information about the result of <a>ProvisionProduct</a>.</p>
+    /// <p>Information about the result of provisioning the product.</p>
     #[serde(rename = "RecordDetail")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub record_detail: Option<RecordDetail>,
+}
+
+/// <p>Information about a provisioned product.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct ProvisionedProductAttribute {
+    /// <p>The ARN of the provisioned product.</p>
+    #[serde(rename = "Arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
+    /// <p>The UTC time stamp of the creation time.</p>
+    #[serde(rename = "CreatedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_time: Option<f64>,
+    /// <p>The identifier of the provisioned product.</p>
+    #[serde(rename = "Id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    /// <p>A unique identifier that you provide to ensure idempotency. If multiple requests differ only by the idempotency token, the same response is returned for each repeated request.</p>
+    #[serde(rename = "IdempotencyToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub idempotency_token: Option<String>,
+    /// <p>The record identifier of the last request performed on this provisioned product.</p>
+    #[serde(rename = "LastRecordId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_record_id: Option<String>,
+    /// <p>The user-friendly name of the provisioned product.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The assigned identifier for the resource, such as an EC2 instance ID or an S3 bucket name.</p>
+    #[serde(rename = "PhysicalId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub physical_id: Option<String>,
+    /// <p>The product identifier.</p>
+    #[serde(rename = "ProductId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub product_id: Option<String>,
+    /// <p>The identifier of the provisioning artifact.</p>
+    #[serde(rename = "ProvisioningArtifactId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub provisioning_artifact_id: Option<String>,
+    /// <p><p>The current status of the provisioned product.</p> <ul> <li> <p> <code>AVAILABLE</code> - Stable state, ready to perform any operation. The most recent operation succeeded and completed.</p> </li> <li> <p> <code>UNDER_CHANGE</code> - Transitive state, operations performed might not have valid results. Wait for an <code>AVAILABLE</code> status before performing operations.</p> </li> <li> <p> <code>TAINTED</code> - Stable state, ready to perform any operation. The stack has completed the requested operation but is not exactly what was requested. For example, a request to update to a new version failed and the stack rolled back to the current version.</p> </li> <li> <p> <code>ERROR</code> - An unexpected error occurred, the provisioned product exists but the stack is not running. For example, CloudFormation received a parameter value that was not valid and could not launch the stack.</p> </li> </ul></p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+    /// <p>The current status message of the provisioned product.</p>
+    #[serde(rename = "StatusMessage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status_message: Option<String>,
+    /// <p>One or more tags.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
+    /// <p>The type of provisioned product. The supported value is <code>CFN_STACK</code>.</p>
+    #[serde(rename = "Type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub type_: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) of the IAM user.</p>
+    #[serde(rename = "UserArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub user_arn: Option<String>,
+    /// <p>The ARN of the IAM user in the session. This ARN might contain a session ID.</p>
+    #[serde(rename = "UserArnSession")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub user_arn_session: Option<String>,
 }
 
 /// <p>Information about a provisioned product.</p>
@@ -1378,7 +1643,7 @@ pub struct ProvisionedProductDetail {
     #[serde(rename = "Arn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub arn: Option<String>,
-    /// <p>The UTC timestamp of the creation time.</p>
+    /// <p>The UTC time stamp of the creation time.</p>
     #[serde(rename = "CreatedTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub created_time: Option<f64>,
@@ -1412,10 +1677,104 @@ pub struct ProvisionedProductDetail {
     pub type_: Option<String>,
 }
 
+/// <p>Information about a plan.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct ProvisionedProductPlanDetails {
+    /// <p>The UTC time stamp of the creation time.</p>
+    #[serde(rename = "CreatedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_time: Option<f64>,
+    /// <p>Passed to CloudFormation. The SNS topic ARNs to which to publish stack-related events.</p>
+    #[serde(rename = "NotificationArns")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub notification_arns: Option<Vec<String>>,
+    /// <p>The path identifier of the product. This value is optional if the product has a default path, and required if the product has more than one path. To list the paths for a product, use <a>ListLaunchPaths</a>.</p>
+    #[serde(rename = "PathId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub path_id: Option<String>,
+    /// <p>The plan identifier.</p>
+    #[serde(rename = "PlanId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub plan_id: Option<String>,
+    /// <p>The name of the plan.</p>
+    #[serde(rename = "PlanName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub plan_name: Option<String>,
+    /// <p>The plan type.</p>
+    #[serde(rename = "PlanType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub plan_type: Option<String>,
+    /// <p>The product identifier.</p>
+    #[serde(rename = "ProductId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub product_id: Option<String>,
+    /// <p>The product identifier.</p>
+    #[serde(rename = "ProvisionProductId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub provision_product_id: Option<String>,
+    /// <p>The user-friendly name of the provisioned product.</p>
+    #[serde(rename = "ProvisionProductName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub provision_product_name: Option<String>,
+    /// <p>The identifier of the provisioning artifact.</p>
+    #[serde(rename = "ProvisioningArtifactId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub provisioning_artifact_id: Option<String>,
+    /// <p>Parameters specified by the administrator that are required for provisioning the product.</p>
+    #[serde(rename = "ProvisioningParameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub provisioning_parameters: Option<Vec<UpdateProvisioningParameter>>,
+    /// <p>The status.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+    /// <p>The status message.</p>
+    #[serde(rename = "StatusMessage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status_message: Option<String>,
+    /// <p>One or more tags.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
+    /// <p>The time when the plan was last updated.</p>
+    #[serde(rename = "UpdatedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub updated_time: Option<f64>,
+}
+
+/// <p>Summary information about a plan.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct ProvisionedProductPlanSummary {
+    /// <p>The plan identifier.</p>
+    #[serde(rename = "PlanId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub plan_id: Option<String>,
+    /// <p>The name of the plan.</p>
+    #[serde(rename = "PlanName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub plan_name: Option<String>,
+    /// <p>The plan type.</p>
+    #[serde(rename = "PlanType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub plan_type: Option<String>,
+    /// <p>The product identifier.</p>
+    #[serde(rename = "ProvisionProductId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub provision_product_id: Option<String>,
+    /// <p>The user-friendly name of the provisioned product.</p>
+    #[serde(rename = "ProvisionProductName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub provision_product_name: Option<String>,
+    /// <p>The identifier of the provisioning artifact.</p>
+    #[serde(rename = "ProvisioningArtifactId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub provisioning_artifact_id: Option<String>,
+}
+
 /// <p>Information about a provisioning artifact. A provisioning artifact is also known as a product version.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct ProvisioningArtifact {
-    /// <p>The UTC timestamp of the creation time.</p>
+    /// <p>The UTC time stamp of the creation time.</p>
     #[serde(rename = "CreatedTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub created_time: Option<f64>,
@@ -1440,7 +1799,7 @@ pub struct ProvisioningArtifactDetail {
     #[serde(rename = "Active")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub active: Option<bool>,
-    /// <p>The UTC timestamp of the creation time.</p>
+    /// <p>The UTC time stamp of the creation time.</p>
     #[serde(rename = "CreatedTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub created_time: Option<f64>,
@@ -1514,7 +1873,7 @@ pub struct ProvisioningArtifactProperties {
 /// <p>Summary information about a provisioning artifact (also known as a version) for a product.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct ProvisioningArtifactSummary {
-    /// <p>The UTC timestamp of the creation time.</p>
+    /// <p>The UTC time stamp of the creation time.</p>
     #[serde(rename = "CreatedTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub created_time: Option<f64>,
@@ -1552,7 +1911,7 @@ pub struct ProvisioningParameter {
 /// <p>Information about a request operation.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct RecordDetail {
-    /// <p>The UTC timestamp of the creation time.</p>
+    /// <p>The UTC time stamp of the creation time.</p>
     #[serde(rename = "CreatedTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub created_time: Option<f64>,
@@ -1580,7 +1939,7 @@ pub struct RecordDetail {
     #[serde(rename = "ProvisioningArtifactId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub provisioning_artifact_id: Option<String>,
-    /// <p>The errors that occurred while processing the request.</p>
+    /// <p>The errors that occurred.</p>
     #[serde(rename = "RecordErrors")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub record_errors: Option<Vec<RecordError>>,
@@ -1588,11 +1947,11 @@ pub struct RecordDetail {
     #[serde(rename = "RecordId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub record_id: Option<String>,
-    /// <p>The tags associated with this record.</p>
+    /// <p>One or more tags.</p>
     #[serde(rename = "RecordTags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub record_tags: Option<Vec<RecordTag>>,
-    /// <p><p>The record type for this record.</p> <ul> <li> <p> <code>PROVISION<em>PRODUCT</code> </p> </li> <li> <p> <code>UPDATE</em>PROVISIONED<em>PRODUCT</code> </p> </li> <li> <p> <code>TERMINATE</em>PROVISIONED_PRODUCT</code> </p> </li> </ul></p>
+    /// <p><p>The record type.</p> <ul> <li> <p> <code>PROVISION<em>PRODUCT</code> </p> </li> <li> <p> <code>UPDATE</em>PROVISIONED<em>PRODUCT</code> </p> </li> <li> <p> <code>TERMINATE</em>PROVISIONED_PRODUCT</code> </p> </li> </ul></p>
     #[serde(rename = "RecordType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub record_type: Option<String>,
@@ -1636,7 +1995,7 @@ pub struct RecordOutput {
     pub output_value: Option<String>,
 }
 
-/// <p>A tag associated with the record, stored as a key-value pair.</p>
+/// <p>Information about a tag, which is a key-value pair.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct RecordTag {
     /// <p>The key for this tag.</p>
@@ -1663,6 +2022,56 @@ pub struct RejectPortfolioShareInput {
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct RejectPortfolioShareOutput {}
 
+/// <p>Information about a resource change that will occur when a plan is executed.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct ResourceChange {
+    /// <p>The change action.</p>
+    #[serde(rename = "Action")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub action: Option<String>,
+    /// <p>Information about the resource changes.</p>
+    #[serde(rename = "Details")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub details: Option<Vec<ResourceChangeDetail>>,
+    /// <p>The ID of the resource, as defined in the CloudFormation template.</p>
+    #[serde(rename = "LogicalResourceId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub logical_resource_id: Option<String>,
+    /// <p>The ID of the resource, if it was already created.</p>
+    #[serde(rename = "PhysicalResourceId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub physical_resource_id: Option<String>,
+    /// <p>If the change type is <code>Modify</code>, indicates whether the existing resource is deleted and replaced with a new one.</p>
+    #[serde(rename = "Replacement")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub replacement: Option<String>,
+    /// <p>The type of resource.</p>
+    #[serde(rename = "ResourceType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_type: Option<String>,
+    /// <p>The change scope.</p>
+    #[serde(rename = "Scope")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub scope: Option<Vec<String>>,
+}
+
+/// <p>Information about a change to a resource attribute.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct ResourceChangeDetail {
+    /// <p>The ID of the entity that caused the change.</p>
+    #[serde(rename = "CausingEntity")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub causing_entity: Option<String>,
+    /// <p>For static evaluations, the value of the resource attribute will change and the new value is known. For dynamic evaluations, the value might change, and any new value will be determined when the plan is updated.</p>
+    #[serde(rename = "Evaluation")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub evaluation: Option<String>,
+    /// <p>Information about the resource attribute to be modified.</p>
+    #[serde(rename = "Target")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub target: Option<ResourceTargetDefinition>,
+}
+
 /// <p>Information about a resource.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct ResourceDetail {
@@ -1686,6 +2095,23 @@ pub struct ResourceDetail {
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
+}
+
+/// <p>Information about a change to a resource attribute.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct ResourceTargetDefinition {
+    /// <p>The attribute to be changed.</p>
+    #[serde(rename = "Attribute")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub attribute: Option<String>,
+    /// <p>If the attribute is <code>Properties</code>, the value is the name of the property. Otherwise, the value is null.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>If the attribute is <code>Properties</code>, indicates whether a change to this property causes the resource to be re-created.</p>
+    #[serde(rename = "RequiresRecreation")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub requires_recreation: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, Serialize)]
@@ -1813,7 +2239,55 @@ pub struct SearchProductsOutput {
     pub product_view_summaries: Option<Vec<ProductViewSummary>>,
 }
 
-/// <p>Information about a tag. A tag is a key-value pair. Tags are entirely discretionary and are propagated to the resources created when provisioning a product.</p>
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct SearchProvisionedProductsInput {
+    /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
+    #[serde(rename = "AcceptLanguage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub accept_language: Option<String>,
+    /// <p>The access level to use to obtain results. The default is <code>User</code>.</p>
+    #[serde(rename = "AccessLevelFilter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub access_level_filter: Option<AccessLevelFilter>,
+    /// <p>The search filters.</p> <p>When the key is <code>SearchQuery</code>, the searchable fields are <code>arn</code>, <code>createdTime</code>, <code>id</code>, <code>lastRecordId</code>, <code>idempotencyToken</code>, <code>name</code>, <code>physicalId</code>, <code>productId</code>, <code>provisioningArtifact</code>, <code>type</code>, <code>status</code>, <code>tags</code>, <code>userArn</code>, and <code>userArnSession</code>.</p> <p>Example: <code>"SearchQuery":["status:AVAILABLE"]</code> </p>
+    #[serde(rename = "Filters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub filters: Option<::std::collections::HashMap<String, Vec<String>>>,
+    /// <p>The maximum number of items to return with this call.</p>
+    #[serde(rename = "PageSize")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub page_size: Option<i64>,
+    /// <p>The page token for the next set of results. To retrieve the first set of results, use null.</p>
+    #[serde(rename = "PageToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub page_token: Option<String>,
+    /// <p>The sort field. If no value is specified, the results are not sorted. The valid values are <code>arn</code>, <code>id</code>, <code>name</code>, and <code>lastRecordId</code>.</p>
+    #[serde(rename = "SortBy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sort_by: Option<String>,
+    /// <p>The sort order. If no value is specified, the results are not sorted.</p>
+    #[serde(rename = "SortOrder")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sort_order: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct SearchProvisionedProductsOutput {
+    /// <p>The page token to use to retrieve the next set of results. If there are no additional results, this value is null.</p>
+    #[serde(rename = "NextPageToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_page_token: Option<String>,
+    /// <p>Information about the provisioned products.</p>
+    #[serde(rename = "ProvisionedProducts")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub provisioned_products: Option<Vec<ProvisionedProductAttribute>>,
+    /// <p>The number of provisioned products found.</p>
+    #[serde(rename = "TotalResultsCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub total_results_count: Option<i64>,
+}
+
+/// <p>Information about a tag. A tag is a key-value pair. Tags are propagated to the resources created when provisioning a product.</p>
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct Tag {
     /// <p>The tag key.</p>
@@ -2052,7 +2526,7 @@ pub struct UpdateProvisionedProductInput {
     #[serde(rename = "ProvisioningParameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub provisioning_parameters: Option<Vec<UpdateProvisioningParameter>>,
-    /// <p>The idempotency token that uniquely identifies the provisioning update rquest.</p>
+    /// <p>The idempotency token that uniquely identifies the provisioning update request.</p>
     #[serde(rename = "UpdateToken")]
     pub update_token: String,
 }
@@ -2108,7 +2582,7 @@ pub struct UpdateProvisioningArtifactOutput {
 }
 
 /// <p>The parameter key-value pair used to update a provisioned product.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct UpdateProvisioningParameter {
     /// <p>The parameter key.</p>
     #[serde(rename = "Key")]
@@ -3018,6 +3492,102 @@ impl Error for CreateProductError {
         }
     }
 }
+/// Errors returned by CreateProvisionedProductPlan
+#[derive(Debug, PartialEq)]
+pub enum CreateProvisionedProductPlanError {
+    /// <p>One or more parameters provided to the operation are not valid.</p>
+    InvalidParameters(String),
+    /// <p>An attempt was made to modify a resource that is in a state that is not valid. Check your resources to ensure that they are in valid states before retrying the operation.</p>
+    InvalidState(String),
+    /// <p>The specified resource was not found.</p>
+    ResourceNotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl CreateProvisionedProductPlanError {
+    pub fn from_body(body: &str) -> CreateProvisionedProductPlanError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InvalidParametersException" => {
+                        CreateProvisionedProductPlanError::InvalidParameters(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidStateException" => {
+                        CreateProvisionedProductPlanError::InvalidState(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        CreateProvisionedProductPlanError::ResourceNotFound(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ValidationException" => {
+                        CreateProvisionedProductPlanError::Validation(error_message.to_string())
+                    }
+                    _ => CreateProvisionedProductPlanError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => CreateProvisionedProductPlanError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for CreateProvisionedProductPlanError {
+    fn from(err: serde_json::error::Error) -> CreateProvisionedProductPlanError {
+        CreateProvisionedProductPlanError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for CreateProvisionedProductPlanError {
+    fn from(err: CredentialsError) -> CreateProvisionedProductPlanError {
+        CreateProvisionedProductPlanError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for CreateProvisionedProductPlanError {
+    fn from(err: HttpDispatchError) -> CreateProvisionedProductPlanError {
+        CreateProvisionedProductPlanError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateProvisionedProductPlanError {
+    fn from(err: io::Error) -> CreateProvisionedProductPlanError {
+        CreateProvisionedProductPlanError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for CreateProvisionedProductPlanError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for CreateProvisionedProductPlanError {
+    fn description(&self) -> &str {
+        match *self {
+            CreateProvisionedProductPlanError::InvalidParameters(ref cause) => cause,
+            CreateProvisionedProductPlanError::InvalidState(ref cause) => cause,
+            CreateProvisionedProductPlanError::ResourceNotFound(ref cause) => cause,
+            CreateProvisionedProductPlanError::Validation(ref cause) => cause,
+            CreateProvisionedProductPlanError::Credentials(ref err) => err.description(),
+            CreateProvisionedProductPlanError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            CreateProvisionedProductPlanError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by CreateProvisioningArtifact
 #[derive(Debug, PartialEq)]
 pub enum CreateProvisioningArtifactError {
@@ -3293,7 +3863,7 @@ impl Error for DeleteConstraintError {
 pub enum DeletePortfolioError {
     /// <p>One or more parameters provided to the operation are not valid.</p>
     InvalidParameters(String),
-    /// <p>A resource that is currently in use. Ensure the resource is not in use and retry the operation.</p>
+    /// <p>A resource that is currently in use. Ensure that the resource is not in use and retry the operation.</p>
     ResourceInUse(String),
     /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
@@ -3469,7 +4039,7 @@ impl Error for DeletePortfolioShareError {
 pub enum DeleteProductError {
     /// <p>One or more parameters provided to the operation are not valid.</p>
     InvalidParameters(String),
-    /// <p>A resource that is currently in use. Ensure the resource is not in use and retry the operation.</p>
+    /// <p>A resource that is currently in use. Ensure that the resource is not in use and retry the operation.</p>
     ResourceInUse(String),
     /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
@@ -3560,12 +4130,102 @@ impl Error for DeleteProductError {
         }
     }
 }
+/// Errors returned by DeleteProvisionedProductPlan
+#[derive(Debug, PartialEq)]
+pub enum DeleteProvisionedProductPlanError {
+    /// <p>One or more parameters provided to the operation are not valid.</p>
+    InvalidParameters(String),
+    /// <p>The specified resource was not found.</p>
+    ResourceNotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl DeleteProvisionedProductPlanError {
+    pub fn from_body(body: &str) -> DeleteProvisionedProductPlanError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InvalidParametersException" => {
+                        DeleteProvisionedProductPlanError::InvalidParameters(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ResourceNotFoundException" => {
+                        DeleteProvisionedProductPlanError::ResourceNotFound(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ValidationException" => {
+                        DeleteProvisionedProductPlanError::Validation(error_message.to_string())
+                    }
+                    _ => DeleteProvisionedProductPlanError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => DeleteProvisionedProductPlanError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for DeleteProvisionedProductPlanError {
+    fn from(err: serde_json::error::Error) -> DeleteProvisionedProductPlanError {
+        DeleteProvisionedProductPlanError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DeleteProvisionedProductPlanError {
+    fn from(err: CredentialsError) -> DeleteProvisionedProductPlanError {
+        DeleteProvisionedProductPlanError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DeleteProvisionedProductPlanError {
+    fn from(err: HttpDispatchError) -> DeleteProvisionedProductPlanError {
+        DeleteProvisionedProductPlanError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteProvisionedProductPlanError {
+    fn from(err: io::Error) -> DeleteProvisionedProductPlanError {
+        DeleteProvisionedProductPlanError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DeleteProvisionedProductPlanError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeleteProvisionedProductPlanError {
+    fn description(&self) -> &str {
+        match *self {
+            DeleteProvisionedProductPlanError::InvalidParameters(ref cause) => cause,
+            DeleteProvisionedProductPlanError::ResourceNotFound(ref cause) => cause,
+            DeleteProvisionedProductPlanError::Validation(ref cause) => cause,
+            DeleteProvisionedProductPlanError::Credentials(ref err) => err.description(),
+            DeleteProvisionedProductPlanError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DeleteProvisionedProductPlanError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by DeleteProvisioningArtifact
 #[derive(Debug, PartialEq)]
 pub enum DeleteProvisioningArtifactError {
     /// <p>One or more parameters provided to the operation are not valid.</p>
     InvalidParameters(String),
-    /// <p>A resource that is currently in use. Ensure the resource is not in use and retry the operation.</p>
+    /// <p>A resource that is currently in use. Ensure that the resource is not in use and retry the operation.</p>
     ResourceInUse(String),
     /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
@@ -3653,6 +4313,96 @@ impl Error for DeleteProvisioningArtifactError {
                 dispatch_error.description()
             }
             DeleteProvisioningArtifactError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DeleteTagOption
+#[derive(Debug, PartialEq)]
+pub enum DeleteTagOptionError {
+    /// <p>A resource that is currently in use. Ensure that the resource is not in use and retry the operation.</p>
+    ResourceInUse(String),
+    /// <p>The specified resource was not found.</p>
+    ResourceNotFound(String),
+    /// <p>An operation requiring TagOptions failed because the TagOptions migration process has not been performed for this account. Please use the AWS console to perform the migration process before retrying the operation.</p>
+    TagOptionNotMigrated(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl DeleteTagOptionError {
+    pub fn from_body(body: &str) -> DeleteTagOptionError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "ResourceInUseException" => {
+                        DeleteTagOptionError::ResourceInUse(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        DeleteTagOptionError::ResourceNotFound(String::from(error_message))
+                    }
+                    "TagOptionNotMigratedException" => {
+                        DeleteTagOptionError::TagOptionNotMigrated(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        DeleteTagOptionError::Validation(error_message.to_string())
+                    }
+                    _ => DeleteTagOptionError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => DeleteTagOptionError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for DeleteTagOptionError {
+    fn from(err: serde_json::error::Error) -> DeleteTagOptionError {
+        DeleteTagOptionError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DeleteTagOptionError {
+    fn from(err: CredentialsError) -> DeleteTagOptionError {
+        DeleteTagOptionError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DeleteTagOptionError {
+    fn from(err: HttpDispatchError) -> DeleteTagOptionError {
+        DeleteTagOptionError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteTagOptionError {
+    fn from(err: io::Error) -> DeleteTagOptionError {
+        DeleteTagOptionError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DeleteTagOptionError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeleteTagOptionError {
+    fn description(&self) -> &str {
+        match *self {
+            DeleteTagOptionError::ResourceInUse(ref cause) => cause,
+            DeleteTagOptionError::ResourceNotFound(ref cause) => cause,
+            DeleteTagOptionError::TagOptionNotMigrated(ref cause) => cause,
+            DeleteTagOptionError::Validation(ref cause) => cause,
+            DeleteTagOptionError::Credentials(ref err) => err.description(),
+            DeleteTagOptionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            DeleteTagOptionError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -4230,6 +4980,96 @@ impl Error for DescribeProvisionedProductError {
         }
     }
 }
+/// Errors returned by DescribeProvisionedProductPlan
+#[derive(Debug, PartialEq)]
+pub enum DescribeProvisionedProductPlanError {
+    /// <p>One or more parameters provided to the operation are not valid.</p>
+    InvalidParameters(String),
+    /// <p>The specified resource was not found.</p>
+    ResourceNotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl DescribeProvisionedProductPlanError {
+    pub fn from_body(body: &str) -> DescribeProvisionedProductPlanError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InvalidParametersException" => {
+                        DescribeProvisionedProductPlanError::InvalidParameters(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ResourceNotFoundException" => {
+                        DescribeProvisionedProductPlanError::ResourceNotFound(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ValidationException" => {
+                        DescribeProvisionedProductPlanError::Validation(error_message.to_string())
+                    }
+                    _ => DescribeProvisionedProductPlanError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => DescribeProvisionedProductPlanError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for DescribeProvisionedProductPlanError {
+    fn from(err: serde_json::error::Error) -> DescribeProvisionedProductPlanError {
+        DescribeProvisionedProductPlanError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DescribeProvisionedProductPlanError {
+    fn from(err: CredentialsError) -> DescribeProvisionedProductPlanError {
+        DescribeProvisionedProductPlanError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DescribeProvisionedProductPlanError {
+    fn from(err: HttpDispatchError) -> DescribeProvisionedProductPlanError {
+        DescribeProvisionedProductPlanError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeProvisionedProductPlanError {
+    fn from(err: io::Error) -> DescribeProvisionedProductPlanError {
+        DescribeProvisionedProductPlanError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DescribeProvisionedProductPlanError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeProvisionedProductPlanError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeProvisionedProductPlanError::InvalidParameters(ref cause) => cause,
+            DescribeProvisionedProductPlanError::ResourceNotFound(ref cause) => cause,
+            DescribeProvisionedProductPlanError::Validation(ref cause) => cause,
+            DescribeProvisionedProductPlanError::Credentials(ref err) => err.description(),
+            DescribeProvisionedProductPlanError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DescribeProvisionedProductPlanError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by DescribeProvisioningArtifact
 #[derive(Debug, PartialEq)]
 pub enum DescribeProvisioningArtifactError {
@@ -4661,7 +5501,7 @@ impl Error for DisassociatePrincipalFromPortfolioError {
 pub enum DisassociateProductFromPortfolioError {
     /// <p>One or more parameters provided to the operation are not valid.</p>
     InvalidParameters(String),
-    /// <p>A resource that is currently in use. Ensure the resource is not in use and retry the operation.</p>
+    /// <p>A resource that is currently in use. Ensure that the resource is not in use and retry the operation.</p>
     ResourceInUse(String),
     /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
@@ -4841,6 +5681,102 @@ impl Error for DisassociateTagOptionFromResourceError {
                 dispatch_error.description()
             }
             DisassociateTagOptionFromResourceError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by ExecuteProvisionedProductPlan
+#[derive(Debug, PartialEq)]
+pub enum ExecuteProvisionedProductPlanError {
+    /// <p>One or more parameters provided to the operation are not valid.</p>
+    InvalidParameters(String),
+    /// <p>An attempt was made to modify a resource that is in a state that is not valid. Check your resources to ensure that they are in valid states before retrying the operation.</p>
+    InvalidState(String),
+    /// <p>The specified resource was not found.</p>
+    ResourceNotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl ExecuteProvisionedProductPlanError {
+    pub fn from_body(body: &str) -> ExecuteProvisionedProductPlanError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InvalidParametersException" => {
+                        ExecuteProvisionedProductPlanError::InvalidParameters(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidStateException" => ExecuteProvisionedProductPlanError::InvalidState(
+                        String::from(error_message),
+                    ),
+                    "ResourceNotFoundException" => {
+                        ExecuteProvisionedProductPlanError::ResourceNotFound(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ValidationException" => {
+                        ExecuteProvisionedProductPlanError::Validation(error_message.to_string())
+                    }
+                    _ => ExecuteProvisionedProductPlanError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => ExecuteProvisionedProductPlanError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for ExecuteProvisionedProductPlanError {
+    fn from(err: serde_json::error::Error) -> ExecuteProvisionedProductPlanError {
+        ExecuteProvisionedProductPlanError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for ExecuteProvisionedProductPlanError {
+    fn from(err: CredentialsError) -> ExecuteProvisionedProductPlanError {
+        ExecuteProvisionedProductPlanError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for ExecuteProvisionedProductPlanError {
+    fn from(err: HttpDispatchError) -> ExecuteProvisionedProductPlanError {
+        ExecuteProvisionedProductPlanError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ExecuteProvisionedProductPlanError {
+    fn from(err: io::Error) -> ExecuteProvisionedProductPlanError {
+        ExecuteProvisionedProductPlanError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for ExecuteProvisionedProductPlanError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ExecuteProvisionedProductPlanError {
+    fn description(&self) -> &str {
+        match *self {
+            ExecuteProvisionedProductPlanError::InvalidParameters(ref cause) => cause,
+            ExecuteProvisionedProductPlanError::InvalidState(ref cause) => cause,
+            ExecuteProvisionedProductPlanError::ResourceNotFound(ref cause) => cause,
+            ExecuteProvisionedProductPlanError::Validation(ref cause) => cause,
+            ExecuteProvisionedProductPlanError::Credentials(ref err) => err.description(),
+            ExecuteProvisionedProductPlanError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            ExecuteProvisionedProductPlanError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -5433,6 +6369,96 @@ impl Error for ListPrincipalsForPortfolioError {
                 dispatch_error.description()
             }
             ListPrincipalsForPortfolioError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by ListProvisionedProductPlans
+#[derive(Debug, PartialEq)]
+pub enum ListProvisionedProductPlansError {
+    /// <p>One or more parameters provided to the operation are not valid.</p>
+    InvalidParameters(String),
+    /// <p>The specified resource was not found.</p>
+    ResourceNotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl ListProvisionedProductPlansError {
+    pub fn from_body(body: &str) -> ListProvisionedProductPlansError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InvalidParametersException" => {
+                        ListProvisionedProductPlansError::InvalidParameters(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ResourceNotFoundException" => {
+                        ListProvisionedProductPlansError::ResourceNotFound(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ValidationException" => {
+                        ListProvisionedProductPlansError::Validation(error_message.to_string())
+                    }
+                    _ => ListProvisionedProductPlansError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => ListProvisionedProductPlansError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for ListProvisionedProductPlansError {
+    fn from(err: serde_json::error::Error) -> ListProvisionedProductPlansError {
+        ListProvisionedProductPlansError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for ListProvisionedProductPlansError {
+    fn from(err: CredentialsError) -> ListProvisionedProductPlansError {
+        ListProvisionedProductPlansError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for ListProvisionedProductPlansError {
+    fn from(err: HttpDispatchError) -> ListProvisionedProductPlansError {
+        ListProvisionedProductPlansError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListProvisionedProductPlansError {
+    fn from(err: io::Error) -> ListProvisionedProductPlansError {
+        ListProvisionedProductPlansError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for ListProvisionedProductPlansError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListProvisionedProductPlansError {
+    fn description(&self) -> &str {
+        match *self {
+            ListProvisionedProductPlansError::InvalidParameters(ref cause) => cause,
+            ListProvisionedProductPlansError::ResourceNotFound(ref cause) => cause,
+            ListProvisionedProductPlansError::Validation(ref cause) => cause,
+            ListProvisionedProductPlansError::Credentials(ref err) => err.description(),
+            ListProvisionedProductPlansError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            ListProvisionedProductPlansError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -6202,6 +7228,88 @@ impl Error for SearchProductsAsAdminError {
         }
     }
 }
+/// Errors returned by SearchProvisionedProducts
+#[derive(Debug, PartialEq)]
+pub enum SearchProvisionedProductsError {
+    /// <p>One or more parameters provided to the operation are not valid.</p>
+    InvalidParameters(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl SearchProvisionedProductsError {
+    pub fn from_body(body: &str) -> SearchProvisionedProductsError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InvalidParametersException" => {
+                        SearchProvisionedProductsError::InvalidParameters(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ValidationException" => {
+                        SearchProvisionedProductsError::Validation(error_message.to_string())
+                    }
+                    _ => SearchProvisionedProductsError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => SearchProvisionedProductsError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for SearchProvisionedProductsError {
+    fn from(err: serde_json::error::Error) -> SearchProvisionedProductsError {
+        SearchProvisionedProductsError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for SearchProvisionedProductsError {
+    fn from(err: CredentialsError) -> SearchProvisionedProductsError {
+        SearchProvisionedProductsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for SearchProvisionedProductsError {
+    fn from(err: HttpDispatchError) -> SearchProvisionedProductsError {
+        SearchProvisionedProductsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for SearchProvisionedProductsError {
+    fn from(err: io::Error) -> SearchProvisionedProductsError {
+        SearchProvisionedProductsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for SearchProvisionedProductsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for SearchProvisionedProductsError {
+    fn description(&self) -> &str {
+        match *self {
+            SearchProvisionedProductsError::InvalidParameters(ref cause) => cause,
+            SearchProvisionedProductsError::Validation(ref cause) => cause,
+            SearchProvisionedProductsError::Credentials(ref err) => err.description(),
+            SearchProvisionedProductsError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            SearchProvisionedProductsError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by TerminateProvisionedProduct
 #[derive(Debug, PartialEq)]
 pub enum TerminateProvisionedProductError {
@@ -6884,6 +7992,12 @@ pub trait ServiceCatalog {
         input: &CreateProductInput,
     ) -> RusotoFuture<CreateProductOutput, CreateProductError>;
 
+    /// <p>Creates a plan. A plan includes the list of resources to be created (when provisioning a new product) or modified (when updating a provisioned product) when the plan is executed.</p> <p>You can create one plan per provisioned product. To create a plan for an existing provisioned product, the product status must be AVAILBLE or TAINTED.</p> <p>To view the resource changes in the change set, use <a>DescribeProvisionedProductPlan</a>. To create or modify the provisioned product, use <a>ExecuteProvisionedProductPlan</a>.</p>
+    fn create_provisioned_product_plan(
+        &self,
+        input: &CreateProvisionedProductPlanInput,
+    ) -> RusotoFuture<CreateProvisionedProductPlanOutput, CreateProvisionedProductPlanError>;
+
     /// <p>Creates a provisioning artifact (also known as a version) for the specified product.</p> <p>You cannot create a provisioning artifact for a product that was shared with you.</p>
     fn create_provisioning_artifact(
         &self,
@@ -6920,11 +8034,23 @@ pub trait ServiceCatalog {
         input: &DeleteProductInput,
     ) -> RusotoFuture<DeleteProductOutput, DeleteProductError>;
 
+    /// <p>Deletes the specified plan.</p>
+    fn delete_provisioned_product_plan(
+        &self,
+        input: &DeleteProvisionedProductPlanInput,
+    ) -> RusotoFuture<DeleteProvisionedProductPlanOutput, DeleteProvisionedProductPlanError>;
+
     /// <p>Deletes the specified provisioning artifact (also known as a version) for the specified product.</p> <p>You cannot delete a provisioning artifact associated with a product that was shared with you. You cannot delete the last provisioning artifact for a product, because a product must have at least one provisioning artifact.</p>
     fn delete_provisioning_artifact(
         &self,
         input: &DeleteProvisioningArtifactInput,
     ) -> RusotoFuture<DeleteProvisioningArtifactOutput, DeleteProvisioningArtifactError>;
+
+    /// <p>Deletes the specified TagOption.</p> <p>You cannot delete a TagOption if it is associated with a product or portfolio.</p>
+    fn delete_tag_option(
+        &self,
+        input: &DeleteTagOptionInput,
+    ) -> RusotoFuture<DeleteTagOptionOutput, DeleteTagOptionError>;
 
     /// <p>Gets information about the specified constraint.</p>
     fn describe_constraint(
@@ -6968,13 +8094,19 @@ pub trait ServiceCatalog {
         input: &DescribeProvisionedProductInput,
     ) -> RusotoFuture<DescribeProvisionedProductOutput, DescribeProvisionedProductError>;
 
+    /// <p>Gets information about the resource changes for the specified plan.</p>
+    fn describe_provisioned_product_plan(
+        &self,
+        input: &DescribeProvisionedProductPlanInput,
+    ) -> RusotoFuture<DescribeProvisionedProductPlanOutput, DescribeProvisionedProductPlanError>;
+
     /// <p>Gets information about the specified provisioning artifact (also known as a version) for the specified product.</p>
     fn describe_provisioning_artifact(
         &self,
         input: &DescribeProvisioningArtifactInput,
     ) -> RusotoFuture<DescribeProvisioningArtifactOutput, DescribeProvisioningArtifactError>;
 
-    /// <p>Gets information about the configuration required to provision the specified product using the specified provisioning artifact.</p> <p>If the output contains a TagOption key with an empty list of values, there is a TagOption conflict for that key. The end user cannot take action to fix the conflict, and launch is not blocked. In subsequent calls to <a>ProvisionProduct</a>, do not include conflicted TagOption keys as tags, or this will cause the error "Parameter validation failed: Missing required parameter in Tags[<i>N</i>]:<i>Value</i>" and tag the provisioned product with the value <code>sc-tagoption-conflict-portfolioId-productId</code>.</p>
+    /// <p>Gets information about the configuration required to provision the specified product using the specified provisioning artifact.</p> <p>If the output contains a TagOption key with an empty list of values, there is a TagOption conflict for that key. The end user cannot take action to fix the conflict, and launch is not blocked. In subsequent calls to <a>ProvisionProduct</a>, do not include conflicted TagOption keys as tags, or this causes the error "Parameter validation failed: Missing required parameter in Tags[<i>N</i>]:<i>Value</i>". Tag the provisioned product with the value <code>sc-tagoption-conflict-portfolioId-productId</code>.</p>
     fn describe_provisioning_parameters(
         &self,
         input: &DescribeProvisioningParametersInput,
@@ -7012,6 +8144,12 @@ pub trait ServiceCatalog {
         &self,
         input: &DisassociateTagOptionFromResourceInput,
     ) -> RusotoFuture<DisassociateTagOptionFromResourceOutput, DisassociateTagOptionFromResourceError>;
+
+    /// <p>Provisions or modifies a product based on the resource changes for the specified plan.</p>
+    fn execute_provisioned_product_plan(
+        &self,
+        input: &ExecuteProvisionedProductPlanInput,
+    ) -> RusotoFuture<ExecuteProvisionedProductPlanOutput, ExecuteProvisionedProductPlanError>;
 
     /// <p>Lists all portfolios for which sharing was accepted by this account.</p>
     fn list_accepted_portfolio_shares(
@@ -7055,6 +8193,12 @@ pub trait ServiceCatalog {
         input: &ListPrincipalsForPortfolioInput,
     ) -> RusotoFuture<ListPrincipalsForPortfolioOutput, ListPrincipalsForPortfolioError>;
 
+    /// <p>Lists the plans for the specified provisioned product or all plans to which the user has access.</p>
+    fn list_provisioned_product_plans(
+        &self,
+        input: &ListProvisionedProductPlansInput,
+    ) -> RusotoFuture<ListProvisionedProductPlansOutput, ListProvisionedProductPlansError>;
+
     /// <p>Lists all provisioning artifacts (also known as versions) for the specified product.</p>
     fn list_provisioning_artifacts(
         &self,
@@ -7079,7 +8223,7 @@ pub trait ServiceCatalog {
         input: &ListTagOptionsInput,
     ) -> RusotoFuture<ListTagOptionsOutput, ListTagOptionsError>;
 
-    /// <p>Provisions the specified product.</p> <p>A provisioned product is a resourced instance of a product. For example, provisioning a product based on a CloudFormation template launches a CloudFormation stack and its underlying resources. You can check the status of this request using <a>DescribeRecord</a>.</p> <p>If the request contains a tag key with an empty list of values, there is a tag conflict for that key. Do not include conflicted keys as tags, or this will cause the error "Parameter validation failed: Missing required parameter in Tags[<i>N</i>]:<i>Value</i>".</p>
+    /// <p>Provisions the specified product.</p> <p>A provisioned product is a resourced instance of a product. For example, provisioning a product based on a CloudFormation template launches a CloudFormation stack and its underlying resources. You can check the status of this request using <a>DescribeRecord</a>.</p> <p>If the request contains a tag key with an empty list of values, there is a tag conflict for that key. Do not include conflicted keys as tags, or this causes the error "Parameter validation failed: Missing required parameter in Tags[<i>N</i>]:<i>Value</i>".</p>
     fn provision_product(
         &self,
         input: &ProvisionProductInput,
@@ -7091,7 +8235,7 @@ pub trait ServiceCatalog {
         input: &RejectPortfolioShareInput,
     ) -> RusotoFuture<RejectPortfolioShareOutput, RejectPortfolioShareError>;
 
-    /// <p>Lists the provisioned products that are available (not terminated).</p>
+    /// <p>Lists the provisioned products that are available (not terminated).</p> <p>To use additional filtering, see <a>SearchProvisionedProducts</a>.</p>
     fn scan_provisioned_products(
         &self,
         input: &ScanProvisionedProductsInput,
@@ -7108,6 +8252,12 @@ pub trait ServiceCatalog {
         &self,
         input: &SearchProductsAsAdminInput,
     ) -> RusotoFuture<SearchProductsAsAdminOutput, SearchProductsAsAdminError>;
+
+    /// <p>Gets information about the provisioned products that meet the specified criteria.</p>
+    fn search_provisioned_products(
+        &self,
+        input: &SearchProvisionedProductsInput,
+    ) -> RusotoFuture<SearchProvisionedProductsOutput, SearchProvisionedProductsError>;
 
     /// <p>Terminates the specified provisioned product.</p> <p>This operation does not delete any records associated with the provisioned product.</p> <p>You can check the status of this request using <a>DescribeRecord</a>.</p>
     fn terminate_provisioned_product(
@@ -7550,6 +8700,46 @@ where
         RusotoFuture::new(future)
     }
 
+    /// <p>Creates a plan. A plan includes the list of resources to be created (when provisioning a new product) or modified (when updating a provisioned product) when the plan is executed.</p> <p>You can create one plan per provisioned product. To create a plan for an existing provisioned product, the product status must be AVAILBLE or TAINTED.</p> <p>To view the resource changes in the change set, use <a>DescribeProvisionedProductPlan</a>. To create or modify the provisioned product, use <a>ExecuteProvisionedProductPlan</a>.</p>
+    fn create_provisioned_product_plan(
+        &self,
+        input: &CreateProvisionedProductPlanInput,
+    ) -> RusotoFuture<CreateProvisionedProductPlanOutput, CreateProvisionedProductPlanError> {
+        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "AWS242ServiceCatalogService.CreateProvisionedProductPlan",
+        );
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        let future = self.inner.sign_and_dispatch(request, |response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<CreateProvisionedProductPlanOutput>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(CreateProvisionedProductPlanError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        });
+
+        RusotoFuture::new(future)
+    }
+
     /// <p>Creates a provisioning artifact (also known as a version) for the specified product.</p> <p>You cannot create a provisioning artifact for a product that was shared with you.</p>
     fn create_provisioning_artifact(
         &self,
@@ -7787,6 +8977,46 @@ where
         RusotoFuture::new(future)
     }
 
+    /// <p>Deletes the specified plan.</p>
+    fn delete_provisioned_product_plan(
+        &self,
+        input: &DeleteProvisionedProductPlanInput,
+    ) -> RusotoFuture<DeleteProvisionedProductPlanOutput, DeleteProvisionedProductPlanError> {
+        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "AWS242ServiceCatalogService.DeleteProvisionedProductPlan",
+        );
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        let future = self.inner.sign_and_dispatch(request, |response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<DeleteProvisionedProductPlanOutput>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DeleteProvisionedProductPlanError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        });
+
+        RusotoFuture::new(future)
+    }
+
     /// <p>Deletes the specified provisioning artifact (also known as a version) for the specified product.</p> <p>You cannot delete a provisioning artifact associated with a product that was shared with you. You cannot delete the last provisioning artifact for a product, because a product must have at least one provisioning artifact.</p>
     fn delete_provisioning_artifact(
         &self,
@@ -7818,6 +9048,46 @@ where
             } else {
                 future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteProvisioningArtifactError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        });
+
+        RusotoFuture::new(future)
+    }
+
+    /// <p>Deletes the specified TagOption.</p> <p>You cannot delete a TagOption if it is associated with a product or portfolio.</p>
+    fn delete_tag_option(
+        &self,
+        input: &DeleteTagOptionInput,
+    ) -> RusotoFuture<DeleteTagOptionOutput, DeleteTagOptionError> {
+        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "AWS242ServiceCatalogService.DeleteTagOption",
+        );
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        let future = self.inner.sign_and_dispatch(request, |response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<DeleteTagOptionOutput>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DeleteTagOptionError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
@@ -8107,6 +9377,47 @@ where
         RusotoFuture::new(future)
     }
 
+    /// <p>Gets information about the resource changes for the specified plan.</p>
+    fn describe_provisioned_product_plan(
+        &self,
+        input: &DescribeProvisionedProductPlanInput,
+    ) -> RusotoFuture<DescribeProvisionedProductPlanOutput, DescribeProvisionedProductPlanError>
+    {
+        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "AWS242ServiceCatalogService.DescribeProvisionedProductPlan",
+        );
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        let future = self.inner.sign_and_dispatch(request, |response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<DescribeProvisionedProductPlanOutput>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeProvisionedProductPlanError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        });
+
+        RusotoFuture::new(future)
+    }
+
     /// <p>Gets information about the specified provisioning artifact (also known as a version) for the specified product.</p>
     fn describe_provisioning_artifact(
         &self,
@@ -8147,7 +9458,7 @@ where
         RusotoFuture::new(future)
     }
 
-    /// <p>Gets information about the configuration required to provision the specified product using the specified provisioning artifact.</p> <p>If the output contains a TagOption key with an empty list of values, there is a TagOption conflict for that key. The end user cannot take action to fix the conflict, and launch is not blocked. In subsequent calls to <a>ProvisionProduct</a>, do not include conflicted TagOption keys as tags, or this will cause the error "Parameter validation failed: Missing required parameter in Tags[<i>N</i>]:<i>Value</i>" and tag the provisioned product with the value <code>sc-tagoption-conflict-portfolioId-productId</code>.</p>
+    /// <p>Gets information about the configuration required to provision the specified product using the specified provisioning artifact.</p> <p>If the output contains a TagOption key with an empty list of values, there is a TagOption conflict for that key. The end user cannot take action to fix the conflict, and launch is not blocked. In subsequent calls to <a>ProvisionProduct</a>, do not include conflicted TagOption keys as tags, or this causes the error "Parameter validation failed: Missing required parameter in Tags[<i>N</i>]:<i>Value</i>". Tag the provisioned product with the value <code>sc-tagoption-conflict-portfolioId-productId</code>.</p>
     fn describe_provisioning_parameters(
         &self,
         input: &DescribeProvisioningParametersInput,
@@ -8381,6 +9692,46 @@ where
             } else {
                 future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DisassociateTagOptionFromResourceError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        });
+
+        RusotoFuture::new(future)
+    }
+
+    /// <p>Provisions or modifies a product based on the resource changes for the specified plan.</p>
+    fn execute_provisioned_product_plan(
+        &self,
+        input: &ExecuteProvisionedProductPlanInput,
+    ) -> RusotoFuture<ExecuteProvisionedProductPlanOutput, ExecuteProvisionedProductPlanError> {
+        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "AWS242ServiceCatalogService.ExecuteProvisionedProductPlan",
+        );
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        let future = self.inner.sign_and_dispatch(request, |response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<ExecuteProvisionedProductPlanOutput>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(ExecuteProvisionedProductPlanError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
@@ -8667,6 +10018,46 @@ where
         RusotoFuture::new(future)
     }
 
+    /// <p>Lists the plans for the specified provisioned product or all plans to which the user has access.</p>
+    fn list_provisioned_product_plans(
+        &self,
+        input: &ListProvisionedProductPlansInput,
+    ) -> RusotoFuture<ListProvisionedProductPlansOutput, ListProvisionedProductPlansError> {
+        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "AWS242ServiceCatalogService.ListProvisionedProductPlans",
+        );
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        let future = self.inner.sign_and_dispatch(request, |response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<ListProvisionedProductPlansOutput>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(ListProvisionedProductPlansError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        });
+
+        RusotoFuture::new(future)
+    }
+
     /// <p>Lists all provisioning artifacts (also known as versions) for the specified product.</p>
     fn list_provisioning_artifacts(
         &self,
@@ -8824,7 +10215,7 @@ where
         RusotoFuture::new(future)
     }
 
-    /// <p>Provisions the specified product.</p> <p>A provisioned product is a resourced instance of a product. For example, provisioning a product based on a CloudFormation template launches a CloudFormation stack and its underlying resources. You can check the status of this request using <a>DescribeRecord</a>.</p> <p>If the request contains a tag key with an empty list of values, there is a tag conflict for that key. Do not include conflicted keys as tags, or this will cause the error "Parameter validation failed: Missing required parameter in Tags[<i>N</i>]:<i>Value</i>".</p>
+    /// <p>Provisions the specified product.</p> <p>A provisioned product is a resourced instance of a product. For example, provisioning a product based on a CloudFormation template launches a CloudFormation stack and its underlying resources. You can check the status of this request using <a>DescribeRecord</a>.</p> <p>If the request contains a tag key with an empty list of values, there is a tag conflict for that key. Do not include conflicted keys as tags, or this causes the error "Parameter validation failed: Missing required parameter in Tags[<i>N</i>]:<i>Value</i>".</p>
     fn provision_product(
         &self,
         input: &ProvisionProductInput,
@@ -8904,7 +10295,7 @@ where
         RusotoFuture::new(future)
     }
 
-    /// <p>Lists the provisioned products that are available (not terminated).</p>
+    /// <p>Lists the provisioned products that are available (not terminated).</p> <p>To use additional filtering, see <a>SearchProvisionedProducts</a>.</p>
     fn scan_provisioned_products(
         &self,
         input: &ScanProvisionedProductsInput,
@@ -9012,6 +10403,46 @@ where
             } else {
                 future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(SearchProductsAsAdminError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        });
+
+        RusotoFuture::new(future)
+    }
+
+    /// <p>Gets information about the provisioned products that meet the specified criteria.</p>
+    fn search_provisioned_products(
+        &self,
+        input: &SearchProvisionedProductsInput,
+    ) -> RusotoFuture<SearchProvisionedProductsOutput, SearchProvisionedProductsError> {
+        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "AWS242ServiceCatalogService.SearchProvisionedProducts",
+        );
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        let future = self.inner.sign_and_dispatch(request, |response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<SearchProvisionedProductsOutput>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(SearchProvisionedProductsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))

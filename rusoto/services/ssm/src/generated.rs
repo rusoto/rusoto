@@ -73,13 +73,13 @@ pub struct Activation {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct AddTagsToResourceRequest {
-    /// <p>The resource ID you want to tag.</p> <p>For the ManagedInstance, MaintenanceWindow, and PatchBaseline values, use the ID of the resource, such as mw-01234361858c9b57b for a Maintenance Window.</p> <p>For the Document and Parameter values, use the name of the resource.</p>
+    /// <p><p>The resource ID you want to tag.</p> <p>Use the ID of the resource. Here are some examples:</p> <p>ManagedInstance: mi-012345abcde</p> <p>MaintenanceWindow: mw-012345abcde</p> <p>PatchBaseline: pb-012345abcde</p> <p>For the Document and Parameter values, use the name of the resource.</p> <note> <p>The ManagedInstance type for this API action is only for on-premises managed instances. You must specify the the name of the managed instance in the following format: mi-ID_number. For example, mi-1a2b3c4d5e6f.</p> </note></p>
     #[serde(rename = "ResourceId")]
     pub resource_id: String,
-    /// <p>Specifies the type of resource you are tagging.</p>
+    /// <p><p>Specifies the type of resource you are tagging.</p> <note> <p>The ManagedInstance type for this API action is for on-premises managed instances. You must specify the the name of the managed instance in the following format: mi-ID_number. For example, mi-1a2b3c4d5e6f.</p> </note></p>
     #[serde(rename = "ResourceType")]
     pub resource_type: String,
-    /// <p> One or more tags. The value parameter is required, but if you don't want the tag to have a value, specify the parameter with no value, and we set the value to an empty string. </p>
+    /// <p><p> One or more tags. The value parameter is required, but if you don&#39;t want the tag to have a value, specify the parameter with no value, and we set the value to an empty string. </p> <important> <p>Do not enter personally identifiable information in this field.</p> </important></p>
     #[serde(rename = "Tags")]
     pub tags: Vec<Tag>,
 }
@@ -520,7 +520,7 @@ pub struct Command {
     #[serde(rename = "ErrorCount")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub error_count: Option<i64>,
-    /// <p>If this time is reached and the command has not already started executing, it will not execute. Calculated based on the ExpiresAfter user input provided as part of the SendCommand API.</p>
+    /// <p>If this time is reached and the command has not already started executing, it will not run. Calculated based on the ExpiresAfter user input provided as part of the SendCommand API.</p>
     #[serde(rename = "ExpiresAfter")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub expires_after: Option<f64>,
@@ -532,7 +532,7 @@ pub struct Command {
     #[serde(rename = "MaxConcurrency")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_concurrency: Option<String>,
-    /// <p>The maximum number of errors allowed before the system stops sending the command to additional targets. You can specify a number of errors, such as 10, or a percentage or errors, such as 10%. The default value is 50. For more information about how to use MaxErrors, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/run-command.html">Executing a Command Using Systems Manager Run Command</a>.</p>
+    /// <p>The maximum number of errors allowed before the system stops sending the command to additional targets. You can specify a number of errors, such as 10, or a percentage or errors, such as 10%. The default value is 0. For more information about how to use MaxErrors, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/run-command.html">Executing a Command Using Systems Manager Run Command</a>.</p>
     #[serde(rename = "MaxErrors")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_errors: Option<String>,
@@ -737,7 +737,7 @@ pub struct ComplianceItem {
     #[serde(rename = "ExecutionSummary")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub execution_summary: Option<ComplianceExecutionSummary>,
-    /// <p>An ID for the compliance item. For example, if the compliance item is a Windows patch, the ID could be the number of the KB article. Here's an example: KB4010320.</p>
+    /// <p>An ID for the compliance item. For example, if the compliance item is a Windows patch, the ID could be the number of the KB article; for example: KB4010320.</p>
     #[serde(rename = "Id")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
@@ -757,7 +757,7 @@ pub struct ComplianceItem {
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
-    /// <p>A title for the compliance item. For example, if the compliance item is a Windows patch, the title could be the title of the KB article for the patch. Here's an example: Security Update for Active Directory Federation Services.</p>
+    /// <p>A title for the compliance item. For example, if the compliance item is a Windows patch, the title could be the title of the KB article for the patch; for example: Security Update for Active Directory Federation Services.</p>
     #[serde(rename = "Title")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub title: Option<String>,
@@ -780,7 +780,7 @@ pub struct ComplianceItemEntry {
     /// <p>The status of the compliance item. An item is either COMPLIANT or NON_COMPLIANT.</p>
     #[serde(rename = "Status")]
     pub status: String,
-    /// <p>The title of the compliance item. For example, if the compliance item is a Windows patch, the title could be the title of the KB article for the patch. Here's an example: Security Update for Active Directory Federation Services. </p>
+    /// <p>The title of the compliance item. For example, if the compliance item is a Windows patch, the title could be the title of the KB article for the patch; for example: Security Update for Active Directory Federation Services. </p>
     #[serde(rename = "Title")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub title: Option<String>,
@@ -835,11 +835,11 @@ pub struct CompliantSummary {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateActivationRequest {
-    /// <p>The name of the registered, managed instance as it will appear in the Amazon EC2 console or when you use the AWS command line tools to list EC2 resources.</p>
+    /// <p><p>The name of the registered, managed instance as it will appear in the Amazon EC2 console or when you use the AWS command line tools to list EC2 resources.</p> <important> <p>Do not enter personally identifiable information in this field.</p> </important></p>
     #[serde(rename = "DefaultInstanceName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub default_instance_name: Option<String>,
-    /// <p>A userdefined description of the resource that you want to register with Amazon EC2. </p>
+    /// <p><p>A user-defined description of the resource that you want to register with Amazon EC2. </p> <important> <p>Do not enter personally identifiable information in this field.</p> </important></p>
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
@@ -979,7 +979,7 @@ pub struct CreateDocumentRequest {
     #[serde(rename = "DocumentType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub document_type: Option<String>,
-    /// <p>A name for the Systems Manager document.</p>
+    /// <p><p>A name for the Systems Manager document.</p> <important> <p>Do not use the following to begin the names of documents you create. They are reserved by AWS for use as document prefixes:</p> <ul> <li> <p> <code>aws</code> </p> </li> <li> <p> <code>amazon</code> </p> </li> <li> <p> <code>amzn</code> </p> </li> </ul> </important></p>
     #[serde(rename = "Name")]
     pub name: String,
     /// <p>Specify a target type to define the kinds of resources the document can run on. For example, to run a document on EC2 instances, specify the following value: /AWS::EC2::Instance. If you specify a value of '/' the document can run on all types of resources. If you don't specify a value, the document can't run on any resources. For a list of valid resource types, see <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-template-resource-type-ref.html">AWS Resource Types Reference</a> in the <i>AWS CloudFormation User Guide</i>. </p>
@@ -1037,14 +1037,18 @@ pub struct CreatePatchBaselineRequest {
     #[serde(rename = "ApprovalRules")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub approval_rules: Option<PatchRuleGroup>,
-    /// <p>A list of explicitly approved patches for the baseline.</p>
+    /// <p>A list of explicitly approved patches for the baseline.</p> <p>For information about accepted formats for lists of approved patches and rejected patches, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/patch-manager-approved-rejected-package-name-formats.html">Package Name Formats for Approved and Rejected Patch Lists</a> in the <i>AWS Systems Manager User Guide</i>.</p>
     #[serde(rename = "ApprovedPatches")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub approved_patches: Option<Vec<String>>,
-    /// <p>Defines the compliance level for approved patches. This means that if an approved patch is reported as missing, this is the severity of the compliance violation. Valid compliance severity levels include the following: CRITICAL, HIGH, MEDIUM, LOW, INFORMATIONAL, UNSPECIFIED. The default value is UNSPECIFIED.</p>
+    /// <p>Defines the compliance level for approved patches. This means that if an approved patch is reported as missing, this is the severity of the compliance violation. The default value is UNSPECIFIED.</p>
     #[serde(rename = "ApprovedPatchesComplianceLevel")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub approved_patches_compliance_level: Option<String>,
+    /// <p>Indicates whether the list of approved patches includes non-security updates that should be applied to the instances. The default value is 'false'. Applies to Linux instances only.</p>
+    #[serde(rename = "ApprovedPatchesEnableNonSecurity")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub approved_patches_enable_non_security: Option<bool>,
     /// <p>User-provided idempotency token.</p>
     #[serde(rename = "ClientToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1064,10 +1068,14 @@ pub struct CreatePatchBaselineRequest {
     #[serde(rename = "OperatingSystem")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub operating_system: Option<String>,
-    /// <p>A list of explicitly rejected patches for the baseline.</p>
+    /// <p>A list of explicitly rejected patches for the baseline.</p> <p>For information about accepted formats for lists of approved patches and rejected patches, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/patch-manager-approved-rejected-package-name-formats.html">Package Name Formats for Approved and Rejected Patch Lists</a> in the <i>AWS Systems Manager User Guide</i>.</p>
     #[serde(rename = "RejectedPatches")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub rejected_patches: Option<Vec<String>>,
+    /// <p>Information about the patches to use to update the instances, including target operating systems and source repositories. Applies to Linux instances only.</p>
+    #[serde(rename = "Sources")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sources: Option<Vec<PatchSource>>,
 }
 
 #[derive(Default, Debug, Clone, Deserialize)]
@@ -2319,7 +2327,7 @@ pub struct GetCommandInvocationResult {
     #[serde(rename = "StandardOutputUrl")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub standard_output_url: Option<String>,
-    /// <p>The status of the parent command for this invocation. This status can be different than StatusDetails.</p>
+    /// <p>The status of this invocation plugin. This status can be different than StatusDetails.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
@@ -2642,7 +2650,7 @@ pub struct GetMaintenanceWindowExecutionTaskResult {
     #[serde(rename = "TaskExecutionId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub task_execution_id: Option<String>,
-    /// <p>The parameters passed to the task when it was executed. The map has the following format:</p> <p>Key: string, between 1 and 255 characters</p> <p>Value: an array of strings, each string is between 1 and 255 characters</p>
+    /// <p>The parameters passed to the task when it was executed.</p> <note> <p> <code>TaskParameters</code> has been deprecated. To specify parameters to pass to a task when it runs, instead use the <code>Parameters</code> option in the <code>TaskInvocationParameters</code> structure. For information about how Systems Manager handles these options for the supported Maintenance Window task types, see <a>MaintenanceWindowTaskInvocationParameters</a>.</p> </note> <p>The map has the following format:</p> <p>Key: string, between 1 and 255 characters</p> <p>Value: an array of strings, each string is between 1 and 255 characters</p>
     #[serde(rename = "TaskParameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub task_parameters: Option<
@@ -2725,7 +2733,7 @@ pub struct GetMaintenanceWindowTaskResult {
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p>The location in Amazon S3 where the task results are logged.</p>
+    /// <p><p>The location in Amazon S3 where the task results are logged.</p> <note> <p> <code>LoggingInfo</code> has been deprecated. To specify an S3 bucket to contain logs, instead use the <code>OutputS3BucketName</code> and <code>OutputS3KeyPrefix</code> options in the <code>TaskInvocationParameters</code> structure. For information about how Systems Manager handles these options for the supported Maintenance Window task types, see <a>MaintenanceWindowTaskInvocationParameters</a>.</p> </note></p>
     #[serde(rename = "LoggingInfo")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub logging_info: Option<LoggingInfo>,
@@ -2761,7 +2769,7 @@ pub struct GetMaintenanceWindowTaskResult {
     #[serde(rename = "TaskInvocationParameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub task_invocation_parameters: Option<MaintenanceWindowTaskInvocationParameters>,
-    /// <p>The parameters to pass to the task when it executes.</p>
+    /// <p><p>The parameters to pass to the task when it executes.</p> <note> <p> <code>TaskParameters</code> has been deprecated. To specify parameters to pass to a task when it runs, instead use the <code>Parameters</code> option in the <code>TaskInvocationParameters</code> structure. For information about how Systems Manager handles these options for the supported Maintenance Window task types, see <a>MaintenanceWindowTaskInvocationParameters</a>.</p> </note></p>
     #[serde(rename = "TaskParameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub task_parameters:
@@ -2940,6 +2948,10 @@ pub struct GetPatchBaselineResult {
     #[serde(rename = "ApprovedPatchesComplianceLevel")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub approved_patches_compliance_level: Option<String>,
+    /// <p>Indicates whether the list of approved patches includes non-security updates that should be applied to the instances. The default value is 'false'. Applies to Linux instances only.</p>
+    #[serde(rename = "ApprovedPatchesEnableNonSecurity")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub approved_patches_enable_non_security: Option<bool>,
     /// <p>The ID of the retrieved patch baseline.</p>
     #[serde(rename = "BaselineId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2976,6 +2988,10 @@ pub struct GetPatchBaselineResult {
     #[serde(rename = "RejectedPatches")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub rejected_patches: Option<Vec<String>>,
+    /// <p>Information about the patches to use to update the instances, including target operating systems and source repositories. Applies to Linux instances only.</p>
+    #[serde(rename = "Sources")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sources: Option<Vec<PatchSource>>,
 }
 
 /// <p>Status information about the aggregated associations.</p>
@@ -3119,7 +3135,7 @@ pub struct InstanceInformation {
     #[serde(rename = "InstanceId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub instance_id: Option<String>,
-    /// <p>Indicates whether latest version of the SSM Agent is running on your instance. </p>
+    /// <p>Indicates whether latest version of the SSM Agent is running on your instance. Some older versions of Windows Server use the EC2Config service to process SSM requests. For this reason, this field does not indicate whether or not the latest version is installed on Windows managed instances.</p>
     #[serde(rename = "IsLatestVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub is_latest_version: Option<bool>,
@@ -3225,7 +3241,7 @@ pub struct InstancePatchState {
     /// <p>The time the most recent patching operation was started on the instance.</p>
     #[serde(rename = "OperationStartTime")]
     pub operation_start_time: f64,
-    /// <p>Placeholder information, this field will always be empty in the current release of the service.</p>
+    /// <p>Placeholder information. This field will always be empty in the current release of the service.</p>
     #[serde(rename = "OwnerInformation")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub owner_information: Option<String>,
@@ -3745,7 +3761,7 @@ pub struct ListTagsForResourceResult {
     pub tag_list: Option<Vec<Tag>>,
 }
 
-/// <p>Information about an Amazon S3 bucket to write instance-level logs to.</p>
+/// <p><p>Information about an Amazon S3 bucket to write instance-level logs to.</p> <note> <p> <code>LoggingInfo</code> has been deprecated. To specify an S3 bucket to contain logs, instead use the <code>OutputS3BucketName</code> and <code>OutputS3KeyPrefix</code> options in the <code>TaskInvocationParameters</code> structure. For information about how Systems Manager handles these options for the supported Maintenance Window task types, see <a>MaintenanceWindowTaskInvocationParameters</a>.</p> </note></p>
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct LoggingInfo {
     /// <p>The name of an Amazon S3 bucket where execution logs are stored .</p>
@@ -3767,7 +3783,7 @@ pub struct MaintenanceWindowAutomationParameters {
     #[serde(rename = "DocumentVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub document_version: Option<String>,
-    /// <p>The parameters for the AUTOMATION task.</p>
+    /// <p><p>The parameters for the AUTOMATION task.</p> <p>For information about specifying and updating task parameters, see <a>RegisterTaskWithMaintenanceWindow</a> and <a>UpdateMaintenanceWindowTask</a>.</p> <note> <p> <code>LoggingInfo</code> has been deprecated. To specify an S3 bucket to contain logs, instead use the <code>OutputS3BucketName</code> and <code>OutputS3KeyPrefix</code> options in the <code>TaskInvocationParameters</code> structure. For information about how Systems Manager handles these options for the supported Maintenance Window task types, see <a>MaintenanceWindowTaskInvocationParameters</a>.</p> <p> <code>TaskParameters</code> has been deprecated. To specify parameters to pass to a task when it runs, instead use the <code>Parameters</code> option in the <code>TaskInvocationParameters</code> structure. For information about how Systems Manager handles these options for the supported Maintenance Window task types, see <a>MaintenanceWindowTaskInvocationParameters</a>.</p> <p>For AUTOMATION task types, Systems Manager ignores any values specified for these parameters.</p> </note></p>
     #[serde(rename = "Parameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub parameters: Option<::std::collections::HashMap<String, Vec<String>>>,
@@ -3934,7 +3950,7 @@ pub struct MaintenanceWindowIdentity {
     pub window_id: Option<String>,
 }
 
-/// <p>The parameters for a LAMBDA task type.</p>
+/// <p><p>The parameters for a LAMBDA task type.</p> <p>For information about specifying and updating task parameters, see <a>RegisterTaskWithMaintenanceWindow</a> and <a>UpdateMaintenanceWindowTask</a>.</p> <note> <p> <code>LoggingInfo</code> has been deprecated. To specify an S3 bucket to contain logs, instead use the <code>OutputS3BucketName</code> and <code>OutputS3KeyPrefix</code> options in the <code>TaskInvocationParameters</code> structure. For information about how Systems Manager handles these options for the supported Maintenance Window task types, see <a>MaintenanceWindowTaskInvocationParameters</a>.</p> <p> <code>TaskParameters</code> has been deprecated. To specify parameters to pass to a task when it runs, instead use the <code>Parameters</code> option in the <code>TaskInvocationParameters</code> structure. For information about how Systems Manager handles these options for the supported Maintenance Window task types, see <a>MaintenanceWindowTaskInvocationParameters</a>.</p> <p>For Lambda tasks, Systems Manager ignores any values specified for TaskParameters and LoggingInfo.</p> </note></p>
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct MaintenanceWindowLambdaParameters {
     /// <p>Pass client-specific information to the Lambda function that you are invoking. You can then process the client information in your Lambda function as you choose through the context variable.</p>
@@ -3952,7 +3968,7 @@ pub struct MaintenanceWindowLambdaParameters {
     pub qualifier: Option<String>,
 }
 
-/// <p>The parameters for a RUN_COMMAND task type.</p>
+/// <p><p>The parameters for a RUN_COMMAND task type.</p> <p>For information about specifying and updating task parameters, see <a>RegisterTaskWithMaintenanceWindow</a> and <a>UpdateMaintenanceWindowTask</a>.</p> <note> <p> <code>LoggingInfo</code> has been deprecated. To specify an S3 bucket to contain logs, instead use the <code>OutputS3BucketName</code> and <code>OutputS3KeyPrefix</code> options in the <code>TaskInvocationParameters</code> structure. For information about how Systems Manager handles these options for the supported Maintenance Window task types, see <a>MaintenanceWindowTaskInvocationParameters</a>.</p> <p> <code>TaskParameters</code> has been deprecated. To specify parameters to pass to a task when it runs, instead use the <code>Parameters</code> option in the <code>TaskInvocationParameters</code> structure. For information about how Systems Manager handles these options for the supported Maintenance Window task types, see <a>MaintenanceWindowTaskInvocationParameters</a>.</p> <p>For Run Command tasks, Systems Manager uses specified values for <code>TaskParameters</code> and <code>LoggingInfo</code> only if no values are specified for <code>TaskInvocationParameters</code>. </p> </note></p>
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct MaintenanceWindowRunCommandParameters {
     /// <p>Information about the command(s) to execute.</p>
@@ -3993,7 +4009,7 @@ pub struct MaintenanceWindowRunCommandParameters {
     pub timeout_seconds: Option<i64>,
 }
 
-/// <p>The parameters for the STEP_FUNCTION execution.</p>
+/// <p><p>The parameters for a STEP_FUNCTION task.</p> <p>For information about specifying and updating task parameters, see <a>RegisterTaskWithMaintenanceWindow</a> and <a>UpdateMaintenanceWindowTask</a>.</p> <note> <p> <code>LoggingInfo</code> has been deprecated. To specify an S3 bucket to contain logs, instead use the <code>OutputS3BucketName</code> and <code>OutputS3KeyPrefix</code> options in the <code>TaskInvocationParameters</code> structure. For information about how Systems Manager handles these options for the supported Maintenance Window task types, see <a>MaintenanceWindowTaskInvocationParameters</a>.</p> <p> <code>TaskParameters</code> has been deprecated. To specify parameters to pass to a task when it runs, instead use the <code>Parameters</code> option in the <code>TaskInvocationParameters</code> structure. For information about how Systems Manager handles these options for the supported Maintenance Window task types, see <a>MaintenanceWindowTaskInvocationParameters</a>.</p> <p>For Step Functions tasks, Systems Manager ignores any values specified for <code>TaskParameters</code> and <code>LoggingInfo</code>.</p> </note></p>
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct MaintenanceWindowStepFunctionsParameters {
     /// <p>The inputs for the STEP_FUNCTION task.</p>
@@ -4046,7 +4062,7 @@ pub struct MaintenanceWindowTask {
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p>Information about an Amazon S3 bucket to write task-level logs to.</p>
+    /// <p><p>Information about an Amazon S3 bucket to write task-level logs to.</p> <note> <p> <code>LoggingInfo</code> has been deprecated. To specify an S3 bucket to contain logs, instead use the <code>OutputS3BucketName</code> and <code>OutputS3KeyPrefix</code> options in the <code>TaskInvocationParameters</code> structure. For information about how Systems Manager handles these options for the supported Maintenance Window task types, see <a>MaintenanceWindowTaskInvocationParameters</a>.</p> </note></p>
     #[serde(rename = "LoggingInfo")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub logging_info: Option<LoggingInfo>,
@@ -4078,7 +4094,7 @@ pub struct MaintenanceWindowTask {
     #[serde(rename = "TaskArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub task_arn: Option<String>,
-    /// <p>The parameters that should be passed to the task when it is executed.</p>
+    /// <p><p>The parameters that should be passed to the task when it is executed.</p> <note> <p> <code>TaskParameters</code> has been deprecated. To specify parameters to pass to a task when it runs, instead use the <code>Parameters</code> option in the <code>TaskInvocationParameters</code> structure. For information about how Systems Manager handles these options for the supported Maintenance Window task types, see <a>MaintenanceWindowTaskInvocationParameters</a>.</p> </note></p>
     #[serde(rename = "TaskParameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub task_parameters:
@@ -4100,7 +4116,7 @@ pub struct MaintenanceWindowTask {
 /// <p>The parameters for task execution.</p>
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct MaintenanceWindowTaskInvocationParameters {
-    /// <p>The parameters for a AUTOMATION task type.</p>
+    /// <p>The parameters for an AUTOMATION task type.</p>
     #[serde(rename = "Automation")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub automation: Option<MaintenanceWindowAutomationParameters>,
@@ -4409,7 +4425,7 @@ pub struct PatchComplianceData {
     pub title: String,
 }
 
-/// <p><p>Defines a patch filter.</p> <p>A patch filter consists of key/value pairs, but not all keys are valid for all operating system types. For example, the key <code>PRODUCT</code> is valid for all supported operating system types. The key <code>MSRC<em>SEVERITY</code>, however, is valid only for Windows operating systems, and the key <code>SECTION</code> is valid only for Ubuntu operating systems.</p> <p>Refer to the following sections for information about which keys may be used with each major operating system, and which values are valid for each key.</p> <p> <b>Windows Operating Systems</b> </p> <p>The supported keys for Windows operating systems are <code>PRODUCT</code>, <code>CLASSIFICATION</code>, and <code>MSRC</em>SEVERITY</code>. See the following lists for valid values for each of these keys.</p> <p> <i>Supported key:</i> <code>PRODUCT</code> </p> <p> <i>Supported values:</i> </p> <ul> <li> <p> <code>Windows7</code> </p> </li> <li> <p> <code>Windows8</code> </p> </li> <li> <p> <code>Windows8.1</code> </p> </li> <li> <p> <code>Windows8Embedded</code> </p> </li> <li> <p> <code>Windows10</code> </p> </li> <li> <p> <code>Windows10LTSB</code> </p> </li> <li> <p> <code>WindowsServer2008</code> </p> </li> <li> <p> <code>WindowsServer2008R2</code> </p> </li> <li> <p> <code>WindowsServer2012</code> </p> </li> <li> <p> <code>WindowsServer2012R2</code> </p> </li> <li> <p> <code>WindowsServer2016</code> </p> </li> </ul> <p> <i>Supported key:</i> <code>CLASSIFICATION</code> </p> <p> <i>Supported values:</i> </p> <ul> <li> <p> <code>CriticalUpdates</code> </p> </li> <li> <p> <code>DefinitionUpdates</code> </p> </li> <li> <p> <code>Drivers</code> </p> </li> <li> <p> <code>FeaturePacks</code> </p> </li> <li> <p> <code>SecurityUpdates</code> </p> </li> <li> <p> <code>ServicePacks</code> </p> </li> <li> <p> <code>Tools</code> </p> </li> <li> <p> <code>UpdateRollups</code> </p> </li> <li> <p> <code>Updates</code> </p> </li> <li> <p> <code>Upgrades</code> </p> </li> </ul> <p> <i>Supported key:</i> <code>MSRC_SEVERITY</code> </p> <p> <i>Supported values:</i> </p> <ul> <li> <p> <code>Critical</code> </p> </li> <li> <p> <code>Important</code> </p> </li> <li> <p> <code>Moderate</code> </p> </li> <li> <p> <code>Low</code> </p> </li> <li> <p> <code>Unspecified</code> </p> </li> </ul> <p> <b>Ubuntu Operating Systems</b> </p> <p>The supported keys for Ubuntu operating systems are <code>PRODUCT</code>, <code>PRIORITY</code>, and <code>SECTION</code>. See the following lists for valid values for each of these keys.</p> <p> <i>Supported key:</i> <code>PRODUCT</code> </p> <p> <i>Supported values:</i> </p> <ul> <li> <p> <code>Ubuntu14.04</code> </p> </li> <li> <p> <code>Ubuntu16.04</code> </p> </li> </ul> <p> <i>Supported key:</i> <code>PRIORITY</code> </p> <p> <i>Supported values:</i> </p> <ul> <li> <p> <code>Required</code> </p> </li> <li> <p> <code>Important</code> </p> </li> <li> <p> <code>Standard</code> </p> </li> <li> <p> <code>Optional</code> </p> </li> <li> <p> <code>Extra</code> </p> </li> </ul> <p> <i>Supported key:</i> <code>SECTION</code> </p> <p>Only the length of the key value is validated. Minimum length is 1. Maximum length is 64.</p> <p> <b>Amazon Linux Operating Systems</b> </p> <p>The supported keys for Amazon Linux operating systems are <code>PRODUCT</code>, <code>CLASSIFICATION</code>, and <code>SEVERITY</code>. See the following lists for valid values for each of these keys.</p> <p> <i>Supported key:</i> <code>PRODUCT</code> </p> <p> <i>Supported values:</i> </p> <ul> <li> <p> <code>AmazonLinux2012.03</code> </p> </li> <li> <p> <code>AmazonLinux2012.09</code> </p> </li> <li> <p> <code>AmazonLinux2013.03</code> </p> </li> <li> <p> <code>AmazonLinux2013.09</code> </p> </li> <li> <p> <code>AmazonLinux2014.03</code> </p> </li> <li> <p> <code>AmazonLinux2014.09</code> </p> </li> <li> <p> <code>AmazonLinux2015.03</code> </p> </li> <li> <p> <code>AmazonLinux2015.09</code> </p> </li> <li> <p> <code>AmazonLinux2016.03</code> </p> </li> <li> <p> <code>AmazonLinux2016.09</code> </p> </li> <li> <p> <code>AmazonLinux2017.03</code> </p> </li> <li> <p> <code>AmazonLinux2017.09</code> </p> </li> </ul> <p> <i>Supported key:</i> <code>CLASSIFICATION</code> </p> <p> <i>Supported values:</i> </p> <ul> <li> <p> <code>Security</code> </p> </li> <li> <p> <code>Bugfix</code> </p> </li> <li> <p> <code>Enhancement</code> </p> </li> <li> <p> <code>Recommended</code> </p> </li> <li> <p> <code>Newpackage</code> </p> </li> </ul> <p> <i>Supported key:</i> <code>SEVERITY</code> </p> <p> <i>Supported values:</i> </p> <ul> <li> <p> <code>Critical</code> </p> </li> <li> <p> <code>Important</code> </p> </li> <li> <p> <code>Medium</code> </p> </li> <li> <p> <code>Low</code> </p> </li> </ul> <p> <b>RedHat Enterprise Linux (RHEL) Operating Systems</b> </p> <p>The supported keys for RedHat Enterprise Linux operating systems are <code>PRODUCT</code>, <code>CLASSIFICATION</code>, and <code>SEVERITY</code>. See the following lists for valid values for each of these keys.</p> <p> <i>Supported key:</i> <code>PRODUCT</code> </p> <p> <i>Supported values:</i> </p> <ul> <li> <p> <code>RedhatEnterpriseLinux6.5</code> </p> </li> <li> <p> <code>RedhatEnterpriseLinux6.6</code> </p> </li> <li> <p> <code>RedhatEnterpriseLinux6.7</code> </p> </li> <li> <p> <code>RedhatEnterpriseLinux6.8</code> </p> </li> <li> <p> <code>RedhatEnterpriseLinux6.9</code> </p> </li> <li> <p> <code>RedhatEnterpriseLinux7.0</code> </p> </li> <li> <p> <code>RedhatEnterpriseLinux7.1</code> </p> </li> <li> <p> <code>RedhatEnterpriseLinux7.2</code> </p> </li> <li> <p> <code>RedhatEnterpriseLinux7.3</code> </p> </li> <li> <p> <code>RedhatEnterpriseLinux7.4</code> </p> </li> </ul> <p> <i>Supported key:</i> <code>CLASSIFICATION</code> </p> <p> <i>Supported values:</i> </p> <ul> <li> <p> <code>Security</code> </p> </li> <li> <p> <code>Bugfix</code> </p> </li> <li> <p> <code>Enhancement</code> </p> </li> <li> <p> <code>Recommended</code> </p> </li> <li> <p> <code>Newpackage</code> </p> </li> </ul> <p> <i>Supported key:</i> <code>SEVERITY</code> </p> <p> <i>Supported values:</i> </p> <ul> <li> <p> <code>Critical</code> </p> </li> <li> <p> <code>Important</code> </p> </li> <li> <p> <code>Medium</code> </p> </li> <li> <p> <code>Low</code> </p> </li> </ul></p>
+/// <p><p>Defines a patch filter.</p> <p>A patch filter consists of key/value pairs, but not all keys are valid for all operating system types. For example, the key <code>PRODUCT</code> is valid for all supported operating system types. The key <code>MSRC<em>SEVERITY</code>, however, is valid only for Windows operating systems, and the key <code>SECTION</code> is valid only for Ubuntu operating systems.</p> <p>Refer to the following sections for information about which keys may be used with each major operating system, and which values are valid for each key.</p> <p> <b>Windows Operating Systems</b> </p> <p>The supported keys for Windows operating systems are <code>PRODUCT</code>, <code>CLASSIFICATION</code>, and <code>MSRC</em>SEVERITY</code>. See the following lists for valid values for each of these keys.</p> <p> <i>Supported key:</i> <code>PRODUCT</code> </p> <p> <i>Supported values:</i> </p> <ul> <li> <p> <code>Windows7</code> </p> </li> <li> <p> <code>Windows8</code> </p> </li> <li> <p> <code>Windows8.1</code> </p> </li> <li> <p> <code>Windows8Embedded</code> </p> </li> <li> <p> <code>Windows10</code> </p> </li> <li> <p> <code>Windows10LTSB</code> </p> </li> <li> <p> <code>WindowsServer2008</code> </p> </li> <li> <p> <code>WindowsServer2008R2</code> </p> </li> <li> <p> <code>WindowsServer2012</code> </p> </li> <li> <p> <code>WindowsServer2012R2</code> </p> </li> <li> <p> <code>WindowsServer2016</code> </p> </li> </ul> <p> <i>Supported key:</i> <code>CLASSIFICATION</code> </p> <p> <i>Supported values:</i> </p> <ul> <li> <p> <code>CriticalUpdates</code> </p> </li> <li> <p> <code>DefinitionUpdates</code> </p> </li> <li> <p> <code>Drivers</code> </p> </li> <li> <p> <code>FeaturePacks</code> </p> </li> <li> <p> <code>SecurityUpdates</code> </p> </li> <li> <p> <code>ServicePacks</code> </p> </li> <li> <p> <code>Tools</code> </p> </li> <li> <p> <code>UpdateRollups</code> </p> </li> <li> <p> <code>Updates</code> </p> </li> <li> <p> <code>Upgrades</code> </p> </li> </ul> <p> <i>Supported key:</i> <code>MSRC_SEVERITY</code> </p> <p> <i>Supported values:</i> </p> <ul> <li> <p> <code>Critical</code> </p> </li> <li> <p> <code>Important</code> </p> </li> <li> <p> <code>Moderate</code> </p> </li> <li> <p> <code>Low</code> </p> </li> <li> <p> <code>Unspecified</code> </p> </li> </ul> <p> <b>Ubuntu Operating Systems</b> </p> <p>The supported keys for Ubuntu operating systems are <code>PRODUCT</code>, <code>PRIORITY</code>, and <code>SECTION</code>. See the following lists for valid values for each of these keys.</p> <p> <i>Supported key:</i> <code>PRODUCT</code> </p> <p> <i>Supported values:</i> </p> <ul> <li> <p> <code>Ubuntu14.04</code> </p> </li> <li> <p> <code>Ubuntu16.04</code> </p> </li> </ul> <p> <i>Supported key:</i> <code>PRIORITY</code> </p> <p> <i>Supported values:</i> </p> <ul> <li> <p> <code>Required</code> </p> </li> <li> <p> <code>Important</code> </p> </li> <li> <p> <code>Standard</code> </p> </li> <li> <p> <code>Optional</code> </p> </li> <li> <p> <code>Extra</code> </p> </li> </ul> <p> <i>Supported key:</i> <code>SECTION</code> </p> <p>Only the length of the key value is validated. Minimum length is 1. Maximum length is 64.</p> <p> <b>Amazon Linux Operating Systems</b> </p> <p>The supported keys for Amazon Linux operating systems are <code>PRODUCT</code>, <code>CLASSIFICATION</code>, and <code>SEVERITY</code>. See the following lists for valid values for each of these keys.</p> <p> <i>Supported key:</i> <code>PRODUCT</code> </p> <p> <i>Supported values:</i> </p> <ul> <li> <p> <code>AmazonLinux2012.03</code> </p> </li> <li> <p> <code>AmazonLinux2012.09</code> </p> </li> <li> <p> <code>AmazonLinux2013.03</code> </p> </li> <li> <p> <code>AmazonLinux2013.09</code> </p> </li> <li> <p> <code>AmazonLinux2014.03</code> </p> </li> <li> <p> <code>AmazonLinux2014.09</code> </p> </li> <li> <p> <code>AmazonLinux2015.03</code> </p> </li> <li> <p> <code>AmazonLinux2015.09</code> </p> </li> <li> <p> <code>AmazonLinux2016.03</code> </p> </li> <li> <p> <code>AmazonLinux2016.09</code> </p> </li> <li> <p> <code>AmazonLinux2017.03</code> </p> </li> <li> <p> <code>AmazonLinux2017.09</code> </p> </li> </ul> <p> <i>Supported key:</i> <code>CLASSIFICATION</code> </p> <p> <i>Supported values:</i> </p> <ul> <li> <p> <code>Security</code> </p> </li> <li> <p> <code>Bugfix</code> </p> </li> <li> <p> <code>Enhancement</code> </p> </li> <li> <p> <code>Recommended</code> </p> </li> <li> <p> <code>Newpackage</code> </p> </li> </ul> <p> <i>Supported key:</i> <code>SEVERITY</code> </p> <p> <i>Supported values:</i> </p> <ul> <li> <p> <code>Critical</code> </p> </li> <li> <p> <code>Important</code> </p> </li> <li> <p> <code>Medium</code> </p> </li> <li> <p> <code>Low</code> </p> </li> </ul> <p> <b>RedHat Enterprise Linux (RHEL) Operating Systems</b> </p> <p>The supported keys for RedHat Enterprise Linux operating systems are <code>PRODUCT</code>, <code>CLASSIFICATION</code>, and <code>SEVERITY</code>. See the following lists for valid values for each of these keys.</p> <p> <i>Supported key:</i> <code>PRODUCT</code> </p> <p> <i>Supported values:</i> </p> <ul> <li> <p> <code>RedhatEnterpriseLinux6.5</code> </p> </li> <li> <p> <code>RedhatEnterpriseLinux6.6</code> </p> </li> <li> <p> <code>RedhatEnterpriseLinux6.7</code> </p> </li> <li> <p> <code>RedhatEnterpriseLinux6.8</code> </p> </li> <li> <p> <code>RedhatEnterpriseLinux6.9</code> </p> </li> <li> <p> <code>RedhatEnterpriseLinux7.0</code> </p> </li> <li> <p> <code>RedhatEnterpriseLinux7.1</code> </p> </li> <li> <p> <code>RedhatEnterpriseLinux7.2</code> </p> </li> <li> <p> <code>RedhatEnterpriseLinux7.3</code> </p> </li> <li> <p> <code>RedhatEnterpriseLinux7.4</code> </p> </li> </ul> <p> <i>Supported key:</i> <code>CLASSIFICATION</code> </p> <p> <i>Supported values:</i> </p> <ul> <li> <p> <code>Security</code> </p> </li> <li> <p> <code>Bugfix</code> </p> </li> <li> <p> <code>Enhancement</code> </p> </li> <li> <p> <code>Recommended</code> </p> </li> <li> <p> <code>Newpackage</code> </p> </li> </ul> <p> <i>Supported key:</i> <code>SEVERITY</code> </p> <p> <i>Supported values:</i> </p> <ul> <li> <p> <code>Critical</code> </p> </li> <li> <p> <code>Important</code> </p> </li> <li> <p> <code>Medium</code> </p> </li> <li> <p> <code>Low</code> </p> </li> </ul> <p> <b>SUSE Linux Enterprise Server (SUSE) Operating Systems</b> </p> <p>The supported keys for SUSE operating systems are <code>PRODUCT</code>, <code>CLASSIFICATION</code>, and <code>SEVERITY</code>. See the following lists for valid values for each of these keys.</p> <p> <i>Supported key:</i> <code>PRODUCT</code> </p> <p> <i>Supported values:</i> </p> <ul> <li> <p> <code>Suse12.0</code> </p> </li> <li> <p> <code>Suse12.1</code> </p> </li> <li> <p> <code>Suse12.2</code> </p> </li> <li> <p> <code>Suse12.3</code> </p> </li> <li> <p> <code>Suse12.4</code> </p> </li> <li> <p> <code>Suse12.5</code> </p> </li> <li> <p> <code>Suse12.6</code> </p> </li> <li> <p> <code>Suse12.7</code> </p> </li> <li> <p> <code>Suse12.8</code> </p> </li> <li> <p> <code>Suse12.9</code> </p> </li> </ul> <p> <i>Supported key:</i> <code>CLASSIFICATION</code> </p> <p> <i>Supported values:</i> </p> <ul> <li> <p> <code>Security</code> </p> </li> <li> <p> <code>Recommended</code> </p> </li> <li> <p> <code>Optional</code> </p> </li> <li> <p> <code>Feature</code> </p> </li> <li> <p> <code>Document</code> </p> </li> <li> <p> <code>Yast</code> </p> </li> </ul> <p> <i>Supported key:</i> <code>SEVERITY</code> </p> <p> <i>Supported values:</i> </p> <ul> <li> <p> <code>Critical</code> </p> </li> <li> <p> <code>Important</code> </p> </li> <li> <p> <code>Moderate</code> </p> </li> <li> <p> <code>Low</code> </p> </li> </ul></p>
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct PatchFilter {
     /// <p>The key for the filter.</p> <p>See <a>PatchFilter</a> for lists of valid keys for each operating system type.</p>
@@ -4464,6 +4480,10 @@ pub struct PatchRule {
     #[serde(rename = "ComplianceLevel")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub compliance_level: Option<String>,
+    /// <p>For instances identified by the approval rule filters, enables a patch baseline to apply non-security updates available in the specified repository. The default value is 'false'. Applies to Linux instances only.</p>
+    #[serde(rename = "EnableNonSecurity")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub enable_non_security: Option<bool>,
     /// <p>The patch filter group that defines the criteria for the rule.</p>
     #[serde(rename = "PatchFilterGroup")]
     pub patch_filter_group: PatchFilterGroup,
@@ -4475,6 +4495,20 @@ pub struct PatchRuleGroup {
     /// <p>The rules that make up the rule group.</p>
     #[serde(rename = "PatchRules")]
     pub patch_rules: Vec<PatchRule>,
+}
+
+/// <p>Information about the patches to use to update the instances, including target operating systems and source repository. Applies to Linux instances only.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+pub struct PatchSource {
+    /// <p>The value of the yum repo configuration. For example:</p> <p> <code>cachedir=/var/cache/yum/$basesearch</code> </p> <p> <code>$releasever</code> </p> <p> <code>keepcache=0</code> </p> <p> <code>debualevel=2</code> </p>
+    #[serde(rename = "Configuration")]
+    pub configuration: String,
+    /// <p>The name specified to identify the patch source.</p>
+    #[serde(rename = "Name")]
+    pub name: String,
+    /// <p>The specific operating system versions a patch repository applies to, such as "Ubuntu16.04", "AmazonLinux2016.09", "RedhatEnterpriseLinux7.2" or "Suse12.7". For lists of supported product values, see <a>PatchFilter</a>.</p>
+    #[serde(rename = "Products")]
+    pub products: Vec<String>,
 }
 
 /// <p>Information about the approval status of a patch.</p>
@@ -4539,7 +4573,7 @@ pub struct PutParameterRequest {
     #[serde(rename = "AllowedPattern")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub allowed_pattern: Option<String>,
-    /// <p>Information about the parameter that you want to add to the system.</p>
+    /// <p><p>Information about the parameter that you want to add to the system.</p> <important> <p>Do not enter personally identifiable information in this field.</p> </important></p>
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
@@ -4547,7 +4581,7 @@ pub struct PutParameterRequest {
     #[serde(rename = "KeyId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub key_id: Option<String>,
-    /// <p><p>The fully qualified name of the parameter that you want to add to the system. The fully qualified name includes the complete hierarchy of the parameter path and name. For example: <code>/Dev/DBServer/MySQL/db-string13</code> </p> <note> <p>The maximum length constraint listed below includes capacity for additional system attributes that are not part of the name. The maximum length for the fully qualified parameter name is 1011 characters. </p> </note></p>
+    /// <p><p>The fully qualified name of the parameter that you want to add to the system. The fully qualified name includes the complete hierarchy of the parameter path and name. For example: <code>/Dev/DBServer/MySQL/db-string13</code> </p> <p>For information about parameter name requirements and restrictions, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-paramstore-su-create.html#sysman-paramstore-su-create-about">About Creating Systems Manager Parameters</a> in the <i>AWS Systems Manager User Guide</i>.</p> <note> <p>The maximum length constraint listed below includes capacity for additional system attributes that are not part of the name. The maximum length for the fully qualified parameter name is 1011 characters. </p> </note></p>
     #[serde(rename = "Name")]
     pub name: String,
     /// <p>Overwrite an existing parameter. If not specified, will default to "false".</p>
@@ -4628,7 +4662,7 @@ pub struct RegisterTargetWithMaintenanceWindowRequest {
     /// <p>The type of target being registered with the Maintenance Window.</p>
     #[serde(rename = "ResourceType")]
     pub resource_type: String,
-    /// <p>The targets (either instances or tags). Instances are specified using Key=instanceids,Values=&lt;instanceid1&gt;,&lt;instanceid2&gt;. Tags are specified using Key=&lt;tag name&gt;,Values=&lt;tag value&gt;.</p>
+    /// <p>The targets (either instances or tags). </p> <p>Specify instances using the following format:</p> <p> <code>Key=InstanceIds,Values=&lt;instance-id-1&gt;,&lt;instance-id-2&gt;</code> </p> <p>Specify tags using either of the following formats:</p> <p> <code>Key=tag:&lt;tag-key&gt;,Values=&lt;tag-value-1&gt;,&lt;tag-value-2&gt;</code> </p> <p> <code>Key=tag-key,Values=&lt;tag-key-1&gt;,&lt;tag-key-2&gt;</code> </p>
     #[serde(rename = "Targets")]
     pub targets: Vec<Target>,
     /// <p>The ID of the Maintenance Window the target should be registered with.</p>
@@ -4654,7 +4688,7 @@ pub struct RegisterTaskWithMaintenanceWindowRequest {
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p>A structure containing information about an Amazon S3 bucket to write instance-level logs to. </p>
+    /// <p><p>A structure containing information about an Amazon S3 bucket to write instance-level logs to. </p> <note> <p> <code>LoggingInfo</code> has been deprecated. To specify an S3 bucket to contain logs, instead use the <code>OutputS3BucketName</code> and <code>OutputS3KeyPrefix</code> options in the <code>TaskInvocationParameters</code> structure. For information about how Systems Manager handles these options for the supported Maintenance Window task types, see <a>MaintenanceWindowTaskInvocationParameters</a>.</p> </note></p>
     #[serde(rename = "LoggingInfo")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub logging_info: Option<LoggingInfo>,
@@ -4675,7 +4709,7 @@ pub struct RegisterTaskWithMaintenanceWindowRequest {
     /// <p>The role that should be assumed when executing the task.</p>
     #[serde(rename = "ServiceRoleArn")]
     pub service_role_arn: String,
-    /// <p>The targets (either instances or tags). Instances are specified using Key=instanceids,Values=&lt;instanceid1&gt;,&lt;instanceid2&gt;. Tags are specified using Key=&lt;tag name&gt;,Values=&lt;tag value&gt;.</p>
+    /// <p>The targets (either instances or Maintenance Window targets).</p> <p>Specify instances using the following format: </p> <p> <code>Key=InstanceIds,Values=&lt;instance-id-1&gt;,&lt;instance-id-2&gt;</code> </p> <p>Specify Maintenance Window targets using the following format:</p> <p> <code>Key=&lt;WindowTargetIds&gt;,Values=&lt;window-target-id-1&gt;,&lt;window-target-id-2&gt;</code> </p>
     #[serde(rename = "Targets")]
     pub targets: Vec<Target>,
     /// <p>The ARN of the task to execute </p>
@@ -4685,7 +4719,7 @@ pub struct RegisterTaskWithMaintenanceWindowRequest {
     #[serde(rename = "TaskInvocationParameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub task_invocation_parameters: Option<MaintenanceWindowTaskInvocationParameters>,
-    /// <p>The parameters that should be passed to the task when it is executed.</p>
+    /// <p><p>The parameters that should be passed to the task when it is executed.</p> <note> <p> <code>TaskParameters</code> has been deprecated. To specify parameters to pass to a task when it runs, instead use the <code>Parameters</code> option in the <code>TaskInvocationParameters</code> structure. For information about how Systems Manager handles these options for the supported Maintenance Window task types, see <a>MaintenanceWindowTaskInvocationParameters</a>.</p> </note></p>
     #[serde(rename = "TaskParameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub task_parameters:
@@ -4693,7 +4727,7 @@ pub struct RegisterTaskWithMaintenanceWindowRequest {
     /// <p>The type of task being registered.</p>
     #[serde(rename = "TaskType")]
     pub task_type: String,
-    /// <p>The id of the Maintenance Window the task should be added to.</p>
+    /// <p>The ID of the Maintenance Window the task should be added to.</p>
     #[serde(rename = "WindowId")]
     pub window_id: String,
 }
@@ -4708,10 +4742,10 @@ pub struct RegisterTaskWithMaintenanceWindowResult {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct RemoveTagsFromResourceRequest {
-    /// <p>The resource ID for which you want to remove tags.</p>
+    /// <p><p>The resource ID for which you want to remove tags. Use the ID of the resource. Here are some examples:</p> <p>ManagedInstance: mi-012345abcde</p> <p>MaintenanceWindow: mw-012345abcde</p> <p>PatchBaseline: pb-012345abcde</p> <p>For the Document and Parameter values, use the name of the resource.</p> <note> <p>The ManagedInstance type for this API action is only for on-premises managed instances. You must specify the the name of the managed instance in the following format: mi-ID_number. For example, mi-1a2b3c4d5e6f.</p> </note></p>
     #[serde(rename = "ResourceId")]
     pub resource_id: String,
-    /// <p>The type of resource of which you want to remove a tag.</p>
+    /// <p><p>The type of resource of which you want to remove a tag.</p> <note> <p>The ManagedInstance type for this API action is only for on-premises managed instances. You must specify the the name of the managed instance in the following format: mi-ID_number. For example, mi-1a2b3c4d5e6f.</p> </note></p>
     #[serde(rename = "ResourceType")]
     pub resource_type: String,
     /// <p>Tag keys that you want to remove from the specified resource.</p>
@@ -4783,6 +4817,10 @@ pub struct ResourceDataSyncItem {
     #[serde(rename = "LastSuccessfulSyncTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_successful_sync_time: Option<f64>,
+    /// <p>The status message details reported by the last sync.</p>
+    #[serde(rename = "LastSyncStatusMessage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_sync_status_message: Option<String>,
     /// <p>The last time the configuration attempted to sync (UTC).</p>
     #[serde(rename = "LastSyncTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4899,7 +4937,7 @@ pub struct SendCommandRequest {
     #[serde(rename = "MaxConcurrency")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_concurrency: Option<String>,
-    /// <p>The maximum number of errors allowed without the command failing. When the command fails one more time beyond the value of MaxErrors, the systems stops sending the command to additional targets. You can specify a number like 10 or a percentage like 10%. The default value is 50. For more information about how to use MaxErrors, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/send-commands-maxerrors.html">Using Error Controls</a>.</p>
+    /// <p>The maximum number of errors allowed without the command failing. When the command fails one more time beyond the value of MaxErrors, the systems stops sending the command to additional targets. You can specify a number like 10 or a percentage like 10%. The default value is 0. For more information about how to use MaxErrors, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/send-commands-maxerrors.html">Using Error Controls</a>.</p>
     #[serde(rename = "MaxErrors")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_errors: Option<String>,
@@ -4931,7 +4969,7 @@ pub struct SendCommandRequest {
     #[serde(rename = "Targets")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub targets: Option<Vec<Target>>,
-    /// <p>If this time is reached and the command has not already started executing, it will not execute.</p>
+    /// <p>If this time is reached and the command has not already started executing, it will not run.</p>
     #[serde(rename = "TimeoutSeconds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub timeout_seconds: Option<i64>,
@@ -5394,7 +5432,7 @@ pub struct UpdateMaintenanceWindowTaskRequest {
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p>The new logging location in Amazon S3 to specify.</p>
+    /// <p><p>The new logging location in Amazon S3 to specify.</p> <note> <p> <code>LoggingInfo</code> has been deprecated. To specify an S3 bucket to contain logs, instead use the <code>OutputS3BucketName</code> and <code>OutputS3KeyPrefix</code> options in the <code>TaskInvocationParameters</code> structure. For information about how Systems Manager handles these options for the supported Maintenance Window task types, see <a>MaintenanceWindowTaskInvocationParameters</a>.</p> </note></p>
     #[serde(rename = "LoggingInfo")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub logging_info: Option<LoggingInfo>,
@@ -5434,7 +5472,7 @@ pub struct UpdateMaintenanceWindowTaskRequest {
     #[serde(rename = "TaskInvocationParameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub task_invocation_parameters: Option<MaintenanceWindowTaskInvocationParameters>,
-    /// <p>The parameters to modify. The map has the following format:</p> <p>Key: string, between 1 and 255 characters</p> <p>Value: an array of strings, each string is between 1 and 255 characters</p>
+    /// <p>The parameters to modify.</p> <note> <p> <code>TaskParameters</code> has been deprecated. To specify parameters to pass to a task when it runs, instead use the <code>Parameters</code> option in the <code>TaskInvocationParameters</code> structure. For information about how Systems Manager handles these options for the supported Maintenance Window task types, see <a>MaintenanceWindowTaskInvocationParameters</a>.</p> </note> <p>The map has the following format:</p> <p>Key: string, between 1 and 255 characters</p> <p>Value: an array of strings, each string is between 1 and 255 characters</p>
     #[serde(rename = "TaskParameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub task_parameters:
@@ -5453,7 +5491,7 @@ pub struct UpdateMaintenanceWindowTaskResult {
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p>The updated logging information in Amazon S3.</p>
+    /// <p><p>The updated logging information in Amazon S3.</p> <note> <p> <code>LoggingInfo</code> has been deprecated. To specify an S3 bucket to contain logs, instead use the <code>OutputS3BucketName</code> and <code>OutputS3KeyPrefix</code> options in the <code>TaskInvocationParameters</code> structure. For information about how Systems Manager handles these options for the supported Maintenance Window task types, see <a>MaintenanceWindowTaskInvocationParameters</a>.</p> </note></p>
     #[serde(rename = "LoggingInfo")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub logging_info: Option<LoggingInfo>,
@@ -5489,7 +5527,7 @@ pub struct UpdateMaintenanceWindowTaskResult {
     #[serde(rename = "TaskInvocationParameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub task_invocation_parameters: Option<MaintenanceWindowTaskInvocationParameters>,
-    /// <p>The updated parameter values.</p>
+    /// <p><p>The updated parameter values.</p> <note> <p> <code>TaskParameters</code> has been deprecated. To specify parameters to pass to a task when it runs, instead use the <code>Parameters</code> option in the <code>TaskInvocationParameters</code> structure. For information about how Systems Manager handles these options for the supported Maintenance Window task types, see <a>MaintenanceWindowTaskInvocationParameters</a>.</p> </note></p>
     #[serde(rename = "TaskParameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub task_parameters:
@@ -5523,7 +5561,7 @@ pub struct UpdatePatchBaselineRequest {
     #[serde(rename = "ApprovalRules")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub approval_rules: Option<PatchRuleGroup>,
-    /// <p>A list of explicitly approved patches for the baseline.</p>
+    /// <p>A list of explicitly approved patches for the baseline.</p> <p>For information about accepted formats for lists of approved patches and rejected patches, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/patch-manager-approved-rejected-package-name-formats.html">Package Name Formats for Approved and Rejected Patch Lists</a> in the <i>AWS Systems Manager User Guide</i>.</p>
     #[serde(rename = "ApprovedPatches")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub approved_patches: Option<Vec<String>>,
@@ -5531,6 +5569,10 @@ pub struct UpdatePatchBaselineRequest {
     #[serde(rename = "ApprovedPatchesComplianceLevel")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub approved_patches_compliance_level: Option<String>,
+    /// <p>Indicates whether the list of approved patches includes non-security updates that should be applied to the instances. The default value is 'false'. Applies to Linux instances only.</p>
+    #[serde(rename = "ApprovedPatchesEnableNonSecurity")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub approved_patches_enable_non_security: Option<bool>,
     /// <p>The ID of the patch baseline to update.</p>
     #[serde(rename = "BaselineId")]
     pub baseline_id: String,
@@ -5546,10 +5588,18 @@ pub struct UpdatePatchBaselineRequest {
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p>A list of explicitly rejected patches for the baseline.</p>
+    /// <p>A list of explicitly rejected patches for the baseline.</p> <p>For information about accepted formats for lists of approved patches and rejected patches, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/patch-manager-approved-rejected-package-name-formats.html">Package Name Formats for Approved and Rejected Patch Lists</a> in the <i>AWS Systems Manager User Guide</i>.</p>
     #[serde(rename = "RejectedPatches")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub rejected_patches: Option<Vec<String>>,
+    /// <p>If True, then all fields that are required by the CreatePatchBaseline action are also required for this API request. Optional fields that are not specified are set to null.</p>
+    #[serde(rename = "Replace")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub replace: Option<bool>,
+    /// <p>Information about the patches to use to update the instances, including target operating systems and source repositories. Applies to Linux instances only.</p>
+    #[serde(rename = "Sources")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sources: Option<Vec<PatchSource>>,
 }
 
 #[derive(Default, Debug, Clone, Deserialize)]
@@ -5566,6 +5616,10 @@ pub struct UpdatePatchBaselineResult {
     #[serde(rename = "ApprovedPatchesComplianceLevel")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub approved_patches_compliance_level: Option<String>,
+    /// <p>Indicates whether the list of approved patches includes non-security updates that should be applied to the instances. The default value is 'false'. Applies to Linux instances only.</p>
+    #[serde(rename = "ApprovedPatchesEnableNonSecurity")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub approved_patches_enable_non_security: Option<bool>,
     /// <p>The ID of the deleted patch baseline.</p>
     #[serde(rename = "BaselineId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -5598,6 +5652,10 @@ pub struct UpdatePatchBaselineResult {
     #[serde(rename = "RejectedPatches")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub rejected_patches: Option<Vec<String>>,
+    /// <p>Information about the patches to use to update the instances, including target operating systems and source repositories. Applies to Linux instances only.</p>
+    #[serde(rename = "Sources")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sources: Option<Vec<PatchSource>>,
 }
 
 /// Errors returned by AddTagsToResource
@@ -13077,7 +13135,7 @@ impl Error for PutInventoryError {
 /// Errors returned by PutParameter
 #[derive(Debug, PartialEq)]
 pub enum PutParameterError {
-    /// <p>A hierarchy can have a maximum of five levels. For example:</p> <p>/Finance/Prod/IAD/OS/WinServ2016/license15</p> <p>For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-paramstore-working.html">Working with Systems Manager Parameters</a>. </p>
+    /// <p>A hierarchy can have a maximum of 15 levels. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-paramstore-working.html">Working with Systems Manager Parameters</a>. </p>
     HierarchyLevelLimitExceeded(String),
     /// <p>Parameter Store does not support changing a parameter type in a hierarchy. For example, you can't change a parameter from a String type to a SecureString type. You must create a new, unique parameter.</p>
     HierarchyTypeMismatch(String),
@@ -15428,7 +15486,7 @@ pub trait Ssm {
         input: &GetCommandInvocationRequest,
     ) -> RusotoFuture<GetCommandInvocationResult, GetCommandInvocationError>;
 
-    /// <p>Retrieves the default patch baseline. Note that Systems Manager supports creating multiple default patch baselines. For example, you can create a default patch baseline for each operating system.</p>
+    /// <p>Retrieves the default patch baseline. Note that Systems Manager supports creating multiple default patch baselines. For example, you can create a default patch baseline for each operating system.</p> <p>If you do not specify an operating system value, the default patch baseline for Windows is returned.</p>
     fn get_default_patch_baseline(
         &self,
         input: &GetDefaultPatchBaselineRequest,
@@ -15722,7 +15780,7 @@ pub trait Ssm {
         input: &UpdateMaintenanceWindowTargetRequest,
     ) -> RusotoFuture<UpdateMaintenanceWindowTargetResult, UpdateMaintenanceWindowTargetError>;
 
-    /// <p>Modifies a task assigned to a Maintenance Window. You can't change the task type, but you can change the following values:</p> <p>Task ARN. For example, you can change a RUN_COMMAND task from AWS-RunPowerShellScript to AWS-RunShellScript.</p> <p>Service role ARN.</p> <p>Task parameters.</p> <p>Task priority.</p> <p>Task MaxConcurrency and MaxErrors.</p> <p>Log location.</p> <p>If a parameter is null, then the corresponding field is not modified. Also, if you set Replace to true, then all fields required by the RegisterTaskWithMaintenanceWindow action are required for this request. Optional fields that aren't specified are set to null.</p>
+    /// <p>Modifies a task assigned to a Maintenance Window. You can't change the task type, but you can change the following values:</p> <ul> <li> <p>TaskARN. For example, you can change a RUN_COMMAND task from AWS-RunPowerShellScript to AWS-RunShellScript.</p> </li> <li> <p>ServiceRoleArn</p> </li> <li> <p>TaskInvocationParameters</p> </li> <li> <p>Priority</p> </li> <li> <p>MaxConcurrency</p> </li> <li> <p>MaxErrors</p> </li> </ul> <p>If a parameter is null, then the corresponding field is not modified. Also, if you set Replace to true, then all fields required by the <a>RegisterTaskWithMaintenanceWindow</a> action are required for this request. Optional fields that aren't specified are set to null.</p>
     fn update_maintenance_window_task(
         &self,
         input: &UpdateMaintenanceWindowTaskRequest,
@@ -17585,7 +17643,7 @@ where
         RusotoFuture::new(future)
     }
 
-    /// <p>Retrieves the default patch baseline. Note that Systems Manager supports creating multiple default patch baselines. For example, you can create a default patch baseline for each operating system.</p>
+    /// <p>Retrieves the default patch baseline. Note that Systems Manager supports creating multiple default patch baselines. For example, you can create a default patch baseline for each operating system.</p> <p>If you do not specify an operating system value, the default patch baseline for Windows is returned.</p>
     fn get_default_patch_baseline(
         &self,
         input: &GetDefaultPatchBaselineRequest,
@@ -19359,7 +19417,7 @@ where
         RusotoFuture::new(future)
     }
 
-    /// <p>Modifies a task assigned to a Maintenance Window. You can't change the task type, but you can change the following values:</p> <p>Task ARN. For example, you can change a RUN_COMMAND task from AWS-RunPowerShellScript to AWS-RunShellScript.</p> <p>Service role ARN.</p> <p>Task parameters.</p> <p>Task priority.</p> <p>Task MaxConcurrency and MaxErrors.</p> <p>Log location.</p> <p>If a parameter is null, then the corresponding field is not modified. Also, if you set Replace to true, then all fields required by the RegisterTaskWithMaintenanceWindow action are required for this request. Optional fields that aren't specified are set to null.</p>
+    /// <p>Modifies a task assigned to a Maintenance Window. You can't change the task type, but you can change the following values:</p> <ul> <li> <p>TaskARN. For example, you can change a RUN_COMMAND task from AWS-RunPowerShellScript to AWS-RunShellScript.</p> </li> <li> <p>ServiceRoleArn</p> </li> <li> <p>TaskInvocationParameters</p> </li> <li> <p>Priority</p> </li> <li> <p>MaxConcurrency</p> </li> <li> <p>MaxErrors</p> </li> </ul> <p>If a parameter is null, then the corresponding field is not modified. Also, if you set Replace to true, then all fields required by the <a>RegisterTaskWithMaintenanceWindow</a> action are required for this request. Optional fields that aren't specified are set to null.</p>
     fn update_maintenance_window_task(
         &self,
         input: &UpdateMaintenanceWindowTaskRequest,
