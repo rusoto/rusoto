@@ -4290,12 +4290,10 @@ where
                     let _start_document = stack.next();
                     let actual_tag_name = try!(peek_at_name(&mut stack));
                     try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(
-                        ChangeMessageVisibilityBatchResultDeserializer::deserialize(
-                            "ChangeMessageVisibilityBatchResult",
-                            &mut stack
-                        )
-                    );
+                    result = try!(ChangeMessageVisibilityBatchResultDeserializer::deserialize(
+                        "ChangeMessageVisibilityBatchResult",
+                        &mut stack
+                    ));
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }

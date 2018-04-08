@@ -170,11 +170,11 @@ pub struct Authorizer {
     #[serde(rename = "id")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
-    /// <p>The identity source for which authorization is requested. <ul><li>For a <code>TOKEN</code> authorizer, this is required and specifies the request header mapping expression for the custom header holding the authorization token submitted by the client. For example, if the token header name is <code>Auth</code>, the header mapping expression is <code>method.request.header.Auth</code>.</li><li>For the <code>REQUEST</code> authorizer, this is required when authorization caching is enabled. The value is a comma-separated string of one or more mapping expressions of the specified request parameters. For example, if an <code>Auth</code> header, a <code>Name</code> query string parameter are defined as identity sources, this value is <code>method.request.header.Auth, method.request.querystring.Name</code>. These parameters will be used to derive the authorization caching key and to perform runtime validation of the <code>REQUEST</code> authorizer by verifying all of the identity-related request parameters are present, not null and non-empty. Only when this is true does the authorizer invoke the authorizer Lambda function, otherwise, it returns a 401 Unauthorized response without calling the Lambda function. The valid value is a string of comma-separated mapping expressions of the specified request parameters. When the authorization caching is not enabled, this property is optional.</li><li>For a <code>COGNITO_USER_POOLS</code> authorizer, this property is not used.</li></ul></p>
+    /// <p>The identity source for which authorization is requested. <ul><li>For a <code>TOKEN</code> or <code>COGNITO_USER_POOLS</code> authorizer, this is required and specifies the request header mapping expression for the custom header holding the authorization token submitted by the client. For example, if the token header name is <code>Auth</code>, the header mapping expression is <code>method.request.header.Auth</code>.</li><li>For the <code>REQUEST</code> authorizer, this is required when authorization caching is enabled. The value is a comma-separated string of one or more mapping expressions of the specified request parameters. For example, if an <code>Auth</code> header, a <code>Name</code> query string parameter are defined as identity sources, this value is <code>method.request.header.Auth, method.request.querystring.Name</code>. These parameters will be used to derive the authorization caching key and to perform runtime validation of the <code>REQUEST</code> authorizer by verifying all of the identity-related request parameters are present, not null and non-empty. Only when this is true does the authorizer invoke the authorizer Lambda function, otherwise, it returns a 401 Unauthorized response without calling the Lambda function. The valid value is a string of comma-separated mapping expressions of the specified request parameters. When the authorization caching is not enabled, this property is optional.</li></ul></p>
     #[serde(rename = "identitySource")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub identity_source: Option<String>,
-    /// <p>A validation expression for the incoming identity token. For <code>TOKEN</code> authorizers, this value is a regular expression. API Gateway will match the incoming token from the client against the specified regular expression. It will invoke the authorizer's Lambda function there is a match. Otherwise, it will return a 401 Unauthorized response without calling the Lambda function. The validation expression does not apply to the <code>REQUEST</code> authorizer.</p>
+    /// <p>A validation expression for the incoming identity token. For <code>TOKEN</code> authorizers, this value is a regular expression. API Gateway will match the <code>aud</code> field of the incoming token from the client against the specified regular expression. It will invoke the authorizer's Lambda function when there is a match. Otherwise, it will return a 401 Unauthorized response without calling the Lambda function. The validation expression does not apply to the <code>REQUEST</code> authorizer.</p>
     #[serde(rename = "identityValidationExpression")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub identity_validation_expression: Option<String>,
@@ -186,7 +186,7 @@ pub struct Authorizer {
     #[serde(rename = "providerARNs")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub provider_ar_ns: Option<Vec<String>>,
-    /// <p>[Required] The authorizer type. Valid values are <code>TOKEN</code> for a Lambda function using a single authorization token submitted in a custom header, <code>REQUEST</code> for a Lambda function using incoming request parameters, and <code>COGNITO_USER_POOLS</code> for using an Amazon Cognito user pool.</p>
+    /// <p>The authorizer type. Valid values are <code>TOKEN</code> for a Lambda function using a single authorization token submitted in a custom header, <code>REQUEST</code> for a Lambda function using incoming request parameters, and <code>COGNITO_USER_POOLS</code> for using an Amazon Cognito user pool.</p>
     #[serde(rename = "type")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
@@ -343,11 +343,11 @@ pub struct CreateAuthorizerRequest {
     #[serde(rename = "authorizerUri")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authorizer_uri: Option<String>,
-    /// <p>The identity source for which authorization is requested. <ul><li>For a <code>TOKEN</code> authorizer, this is required and specifies the request header mapping expression for the custom header holding the authorization token submitted by the client. For example, if the token header name is <code>Auth</code>, the header mapping expression is <code>method.request.header.Auth</code>.</li><li>For the <code>REQUEST</code> authorizer, this is required when authorization caching is enabled. The value is a comma-separated string of one or more mapping expressions of the specified request parameters. For example, if an <code>Auth</code> header, a <code>Name</code> query string parameter are defined as identity sources, this value is <code>method.request.header.Auth, method.request.querystring.Name</code>. These parameters will be used to derive the authorization caching key and to perform runtime validation of the <code>REQUEST</code> authorizer by verifying all of the identity-related request parameters are present, not null and non-empty. Only when this is true does the authorizer invoke the authorizer Lambda function, otherwise, it returns a 401 Unauthorized response without calling the Lambda function. The valid value is a string of comma-separated mapping expressions of the specified request parameters. When the authorization caching is not enabled, this property is optional.</li><li>For a <code>COGNITO_USER_POOLS</code> authorizer, this property is not used.</li></ul></p>
+    /// <p>The identity source for which authorization is requested. <ul><li>For a <code>TOKEN</code> or <code>COGNITO_USER_POOLS</code> authorizer, this is required and specifies the request header mapping expression for the custom header holding the authorization token submitted by the client. For example, if the token header name is <code>Auth</code>, the header mapping expression is <code>method.request.header.Auth</code>.</li><li>For the <code>REQUEST</code> authorizer, this is required when authorization caching is enabled. The value is a comma-separated string of one or more mapping expressions of the specified request parameters. For example, if an <code>Auth</code> header, a <code>Name</code> query string parameter are defined as identity sources, this value is <code>method.request.header.Auth, method.request.querystring.Name</code>. These parameters will be used to derive the authorization caching key and to perform runtime validation of the <code>REQUEST</code> authorizer by verifying all of the identity-related request parameters are present, not null and non-empty. Only when this is true does the authorizer invoke the authorizer Lambda function, otherwise, it returns a 401 Unauthorized response without calling the Lambda function. The valid value is a string of comma-separated mapping expressions of the specified request parameters. When the authorization caching is not enabled, this property is optional.</li></ul></p>
     #[serde(rename = "identitySource")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub identity_source: Option<String>,
-    /// <p>A validation expression for the incoming identity token. For <code>TOKEN</code> authorizers, this value is a regular expression. API Gateway will match the incoming token from the client against the specified regular expression. It will invoke the authorizer's Lambda function there is a match. Otherwise, it will return a 401 Unauthorized response without calling the Lambda function. The validation expression does not apply to the <code>REQUEST</code> authorizer.</p>
+    /// <p>A validation expression for the incoming identity token. For <code>TOKEN</code> authorizers, this value is a regular expression. API Gateway will match the <code>aud</code> field of the incoming token from the client against the specified regular expression. It will invoke the authorizer's Lambda function when there is a match. Otherwise, it will return a 401 Unauthorized response without calling the Lambda function. The validation expression does not apply to the <code>REQUEST</code> authorizer.</p>
     #[serde(rename = "identityValidationExpression")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub identity_validation_expression: Option<String>,
@@ -358,7 +358,7 @@ pub struct CreateAuthorizerRequest {
     #[serde(rename = "providerARNs")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub provider_ar_ns: Option<Vec<String>>,
-    /// <p>The string identifier of the associated <a>RestApi</a>.</p>
+    /// <p>[Required] The string identifier of the associated <a>RestApi</a>.</p>
     #[serde(rename = "restApiId")]
     pub rest_api_id: String,
     /// <p>[Required] The authorizer type. Valid values are <code>TOKEN</code> for a Lambda function using a single authorization token submitted in a custom header, <code>REQUEST</code> for a Lambda function using incoming request parameters, and <code>COGNITO_USER_POOLS</code> for using an Amazon Cognito user pool.</p>
@@ -373,10 +373,10 @@ pub struct CreateBasePathMappingRequest {
     #[serde(rename = "basePath")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub base_path: Option<String>,
-    /// <p>The domain name of the <a>BasePathMapping</a> resource to create.</p>
+    /// <p>[Required] The domain name of the <a>BasePathMapping</a> resource to create.</p>
     #[serde(rename = "domainName")]
     pub domain_name: String,
-    /// <p>The string identifier of the associated <a>RestApi</a>.</p>
+    /// <p>[Required] The string identifier of the associated <a>RestApi</a>.</p>
     #[serde(rename = "restApiId")]
     pub rest_api_id: String,
     /// <p>The name of the API's stage that you want to use for this mapping. Leave this blank if you do not want callers to explicitly specify the stage name after any base path name.</p>
@@ -404,7 +404,7 @@ pub struct CreateDeploymentRequest {
     #[serde(rename = "description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p>The string identifier of the associated <a>RestApi</a>.</p>
+    /// <p>[Required] The string identifier of the associated <a>RestApi</a>.</p>
     #[serde(rename = "restApiId")]
     pub rest_api_id: String,
     /// <p>The description of the <a>Stage</a> resource for the <a>Deployment</a> resource to create.</p>
@@ -477,7 +477,7 @@ pub struct CreateDomainNameRequest {
     #[serde(rename = "certificatePrivateKey")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub certificate_private_key: Option<String>,
-    /// <p>(Required) The name of the <a>DomainName</a> resource.</p>
+    /// <p>[Required] The name of the <a>DomainName</a> resource.</p>
     #[serde(rename = "domainName")]
     pub domain_name: String,
     /// <p>The endpoint configuration of this <a>DomainName</a> showing the endpoint types of the domain name. </p>
@@ -497,20 +497,20 @@ pub struct CreateDomainNameRequest {
 /// <p>Request to add a new <a>Model</a> to an existing <a>RestApi</a> resource.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateModelRequest {
-    /// <p>The content-type for the model.</p>
+    /// <p>[Required] The content-type for the model.</p>
     #[serde(rename = "contentType")]
     pub content_type: String,
     /// <p>The description of the model.</p>
     #[serde(rename = "description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p>The name of the model. Must be alphanumeric.</p>
+    /// <p>[Required] The name of the model. Must be alphanumeric.</p>
     #[serde(rename = "name")]
     pub name: String,
-    /// <p>The <a>RestApi</a> identifier under which the <a>Model</a> will be created.</p>
+    /// <p>[Required] The <a>RestApi</a> identifier under which the <a>Model</a> will be created.</p>
     #[serde(rename = "restApiId")]
     pub rest_api_id: String,
-    /// <p>The schema for the model. For <code>application/json</code> models, this should be <a href="http://json-schema.org/documentation.html" target="_blank">JSON-schema draft v4</a> model.</p>
+    /// <p>The schema for the model. For <code>application/json</code> models, this should be <a href="https://tools.ietf.org/html/draft-zyp-json-schema-04" target="_blank">JSON schema draft 4</a> model.</p>
     #[serde(rename = "schema")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub schema: Option<String>,
@@ -523,7 +523,7 @@ pub struct CreateRequestValidatorRequest {
     #[serde(rename = "name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p>The string identifier of the associated <a>RestApi</a>.</p>
+    /// <p>[Required] The string identifier of the associated <a>RestApi</a>.</p>
     #[serde(rename = "restApiId")]
     pub rest_api_id: String,
     /// <p>A Boolean flag to indicate whether to validate request body according to the configured model schema for the method (<code>true</code>) or not (<code>false</code>).</p>
@@ -539,13 +539,13 @@ pub struct CreateRequestValidatorRequest {
 /// <p>Requests API Gateway to create a <a>Resource</a> resource.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateResourceRequest {
-    /// <p>The parent resource's identifier.</p>
+    /// <p>[Required] The parent resource's identifier.</p>
     #[serde(rename = "parentId")]
     pub parent_id: String,
     /// <p>The last path segment for this resource.</p>
     #[serde(rename = "pathPart")]
     pub path_part: String,
-    /// <p>The string identifier of the associated <a>RestApi</a>.</p>
+    /// <p>[Required] The string identifier of the associated <a>RestApi</a>.</p>
     #[serde(rename = "restApiId")]
     pub rest_api_id: String,
 }
@@ -553,7 +553,7 @@ pub struct CreateResourceRequest {
 /// <p>The POST Request to add a new <a>RestApi</a> resource to your collection.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateRestApiRequest {
-    /// <p>The source of the API key for metring requests according to a usage plan. Valid values are <ul><li><code>HEADER</code> to read the API key from the <code>X-API-Key</code> header of a request. </li><li><code>AUTHORIZER</code> to read the API key from the <code>UsageIdentifierKey</code> from a custom authorizer.</li></ul> </p>
+    /// <p>The source of the API key for metering requests according to a usage plan. Valid values are: <ul><li><code>HEADER</code> to read the API key from the <code>X-API-Key</code> header of a request. </li><li><code>AUTHORIZER</code> to read the API key from the <code>UsageIdentifierKey</code> from a custom authorizer.</li></ul> </p>
     #[serde(rename = "apiKeySource")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub api_key_source: Option<String>,
@@ -573,13 +573,17 @@ pub struct CreateRestApiRequest {
     #[serde(rename = "endpointConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub endpoint_configuration: Option<EndpointConfiguration>,
-    /// <p>A nullable integer used to enable (non-negative between 0 and 10485760 (10M) bytes, inclusive) or disable (null) compression on an API. When compression is enabled, compression or decompression are not applied on the payload if the payload size is smaller than this value. Setting it to zero allows compression for any payload size.</p>
+    /// <p>A nullable integer that is used to enable compression (with non-negative between 0 and 10485760 (10M) bytes, inclusive) or disable compression (with a null value) on an API. When compression is enabled, compression or decompression is not applied on the payload if the payload size is smaller than this value. Setting it to zero allows compression for any payload size.</p>
     #[serde(rename = "minimumCompressionSize")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub minimum_compression_size: Option<i64>,
-    /// <p>The name of the <a>RestApi</a>.</p>
+    /// <p>[Required] The name of the <a>RestApi</a>.</p>
     #[serde(rename = "name")]
     pub name: String,
+    /// <p>A stringified JSON policy document that applies to this RestApi regardless of the caller and <a>Method</a> configuration.</p>
+    #[serde(rename = "policy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub policy: Option<String>,
     /// <p>A version identifier for the API.</p>
     #[serde(rename = "version")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -612,13 +616,13 @@ pub struct CreateStageRequest {
     #[serde(rename = "documentationVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub documentation_version: Option<String>,
-    /// <p>The string identifier of the associated <a>RestApi</a>.</p>
+    /// <p>[Required] The string identifier of the associated <a>RestApi</a>.</p>
     #[serde(rename = "restApiId")]
     pub rest_api_id: String,
     /// <p>[Required] The name for the <a>Stage</a> resource.</p>
     #[serde(rename = "stageName")]
     pub stage_name: String,
-    /// <p>Key/Value map of strings. Valid character set is [a-zA-Z+-=._:/]. Tag key can be up to 128 characters and must not start with "aws:". Tag value can be up to 256 characters.</p>
+    /// <p>The key-value map of strings. The valid character set is [a-zA-Z+-=._:/]. The tag key can be up to 128 characters and must not start with <code>aws:</code>. The tag value can be up to 256 characters.</p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<::std::collections::HashMap<String, String>>,
@@ -631,13 +635,13 @@ pub struct CreateStageRequest {
 /// <p>The POST request to create a usage plan key for adding an existing API key to a usage plan.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateUsagePlanKeyRequest {
-    /// <p>The identifier of a <a>UsagePlanKey</a> resource for a plan customer.</p>
+    /// <p>[Required] The identifier of a <a>UsagePlanKey</a> resource for a plan customer.</p>
     #[serde(rename = "keyId")]
     pub key_id: String,
-    /// <p>The type of a <a>UsagePlanKey</a> resource for a plan customer.</p>
+    /// <p>[Required] The type of a <a>UsagePlanKey</a> resource for a plan customer.</p>
     #[serde(rename = "keyType")]
     pub key_type: String,
-    /// <p>The Id of the <a>UsagePlan</a> resource representing the usage plan containing the to-be-created <a>UsagePlanKey</a> resource representing a plan customer.</p>
+    /// <p>[Required] The Id of the <a>UsagePlan</a> resource representing the usage plan containing the to-be-created <a>UsagePlanKey</a> resource representing a plan customer.</p>
     #[serde(rename = "usagePlanId")]
     pub usage_plan_id: String,
 }
@@ -653,7 +657,7 @@ pub struct CreateUsagePlanRequest {
     #[serde(rename = "description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p>The name of the usage plan.</p>
+    /// <p>[Required] The name of the usage plan.</p>
     #[serde(rename = "name")]
     pub name: String,
     /// <p>The quota of the usage plan.</p>
@@ -684,7 +688,7 @@ pub struct CreateVpcLinkRequest {
 /// <p>A request to delete the <a>ApiKey</a> resource.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteApiKeyRequest {
-    /// <p>The identifier of the <a>ApiKey</a> resource to be deleted.</p>
+    /// <p>[Required] The identifier of the <a>ApiKey</a> resource to be deleted.</p>
     #[serde(rename = "apiKey")]
     pub api_key: String,
 }
@@ -692,10 +696,10 @@ pub struct DeleteApiKeyRequest {
 /// <p>Request to delete an existing <a>Authorizer</a> resource.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteAuthorizerRequest {
-    /// <p>The identifier of the <a>Authorizer</a> resource.</p>
+    /// <p>[Required] The identifier of the <a>Authorizer</a> resource.</p>
     #[serde(rename = "authorizerId")]
     pub authorizer_id: String,
-    /// <p>The string identifier of the associated <a>RestApi</a>.</p>
+    /// <p>[Required] The string identifier of the associated <a>RestApi</a>.</p>
     #[serde(rename = "restApiId")]
     pub rest_api_id: String,
 }
@@ -703,10 +707,10 @@ pub struct DeleteAuthorizerRequest {
 /// <p>A request to delete the <a>BasePathMapping</a> resource.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteBasePathMappingRequest {
-    /// <p>The base path name of the <a>BasePathMapping</a> resource to delete.</p>
+    /// <p>[Required] The base path name of the <a>BasePathMapping</a> resource to delete.</p>
     #[serde(rename = "basePath")]
     pub base_path: String,
-    /// <p>The domain name of the <a>BasePathMapping</a> resource to delete.</p>
+    /// <p>[Required] The domain name of the <a>BasePathMapping</a> resource to delete.</p>
     #[serde(rename = "domainName")]
     pub domain_name: String,
 }
@@ -714,7 +718,7 @@ pub struct DeleteBasePathMappingRequest {
 /// <p>A request to delete the <a>ClientCertificate</a> resource.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteClientCertificateRequest {
-    /// <p>The identifier of the <a>ClientCertificate</a> resource to be deleted.</p>
+    /// <p>[Required] The identifier of the <a>ClientCertificate</a> resource to be deleted.</p>
     #[serde(rename = "clientCertificateId")]
     pub client_certificate_id: String,
 }
@@ -722,10 +726,10 @@ pub struct DeleteClientCertificateRequest {
 /// <p>Requests API Gateway to delete a <a>Deployment</a> resource.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteDeploymentRequest {
-    /// <p>The identifier of the <a>Deployment</a> resource to delete.</p>
+    /// <p>[Required] The identifier of the <a>Deployment</a> resource to delete.</p>
     #[serde(rename = "deploymentId")]
     pub deployment_id: String,
-    /// <p>The string identifier of the associated <a>RestApi</a>.</p>
+    /// <p>[Required] The string identifier of the associated <a>RestApi</a>.</p>
     #[serde(rename = "restApiId")]
     pub rest_api_id: String,
 }
@@ -755,7 +759,7 @@ pub struct DeleteDocumentationVersionRequest {
 /// <p>A request to delete the <a>DomainName</a> resource.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteDomainNameRequest {
-    /// <p>The name of the <a>DomainName</a> resource to be deleted.</p>
+    /// <p>[Required] The name of the <a>DomainName</a> resource to be deleted.</p>
     #[serde(rename = "domainName")]
     pub domain_name: String,
 }
@@ -763,10 +767,10 @@ pub struct DeleteDomainNameRequest {
 /// <p>Clears any customization of a <a>GatewayResponse</a> of a specified response type on the given <a>RestApi</a> and resets it with the default settings.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteGatewayResponseRequest {
-    /// <p><p>The response type of the associated <a>GatewayResponse</a>. Valid values are <ul><li>ACCESS_DENIED</li><li>API_CONFIGURATION_ERROR</li><li>AUTHORIZER_FAILURE</li><li> AUTHORIZER_CONFIGURATION_ERROR</li><li>BAD_REQUEST_PARAMETERS</li><li>BAD_REQUEST_BODY</li><li>DEFAULT_4XX</li><li>DEFAULT_5XX</li><li>EXPIRED_TOKEN</li><li>INVALID_SIGNATURE</li><li>INTEGRATION_FAILURE</li><li>INTEGRATION_TIMEOUT</li><li>INVALID_API_KEY</li><li>MISSING_AUTHENTICATION_TOKEN</li><li> QUOTA_EXCEEDED</li><li>REQUEST_TOO_LARGE</li><li>RESOURCE_NOT_FOUND</li><li>THROTTLED</li><li>UNAUTHORIZED</li><li>UNSUPPORTED_MEDIA_TYPES</li></ul> </p></p>
+    /// <p>[Required] <p>The response type of the associated <a>GatewayResponse</a>. Valid values are <ul><li>ACCESS_DENIED</li><li>API_CONFIGURATION_ERROR</li><li>AUTHORIZER_FAILURE</li><li> AUTHORIZER_CONFIGURATION_ERROR</li><li>BAD_REQUEST_PARAMETERS</li><li>BAD_REQUEST_BODY</li><li>DEFAULT_4XX</li><li>DEFAULT_5XX</li><li>EXPIRED_TOKEN</li><li>INVALID_SIGNATURE</li><li>INTEGRATION_FAILURE</li><li>INTEGRATION_TIMEOUT</li><li>INVALID_API_KEY</li><li>MISSING_AUTHENTICATION_TOKEN</li><li> QUOTA_EXCEEDED</li><li>REQUEST_TOO_LARGE</li><li>RESOURCE_NOT_FOUND</li><li>THROTTLED</li><li>UNAUTHORIZED</li><li>UNSUPPORTED_MEDIA_TYPE</li></ul> </p></p>
     #[serde(rename = "responseType")]
     pub response_type: String,
-    /// <p>The string identifier of the associated <a>RestApi</a>.</p>
+    /// <p>[Required] The string identifier of the associated <a>RestApi</a>.</p>
     #[serde(rename = "restApiId")]
     pub rest_api_id: String,
 }
@@ -774,13 +778,13 @@ pub struct DeleteGatewayResponseRequest {
 /// <p>Represents a delete integration request.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteIntegrationRequest {
-    /// <p>Specifies a delete integration request's HTTP method.</p>
+    /// <p>[Required] Specifies a delete integration request's HTTP method.</p>
     #[serde(rename = "httpMethod")]
     pub http_method: String,
-    /// <p>Specifies a delete integration request's resource identifier.</p>
+    /// <p>[Required] Specifies a delete integration request's resource identifier.</p>
     #[serde(rename = "resourceId")]
     pub resource_id: String,
-    /// <p>The string identifier of the associated <a>RestApi</a>.</p>
+    /// <p>[Required] The string identifier of the associated <a>RestApi</a>.</p>
     #[serde(rename = "restApiId")]
     pub rest_api_id: String,
 }
@@ -788,16 +792,16 @@ pub struct DeleteIntegrationRequest {
 /// <p>Represents a delete integration response request.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteIntegrationResponseRequest {
-    /// <p>Specifies a delete integration response request's HTTP method.</p>
+    /// <p>[Required] Specifies a delete integration response request's HTTP method.</p>
     #[serde(rename = "httpMethod")]
     pub http_method: String,
-    /// <p>Specifies a delete integration response request's resource identifier.</p>
+    /// <p>[Required] Specifies a delete integration response request's resource identifier.</p>
     #[serde(rename = "resourceId")]
     pub resource_id: String,
-    /// <p>The string identifier of the associated <a>RestApi</a>.</p>
+    /// <p>[Required] The string identifier of the associated <a>RestApi</a>.</p>
     #[serde(rename = "restApiId")]
     pub rest_api_id: String,
-    /// <p>Specifies a delete integration response request's status code.</p>
+    /// <p>[Required] Specifies a delete integration response request's status code.</p>
     #[serde(rename = "statusCode")]
     pub status_code: String,
 }
@@ -805,13 +809,13 @@ pub struct DeleteIntegrationResponseRequest {
 /// <p>Request to delete an existing <a>Method</a> resource.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteMethodRequest {
-    /// <p>The HTTP verb of the <a>Method</a> resource.</p>
+    /// <p>[Required] The HTTP verb of the <a>Method</a> resource.</p>
     #[serde(rename = "httpMethod")]
     pub http_method: String,
-    /// <p>The <a>Resource</a> identifier for the <a>Method</a> resource.</p>
+    /// <p>[Required] The <a>Resource</a> identifier for the <a>Method</a> resource.</p>
     #[serde(rename = "resourceId")]
     pub resource_id: String,
-    /// <p>The string identifier of the associated <a>RestApi</a>.</p>
+    /// <p>[Required] The string identifier of the associated <a>RestApi</a>.</p>
     #[serde(rename = "restApiId")]
     pub rest_api_id: String,
 }
@@ -819,16 +823,16 @@ pub struct DeleteMethodRequest {
 /// <p>A request to delete an existing <a>MethodResponse</a> resource.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteMethodResponseRequest {
-    /// <p>The HTTP verb of the <a>Method</a> resource.</p>
+    /// <p>[Required] The HTTP verb of the <a>Method</a> resource.</p>
     #[serde(rename = "httpMethod")]
     pub http_method: String,
-    /// <p>The <a>Resource</a> identifier for the <a>MethodResponse</a> resource.</p>
+    /// <p>[Required] The <a>Resource</a> identifier for the <a>MethodResponse</a> resource.</p>
     #[serde(rename = "resourceId")]
     pub resource_id: String,
-    /// <p>The string identifier of the associated <a>RestApi</a>.</p>
+    /// <p>[Required] The string identifier of the associated <a>RestApi</a>.</p>
     #[serde(rename = "restApiId")]
     pub rest_api_id: String,
-    /// <p>The status code identifier for the <a>MethodResponse</a> resource.</p>
+    /// <p>[Required] The status code identifier for the <a>MethodResponse</a> resource.</p>
     #[serde(rename = "statusCode")]
     pub status_code: String,
 }
@@ -836,10 +840,10 @@ pub struct DeleteMethodResponseRequest {
 /// <p>Request to delete an existing model in an existing <a>RestApi</a> resource.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteModelRequest {
-    /// <p>The name of the model to delete.</p>
+    /// <p>[Required] The name of the model to delete.</p>
     #[serde(rename = "modelName")]
     pub model_name: String,
-    /// <p>The string identifier of the associated <a>RestApi</a>.</p>
+    /// <p>[Required] The string identifier of the associated <a>RestApi</a>.</p>
     #[serde(rename = "restApiId")]
     pub rest_api_id: String,
 }
@@ -850,7 +854,7 @@ pub struct DeleteRequestValidatorRequest {
     /// <p>[Required] The identifier of the <a>RequestValidator</a> to be deleted.</p>
     #[serde(rename = "requestValidatorId")]
     pub request_validator_id: String,
-    /// <p>The string identifier of the associated <a>RestApi</a>.</p>
+    /// <p>[Required] The string identifier of the associated <a>RestApi</a>.</p>
     #[serde(rename = "restApiId")]
     pub rest_api_id: String,
 }
@@ -858,10 +862,10 @@ pub struct DeleteRequestValidatorRequest {
 /// <p>Request to delete a <a>Resource</a>.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteResourceRequest {
-    /// <p>The identifier of the <a>Resource</a> resource.</p>
+    /// <p>[Required] The identifier of the <a>Resource</a> resource.</p>
     #[serde(rename = "resourceId")]
     pub resource_id: String,
-    /// <p>The string identifier of the associated <a>RestApi</a>.</p>
+    /// <p>[Required] The string identifier of the associated <a>RestApi</a>.</p>
     #[serde(rename = "restApiId")]
     pub rest_api_id: String,
 }
@@ -869,7 +873,7 @@ pub struct DeleteResourceRequest {
 /// <p>Request to delete the specified API from your collection.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteRestApiRequest {
-    /// <p>The string identifier of the associated <a>RestApi</a>.</p>
+    /// <p>[Required] The string identifier of the associated <a>RestApi</a>.</p>
     #[serde(rename = "restApiId")]
     pub rest_api_id: String,
 }
@@ -877,10 +881,10 @@ pub struct DeleteRestApiRequest {
 /// <p>Requests API Gateway to delete a <a>Stage</a> resource.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteStageRequest {
-    /// <p>The string identifier of the associated <a>RestApi</a>.</p>
+    /// <p>[Required] The string identifier of the associated <a>RestApi</a>.</p>
     #[serde(rename = "restApiId")]
     pub rest_api_id: String,
-    /// <p>The name of the <a>Stage</a> resource to delete.</p>
+    /// <p>[Required] The name of the <a>Stage</a> resource to delete.</p>
     #[serde(rename = "stageName")]
     pub stage_name: String,
 }
@@ -888,10 +892,10 @@ pub struct DeleteStageRequest {
 /// <p>The DELETE request to delete a usage plan key and remove the underlying API key from the associated usage plan.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteUsagePlanKeyRequest {
-    /// <p>The Id of the <a>UsagePlanKey</a> resource to be deleted.</p>
+    /// <p>[Required] The Id of the <a>UsagePlanKey</a> resource to be deleted.</p>
     #[serde(rename = "keyId")]
     pub key_id: String,
-    /// <p>The Id of the <a>UsagePlan</a> resource representing the usage plan containing the to-be-deleted <a>UsagePlanKey</a> resource representing a plan customer.</p>
+    /// <p>[Required] The Id of the <a>UsagePlan</a> resource representing the usage plan containing the to-be-deleted <a>UsagePlanKey</a> resource representing a plan customer.</p>
     #[serde(rename = "usagePlanId")]
     pub usage_plan_id: String,
 }
@@ -899,7 +903,7 @@ pub struct DeleteUsagePlanKeyRequest {
 /// <p>The DELETE request to delete a usage plan of a given plan Id.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteUsagePlanRequest {
-    /// <p>The Id of the to-be-deleted usage plan.</p>
+    /// <p>[Required] The Id of the to-be-deleted usage plan.</p>
     #[serde(rename = "usagePlanId")]
     pub usage_plan_id: String,
 }
@@ -1013,7 +1017,7 @@ pub struct DocumentationPartLocation {
     #[serde(rename = "statusCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status_code: Option<String>,
-    /// <p>The type of API entity to which the documentation content applies. It is a valid and required field for API entity types of <code>API</code>, <code>AUTHORIZER</code>, <code>MODEL</code>, <code>RESOURCE</code>, <code>METHOD</code>, <code>PATH_PARAMETER</code>, <code>QUERY_PARAMETER</code>, <code>REQUEST_HEADER</code>, <code>REQUEST_BODY</code>, <code>RESPONSE</code>, <code>RESPONSE_HEADER</code>, and <code>RESPONSE_BODY</code>. Content inheritance does not apply to any entity of the <code>API</code>, <code>AUTHORIZER</code>, <code>METHOD</code>, <code>MODEL</code>, <code>REQUEST_BODY</code>, or <code>RESOURCE</code> type.</p>
+    /// <p>[Required] The type of API entity to which the documentation content applies. Valid values are <code>API</code>, <code>AUTHORIZER</code>, <code>MODEL</code>, <code>RESOURCE</code>, <code>METHOD</code>, <code>PATH_PARAMETER</code>, <code>QUERY_PARAMETER</code>, <code>REQUEST_HEADER</code>, <code>REQUEST_BODY</code>, <code>RESPONSE</code>, <code>RESPONSE_HEADER</code>, and <code>RESPONSE_BODY</code>. Content inheritance does not apply to any entity of the <code>API</code>, <code>AUTHORIZER</code>, <code>METHOD</code>, <code>MODEL</code>, <code>REQUEST_BODY</code>, or <code>RESOURCE</code> type.</p>
     #[serde(rename = "type")]
     pub type_: String,
 }
@@ -1082,7 +1086,7 @@ pub struct DomainName {
     #[serde(rename = "distributionHostedZoneId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub distribution_hosted_zone_id: Option<String>,
-    /// <p>The name of the <a>DomainName</a> resource.</p>
+    /// <p>The custom domain name as an API host name, for example, <code>my-api.example.com</code>.</p>
     #[serde(rename = "domainName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub domain_name: Option<String>,
@@ -1154,10 +1158,10 @@ pub struct FlushStageAuthorizersCacheRequest {
 /// <p>Requests API Gateway to flush a stage's cache.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct FlushStageCacheRequest {
-    /// <p>The string identifier of the associated <a>RestApi</a>.</p>
+    /// <p>[Required] The string identifier of the associated <a>RestApi</a>.</p>
     #[serde(rename = "restApiId")]
     pub rest_api_id: String,
-    /// <p>The name of the stage to flush its cache.</p>
+    /// <p>[Required] The name of the stage to flush its cache.</p>
     #[serde(rename = "stageName")]
     pub stage_name: String,
 }
@@ -1177,7 +1181,7 @@ pub struct GatewayResponse {
     #[serde(rename = "responseTemplates")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub response_templates: Option<::std::collections::HashMap<String, String>>,
-    /// <p>The response type of the associated <a>GatewayResponse</a>. Valid values are <ul><li>ACCESS_DENIED</li><li>API_CONFIGURATION_ERROR</li><li>AUTHORIZER_FAILURE</li><li> AUTHORIZER_CONFIGURATION_ERROR</li><li>BAD_REQUEST_PARAMETERS</li><li>BAD_REQUEST_BODY</li><li>DEFAULT_4XX</li><li>DEFAULT_5XX</li><li>EXPIRED_TOKEN</li><li>INVALID_SIGNATURE</li><li>INTEGRATION_FAILURE</li><li>INTEGRATION_TIMEOUT</li><li>INVALID_API_KEY</li><li>MISSING_AUTHENTICATION_TOKEN</li><li> QUOTA_EXCEEDED</li><li>REQUEST_TOO_LARGE</li><li>RESOURCE_NOT_FOUND</li><li>THROTTLED</li><li>UNAUTHORIZED</li><li>UNSUPPORTED_MEDIA_TYPES</li></ul> </p>
+    /// <p>The response type of the associated <a>GatewayResponse</a>. Valid values are <ul><li>ACCESS_DENIED</li><li>API_CONFIGURATION_ERROR</li><li>AUTHORIZER_FAILURE</li><li> AUTHORIZER_CONFIGURATION_ERROR</li><li>BAD_REQUEST_PARAMETERS</li><li>BAD_REQUEST_BODY</li><li>DEFAULT_4XX</li><li>DEFAULT_5XX</li><li>EXPIRED_TOKEN</li><li>INVALID_SIGNATURE</li><li>INTEGRATION_FAILURE</li><li>INTEGRATION_TIMEOUT</li><li>INVALID_API_KEY</li><li>MISSING_AUTHENTICATION_TOKEN</li><li> QUOTA_EXCEEDED</li><li>REQUEST_TOO_LARGE</li><li>RESOURCE_NOT_FOUND</li><li>THROTTLED</li><li>UNAUTHORIZED</li><li>UNSUPPORTED_MEDIA_TYPE</li></ul> </p>
     #[serde(rename = "responseType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub response_type: Option<String>,
@@ -1215,7 +1219,7 @@ pub struct GetAccountRequest {}
 /// <p>A request to get information about the current <a>ApiKey</a> resource.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct GetApiKeyRequest {
-    /// <p>The identifier of the <a>ApiKey</a> resource.</p>
+    /// <p>[Required] The identifier of the <a>ApiKey</a> resource.</p>
     #[serde(rename = "apiKey")]
     pub api_key: String,
     /// <p>A boolean flag to specify whether (<code>true</code>) or not (<code>false</code>) the result contains the key value.</p>
@@ -1235,7 +1239,7 @@ pub struct GetApiKeysRequest {
     #[serde(rename = "includeValues")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub include_values: Option<bool>,
-    /// <p>The maximum number of returned results per page.</p>
+    /// <p>The maximum number of returned results per page. The default value is 25 and the maximum value is 500.</p>
     #[serde(rename = "limit")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub limit: Option<i64>,
@@ -1252,10 +1256,10 @@ pub struct GetApiKeysRequest {
 /// <p>Request to describe an existing <a>Authorizer</a> resource.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct GetAuthorizerRequest {
-    /// <p>The identifier of the <a>Authorizer</a> resource.</p>
+    /// <p>[Required] The identifier of the <a>Authorizer</a> resource.</p>
     #[serde(rename = "authorizerId")]
     pub authorizer_id: String,
-    /// <p>The string identifier of the associated <a>RestApi</a>.</p>
+    /// <p>[Required] The string identifier of the associated <a>RestApi</a>.</p>
     #[serde(rename = "restApiId")]
     pub rest_api_id: String,
 }
@@ -1263,7 +1267,7 @@ pub struct GetAuthorizerRequest {
 /// <p>Request to describe an existing <a>Authorizers</a> resource.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct GetAuthorizersRequest {
-    /// <p>The maximum number of returned results per page.</p>
+    /// <p>The maximum number of returned results per page. The default value is 25 and the maximum value is 500.</p>
     #[serde(rename = "limit")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub limit: Option<i64>,
@@ -1271,7 +1275,7 @@ pub struct GetAuthorizersRequest {
     #[serde(rename = "position")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub position: Option<String>,
-    /// <p>The string identifier of the associated <a>RestApi</a>.</p>
+    /// <p>[Required] The string identifier of the associated <a>RestApi</a>.</p>
     #[serde(rename = "restApiId")]
     pub rest_api_id: String,
 }
@@ -1279,10 +1283,10 @@ pub struct GetAuthorizersRequest {
 /// <p>Request to describe a <a>BasePathMapping</a> resource.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct GetBasePathMappingRequest {
-    /// <p>The base path name that callers of the API must provide as part of the URL after the domain name. This value must be unique for all of the mappings across a single API. Leave this blank if you do not want callers to specify any base path name after the domain name.</p>
+    /// <p>[Required] The base path name that callers of the API must provide as part of the URL after the domain name. This value must be unique for all of the mappings across a single API. Leave this blank if you do not want callers to specify any base path name after the domain name.</p>
     #[serde(rename = "basePath")]
     pub base_path: String,
-    /// <p>The domain name of the <a>BasePathMapping</a> resource to be described.</p>
+    /// <p>[Required] The domain name of the <a>BasePathMapping</a> resource to be described.</p>
     #[serde(rename = "domainName")]
     pub domain_name: String,
 }
@@ -1290,10 +1294,10 @@ pub struct GetBasePathMappingRequest {
 /// <p>A request to get information about a collection of <a>BasePathMapping</a> resources.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct GetBasePathMappingsRequest {
-    /// <p>The domain name of a <a>BasePathMapping</a> resource.</p>
+    /// <p>[Required] The domain name of a <a>BasePathMapping</a> resource.</p>
     #[serde(rename = "domainName")]
     pub domain_name: String,
-    /// <p>The maximum number of returned results per page. The value is 25 by default and could be between 1 - 500.</p>
+    /// <p>The maximum number of returned results per page. The default value is 25 and the maximum value is 500.</p>
     #[serde(rename = "limit")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub limit: Option<i64>,
@@ -1306,7 +1310,7 @@ pub struct GetBasePathMappingsRequest {
 /// <p>A request to get information about the current <a>ClientCertificate</a> resource.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct GetClientCertificateRequest {
-    /// <p>The identifier of the <a>ClientCertificate</a> resource to be described.</p>
+    /// <p>[Required] The identifier of the <a>ClientCertificate</a> resource to be described.</p>
     #[serde(rename = "clientCertificateId")]
     pub client_certificate_id: String,
 }
@@ -1314,7 +1318,7 @@ pub struct GetClientCertificateRequest {
 /// <p>A request to get information about a collection of <a>ClientCertificate</a> resources.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct GetClientCertificatesRequest {
-    /// <p>The maximum number of returned results per page. The value is 25 by default and could be between 1 - 500.</p>
+    /// <p>The maximum number of returned results per page. The default value is 25 and the maximum value is 500.</p>
     #[serde(rename = "limit")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub limit: Option<i64>,
@@ -1327,14 +1331,14 @@ pub struct GetClientCertificatesRequest {
 /// <p>Requests API Gateway to get information about a <a>Deployment</a> resource.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct GetDeploymentRequest {
-    /// <p>The identifier of the <a>Deployment</a> resource to get information about.</p>
+    /// <p>[Required] The identifier of the <a>Deployment</a> resource to get information about.</p>
     #[serde(rename = "deploymentId")]
     pub deployment_id: String,
     /// <p>A query parameter to retrieve the specified embedded resources of the returned <a>Deployment</a> resource in the response. In a REST API call, this <code>embed</code> parameter value is a list of comma-separated strings, as in <code>GET /restapis/{restapi_id}/deployments/{deployment_id}?embed=var1,var2</code>. The SDK and other platform-dependent libraries might use a different format for the list. Currently, this request supports only retrieval of the embedded API summary this way. Hence, the parameter value must be a single-valued list containing only the <code>"apisummary"</code> string. For example, <code>GET /restapis/{restapi_id}/deployments/{deployment_id}?embed=apisummary</code>.</p>
     #[serde(rename = "embed")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub embed: Option<Vec<String>>,
-    /// <p>The string identifier of the associated <a>RestApi</a>.</p>
+    /// <p>[Required] The string identifier of the associated <a>RestApi</a>.</p>
     #[serde(rename = "restApiId")]
     pub rest_api_id: String,
 }
@@ -1342,7 +1346,7 @@ pub struct GetDeploymentRequest {
 /// <p>Requests API Gateway to get information about a <a>Deployments</a> collection.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct GetDeploymentsRequest {
-    /// <p>The maximum number of returned results per page. The value is 25 by default and could be between 1 - 500.</p>
+    /// <p>The maximum number of returned results per page. The default value is 25 and the maximum value is 500.</p>
     #[serde(rename = "limit")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub limit: Option<i64>,
@@ -1350,7 +1354,7 @@ pub struct GetDeploymentsRequest {
     #[serde(rename = "position")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub position: Option<String>,
-    /// <p>The string identifier of the associated <a>RestApi</a>.</p>
+    /// <p>[Required] The string identifier of the associated <a>RestApi</a>.</p>
     #[serde(rename = "restApiId")]
     pub rest_api_id: String,
 }
@@ -1369,7 +1373,7 @@ pub struct GetDocumentationPartRequest {
 /// <p>Gets the documentation parts of an API. The result may be filtered by the type, name, or path of API entities (targets).</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct GetDocumentationPartsRequest {
-    /// <p>The maximum number of returned results per page.</p>
+    /// <p>The maximum number of returned results per page. The default value is 25 and the maximum value is 500.</p>
     #[serde(rename = "limit")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub limit: Option<i64>,
@@ -1412,7 +1416,7 @@ pub struct GetDocumentationVersionRequest {
 /// <p>Gets the documentation versions of an API.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct GetDocumentationVersionsRequest {
-    /// <p>The maximum number of returned results per page.</p>
+    /// <p>The maximum number of returned results per page. The default value is 25 and the maximum value is 500.</p>
     #[serde(rename = "limit")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub limit: Option<i64>,
@@ -1428,7 +1432,7 @@ pub struct GetDocumentationVersionsRequest {
 /// <p>Request to get the name of a <a>DomainName</a> resource.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct GetDomainNameRequest {
-    /// <p>The name of the <a>DomainName</a> resource.</p>
+    /// <p>[Required] The name of the <a>DomainName</a> resource.</p>
     #[serde(rename = "domainName")]
     pub domain_name: String,
 }
@@ -1436,7 +1440,7 @@ pub struct GetDomainNameRequest {
 /// <p>Request to describe a collection of <a>DomainName</a> resources.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct GetDomainNamesRequest {
-    /// <p>The maximum number of returned results per page. The value is 25 by default and could be between 1 - 500.</p>
+    /// <p>The maximum number of returned results per page. The default value is 25 and the maximum value is 500.</p>
     #[serde(rename = "limit")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub limit: Option<i64>,
@@ -1453,17 +1457,17 @@ pub struct GetExportRequest {
     #[serde(rename = "accepts")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub accepts: Option<String>,
-    /// <p>The type of export. Currently only 'swagger' is supported.</p>
+    /// <p>[Required] The type of export. Currently only 'swagger' is supported.</p>
     #[serde(rename = "exportType")]
     pub export_type: String,
     /// <p>A key-value map of query string parameters that specify properties of the export, depending on the requested <code>exportType</code>. For <code>exportType</code> <code>swagger</code>, any combination of the following parameters are supported: <code>integrations</code> will export the API with x-amazon-apigateway-integration extensions. <code>authorizers</code> will export the API with x-amazon-apigateway-authorizer extensions. <code>postman</code> will export the API with Postman extensions, allowing for import to the Postman tool</p>
     #[serde(rename = "parameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub parameters: Option<::std::collections::HashMap<String, String>>,
-    /// <p>The string identifier of the associated <a>RestApi</a>.</p>
+    /// <p>[Required] The string identifier of the associated <a>RestApi</a>.</p>
     #[serde(rename = "restApiId")]
     pub rest_api_id: String,
-    /// <p>The name of the <a>Stage</a> that will be exported.</p>
+    /// <p>[Required] The name of the <a>Stage</a> that will be exported.</p>
     #[serde(rename = "stageName")]
     pub stage_name: String,
 }
@@ -1471,10 +1475,10 @@ pub struct GetExportRequest {
 /// <p>Gets a <a>GatewayResponse</a> of a specified response type on the given <a>RestApi</a>.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct GetGatewayResponseRequest {
-    /// <p><p>The response type of the associated <a>GatewayResponse</a>. Valid values are <ul><li>ACCESS_DENIED</li><li>API_CONFIGURATION_ERROR</li><li>AUTHORIZER_FAILURE</li><li> AUTHORIZER_CONFIGURATION_ERROR</li><li>BAD_REQUEST_PARAMETERS</li><li>BAD_REQUEST_BODY</li><li>DEFAULT_4XX</li><li>DEFAULT_5XX</li><li>EXPIRED_TOKEN</li><li>INVALID_SIGNATURE</li><li>INTEGRATION_FAILURE</li><li>INTEGRATION_TIMEOUT</li><li>INVALID_API_KEY</li><li>MISSING_AUTHENTICATION_TOKEN</li><li> QUOTA_EXCEEDED</li><li>REQUEST_TOO_LARGE</li><li>RESOURCE_NOT_FOUND</li><li>THROTTLED</li><li>UNAUTHORIZED</li><li>UNSUPPORTED_MEDIA_TYPES</li></ul> </p></p>
+    /// <p>[Required] <p>The response type of the associated <a>GatewayResponse</a>. Valid values are <ul><li>ACCESS_DENIED</li><li>API_CONFIGURATION_ERROR</li><li>AUTHORIZER_FAILURE</li><li> AUTHORIZER_CONFIGURATION_ERROR</li><li>BAD_REQUEST_PARAMETERS</li><li>BAD_REQUEST_BODY</li><li>DEFAULT_4XX</li><li>DEFAULT_5XX</li><li>EXPIRED_TOKEN</li><li>INVALID_SIGNATURE</li><li>INTEGRATION_FAILURE</li><li>INTEGRATION_TIMEOUT</li><li>INVALID_API_KEY</li><li>MISSING_AUTHENTICATION_TOKEN</li><li> QUOTA_EXCEEDED</li><li>REQUEST_TOO_LARGE</li><li>RESOURCE_NOT_FOUND</li><li>THROTTLED</li><li>UNAUTHORIZED</li><li>UNSUPPORTED_MEDIA_TYPE</li></ul> </p></p>
     #[serde(rename = "responseType")]
     pub response_type: String,
-    /// <p>The string identifier of the associated <a>RestApi</a>.</p>
+    /// <p>[Required] The string identifier of the associated <a>RestApi</a>.</p>
     #[serde(rename = "restApiId")]
     pub rest_api_id: String,
 }
@@ -1482,7 +1486,7 @@ pub struct GetGatewayResponseRequest {
 /// <p>Gets the <a>GatewayResponses</a> collection on the given <a>RestApi</a>. If an API developer has not added any definitions for gateway responses, the result will be the API Gateway-generated default <a>GatewayResponses</a> collection for the supported response types.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct GetGatewayResponsesRequest {
-    /// <p>The maximum number of returned results per page. The <a>GatewayResponses</a> collection does not support pagination and the limit does not apply here.</p>
+    /// <p>The maximum number of returned results per page. The default value is 25 and the maximum value is 500. The <a>GatewayResponses</a> collection does not support pagination and the limit does not apply here.</p>
     #[serde(rename = "limit")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub limit: Option<i64>,
@@ -1490,7 +1494,7 @@ pub struct GetGatewayResponsesRequest {
     #[serde(rename = "position")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub position: Option<String>,
-    /// <p>The string identifier of the associated <a>RestApi</a>.</p>
+    /// <p>[Required] The string identifier of the associated <a>RestApi</a>.</p>
     #[serde(rename = "restApiId")]
     pub rest_api_id: String,
 }
@@ -1498,13 +1502,13 @@ pub struct GetGatewayResponsesRequest {
 /// <p>Represents a request to get the integration configuration.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct GetIntegrationRequest {
-    /// <p>Specifies a get integration request's HTTP method.</p>
+    /// <p>[Required] Specifies a get integration request's HTTP method.</p>
     #[serde(rename = "httpMethod")]
     pub http_method: String,
-    /// <p>Specifies a get integration request's resource identifier</p>
+    /// <p>[Required] Specifies a get integration request's resource identifier</p>
     #[serde(rename = "resourceId")]
     pub resource_id: String,
-    /// <p>The string identifier of the associated <a>RestApi</a>.</p>
+    /// <p>[Required] The string identifier of the associated <a>RestApi</a>.</p>
     #[serde(rename = "restApiId")]
     pub rest_api_id: String,
 }
@@ -1512,16 +1516,16 @@ pub struct GetIntegrationRequest {
 /// <p>Represents a get integration response request.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct GetIntegrationResponseRequest {
-    /// <p>Specifies a get integration response request's HTTP method.</p>
+    /// <p>[Required] Specifies a get integration response request's HTTP method.</p>
     #[serde(rename = "httpMethod")]
     pub http_method: String,
-    /// <p>Specifies a get integration response request's resource identifier.</p>
+    /// <p>[Required] Specifies a get integration response request's resource identifier.</p>
     #[serde(rename = "resourceId")]
     pub resource_id: String,
-    /// <p>The string identifier of the associated <a>RestApi</a>.</p>
+    /// <p>[Required] The string identifier of the associated <a>RestApi</a>.</p>
     #[serde(rename = "restApiId")]
     pub rest_api_id: String,
-    /// <p>Specifies a get integration response request's status code.</p>
+    /// <p>[Required] Specifies a get integration response request's status code.</p>
     #[serde(rename = "statusCode")]
     pub status_code: String,
 }
@@ -1529,13 +1533,13 @@ pub struct GetIntegrationResponseRequest {
 /// <p>Request to describe an existing <a>Method</a> resource.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct GetMethodRequest {
-    /// <p>Specifies the method request's HTTP method type.</p>
+    /// <p>[Required] Specifies the method request's HTTP method type.</p>
     #[serde(rename = "httpMethod")]
     pub http_method: String,
-    /// <p>The <a>Resource</a> identifier for the <a>Method</a> resource.</p>
+    /// <p>[Required] The <a>Resource</a> identifier for the <a>Method</a> resource.</p>
     #[serde(rename = "resourceId")]
     pub resource_id: String,
-    /// <p>The string identifier of the associated <a>RestApi</a>.</p>
+    /// <p>[Required] The string identifier of the associated <a>RestApi</a>.</p>
     #[serde(rename = "restApiId")]
     pub rest_api_id: String,
 }
@@ -1543,16 +1547,16 @@ pub struct GetMethodRequest {
 /// <p>Request to describe a <a>MethodResponse</a> resource.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct GetMethodResponseRequest {
-    /// <p>The HTTP verb of the <a>Method</a> resource.</p>
+    /// <p>[Required] The HTTP verb of the <a>Method</a> resource.</p>
     #[serde(rename = "httpMethod")]
     pub http_method: String,
-    /// <p>The <a>Resource</a> identifier for the <a>MethodResponse</a> resource.</p>
+    /// <p>[Required] The <a>Resource</a> identifier for the <a>MethodResponse</a> resource.</p>
     #[serde(rename = "resourceId")]
     pub resource_id: String,
-    /// <p>The string identifier of the associated <a>RestApi</a>.</p>
+    /// <p>[Required] The string identifier of the associated <a>RestApi</a>.</p>
     #[serde(rename = "restApiId")]
     pub rest_api_id: String,
-    /// <p>The status code for the <a>MethodResponse</a> resource.</p>
+    /// <p>[Required] The status code for the <a>MethodResponse</a> resource.</p>
     #[serde(rename = "statusCode")]
     pub status_code: String,
 }
@@ -1564,10 +1568,10 @@ pub struct GetModelRequest {
     #[serde(rename = "flatten")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub flatten: Option<bool>,
-    /// <p>The name of the model as an identifier.</p>
+    /// <p>[Required] The name of the model as an identifier.</p>
     #[serde(rename = "modelName")]
     pub model_name: String,
-    /// <p>The <a>RestApi</a> identifier under which the <a>Model</a> exists.</p>
+    /// <p>[Required] The <a>RestApi</a> identifier under which the <a>Model</a> exists.</p>
     #[serde(rename = "restApiId")]
     pub rest_api_id: String,
 }
@@ -1575,10 +1579,10 @@ pub struct GetModelRequest {
 /// <p>Request to generate a sample mapping template used to transform the payload.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct GetModelTemplateRequest {
-    /// <p>The name of the model for which to generate a template.</p>
+    /// <p>[Required] The name of the model for which to generate a template.</p>
     #[serde(rename = "modelName")]
     pub model_name: String,
-    /// <p>The string identifier of the associated <a>RestApi</a>.</p>
+    /// <p>[Required] The string identifier of the associated <a>RestApi</a>.</p>
     #[serde(rename = "restApiId")]
     pub rest_api_id: String,
 }
@@ -1586,7 +1590,7 @@ pub struct GetModelTemplateRequest {
 /// <p>Request to list existing <a>Models</a> defined for a <a>RestApi</a> resource.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct GetModelsRequest {
-    /// <p>The maximum number of returned results per page. The value is 25 by default and could be between 1 - 500.</p>
+    /// <p>The maximum number of returned results per page. The default value is 25 and the maximum value is 500.</p>
     #[serde(rename = "limit")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub limit: Option<i64>,
@@ -1594,7 +1598,7 @@ pub struct GetModelsRequest {
     #[serde(rename = "position")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub position: Option<String>,
-    /// <p>The string identifier of the associated <a>RestApi</a>.</p>
+    /// <p>[Required] The string identifier of the associated <a>RestApi</a>.</p>
     #[serde(rename = "restApiId")]
     pub rest_api_id: String,
 }
@@ -1605,7 +1609,7 @@ pub struct GetRequestValidatorRequest {
     /// <p>[Required] The identifier of the <a>RequestValidator</a> to be retrieved.</p>
     #[serde(rename = "requestValidatorId")]
     pub request_validator_id: String,
-    /// <p>The string identifier of the associated <a>RestApi</a>.</p>
+    /// <p>[Required] The string identifier of the associated <a>RestApi</a>.</p>
     #[serde(rename = "restApiId")]
     pub rest_api_id: String,
 }
@@ -1613,7 +1617,7 @@ pub struct GetRequestValidatorRequest {
 /// <p>Gets the <a>RequestValidators</a> collection of a given <a>RestApi</a>.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct GetRequestValidatorsRequest {
-    /// <p>The maximum number of returned results per page.</p>
+    /// <p>The maximum number of returned results per page. The default value is 25 and the maximum value is 500.</p>
     #[serde(rename = "limit")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub limit: Option<i64>,
@@ -1621,7 +1625,7 @@ pub struct GetRequestValidatorsRequest {
     #[serde(rename = "position")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub position: Option<String>,
-    /// <p>The string identifier of the associated <a>RestApi</a>.</p>
+    /// <p>[Required] The string identifier of the associated <a>RestApi</a>.</p>
     #[serde(rename = "restApiId")]
     pub rest_api_id: String,
 }
@@ -1633,10 +1637,10 @@ pub struct GetResourceRequest {
     #[serde(rename = "embed")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub embed: Option<Vec<String>>,
-    /// <p>The identifier for the <a>Resource</a> resource.</p>
+    /// <p>[Required] The identifier for the <a>Resource</a> resource.</p>
     #[serde(rename = "resourceId")]
     pub resource_id: String,
-    /// <p>The string identifier of the associated <a>RestApi</a>.</p>
+    /// <p>[Required] The string identifier of the associated <a>RestApi</a>.</p>
     #[serde(rename = "restApiId")]
     pub rest_api_id: String,
 }
@@ -1648,7 +1652,7 @@ pub struct GetResourcesRequest {
     #[serde(rename = "embed")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub embed: Option<Vec<String>>,
-    /// <p>The maximum number of returned results per page. The value is 25 by default and could be between 1 - 500.</p>
+    /// <p>The maximum number of returned results per page. The default value is 25 and the maximum value is 500.</p>
     #[serde(rename = "limit")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub limit: Option<i64>,
@@ -1656,7 +1660,7 @@ pub struct GetResourcesRequest {
     #[serde(rename = "position")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub position: Option<String>,
-    /// <p>The string identifier of the associated <a>RestApi</a>.</p>
+    /// <p>[Required] The string identifier of the associated <a>RestApi</a>.</p>
     #[serde(rename = "restApiId")]
     pub rest_api_id: String,
 }
@@ -1664,7 +1668,7 @@ pub struct GetResourcesRequest {
 /// <p>The GET request to list an existing <a>RestApi</a> defined for your collection. </p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct GetRestApiRequest {
-    /// <p>The identifier of the <a>RestApi</a> resource.</p>
+    /// <p>[Required] The string identifier of the associated <a>RestApi</a>.</p>
     #[serde(rename = "restApiId")]
     pub rest_api_id: String,
 }
@@ -1672,7 +1676,7 @@ pub struct GetRestApiRequest {
 /// <p>The GET request to list existing <a>RestApis</a> defined for your collection.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct GetRestApisRequest {
-    /// <p>The maximum number of returned results per page. The value is 25 by default and could be between 1 - 500.</p>
+    /// <p>The maximum number of returned results per page. The default value is 25 and the maximum value is 500.</p>
     #[serde(rename = "limit")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub limit: Option<i64>,
@@ -1689,13 +1693,13 @@ pub struct GetSdkRequest {
     #[serde(rename = "parameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub parameters: Option<::std::collections::HashMap<String, String>>,
-    /// <p>The string identifier of the associated <a>RestApi</a>.</p>
+    /// <p>[Required] The string identifier of the associated <a>RestApi</a>.</p>
     #[serde(rename = "restApiId")]
     pub rest_api_id: String,
-    /// <p>The language for the generated SDK. Currently <code>java</code>, <code>javascript</code>, <code>android</code>, <code>objectivec</code> (for iOS), <code>swift</code> (for iOS), and <code>ruby</code> are supported.</p>
+    /// <p>[Required] The language for the generated SDK. Currently <code>java</code>, <code>javascript</code>, <code>android</code>, <code>objectivec</code> (for iOS), <code>swift</code> (for iOS), and <code>ruby</code> are supported.</p>
     #[serde(rename = "sdkType")]
     pub sdk_type: String,
-    /// <p>The name of the <a>Stage</a> that the SDK will use.</p>
+    /// <p>[Required] The name of the <a>Stage</a> that the SDK will use.</p>
     #[serde(rename = "stageName")]
     pub stage_name: String,
 }
@@ -1703,7 +1707,7 @@ pub struct GetSdkRequest {
 /// <p>Get an <a>SdkType</a> instance.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct GetSdkTypeRequest {
-    /// <p>The identifier of the queried <a>SdkType</a> instance.</p>
+    /// <p>[Required] The identifier of the queried <a>SdkType</a> instance.</p>
     #[serde(rename = "id")]
     pub id: String,
 }
@@ -1711,7 +1715,7 @@ pub struct GetSdkTypeRequest {
 /// <p>Get the <a>SdkTypes</a> collection.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct GetSdkTypesRequest {
-    /// <p>The maximum number of returned results per page.</p>
+    /// <p>The maximum number of returned results per page. The default value is 25 and the maximum value is 500.</p>
     #[serde(rename = "limit")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub limit: Option<i64>,
@@ -1724,10 +1728,10 @@ pub struct GetSdkTypesRequest {
 /// <p>Requests API Gateway to get information about a <a>Stage</a> resource.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct GetStageRequest {
-    /// <p>The string identifier of the associated <a>RestApi</a>.</p>
+    /// <p>[Required] The string identifier of the associated <a>RestApi</a>.</p>
     #[serde(rename = "restApiId")]
     pub rest_api_id: String,
-    /// <p>The name of the <a>Stage</a> resource to get information about.</p>
+    /// <p>[Required] The name of the <a>Stage</a> resource to get information about.</p>
     #[serde(rename = "stageName")]
     pub stage_name: String,
 }
@@ -1739,15 +1743,15 @@ pub struct GetStagesRequest {
     #[serde(rename = "deploymentId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub deployment_id: Option<String>,
-    /// <p>The string identifier of the associated <a>RestApi</a>.</p>
+    /// <p>[Required] The string identifier of the associated <a>RestApi</a>.</p>
     #[serde(rename = "restApiId")]
     pub rest_api_id: String,
 }
 
-/// <p>Gets the Tags collection for a given resource.</p>
+/// <p>Gets the <a>Tags</a> collection for a given resource.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct GetTagsRequest {
-    /// <p>(Not currently supported) The maximum number of returned results per page.</p>
+    /// <p>(Not currently supported) The maximum number of returned results per page. The default value is 25 and the maximum value is 500.</p>
     #[serde(rename = "limit")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub limit: Option<i64>,
@@ -1755,7 +1759,7 @@ pub struct GetTagsRequest {
     #[serde(rename = "position")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub position: Option<String>,
-    /// <p>[Required] The ARN of a resource that can be tagged. At present, <a>Stage</a> is the only taggable resource.</p>
+    /// <p>[Required] The ARN of a resource that can be tagged. The resource ARN must be URL-encoded. At present, <a>Stage</a> is the only taggable resource.</p>
     #[serde(rename = "resourceArn")]
     pub resource_arn: String,
 }
@@ -1763,10 +1767,10 @@ pub struct GetTagsRequest {
 /// <p>The GET request to get a usage plan key of a given key identifier.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct GetUsagePlanKeyRequest {
-    /// <p>The key Id of the to-be-retrieved <a>UsagePlanKey</a> resource representing a plan customer.</p>
+    /// <p>[Required] The key Id of the to-be-retrieved <a>UsagePlanKey</a> resource representing a plan customer.</p>
     #[serde(rename = "keyId")]
     pub key_id: String,
-    /// <p>The Id of the <a>UsagePlan</a> resource representing the usage plan containing the to-be-retrieved <a>UsagePlanKey</a> resource representing a plan customer.</p>
+    /// <p>[Required] The Id of the <a>UsagePlan</a> resource representing the usage plan containing the to-be-retrieved <a>UsagePlanKey</a> resource representing a plan customer.</p>
     #[serde(rename = "usagePlanId")]
     pub usage_plan_id: String,
 }
@@ -1774,7 +1778,7 @@ pub struct GetUsagePlanKeyRequest {
 /// <p>The GET request to get all the usage plan keys representing the API keys added to a specified usage plan.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct GetUsagePlanKeysRequest {
-    /// <p>The maximum number of returned results per page.</p>
+    /// <p>The maximum number of returned results per page. The default value is 25 and the maximum value is 500.</p>
     #[serde(rename = "limit")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub limit: Option<i64>,
@@ -1786,7 +1790,7 @@ pub struct GetUsagePlanKeysRequest {
     #[serde(rename = "position")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub position: Option<String>,
-    /// <p>The Id of the <a>UsagePlan</a> resource representing the usage plan containing the to-be-retrieved <a>UsagePlanKey</a> resource representing a plan customer.</p>
+    /// <p>[Required] The Id of the <a>UsagePlan</a> resource representing the usage plan containing the to-be-retrieved <a>UsagePlanKey</a> resource representing a plan customer.</p>
     #[serde(rename = "usagePlanId")]
     pub usage_plan_id: String,
 }
@@ -1794,7 +1798,7 @@ pub struct GetUsagePlanKeysRequest {
 /// <p>The GET request to get a usage plan of a given plan identifier.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct GetUsagePlanRequest {
-    /// <p>The identifier of the <a>UsagePlan</a> resource to be retrieved.</p>
+    /// <p>[Required] The identifier of the <a>UsagePlan</a> resource to be retrieved.</p>
     #[serde(rename = "usagePlanId")]
     pub usage_plan_id: String,
 }
@@ -1806,7 +1810,7 @@ pub struct GetUsagePlansRequest {
     #[serde(rename = "keyId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub key_id: Option<String>,
-    /// <p>The maximum number of returned results per page.</p>
+    /// <p>The maximum number of returned results per page. The default value is 25 and the maximum value is 500.</p>
     #[serde(rename = "limit")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub limit: Option<i64>,
@@ -1819,14 +1823,14 @@ pub struct GetUsagePlansRequest {
 /// <p>The GET request to get the usage data of a usage plan in a specified time interval.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct GetUsageRequest {
-    /// <p>The ending date (e.g., 2016-12-31) of the usage data.</p>
+    /// <p>[Required] The ending date (e.g., 2016-12-31) of the usage data.</p>
     #[serde(rename = "endDate")]
     pub end_date: String,
     /// <p>The Id of the API key associated with the resultant usage data.</p>
     #[serde(rename = "keyId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub key_id: Option<String>,
-    /// <p>The maximum number of returned results per page.</p>
+    /// <p>The maximum number of returned results per page. The default value is 25 and the maximum value is 500.</p>
     #[serde(rename = "limit")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub limit: Option<i64>,
@@ -1834,10 +1838,10 @@ pub struct GetUsageRequest {
     #[serde(rename = "position")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub position: Option<String>,
-    /// <p>The starting date (e.g., 2016-01-01) of the usage data.</p>
+    /// <p>[Required] The starting date (e.g., 2016-01-01) of the usage data.</p>
     #[serde(rename = "startDate")]
     pub start_date: String,
-    /// <p>The Id of the usage plan associated with the usage data.</p>
+    /// <p>[Required] The Id of the usage plan associated with the usage data.</p>
     #[serde(rename = "usagePlanId")]
     pub usage_plan_id: String,
 }
@@ -1853,7 +1857,7 @@ pub struct GetVpcLinkRequest {
 /// <p>Gets the <a>VpcLinks</a> collection under the caller's account in a selected region.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct GetVpcLinksRequest {
-    /// <p>The maximum number of returned results per page.</p>
+    /// <p>The maximum number of returned results per page. The default value is 25 and the maximum value is 500.</p>
     #[serde(rename = "limit")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub limit: Option<i64>,
@@ -1904,7 +1908,7 @@ pub struct ImportDocumentationPartsRequest {
 /// <p>A POST request to import an API to API Gateway using an input of an API definition file.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct ImportRestApiRequest {
-    /// <p>The POST request body containing external API definitions. Currently, only Swagger definition JSON files are supported. The maximum size of the API definition file is 2MB.</p>
+    /// <p>[Required] The POST request body containing external API definitions. Currently, only Swagger definition JSON files are supported. The maximum size of the API definition file is 2MB.</p>
     #[serde(rename = "body")]
     #[serde(deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
             serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob", default)]
@@ -2012,7 +2016,7 @@ pub struct Method {
     #[serde(rename = "apiKeyRequired")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub api_key_required: Option<bool>,
-    /// <p>A list of authorization scopes configured on the method. The scopes are used with a <code>COGNITO_USER_POOL</code> authorizer to authorize the method invocation. The authorization works by matching the method scopes against the scopes parsed from the access token in the incoming request. The method invocation is authorized if any method scopes matches a claimed scope in the access token. Otherwise, the invocation is not authorized. When the method scope is configured, the client must provide an access token instead of an identity token for authorization purposes.</p>
+    /// <p>A list of authorization scopes configured on the method. The scopes are used with a <code>COGNITO_USER_POOLS</code> authorizer to authorize the method invocation. The authorization works by matching the method scopes against the scopes parsed from the access token in the incoming request. The method invocation is authorized if any method scopes matches a claimed scope in the access token. Otherwise, the invocation is not authorized. When the method scope is configured, the client must provide an access token instead of an identity token for authorization purposes.</p>
     #[serde(rename = "authorizationScopes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authorization_scopes: Option<Vec<String>>,
@@ -2148,7 +2152,7 @@ pub struct Model {
     #[serde(rename = "name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p>The schema for the model. For <code>application/json</code> models, this should be <a href="http://json-schema.org/documentation.html" target="_blank">JSON-schema draft v4</a> model. Do not include "\*/" characters in the description of any properties because such "\*/" characters may be interpreted as the closing marker for comments in some languages, such as Java or JavaScript, causing the installation of your API's SDK generated by API Gateway to fail.</p>
+    /// <p>The schema for the model. For <code>application/json</code> models, this should be <a href="https://tools.ietf.org/html/draft-zyp-json-schema-04" target="_blank">JSON schema draft 4</a> model. Do not include "\*/" characters in the description of any properties because such "\*/" characters may be interpreted as the closing marker for comments in some languages, such as Java or JavaScript, causing the installation of your API's SDK generated by API Gateway to fail.</p>
     #[serde(rename = "schema")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub schema: Option<String>,
@@ -2198,10 +2202,10 @@ pub struct PutGatewayResponseRequest {
     #[serde(rename = "responseTemplates")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub response_templates: Option<::std::collections::HashMap<String, String>>,
-    /// <p><p>The response type of the associated <a>GatewayResponse</a>. Valid values are <ul><li>ACCESS_DENIED</li><li>API_CONFIGURATION_ERROR</li><li>AUTHORIZER_FAILURE</li><li> AUTHORIZER_CONFIGURATION_ERROR</li><li>BAD_REQUEST_PARAMETERS</li><li>BAD_REQUEST_BODY</li><li>DEFAULT_4XX</li><li>DEFAULT_5XX</li><li>EXPIRED_TOKEN</li><li>INVALID_SIGNATURE</li><li>INTEGRATION_FAILURE</li><li>INTEGRATION_TIMEOUT</li><li>INVALID_API_KEY</li><li>MISSING_AUTHENTICATION_TOKEN</li><li> QUOTA_EXCEEDED</li><li>REQUEST_TOO_LARGE</li><li>RESOURCE_NOT_FOUND</li><li>THROTTLED</li><li>UNAUTHORIZED</li><li>UNSUPPORTED_MEDIA_TYPES</li></ul> </p></p>
+    /// <p>[Required] <p>The response type of the associated <a>GatewayResponse</a>. Valid values are <ul><li>ACCESS_DENIED</li><li>API_CONFIGURATION_ERROR</li><li>AUTHORIZER_FAILURE</li><li> AUTHORIZER_CONFIGURATION_ERROR</li><li>BAD_REQUEST_PARAMETERS</li><li>BAD_REQUEST_BODY</li><li>DEFAULT_4XX</li><li>DEFAULT_5XX</li><li>EXPIRED_TOKEN</li><li>INVALID_SIGNATURE</li><li>INTEGRATION_FAILURE</li><li>INTEGRATION_TIMEOUT</li><li>INVALID_API_KEY</li><li>MISSING_AUTHENTICATION_TOKEN</li><li> QUOTA_EXCEEDED</li><li>REQUEST_TOO_LARGE</li><li>RESOURCE_NOT_FOUND</li><li>THROTTLED</li><li>UNAUTHORIZED</li><li>UNSUPPORTED_MEDIA_TYPE</li></ul> </p></p>
     #[serde(rename = "responseType")]
     pub response_type: String,
-    /// <p>The string identifier of the associated <a>RestApi</a>.</p>
+    /// <p>[Required] The string identifier of the associated <a>RestApi</a>.</p>
     #[serde(rename = "restApiId")]
     pub rest_api_id: String,
     /// <p>The HTTP status code of the <a>GatewayResponse</a>.</p>
@@ -2237,7 +2241,7 @@ pub struct PutIntegrationRequest {
     #[serde(rename = "credentials")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub credentials: Option<String>,
-    /// <p>Specifies a put integration request's HTTP method.</p>
+    /// <p>[Required] Specifies a put integration request's HTTP method.</p>
     #[serde(rename = "httpMethod")]
     pub http_method: String,
     /// <p>Specifies a put integration HTTP method. When the integration type is HTTP or AWS, this field is required.</p>
@@ -2256,17 +2260,17 @@ pub struct PutIntegrationRequest {
     #[serde(rename = "requestTemplates")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub request_templates: Option<::std::collections::HashMap<String, String>>,
-    /// <p>Specifies a put integration request's resource ID.</p>
+    /// <p>[Required] Specifies a put integration request's resource ID.</p>
     #[serde(rename = "resourceId")]
     pub resource_id: String,
-    /// <p>The string identifier of the associated <a>RestApi</a>.</p>
+    /// <p>[Required] The string identifier of the associated <a>RestApi</a>.</p>
     #[serde(rename = "restApiId")]
     pub rest_api_id: String,
     /// <p>Custom timeout between 50 and 29,000 milliseconds. The default value is 29,000 milliseconds or 29 seconds.</p>
     #[serde(rename = "timeoutInMillis")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub timeout_in_millis: Option<i64>,
-    /// <p>Specifies a put integration input's type.</p>
+    /// <p>[Required] Specifies a put integration input's type.</p>
     #[serde(rename = "type")]
     pub type_: String,
     /// <p><p>Specifies Uniform Resource Identifier (URI) of the integration endpoint.</p> <ul> <li><p> For <code>HTTP</code> or <code>HTTP<em>PROXY</code> integrations, the URI must be a fully formed, encoded HTTP(S) URL according to the &lt;a target=&quot;</em>blank&quot; href=&quot;https://en.wikipedia.org/wiki/Uniform<em>Resource</em>Identifier&quot;&gt;RFC-3986 specification</a>, for either standard integration, where <code>connectionType</code> is not <code>VPC<em>LINK</code>, or private integration, where <code>connectionType</code> is <code>VPC</em>LINK</code>. For a private HTTP integration, the URI is not used for routing. </p> </li> <li><p> For <code>AWS</code> or <code>AWS<em>PROXY</code> integrations, the URI is of the form <code>arn:aws:apigateway:{region}:{subdomain.service|service}:path|action/{service</em>api}</code>. Here, <code>{Region}</code> is the API Gateway region (e.g., <code>us-east-1</code>); <code>{service}</code> is the name of the integrated AWS service (e.g., <code>s3</code>); and <code>{subdomain}</code> is a designated subdomain supported by certain AWS service for fast host-name lookup. <code>action</code> can be used for an AWS service action-based API, using an <code>Action={name}&amp;{p1}={v1}&amp;p2={v2}...</code> query string. The ensuing <code>{service<em>api}</code> refers to a supported action <code>{name}</code> plus any required input parameters. Alternatively, <code>path</code> can be used for an AWS service path-based API. The ensuing <code>service</em>api</code> refers to the path to an AWS service resource, including the region of the integrated AWS service, if applicable. For example, for integration with the S3 API of <code><a href="http://docs.aws.amazon.com/AmazonS3/latest/API/RESTObjectGET.html">GetObject</a></code>, the <code>uri</code> can be either <code>arn:aws:apigateway:us-west-2:s3:action/GetObject&amp;Bucket={bucket}&amp;Key={key}</code> or <code>arn:aws:apigateway:us-west-2:s3:path/{bucket}/{key}</code></p> </li></ul></p>
@@ -2282,10 +2286,10 @@ pub struct PutIntegrationResponseRequest {
     #[serde(rename = "contentHandling")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub content_handling: Option<String>,
-    /// <p>Specifies a put integration response request's HTTP method.</p>
+    /// <p>[Required] Specifies a put integration response request's HTTP method.</p>
     #[serde(rename = "httpMethod")]
     pub http_method: String,
-    /// <p>Specifies a put integration response request's resource identifier.</p>
+    /// <p>[Required] Specifies a put integration response request's resource identifier.</p>
     #[serde(rename = "resourceId")]
     pub resource_id: String,
     /// <p>A key-value map specifying response parameters that are passed to the method response from the back end. The key is a method response header parameter name and the mapped value is an integration response header value, a static value enclosed within a pair of single quotes, or a JSON expression from the integration response body. The mapping key must match the pattern of <code>method.response.header.{name}</code>, where <code>name</code> is a valid and unique header name. The mapped non-static value must match the pattern of <code>integration.response.header.{name}</code> or <code>integration.response.body.{JSON-expression}</code>, where <code>name</code> must be a valid and unique response header name and <code>JSON-expression</code> a valid JSON expression without the <code>$</code> prefix.</p>
@@ -2296,14 +2300,14 @@ pub struct PutIntegrationResponseRequest {
     #[serde(rename = "responseTemplates")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub response_templates: Option<::std::collections::HashMap<String, String>>,
-    /// <p>The string identifier of the associated <a>RestApi</a>.</p>
+    /// <p>[Required] The string identifier of the associated <a>RestApi</a>.</p>
     #[serde(rename = "restApiId")]
     pub rest_api_id: String,
     /// <p>Specifies the selection pattern of a put integration response.</p>
     #[serde(rename = "selectionPattern")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub selection_pattern: Option<String>,
-    /// <p>Specifies the status code that is used to map the integration response to an existing <a>MethodResponse</a>.</p>
+    /// <p>[Required] Specifies the status code that is used to map the integration response to an existing <a>MethodResponse</a>.</p>
     #[serde(rename = "statusCode")]
     pub status_code: String,
 }
@@ -2315,18 +2319,18 @@ pub struct PutMethodRequest {
     #[serde(rename = "apiKeyRequired")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub api_key_required: Option<bool>,
-    /// <p>A list of authorization scopes configured on the method. The scopes are used with a <code>COGNITO_USER_POOL</code> authorizer to authorize the method invocation. The authorization works by matching the method scopes against the scopes parsed from the access token in the incoming request. The method invocation is authorized if any method scopes matches a claimed scope in the access token. Otherwise, the invocation is not authorized. When the method scope is configured, the client must provide an access token instead of an identity token for authorization purposes.</p>
+    /// <p>A list of authorization scopes configured on the method. The scopes are used with a <code>COGNITO_USER_POOLS</code> authorizer to authorize the method invocation. The authorization works by matching the method scopes against the scopes parsed from the access token in the incoming request. The method invocation is authorized if any method scopes matches a claimed scope in the access token. Otherwise, the invocation is not authorized. When the method scope is configured, the client must provide an access token instead of an identity token for authorization purposes.</p>
     #[serde(rename = "authorizationScopes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authorization_scopes: Option<Vec<String>>,
-    /// <p>The method's authorization type. Valid values are <code>NONE</code> for open access, <code>AWS_IAM</code> for using AWS IAM permissions, <code>CUSTOM</code> for using a custom authorizer, or <code>COGNITO_USER_POOLS</code> for using a Cognito user pool.</p>
+    /// <p>[Required] The method's authorization type. Valid values are <code>NONE</code> for open access, <code>AWS_IAM</code> for using AWS IAM permissions, <code>CUSTOM</code> for using a custom authorizer, or <code>COGNITO_USER_POOLS</code> for using a Cognito user pool.</p>
     #[serde(rename = "authorizationType")]
     pub authorization_type: String,
-    /// <p>Specifies the identifier of an <a>Authorizer</a> to use on this Method, if the type is CUSTOM.</p>
+    /// <p>Specifies the identifier of an <a>Authorizer</a> to use on this Method, if the type is CUSTOM or COGNITO_USER_POOLS. The authorizer identifier is generated by API Gateway when you created the authorizer.</p>
     #[serde(rename = "authorizerId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authorizer_id: Option<String>,
-    /// <p>Specifies the method request's HTTP method type.</p>
+    /// <p>[Required] Specifies the method request's HTTP method type.</p>
     #[serde(rename = "httpMethod")]
     pub http_method: String,
     /// <p>A human-friendly operation identifier for the method. For example, you can assign the <code>operationName</code> of <code>ListPets</code> for the <code>GET /pets</code> method in <a href="http://petstore-demo-endpoint.execute-api.com/petstore/pets">PetStore</a> example.</p>
@@ -2345,10 +2349,10 @@ pub struct PutMethodRequest {
     #[serde(rename = "requestValidatorId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub request_validator_id: Option<String>,
-    /// <p>The <a>Resource</a> identifier for the new <a>Method</a> resource.</p>
+    /// <p>[Required] The <a>Resource</a> identifier for the new <a>Method</a> resource.</p>
     #[serde(rename = "resourceId")]
     pub resource_id: String,
-    /// <p>The string identifier of the associated <a>RestApi</a>.</p>
+    /// <p>[Required] The string identifier of the associated <a>RestApi</a>.</p>
     #[serde(rename = "restApiId")]
     pub rest_api_id: String,
 }
@@ -2356,10 +2360,10 @@ pub struct PutMethodRequest {
 /// <p>Request to add a <a>MethodResponse</a> to an existing <a>Method</a> resource.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct PutMethodResponseRequest {
-    /// <p>The HTTP verb of the <a>Method</a> resource.</p>
+    /// <p>[Required] The HTTP verb of the <a>Method</a> resource.</p>
     #[serde(rename = "httpMethod")]
     pub http_method: String,
-    /// <p>The <a>Resource</a> identifier for the <a>Method</a> resource.</p>
+    /// <p>[Required] The <a>Resource</a> identifier for the <a>Method</a> resource.</p>
     #[serde(rename = "resourceId")]
     pub resource_id: String,
     /// <p>Specifies the <a>Model</a> resources used for the response's content type. Response models are represented as a key/value map, with a content type as the key and a <a>Model</a> name as the value.</p>
@@ -2370,10 +2374,10 @@ pub struct PutMethodResponseRequest {
     #[serde(rename = "responseParameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub response_parameters: Option<::std::collections::HashMap<String, bool>>,
-    /// <p>The string identifier of the associated <a>RestApi</a>.</p>
+    /// <p>[Required] The string identifier of the associated <a>RestApi</a>.</p>
     #[serde(rename = "restApiId")]
     pub rest_api_id: String,
-    /// <p>The method response's status code.</p>
+    /// <p>[Required] The method response's status code.</p>
     #[serde(rename = "statusCode")]
     pub status_code: String,
 }
@@ -2381,7 +2385,7 @@ pub struct PutMethodResponseRequest {
 /// <p>A PUT request to update an existing API, with external API definitions specified as the request body.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct PutRestApiRequest {
-    /// <p>The PUT request body containing external API definitions. Currently, only Swagger definition JSON files are supported. The maximum size of the API definition file is 2MB.</p>
+    /// <p>[Required] The PUT request body containing external API definitions. Currently, only Swagger definition JSON files are supported. The maximum size of the API definition file is 2MB.</p>
     #[serde(rename = "body")]
     #[serde(deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
             serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob", default)]
@@ -2398,7 +2402,7 @@ pub struct PutRestApiRequest {
     #[serde(rename = "parameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub parameters: Option<::std::collections::HashMap<String, String>>,
-    /// <p>The string identifier of the associated <a>RestApi</a>.</p>
+    /// <p>[Required] The string identifier of the associated <a>RestApi</a>.</p>
     #[serde(rename = "restApiId")]
     pub rest_api_id: String,
 }
@@ -2493,7 +2497,7 @@ pub struct Resources {
 /// <p><p>Represents a REST API.</p> <div class="seeAlso"> <a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-create-api.html">Create an API</a> </div></p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct RestApi {
-    /// <p>The source of the API key for metring requests according to a usage plan. Valid values are <ul><li><code>HEADER</code> to read the API key from the <code>X-API-Key</code> header of a request. </li><li><code>AUTHORIZER</code> to read the API key from the <code>UsageIdentifierKey</code> from a custom authorizer.</li></ul> </p>
+    /// <p>The source of the API key for metering requests according to a usage plan. Valid values are: <ul><li><code>HEADER</code> to read the API key from the <code>X-API-Key</code> header of a request. </li><li><code>AUTHORIZER</code> to read the API key from the <code>UsageIdentifierKey</code> from a custom authorizer.</li></ul> </p>
     #[serde(rename = "apiKeySource")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub api_key_source: Option<String>,
@@ -2517,7 +2521,7 @@ pub struct RestApi {
     #[serde(rename = "id")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
-    /// <p>A nullable integer used to enable (non-negative between 0 and 10485760 (10M) bytes, inclusive) or disable (null) compression on an API. When compression is enabled, compression or decompression are not applied on the payload if the payload size is smaller than this value. Setting it to zero allows compression for any payload size.</p>
+    /// <p>A nullable integer that is used to enable compression (with non-negative between 0 and 10485760 (10M) bytes, inclusive) or disable compression (with a null value) on an API. When compression is enabled, compression or decompression is not applied on the payload if the payload size is smaller than this value. Setting it to zero allows compression for any payload size.</p>
     #[serde(rename = "minimumCompressionSize")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub minimum_compression_size: Option<i64>,
@@ -2525,6 +2529,10 @@ pub struct RestApi {
     #[serde(rename = "name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
+    /// <p>A stringified JSON policy document that applies to this RestApi regardless of the caller and <a>Method</a> configuration.</p>
+    #[serde(rename = "policy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub policy: Option<String>,
     /// <p>A version identifier for the API.</p>
     #[serde(rename = "version")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2671,7 +2679,7 @@ pub struct Stage {
     #[serde(rename = "stageName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub stage_name: Option<String>,
-    /// <p>A collection of Tags associated with a given resource.</p>
+    /// <p>The collection of tags. Each tag element is associated with a given resource.</p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<::std::collections::HashMap<String, String>>,
@@ -2703,21 +2711,21 @@ pub struct Stages {
     pub item: Option<Vec<Stage>>,
 }
 
-/// <p>Adds or updates Tags on a gievn resource.</p>
+/// <p>Adds or updates a tag on a given resource.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct TagResourceRequest {
-    /// <p>[Required] The ARN of a resource that can be tagged. At present, <a>Stage</a> is the only taggable resource.</p>
+    /// <p>[Required] The ARN of a resource that can be tagged. The resource ARN must be URL-encoded. At present, <a>Stage</a> is the only taggable resource.</p>
     #[serde(rename = "resourceArn")]
     pub resource_arn: String,
-    /// <p>[Required] Key/Value map of strings. Valid character set is [a-zA-Z+-=._:/]. Tag key can be up to 128 characters and must not start with "aws:". Tag value can be up to 256 characters.</p>
+    /// <p>[Required] The key-value map of strings. The valid character set is [a-zA-Z+-=._:/]. The tag key can be up to 128 characters and must not start with <code>aws:</code>. The tag value can be up to 256 characters.</p>
     #[serde(rename = "tags")]
     pub tags: ::std::collections::HashMap<String, String>,
 }
 
-/// <p>A collection of Tags associated with a given resource.</p>
+/// <p>The collection of tags. Each tag element is associated with a given resource.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct Tags {
-    /// <p>A collection of Tags associated with a given resource.</p>
+    /// <p>The collection of tags. Each tag element is associated with a given resource.</p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<::std::collections::HashMap<String, String>>,
@@ -2739,7 +2747,7 @@ pub struct TestInvokeAuthorizerRequest {
     #[serde(rename = "additionalContext")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub additional_context: Option<::std::collections::HashMap<String, String>>,
-    /// <p>Specifies a test invoke authorizer request's <a>Authorizer</a> ID.</p>
+    /// <p>[Required] Specifies a test invoke authorizer request's <a>Authorizer</a> ID.</p>
     #[serde(rename = "authorizerId")]
     pub authorizer_id: String,
     /// <p>[Optional] The simulated request body of an incoming invocation request.</p>
@@ -2754,7 +2762,7 @@ pub struct TestInvokeAuthorizerRequest {
     #[serde(rename = "pathWithQueryString")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub path_with_query_string: Option<String>,
-    /// <p>The string identifier of the associated <a>RestApi</a>.</p>
+    /// <p>[Required] The string identifier of the associated <a>RestApi</a>.</p>
     #[serde(rename = "restApiId")]
     pub rest_api_id: String,
     /// <p>A key-value map of stage variables to simulate an invocation on a deployed <a>Stage</a>.</p>
@@ -2810,17 +2818,17 @@ pub struct TestInvokeMethodRequest {
     #[serde(rename = "headers")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub headers: Option<::std::collections::HashMap<String, String>>,
-    /// <p>Specifies a test invoke method request's HTTP method.</p>
+    /// <p>[Required] Specifies a test invoke method request's HTTP method.</p>
     #[serde(rename = "httpMethod")]
     pub http_method: String,
     /// <p>The URI path, including query string, of the simulated invocation request. Use this to specify path parameters and query string parameters.</p>
     #[serde(rename = "pathWithQueryString")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub path_with_query_string: Option<String>,
-    /// <p>Specifies a test invoke method request's resource ID.</p>
+    /// <p>[Required] Specifies a test invoke method request's resource ID.</p>
     #[serde(rename = "resourceId")]
     pub resource_id: String,
-    /// <p>The string identifier of the associated <a>RestApi</a>.</p>
+    /// <p>[Required] The string identifier of the associated <a>RestApi</a>.</p>
     #[serde(rename = "restApiId")]
     pub rest_api_id: String,
     /// <p>A key-value map of stage variables to simulate an invocation on a deployed <a>Stage</a>.</p>
@@ -2867,13 +2875,13 @@ pub struct ThrottleSettings {
     pub rate_limit: Option<f64>,
 }
 
-/// <p>Removes Tags from a given resource.</p>
+/// <p>Removes a tag from a given resource.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct UntagResourceRequest {
-    /// <p>[Required] The ARN of a resource that can be tagged. At present, <a>Stage</a> is the only taggable resource.</p>
+    /// <p>[Required] The ARN of a resource that can be tagged. The resource ARN must be URL-encoded. At present, <a>Stage</a> is the only taggable resource.</p>
     #[serde(rename = "resourceArn")]
     pub resource_arn: String,
-    /// <p>The Tag keys to delete.</p>
+    /// <p>[Required] The Tag keys to delete.</p>
     #[serde(rename = "tagKeys")]
     pub tag_keys: Vec<String>,
 }
@@ -2890,7 +2898,7 @@ pub struct UpdateAccountRequest {
 /// <p>A request to change information about an <a>ApiKey</a> resource.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct UpdateApiKeyRequest {
-    /// <p>The identifier of the <a>ApiKey</a> resource to be updated.</p>
+    /// <p>[Required] The identifier of the <a>ApiKey</a> resource to be updated.</p>
     #[serde(rename = "apiKey")]
     pub api_key: String,
     /// <p>A list of update operations to be applied to the specified resource and in the order specified in this list.</p>
@@ -2902,14 +2910,14 @@ pub struct UpdateApiKeyRequest {
 /// <p>Request to update an existing <a>Authorizer</a> resource.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct UpdateAuthorizerRequest {
-    /// <p>The identifier of the <a>Authorizer</a> resource.</p>
+    /// <p>[Required] The identifier of the <a>Authorizer</a> resource.</p>
     #[serde(rename = "authorizerId")]
     pub authorizer_id: String,
     /// <p>A list of update operations to be applied to the specified resource and in the order specified in this list.</p>
     #[serde(rename = "patchOperations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub patch_operations: Option<Vec<PatchOperation>>,
-    /// <p>The string identifier of the associated <a>RestApi</a>.</p>
+    /// <p>[Required] The string identifier of the associated <a>RestApi</a>.</p>
     #[serde(rename = "restApiId")]
     pub rest_api_id: String,
 }
@@ -2917,10 +2925,10 @@ pub struct UpdateAuthorizerRequest {
 /// <p>A request to change information about the <a>BasePathMapping</a> resource.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct UpdateBasePathMappingRequest {
-    /// <p>The base path of the <a>BasePathMapping</a> resource to change.</p>
+    /// <p>[Required] The base path of the <a>BasePathMapping</a> resource to change.</p>
     #[serde(rename = "basePath")]
     pub base_path: String,
-    /// <p>The domain name of the <a>BasePathMapping</a> resource to change.</p>
+    /// <p>[Required] The domain name of the <a>BasePathMapping</a> resource to change.</p>
     #[serde(rename = "domainName")]
     pub domain_name: String,
     /// <p>A list of update operations to be applied to the specified resource and in the order specified in this list.</p>
@@ -2932,7 +2940,7 @@ pub struct UpdateBasePathMappingRequest {
 /// <p>A request to change information about an <a>ClientCertificate</a> resource.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct UpdateClientCertificateRequest {
-    /// <p>The identifier of the <a>ClientCertificate</a> resource to be updated.</p>
+    /// <p>[Required] The identifier of the <a>ClientCertificate</a> resource to be updated.</p>
     #[serde(rename = "clientCertificateId")]
     pub client_certificate_id: String,
     /// <p>A list of update operations to be applied to the specified resource and in the order specified in this list.</p>
@@ -2951,7 +2959,7 @@ pub struct UpdateDeploymentRequest {
     #[serde(rename = "patchOperations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub patch_operations: Option<Vec<PatchOperation>>,
-    /// <p>The string identifier of the associated <a>RestApi</a>.</p>
+    /// <p>[Required] The string identifier of the associated <a>RestApi</a>.</p>
     #[serde(rename = "restApiId")]
     pub rest_api_id: String,
 }
@@ -2989,7 +2997,7 @@ pub struct UpdateDocumentationVersionRequest {
 /// <p>A request to change information about the <a>DomainName</a> resource.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct UpdateDomainNameRequest {
-    /// <p>The name of the <a>DomainName</a> resource to be changed.</p>
+    /// <p>[Required] The name of the <a>DomainName</a> resource to be changed.</p>
     #[serde(rename = "domainName")]
     pub domain_name: String,
     /// <p>A list of update operations to be applied to the specified resource and in the order specified in this list.</p>
@@ -3005,10 +3013,10 @@ pub struct UpdateGatewayResponseRequest {
     #[serde(rename = "patchOperations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub patch_operations: Option<Vec<PatchOperation>>,
-    /// <p><p>The response type of the associated <a>GatewayResponse</a>. Valid values are <ul><li>ACCESS_DENIED</li><li>API_CONFIGURATION_ERROR</li><li>AUTHORIZER_FAILURE</li><li> AUTHORIZER_CONFIGURATION_ERROR</li><li>BAD_REQUEST_PARAMETERS</li><li>BAD_REQUEST_BODY</li><li>DEFAULT_4XX</li><li>DEFAULT_5XX</li><li>EXPIRED_TOKEN</li><li>INVALID_SIGNATURE</li><li>INTEGRATION_FAILURE</li><li>INTEGRATION_TIMEOUT</li><li>INVALID_API_KEY</li><li>MISSING_AUTHENTICATION_TOKEN</li><li> QUOTA_EXCEEDED</li><li>REQUEST_TOO_LARGE</li><li>RESOURCE_NOT_FOUND</li><li>THROTTLED</li><li>UNAUTHORIZED</li><li>UNSUPPORTED_MEDIA_TYPES</li></ul> </p></p>
+    /// <p>[Required] <p>The response type of the associated <a>GatewayResponse</a>. Valid values are <ul><li>ACCESS_DENIED</li><li>API_CONFIGURATION_ERROR</li><li>AUTHORIZER_FAILURE</li><li> AUTHORIZER_CONFIGURATION_ERROR</li><li>BAD_REQUEST_PARAMETERS</li><li>BAD_REQUEST_BODY</li><li>DEFAULT_4XX</li><li>DEFAULT_5XX</li><li>EXPIRED_TOKEN</li><li>INVALID_SIGNATURE</li><li>INTEGRATION_FAILURE</li><li>INTEGRATION_TIMEOUT</li><li>INVALID_API_KEY</li><li>MISSING_AUTHENTICATION_TOKEN</li><li> QUOTA_EXCEEDED</li><li>REQUEST_TOO_LARGE</li><li>RESOURCE_NOT_FOUND</li><li>THROTTLED</li><li>UNAUTHORIZED</li><li>UNSUPPORTED_MEDIA_TYPE</li></ul> </p></p>
     #[serde(rename = "responseType")]
     pub response_type: String,
-    /// <p>The string identifier of the associated <a>RestApi</a>.</p>
+    /// <p>[Required] The string identifier of the associated <a>RestApi</a>.</p>
     #[serde(rename = "restApiId")]
     pub rest_api_id: String,
 }
@@ -3016,17 +3024,17 @@ pub struct UpdateGatewayResponseRequest {
 /// <p>Represents an update integration request.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct UpdateIntegrationRequest {
-    /// <p>Represents an update integration request's HTTP method.</p>
+    /// <p>[Required] Represents an update integration request's HTTP method.</p>
     #[serde(rename = "httpMethod")]
     pub http_method: String,
     /// <p>A list of update operations to be applied to the specified resource and in the order specified in this list.</p>
     #[serde(rename = "patchOperations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub patch_operations: Option<Vec<PatchOperation>>,
-    /// <p>Represents an update integration request's resource identifier.</p>
+    /// <p>[Required] Represents an update integration request's resource identifier.</p>
     #[serde(rename = "resourceId")]
     pub resource_id: String,
-    /// <p>The string identifier of the associated <a>RestApi</a>.</p>
+    /// <p>[Required] The string identifier of the associated <a>RestApi</a>.</p>
     #[serde(rename = "restApiId")]
     pub rest_api_id: String,
 }
@@ -3034,20 +3042,20 @@ pub struct UpdateIntegrationRequest {
 /// <p>Represents an update integration response request.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct UpdateIntegrationResponseRequest {
-    /// <p>Specifies an update integration response request's HTTP method.</p>
+    /// <p>[Required] Specifies an update integration response request's HTTP method.</p>
     #[serde(rename = "httpMethod")]
     pub http_method: String,
     /// <p>A list of update operations to be applied to the specified resource and in the order specified in this list.</p>
     #[serde(rename = "patchOperations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub patch_operations: Option<Vec<PatchOperation>>,
-    /// <p>Specifies an update integration response request's resource identifier.</p>
+    /// <p>[Required] Specifies an update integration response request's resource identifier.</p>
     #[serde(rename = "resourceId")]
     pub resource_id: String,
-    /// <p>The string identifier of the associated <a>RestApi</a>.</p>
+    /// <p>[Required] The string identifier of the associated <a>RestApi</a>.</p>
     #[serde(rename = "restApiId")]
     pub rest_api_id: String,
-    /// <p>Specifies an update integration response request's status code.</p>
+    /// <p>[Required] Specifies an update integration response request's status code.</p>
     #[serde(rename = "statusCode")]
     pub status_code: String,
 }
@@ -3055,17 +3063,17 @@ pub struct UpdateIntegrationResponseRequest {
 /// <p>Request to update an existing <a>Method</a> resource.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct UpdateMethodRequest {
-    /// <p>The HTTP verb of the <a>Method</a> resource.</p>
+    /// <p>[Required] The HTTP verb of the <a>Method</a> resource.</p>
     #[serde(rename = "httpMethod")]
     pub http_method: String,
     /// <p>A list of update operations to be applied to the specified resource and in the order specified in this list.</p>
     #[serde(rename = "patchOperations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub patch_operations: Option<Vec<PatchOperation>>,
-    /// <p>The <a>Resource</a> identifier for the <a>Method</a> resource.</p>
+    /// <p>[Required] The <a>Resource</a> identifier for the <a>Method</a> resource.</p>
     #[serde(rename = "resourceId")]
     pub resource_id: String,
-    /// <p>The string identifier of the associated <a>RestApi</a>.</p>
+    /// <p>[Required] The string identifier of the associated <a>RestApi</a>.</p>
     #[serde(rename = "restApiId")]
     pub rest_api_id: String,
 }
@@ -3073,20 +3081,20 @@ pub struct UpdateMethodRequest {
 /// <p>A request to update an existing <a>MethodResponse</a> resource.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct UpdateMethodResponseRequest {
-    /// <p>The HTTP verb of the <a>Method</a> resource.</p>
+    /// <p>[Required] The HTTP verb of the <a>Method</a> resource.</p>
     #[serde(rename = "httpMethod")]
     pub http_method: String,
     /// <p>A list of update operations to be applied to the specified resource and in the order specified in this list.</p>
     #[serde(rename = "patchOperations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub patch_operations: Option<Vec<PatchOperation>>,
-    /// <p>The <a>Resource</a> identifier for the <a>MethodResponse</a> resource.</p>
+    /// <p>[Required] The <a>Resource</a> identifier for the <a>MethodResponse</a> resource.</p>
     #[serde(rename = "resourceId")]
     pub resource_id: String,
-    /// <p>The string identifier of the associated <a>RestApi</a>.</p>
+    /// <p>[Required] The string identifier of the associated <a>RestApi</a>.</p>
     #[serde(rename = "restApiId")]
     pub rest_api_id: String,
-    /// <p>The status code for the <a>MethodResponse</a> resource.</p>
+    /// <p>[Required] The status code for the <a>MethodResponse</a> resource.</p>
     #[serde(rename = "statusCode")]
     pub status_code: String,
 }
@@ -3094,14 +3102,14 @@ pub struct UpdateMethodResponseRequest {
 /// <p>Request to update an existing model in an existing <a>RestApi</a> resource.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct UpdateModelRequest {
-    /// <p>The name of the model to update.</p>
+    /// <p>[Required] The name of the model to update.</p>
     #[serde(rename = "modelName")]
     pub model_name: String,
     /// <p>A list of update operations to be applied to the specified resource and in the order specified in this list.</p>
     #[serde(rename = "patchOperations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub patch_operations: Option<Vec<PatchOperation>>,
-    /// <p>The string identifier of the associated <a>RestApi</a>.</p>
+    /// <p>[Required] The string identifier of the associated <a>RestApi</a>.</p>
     #[serde(rename = "restApiId")]
     pub rest_api_id: String,
 }
@@ -3116,7 +3124,7 @@ pub struct UpdateRequestValidatorRequest {
     /// <p>[Required] The identifier of <a>RequestValidator</a> to be updated.</p>
     #[serde(rename = "requestValidatorId")]
     pub request_validator_id: String,
-    /// <p>The string identifier of the associated <a>RestApi</a>.</p>
+    /// <p>[Required] The string identifier of the associated <a>RestApi</a>.</p>
     #[serde(rename = "restApiId")]
     pub rest_api_id: String,
 }
@@ -3128,10 +3136,10 @@ pub struct UpdateResourceRequest {
     #[serde(rename = "patchOperations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub patch_operations: Option<Vec<PatchOperation>>,
-    /// <p>The identifier of the <a>Resource</a> resource.</p>
+    /// <p>[Required] The identifier of the <a>Resource</a> resource.</p>
     #[serde(rename = "resourceId")]
     pub resource_id: String,
-    /// <p>The string identifier of the associated <a>RestApi</a>.</p>
+    /// <p>[Required] The string identifier of the associated <a>RestApi</a>.</p>
     #[serde(rename = "restApiId")]
     pub rest_api_id: String,
 }
@@ -3143,7 +3151,7 @@ pub struct UpdateRestApiRequest {
     #[serde(rename = "patchOperations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub patch_operations: Option<Vec<PatchOperation>>,
-    /// <p>The string identifier of the associated <a>RestApi</a>.</p>
+    /// <p>[Required] The string identifier of the associated <a>RestApi</a>.</p>
     #[serde(rename = "restApiId")]
     pub rest_api_id: String,
 }
@@ -3155,10 +3163,10 @@ pub struct UpdateStageRequest {
     #[serde(rename = "patchOperations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub patch_operations: Option<Vec<PatchOperation>>,
-    /// <p>The string identifier of the associated <a>RestApi</a>.</p>
+    /// <p>[Required] The string identifier of the associated <a>RestApi</a>.</p>
     #[serde(rename = "restApiId")]
     pub rest_api_id: String,
-    /// <p>The name of the <a>Stage</a> resource to change information about.</p>
+    /// <p>[Required] The name of the <a>Stage</a> resource to change information about.</p>
     #[serde(rename = "stageName")]
     pub stage_name: String,
 }
@@ -3170,7 +3178,7 @@ pub struct UpdateUsagePlanRequest {
     #[serde(rename = "patchOperations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub patch_operations: Option<Vec<PatchOperation>>,
-    /// <p>The Id of the to-be-updated usage plan.</p>
+    /// <p>[Required] The Id of the to-be-updated usage plan.</p>
     #[serde(rename = "usagePlanId")]
     pub usage_plan_id: String,
 }
@@ -3178,14 +3186,14 @@ pub struct UpdateUsagePlanRequest {
 /// <p>The PATCH request to grant a temporary extension to the remaining quota of a usage plan associated with a specified API key.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct UpdateUsageRequest {
-    /// <p>The identifier of the API key associated with the usage plan in which a temporary extension is granted to the remaining quota.</p>
+    /// <p>[Required] The identifier of the API key associated with the usage plan in which a temporary extension is granted to the remaining quota.</p>
     #[serde(rename = "keyId")]
     pub key_id: String,
     /// <p>A list of update operations to be applied to the specified resource and in the order specified in this list.</p>
     #[serde(rename = "patchOperations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub patch_operations: Option<Vec<PatchOperation>>,
-    /// <p>The Id of the usage plan associated with the usage data.</p>
+    /// <p>[Required] The Id of the usage plan associated with the usage data.</p>
     #[serde(rename = "usagePlanId")]
     pub usage_plan_id: String,
 }
@@ -3929,11 +3937,9 @@ impl CreateDocumentationVersionError {
                     "NotFoundException" => {
                         CreateDocumentationVersionError::NotFound(String::from(error_message))
                     }
-                    "TooManyRequestsException" => {
-                        CreateDocumentationVersionError::TooManyRequests(String::from(
-                            error_message,
-                        ))
-                    }
+                    "TooManyRequestsException" => CreateDocumentationVersionError::TooManyRequests(
+                        String::from(error_message),
+                    ),
                     "UnauthorizedException" => {
                         CreateDocumentationVersionError::Unauthorized(String::from(error_message))
                     }
@@ -5542,11 +5548,9 @@ impl DeleteDocumentationVersionError {
                     "NotFoundException" => {
                         DeleteDocumentationVersionError::NotFound(String::from(error_message))
                     }
-                    "TooManyRequestsException" => {
-                        DeleteDocumentationVersionError::TooManyRequests(String::from(
-                            error_message,
-                        ))
-                    }
+                    "TooManyRequestsException" => DeleteDocumentationVersionError::TooManyRequests(
+                        String::from(error_message),
+                    ),
                     "UnauthorizedException" => {
                         DeleteDocumentationVersionError::Unauthorized(String::from(error_message))
                     }
@@ -7025,11 +7029,9 @@ impl FlushStageAuthorizersCacheError {
                     "NotFoundException" => {
                         FlushStageAuthorizersCacheError::NotFound(String::from(error_message))
                     }
-                    "TooManyRequestsException" => {
-                        FlushStageAuthorizersCacheError::TooManyRequests(String::from(
-                            error_message,
-                        ))
-                    }
+                    "TooManyRequestsException" => FlushStageAuthorizersCacheError::TooManyRequests(
+                        String::from(error_message),
+                    ),
                     "UnauthorizedException" => {
                         FlushStageAuthorizersCacheError::Unauthorized(String::from(error_message))
                     }
@@ -13592,11 +13594,9 @@ impl UpdateDocumentationVersionError {
                     "NotFoundException" => {
                         UpdateDocumentationVersionError::NotFound(String::from(error_message))
                     }
-                    "TooManyRequestsException" => {
-                        UpdateDocumentationVersionError::TooManyRequests(String::from(
-                            error_message,
-                        ))
-                    }
+                    "TooManyRequestsException" => UpdateDocumentationVersionError::TooManyRequests(
+                        String::from(error_message),
+                    ),
                     "UnauthorizedException" => {
                         UpdateDocumentationVersionError::Unauthorized(String::from(error_message))
                     }
@@ -15454,7 +15454,7 @@ pub trait ApiGateway {
     /// <p>Gets information about one or more <a>Stage</a> resources.</p>
     fn get_stages(&self, input: &GetStagesRequest) -> RusotoFuture<Stages, GetStagesError>;
 
-    /// <p>Gets the Tags collection for a given resource.</p>
+    /// <p>Gets the <a>Tags</a> collection for a given resource.</p>
     fn get_tags(&self, input: &GetTagsRequest) -> RusotoFuture<Tags, GetTagsError>;
 
     /// <p>Gets the usage data of a usage plan in a specified time interval.</p>
@@ -15538,7 +15538,7 @@ pub trait ApiGateway {
     /// <p>A feature of the API Gateway control service for updating an existing API with an input of external API definitions. The update can take the form of merging the supplied definition into the existing API or overwriting the existing API.</p>
     fn put_rest_api(&self, input: &PutRestApiRequest) -> RusotoFuture<RestApi, PutRestApiError>;
 
-    /// <p>Adds or updates Tags on a gievn resource.</p>
+    /// <p>Adds or updates a tag on a given resource.</p>
     fn tag_resource(&self, input: &TagResourceRequest) -> RusotoFuture<(), TagResourceError>;
 
     /// <p><p>Simulate the execution of an <a>Authorizer</a> in your <a>RestApi</a> with headers, parameters, and an incoming request body.</p> <div class="seeAlso"> <a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/use-custom-authorizer.html">Enable custom authorizers</a> </div></p>
@@ -15553,7 +15553,7 @@ pub trait ApiGateway {
         input: &TestInvokeMethodRequest,
     ) -> RusotoFuture<TestInvokeMethodResponse, TestInvokeMethodError>;
 
-    /// <p>Removes Tags from a given resource.</p>
+    /// <p>Removes a tag from a given resource.</p>
     fn untag_resource(&self, input: &UntagResourceRequest) -> RusotoFuture<(), UntagResourceError>;
 
     /// <p>Changes information about the current <a>Account</a> resource.</p>
@@ -18775,7 +18775,7 @@ where
         RusotoFuture::new(future)
     }
 
-    /// <p>Gets the Tags collection for a given resource.</p>
+    /// <p>Gets the <a>Tags</a> collection for a given resource.</p>
     fn get_tags(&self, input: &GetTagsRequest) -> RusotoFuture<Tags, GetTagsError> {
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 
@@ -19544,7 +19544,7 @@ where
         RusotoFuture::new(future)
     }
 
-    /// <p>Adds or updates Tags on a gievn resource.</p>
+    /// <p>Adds or updates a tag on a given resource.</p>
     fn tag_resource(&self, input: &TagResourceRequest) -> RusotoFuture<(), TagResourceError> {
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 
@@ -19663,7 +19663,7 @@ where
         RusotoFuture::new(future)
     }
 
-    /// <p>Removes Tags from a given resource.</p>
+    /// <p>Removes a tag from a given resource.</p>
     fn untag_resource(&self, input: &UntagResourceRequest) -> RusotoFuture<(), UntagResourceError> {
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 

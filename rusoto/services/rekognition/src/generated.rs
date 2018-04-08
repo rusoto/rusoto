@@ -4731,9 +4731,9 @@ impl StartCelebrityRecognitionError {
                         StartCelebrityRecognitionError::LimitExceeded(String::from(error_message))
                     }
                     "ProvisionedThroughputExceededException" => {
-                        StartCelebrityRecognitionError::ProvisionedThroughputExceeded(
-                            String::from(error_message),
-                        )
+                        StartCelebrityRecognitionError::ProvisionedThroughputExceeded(String::from(
+                            error_message,
+                        ))
                     }
                     "ThrottlingException" => {
                         StartCelebrityRecognitionError::Throttling(String::from(error_message))

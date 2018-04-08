@@ -721,19 +721,15 @@ impl AddAttachmentsToSetError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "AttachmentLimitExceeded" => {
-                        AddAttachmentsToSetError::AttachmentLimitExceeded(String::from(
-                            error_message,
-                        ))
-                    }
+                    "AttachmentLimitExceeded" => AddAttachmentsToSetError::AttachmentLimitExceeded(
+                        String::from(error_message),
+                    ),
                     "AttachmentSetExpired" => {
                         AddAttachmentsToSetError::AttachmentSetExpired(String::from(error_message))
                     }
-                    "AttachmentSetIdNotFound" => {
-                        AddAttachmentsToSetError::AttachmentSetIdNotFound(String::from(
-                            error_message,
-                        ))
-                    }
+                    "AttachmentSetIdNotFound" => AddAttachmentsToSetError::AttachmentSetIdNotFound(
+                        String::from(error_message),
+                    ),
                     "AttachmentSetSizeLimitExceeded" => {
                         AddAttachmentsToSetError::AttachmentSetSizeLimitExceeded(String::from(
                             error_message,
@@ -1616,11 +1612,9 @@ impl DescribeTrustedAdvisorCheckSummariesError {
                             String::from(error_message),
                         )
                     }
-                    "ValidationException" => {
-                        DescribeTrustedAdvisorCheckSummariesError::Validation(
-                            error_message.to_string(),
-                        )
-                    }
+                    "ValidationException" => DescribeTrustedAdvisorCheckSummariesError::Validation(
+                        error_message.to_string(),
+                    ),
                     _ => DescribeTrustedAdvisorCheckSummariesError::Unknown(String::from(body)),
                 }
             }

@@ -1903,11 +1903,9 @@ impl CreateDataSourceFromRedshiftError {
                             String::from(error_message),
                         )
                     }
-                    "InternalServerException" => {
-                        CreateDataSourceFromRedshiftError::InternalServer(String::from(
-                            error_message,
-                        ))
-                    }
+                    "InternalServerException" => CreateDataSourceFromRedshiftError::InternalServer(
+                        String::from(error_message),
+                    ),
                     "InvalidInputException" => {
                         CreateDataSourceFromRedshiftError::InvalidInput(String::from(error_message))
                     }

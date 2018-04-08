@@ -49,6 +49,10 @@ pub struct AccountSettings {
     #[serde(rename = "maxSlots")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_slots: Option<::std::collections::HashMap<String, i64>>,
+    /// <p>When set to <code>true</code>, for private devices, Device Farm will not sign your app again. For public devices, Device Farm always signs your apps again and this parameter has no effect.</p> <p>For more information about how Device Farm re-signs your app(s), see <a href="https://aws.amazon.com/device-farm/faq/">Do you modify my app?</a> in the <i>AWS Device Farm FAQs</i>.</p>
+    #[serde(rename = "skipAppResign")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub skip_app_resign: Option<bool>,
     /// <p>Information about an AWS account's usage of free trial device minutes.</p>
     #[serde(rename = "trialMinutes")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -166,6 +170,37 @@ pub struct CreateDevicePoolResult {
 }
 
 #[derive(Default, Debug, Clone, Serialize)]
+pub struct CreateInstanceProfileRequest {
+    /// <p>The description of your instance profile.</p>
+    #[serde(rename = "description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>An array of strings specifying the list of app packages that should not be cleaned up from the device after a test run is over.</p> <p>The list of packages is only considered if you set <code>packageCleanup</code> to <code>true</code>.</p>
+    #[serde(rename = "excludeAppPackagesFromCleanup")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub exclude_app_packages_from_cleanup: Option<Vec<String>>,
+    /// <p>The name of your instance profile.</p>
+    #[serde(rename = "name")]
+    pub name: String,
+    /// <p>When set to <code>true</code>, Device Farm will remove app packages after a test run. The default value is <code>false</code> for private devices.</p>
+    #[serde(rename = "packageCleanup")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub package_cleanup: Option<bool>,
+    /// <p>When set to <code>true</code>, Device Farm will reboot the instance after a test run. The default value is <code>true</code>.</p>
+    #[serde(rename = "rebootAfterUse")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub reboot_after_use: Option<bool>,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct CreateInstanceProfileResult {
+    /// <p>An object containing information about your instance profile.</p>
+    #[serde(rename = "instanceProfile")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub instance_profile: Option<InstanceProfile>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateNetworkProfileRequest {
     /// <p>The description of the network profile.</p>
     #[serde(rename = "description")]
@@ -244,10 +279,10 @@ pub struct CreateProjectResult {
     pub project: Option<Project>,
 }
 
-/// <p>Creates the configuration settings for a remote access session, including the device model and type.</p>
+/// <p>Configuration settings for a remote access session, including billing method.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateRemoteAccessSessionConfiguration {
-    /// <p>Returns the billing method for purposes of configuring a remote access session.</p>
+    /// <p>The billing method for the remote access session.</p>
     #[serde(rename = "billingMethod")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub billing_method: Option<String>,
@@ -256,7 +291,7 @@ pub struct CreateRemoteAccessSessionConfiguration {
 /// <p>Creates and submits a request to start a remote access session.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateRemoteAccessSessionRequest {
-    /// <p>Unique identifier for the client. If you want access to multiple devices on the same client, you should pass the same <code>clientId</code> value in each call to <code>CreateRemoteAccessSession</code>. This is required only if <code>remoteDebugEnabled</code> is set to true <code>true</code>.</p>
+    /// <p>Unique identifier for the client. If you want access to multiple devices on the same client, you should pass the same <code>clientId</code> value in each call to <code>CreateRemoteAccessSession</code>. This is required only if <code>remoteDebugEnabled</code> is set to <code>true</code>.</p>
     #[serde(rename = "clientId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub client_id: Option<String>,
@@ -267,6 +302,14 @@ pub struct CreateRemoteAccessSessionRequest {
     /// <p>The Amazon Resource Name (ARN) of the device for which you want to create a remote access session.</p>
     #[serde(rename = "deviceArn")]
     pub device_arn: String,
+    /// <p>The Amazon Resource Name (ARN) of the device instance for which you want to create a remote access session.</p>
+    #[serde(rename = "instanceArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub instance_arn: Option<String>,
+    /// <p><p>The interaction mode of the remote access session. Valid values are:</p> <ul> <li> <p>INTERACTIVE: You can interact with the iOS device by viewing, touching, and rotating the screen. You <b>cannot</b> run XCUITest framework-based tests in this mode.</p> </li> <li> <p>NO<em>VIDEO: You are connected to the device but cannot interact with it or view the screen. This mode has the fastest test execution speed. You <b>can</b> run XCUITest framework-based tests in this mode.</p> </li> <li> <p>VIDEO</em>ONLY: You can view the screen but cannot touch or rotate it. You <b>can</b> run XCUITest framework-based tests and watch the screen in this mode.</p> </li> </ul></p>
+    #[serde(rename = "interactionMode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub interaction_mode: Option<String>,
     /// <p>The name of the remote access session that you wish to create.</p>
     #[serde(rename = "name")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -278,6 +321,18 @@ pub struct CreateRemoteAccessSessionRequest {
     #[serde(rename = "remoteDebugEnabled")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub remote_debug_enabled: Option<bool>,
+    /// <p>The Amazon Resource Name (ARN) for the app to be recorded in the remote access session.</p>
+    #[serde(rename = "remoteRecordAppArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub remote_record_app_arn: Option<String>,
+    /// <p>Set to <code>true</code> to enable remote recording for the remote access session.</p>
+    #[serde(rename = "remoteRecordEnabled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub remote_record_enabled: Option<bool>,
+    /// <p>When set to <code>true</code>, for private devices, Device Farm will not sign your app again. For public devices, Device Farm always signs your apps again and this parameter has no effect.</p> <p>For more information about how Device Farm re-signs your app(s), see <a href="https://aws.amazon.com/device-farm/faq/">Do you modify my app?</a> in the <i>AWS Device Farm FAQs</i>.</p>
+    #[serde(rename = "skipAppResign")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub skip_app_resign: Option<bool>,
     /// <p>The public key of the <code>ssh</code> key pair you want to use for connecting to remote devices in your remote debugging session. This is only required if <code>remoteDebugEnabled</code> is set to <code>true</code>.</p>
     #[serde(rename = "sshPublicKey")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -348,6 +403,16 @@ pub struct DeleteDevicePoolRequest {
 /// <p>Represents the result of a delete device pool request.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct DeleteDevicePoolResult {}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct DeleteInstanceProfileRequest {
+    /// <p>The Amazon Resource Name (ARN) of the instance profile you are requesting to delete.</p>
+    #[serde(rename = "arn")]
+    pub arn: String,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct DeleteInstanceProfileResult {}
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteNetworkProfileRequest {
@@ -442,6 +507,10 @@ pub struct Device {
     #[serde(rename = "image")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub image: Option<String>,
+    /// <p>The instances belonging to this device.</p>
+    #[serde(rename = "instances")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub instances: Option<Vec<DeviceInstance>>,
     /// <p>The device's manufacturer name.</p>
     #[serde(rename = "manufacturer")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -454,6 +523,10 @@ pub struct Device {
     #[serde(rename = "model")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub model: Option<String>,
+    /// <p>The device's model ID.</p>
+    #[serde(rename = "modelId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub model_id: Option<String>,
     /// <p>The device's display name.</p>
     #[serde(rename = "name")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -482,6 +555,35 @@ pub struct Device {
     #[serde(rename = "resolution")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resolution: Option<Resolution>,
+}
+
+/// <p>Represents the device instance.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct DeviceInstance {
+    /// <p>The Amazon Resource Name (ARN) of the device instance.</p>
+    #[serde(rename = "arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) of the device.</p>
+    #[serde(rename = "deviceArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub device_arn: Option<String>,
+    /// <p>A object containing information about the instance profile.</p>
+    #[serde(rename = "instanceProfile")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub instance_profile: Option<InstanceProfile>,
+    /// <p>An array of strings describing the device instance.</p>
+    #[serde(rename = "labels")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub labels: Option<Vec<String>>,
+    /// <p>The status of the device instance. Valid values are listed below.</p>
+    #[serde(rename = "status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+    /// <p>Unique device identifier for the device instance.</p>
+    #[serde(rename = "udid")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub udid: Option<String>,
 }
 
 /// <p>Represents the total (metered or unmetered) minutes used by the resource to run tests. Contains the sum of minutes consumed by all children.</p>
@@ -558,6 +660,10 @@ pub struct ExecutionConfiguration {
     #[serde(rename = "jobTimeoutMinutes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub job_timeout_minutes: Option<i64>,
+    /// <p>When set to <code>true</code>, for private devices, Device Farm will not sign your app again. For public devices, Device Farm always signs your apps again and this parameter has no effect.</p> <p>For more information about how Device Farm re-signs your app(s), see <a href="https://aws.amazon.com/device-farm/faq/">Do you modify my app?</a> in the <i>AWS Device Farm FAQs</i>.</p>
+    #[serde(rename = "skipAppResign")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub skip_app_resign: Option<bool>,
 }
 
 /// <p>Represents the request sent to retrieve the account settings.</p>
@@ -571,6 +677,21 @@ pub struct GetAccountSettingsResult {
     #[serde(rename = "accountSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub account_settings: Option<AccountSettings>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct GetDeviceInstanceRequest {
+    /// <p>The Amazon Resource Name (ARN) of the instance you're requesting information about.</p>
+    #[serde(rename = "arn")]
+    pub arn: String,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct GetDeviceInstanceResult {
+    /// <p>An object containing information about your device instance.</p>
+    #[serde(rename = "deviceInstance")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub device_instance: Option<DeviceInstance>,
 }
 
 /// <p>Represents a request to the get device pool compatibility operation.</p>
@@ -638,6 +759,21 @@ pub struct GetDeviceResult {
     #[serde(rename = "device")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub device: Option<Device>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct GetInstanceProfileRequest {
+    /// <p>The Amazon Resource Name (ARN) of your instance profile.</p>
+    #[serde(rename = "arn")]
+    pub arn: String,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct GetInstanceProfileResult {
+    /// <p>An object containing information about your instance profile.</p>
+    #[serde(rename = "instanceProfile")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub instance_profile: Option<InstanceProfile>,
 }
 
 /// <p>Represents a request to the get job operation.</p>
@@ -833,6 +969,35 @@ pub struct InstallToRemoteAccessSessionResult {
     pub app_upload: Option<Upload>,
 }
 
+/// <p>Represents the instance profile.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct InstanceProfile {
+    /// <p>The Amazon Resource Name (ARN) of the instance profile.</p>
+    #[serde(rename = "arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
+    /// <p>The description of the instance profile.</p>
+    #[serde(rename = "description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>An array of strings specifying the list of app packages that should not be cleaned up from the device after a test run is over.</p> <p>The list of packages is only considered if you set <code>packageCleanup</code> to <code>true</code>.</p>
+    #[serde(rename = "excludeAppPackagesFromCleanup")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub exclude_app_packages_from_cleanup: Option<Vec<String>>,
+    /// <p>The name of the instance profile.</p>
+    #[serde(rename = "name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>When set to <code>true</code>, Device Farm will remove app packages after a test run. The default value is <code>false</code> for private devices.</p>
+    #[serde(rename = "packageCleanup")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub package_cleanup: Option<bool>,
+    /// <p>When set to <code>true</code>, Device Farm will reboot the instance after a test run. The default value is <code>true</code>.</p>
+    #[serde(rename = "rebootAfterUse")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub reboot_after_use: Option<bool>,
+}
+
 /// <p>Represents a device.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct Job {
@@ -856,6 +1021,10 @@ pub struct Job {
     #[serde(rename = "deviceMinutes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub device_minutes: Option<DeviceMinutes>,
+    /// <p>The Amazon Resource Name (ARN) of the instance.</p>
+    #[serde(rename = "instanceArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub instance_arn: Option<String>,
     /// <p>A message about the job's result.</p>
     #[serde(rename = "message")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -909,6 +1078,30 @@ pub struct ListArtifactsResult {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub artifacts: Option<Vec<Artifact>>,
     /// <p>If the number of items that are returned is significantly large, this is an identifier that is also returned, which can be used in a subsequent call to this operation to return the next set of items in the list.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct ListDeviceInstancesRequest {
+    /// <p>An integer specifying the maximum number of items you want to return in the API response.</p>
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>An identifier that was returned from the previous call to this operation, which can be used to return the next set of items in the list.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct ListDeviceInstancesResult {
+    /// <p>An object containing information about your device instances.</p>
+    #[serde(rename = "deviceInstances")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub device_instances: Option<Vec<DeviceInstance>>,
+    /// <p>An identifier that can be used in the next call to this operation to return the next set of items in the list.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -969,10 +1162,34 @@ pub struct ListDevicesResult {
     pub next_token: Option<String>,
 }
 
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct ListInstanceProfilesRequest {
+    /// <p>An integer specifying the maximum number of items you want to return in the API response.</p>
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>An identifier that was returned from the previous call to this operation, which can be used to return the next set of items in the list.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct ListInstanceProfilesResult {
+    /// <p>An object containing information about your instance profiles.</p>
+    #[serde(rename = "instanceProfiles")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub instance_profiles: Option<Vec<InstanceProfile>>,
+    /// <p>An identifier that can be used in the next call to this operation to return the next set of items in the list.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
 /// <p>Represents a request to the list jobs operation.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct ListJobsRequest {
-    /// <p>The jobs' ARNs.</p>
+    /// <p>The run's Amazon Resource Name (ARN).</p>
     #[serde(rename = "arn")]
     pub arn: String,
     /// <p>An identifier that was returned from the previous call to this operation, which can be used to return the next set of items in the list.</p>
@@ -1189,7 +1406,7 @@ pub struct ListSamplesResult {
 /// <p>Represents a request to the list suites operation.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct ListSuitesRequest {
-    /// <p>The suites' ARNs.</p>
+    /// <p>The job's Amazon Resource Name (ARN).</p>
     #[serde(rename = "arn")]
     pub arn: String,
     /// <p>An identifier that was returned from the previous call to this operation, which can be used to return the next set of items in the list.</p>
@@ -1214,7 +1431,7 @@ pub struct ListSuitesResult {
 /// <p>Represents a request to the list tests operation.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct ListTestsRequest {
-    /// <p>The tests' ARNs.</p>
+    /// <p>The test suite's Amazon Resource Name (ARN).</p>
     #[serde(rename = "arn")]
     pub arn: String,
     /// <p>An identifier that was returned from the previous call to this operation, which can be used to return the next set of items in the list.</p>
@@ -1287,7 +1504,7 @@ pub struct ListUploadsResult {
 }
 
 /// <p>Represents a latitude and longitude pair, expressed in geographic coordinate system degrees (for example 47.6204, -122.3491).</p> <p>Elevation is currently not supported.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct Location {
     /// <p>The latitude.</p>
     #[serde(rename = "latitude")]
@@ -1541,7 +1758,7 @@ pub struct PurchaseOfferingResult {
 }
 
 /// <p>Represents the set of radios and their states on a device. Examples of radios include Wi-Fi, GPS, Bluetooth, and NFC.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct Radios {
     /// <p>True if Bluetooth is enabled at the beginning of the test; otherwise, false.</p>
     #[serde(rename = "bluetooth")]
@@ -1613,6 +1830,14 @@ pub struct RemoteAccessSession {
     #[serde(rename = "hostAddress")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub host_address: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) of the instance.</p>
+    #[serde(rename = "instanceArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub instance_arn: Option<String>,
+    /// <p><p>The interaction mode of the remote access session. Valid values are:</p> <ul> <li> <p>INTERACTIVE: You can interact with the iOS device by viewing, touching, and rotating the screen. You <b>cannot</b> run XCUITest framework-based tests in this mode.</p> </li> <li> <p>NO<em>VIDEO: You are connected to the device but cannot interact with it or view the screen. This mode has the fastest test execution speed. You <b>can</b> run XCUITest framework-based tests in this mode.</p> </li> <li> <p>VIDEO</em>ONLY: You can view the screen but cannot touch or rotate it. You <b>can</b> run XCUITest framework-based tests and watch the screen in this mode.</p> </li> </ul></p>
+    #[serde(rename = "interactionMode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub interaction_mode: Option<String>,
     /// <p>A message about the remote access session.</p>
     #[serde(rename = "message")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1625,10 +1850,22 @@ pub struct RemoteAccessSession {
     #[serde(rename = "remoteDebugEnabled")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub remote_debug_enabled: Option<bool>,
+    /// <p>The Amazon Resource Name (ARN) for the app to be recorded in the remote access session.</p>
+    #[serde(rename = "remoteRecordAppArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub remote_record_app_arn: Option<String>,
+    /// <p>This flag is set to <code>true</code> if remote recording is enabled for the remote access session.</p>
+    #[serde(rename = "remoteRecordEnabled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub remote_record_enabled: Option<bool>,
     /// <p><p>The result of the remote access session. Can be any of the following:</p> <ul> <li> <p>PENDING: A pending condition.</p> </li> <li> <p>PASSED: A passing condition.</p> </li> <li> <p>WARNED: A warning condition.</p> </li> <li> <p>FAILED: A failed condition.</p> </li> <li> <p>SKIPPED: A skipped condition.</p> </li> <li> <p>ERRORED: An error condition.</p> </li> <li> <p>STOPPED: A stopped condition.</p> </li> </ul></p>
     #[serde(rename = "result")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub result: Option<String>,
+    /// <p>When set to <code>true</code>, for private devices, Device Farm will not sign your app again. For public devices, Device Farm always signs your apps again and this parameter has no effect.</p> <p>For more information about how Device Farm re-signs your app(s), see <a href="https://aws.amazon.com/device-farm/faq/">Do you modify my app?</a> in the <i>AWS Device Farm FAQs</i>.</p>
+    #[serde(rename = "skipAppResign")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub skip_app_resign: Option<bool>,
     /// <p>The date and time the remote access session was started.</p>
     #[serde(rename = "started")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1681,7 +1918,7 @@ pub struct Resolution {
 /// <p>Represents a condition for a device pool.</p>
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct Rule {
-    /// <p><p>The rule&#39;s stringified attribute. For example, specify the value as <code>&quot;&quot;abc&quot;&quot;</code>.</p> <p>Allowed values include:</p> <ul> <li> <p>ARN: The ARN.</p> </li> <li> <p>FORM<em>FACTOR: The form factor (for example, phone or tablet).</p> </li> <li> <p>MANUFACTURER: The manufacturer.</p> </li> <li> <p>PLATFORM: The platform (for example, Android or iOS).</p> </li> <li> <p>REMOTE</em>ACCESS<em>ENABLED: Whether the device is enabled for remote access.</p> </li> <li> <p>APPIUM</em>VERSION: The Appium version for the test.</p> </li> </ul></p>
+    /// <p><p>The rule&#39;s stringified attribute. For example, specify the value as <code>&quot;&quot;abc&quot;&quot;</code>.</p> <p>Allowed values include:</p> <ul> <li> <p>ARN: The ARN.</p> </li> <li> <p>FORM<em>FACTOR: The form factor (for example, phone or tablet).</p> </li> <li> <p>MANUFACTURER: The manufacturer.</p> </li> <li> <p>PLATFORM: The platform (for example, Android or iOS).</p> </li> <li> <p>REMOTE</em>ACCESS<em>ENABLED: Whether the device is enabled for remote access.</p> </li> <li> <p>APPIUM</em>VERSION: The Appium version for the test.</p> </li> <li> <p>INSTANCE<em>ARN: The Amazon Resource Name (ARN) of the device instance.</p> </li> <li> <p>INSTANCE</em>LABELS: The label of the device instance.</p> </li> </ul></p>
     #[serde(rename = "attribute")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub attribute: Option<String>,
@@ -1698,6 +1935,10 @@ pub struct Rule {
 /// <p>Represents a test run on a set of devices with a given app package, test parameters, etc.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct Run {
+    /// <p>An app to upload or that has been uploaded.</p>
+    #[serde(rename = "appUpload")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub app_upload: Option<String>,
     /// <p>The run's ARN.</p>
     #[serde(rename = "arn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1726,6 +1967,26 @@ pub struct Run {
     #[serde(rename = "deviceMinutes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub device_minutes: Option<DeviceMinutes>,
+    /// <p>The ARN of the device pool for the run.</p>
+    #[serde(rename = "devicePoolArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub device_pool_arn: Option<String>,
+    /// <p>For fuzz tests, this is the number of events, between 1 and 10000, that the UI fuzz test should perform.</p>
+    #[serde(rename = "eventCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub event_count: Option<i64>,
+    /// <p>The number of minutes the job will execute before it times out.</p>
+    #[serde(rename = "jobTimeoutMinutes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job_timeout_minutes: Option<i64>,
+    /// <p>Information about the locale that is used for the run.</p>
+    #[serde(rename = "locale")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub locale: Option<String>,
+    /// <p>Information about the location that is used for the run.</p>
+    #[serde(rename = "location")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub location: Option<Location>,
     /// <p>A message about the run's result.</p>
     #[serde(rename = "message")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1746,6 +2007,10 @@ pub struct Run {
     #[serde(rename = "platform")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub platform: Option<String>,
+    /// <p>Information about the radio states for the run.</p>
+    #[serde(rename = "radios")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub radios: Option<Radios>,
     /// <p><p>The run&#39;s result.</p> <p>Allowed values include:</p> <ul> <li> <p>PENDING: A pending condition.</p> </li> <li> <p>PASSED: A passing condition.</p> </li> <li> <p>WARNED: A warning condition.</p> </li> <li> <p>FAILED: A failed condition.</p> </li> <li> <p>SKIPPED: A skipped condition.</p> </li> <li> <p>ERRORED: An error condition.</p> </li> <li> <p>STOPPED: A stopped condition.</p> </li> </ul></p>
     #[serde(rename = "result")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1754,6 +2019,14 @@ pub struct Run {
     #[serde(rename = "resultCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub result_code: Option<String>,
+    /// <p>For fuzz tests, this is a seed to use for randomizing the UI fuzz test. Using the same seed value between tests ensures identical event sequences.</p>
+    #[serde(rename = "seed")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub seed: Option<i64>,
+    /// <p>When set to <code>true</code>, for private devices, Device Farm will not sign your app again. For public devices, Device Farm always signs your apps again and this parameter has no effect.</p> <p>For more information about how Device Farm re-signs your app(s), see <a href="https://aws.amazon.com/device-farm/faq/">Do you modify my app?</a> in the <i>AWS Device Farm FAQs</i>.</p>
+    #[serde(rename = "skipAppResign")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub skip_app_resign: Option<bool>,
     /// <p>The run's start time.</p>
     #[serde(rename = "started")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1774,6 +2047,10 @@ pub struct Run {
     #[serde(rename = "type")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
+    /// <p>The Device Farm console URL for the recording of the run.</p>
+    #[serde(rename = "webUrl")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub web_url: Option<String>,
 }
 
 /// <p>Represents a sample of performance data.</p>
@@ -2047,6 +2324,29 @@ pub struct UniqueProblem {
     pub problems: Option<Vec<Problem>>,
 }
 
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct UpdateDeviceInstanceRequest {
+    /// <p>The Amazon Resource Name (ARN) of the device instance.</p>
+    #[serde(rename = "arn")]
+    pub arn: String,
+    /// <p>An array of strings that you want to associate with the device instance.</p>
+    #[serde(rename = "labels")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub labels: Option<Vec<String>>,
+    /// <p>The Amazon Resource Name (ARN) of the profile that you want to associate with the device instance.</p>
+    #[serde(rename = "profileArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub profile_arn: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct UpdateDeviceInstanceResult {
+    /// <p>An object containing information about your device instance.</p>
+    #[serde(rename = "deviceInstance")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub device_instance: Option<DeviceInstance>,
+}
+
 /// <p>Represents a request to the update device pool operation.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct UpdateDevicePoolRequest {
@@ -2077,8 +2377,43 @@ pub struct UpdateDevicePoolResult {
 }
 
 #[derive(Default, Debug, Clone, Serialize)]
+pub struct UpdateInstanceProfileRequest {
+    /// <p>The Amazon Resource Name (ARN) of the instance profile.</p>
+    #[serde(rename = "arn")]
+    pub arn: String,
+    /// <p>The updated description for your instance profile.</p>
+    #[serde(rename = "description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>An array of strings specifying the list of app packages that should not be cleaned up from the device after a test run is over.</p> <p>The list of packages is only considered if you set <code>packageCleanup</code> to <code>true</code>.</p>
+    #[serde(rename = "excludeAppPackagesFromCleanup")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub exclude_app_packages_from_cleanup: Option<Vec<String>>,
+    /// <p>The updated name for your instance profile.</p>
+    #[serde(rename = "name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The updated choice for whether you want to specify package cleanup. The default value is <code>false</code> for private devices.</p>
+    #[serde(rename = "packageCleanup")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub package_cleanup: Option<bool>,
+    /// <p>The updated choice for whether you want to reboot the device after use. The default value is <code>true</code>.</p>
+    #[serde(rename = "rebootAfterUse")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub reboot_after_use: Option<bool>,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct UpdateInstanceProfileResult {
+    /// <p>An object containing information about your instance profile.</p>
+    #[serde(rename = "instanceProfile")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub instance_profile: Option<InstanceProfile>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct UpdateNetworkProfileRequest {
-    /// <p>The Amazon Resource Name (ARN) of the project that you wish to update network profile settings.</p>
+    /// <p>The Amazon Resource Name (ARN) of the project for which you want to update network profile settings.</p>
     #[serde(rename = "arn")]
     pub arn: String,
     /// <p>The descriptoin of the network profile about which you are returning information.</p>
@@ -2294,6 +2629,104 @@ impl Error for CreateDevicePoolError {
             CreateDevicePoolError::Credentials(ref err) => err.description(),
             CreateDevicePoolError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
             CreateDevicePoolError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by CreateInstanceProfile
+#[derive(Debug, PartialEq)]
+pub enum CreateInstanceProfileError {
+    /// <p>An invalid argument was specified.</p>
+    Argument(String),
+    /// <p>A limit was exceeded.</p>
+    LimitExceeded(String),
+    /// <p>The specified entity was not found.</p>
+    NotFound(String),
+    /// <p>There was a problem with the service account.</p>
+    ServiceAccount(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl CreateInstanceProfileError {
+    pub fn from_body(body: &str) -> CreateInstanceProfileError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "ArgumentException" => {
+                        CreateInstanceProfileError::Argument(String::from(error_message))
+                    }
+                    "LimitExceededException" => {
+                        CreateInstanceProfileError::LimitExceeded(String::from(error_message))
+                    }
+                    "NotFoundException" => {
+                        CreateInstanceProfileError::NotFound(String::from(error_message))
+                    }
+                    "ServiceAccountException" => {
+                        CreateInstanceProfileError::ServiceAccount(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        CreateInstanceProfileError::Validation(error_message.to_string())
+                    }
+                    _ => CreateInstanceProfileError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => CreateInstanceProfileError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for CreateInstanceProfileError {
+    fn from(err: serde_json::error::Error) -> CreateInstanceProfileError {
+        CreateInstanceProfileError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for CreateInstanceProfileError {
+    fn from(err: CredentialsError) -> CreateInstanceProfileError {
+        CreateInstanceProfileError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for CreateInstanceProfileError {
+    fn from(err: HttpDispatchError) -> CreateInstanceProfileError {
+        CreateInstanceProfileError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateInstanceProfileError {
+    fn from(err: io::Error) -> CreateInstanceProfileError {
+        CreateInstanceProfileError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for CreateInstanceProfileError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for CreateInstanceProfileError {
+    fn description(&self) -> &str {
+        match *self {
+            CreateInstanceProfileError::Argument(ref cause) => cause,
+            CreateInstanceProfileError::LimitExceeded(ref cause) => cause,
+            CreateInstanceProfileError::NotFound(ref cause) => cause,
+            CreateInstanceProfileError::ServiceAccount(ref cause) => cause,
+            CreateInstanceProfileError::Validation(ref cause) => cause,
+            CreateInstanceProfileError::Credentials(ref err) => err.description(),
+            CreateInstanceProfileError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            CreateInstanceProfileError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -2774,6 +3207,104 @@ impl Error for DeleteDevicePoolError {
             DeleteDevicePoolError::Credentials(ref err) => err.description(),
             DeleteDevicePoolError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
             DeleteDevicePoolError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DeleteInstanceProfile
+#[derive(Debug, PartialEq)]
+pub enum DeleteInstanceProfileError {
+    /// <p>An invalid argument was specified.</p>
+    Argument(String),
+    /// <p>A limit was exceeded.</p>
+    LimitExceeded(String),
+    /// <p>The specified entity was not found.</p>
+    NotFound(String),
+    /// <p>There was a problem with the service account.</p>
+    ServiceAccount(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl DeleteInstanceProfileError {
+    pub fn from_body(body: &str) -> DeleteInstanceProfileError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "ArgumentException" => {
+                        DeleteInstanceProfileError::Argument(String::from(error_message))
+                    }
+                    "LimitExceededException" => {
+                        DeleteInstanceProfileError::LimitExceeded(String::from(error_message))
+                    }
+                    "NotFoundException" => {
+                        DeleteInstanceProfileError::NotFound(String::from(error_message))
+                    }
+                    "ServiceAccountException" => {
+                        DeleteInstanceProfileError::ServiceAccount(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        DeleteInstanceProfileError::Validation(error_message.to_string())
+                    }
+                    _ => DeleteInstanceProfileError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => DeleteInstanceProfileError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for DeleteInstanceProfileError {
+    fn from(err: serde_json::error::Error) -> DeleteInstanceProfileError {
+        DeleteInstanceProfileError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DeleteInstanceProfileError {
+    fn from(err: CredentialsError) -> DeleteInstanceProfileError {
+        DeleteInstanceProfileError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DeleteInstanceProfileError {
+    fn from(err: HttpDispatchError) -> DeleteInstanceProfileError {
+        DeleteInstanceProfileError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteInstanceProfileError {
+    fn from(err: io::Error) -> DeleteInstanceProfileError {
+        DeleteInstanceProfileError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DeleteInstanceProfileError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeleteInstanceProfileError {
+    fn description(&self) -> &str {
+        match *self {
+            DeleteInstanceProfileError::Argument(ref cause) => cause,
+            DeleteInstanceProfileError::LimitExceeded(ref cause) => cause,
+            DeleteInstanceProfileError::NotFound(ref cause) => cause,
+            DeleteInstanceProfileError::ServiceAccount(ref cause) => cause,
+            DeleteInstanceProfileError::Validation(ref cause) => cause,
+            DeleteInstanceProfileError::Credentials(ref err) => err.description(),
+            DeleteInstanceProfileError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DeleteInstanceProfileError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -3439,6 +3970,104 @@ impl Error for GetDeviceError {
         }
     }
 }
+/// Errors returned by GetDeviceInstance
+#[derive(Debug, PartialEq)]
+pub enum GetDeviceInstanceError {
+    /// <p>An invalid argument was specified.</p>
+    Argument(String),
+    /// <p>A limit was exceeded.</p>
+    LimitExceeded(String),
+    /// <p>The specified entity was not found.</p>
+    NotFound(String),
+    /// <p>There was a problem with the service account.</p>
+    ServiceAccount(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl GetDeviceInstanceError {
+    pub fn from_body(body: &str) -> GetDeviceInstanceError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "ArgumentException" => {
+                        GetDeviceInstanceError::Argument(String::from(error_message))
+                    }
+                    "LimitExceededException" => {
+                        GetDeviceInstanceError::LimitExceeded(String::from(error_message))
+                    }
+                    "NotFoundException" => {
+                        GetDeviceInstanceError::NotFound(String::from(error_message))
+                    }
+                    "ServiceAccountException" => {
+                        GetDeviceInstanceError::ServiceAccount(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        GetDeviceInstanceError::Validation(error_message.to_string())
+                    }
+                    _ => GetDeviceInstanceError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => GetDeviceInstanceError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for GetDeviceInstanceError {
+    fn from(err: serde_json::error::Error) -> GetDeviceInstanceError {
+        GetDeviceInstanceError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for GetDeviceInstanceError {
+    fn from(err: CredentialsError) -> GetDeviceInstanceError {
+        GetDeviceInstanceError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for GetDeviceInstanceError {
+    fn from(err: HttpDispatchError) -> GetDeviceInstanceError {
+        GetDeviceInstanceError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetDeviceInstanceError {
+    fn from(err: io::Error) -> GetDeviceInstanceError {
+        GetDeviceInstanceError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for GetDeviceInstanceError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetDeviceInstanceError {
+    fn description(&self) -> &str {
+        match *self {
+            GetDeviceInstanceError::Argument(ref cause) => cause,
+            GetDeviceInstanceError::LimitExceeded(ref cause) => cause,
+            GetDeviceInstanceError::NotFound(ref cause) => cause,
+            GetDeviceInstanceError::ServiceAccount(ref cause) => cause,
+            GetDeviceInstanceError::Validation(ref cause) => cause,
+            GetDeviceInstanceError::Credentials(ref err) => err.description(),
+            GetDeviceInstanceError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            GetDeviceInstanceError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by GetDevicePool
 #[derive(Debug, PartialEq)]
 pub enum GetDevicePoolError {
@@ -3630,6 +4259,104 @@ impl Error for GetDevicePoolCompatibilityError {
                 dispatch_error.description()
             }
             GetDevicePoolCompatibilityError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by GetInstanceProfile
+#[derive(Debug, PartialEq)]
+pub enum GetInstanceProfileError {
+    /// <p>An invalid argument was specified.</p>
+    Argument(String),
+    /// <p>A limit was exceeded.</p>
+    LimitExceeded(String),
+    /// <p>The specified entity was not found.</p>
+    NotFound(String),
+    /// <p>There was a problem with the service account.</p>
+    ServiceAccount(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl GetInstanceProfileError {
+    pub fn from_body(body: &str) -> GetInstanceProfileError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "ArgumentException" => {
+                        GetInstanceProfileError::Argument(String::from(error_message))
+                    }
+                    "LimitExceededException" => {
+                        GetInstanceProfileError::LimitExceeded(String::from(error_message))
+                    }
+                    "NotFoundException" => {
+                        GetInstanceProfileError::NotFound(String::from(error_message))
+                    }
+                    "ServiceAccountException" => {
+                        GetInstanceProfileError::ServiceAccount(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        GetInstanceProfileError::Validation(error_message.to_string())
+                    }
+                    _ => GetInstanceProfileError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => GetInstanceProfileError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for GetInstanceProfileError {
+    fn from(err: serde_json::error::Error) -> GetInstanceProfileError {
+        GetInstanceProfileError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for GetInstanceProfileError {
+    fn from(err: CredentialsError) -> GetInstanceProfileError {
+        GetInstanceProfileError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for GetInstanceProfileError {
+    fn from(err: HttpDispatchError) -> GetInstanceProfileError {
+        GetInstanceProfileError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetInstanceProfileError {
+    fn from(err: io::Error) -> GetInstanceProfileError {
+        GetInstanceProfileError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for GetInstanceProfileError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetInstanceProfileError {
+    fn description(&self) -> &str {
+        match *self {
+            GetInstanceProfileError::Argument(ref cause) => cause,
+            GetInstanceProfileError::LimitExceeded(ref cause) => cause,
+            GetInstanceProfileError::NotFound(ref cause) => cause,
+            GetInstanceProfileError::ServiceAccount(ref cause) => cause,
+            GetInstanceProfileError::Validation(ref cause) => cause,
+            GetInstanceProfileError::Credentials(ref err) => err.description(),
+            GetInstanceProfileError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            GetInstanceProfileError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -4516,11 +5243,9 @@ impl InstallToRemoteAccessSessionError {
                     "NotFoundException" => {
                         InstallToRemoteAccessSessionError::NotFound(String::from(error_message))
                     }
-                    "ServiceAccountException" => {
-                        InstallToRemoteAccessSessionError::ServiceAccount(String::from(
-                            error_message,
-                        ))
-                    }
+                    "ServiceAccountException" => InstallToRemoteAccessSessionError::ServiceAccount(
+                        String::from(error_message),
+                    ),
                     "ValidationException" => {
                         InstallToRemoteAccessSessionError::Validation(error_message.to_string())
                     }
@@ -4666,6 +5391,104 @@ impl Error for ListArtifactsError {
             ListArtifactsError::Credentials(ref err) => err.description(),
             ListArtifactsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
             ListArtifactsError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by ListDeviceInstances
+#[derive(Debug, PartialEq)]
+pub enum ListDeviceInstancesError {
+    /// <p>An invalid argument was specified.</p>
+    Argument(String),
+    /// <p>A limit was exceeded.</p>
+    LimitExceeded(String),
+    /// <p>The specified entity was not found.</p>
+    NotFound(String),
+    /// <p>There was a problem with the service account.</p>
+    ServiceAccount(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl ListDeviceInstancesError {
+    pub fn from_body(body: &str) -> ListDeviceInstancesError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "ArgumentException" => {
+                        ListDeviceInstancesError::Argument(String::from(error_message))
+                    }
+                    "LimitExceededException" => {
+                        ListDeviceInstancesError::LimitExceeded(String::from(error_message))
+                    }
+                    "NotFoundException" => {
+                        ListDeviceInstancesError::NotFound(String::from(error_message))
+                    }
+                    "ServiceAccountException" => {
+                        ListDeviceInstancesError::ServiceAccount(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        ListDeviceInstancesError::Validation(error_message.to_string())
+                    }
+                    _ => ListDeviceInstancesError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => ListDeviceInstancesError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for ListDeviceInstancesError {
+    fn from(err: serde_json::error::Error) -> ListDeviceInstancesError {
+        ListDeviceInstancesError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for ListDeviceInstancesError {
+    fn from(err: CredentialsError) -> ListDeviceInstancesError {
+        ListDeviceInstancesError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for ListDeviceInstancesError {
+    fn from(err: HttpDispatchError) -> ListDeviceInstancesError {
+        ListDeviceInstancesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListDeviceInstancesError {
+    fn from(err: io::Error) -> ListDeviceInstancesError {
+        ListDeviceInstancesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for ListDeviceInstancesError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListDeviceInstancesError {
+    fn description(&self) -> &str {
+        match *self {
+            ListDeviceInstancesError::Argument(ref cause) => cause,
+            ListDeviceInstancesError::LimitExceeded(ref cause) => cause,
+            ListDeviceInstancesError::NotFound(ref cause) => cause,
+            ListDeviceInstancesError::ServiceAccount(ref cause) => cause,
+            ListDeviceInstancesError::Validation(ref cause) => cause,
+            ListDeviceInstancesError::Credentials(ref err) => err.description(),
+            ListDeviceInstancesError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            ListDeviceInstancesError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -4854,6 +5677,104 @@ impl Error for ListDevicesError {
             ListDevicesError::Credentials(ref err) => err.description(),
             ListDevicesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
             ListDevicesError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by ListInstanceProfiles
+#[derive(Debug, PartialEq)]
+pub enum ListInstanceProfilesError {
+    /// <p>An invalid argument was specified.</p>
+    Argument(String),
+    /// <p>A limit was exceeded.</p>
+    LimitExceeded(String),
+    /// <p>The specified entity was not found.</p>
+    NotFound(String),
+    /// <p>There was a problem with the service account.</p>
+    ServiceAccount(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl ListInstanceProfilesError {
+    pub fn from_body(body: &str) -> ListInstanceProfilesError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "ArgumentException" => {
+                        ListInstanceProfilesError::Argument(String::from(error_message))
+                    }
+                    "LimitExceededException" => {
+                        ListInstanceProfilesError::LimitExceeded(String::from(error_message))
+                    }
+                    "NotFoundException" => {
+                        ListInstanceProfilesError::NotFound(String::from(error_message))
+                    }
+                    "ServiceAccountException" => {
+                        ListInstanceProfilesError::ServiceAccount(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        ListInstanceProfilesError::Validation(error_message.to_string())
+                    }
+                    _ => ListInstanceProfilesError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => ListInstanceProfilesError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for ListInstanceProfilesError {
+    fn from(err: serde_json::error::Error) -> ListInstanceProfilesError {
+        ListInstanceProfilesError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for ListInstanceProfilesError {
+    fn from(err: CredentialsError) -> ListInstanceProfilesError {
+        ListInstanceProfilesError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for ListInstanceProfilesError {
+    fn from(err: HttpDispatchError) -> ListInstanceProfilesError {
+        ListInstanceProfilesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListInstanceProfilesError {
+    fn from(err: io::Error) -> ListInstanceProfilesError {
+        ListInstanceProfilesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for ListInstanceProfilesError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListInstanceProfilesError {
+    fn description(&self) -> &str {
+        match *self {
+            ListInstanceProfilesError::Argument(ref cause) => cause,
+            ListInstanceProfilesError::LimitExceeded(ref cause) => cause,
+            ListInstanceProfilesError::NotFound(ref cause) => cause,
+            ListInstanceProfilesError::ServiceAccount(ref cause) => cause,
+            ListInstanceProfilesError::Validation(ref cause) => cause,
+            ListInstanceProfilesError::Credentials(ref err) => err.description(),
+            ListInstanceProfilesError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            ListInstanceProfilesError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -6587,6 +7508,104 @@ impl Error for StopRunError {
         }
     }
 }
+/// Errors returned by UpdateDeviceInstance
+#[derive(Debug, PartialEq)]
+pub enum UpdateDeviceInstanceError {
+    /// <p>An invalid argument was specified.</p>
+    Argument(String),
+    /// <p>A limit was exceeded.</p>
+    LimitExceeded(String),
+    /// <p>The specified entity was not found.</p>
+    NotFound(String),
+    /// <p>There was a problem with the service account.</p>
+    ServiceAccount(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl UpdateDeviceInstanceError {
+    pub fn from_body(body: &str) -> UpdateDeviceInstanceError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "ArgumentException" => {
+                        UpdateDeviceInstanceError::Argument(String::from(error_message))
+                    }
+                    "LimitExceededException" => {
+                        UpdateDeviceInstanceError::LimitExceeded(String::from(error_message))
+                    }
+                    "NotFoundException" => {
+                        UpdateDeviceInstanceError::NotFound(String::from(error_message))
+                    }
+                    "ServiceAccountException" => {
+                        UpdateDeviceInstanceError::ServiceAccount(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        UpdateDeviceInstanceError::Validation(error_message.to_string())
+                    }
+                    _ => UpdateDeviceInstanceError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => UpdateDeviceInstanceError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for UpdateDeviceInstanceError {
+    fn from(err: serde_json::error::Error) -> UpdateDeviceInstanceError {
+        UpdateDeviceInstanceError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for UpdateDeviceInstanceError {
+    fn from(err: CredentialsError) -> UpdateDeviceInstanceError {
+        UpdateDeviceInstanceError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for UpdateDeviceInstanceError {
+    fn from(err: HttpDispatchError) -> UpdateDeviceInstanceError {
+        UpdateDeviceInstanceError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateDeviceInstanceError {
+    fn from(err: io::Error) -> UpdateDeviceInstanceError {
+        UpdateDeviceInstanceError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for UpdateDeviceInstanceError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for UpdateDeviceInstanceError {
+    fn description(&self) -> &str {
+        match *self {
+            UpdateDeviceInstanceError::Argument(ref cause) => cause,
+            UpdateDeviceInstanceError::LimitExceeded(ref cause) => cause,
+            UpdateDeviceInstanceError::NotFound(ref cause) => cause,
+            UpdateDeviceInstanceError::ServiceAccount(ref cause) => cause,
+            UpdateDeviceInstanceError::Validation(ref cause) => cause,
+            UpdateDeviceInstanceError::Credentials(ref err) => err.description(),
+            UpdateDeviceInstanceError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            UpdateDeviceInstanceError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by UpdateDevicePool
 #[derive(Debug, PartialEq)]
 pub enum UpdateDevicePoolError {
@@ -6680,6 +7699,104 @@ impl Error for UpdateDevicePoolError {
             UpdateDevicePoolError::Credentials(ref err) => err.description(),
             UpdateDevicePoolError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
             UpdateDevicePoolError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by UpdateInstanceProfile
+#[derive(Debug, PartialEq)]
+pub enum UpdateInstanceProfileError {
+    /// <p>An invalid argument was specified.</p>
+    Argument(String),
+    /// <p>A limit was exceeded.</p>
+    LimitExceeded(String),
+    /// <p>The specified entity was not found.</p>
+    NotFound(String),
+    /// <p>There was a problem with the service account.</p>
+    ServiceAccount(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl UpdateInstanceProfileError {
+    pub fn from_body(body: &str) -> UpdateInstanceProfileError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "ArgumentException" => {
+                        UpdateInstanceProfileError::Argument(String::from(error_message))
+                    }
+                    "LimitExceededException" => {
+                        UpdateInstanceProfileError::LimitExceeded(String::from(error_message))
+                    }
+                    "NotFoundException" => {
+                        UpdateInstanceProfileError::NotFound(String::from(error_message))
+                    }
+                    "ServiceAccountException" => {
+                        UpdateInstanceProfileError::ServiceAccount(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        UpdateInstanceProfileError::Validation(error_message.to_string())
+                    }
+                    _ => UpdateInstanceProfileError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => UpdateInstanceProfileError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for UpdateInstanceProfileError {
+    fn from(err: serde_json::error::Error) -> UpdateInstanceProfileError {
+        UpdateInstanceProfileError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for UpdateInstanceProfileError {
+    fn from(err: CredentialsError) -> UpdateInstanceProfileError {
+        UpdateInstanceProfileError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for UpdateInstanceProfileError {
+    fn from(err: HttpDispatchError) -> UpdateInstanceProfileError {
+        UpdateInstanceProfileError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateInstanceProfileError {
+    fn from(err: io::Error) -> UpdateInstanceProfileError {
+        UpdateInstanceProfileError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for UpdateInstanceProfileError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for UpdateInstanceProfileError {
+    fn description(&self) -> &str {
+        match *self {
+            UpdateInstanceProfileError::Argument(ref cause) => cause,
+            UpdateInstanceProfileError::LimitExceeded(ref cause) => cause,
+            UpdateInstanceProfileError::NotFound(ref cause) => cause,
+            UpdateInstanceProfileError::ServiceAccount(ref cause) => cause,
+            UpdateInstanceProfileError::Validation(ref cause) => cause,
+            UpdateInstanceProfileError::Credentials(ref err) => err.description(),
+            UpdateInstanceProfileError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            UpdateInstanceProfileError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -6885,6 +8002,12 @@ pub trait DeviceFarm {
         input: &CreateDevicePoolRequest,
     ) -> RusotoFuture<CreateDevicePoolResult, CreateDevicePoolError>;
 
+    /// <p>Creates a profile that can be applied to one or more private fleet device instances.</p>
+    fn create_instance_profile(
+        &self,
+        input: &CreateInstanceProfileRequest,
+    ) -> RusotoFuture<CreateInstanceProfileResult, CreateInstanceProfileError>;
+
     /// <p>Creates a network profile.</p>
     fn create_network_profile(
         &self,
@@ -6914,6 +8037,12 @@ pub trait DeviceFarm {
         &self,
         input: &DeleteDevicePoolRequest,
     ) -> RusotoFuture<DeleteDevicePoolResult, DeleteDevicePoolError>;
+
+    /// <p>Deletes a profile that can be applied to one or more private device instances.</p>
+    fn delete_instance_profile(
+        &self,
+        input: &DeleteInstanceProfileRequest,
+    ) -> RusotoFuture<DeleteInstanceProfileResult, DeleteInstanceProfileError>;
 
     /// <p>Deletes a network profile.</p>
     fn delete_network_profile(
@@ -6952,6 +8081,12 @@ pub trait DeviceFarm {
     fn get_device(&self, input: &GetDeviceRequest)
         -> RusotoFuture<GetDeviceResult, GetDeviceError>;
 
+    /// <p>Returns information about a device instance belonging to a private device fleet.</p>
+    fn get_device_instance(
+        &self,
+        input: &GetDeviceInstanceRequest,
+    ) -> RusotoFuture<GetDeviceInstanceResult, GetDeviceInstanceError>;
+
     /// <p>Gets information about a device pool.</p>
     fn get_device_pool(
         &self,
@@ -6963,6 +8098,12 @@ pub trait DeviceFarm {
         &self,
         input: &GetDevicePoolCompatibilityRequest,
     ) -> RusotoFuture<GetDevicePoolCompatibilityResult, GetDevicePoolCompatibilityError>;
+
+    /// <p>Returns information about the specified instance profile.</p>
+    fn get_instance_profile(
+        &self,
+        input: &GetInstanceProfileRequest,
+    ) -> RusotoFuture<GetInstanceProfileResult, GetInstanceProfileError>;
 
     /// <p>Gets information about a job.</p>
     fn get_job(&self, input: &GetJobRequest) -> RusotoFuture<GetJobResult, GetJobError>;
@@ -7016,6 +8157,12 @@ pub trait DeviceFarm {
         input: &ListArtifactsRequest,
     ) -> RusotoFuture<ListArtifactsResult, ListArtifactsError>;
 
+    /// <p>Returns information about the private device instances associated with one or more AWS accounts.</p>
+    fn list_device_instances(
+        &self,
+        input: &ListDeviceInstancesRequest,
+    ) -> RusotoFuture<ListDeviceInstancesResult, ListDeviceInstancesError>;
+
     /// <p>Gets information about device pools.</p>
     fn list_device_pools(
         &self,
@@ -7028,7 +8175,13 @@ pub trait DeviceFarm {
         input: &ListDevicesRequest,
     ) -> RusotoFuture<ListDevicesResult, ListDevicesError>;
 
-    /// <p>Gets information about jobs.</p>
+    /// <p>Returns information about all the instance profiles in an AWS account.</p>
+    fn list_instance_profiles(
+        &self,
+        input: &ListInstanceProfilesRequest,
+    ) -> RusotoFuture<ListInstanceProfilesResult, ListInstanceProfilesError>;
+
+    /// <p>Gets information about jobs for a given test run.</p>
     fn list_jobs(&self, input: &ListJobsRequest) -> RusotoFuture<ListJobsResult, ListJobsError>;
 
     /// <p>Returns the list of available network profiles.</p>
@@ -7076,13 +8229,13 @@ pub trait DeviceFarm {
         input: &ListSamplesRequest,
     ) -> RusotoFuture<ListSamplesResult, ListSamplesError>;
 
-    /// <p>Gets information about suites.</p>
+    /// <p>Gets information about test suites for a given job.</p>
     fn list_suites(
         &self,
         input: &ListSuitesRequest,
     ) -> RusotoFuture<ListSuitesResult, ListSuitesError>;
 
-    /// <p>Gets information about tests.</p>
+    /// <p>Gets information about tests in a given test suite.</p>
     fn list_tests(&self, input: &ListTestsRequest)
         -> RusotoFuture<ListTestsResult, ListTestsError>;
 
@@ -7125,11 +8278,23 @@ pub trait DeviceFarm {
     /// <p>Initiates a stop request for the current test run. AWS Device Farm will immediately stop the run on devices where tests have not started executing, and you will not be billed for these devices. On devices where tests have started executing, Setup Suite and Teardown Suite tests will run to completion before stopping execution on those devices. You will be billed for Setup, Teardown, and any tests that were in progress or already completed.</p>
     fn stop_run(&self, input: &StopRunRequest) -> RusotoFuture<StopRunResult, StopRunError>;
 
+    /// <p>Updates information about an existing private device instance.</p>
+    fn update_device_instance(
+        &self,
+        input: &UpdateDeviceInstanceRequest,
+    ) -> RusotoFuture<UpdateDeviceInstanceResult, UpdateDeviceInstanceError>;
+
     /// <p>Modifies the name, description, and rules in a device pool given the attributes and the pool ARN. Rule updates are all-or-nothing, meaning they can only be updated as a whole (or not at all).</p>
     fn update_device_pool(
         &self,
         input: &UpdateDevicePoolRequest,
     ) -> RusotoFuture<UpdateDevicePoolResult, UpdateDevicePoolError>;
+
+    /// <p>Updates information about an existing private device instance profile.</p>
+    fn update_instance_profile(
+        &self,
+        input: &UpdateInstanceProfileRequest,
+    ) -> RusotoFuture<UpdateInstanceProfileResult, UpdateInstanceProfileError>;
 
     /// <p>Updates the network profile with specific settings.</p>
     fn update_network_profile(
@@ -7214,6 +8379,43 @@ where
             } else {
                 future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CreateDevicePoolError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        });
+
+        RusotoFuture::new(future)
+    }
+
+    /// <p>Creates a profile that can be applied to one or more private fleet device instances.</p>
+    fn create_instance_profile(
+        &self,
+        input: &CreateInstanceProfileRequest,
+    ) -> RusotoFuture<CreateInstanceProfileResult, CreateInstanceProfileError> {
+        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "DeviceFarm_20150623.CreateInstanceProfile");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        let future = self.inner.sign_and_dispatch(request, |response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<CreateInstanceProfileResult>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(CreateInstanceProfileError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
@@ -7402,6 +8604,43 @@ where
             } else {
                 future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteDevicePoolError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        });
+
+        RusotoFuture::new(future)
+    }
+
+    /// <p>Deletes a profile that can be applied to one or more private device instances.</p>
+    fn delete_instance_profile(
+        &self,
+        input: &DeleteInstanceProfileRequest,
+    ) -> RusotoFuture<DeleteInstanceProfileResult, DeleteInstanceProfileError> {
+        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "DeviceFarm_20150623.DeleteInstanceProfile");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        let future = self.inner.sign_and_dispatch(request, |response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<DeleteInstanceProfileResult>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DeleteInstanceProfileError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
@@ -7671,6 +8910,43 @@ where
         RusotoFuture::new(future)
     }
 
+    /// <p>Returns information about a device instance belonging to a private device fleet.</p>
+    fn get_device_instance(
+        &self,
+        input: &GetDeviceInstanceRequest,
+    ) -> RusotoFuture<GetDeviceInstanceResult, GetDeviceInstanceError> {
+        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "DeviceFarm_20150623.GetDeviceInstance");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        let future = self.inner.sign_and_dispatch(request, |response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<GetDeviceInstanceResult>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(GetDeviceInstanceError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        });
+
+        RusotoFuture::new(future)
+    }
+
     /// <p>Gets information about a device pool.</p>
     fn get_device_pool(
         &self,
@@ -7739,6 +9015,43 @@ where
             } else {
                 future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(GetDevicePoolCompatibilityError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        });
+
+        RusotoFuture::new(future)
+    }
+
+    /// <p>Returns information about the specified instance profile.</p>
+    fn get_instance_profile(
+        &self,
+        input: &GetInstanceProfileRequest,
+    ) -> RusotoFuture<GetInstanceProfileResult, GetInstanceProfileError> {
+        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "DeviceFarm_20150623.GetInstanceProfile");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        let future = self.inner.sign_and_dispatch(request, |response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<GetInstanceProfileResult>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(GetInstanceProfileError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
@@ -8146,6 +9459,43 @@ where
         RusotoFuture::new(future)
     }
 
+    /// <p>Returns information about the private device instances associated with one or more AWS accounts.</p>
+    fn list_device_instances(
+        &self,
+        input: &ListDeviceInstancesRequest,
+    ) -> RusotoFuture<ListDeviceInstancesResult, ListDeviceInstancesError> {
+        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "DeviceFarm_20150623.ListDeviceInstances");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        let future = self.inner.sign_and_dispatch(request, |response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<ListDeviceInstancesResult>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(ListDeviceInstancesError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        });
+
+        RusotoFuture::new(future)
+    }
+
     /// <p>Gets information about device pools.</p>
     fn list_device_pools(
         &self,
@@ -8220,7 +9570,44 @@ where
         RusotoFuture::new(future)
     }
 
-    /// <p>Gets information about jobs.</p>
+    /// <p>Returns information about all the instance profiles in an AWS account.</p>
+    fn list_instance_profiles(
+        &self,
+        input: &ListInstanceProfilesRequest,
+    ) -> RusotoFuture<ListInstanceProfilesResult, ListInstanceProfilesError> {
+        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "DeviceFarm_20150623.ListInstanceProfiles");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        let future = self.inner.sign_and_dispatch(request, |response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<ListInstanceProfilesResult>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(ListInstanceProfilesError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        });
+
+        RusotoFuture::new(future)
+    }
+
+    /// <p>Gets information about jobs for a given test run.</p>
     fn list_jobs(&self, input: &ListJobsRequest) -> RusotoFuture<ListJobsResult, ListJobsError> {
         let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
 
@@ -8553,7 +9940,7 @@ where
         RusotoFuture::new(future)
     }
 
-    /// <p>Gets information about suites.</p>
+    /// <p>Gets information about test suites for a given job.</p>
     fn list_suites(
         &self,
         input: &ListSuitesRequest,
@@ -8590,7 +9977,7 @@ where
         RusotoFuture::new(future)
     }
 
-    /// <p>Gets information about tests.</p>
+    /// <p>Gets information about tests in a given test suite.</p>
     fn list_tests(
         &self,
         input: &ListTestsRequest,
@@ -8886,6 +10273,43 @@ where
         RusotoFuture::new(future)
     }
 
+    /// <p>Updates information about an existing private device instance.</p>
+    fn update_device_instance(
+        &self,
+        input: &UpdateDeviceInstanceRequest,
+    ) -> RusotoFuture<UpdateDeviceInstanceResult, UpdateDeviceInstanceError> {
+        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "DeviceFarm_20150623.UpdateDeviceInstance");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        let future = self.inner.sign_and_dispatch(request, |response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<UpdateDeviceInstanceResult>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(UpdateDeviceInstanceError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        });
+
+        RusotoFuture::new(future)
+    }
+
     /// <p>Modifies the name, description, and rules in a device pool given the attributes and the pool ARN. Rule updates are all-or-nothing, meaning they can only be updated as a whole (or not at all).</p>
     fn update_device_pool(
         &self,
@@ -8914,6 +10338,43 @@ where
             } else {
                 future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(UpdateDevicePoolError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        });
+
+        RusotoFuture::new(future)
+    }
+
+    /// <p>Updates information about an existing private device instance profile.</p>
+    fn update_instance_profile(
+        &self,
+        input: &UpdateInstanceProfileRequest,
+    ) -> RusotoFuture<UpdateInstanceProfileResult, UpdateInstanceProfileError> {
+        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "DeviceFarm_20150623.UpdateInstanceProfile");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        let future = self.inner.sign_and_dispatch(request, |response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<UpdateInstanceProfileResult>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(UpdateInstanceProfileError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))

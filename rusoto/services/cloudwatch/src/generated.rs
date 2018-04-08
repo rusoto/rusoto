@@ -653,6 +653,49 @@ impl DatapointValueMapDeserializer {
         Ok(obj)
     }
 }
+struct DatapointValuesDeserializer;
+impl DatapointValuesDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<f64>, XmlParseError> {
+        let mut obj = vec![];
+        try!(start_element(tag_name, stack));
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => {
+                    if name == "member" {
+                        obj.push(try!(DatapointValueDeserializer::deserialize(
+                            "member",
+                            stack
+                        )));
+                    } else {
+                        skip_tree(stack);
+                    }
+                }
+                DeserializerNext::Close => {
+                    try!(end_element(tag_name, stack));
+                    break;
+                }
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        Ok(obj)
+    }
+}
 struct DatapointsDeserializer;
 impl DatapointsDeserializer {
     #[allow(unused_variables)]
@@ -1506,6 +1549,118 @@ impl GetDashboardOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone)]
+pub struct GetMetricDataInput {
+    /// <p>The time stamp indicating the latest data to be returned.</p>
+    pub end_time: String,
+    /// <p>The maximum number of data points the request should return before paginating. If you omit this, the default of 100,800 is used.</p>
+    pub max_datapoints: Option<i64>,
+    /// <p>The metric queries to be returned. A single <code>GetMetricData</code> call can include as many as 100 <code>MetricDataQuery</code> structures. Each of these structures can specify either a metric to retrieve, or a math expression to perform on retrieved data. </p>
+    pub metric_data_queries: Vec<MetricDataQuery>,
+    /// <p>Include this value, if it was returned by the previous call, to get the next set of data points.</p>
+    pub next_token: Option<String>,
+    /// <p>The order in which data points should be returned. <code>TimestampDescending</code> returns the newest data first and paginates when the <code>MaxDatapoints</code> limit is reached. <code>TimestampAscending</code> returns the oldest data first and paginates when the <code>MaxDatapoints</code> limit is reached.</p>
+    pub scan_by: Option<String>,
+    /// <p>The time stamp indicating the earliest data to be returned.</p>
+    pub start_time: String,
+}
+
+/// Serialize `GetMetricDataInput` contents to a `SignedRequest`.
+struct GetMetricDataInputSerializer;
+impl GetMetricDataInputSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &GetMetricDataInput) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        params.put(
+            &format!("{}{}", prefix, "EndTime"),
+            &obj.end_time.replace("+", "%2B"),
+        );
+        if let Some(ref field_value) = obj.max_datapoints {
+            params.put(
+                &format!("{}{}", prefix, "MaxDatapoints"),
+                &field_value.to_string().replace("+", "%2B"),
+            );
+        }
+        MetricDataQueriesSerializer::serialize(
+            params,
+            &format!("{}{}", prefix, "MetricDataQueries"),
+            &obj.metric_data_queries,
+        );
+        if let Some(ref field_value) = obj.next_token {
+            params.put(
+                &format!("{}{}", prefix, "NextToken"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
+        if let Some(ref field_value) = obj.scan_by {
+            params.put(
+                &format!("{}{}", prefix, "ScanBy"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
+        params.put(
+            &format!("{}{}", prefix, "StartTime"),
+            &obj.start_time.replace("+", "%2B"),
+        );
+    }
+}
+
+#[derive(Default, Debug, Clone)]
+pub struct GetMetricDataOutput {
+    /// <p>The metrics that are returned, including the metric name, namespace, and dimensions.</p>
+    pub metric_data_results: Option<Vec<MetricDataResult>>,
+    /// <p>A token that marks the next batch of returned results.</p>
+    pub next_token: Option<String>,
+}
+
+struct GetMetricDataOutputDeserializer;
+impl GetMetricDataOutputDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<GetMetricDataOutput, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = GetMetricDataOutput::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "MetricDataResults" => {
+                        obj.metric_data_results = Some(try!(
+                            MetricDataResultsDeserializer::deserialize("MetricDataResults", stack)
+                        ));
+                    }
+                    "NextToken" => {
+                        obj.next_token =
+                            Some(try!(NextTokenDeserializer::deserialize("NextToken", stack)));
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+#[derive(Default, Debug, Clone)]
 pub struct GetMetricStatisticsInput {
     /// <p>The dimensions. If the metric contains multiple dimensions, you must include a value for each dimension. CloudWatch treats each unique combination of dimensions as a separate metric. If a specific combination of dimensions was not published, you can't retrieve statistics for it. You must specify the same dimensions that were used when the metrics were created. For an example, see <a href="http://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/cloudwatch_concepts.html#dimension-combinations">Dimension Combinations</a> in the <i>Amazon CloudWatch User Guide</i>. For more information about specifying dimensions, see <a href="http://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/publishingMetrics.html">Publishing Metrics</a> in the <i>Amazon CloudWatch User Guide</i>.</p>
     pub dimensions: Option<Vec<Dimension>>,
@@ -1523,7 +1678,7 @@ pub struct GetMetricStatisticsInput {
     pub start_time: String,
     /// <p>The metric statistics, other than percentile. For percentile statistics, use <code>ExtendedStatistics</code>. When calling <code>GetMetricStatistics</code>, you must specify either <code>Statistics</code> or <code>ExtendedStatistics</code>, but not both.</p>
     pub statistics: Option<Vec<String>>,
-    /// <p>The unit for a given metric. Metrics may be reported in multiple units. Not supplying a unit results in all units being returned. If the metric only ever reports one unit, specifying a unit has no effect.</p>
+    /// <p>The unit for a given metric. Metrics may be reported in multiple units. Not supplying a unit results in all units being returned. If you specify only a unit that the metric does not report, the results of the call are null.</p>
     pub unit: Option<String>,
 }
 
@@ -1896,6 +2051,91 @@ impl MessageDeserializer {
         Ok(obj)
     }
 }
+/// <p>A message returned by the <code>GetMetricData</code>API, including a code and a description.</p>
+#[derive(Default, Debug, Clone)]
+pub struct MessageData {
+    /// <p>The error code or status code associated with the message.</p>
+    pub code: Option<String>,
+    /// <p>The message text.</p>
+    pub value: Option<String>,
+}
+
+struct MessageDataDeserializer;
+impl MessageDataDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<MessageData, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = MessageData::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "Code" => {
+                        obj.code = Some(try!(MessageDataCodeDeserializer::deserialize(
+                            "Code",
+                            stack
+                        )));
+                    }
+                    "Value" => {
+                        obj.value = Some(try!(MessageDataValueDeserializer::deserialize(
+                            "Value",
+                            stack
+                        )));
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+struct MessageDataCodeDeserializer;
+impl MessageDataCodeDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let obj = try!(characters(stack));
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+struct MessageDataValueDeserializer;
+impl MessageDataValueDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let obj = try!(characters(stack));
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
 /// <p>Represents a specific metric.</p>
 #[derive(Default, Debug, Clone)]
 pub struct Metric {
@@ -1959,6 +2199,38 @@ impl MetricDeserializer {
         Ok(obj)
     }
 }
+
+/// Serialize `Metric` contents to a `SignedRequest`.
+struct MetricSerializer;
+impl MetricSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &Metric) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.dimensions {
+            DimensionsSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "Dimensions"),
+                field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.metric_name {
+            params.put(
+                &format!("{}{}", prefix, "MetricName"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
+        if let Some(ref field_value) = obj.namespace {
+            params.put(
+                &format!("{}{}", prefix, "Namespace"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
+    }
+}
+
 /// <p>Represents an alarm.</p>
 #[derive(Default, Debug, Clone)]
 pub struct MetricAlarm {
@@ -2232,6 +2504,236 @@ impl MetricDataSerializer {
     }
 }
 
+/// Serialize `MetricDataQueries` contents to a `SignedRequest`.
+struct MetricDataQueriesSerializer;
+impl MetricDataQueriesSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<MetricDataQuery>) {
+        for (index, obj) in obj.iter().enumerate() {
+            let key = format!("{}.member.{}", name, index + 1);
+            MetricDataQuerySerializer::serialize(params, &key, obj);
+        }
+    }
+}
+
+/// <p>This structure indicates the metric data to return, and whether this call is just retrieving a batch set of data for one metric, or is performing a math expression on metric data. A single <code>GetMetricData</code> call can include up to 100 <code>MetricDataQuery</code> structures.</p>
+#[derive(Default, Debug, Clone)]
+pub struct MetricDataQuery {
+    /// <p>The math expression to be performed on the returned data, if this structure is performing a math expression. For more information about metric math expressions, see <a href="http://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/using-metric-math.html#metric-math-syntax">Metric Math Syntax and Functions</a> in the <i>Amazon CloudWatch User Guide</i>.</p> <p>Within one MetricDataQuery structure, you must specify either <code>Expression</code> or <code>MetricStat</code> but not both.</p>
+    pub expression: Option<String>,
+    /// <p>A short name used to tie this structure to the results in the response. This name must be unique within a single call to <code>GetMetricData</code>. If you are performing math expressions on this set of data, this name represents that data and can serve as a variable in the mathematical expression. The valid characters are letters, numbers, and underscore. The first character must be a lowercase letter.</p>
+    pub id: String,
+    /// <p>A human-readable label for this metric or expression. This is especially useful if this is an expression, so that you know what the value represents. If the metric or expression is shown in a CloudWatch dashboard widget, the label is shown. If Label is omitted, CloudWatch generates a default.</p>
+    pub label: Option<String>,
+    /// <p>The metric to be returned, along with statistics, period, and units. Use this parameter only if this structure is performing a data retrieval and not performing a math expression on the returned data.</p> <p>Within one MetricDataQuery structure, you must specify either <code>Expression</code> or <code>MetricStat</code> but not both.</p>
+    pub metric_stat: Option<MetricStat>,
+    /// <p>Indicates whether to return the time stamps and raw data values of this metric. If you are performing this call just to do math expressions and do not also need the raw data returned, you can specify <code>False</code>. If you omit this, the default of <code>True</code> is used.</p>
+    pub return_data: Option<bool>,
+}
+
+/// Serialize `MetricDataQuery` contents to a `SignedRequest`.
+struct MetricDataQuerySerializer;
+impl MetricDataQuerySerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &MetricDataQuery) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.expression {
+            params.put(
+                &format!("{}{}", prefix, "Expression"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
+        params.put(&format!("{}{}", prefix, "Id"), &obj.id.replace("+", "%2B"));
+        if let Some(ref field_value) = obj.label {
+            params.put(
+                &format!("{}{}", prefix, "Label"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
+        if let Some(ref field_value) = obj.metric_stat {
+            MetricStatSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "MetricStat"),
+                field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.return_data {
+            params.put(
+                &format!("{}{}", prefix, "ReturnData"),
+                &field_value.to_string().replace("+", "%2B"),
+            );
+        }
+    }
+}
+
+/// <p>A <code>GetMetricData</code> call returns an array of <code>MetricDataResult</code> structures. Each of these structures includes the data points for that metric, along with the time stamps of those data points and other identifying information.</p>
+#[derive(Default, Debug, Clone)]
+pub struct MetricDataResult {
+    /// <p>The short name you specified to represent this metric.</p>
+    pub id: Option<String>,
+    /// <p>The human-readable label associated with the data.</p>
+    pub label: Option<String>,
+    /// <p>A list of messages with additional information about the data returned.</p>
+    pub messages: Option<Vec<MessageData>>,
+    /// <p>The status of the returned data. <code>Complete</code> indicates that all data points in the requested time range were returned. <code>PartialData</code> means that an incomplete set of data points were returned. You can use the <code>NextToken</code> value that was returned and repeat your request to get more data points. <code>NextToken</code> is not returned if you are performing a math expression. <code>InternalError</code> indicates that an error occurred. Retry your request using <code>NextToken</code>, if present.</p>
+    pub status_code: Option<String>,
+    /// <p>The time stamps for the data points, formatted in Unix timestamp format. The number of time stamps always matches the number of values and the value for Timestamps[x] is Values[x].</p>
+    pub timestamps: Option<Vec<String>>,
+    /// <p>The data points for the metric corresponding to <code>Timestamps</code>. The number of values always matches the number of time stamps and the time stamp for Values[x] is Timestamps[x].</p>
+    pub values: Option<Vec<f64>>,
+}
+
+struct MetricDataResultDeserializer;
+impl MetricDataResultDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<MetricDataResult, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = MetricDataResult::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "Id" => {
+                        obj.id = Some(try!(MetricIdDeserializer::deserialize("Id", stack)));
+                    }
+                    "Label" => {
+                        obj.label =
+                            Some(try!(MetricLabelDeserializer::deserialize("Label", stack)));
+                    }
+                    "Messages" => {
+                        obj.messages = Some(try!(
+                            MetricDataResultMessagesDeserializer::deserialize("Messages", stack)
+                        ));
+                    }
+                    "StatusCode" => {
+                        obj.status_code = Some(try!(StatusCodeDeserializer::deserialize(
+                            "StatusCode",
+                            stack
+                        )));
+                    }
+                    "Timestamps" => {
+                        obj.timestamps = Some(try!(TimestampsDeserializer::deserialize(
+                            "Timestamps",
+                            stack
+                        )));
+                    }
+                    "Values" => {
+                        obj.values = Some(try!(DatapointValuesDeserializer::deserialize(
+                            "Values",
+                            stack
+                        )));
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+struct MetricDataResultMessagesDeserializer;
+impl MetricDataResultMessagesDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<MessageData>, XmlParseError> {
+        let mut obj = vec![];
+        try!(start_element(tag_name, stack));
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => {
+                    if name == "member" {
+                        obj.push(try!(MessageDataDeserializer::deserialize("member", stack)));
+                    } else {
+                        skip_tree(stack);
+                    }
+                }
+                DeserializerNext::Close => {
+                    try!(end_element(tag_name, stack));
+                    break;
+                }
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        Ok(obj)
+    }
+}
+struct MetricDataResultsDeserializer;
+impl MetricDataResultsDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<MetricDataResult>, XmlParseError> {
+        let mut obj = vec![];
+        try!(start_element(tag_name, stack));
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => {
+                    if name == "member" {
+                        obj.push(try!(MetricDataResultDeserializer::deserialize(
+                            "member",
+                            stack
+                        )));
+                    } else {
+                        skip_tree(stack);
+                    }
+                }
+                DeserializerNext::Close => {
+                    try!(end_element(tag_name, stack));
+                    break;
+                }
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        Ok(obj)
+    }
+}
 /// <p>Encapsulates the information sent to either create a metric or add new values to be aggregated into an existing metric.</p>
 #[derive(Default, Debug, Clone)]
 pub struct MetricDatum {
@@ -2305,6 +2807,20 @@ impl MetricDatumSerializer {
     }
 }
 
+struct MetricIdDeserializer;
+impl MetricIdDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let obj = try!(characters(stack));
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
 struct MetricLabelDeserializer;
 impl MetricLabelDeserializer {
     #[allow(unused_variables)]
@@ -2333,6 +2849,46 @@ impl MetricNameDeserializer {
         Ok(obj)
     }
 }
+/// <p>This structure defines the metric to be returned, along with the statistics, period, and units.</p>
+#[derive(Default, Debug, Clone)]
+pub struct MetricStat {
+    /// <p>The metric to return, including the metric name, namespace, and dimensions.</p>
+    pub metric: Metric,
+    /// <p>The period to use when retrieving the metric.</p>
+    pub period: i64,
+    /// <p>The statistic to return. It can include any CloudWatch statistic or extended statistic.</p>
+    pub stat: String,
+    /// <p>The unit to use for the returned data points.</p>
+    pub unit: Option<String>,
+}
+
+/// Serialize `MetricStat` contents to a `SignedRequest`.
+struct MetricStatSerializer;
+impl MetricStatSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &MetricStat) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        MetricSerializer::serialize(params, &format!("{}{}", prefix, "Metric"), &obj.metric);
+        params.put(
+            &format!("{}{}", prefix, "Period"),
+            &obj.period.to_string().replace("+", "%2B"),
+        );
+        params.put(
+            &format!("{}{}", prefix, "Stat"),
+            &obj.stat.replace("+", "%2B"),
+        );
+        if let Some(ref field_value) = obj.unit {
+            params.put(
+                &format!("{}{}", prefix, "Unit"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
+    }
+}
+
 struct MetricsDeserializer;
 impl MetricsDeserializer {
     #[allow(unused_variables)]
@@ -2504,13 +3060,13 @@ pub struct PutMetricAlarmInput {
     pub alarm_name: String,
     /// <p> The arithmetic operation to use when comparing the specified statistic and threshold. The specified statistic value is used as the first operand.</p>
     pub comparison_operator: String,
-    /// <p>The number of datapoints that must be breaching to trigger the alarm.</p>
+    /// <p>The number of datapoints that must be breaching to trigger the alarm. This is used only if you are setting an "M out of N" alarm. In that case, this value is the M. For more information, see <a href="http://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/AlarmThatSendsEmail.html#alarm-evaluation">Evaluating an Alarm</a> in the <i>Amazon CloudWatch User Guide</i>.</p>
     pub datapoints_to_alarm: Option<i64>,
     /// <p>The dimensions for the metric associated with the alarm.</p>
     pub dimensions: Option<Vec<Dimension>>,
     /// <p> Used only for alarms based on percentiles. If you specify <code>ignore</code>, the alarm state does not change during periods with too few data points to be statistically significant. If you specify <code>evaluate</code> or omit this parameter, the alarm is always evaluated and possibly changes state no matter how many data points are available. For more information, see <a href="http://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/AlarmThatSendsEmail.html#percentiles-with-low-samples">Percentile-Based CloudWatch Alarms and Low Data Samples</a>.</p> <p>Valid Values: <code>evaluate | ignore</code> </p>
     pub evaluate_low_sample_count_percentile: Option<String>,
-    /// <p>The number of periods over which data is compared to the specified threshold. An alarm's total current evaluation period can be no longer than one day, so this number multiplied by <code>Period</code> cannot be more than 86,400 seconds.</p>
+    /// <p>The number of periods over which data is compared to the specified threshold. If you are setting an alarm which requires that a number of consecutive data points be breaching to trigger the alarm, this value specifies that number. If you are setting an "M out of N" alarm, this value is the N.</p> <p>An alarm's total current evaluation period can be no longer than one day, so this number multiplied by <code>Period</code> cannot be more than 86,400 seconds.</p>
     pub evaluation_periods: i64,
     /// <p>The percentile statistic for the metric associated with the alarm. Specify a value between p0.0 and p100. When you call <code>PutMetricAlarm</code>, you must specify either <code>Statistic</code> or <code>ExtendedStatistic,</code> but not both.</p>
     pub extended_statistic: Option<String>,
@@ -2522,7 +3078,7 @@ pub struct PutMetricAlarmInput {
     pub namespace: String,
     /// <p>The actions to execute when this alarm transitions to an <code>OK</code> state from any other state. Each action is specified as an Amazon Resource Name (ARN).</p> <p>Valid Values: arn:aws:automate:<i>region</i>:ec2:stop | arn:aws:automate:<i>region</i>:ec2:terminate | arn:aws:automate:<i>region</i>:ec2:recover | arn:aws:sns:<i>region</i>:<i>account-id</i>:<i>sns-topic-name</i> | arn:aws:autoscaling:<i>region</i>:<i>account-id</i>:scalingPolicy:<i>policy-id</i> autoScalingGroupName/<i>group-friendly-name</i>:policyName/<i>policy-friendly-name</i> </p> <p>Valid Values (for use with IAM roles): arn:aws:swf:<i>region</i>:{<i>account-id</i>}:action/actions/AWS_EC2.InstanceId.Stop/1.0 | arn:aws:swf:<i>region</i>:{<i>account-id</i>}:action/actions/AWS_EC2.InstanceId.Terminate/1.0 | arn:aws:swf:<i>region</i>:{<i>account-id</i>}:action/actions/AWS_EC2.InstanceId.Reboot/1.0</p>
     pub ok_actions: Option<Vec<String>>,
-    /// <p>The period, in seconds, over which the specified statistic is applied. Valid values are 10, 30, and any multiple of 60.</p> <p>Be sure to specify 10 or 30 only for metrics that are stored by a <code>PutMetricData</code> call with a <code>StorageResolution</code> of 1. If you specify a Period of 10 or 30 for a metric that does not have sub-minute resolution, the alarm still attempts to gather data at the period rate that you specify. In this case, it does not receive data for the attempts that do not correspond to a one-minute data resolution, and the alarm may often lapse into INSUFFICENT_DATA status. Specifying 10 or 30 also sets this alarm as a high-resolution alarm, which has a higher charge than other alarms. For more information about pricing, see <a href="https://aws.amazon.com/cloudwatch/pricing/">Amazon CloudWatch Pricing</a>.</p> <p>An alarm's total current evaluation period can be no longer than one day, so <code>Period</code> multiplied by <code>EvaluationPeriods</code> cannot be more than 86,400 seconds.</p>
+    /// <p>The period, in seconds, over which the specified statistic is applied. Valid values are 10, 30, and any multiple of 60.</p> <p>Be sure to specify 10 or 30 only for metrics that are stored by a <code>PutMetricData</code> call with a <code>StorageResolution</code> of 1. If you specify a period of 10 or 30 for a metric that does not have sub-minute resolution, the alarm still attempts to gather data at the period rate that you specify. In this case, it does not receive data for the attempts that do not correspond to a one-minute data resolution, and the alarm may often lapse into INSUFFICENT_DATA status. Specifying 10 or 30 also sets this alarm as a high-resolution alarm, which has a higher charge than other alarms. For more information about pricing, see <a href="https://aws.amazon.com/cloudwatch/pricing/">Amazon CloudWatch Pricing</a>.</p> <p>An alarm's total current evaluation period can be no longer than one day, so <code>Period</code> multiplied by <code>EvaluationPeriods</code> cannot be more than 86,400 seconds.</p>
     pub period: i64,
     /// <p>The statistic for the metric associated with the alarm, other than percentile. For percentile statistics, use <code>ExtendedStatistic</code>. When you call <code>PutMetricAlarm</code>, you must specify either <code>Statistic</code> or <code>ExtendedStatistic,</code> but not both.</p>
     pub statistic: Option<String>,
@@ -2923,6 +3479,20 @@ impl StatisticsSerializer {
     }
 }
 
+struct StatusCodeDeserializer;
+impl StatusCodeDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let obj = try!(characters(stack));
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
 struct ThresholdDeserializer;
 impl ThresholdDeserializer {
     #[allow(unused_variables)]
@@ -2947,6 +3517,46 @@ impl TimestampDeserializer {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+struct TimestampsDeserializer;
+impl TimestampsDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<String>, XmlParseError> {
+        let mut obj = vec![];
+        try!(start_element(tag_name, stack));
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => {
+                    if name == "member" {
+                        obj.push(try!(TimestampDeserializer::deserialize("member", stack)));
+                    } else {
+                        skip_tree(stack);
+                    }
+                }
+                DeserializerNext::Close => {
+                    try!(end_element(tag_name, stack));
+                    break;
+                }
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
 
         Ok(obj)
     }
@@ -3592,6 +4202,83 @@ impl Error for GetDashboardError {
             GetDashboardError::Credentials(ref err) => err.description(),
             GetDashboardError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
             GetDashboardError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by GetMetricData
+#[derive(Debug, PartialEq)]
+pub enum GetMetricDataError {
+    /// <p>The next token specified is invalid.</p>
+    InvalidNextToken(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl GetMetricDataError {
+    pub fn from_body(body: &str) -> GetMetricDataError {
+        let reader = EventReader::new(body.as_bytes());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        find_start_element(&mut stack);
+        match Self::deserialize(&mut stack) {
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                "InvalidNextToken" => {
+                    GetMetricDataError::InvalidNextToken(String::from(parsed_error.message))
+                }
+                _ => GetMetricDataError::Unknown(String::from(body)),
+            },
+            Err(_) => GetMetricDataError::Unknown(body.to_string()),
+        }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+
+impl From<XmlParseError> for GetMetricDataError {
+    fn from(err: XmlParseError) -> GetMetricDataError {
+        let XmlParseError(message) = err;
+        GetMetricDataError::Unknown(message.to_string())
+    }
+}
+impl From<CredentialsError> for GetMetricDataError {
+    fn from(err: CredentialsError) -> GetMetricDataError {
+        GetMetricDataError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for GetMetricDataError {
+    fn from(err: HttpDispatchError) -> GetMetricDataError {
+        GetMetricDataError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetMetricDataError {
+    fn from(err: io::Error) -> GetMetricDataError {
+        GetMetricDataError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for GetMetricDataError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetMetricDataError {
+    fn description(&self) -> &str {
+        match *self {
+            GetMetricDataError::InvalidNextToken(ref cause) => cause,
+            GetMetricDataError::Validation(ref cause) => cause,
+            GetMetricDataError::Credentials(ref err) => err.description(),
+            GetMetricDataError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            GetMetricDataError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -4245,6 +4932,12 @@ pub trait CloudWatch {
         input: &GetDashboardInput,
     ) -> RusotoFuture<GetDashboardOutput, GetDashboardError>;
 
+    /// <p>You can use the <code>GetMetricData</code> API to retrieve as many as 100 different metrics in a single request, with a total of as many as 100,800 datapoints. You can also optionally perform math expressions on the values of the returned statistics, to create new time series that represent new insights into your data. For example, using Lambda metrics, you could divide the Errors metric by the Invocations metric to get an error rate time series. For more information about metric math expressions, see <a href="http://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/using-metric-math.html#metric-math-syntax">Metric Math Syntax and Functions</a> in the <i>Amazon CloudWatch User Guide</i>.</p> <p>Calls to the <code>GetMetricData</code> API have a different pricing structure than calls to <code>GetMetricStatistics</code>. For more information about pricing, see <a href="https://aws.amazon.com/cloudwatch/pricing/">Amazon CloudWatch Pricing</a>.</p>
+    fn get_metric_data(
+        &self,
+        input: &GetMetricDataInput,
+    ) -> RusotoFuture<GetMetricDataOutput, GetMetricDataError>;
+
     /// <p>Gets statistics for the specified metric.</p> <p>The maximum number of data points returned from a single call is 1,440. If you request more than 1,440 data points, CloudWatch returns an error. To reduce the number of data points, you can narrow the specified time range and make multiple requests across adjacent time ranges, or you can increase the specified period. Data points are not returned in chronological order.</p> <p>CloudWatch aggregates data points based on the length of the period that you specify. For example, if you request statistics with a one-hour period, CloudWatch aggregates all data points with time stamps that fall within each one-hour period. Therefore, the number of values aggregated by CloudWatch is larger than the number of data points returned.</p> <p>CloudWatch needs raw data points to calculate percentile statistics. If you publish data using a statistic set instead, you can only retrieve percentile statistics for this data if one of the following conditions is true:</p> <ul> <li> <p>The SampleCount value of the statistic set is 1.</p> </li> <li> <p>The Min and the Max values of the statistic set are equal.</p> </li> </ul> <p>Amazon CloudWatch retains metric data as follows:</p> <ul> <li> <p>Data points with a period of less than 60 seconds are available for 3 hours. These data points are high-resolution metrics and are available only for custom metrics that have been defined with a <code>StorageResolution</code> of 1.</p> </li> <li> <p>Data points with a period of 60 seconds (1-minute) are available for 15 days.</p> </li> <li> <p>Data points with a period of 300 seconds (5-minute) are available for 63 days.</p> </li> <li> <p>Data points with a period of 3600 seconds (1 hour) are available for 455 days (15 months).</p> </li> </ul> <p>Data points that are initially published with a shorter period are aggregated together for long-term storage. For example, if you collect data using a period of 1 minute, the data remains available for 15 days with 1-minute resolution. After 15 days, this data is still available, but is aggregated and retrievable only with a resolution of 5 minutes. After 63 days, the data is further aggregated and is available with a resolution of 1 hour.</p> <p>CloudWatch started retaining 5-minute and 1-hour metric data as of July 9, 2016.</p> <p>For information about metrics and dimensions supported by AWS services, see the <a href="http://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CW_Support_For_AWS.html">Amazon CloudWatch Metrics and Dimensions Reference</a> in the <i>Amazon CloudWatch User Guide</i>.</p>
     fn get_metric_statistics(
         &self,
@@ -4647,6 +5340,57 @@ where
                     try!(start_element(&actual_tag_name, &mut stack));
                     result = try!(GetDashboardOutputDeserializer::deserialize(
                         "GetDashboardResult",
+                        &mut stack
+                    ));
+                    skip_tree(&mut stack);
+                    try!(end_element(&actual_tag_name, &mut stack));
+                }
+
+                Ok(result)
+            }))
+        });
+
+        RusotoFuture::new(future)
+    }
+
+    /// <p>You can use the <code>GetMetricData</code> API to retrieve as many as 100 different metrics in a single request, with a total of as many as 100,800 datapoints. You can also optionally perform math expressions on the values of the returned statistics, to create new time series that represent new insights into your data. For example, using Lambda metrics, you could divide the Errors metric by the Invocations metric to get an error rate time series. For more information about metric math expressions, see <a href="http://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/using-metric-math.html#metric-math-syntax">Metric Math Syntax and Functions</a> in the <i>Amazon CloudWatch User Guide</i>.</p> <p>Calls to the <code>GetMetricData</code> API have a different pricing structure than calls to <code>GetMetricStatistics</code>. For more information about pricing, see <a href="https://aws.amazon.com/cloudwatch/pricing/">Amazon CloudWatch Pricing</a>.</p>
+    fn get_metric_data(
+        &self,
+        input: &GetMetricDataInput,
+    ) -> RusotoFuture<GetMetricDataOutput, GetMetricDataError> {
+        let mut request = SignedRequest::new("POST", "monitoring", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "GetMetricData");
+        params.put("Version", "2010-08-01");
+        GetMetricDataInputSerializer::serialize(&mut params, "", &input);
+        request.set_params(params);
+
+        let future = self.inner.sign_and_dispatch(request, |response| {
+            if response.status != StatusCode::Ok {
+                return future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(GetMetricDataError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
+            }
+
+            future::Either::A(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = GetMetricDataOutput::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = try!(peek_at_name(&mut stack));
+                    try!(start_element(&actual_tag_name, &mut stack));
+                    result = try!(GetMetricDataOutputDeserializer::deserialize(
+                        "GetMetricDataResult",
                         &mut stack
                     ));
                     skip_tree(&mut stack);

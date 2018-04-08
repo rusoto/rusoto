@@ -30,380 +30,466 @@ use rusoto_core::signature::SignedRequest;
 use serde_json::Value as SerdeJsonValue;
 use serde_json::from_str;
 use hyper::StatusCode;
-/// <p>AWS Budget model</p>
+/// <p>Represents the output of the <code>CreateBudget</code> operation. The content consists of the detailed metadata and data file information, and the current status of the <code>budget</code>.</p> <p>The ARN pattern for a budget is: <code>arn:aws:budgetservice::AccountId:budget/budgetName</code> </p>
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct Budget {
+    /// <p>The total amount of cost, usage, or RI utilization that you want to track with your budget.</p> <p> <code>BudgetLimit</code> is required for cost or usage budgets, but optional for RI utilization budgets. RI utilization budgets default to the only valid value for RI utilization budgets, which is <code>100</code>.</p>
     #[serde(rename = "BudgetLimit")]
-    pub budget_limit: Spend,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub budget_limit: Option<Spend>,
+    /// <p>The name of a budget. Unique within accounts. <code>:</code> and <code>&bsol;</code> characters are not allowed in the <code>BudgetName</code>.</p>
     #[serde(rename = "BudgetName")]
     pub budget_name: String,
+    /// <p>Whether this budget tracks monetary costs, usage, or RI utilization.</p>
     #[serde(rename = "BudgetType")]
     pub budget_type: String,
+    /// <p>The actual and forecasted cost or usage being tracked by a budget.</p>
     #[serde(rename = "CalculatedSpend")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub calculated_spend: Option<CalculatedSpend>,
+    /// <p>The cost filters applied to a budget, such as service or region.</p>
     #[serde(rename = "CostFilters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cost_filters: Option<::std::collections::HashMap<String, Vec<String>>>,
+    /// <p>The types of costs included in this budget.</p>
     #[serde(rename = "CostTypes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cost_types: Option<CostTypes>,
+    /// <p>The period of time covered by a budget. Has a start date and an end date. The start date must come before the end date. There are no restrictions on the end date. </p> <p>If you created your budget and didn't specify a start date, AWS defaults to the start of your chosen time period (i.e. DAILY, MONTHLY, QUARTERLY, ANNUALLY). For example, if you created your budget on January 24th 2018, chose <code>DAILY</code>, and didn't set a start date, AWS set your start date to <code>01/24/18 00:00 UTC</code>. If you chose <code>MONTHLY</code>, AWS set your start date to <code>01/01/18 00:00 UTC</code>. If you didn't specify an end date, AWS set your end date to <code>06/15/87 00:00 UTC</code>. The defaults are the same for the AWS Billing and Cost Management console and the API. </p> <p>You can change either date with the <code>UpdateBudget</code> operation.</p> <p>After the end date, AWS deletes the budget and all associated notifications and subscribers.</p>
     #[serde(rename = "TimePeriod")]
-    pub time_period: TimePeriod,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub time_period: Option<TimePeriod>,
+    /// <p>The length of time until a budget resets the actual and forecasted spend.</p>
     #[serde(rename = "TimeUnit")]
     pub time_unit: String,
 }
 
-/// <p>A structure that holds the actual and forecasted spend for a budget.</p>
+/// <p>The spend objects associated with this budget. The <code>actualSpend</code> tracks how much you've used, cost, usage, or RI units, and the <code>forecastedSpend</code> tracks how much you are predicted to spend if your current usage remains steady.</p> <p>For example, if it is the 20th of the month and you have spent <code>50</code> dollars on Amazon EC2, your <code>actualSpend</code> is <code>50 USD</code>, and your <code>forecastedSpend</code> is <code>75 USD</code>.</p>
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct CalculatedSpend {
+    /// <p>The amount of cost, usage, or RI units that you have used.</p>
     #[serde(rename = "ActualSpend")]
     pub actual_spend: Spend,
+    /// <p>The amount of cost, usage, or RI units that you are forecasted to use.</p>
     #[serde(rename = "ForecastedSpend")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub forecasted_spend: Option<Spend>,
 }
 
-/// <p>This includes the options for getting the cost of a budget.</p>
+/// <p>The types of cost included in a budget, such as tax and subscriptions.</p>
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct CostTypes {
-    /// <p>A boolean value whether to include credits in the cost budget.</p>
+    /// <p>Specifies whether a budget includes credits.</p> <p>The default value is <code>true</code>.</p>
     #[serde(rename = "IncludeCredit")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub include_credit: Option<bool>,
-    /// <p>A boolean value whether to include other subscription costs in the cost budget.</p>
+    /// <p>Specifies whether a budget includes discounts.</p> <p>The default value is <code>true</code>.</p>
+    #[serde(rename = "IncludeDiscount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub include_discount: Option<bool>,
+    /// <p>Specifies whether a budget includes non-RI subscription costs.</p> <p>The default value is <code>true</code>.</p>
     #[serde(rename = "IncludeOtherSubscription")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub include_other_subscription: Option<bool>,
-    /// <p>A boolean value whether to include recurring costs in the cost budget.</p>
+    /// <p>Specifies whether a budget includes recurring fees such as monthly RI fees.</p> <p>The default value is <code>true</code>.</p>
     #[serde(rename = "IncludeRecurring")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub include_recurring: Option<bool>,
-    /// <p>A boolean value whether to include refunds in the cost budget.</p>
+    /// <p>Specifies whether a budget includes refunds.</p> <p>The default value is <code>true</code>.</p>
     #[serde(rename = "IncludeRefund")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub include_refund: Option<bool>,
-    /// <p>A boolean value whether to include subscriptions in the cost budget.</p>
+    /// <p>Specifies whether a budget includes subscriptions.</p> <p>The default value is <code>true</code>.</p>
     #[serde(rename = "IncludeSubscription")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub include_subscription: Option<bool>,
-    /// <p>A boolean value whether to include support costs in the cost budget.</p>
+    /// <p>Specifies whether a budget includes support subscription fees.</p> <p>The default value is <code>true</code>.</p>
     #[serde(rename = "IncludeSupport")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub include_support: Option<bool>,
-    /// <p>A boolean value whether to include tax in the cost budget.</p>
+    /// <p>Specifies whether a budget includes taxes.</p> <p>The default value is <code>true</code>.</p>
     #[serde(rename = "IncludeTax")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub include_tax: Option<bool>,
-    /// <p>A boolean value whether to include upfront costs in the cost budget.</p>
+    /// <p>Specifies whether a budget includes upfront RI costs.</p> <p>The default value is <code>true</code>.</p>
     #[serde(rename = "IncludeUpfront")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub include_upfront: Option<bool>,
-    /// <p>A boolean value whether to use blended costs in the cost budget.</p>
+    /// <p>Specifies whether a budget uses the amortized rate.</p> <p>The default value is <code>false</code>.</p>
+    #[serde(rename = "UseAmortized")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub use_amortized: Option<bool>,
+    /// <p>Specifies whether a budget uses blended rate.</p> <p>The default value is <code>false</code>.</p>
     #[serde(rename = "UseBlended")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub use_blended: Option<bool>,
 }
 
-/// <p>Request of CreateBudget</p>
+/// <p> Request of CreateBudget </p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateBudgetRequest {
+    /// <p>The <code>accountId</code> that is associated with the budget.</p>
     #[serde(rename = "AccountId")]
     pub account_id: String,
+    /// <p>The budget object that you want to create.</p>
     #[serde(rename = "Budget")]
     pub budget: Budget,
+    /// <p>A notification that you want to associate with a budget. A budget can have up to five notifications, and each notification can have one SNS subscriber and up to ten email subscribers. If you include notifications and subscribers in your <code>CreateBudget</code> call, AWS creates the notifications and subscribers for you.</p>
     #[serde(rename = "NotificationsWithSubscribers")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub notifications_with_subscribers: Option<Vec<NotificationWithSubscribers>>,
 }
 
-/// <p>Response of CreateBudget</p>
+/// <p> Response of CreateBudget </p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct CreateBudgetResponse {}
 
-/// <p>Request of CreateNotification</p>
+/// <p> Request of CreateNotification </p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateNotificationRequest {
+    /// <p>The <code>accountId</code> that is associated with the budget that you want to create a notification for.</p>
     #[serde(rename = "AccountId")]
     pub account_id: String,
+    /// <p>The name of the budget that you want AWS to notified you about. Budget names must be unique within an account.</p>
     #[serde(rename = "BudgetName")]
     pub budget_name: String,
+    /// <p>The notification that you want to create.</p>
     #[serde(rename = "Notification")]
     pub notification: Notification,
+    /// <p>A list of subscribers that you want to associate with the notification. Each notification can have one SNS subscriber and up to ten email subscribers.</p>
     #[serde(rename = "Subscribers")]
     pub subscribers: Vec<Subscriber>,
 }
 
-/// <p>Response of CreateNotification</p>
+/// <p> Response of CreateNotification </p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct CreateNotificationResponse {}
 
-/// <p>Request of CreateSubscriber</p>
+/// <p> Request of CreateSubscriber </p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateSubscriberRequest {
+    /// <p>The <code>accountId</code> associated with the budget that you want to create a subscriber for.</p>
     #[serde(rename = "AccountId")]
     pub account_id: String,
+    /// <p>The name of the budget that you want to subscribe to. Budget names must be unique within an account.</p>
     #[serde(rename = "BudgetName")]
     pub budget_name: String,
+    /// <p>The notification that you want to create a subscriber for.</p>
     #[serde(rename = "Notification")]
     pub notification: Notification,
+    /// <p>The subscriber that you want to associate with a budget notification.</p>
     #[serde(rename = "Subscriber")]
     pub subscriber: Subscriber,
 }
 
-/// <p>Response of CreateSubscriber</p>
+/// <p> Response of CreateSubscriber </p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct CreateSubscriberResponse {}
 
-/// <p>Request of DeleteBudget</p>
+/// <p> Request of DeleteBudget </p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteBudgetRequest {
+    /// <p>The <code>accountId</code> that is associated with the budget that you want to delete.</p>
     #[serde(rename = "AccountId")]
     pub account_id: String,
+    /// <p>The name of the budget that you want to delete.</p>
     #[serde(rename = "BudgetName")]
     pub budget_name: String,
 }
 
-/// <p>Response of DeleteBudget</p>
+/// <p> Response of DeleteBudget </p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct DeleteBudgetResponse {}
 
-/// <p>Request of DeleteNotification</p>
+/// <p> Request of DeleteNotification </p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteNotificationRequest {
+    /// <p>The <code>accountId</code> that is associated with the budget whose notification you want to delete.</p>
     #[serde(rename = "AccountId")]
     pub account_id: String,
+    /// <p>The name of the budget whose notification you want to delete.</p>
     #[serde(rename = "BudgetName")]
     pub budget_name: String,
+    /// <p>The notification that you want to delete.</p>
     #[serde(rename = "Notification")]
     pub notification: Notification,
 }
 
-/// <p>Response of DeleteNotification</p>
+/// <p> Response of DeleteNotification </p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct DeleteNotificationResponse {}
 
-/// <p>Request of DeleteSubscriber</p>
+/// <p> Request of DeleteSubscriber </p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteSubscriberRequest {
+    /// <p>The <code>accountId</code> that is associated with the budget whose subscriber you want to delete.</p>
     #[serde(rename = "AccountId")]
     pub account_id: String,
+    /// <p>The name of the budget whose subscriber you want to delete.</p>
     #[serde(rename = "BudgetName")]
     pub budget_name: String,
+    /// <p>The notification whose subscriber you want to delete.</p>
     #[serde(rename = "Notification")]
     pub notification: Notification,
+    /// <p>The subscriber that you want to delete.</p>
     #[serde(rename = "Subscriber")]
     pub subscriber: Subscriber,
 }
 
-/// <p>Response of DeleteSubscriber</p>
+/// <p> Response of DeleteSubscriber </p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct DeleteSubscriberResponse {}
 
-/// <p>Request of DescribeBudget</p>
+/// <p> Request of DescribeBudget </p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeBudgetRequest {
+    /// <p>The <code>accountId</code> that is associated with the budget that you want a description of.</p>
     #[serde(rename = "AccountId")]
     pub account_id: String,
+    /// <p>The name of the budget that you want a description of.</p>
     #[serde(rename = "BudgetName")]
     pub budget_name: String,
 }
 
-/// <p>Response of DescribeBudget</p>
+/// <p> Response of DescribeBudget </p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeBudgetResponse {
+    /// <p>The description of the budget.</p>
     #[serde(rename = "Budget")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub budget: Option<Budget>,
 }
 
-/// <p>Request of DescribeBudgets</p>
+/// <p> Request of DescribeBudgets </p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeBudgetsRequest {
+    /// <p>The <code>accountId</code> that is associated with the budgets that you want descriptions of.</p>
     #[serde(rename = "AccountId")]
     pub account_id: String,
+    /// <p>Optional integer. Specifies the maximum number of results to return in response.</p>
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
+    /// <p>The pagination token that indicates the next set of results to retrieve.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-/// <p>Response of DescribeBudgets</p>
+/// <p> Response of DescribeBudgets </p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeBudgetsResponse {
+    /// <p>A list of budgets.</p>
     #[serde(rename = "Budgets")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub budgets: Option<Vec<Budget>>,
+    /// <p>The pagination token that indicates the next set of results that you can retrieve.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-/// <p>Request of DescribeNotificationsForBudget</p>
+/// <p> Request of DescribeNotificationsForBudget </p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeNotificationsForBudgetRequest {
+    /// <p>The <code>accountId</code> that is associated with the budget whose notifications you want descriptions of.</p>
     #[serde(rename = "AccountId")]
     pub account_id: String,
+    /// <p>The name of the budget whose notifications you want descriptions of.</p>
     #[serde(rename = "BudgetName")]
     pub budget_name: String,
+    /// <p>Optional integer. Specifies the maximum number of results to return in response.</p>
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
+    /// <p>The pagination token that indicates the next set of results to retrieve.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-/// <p>Response of GetNotificationsForBudget</p>
+/// <p> Response of GetNotificationsForBudget </p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeNotificationsForBudgetResponse {
+    /// <p>The pagination token that indicates the next set of results that you can retrieve.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
+    /// <p>A list of notifications associated with a budget.</p>
     #[serde(rename = "Notifications")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub notifications: Option<Vec<Notification>>,
 }
 
-/// <p>Request of DescribeSubscribersForNotification</p>
+/// <p> Request of DescribeSubscribersForNotification </p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeSubscribersForNotificationRequest {
+    /// <p>The <code>accountId</code> that is associated with the budget whose subscribers you want descriptions of.</p>
     #[serde(rename = "AccountId")]
     pub account_id: String,
+    /// <p>The name of the budget whose subscribers you want descriptions of.</p>
     #[serde(rename = "BudgetName")]
     pub budget_name: String,
+    /// <p>Optional integer. Specifies the maximum number of results to return in response.</p>
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
+    /// <p>The pagination token that indicates the next set of results to retrieve.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
+    /// <p>The notification whose subscribers you want to list.</p>
     #[serde(rename = "Notification")]
     pub notification: Notification,
 }
 
-/// <p>Response of DescribeSubscribersForNotification</p>
+/// <p> Response of DescribeSubscribersForNotification </p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeSubscribersForNotificationResponse {
+    /// <p>The pagination token that indicates the next set of results that you can retrieve.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
+    /// <p>A list of subscribers associated with a notification.</p>
     #[serde(rename = "Subscribers")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub subscribers: Option<Vec<Subscriber>>,
 }
 
-/// <p>Notification model. Each budget may contain multiple notifications with different settings.</p>
+/// <p><p>A notification associated with a budget. A budget can have up to five notifications. </p> <p>Each notification must have at least one subscriber. A notification can have one SNS subscriber and up to ten email subscribers, for a total of 11 subscribers.</p> <p>For example, if you have a budget for 200 dollars and you want to be notified when you go over 160 dollars, create a notification with the following parameters:</p> <ul> <li> <p>A notificationType of <code>ACTUAL</code> </p> </li> <li> <p>A comparisonOperator of <code>GREATER_THAN</code> </p> </li> <li> <p>A notification threshold of <code>80</code> </p> </li> </ul></p>
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct Notification {
+    /// <p>The comparison used for this notification.</p>
     #[serde(rename = "ComparisonOperator")]
     pub comparison_operator: String,
+    /// <p>Whether the notification is for how much you have spent (<code>ACTUAL</code>) or for how much you are forecasted to spend (<code>FORECASTED</code>).</p>
     #[serde(rename = "NotificationType")]
     pub notification_type: String,
+    /// <p>The threshold associated with a notification. Thresholds are always a percentage.</p>
     #[serde(rename = "Threshold")]
     pub threshold: f64,
+    /// <p>The type of threshold for a notification. For <code>ACTUAL</code> thresholds, AWS notifies you when you go over the threshold, and for <code>FORECASTED</code> thresholds AWS notifies you when you are forecasted to go over the threshold.</p>
     #[serde(rename = "ThresholdType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub threshold_type: Option<String>,
 }
 
-/// <p>A structure to relate notification and a list of subscribers who belong to the notification.</p>
+/// <p>A notification with subscribers. A notification can have one SNS subscriber and up to ten email subscribers, for a total of 11 subscribers.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct NotificationWithSubscribers {
+    /// <p>The notification associated with a budget.</p>
     #[serde(rename = "Notification")]
     pub notification: Notification,
+    /// <p>A list of subscribers who are subscribed to this notification.</p>
     #[serde(rename = "Subscribers")]
     pub subscribers: Vec<Subscriber>,
 }
 
-/// <p>A structure that represents either a cost spend or usage spend. Contains an amount and a unit.</p>
+/// <p><p>The amount of cost or usage being measured for a budget.</p> <p>For example, a <code>Spend</code> for <code>3 GB</code> of S3 usage would have the following parameters:</p> <ul> <li> <p>An <code>Amount</code> of <code>3</code> </p> </li> <li> <p>A <code>unit</code> of <code>GB</code> </p> </li> </ul></p>
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct Spend {
+    /// <p>The cost or usage amount associated with a budget forecast, actual spend, or budget threshold.</p>
     #[serde(rename = "Amount")]
     pub amount: String,
+    /// <p>The unit of measurement used for the budget forecast, actual spend, or budget threshold, such as dollars or GB.</p>
     #[serde(rename = "Unit")]
     pub unit: String,
 }
 
-/// <p>Subscriber model. Each notification may contain multiple subscribers with different addresses.</p>
+/// <p><p>The subscriber to a budget notification. The subscriber consists of a subscription type and either an Amazon Simple Notification Service topic or an email address.</p> <p>For example, an email subscriber would have the following parameters:</p> <ul> <li> <p>A <code>subscriptionType</code> of <code>EMAIL</code> </p> </li> <li> <p>An <code>address</code> of <code>example@example.com</code> </p> </li> </ul></p>
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct Subscriber {
+    /// <p>The address that AWS sends budget notifications to, either an SNS topic or an email.</p>
     #[serde(rename = "Address")]
     pub address: String,
+    /// <p>The type of notification that AWS sends to a subscriber.</p>
     #[serde(rename = "SubscriptionType")]
     pub subscription_type: String,
 }
 
-/// <p>A time period indicating the start date and end date of a budget.</p>
+/// <p>The period of time covered by a budget. Has a start date and an end date. The start date must come before the end date. There are no restrictions on the end date. </p>
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct TimePeriod {
+    /// <p>The end date for a budget. If you didn't specify an end date, AWS set your end date to <code>06/15/87 00:00 UTC</code>. The defaults are the same for the AWS Billing and Cost Management console and the API.</p> <p>After the end date, AWS deletes the budget and all associated notifications and subscribers. You can change your end date with the <code>UpdateBudget</code> operation.</p>
     #[serde(rename = "End")]
-    pub end: f64,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub end: Option<f64>,
+    /// <p>The start date for a budget. If you created your budget and didn't specify a start date, AWS defaults to the start of your chosen time period (i.e. DAILY, MONTHLY, QUARTERLY, ANNUALLY). For example, if you created your budget on January 24th 2018, chose <code>DAILY</code>, and didn't set a start date, AWS set your start date to <code>01/24/18 00:00 UTC</code>. If you chose <code>MONTHLY</code>, AWS set your start date to <code>01/01/18 00:00 UTC</code>. The defaults are the same for the AWS Billing and Cost Management console and the API.</p> <p>You can change your start date with the <code>UpdateBudget</code> operation.</p>
     #[serde(rename = "Start")]
-    pub start: f64,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub start: Option<f64>,
 }
 
-/// <p>Request of UpdateBudget</p>
+/// <p> Request of UpdateBudget </p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct UpdateBudgetRequest {
+    /// <p>The <code>accountId</code> that is associated with the budget that you want to update.</p>
     #[serde(rename = "AccountId")]
     pub account_id: String,
+    /// <p>The budget that you want to update your budget to.</p>
     #[serde(rename = "NewBudget")]
     pub new_budget: Budget,
 }
 
-/// <p>Response of UpdateBudget</p>
+/// <p> Response of UpdateBudget </p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct UpdateBudgetResponse {}
 
-/// <p>Request of UpdateNotification</p>
+/// <p> Request of UpdateNotification </p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct UpdateNotificationRequest {
+    /// <p>The <code>accountId</code> that is associated with the budget whose notification you want to update.</p>
     #[serde(rename = "AccountId")]
     pub account_id: String,
+    /// <p>The name of the budget whose notification you want to update.</p>
     #[serde(rename = "BudgetName")]
     pub budget_name: String,
+    /// <p>The updated notification to be associated with a budget.</p>
     #[serde(rename = "NewNotification")]
     pub new_notification: Notification,
+    /// <p>The previous notification associated with a budget.</p>
     #[serde(rename = "OldNotification")]
     pub old_notification: Notification,
 }
 
-/// <p>Response of UpdateNotification</p>
+/// <p> Response of UpdateNotification </p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct UpdateNotificationResponse {}
 
-/// <p>Request of UpdateSubscriber</p>
+/// <p> Request of UpdateSubscriber </p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct UpdateSubscriberRequest {
+    /// <p>The <code>accountId</code> that is associated with the budget whose subscriber you want to update.</p>
     #[serde(rename = "AccountId")]
     pub account_id: String,
+    /// <p>The name of the budget whose subscriber you want to update.</p>
     #[serde(rename = "BudgetName")]
     pub budget_name: String,
+    /// <p>The updated subscriber associated with a budget notification.</p>
     #[serde(rename = "NewSubscriber")]
     pub new_subscriber: Subscriber,
+    /// <p>The notification whose subscriber you want to update.</p>
     #[serde(rename = "Notification")]
     pub notification: Notification,
+    /// <p>The previous subscriber associated with a budget notification.</p>
     #[serde(rename = "OldSubscriber")]
     pub old_subscriber: Subscriber,
 }
 
-/// <p>Response of UpdateSubscriber</p>
+/// <p> Response of UpdateSubscriber </p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct UpdateSubscriberResponse {}
 
 /// Errors returned by CreateBudget
 #[derive(Debug, PartialEq)]
 pub enum CreateBudgetError {
-    /// <p>The exception is thrown when customer tries to create a record (e.g. budget), but the number this record already exceeds the limitation.</p>
+    /// <p>You've exceeded the notification or subscriber limit.</p>
     CreationLimitExceeded(String),
-    /// <p>The exception is thrown when customer tries to create a record (e.g. budget) that already exists.</p>
+    /// <p>The budget name already exists. Budget names must be unique within an account.</p>
     DuplicateRecord(String),
-    /// <p>This exception is thrown on an unknown internal failure.</p>
+    /// <p>An error on the server occurred during the processing of your request. Try again later.</p>
     InternalError(String),
-    /// <p>This exception is thrown if any request is given an invalid parameter. E.g., if a required Date field is null.</p>
+    /// <p>An error on the client occurred. Typically, the cause is an invalid input value.</p>
     InvalidParameter(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -493,15 +579,15 @@ impl Error for CreateBudgetError {
 /// Errors returned by CreateNotification
 #[derive(Debug, PartialEq)]
 pub enum CreateNotificationError {
-    /// <p>The exception is thrown when customer tries to create a record (e.g. budget), but the number this record already exceeds the limitation.</p>
+    /// <p>You've exceeded the notification or subscriber limit.</p>
     CreationLimitExceeded(String),
-    /// <p>The exception is thrown when customer tries to create a record (e.g. budget) that already exists.</p>
+    /// <p>The budget name already exists. Budget names must be unique within an account.</p>
     DuplicateRecord(String),
-    /// <p>This exception is thrown on an unknown internal failure.</p>
+    /// <p>An error on the server occurred during the processing of your request. Try again later.</p>
     InternalError(String),
-    /// <p>This exception is thrown if any request is given an invalid parameter. E.g., if a required Date field is null.</p>
+    /// <p>An error on the client occurred. Typically, the cause is an invalid input value.</p>
     InvalidParameter(String),
-    /// <p>This exception is thrown if a requested entity is not found. E.g., if a budget id doesn&#39;t exist for an account ID.</p>
+    /// <p>We can’t locate the resource that you specified.</p>
     NotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -597,15 +683,15 @@ impl Error for CreateNotificationError {
 /// Errors returned by CreateSubscriber
 #[derive(Debug, PartialEq)]
 pub enum CreateSubscriberError {
-    /// <p>The exception is thrown when customer tries to create a record (e.g. budget), but the number this record already exceeds the limitation.</p>
+    /// <p>You've exceeded the notification or subscriber limit.</p>
     CreationLimitExceeded(String),
-    /// <p>The exception is thrown when customer tries to create a record (e.g. budget) that already exists.</p>
+    /// <p>The budget name already exists. Budget names must be unique within an account.</p>
     DuplicateRecord(String),
-    /// <p>This exception is thrown on an unknown internal failure.</p>
+    /// <p>An error on the server occurred during the processing of your request. Try again later.</p>
     InternalError(String),
-    /// <p>This exception is thrown if any request is given an invalid parameter. E.g., if a required Date field is null.</p>
+    /// <p>An error on the client occurred. Typically, the cause is an invalid input value.</p>
     InvalidParameter(String),
-    /// <p>This exception is thrown if a requested entity is not found. E.g., if a budget id doesn&#39;t exist for an account ID.</p>
+    /// <p>We can’t locate the resource that you specified.</p>
     NotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -699,11 +785,11 @@ impl Error for CreateSubscriberError {
 /// Errors returned by DeleteBudget
 #[derive(Debug, PartialEq)]
 pub enum DeleteBudgetError {
-    /// <p>This exception is thrown on an unknown internal failure.</p>
+    /// <p>An error on the server occurred during the processing of your request. Try again later.</p>
     InternalError(String),
-    /// <p>This exception is thrown if any request is given an invalid parameter. E.g., if a required Date field is null.</p>
+    /// <p>An error on the client occurred. Typically, the cause is an invalid input value.</p>
     InvalidParameter(String),
-    /// <p>This exception is thrown if a requested entity is not found. E.g., if a budget id doesn&#39;t exist for an account ID.</p>
+    /// <p>We can’t locate the resource that you specified.</p>
     NotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -787,11 +873,11 @@ impl Error for DeleteBudgetError {
 /// Errors returned by DeleteNotification
 #[derive(Debug, PartialEq)]
 pub enum DeleteNotificationError {
-    /// <p>This exception is thrown on an unknown internal failure.</p>
+    /// <p>An error on the server occurred during the processing of your request. Try again later.</p>
     InternalError(String),
-    /// <p>This exception is thrown if any request is given an invalid parameter. E.g., if a required Date field is null.</p>
+    /// <p>An error on the client occurred. Typically, the cause is an invalid input value.</p>
     InvalidParameter(String),
-    /// <p>This exception is thrown if a requested entity is not found. E.g., if a budget id doesn&#39;t exist for an account ID.</p>
+    /// <p>We can’t locate the resource that you specified.</p>
     NotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -879,11 +965,11 @@ impl Error for DeleteNotificationError {
 /// Errors returned by DeleteSubscriber
 #[derive(Debug, PartialEq)]
 pub enum DeleteSubscriberError {
-    /// <p>This exception is thrown on an unknown internal failure.</p>
+    /// <p>An error on the server occurred during the processing of your request. Try again later.</p>
     InternalError(String),
-    /// <p>This exception is thrown if any request is given an invalid parameter. E.g., if a required Date field is null.</p>
+    /// <p>An error on the client occurred. Typically, the cause is an invalid input value.</p>
     InvalidParameter(String),
-    /// <p>This exception is thrown if a requested entity is not found. E.g., if a budget id doesn&#39;t exist for an account ID.</p>
+    /// <p>We can’t locate the resource that you specified.</p>
     NotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -969,11 +1055,11 @@ impl Error for DeleteSubscriberError {
 /// Errors returned by DescribeBudget
 #[derive(Debug, PartialEq)]
 pub enum DescribeBudgetError {
-    /// <p>This exception is thrown on an unknown internal failure.</p>
+    /// <p>An error on the server occurred during the processing of your request. Try again later.</p>
     InternalError(String),
-    /// <p>This exception is thrown if any request is given an invalid parameter. E.g., if a required Date field is null.</p>
+    /// <p>An error on the client occurred. Typically, the cause is an invalid input value.</p>
     InvalidParameter(String),
-    /// <p>This exception is thrown if a requested entity is not found. E.g., if a budget id doesn&#39;t exist for an account ID.</p>
+    /// <p>We can’t locate the resource that you specified.</p>
     NotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1059,15 +1145,15 @@ impl Error for DescribeBudgetError {
 /// Errors returned by DescribeBudgets
 #[derive(Debug, PartialEq)]
 pub enum DescribeBudgetsError {
-    /// <p>This exception is thrown if the paging token is expired - past its TTL</p>
+    /// <p>The pagination token expired.</p>
     ExpiredNextToken(String),
-    /// <p>This exception is thrown on an unknown internal failure.</p>
+    /// <p>An error on the server occurred during the processing of your request. Try again later.</p>
     InternalError(String),
-    /// <p>This exception is thrown if paging token signature didn&#39;t match the token, or the paging token isn&#39;t for this request</p>
+    /// <p>The pagination token is invalid.</p>
     InvalidNextToken(String),
-    /// <p>This exception is thrown if any request is given an invalid parameter. E.g., if a required Date field is null.</p>
+    /// <p>An error on the client occurred. Typically, the cause is an invalid input value.</p>
     InvalidParameter(String),
-    /// <p>This exception is thrown if a requested entity is not found. E.g., if a budget id doesn&#39;t exist for an account ID.</p>
+    /// <p>We can’t locate the resource that you specified.</p>
     NotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1161,15 +1247,15 @@ impl Error for DescribeBudgetsError {
 /// Errors returned by DescribeNotificationsForBudget
 #[derive(Debug, PartialEq)]
 pub enum DescribeNotificationsForBudgetError {
-    /// <p>This exception is thrown if the paging token is expired - past its TTL</p>
+    /// <p>The pagination token expired.</p>
     ExpiredNextToken(String),
-    /// <p>This exception is thrown on an unknown internal failure.</p>
+    /// <p>An error on the server occurred during the processing of your request. Try again later.</p>
     InternalError(String),
-    /// <p>This exception is thrown if paging token signature didn&#39;t match the token, or the paging token isn&#39;t for this request</p>
+    /// <p>The pagination token is invalid.</p>
     InvalidNextToken(String),
-    /// <p>This exception is thrown if any request is given an invalid parameter. E.g., if a required Date field is null.</p>
+    /// <p>An error on the client occurred. Typically, the cause is an invalid input value.</p>
     InvalidParameter(String),
-    /// <p>This exception is thrown if a requested entity is not found. E.g., if a budget id doesn&#39;t exist for an account ID.</p>
+    /// <p>We can’t locate the resource that you specified.</p>
     NotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1199,11 +1285,9 @@ impl DescribeNotificationsForBudgetError {
                             error_message,
                         ))
                     }
-                    "InternalErrorException" => {
-                        DescribeNotificationsForBudgetError::InternalError(String::from(
-                            error_message,
-                        ))
-                    }
+                    "InternalErrorException" => DescribeNotificationsForBudgetError::InternalError(
+                        String::from(error_message),
+                    ),
                     "InvalidNextTokenException" => {
                         DescribeNotificationsForBudgetError::InvalidNextToken(String::from(
                             error_message,
@@ -1273,15 +1357,15 @@ impl Error for DescribeNotificationsForBudgetError {
 /// Errors returned by DescribeSubscribersForNotification
 #[derive(Debug, PartialEq)]
 pub enum DescribeSubscribersForNotificationError {
-    /// <p>This exception is thrown if the paging token is expired - past its TTL</p>
+    /// <p>The pagination token expired.</p>
     ExpiredNextToken(String),
-    /// <p>This exception is thrown on an unknown internal failure.</p>
+    /// <p>An error on the server occurred during the processing of your request. Try again later.</p>
     InternalError(String),
-    /// <p>This exception is thrown if paging token signature didn&#39;t match the token, or the paging token isn&#39;t for this request</p>
+    /// <p>The pagination token is invalid.</p>
     InvalidNextToken(String),
-    /// <p>This exception is thrown if any request is given an invalid parameter. E.g., if a required Date field is null.</p>
+    /// <p>An error on the client occurred. Typically, the cause is an invalid input value.</p>
     InvalidParameter(String),
-    /// <p>This exception is thrown if a requested entity is not found. E.g., if a budget id doesn&#39;t exist for an account ID.</p>
+    /// <p>We can’t locate the resource that you specified.</p>
     NotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1385,11 +1469,11 @@ impl Error for DescribeSubscribersForNotificationError {
 /// Errors returned by UpdateBudget
 #[derive(Debug, PartialEq)]
 pub enum UpdateBudgetError {
-    /// <p>This exception is thrown on an unknown internal failure.</p>
+    /// <p>An error on the server occurred during the processing of your request. Try again later.</p>
     InternalError(String),
-    /// <p>This exception is thrown if any request is given an invalid parameter. E.g., if a required Date field is null.</p>
+    /// <p>An error on the client occurred. Typically, the cause is an invalid input value.</p>
     InvalidParameter(String),
-    /// <p>This exception is thrown if a requested entity is not found. E.g., if a budget id doesn&#39;t exist for an account ID.</p>
+    /// <p>We can’t locate the resource that you specified.</p>
     NotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1473,13 +1557,13 @@ impl Error for UpdateBudgetError {
 /// Errors returned by UpdateNotification
 #[derive(Debug, PartialEq)]
 pub enum UpdateNotificationError {
-    /// <p>The exception is thrown when customer tries to create a record (e.g. budget) that already exists.</p>
+    /// <p>The budget name already exists. Budget names must be unique within an account.</p>
     DuplicateRecord(String),
-    /// <p>This exception is thrown on an unknown internal failure.</p>
+    /// <p>An error on the server occurred during the processing of your request. Try again later.</p>
     InternalError(String),
-    /// <p>This exception is thrown if any request is given an invalid parameter. E.g., if a required Date field is null.</p>
+    /// <p>An error on the client occurred. Typically, the cause is an invalid input value.</p>
     InvalidParameter(String),
-    /// <p>This exception is thrown if a requested entity is not found. E.g., if a budget id doesn&#39;t exist for an account ID.</p>
+    /// <p>We can’t locate the resource that you specified.</p>
     NotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1571,13 +1655,13 @@ impl Error for UpdateNotificationError {
 /// Errors returned by UpdateSubscriber
 #[derive(Debug, PartialEq)]
 pub enum UpdateSubscriberError {
-    /// <p>The exception is thrown when customer tries to create a record (e.g. budget) that already exists.</p>
+    /// <p>The budget name already exists. Budget names must be unique within an account.</p>
     DuplicateRecord(String),
-    /// <p>This exception is thrown on an unknown internal failure.</p>
+    /// <p>An error on the server occurred during the processing of your request. Try again later.</p>
     InternalError(String),
-    /// <p>This exception is thrown if any request is given an invalid parameter. E.g., if a required Date field is null.</p>
+    /// <p>An error on the client occurred. Typically, the cause is an invalid input value.</p>
     InvalidParameter(String),
-    /// <p>This exception is thrown if a requested entity is not found. E.g., if a budget id doesn&#39;t exist for an account ID.</p>
+    /// <p>We can’t locate the resource that you specified.</p>
     NotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1666,61 +1750,61 @@ impl Error for UpdateSubscriberError {
 }
 /// Trait representing the capabilities of the AWSBudgets API. AWSBudgets clients implement this trait.
 pub trait Budgets {
-    /// <p>Create a new budget</p>
+    /// <p>Creates a budget and, if included, notifications and subscribers. </p>
     fn create_budget(
         &self,
         input: &CreateBudgetRequest,
     ) -> RusotoFuture<CreateBudgetResponse, CreateBudgetError>;
 
-    /// <p>Create a new Notification with subscribers for a budget</p>
+    /// <p>Creates a notification. You must create the budget before you create the associated notification.</p>
     fn create_notification(
         &self,
         input: &CreateNotificationRequest,
     ) -> RusotoFuture<CreateNotificationResponse, CreateNotificationError>;
 
-    /// <p>Create a new Subscriber for a notification</p>
+    /// <p>Creates a subscriber. You must create the associated budget and notification before you create the subscriber.</p>
     fn create_subscriber(
         &self,
         input: &CreateSubscriberRequest,
     ) -> RusotoFuture<CreateSubscriberResponse, CreateSubscriberError>;
 
-    /// <p>Delete a budget and related notifications</p>
+    /// <p>Deletes a budget. You can delete your budget at any time.</p> <p> <b>Deleting a budget also deletes the notifications and subscribers associated with that budget.</b> </p>
     fn delete_budget(
         &self,
         input: &DeleteBudgetRequest,
     ) -> RusotoFuture<DeleteBudgetResponse, DeleteBudgetError>;
 
-    /// <p>Delete a notification and related subscribers</p>
+    /// <p>Deletes a notification.</p> <p> <b>Deleting a notification also deletes the subscribers associated with the notification.</b> </p>
     fn delete_notification(
         &self,
         input: &DeleteNotificationRequest,
     ) -> RusotoFuture<DeleteNotificationResponse, DeleteNotificationError>;
 
-    /// <p>Delete a Subscriber for a notification</p>
+    /// <p>Deletes a subscriber.</p> <p> <b>Deleting the last subscriber to a notification also deletes the notification.</b> </p>
     fn delete_subscriber(
         &self,
         input: &DeleteSubscriberRequest,
     ) -> RusotoFuture<DeleteSubscriberResponse, DeleteSubscriberError>;
 
-    /// <p>Get a single budget</p>
+    /// <p>Describes a budget.</p>
     fn describe_budget(
         &self,
         input: &DescribeBudgetRequest,
     ) -> RusotoFuture<DescribeBudgetResponse, DescribeBudgetError>;
 
-    /// <p>Get all budgets for an account</p>
+    /// <p>Lists the budgets associated with an account.</p>
     fn describe_budgets(
         &self,
         input: &DescribeBudgetsRequest,
     ) -> RusotoFuture<DescribeBudgetsResponse, DescribeBudgetsError>;
 
-    /// <p>Get notifications of a budget</p>
+    /// <p>Lists the notifications associated with a budget.</p>
     fn describe_notifications_for_budget(
         &self,
         input: &DescribeNotificationsForBudgetRequest,
     ) -> RusotoFuture<DescribeNotificationsForBudgetResponse, DescribeNotificationsForBudgetError>;
 
-    /// <p>Get subscribers of a notification</p>
+    /// <p>Lists the subscribers associated with a notification.</p>
     fn describe_subscribers_for_notification(
         &self,
         input: &DescribeSubscribersForNotificationRequest,
@@ -1729,19 +1813,19 @@ pub trait Budgets {
         DescribeSubscribersForNotificationError,
     >;
 
-    /// <p>Update the information of a budget already created</p>
+    /// <p>Updates a budget. You can change every part of a budget except for the <code>budgetName</code> and the <code>calculatedSpend</code>. When a budget is modified, the <code>calculatedSpend</code> drops to zero until AWS has new usage data to use for forecasting.</p>
     fn update_budget(
         &self,
         input: &UpdateBudgetRequest,
     ) -> RusotoFuture<UpdateBudgetResponse, UpdateBudgetError>;
 
-    /// <p>Update the information about a notification already created</p>
+    /// <p>Updates a notification.</p>
     fn update_notification(
         &self,
         input: &UpdateNotificationRequest,
     ) -> RusotoFuture<UpdateNotificationResponse, UpdateNotificationError>;
 
-    /// <p>Update a subscriber</p>
+    /// <p>Updates a subscriber.</p>
     fn update_subscriber(
         &self,
         input: &UpdateSubscriberRequest,
@@ -1790,7 +1874,7 @@ where
     P: ProvideAwsCredentials + 'static,
     D: DispatchSignedRequest + 'static,
 {
-    /// <p>Create a new budget</p>
+    /// <p>Creates a budget and, if included, notifications and subscribers. </p>
     fn create_budget(
         &self,
         input: &CreateBudgetRequest,
@@ -1827,7 +1911,7 @@ where
         RusotoFuture::new(future)
     }
 
-    /// <p>Create a new Notification with subscribers for a budget</p>
+    /// <p>Creates a notification. You must create the budget before you create the associated notification.</p>
     fn create_notification(
         &self,
         input: &CreateNotificationRequest,
@@ -1864,7 +1948,7 @@ where
         RusotoFuture::new(future)
     }
 
-    /// <p>Create a new Subscriber for a notification</p>
+    /// <p>Creates a subscriber. You must create the associated budget and notification before you create the subscriber.</p>
     fn create_subscriber(
         &self,
         input: &CreateSubscriberRequest,
@@ -1901,7 +1985,7 @@ where
         RusotoFuture::new(future)
     }
 
-    /// <p>Delete a budget and related notifications</p>
+    /// <p>Deletes a budget. You can delete your budget at any time.</p> <p> <b>Deleting a budget also deletes the notifications and subscribers associated with that budget.</b> </p>
     fn delete_budget(
         &self,
         input: &DeleteBudgetRequest,
@@ -1938,7 +2022,7 @@ where
         RusotoFuture::new(future)
     }
 
-    /// <p>Delete a notification and related subscribers</p>
+    /// <p>Deletes a notification.</p> <p> <b>Deleting a notification also deletes the subscribers associated with the notification.</b> </p>
     fn delete_notification(
         &self,
         input: &DeleteNotificationRequest,
@@ -1975,7 +2059,7 @@ where
         RusotoFuture::new(future)
     }
 
-    /// <p>Delete a Subscriber for a notification</p>
+    /// <p>Deletes a subscriber.</p> <p> <b>Deleting the last subscriber to a notification also deletes the notification.</b> </p>
     fn delete_subscriber(
         &self,
         input: &DeleteSubscriberRequest,
@@ -2012,7 +2096,7 @@ where
         RusotoFuture::new(future)
     }
 
-    /// <p>Get a single budget</p>
+    /// <p>Describes a budget.</p>
     fn describe_budget(
         &self,
         input: &DescribeBudgetRequest,
@@ -2049,7 +2133,7 @@ where
         RusotoFuture::new(future)
     }
 
-    /// <p>Get all budgets for an account</p>
+    /// <p>Lists the budgets associated with an account.</p>
     fn describe_budgets(
         &self,
         input: &DescribeBudgetsRequest,
@@ -2086,7 +2170,7 @@ where
         RusotoFuture::new(future)
     }
 
-    /// <p>Get notifications of a budget</p>
+    /// <p>Lists the notifications associated with a budget.</p>
     fn describe_notifications_for_budget(
         &self,
         input: &DescribeNotificationsForBudgetRequest,
@@ -2127,7 +2211,7 @@ where
         RusotoFuture::new(future)
     }
 
-    /// <p>Get subscribers of a notification</p>
+    /// <p>Lists the subscribers associated with a notification.</p>
     fn describe_subscribers_for_notification(
         &self,
         input: &DescribeSubscribersForNotificationRequest,
@@ -2170,7 +2254,7 @@ where
         RusotoFuture::new(future)
     }
 
-    /// <p>Update the information of a budget already created</p>
+    /// <p>Updates a budget. You can change every part of a budget except for the <code>budgetName</code> and the <code>calculatedSpend</code>. When a budget is modified, the <code>calculatedSpend</code> drops to zero until AWS has new usage data to use for forecasting.</p>
     fn update_budget(
         &self,
         input: &UpdateBudgetRequest,
@@ -2207,7 +2291,7 @@ where
         RusotoFuture::new(future)
     }
 
-    /// <p>Update the information about a notification already created</p>
+    /// <p>Updates a notification.</p>
     fn update_notification(
         &self,
         input: &UpdateNotificationRequest,
@@ -2244,7 +2328,7 @@ where
         RusotoFuture::new(future)
     }
 
-    /// <p>Update a subscriber</p>
+    /// <p>Updates a subscriber.</p>
     fn update_subscriber(
         &self,
         input: &UpdateSubscriberRequest,

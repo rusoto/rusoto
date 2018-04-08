@@ -327,7 +327,7 @@ pub struct Encryption {
     #[serde(rename = "EncryptionType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub encryption_type: Option<String>,
-    /// <p>Optional. If the encryption type is <code>aws:kms</code>, you can use this value to specify the encryption context for the restore results.</p>
+    /// <p>Optional. If the encryption type is <code>aws:kms</code>, you can use this value to specify the encryption context for the job results.</p>
     #[serde(rename = "KMSContext")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub kms_context: Option<String>,
@@ -530,7 +530,7 @@ pub struct GlacierJobDescription {
     #[serde(rename = "SNSTopic")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub sns_topic: Option<String>,
-    /// <p>Contains the parameters that define a select job.</p>
+    /// <p>Contains the parameters used for a select.</p>
     #[serde(rename = "SelectParameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub select_parameters: Option<SelectParameters>,
@@ -542,7 +542,7 @@ pub struct GlacierJobDescription {
     #[serde(rename = "StatusMessage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status_message: Option<String>,
-    /// <p>The retrieval option to use for the archive retrieval. Valid values are <code>Expedited</code>, <code>Standard</code>, or <code>Bulk</code>. <code>Standard</code> is the default.</p>
+    /// <p>The tier to use for a select or an archive retrieval. Valid values are <code>Expedited</code>, <code>Standard</code>, or <code>Bulk</code>. <code>Standard</code> is the default.</p>
     #[serde(rename = "Tier")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tier: Option<String>,
@@ -767,7 +767,7 @@ pub struct JobParameters {
     #[serde(rename = "SelectParameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub select_parameters: Option<SelectParameters>,
-    /// <p>The retrieval option to use for a select or archive retrieval job. Valid values are <code>Expedited</code>, <code>Standard</code>, or <code>Bulk</code>. <code>Standard</code> is the default.</p>
+    /// <p>The tier to use for a select or an archive retrieval job. Valid values are <code>Expedited</code>, <code>Standard</code>, or <code>Bulk</code>. <code>Standard</code> is the default.</p>
     #[serde(rename = "Tier")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tier: Option<String>,
@@ -971,7 +971,7 @@ pub struct ListVaultsOutput {
 /// <p>Contains information about the location where the select job results are stored.</p>
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct OutputLocation {
-    /// <p>Describes an S3 location that will receive the results of the restore request.</p>
+    /// <p>Describes an S3 location that will receive the results of the job request.</p>
     #[serde(rename = "S3")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub s3: Option<S3Location>,
@@ -1053,11 +1053,11 @@ pub struct S3Location {
     #[serde(rename = "AccessControlList")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub access_control_list: Option<Vec<Grant>>,
-    /// <p>The name of the bucket where the restore results are stored.</p>
+    /// <p>The name of the Amazon S3 bucket where the job results are stored.</p>
     #[serde(rename = "BucketName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub bucket_name: Option<String>,
-    /// <p>The canned ACL to apply to the restore results.</p>
+    /// <p>The canned access control list (ACL) to apply to the job results.</p>
     #[serde(rename = "CannedACL")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub canned_acl: Option<String>,
@@ -1065,19 +1065,19 @@ pub struct S3Location {
     #[serde(rename = "Encryption")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub encryption: Option<Encryption>,
-    /// <p>The prefix that is prepended to the restore results for this request.</p>
+    /// <p>The prefix that is prepended to the results for this request.</p>
     #[serde(rename = "Prefix")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub prefix: Option<String>,
-    /// <p>The storage class used to store the restore results.</p>
+    /// <p>The storage class used to store the job results.</p>
     #[serde(rename = "StorageClass")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub storage_class: Option<String>,
-    /// <p>The tag-set that is applied to the restore results.</p>
+    /// <p>The tag-set that is applied to the job results.</p>
     #[serde(rename = "Tagging")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tagging: Option<::std::collections::HashMap<String, String>>,
-    /// <p>A map of metadata to store with the restore results in Amazon S3.</p>
+    /// <p>A map of metadata to store with the job results in Amazon S3.</p>
     #[serde(rename = "UserMetadata")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub user_metadata: Option<::std::collections::HashMap<String, String>>,

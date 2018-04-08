@@ -491,9 +491,10 @@ impl CacheClusterDeserializer {
                         ));
                     }
                     "ConfigurationEndpoint" => {
-                        obj.configuration_endpoint = Some(try!(
-                            EndpointDeserializer::deserialize("ConfigurationEndpoint", stack)
-                        ));
+                        obj.configuration_endpoint = Some(try!(EndpointDeserializer::deserialize(
+                            "ConfigurationEndpoint",
+                            stack
+                        )));
                     }
                     "Engine" => {
                         obj.engine = Some(try!(StringDeserializer::deserialize("Engine", stack)));
@@ -512,9 +513,10 @@ impl CacheClusterDeserializer {
                             )));
                     }
                     "NumCacheNodes" => {
-                        obj.num_cache_nodes = Some(try!(
-                            IntegerOptionalDeserializer::deserialize("NumCacheNodes", stack)
-                        ));
+                        obj.num_cache_nodes = Some(try!(IntegerOptionalDeserializer::deserialize(
+                            "NumCacheNodes",
+                            stack
+                        )));
                     }
                     "PendingModifiedValues" => {
                         obj.pending_modified_values =
@@ -655,9 +657,10 @@ impl CacheClusterMessageDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "CacheClusters" => {
-                        obj.cache_clusters = Some(try!(
-                            CacheClusterListDeserializer::deserialize("CacheClusters", stack)
-                        ));
+                        obj.cache_clusters = Some(try!(CacheClusterListDeserializer::deserialize(
+                            "CacheClusters",
+                            stack
+                        )));
                     }
                     "Marker" => {
                         obj.marker = Some(try!(StringDeserializer::deserialize("Marker", stack)));
@@ -714,9 +717,10 @@ impl CacheEngineVersionDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "CacheEngineDescription" => {
-                        obj.cache_engine_description = Some(try!(
-                            StringDeserializer::deserialize("CacheEngineDescription", stack)
-                        ));
+                        obj.cache_engine_description = Some(try!(StringDeserializer::deserialize(
+                            "CacheEngineDescription",
+                            stack
+                        )));
                     }
                     "CacheEngineVersionDescription" => {
                         obj.cache_engine_version_description = Some(try!(
@@ -921,9 +925,10 @@ impl CacheNodeDeserializer {
                             ));
                         }
                         "SourceCacheNodeId" => {
-                            obj.source_cache_node_id = Some(try!(
-                                StringDeserializer::deserialize("SourceCacheNodeId", stack)
-                            ));
+                            obj.source_cache_node_id = Some(try!(StringDeserializer::deserialize(
+                                "SourceCacheNodeId",
+                                stack
+                            )));
                         }
                         _ => skip_tree(stack),
                     }
@@ -1762,12 +1767,10 @@ impl CacheSecurityGroupMembershipListDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => {
                     if name == "CacheSecurityGroup" {
-                        obj.push(try!(
-                            CacheSecurityGroupMembershipDeserializer::deserialize(
-                                "CacheSecurityGroup",
-                                stack
-                            )
-                        ));
+                        obj.push(try!(CacheSecurityGroupMembershipDeserializer::deserialize(
+                            "CacheSecurityGroup",
+                            stack
+                        )));
                     } else {
                         skip_tree(stack);
                     }
@@ -5653,46 +5656,46 @@ impl NodeSnapshotDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "CacheClusterId" => {
-                            obj.cache_cluster_id = Some(try!(StringDeserializer::deserialize(
-                                "CacheClusterId",
+                DeserializerNext::Element(name) => match &name[..] {
+                    "CacheClusterId" => {
+                        obj.cache_cluster_id = Some(try!(StringDeserializer::deserialize(
+                            "CacheClusterId",
+                            stack
+                        )));
+                    }
+                    "CacheNodeCreateTime" => {
+                        obj.cache_node_create_time = Some(try!(TStampDeserializer::deserialize(
+                            "CacheNodeCreateTime",
+                            stack
+                        )));
+                    }
+                    "CacheNodeId" => {
+                        obj.cache_node_id =
+                            Some(try!(StringDeserializer::deserialize("CacheNodeId", stack)));
+                    }
+                    "CacheSize" => {
+                        obj.cache_size =
+                            Some(try!(StringDeserializer::deserialize("CacheSize", stack)));
+                    }
+                    "NodeGroupConfiguration" => {
+                        obj.node_group_configuration =
+                            Some(try!(NodeGroupConfigurationDeserializer::deserialize(
+                                "NodeGroupConfiguration",
                                 stack
                             )));
-                        }
-                        "CacheNodeCreateTime" => {
-                            obj.cache_node_create_time = Some(try!(
-                                TStampDeserializer::deserialize("CacheNodeCreateTime", stack)
-                            ));
-                        }
-                        "CacheNodeId" => {
-                            obj.cache_node_id =
-                                Some(try!(StringDeserializer::deserialize("CacheNodeId", stack)));
-                        }
-                        "CacheSize" => {
-                            obj.cache_size =
-                                Some(try!(StringDeserializer::deserialize("CacheSize", stack)));
-                        }
-                        "NodeGroupConfiguration" => {
-                            obj.node_group_configuration =
-                                Some(try!(NodeGroupConfigurationDeserializer::deserialize(
-                                    "NodeGroupConfiguration",
-                                    stack
-                                )));
-                        }
-                        "NodeGroupId" => {
-                            obj.node_group_id =
-                                Some(try!(StringDeserializer::deserialize("NodeGroupId", stack)));
-                        }
-                        "SnapshotCreateTime" => {
-                            obj.snapshot_create_time = Some(try!(
-                                TStampDeserializer::deserialize("SnapshotCreateTime", stack)
-                            ));
-                        }
-                        _ => skip_tree(stack),
                     }
-                }
+                    "NodeGroupId" => {
+                        obj.node_group_id =
+                            Some(try!(StringDeserializer::deserialize("NodeGroupId", stack)));
+                    }
+                    "SnapshotCreateTime" => {
+                        obj.snapshot_create_time = Some(try!(TStampDeserializer::deserialize(
+                            "SnapshotCreateTime",
+                            stack
+                        )));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -6100,9 +6103,10 @@ impl PendingModifiedValuesDeserializer {
                         )));
                     }
                     "NumCacheNodes" => {
-                        obj.num_cache_nodes = Some(try!(
-                            IntegerOptionalDeserializer::deserialize("NumCacheNodes", stack)
-                        ));
+                        obj.num_cache_nodes = Some(try!(IntegerOptionalDeserializer::deserialize(
+                            "NumCacheNodes",
+                            stack
+                        )));
                     }
                     _ => skip_tree(stack),
                 },
@@ -6536,9 +6540,10 @@ impl ReplicationGroupDeserializer {
                             ));
                         }
                         "ReplicationGroupId" => {
-                            obj.replication_group_id = Some(try!(
-                                StringDeserializer::deserialize("ReplicationGroupId", stack)
-                            ));
+                            obj.replication_group_id = Some(try!(StringDeserializer::deserialize(
+                                "ReplicationGroupId",
+                                stack
+                            )));
                         }
                         "SnapshotRetentionLimit" => {
                             obj.snapshot_retention_limit =
@@ -7655,19 +7660,22 @@ impl SnapshotDeserializer {
                         )));
                     }
                     "NodeSnapshots" => {
-                        obj.node_snapshots = Some(try!(
-                            NodeSnapshotListDeserializer::deserialize("NodeSnapshots", stack)
-                        ));
+                        obj.node_snapshots = Some(try!(NodeSnapshotListDeserializer::deserialize(
+                            "NodeSnapshots",
+                            stack
+                        )));
                     }
                     "NumCacheNodes" => {
-                        obj.num_cache_nodes = Some(try!(
-                            IntegerOptionalDeserializer::deserialize("NumCacheNodes", stack)
-                        ));
+                        obj.num_cache_nodes = Some(try!(IntegerOptionalDeserializer::deserialize(
+                            "NumCacheNodes",
+                            stack
+                        )));
                     }
                     "NumNodeGroups" => {
-                        obj.num_node_groups = Some(try!(
-                            IntegerOptionalDeserializer::deserialize("NumNodeGroups", stack)
-                        ));
+                        obj.num_node_groups = Some(try!(IntegerOptionalDeserializer::deserialize(
+                            "NumNodeGroups",
+                            stack
+                        )));
                     }
                     "Port" => {
                         obj.port = Some(try!(IntegerOptionalDeserializer::deserialize(
@@ -9101,9 +9109,9 @@ impl CreateReplicationGroupError {
                     ))
                 }
                 "ClusterQuotaForCustomerExceeded" => {
-                    CreateReplicationGroupError::ClusterQuotaForCustomerExceededFault(
-                        String::from(parsed_error.message),
-                    )
+                    CreateReplicationGroupError::ClusterQuotaForCustomerExceededFault(String::from(
+                        parsed_error.message,
+                    ))
                 }
                 "InsufficientCacheClusterCapacity" => {
                     CreateReplicationGroupError::InsufficientCacheClusterCapacityFault(
@@ -10381,20 +10389,18 @@ impl DescribeCacheSecurityGroupsError {
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "CacheSecurityGroupNotFound" => {
-                    DescribeCacheSecurityGroupsError::CacheSecurityGroupNotFoundFault(
-                        String::from(parsed_error.message),
-                    )
+                    DescribeCacheSecurityGroupsError::CacheSecurityGroupNotFoundFault(String::from(
+                        parsed_error.message,
+                    ))
                 }
                 "InvalidParameterCombination" => {
                     DescribeCacheSecurityGroupsError::InvalidParameterCombination(String::from(
                         parsed_error.message,
                     ))
                 }
-                "InvalidParameterValue" => {
-                    DescribeCacheSecurityGroupsError::InvalidParameterValue(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "InvalidParameterValue" => DescribeCacheSecurityGroupsError::InvalidParameterValue(
+                    String::from(parsed_error.message),
+                ),
                 _ => DescribeCacheSecurityGroupsError::Unknown(String::from(body)),
             },
             Err(_) => DescribeCacheSecurityGroupsError::Unknown(body.to_string()),
@@ -10557,9 +10563,9 @@ impl DescribeEngineDefaultParametersError {
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "InvalidParameterCombination" => {
-                    DescribeEngineDefaultParametersError::InvalidParameterCombination(
-                        String::from(parsed_error.message),
-                    )
+                    DescribeEngineDefaultParametersError::InvalidParameterCombination(String::from(
+                        parsed_error.message,
+                    ))
                 }
                 "InvalidParameterValue" => {
                     DescribeEngineDefaultParametersError::InvalidParameterValue(String::from(
@@ -11944,13 +11950,36 @@ impl PurchaseReservedCacheNodesOfferingError {
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
-                            Ok(parsed_error) => {
-                                match &parsed_error.code[..] {
-                                    "InvalidParameterCombination" => PurchaseReservedCacheNodesOfferingError::InvalidParameterCombination(String::from(parsed_error.message)),"InvalidParameterValue" => PurchaseReservedCacheNodesOfferingError::InvalidParameterValue(String::from(parsed_error.message)),"ReservedCacheNodeAlreadyExists" => PurchaseReservedCacheNodesOfferingError::ReservedCacheNodeAlreadyExistsFault(String::from(parsed_error.message)),"ReservedCacheNodeQuotaExceeded" => PurchaseReservedCacheNodesOfferingError::ReservedCacheNodeQuotaExceededFault(String::from(parsed_error.message)),"ReservedCacheNodesOfferingNotFound" => PurchaseReservedCacheNodesOfferingError::ReservedCacheNodesOfferingNotFoundFault(String::from(parsed_error.message)),_ => PurchaseReservedCacheNodesOfferingError::Unknown(String::from(body))
-                                }
-                           },
-                           Err(_) => PurchaseReservedCacheNodesOfferingError::Unknown(body.to_string())
-                       }
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                "InvalidParameterCombination" => {
+                    PurchaseReservedCacheNodesOfferingError::InvalidParameterCombination(
+                        String::from(parsed_error.message),
+                    )
+                }
+                "InvalidParameterValue" => {
+                    PurchaseReservedCacheNodesOfferingError::InvalidParameterValue(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                "ReservedCacheNodeAlreadyExists" => {
+                    PurchaseReservedCacheNodesOfferingError::ReservedCacheNodeAlreadyExistsFault(
+                        String::from(parsed_error.message),
+                    )
+                }
+                "ReservedCacheNodeQuotaExceeded" => {
+                    PurchaseReservedCacheNodesOfferingError::ReservedCacheNodeQuotaExceededFault(
+                        String::from(parsed_error.message),
+                    )
+                }
+                "ReservedCacheNodesOfferingNotFound" => {
+                    PurchaseReservedCacheNodesOfferingError::ReservedCacheNodesOfferingNotFoundFault(
+                        String::from(parsed_error.message),
+                    )
+                }
+                _ => PurchaseReservedCacheNodesOfferingError::Unknown(String::from(body)),
+            },
+            Err(_) => PurchaseReservedCacheNodesOfferingError::Unknown(body.to_string()),
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -12346,9 +12375,9 @@ impl RevokeCacheSecurityGroupIngressError {
                     )
                 }
                 "InvalidParameterCombination" => {
-                    RevokeCacheSecurityGroupIngressError::InvalidParameterCombination(
-                        String::from(parsed_error.message),
-                    )
+                    RevokeCacheSecurityGroupIngressError::InvalidParameterCombination(String::from(
+                        parsed_error.message,
+                    ))
                 }
                 "InvalidParameterValue" => {
                     RevokeCacheSecurityGroupIngressError::InvalidParameterValue(String::from(

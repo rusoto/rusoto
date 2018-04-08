@@ -1681,21 +1681,17 @@ impl AbortDocumentVersionUploadError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "EntityNotExistsException" => {
-                        AbortDocumentVersionUploadError::EntityNotExists(String::from(
-                            error_message,
-                        ))
-                    }
+                    "EntityNotExistsException" => AbortDocumentVersionUploadError::EntityNotExists(
+                        String::from(error_message),
+                    ),
                     "FailedDependencyException" => {
                         AbortDocumentVersionUploadError::FailedDependency(String::from(
                             error_message,
                         ))
                     }
-                    "ProhibitedStateException" => {
-                        AbortDocumentVersionUploadError::ProhibitedState(String::from(
-                            error_message,
-                        ))
-                    }
+                    "ProhibitedStateException" => AbortDocumentVersionUploadError::ProhibitedState(
+                        String::from(error_message),
+                    ),
                     "ServiceUnavailableException" => {
                         AbortDocumentVersionUploadError::ServiceUnavailable(String::from(
                             error_message,
@@ -5289,9 +5285,9 @@ impl InitiateDocumentVersionUploadError {
                         ))
                     }
                     "ResourceAlreadyCheckedOutException" => {
-                        InitiateDocumentVersionUploadError::ResourceAlreadyCheckedOut(
-                            String::from(error_message),
-                        )
+                        InitiateDocumentVersionUploadError::ResourceAlreadyCheckedOut(String::from(
+                            error_message,
+                        ))
                     }
                     "ServiceUnavailableException" => {
                         InitiateDocumentVersionUploadError::ServiceUnavailable(String::from(
@@ -5427,9 +5423,9 @@ impl RemoveAllResourcePermissionsError {
                         ))
                     }
                     "UnauthorizedResourceAccessException" => {
-                        RemoveAllResourcePermissionsError::UnauthorizedResourceAccess(
-                            String::from(error_message),
-                        )
+                        RemoveAllResourcePermissionsError::UnauthorizedResourceAccess(String::from(
+                            error_message,
+                        ))
                     }
                     "ValidationException" => {
                         RemoveAllResourcePermissionsError::Validation(error_message.to_string())
@@ -7448,9 +7444,9 @@ where
 
                     debug!("Response body: {:?}", body);
                     debug!("Response status: {}", response.status);
-                    let result =
-                        serde_json::from_slice::<DescribeNotificationSubscriptionsResponse>(&body)
-                            .unwrap();
+                    let result = serde_json::from_slice::<DescribeNotificationSubscriptionsResponse>(
+                        &body,
+                    ).unwrap();
 
                     result
                 }))
