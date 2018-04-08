@@ -8293,9 +8293,9 @@ impl UpdateGroupCertificateConfigurationError {
                         String::from(error_message),
                     ),
                     "InternalServerErrorException" => {
-                        UpdateGroupCertificateConfigurationError::InternalServerError(
-                            String::from(error_message),
-                        )
+                        UpdateGroupCertificateConfigurationError::InternalServerError(String::from(
+                            error_message,
+                        ))
                     }
                     "ValidationException" => UpdateGroupCertificateConfigurationError::Validation(
                         error_message.to_string(),
@@ -9483,9 +9483,9 @@ where
 
                     debug!("Response body: {:?}", body);
                     debug!("Response status: {}", response.status);
-                    let result =
-                        serde_json::from_slice::<CreateFunctionDefinitionVersionResponse>(&body)
-                            .unwrap();
+                    let result = serde_json::from_slice::<CreateFunctionDefinitionVersionResponse>(
+                        &body,
+                    ).unwrap();
 
                     result
                 }))
@@ -9574,9 +9574,9 @@ where
 
                     debug!("Response body: {:?}", body);
                     debug!("Response status: {}", response.status);
-                    let result =
-                        serde_json::from_slice::<CreateGroupCertificateAuthorityResponse>(&body)
-                            .unwrap();
+                    let result = serde_json::from_slice::<CreateGroupCertificateAuthorityResponse>(
+                        &body,
+                    ).unwrap();
 
                     result
                 }))
@@ -9812,9 +9812,9 @@ where
 
                     debug!("Response body: {:?}", body);
                     debug!("Response status: {}", response.status);
-                    let result =
-                        serde_json::from_slice::<CreateResourceDefinitionVersionResponse>(&body)
-                            .unwrap();
+                    let result = serde_json::from_slice::<CreateResourceDefinitionVersionResponse>(
+                        &body,
+                    ).unwrap();
 
                     result
                 }))
@@ -10322,9 +10322,9 @@ where
 
                     debug!("Response body: {:?}", body);
                     debug!("Response status: {}", response.status);
-                    let result =
-                        serde_json::from_slice::<DisassociateServiceRoleFromAccountResponse>(&body)
-                            .unwrap();
+                    let result = serde_json::from_slice::<DisassociateServiceRoleFromAccountResponse>(
+                        &body,
+                    ).unwrap();
 
                     result
                 }))
@@ -10805,9 +10805,9 @@ where
 
                     debug!("Response body: {:?}", body);
                     debug!("Response status: {}", response.status);
-                    let result =
-                        serde_json::from_slice::<GetGroupCertificateConfigurationResponse>(&body)
-                            .unwrap();
+                    let result = serde_json::from_slice::<GetGroupCertificateConfigurationResponse>(
+                        &body,
+                    ).unwrap();
 
                     result
                 }))
@@ -11124,9 +11124,9 @@ where
 
                     debug!("Response body: {:?}", body);
                     debug!("Response status: {}", response.status);
-                    let result =
-                        serde_json::from_slice::<GetSubscriptionDefinitionVersionResponse>(&body)
-                            .unwrap();
+                    let result = serde_json::from_slice::<GetSubscriptionDefinitionVersionResponse>(
+                        &body,
+                    ).unwrap();
 
                     result
                 }))
@@ -11511,9 +11511,9 @@ where
 
                     debug!("Response body: {:?}", body);
                     debug!("Response status: {}", response.status);
-                    let result =
-                        serde_json::from_slice::<ListGroupCertificateAuthoritiesResponse>(&body)
-                            .unwrap();
+                    let result = serde_json::from_slice::<ListGroupCertificateAuthoritiesResponse>(
+                        &body,
+                    ).unwrap();
 
                     result
                 }))
@@ -11858,9 +11858,9 @@ where
 
                     debug!("Response body: {:?}", body);
                     debug!("Response status: {}", response.status);
-                    let result =
-                        serde_json::from_slice::<ListSubscriptionDefinitionVersionsResponse>(&body)
-                            .unwrap();
+                    let result = serde_json::from_slice::<ListSubscriptionDefinitionVersionsResponse>(
+                        &body,
+                    ).unwrap();
 
                     result
                 }))

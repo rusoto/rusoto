@@ -2955,11 +2955,9 @@ impl DescribeContainerInstancesError {
                     "ClientException" => {
                         DescribeContainerInstancesError::Client(String::from(error_message))
                     }
-                    "ClusterNotFoundException" => {
-                        DescribeContainerInstancesError::ClusterNotFound(String::from(
-                            error_message,
-                        ))
-                    }
+                    "ClusterNotFoundException" => DescribeContainerInstancesError::ClusterNotFound(
+                        String::from(error_message),
+                    ),
                     "InvalidParameterException" => {
                         DescribeContainerInstancesError::InvalidParameter(String::from(
                             error_message,

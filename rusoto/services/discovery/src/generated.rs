@@ -1783,9 +1783,9 @@ impl DisassociateConfigurationItemsFromApplicationError {
                             error_message.to_string(),
                         )
                     }
-                    _ => DisassociateConfigurationItemsFromApplicationError::Unknown(
-                        String::from(body),
-                    ),
+                    _ => DisassociateConfigurationItemsFromApplicationError::Unknown(String::from(
+                        body,
+                    )),
                 }
             }
             Err(_) => {

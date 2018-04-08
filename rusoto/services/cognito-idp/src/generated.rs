@@ -11269,11 +11269,9 @@ impl GetUserAttributeVerificationCodeError {
                             error_message,
                         ))
                     }
-                    "UserNotFoundException" => {
-                        GetUserAttributeVerificationCodeError::UserNotFound(String::from(
-                            error_message,
-                        ))
-                    }
+                    "UserNotFoundException" => GetUserAttributeVerificationCodeError::UserNotFound(
+                        String::from(error_message),
+                    ),
                     "ValidationException" => {
                         GetUserAttributeVerificationCodeError::Validation(error_message.to_string())
                     }

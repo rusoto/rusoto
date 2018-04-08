@@ -649,11 +649,9 @@ impl AssociateDiscoveredResourceError {
                     "DryRunOperation" => AssociateDiscoveredResourceError::DryRunOperation(
                         String::from(error_message),
                     ),
-                    "InternalServerError" => {
-                        AssociateDiscoveredResourceError::InternalServerError(String::from(
-                            error_message,
-                        ))
-                    }
+                    "InternalServerError" => AssociateDiscoveredResourceError::InternalServerError(
+                        String::from(error_message),
+                    ),
                     "InvalidInputException" => {
                         AssociateDiscoveredResourceError::InvalidInput(String::from(error_message))
                     }
@@ -1229,11 +1227,9 @@ impl DisassociateCreatedArtifactError {
                     "DryRunOperation" => DisassociateCreatedArtifactError::DryRunOperation(
                         String::from(error_message),
                     ),
-                    "InternalServerError" => {
-                        DisassociateCreatedArtifactError::InternalServerError(String::from(
-                            error_message,
-                        ))
-                    }
+                    "InternalServerError" => DisassociateCreatedArtifactError::InternalServerError(
+                        String::from(error_message),
+                    ),
                     "InvalidInputException" => {
                         DisassociateCreatedArtifactError::InvalidInput(String::from(error_message))
                     }

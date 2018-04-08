@@ -420,9 +420,10 @@ impl CreatePlatformApplicationResponseDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "PlatformApplicationArn" => {
-                        obj.platform_application_arn = Some(try!(
-                            StringDeserializer::deserialize("PlatformApplicationArn", stack)
-                        ));
+                        obj.platform_application_arn = Some(try!(StringDeserializer::deserialize(
+                            "PlatformApplicationArn",
+                            stack
+                        )));
                     }
                     _ => skip_tree(stack),
                 },
@@ -1419,9 +1420,10 @@ impl ListSubscriptionsByTopicResponseDeserializer {
                             Some(try!(NextTokenDeserializer::deserialize("NextToken", stack)));
                     }
                     "Subscriptions" => {
-                        obj.subscriptions = Some(try!(
-                            SubscriptionsListDeserializer::deserialize("Subscriptions", stack)
-                        ));
+                        obj.subscriptions = Some(try!(SubscriptionsListDeserializer::deserialize(
+                            "Subscriptions",
+                            stack
+                        )));
                     }
                     _ => skip_tree(stack),
                 },
@@ -1498,9 +1500,10 @@ impl ListSubscriptionsResponseDeserializer {
                             Some(try!(NextTokenDeserializer::deserialize("NextToken", stack)));
                     }
                     "Subscriptions" => {
-                        obj.subscriptions = Some(try!(
-                            SubscriptionsListDeserializer::deserialize("Subscriptions", stack)
-                        ));
+                        obj.subscriptions = Some(try!(SubscriptionsListDeserializer::deserialize(
+                            "Subscriptions",
+                            stack
+                        )));
                     }
                     _ => skip_tree(stack),
                 },
@@ -1849,20 +1852,21 @@ impl PlatformApplicationDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "Attributes" => {
-                        obj.attributes = Some(try!(MapStringToStringDeserializer::deserialize(
-                            "Attributes",
-                            stack
-                        )));
+                DeserializerNext::Element(name) => {
+                    match &name[..] {
+                        "Attributes" => {
+                            obj.attributes = Some(try!(
+                                MapStringToStringDeserializer::deserialize("Attributes", stack)
+                            ));
+                        }
+                        "PlatformApplicationArn" => {
+                            obj.platform_application_arn = Some(try!(
+                                StringDeserializer::deserialize("PlatformApplicationArn", stack)
+                            ));
+                        }
+                        _ => skip_tree(stack),
                     }
-                    "PlatformApplicationArn" => {
-                        obj.platform_application_arn = Some(try!(
-                            StringDeserializer::deserialize("PlatformApplicationArn", stack)
-                        ));
-                    }
-                    _ => skip_tree(stack),
-                },
+                }
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -2841,11 +2845,9 @@ impl ConfirmSubscriptionError {
                 "NotFound" => {
                     ConfirmSubscriptionError::NotFound(String::from(parsed_error.message))
                 }
-                "SubscriptionLimitExceeded" => {
-                    ConfirmSubscriptionError::SubscriptionLimitExceeded(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "SubscriptionLimitExceeded" => ConfirmSubscriptionError::SubscriptionLimitExceeded(
+                    String::from(parsed_error.message),
+                ),
                 _ => ConfirmSubscriptionError::Unknown(String::from(body)),
             },
             Err(_) => ConfirmSubscriptionError::Unknown(body.to_string()),

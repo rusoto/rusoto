@@ -3460,11 +3460,9 @@ impl CreateMatchmakingConfigurationError {
                             error_message,
                         ))
                     }
-                    "LimitExceededException" => {
-                        CreateMatchmakingConfigurationError::LimitExceeded(String::from(
-                            error_message,
-                        ))
-                    }
+                    "LimitExceededException" => CreateMatchmakingConfigurationError::LimitExceeded(
+                        String::from(error_message),
+                    ),
                     "NotFoundException" => {
                         CreateMatchmakingConfigurationError::NotFound(String::from(error_message))
                     }
@@ -3996,11 +3994,9 @@ impl CreateVpcPeeringConnectionError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "InternalServiceException" => {
-                        CreateVpcPeeringConnectionError::InternalService(String::from(
-                            error_message,
-                        ))
-                    }
+                    "InternalServiceException" => CreateVpcPeeringConnectionError::InternalService(
+                        String::from(error_message),
+                    ),
                     "InvalidRequestException" => {
                         CreateVpcPeeringConnectionError::InvalidRequest(String::from(error_message))
                     }
@@ -4786,11 +4782,9 @@ impl DeleteVpcPeeringConnectionError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "InternalServiceException" => {
-                        DeleteVpcPeeringConnectionError::InternalService(String::from(
-                            error_message,
-                        ))
-                    }
+                    "InternalServiceException" => DeleteVpcPeeringConnectionError::InternalService(
+                        String::from(error_message),
+                    ),
                     "InvalidRequestException" => {
                         DeleteVpcPeeringConnectionError::InvalidRequest(String::from(error_message))
                     }
@@ -5662,11 +5656,9 @@ impl DescribeGameSessionDetailsError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "InternalServiceException" => {
-                        DescribeGameSessionDetailsError::InternalService(String::from(
-                            error_message,
-                        ))
-                    }
+                    "InternalServiceException" => DescribeGameSessionDetailsError::InternalService(
+                        String::from(error_message),
+                    ),
                     "InvalidRequestException" => {
                         DescribeGameSessionDetailsError::InvalidRequest(String::from(error_message))
                     }
@@ -5773,11 +5765,9 @@ impl DescribeGameSessionPlacementError {
                             error_message,
                         ))
                     }
-                    "InvalidRequestException" => {
-                        DescribeGameSessionPlacementError::InvalidRequest(String::from(
-                            error_message,
-                        ))
-                    }
+                    "InvalidRequestException" => DescribeGameSessionPlacementError::InvalidRequest(
+                        String::from(error_message),
+                    ),
                     "NotFoundException" => {
                         DescribeGameSessionPlacementError::NotFound(String::from(error_message))
                     }
@@ -6567,11 +6557,9 @@ impl DescribeRuntimeConfigurationError {
                             error_message,
                         ))
                     }
-                    "InvalidRequestException" => {
-                        DescribeRuntimeConfigurationError::InvalidRequest(String::from(
-                            error_message,
-                        ))
-                    }
+                    "InvalidRequestException" => DescribeRuntimeConfigurationError::InvalidRequest(
+                        String::from(error_message),
+                    ),
                     "NotFoundException" => {
                         DescribeRuntimeConfigurationError::NotFound(String::from(error_message))
                     }
@@ -6770,11 +6758,9 @@ impl DescribeVpcPeeringAuthorizationsError {
                             error_message,
                         ))
                     }
-                    "UnauthorizedException" => {
-                        DescribeVpcPeeringAuthorizationsError::Unauthorized(String::from(
-                            error_message,
-                        ))
-                    }
+                    "UnauthorizedException" => DescribeVpcPeeringAuthorizationsError::Unauthorized(
+                        String::from(error_message),
+                    ),
                     "ValidationException" => {
                         DescribeVpcPeeringAuthorizationsError::Validation(error_message.to_string())
                     }
@@ -9168,11 +9154,9 @@ impl UpdateRuntimeConfigurationError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "InternalServiceException" => {
-                        UpdateRuntimeConfigurationError::InternalService(String::from(
-                            error_message,
-                        ))
-                    }
+                    "InternalServiceException" => UpdateRuntimeConfigurationError::InternalService(
+                        String::from(error_message),
+                    ),
                     "InvalidFleetStatusException" => {
                         UpdateRuntimeConfigurationError::InvalidFleetStatus(String::from(
                             error_message,
@@ -9272,11 +9256,9 @@ impl ValidateMatchmakingRuleSetError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "InternalServiceException" => {
-                        ValidateMatchmakingRuleSetError::InternalService(String::from(
-                            error_message,
-                        ))
-                    }
+                    "InternalServiceException" => ValidateMatchmakingRuleSetError::InternalService(
+                        String::from(error_message),
+                    ),
                     "InvalidRequestException" => {
                         ValidateMatchmakingRuleSetError::InvalidRequest(String::from(error_message))
                     }

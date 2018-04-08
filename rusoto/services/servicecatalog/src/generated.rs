@@ -2971,11 +2971,9 @@ impl AssociateTagOptionWithResourceError {
                     "InvalidStateException" => AssociateTagOptionWithResourceError::InvalidState(
                         String::from(error_message),
                     ),
-                    "LimitExceededException" => {
-                        AssociateTagOptionWithResourceError::LimitExceeded(String::from(
-                            error_message,
-                        ))
-                    }
+                    "LimitExceededException" => AssociateTagOptionWithResourceError::LimitExceeded(
+                        String::from(error_message),
+                    ),
                     "ResourceNotFoundException" => {
                         AssociateTagOptionWithResourceError::ResourceNotFound(String::from(
                             error_message,

@@ -694,9 +694,10 @@ impl ClusterDeserializer {
                                 )));
                         }
                         "PubliclyAccessible" => {
-                            obj.publicly_accessible = Some(try!(
-                                BooleanDeserializer::deserialize("PubliclyAccessible", stack)
-                            ));
+                            obj.publicly_accessible = Some(try!(BooleanDeserializer::deserialize(
+                                "PubliclyAccessible",
+                                stack
+                            )));
                         }
                         "RestoreStatus" => {
                             obj.restore_status = Some(try!(
@@ -1066,28 +1067,28 @@ impl ClusterParameterGroupDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "Description" => {
-                            obj.description =
-                                Some(try!(StringDeserializer::deserialize("Description", stack)));
-                        }
-                        "ParameterGroupFamily" => {
-                            obj.parameter_group_family = Some(try!(
-                                StringDeserializer::deserialize("ParameterGroupFamily", stack)
-                            ));
-                        }
-                        "ParameterGroupName" => {
-                            obj.parameter_group_name = Some(try!(
-                                StringDeserializer::deserialize("ParameterGroupName", stack)
-                            ));
-                        }
-                        "Tags" => {
-                            obj.tags = Some(try!(TagListDeserializer::deserialize("Tags", stack)));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "Description" => {
+                        obj.description =
+                            Some(try!(StringDeserializer::deserialize("Description", stack)));
                     }
-                }
+                    "ParameterGroupFamily" => {
+                        obj.parameter_group_family = Some(try!(StringDeserializer::deserialize(
+                            "ParameterGroupFamily",
+                            stack
+                        )));
+                    }
+                    "ParameterGroupName" => {
+                        obj.parameter_group_name = Some(try!(StringDeserializer::deserialize(
+                            "ParameterGroupName",
+                            stack
+                        )));
+                    }
+                    "Tags" => {
+                        obj.tags = Some(try!(TagListDeserializer::deserialize("Tags", stack)));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -1184,21 +1185,21 @@ impl ClusterParameterGroupNameMessageDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "ParameterGroupName" => {
-                            obj.parameter_group_name = Some(try!(
-                                StringDeserializer::deserialize("ParameterGroupName", stack)
-                            ));
-                        }
-                        "ParameterGroupStatus" => {
-                            obj.parameter_group_status = Some(try!(
-                                StringDeserializer::deserialize("ParameterGroupStatus", stack)
-                            ));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "ParameterGroupName" => {
+                        obj.parameter_group_name = Some(try!(StringDeserializer::deserialize(
+                            "ParameterGroupName",
+                            stack
+                        )));
                     }
-                }
+                    "ParameterGroupStatus" => {
+                        obj.parameter_group_status = Some(try!(StringDeserializer::deserialize(
+                            "ParameterGroupStatus",
+                            stack
+                        )));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -1243,28 +1244,28 @@ impl ClusterParameterGroupStatusDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "ClusterParameterStatusList" => {
-                            obj.cluster_parameter_status_list =
-                                Some(try!(ClusterParameterStatusListDeserializer::deserialize(
-                                    "ClusterParameterStatusList",
-                                    stack
-                                )));
-                        }
-                        "ParameterApplyStatus" => {
-                            obj.parameter_apply_status = Some(try!(
-                                StringDeserializer::deserialize("ParameterApplyStatus", stack)
-                            ));
-                        }
-                        "ParameterGroupName" => {
-                            obj.parameter_group_name = Some(try!(
-                                StringDeserializer::deserialize("ParameterGroupName", stack)
-                            ));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "ClusterParameterStatusList" => {
+                        obj.cluster_parameter_status_list =
+                            Some(try!(ClusterParameterStatusListDeserializer::deserialize(
+                                "ClusterParameterStatusList",
+                                stack
+                            )));
                     }
-                }
+                    "ParameterApplyStatus" => {
+                        obj.parameter_apply_status = Some(try!(StringDeserializer::deserialize(
+                            "ParameterApplyStatus",
+                            stack
+                        )));
+                    }
+                    "ParameterGroupName" => {
+                        obj.parameter_group_name = Some(try!(StringDeserializer::deserialize(
+                            "ParameterGroupName",
+                            stack
+                        )));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -1812,9 +1813,10 @@ impl ClusterSnapshotCopyStatusDeserializer {
                         )));
                     }
                     "SnapshotCopyGrantName" => {
-                        obj.snapshot_copy_grant_name = Some(try!(
-                            StringDeserializer::deserialize("SnapshotCopyGrantName", stack)
-                        ));
+                        obj.snapshot_copy_grant_name = Some(try!(StringDeserializer::deserialize(
+                            "SnapshotCopyGrantName",
+                            stack
+                        )));
                     }
                     _ => skip_tree(stack),
                 },
@@ -8012,9 +8014,10 @@ impl PendingModifiedValuesDeserializer {
                             Some(try!(StringDeserializer::deserialize("NodeType", stack)));
                     }
                     "NumberOfNodes" => {
-                        obj.number_of_nodes = Some(try!(
-                            IntegerOptionalDeserializer::deserialize("NumberOfNodes", stack)
-                        ));
+                        obj.number_of_nodes = Some(try!(IntegerOptionalDeserializer::deserialize(
+                            "NumberOfNodes",
+                            stack
+                        )));
                     }
                     "PubliclyAccessible" => {
                         obj.publicly_accessible = Some(try!(
@@ -8693,9 +8696,10 @@ impl ReservedNodesMessageDeserializer {
                         obj.marker = Some(try!(StringDeserializer::deserialize("Marker", stack)));
                     }
                     "ReservedNodes" => {
-                        obj.reserved_nodes = Some(try!(
-                            ReservedNodeListDeserializer::deserialize("ReservedNodes", stack)
-                        ));
+                        obj.reserved_nodes = Some(try!(ReservedNodeListDeserializer::deserialize(
+                            "ReservedNodes",
+                            stack
+                        )));
                     }
                     _ => skip_tree(stack),
                 },
@@ -9916,9 +9920,10 @@ impl SnapshotCopyGrantDeserializer {
                             Some(try!(StringDeserializer::deserialize("KmsKeyId", stack)));
                     }
                     "SnapshotCopyGrantName" => {
-                        obj.snapshot_copy_grant_name = Some(try!(
-                            StringDeserializer::deserialize("SnapshotCopyGrantName", stack)
-                        ));
+                        obj.snapshot_copy_grant_name = Some(try!(StringDeserializer::deserialize(
+                            "SnapshotCopyGrantName",
+                            stack
+                        )));
                     }
                     "Tags" => {
                         obj.tags = Some(try!(TagListDeserializer::deserialize("Tags", stack)));
@@ -10534,9 +10539,10 @@ impl TableRestoreStatusDeserializer {
                         )));
                     }
                     "TableRestoreRequestId" => {
-                        obj.table_restore_request_id = Some(try!(
-                            StringDeserializer::deserialize("TableRestoreRequestId", stack)
-                        ));
+                        obj.table_restore_request_id = Some(try!(StringDeserializer::deserialize(
+                            "TableRestoreRequestId",
+                            stack
+                        )));
                     }
                     "TargetDatabaseName" => {
                         obj.target_database_name = Some(try!(StringDeserializer::deserialize(
@@ -11121,13 +11127,31 @@ impl AuthorizeClusterSecurityGroupIngressError {
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
-                            Ok(parsed_error) => {
-                                match &parsed_error.code[..] {
-                                    "AuthorizationAlreadyExists" => AuthorizeClusterSecurityGroupIngressError::AuthorizationAlreadyExistsFault(String::from(parsed_error.message)),"AuthorizationQuotaExceeded" => AuthorizeClusterSecurityGroupIngressError::AuthorizationQuotaExceededFault(String::from(parsed_error.message)),"ClusterSecurityGroupNotFound" => AuthorizeClusterSecurityGroupIngressError::ClusterSecurityGroupNotFoundFault(String::from(parsed_error.message)),"InvalidClusterSecurityGroupState" => AuthorizeClusterSecurityGroupIngressError::InvalidClusterSecurityGroupStateFault(String::from(parsed_error.message)),_ => AuthorizeClusterSecurityGroupIngressError::Unknown(String::from(body))
-                                }
-                           },
-                           Err(_) => AuthorizeClusterSecurityGroupIngressError::Unknown(body.to_string())
-                       }
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                "AuthorizationAlreadyExists" => {
+                    AuthorizeClusterSecurityGroupIngressError::AuthorizationAlreadyExistsFault(
+                        String::from(parsed_error.message),
+                    )
+                }
+                "AuthorizationQuotaExceeded" => {
+                    AuthorizeClusterSecurityGroupIngressError::AuthorizationQuotaExceededFault(
+                        String::from(parsed_error.message),
+                    )
+                }
+                "ClusterSecurityGroupNotFound" => {
+                    AuthorizeClusterSecurityGroupIngressError::ClusterSecurityGroupNotFoundFault(
+                        String::from(parsed_error.message),
+                    )
+                }
+                "InvalidClusterSecurityGroupState" => {
+                    AuthorizeClusterSecurityGroupIngressError::InvalidClusterSecurityGroupStateFault(
+                        String::from(parsed_error.message),
+                    )
+                }
+                _ => AuthorizeClusterSecurityGroupIngressError::Unknown(String::from(body)),
+            },
+            Err(_) => AuthorizeClusterSecurityGroupIngressError::Unknown(body.to_string()),
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -11661,11 +11685,9 @@ impl CreateClusterParameterGroupError {
                 "InvalidTagFault" => CreateClusterParameterGroupError::InvalidTagFault(
                     String::from(parsed_error.message),
                 ),
-                "TagLimitExceededFault" => {
-                    CreateClusterParameterGroupError::TagLimitExceededFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "TagLimitExceededFault" => CreateClusterParameterGroupError::TagLimitExceededFault(
+                    String::from(parsed_error.message),
+                ),
                 _ => CreateClusterParameterGroupError::Unknown(String::from(body)),
             },
             Err(_) => CreateClusterParameterGroupError::Unknown(body.to_string()),
@@ -12119,9 +12141,9 @@ impl CreateEventSubscriptionError {
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "EventSubscriptionQuotaExceeded" => {
-                    CreateEventSubscriptionError::EventSubscriptionQuotaExceededFault(
-                        String::from(parsed_error.message),
-                    )
+                    CreateEventSubscriptionError::EventSubscriptionQuotaExceededFault(String::from(
+                        parsed_error.message,
+                    ))
                 }
                 "InvalidTagFault" => CreateEventSubscriptionError::InvalidTagFault(String::from(
                     parsed_error.message,
@@ -12475,14 +12497,14 @@ impl CreateSnapshotCopyGrantError {
                     String::from(parsed_error.message),
                 ),
                 "SnapshotCopyGrantAlreadyExistsFault" => {
-                    CreateSnapshotCopyGrantError::SnapshotCopyGrantAlreadyExistsFault(
-                        String::from(parsed_error.message),
-                    )
+                    CreateSnapshotCopyGrantError::SnapshotCopyGrantAlreadyExistsFault(String::from(
+                        parsed_error.message,
+                    ))
                 }
                 "SnapshotCopyGrantQuotaExceededFault" => {
-                    CreateSnapshotCopyGrantError::SnapshotCopyGrantQuotaExceededFault(
-                        String::from(parsed_error.message),
-                    )
+                    CreateSnapshotCopyGrantError::SnapshotCopyGrantQuotaExceededFault(String::from(
+                        parsed_error.message,
+                    ))
                 }
                 "TagLimitExceededFault" => CreateSnapshotCopyGrantError::TagLimitExceededFault(
                     String::from(parsed_error.message),
@@ -13922,9 +13944,9 @@ impl DescribeClusterSubnetGroupsError {
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "ClusterSubnetGroupNotFoundFault" => {
-                    DescribeClusterSubnetGroupsError::ClusterSubnetGroupNotFoundFault(
-                        String::from(parsed_error.message),
-                    )
+                    DescribeClusterSubnetGroupsError::ClusterSubnetGroupNotFoundFault(String::from(
+                        parsed_error.message,
+                    ))
                 }
                 "InvalidTagFault" => DescribeClusterSubnetGroupsError::InvalidTagFault(
                     String::from(parsed_error.message),
@@ -14562,9 +14584,9 @@ impl DescribeHsmConfigurationsError {
                         parsed_error.message,
                     ))
                 }
-                "InvalidTagFault" => DescribeHsmConfigurationsError::InvalidTagFault(
-                    String::from(parsed_error.message),
-                ),
+                "InvalidTagFault" => DescribeHsmConfigurationsError::InvalidTagFault(String::from(
+                    parsed_error.message,
+                )),
                 _ => DescribeHsmConfigurationsError::Unknown(String::from(body)),
             },
             Err(_) => DescribeHsmConfigurationsError::Unknown(body.to_string()),
@@ -16459,9 +16481,9 @@ impl ModifySnapshotCopyRetentionPeriodError {
                     ))
                 }
                 "SnapshotCopyDisabledFault" => {
-                    ModifySnapshotCopyRetentionPeriodError::SnapshotCopyDisabledFault(
-                        String::from(parsed_error.message),
-                    )
+                    ModifySnapshotCopyRetentionPeriodError::SnapshotCopyDisabledFault(String::from(
+                        parsed_error.message,
+                    ))
                 }
                 "UnauthorizedOperation" => {
                     ModifySnapshotCopyRetentionPeriodError::UnauthorizedOperation(String::from(
@@ -16554,9 +16576,9 @@ impl PurchaseReservedNodeOfferingError {
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "ReservedNodeAlreadyExists" => {
-                    PurchaseReservedNodeOfferingError::ReservedNodeAlreadyExistsFault(
-                        String::from(parsed_error.message),
-                    )
+                    PurchaseReservedNodeOfferingError::ReservedNodeAlreadyExistsFault(String::from(
+                        parsed_error.message,
+                    ))
                 }
                 "ReservedNodeOfferingNotFound" => {
                     PurchaseReservedNodeOfferingError::ReservedNodeOfferingNotFoundFault(
@@ -16564,9 +16586,9 @@ impl PurchaseReservedNodeOfferingError {
                     )
                 }
                 "ReservedNodeQuotaExceeded" => {
-                    PurchaseReservedNodeOfferingError::ReservedNodeQuotaExceededFault(
-                        String::from(parsed_error.message),
-                    )
+                    PurchaseReservedNodeOfferingError::ReservedNodeQuotaExceededFault(String::from(
+                        parsed_error.message,
+                    ))
                 }
                 "UnsupportedOperation" => {
                     PurchaseReservedNodeOfferingError::UnsupportedOperationFault(String::from(
@@ -16919,14 +16941,14 @@ impl RestoreFromClusterSnapshotError {
                     ))
                 }
                 "InsufficientClusterCapacity" => {
-                    RestoreFromClusterSnapshotError::InsufficientClusterCapacityFault(
-                        String::from(parsed_error.message),
-                    )
+                    RestoreFromClusterSnapshotError::InsufficientClusterCapacityFault(String::from(
+                        parsed_error.message,
+                    ))
                 }
                 "InvalidClusterSnapshotState" => {
-                    RestoreFromClusterSnapshotError::InvalidClusterSnapshotStateFault(
-                        String::from(parsed_error.message),
-                    )
+                    RestoreFromClusterSnapshotError::InvalidClusterSnapshotStateFault(String::from(
+                        parsed_error.message,
+                    ))
                 }
                 "InvalidClusterSubnetGroupStateFault" => {
                     RestoreFromClusterSnapshotError::InvalidClusterSubnetGroupStateFault(
@@ -17303,11 +17325,9 @@ impl RevokeSnapshotAccessError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "AccessToSnapshotDenied" => {
-                    RevokeSnapshotAccessError::AccessToSnapshotDeniedFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "AccessToSnapshotDenied" => RevokeSnapshotAccessError::AccessToSnapshotDeniedFault(
+                    String::from(parsed_error.message),
+                ),
                 "AuthorizationNotFound" => RevokeSnapshotAccessError::AuthorizationNotFoundFault(
                     String::from(parsed_error.message),
                 ),
@@ -20524,12 +20544,10 @@ where
                     let _start_document = stack.next();
                     let actual_tag_name = try!(peek_at_name(&mut stack));
                     try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(
-                        PurchaseReservedNodeOfferingResultDeserializer::deserialize(
-                            "PurchaseReservedNodeOfferingResult",
-                            &mut stack
-                        )
-                    );
+                    result = try!(PurchaseReservedNodeOfferingResultDeserializer::deserialize(
+                        "PurchaseReservedNodeOfferingResult",
+                        &mut stack
+                    ));
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }

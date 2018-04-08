@@ -2800,21 +2800,17 @@ impl AttachLoadBalancerTlsCertificateError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "AccessDeniedException" => {
-                        AttachLoadBalancerTlsCertificateError::AccessDenied(String::from(
-                            error_message,
-                        ))
-                    }
+                    "AccessDeniedException" => AttachLoadBalancerTlsCertificateError::AccessDenied(
+                        String::from(error_message),
+                    ),
                     "AccountSetupInProgressException" => {
-                        AttachLoadBalancerTlsCertificateError::AccountSetupInProgress(
-                            String::from(error_message),
-                        )
-                    }
-                    "InvalidInputException" => {
-                        AttachLoadBalancerTlsCertificateError::InvalidInput(String::from(
+                        AttachLoadBalancerTlsCertificateError::AccountSetupInProgress(String::from(
                             error_message,
                         ))
                     }
+                    "InvalidInputException" => AttachLoadBalancerTlsCertificateError::InvalidInput(
+                        String::from(error_message),
+                    ),
                     "NotFoundException" => {
                         AttachLoadBalancerTlsCertificateError::NotFound(String::from(error_message))
                     }
@@ -4306,21 +4302,17 @@ impl CreateLoadBalancerTlsCertificateError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "AccessDeniedException" => {
-                        CreateLoadBalancerTlsCertificateError::AccessDenied(String::from(
-                            error_message,
-                        ))
-                    }
+                    "AccessDeniedException" => CreateLoadBalancerTlsCertificateError::AccessDenied(
+                        String::from(error_message),
+                    ),
                     "AccountSetupInProgressException" => {
-                        CreateLoadBalancerTlsCertificateError::AccountSetupInProgress(
-                            String::from(error_message),
-                        )
-                    }
-                    "InvalidInputException" => {
-                        CreateLoadBalancerTlsCertificateError::InvalidInput(String::from(
+                        CreateLoadBalancerTlsCertificateError::AccountSetupInProgress(String::from(
                             error_message,
                         ))
                     }
+                    "InvalidInputException" => CreateLoadBalancerTlsCertificateError::InvalidInput(
+                        String::from(error_message),
+                    ),
                     "NotFoundException" => {
                         CreateLoadBalancerTlsCertificateError::NotFound(String::from(error_message))
                     }
@@ -5340,21 +5332,17 @@ impl DeleteLoadBalancerTlsCertificateError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "AccessDeniedException" => {
-                        DeleteLoadBalancerTlsCertificateError::AccessDenied(String::from(
-                            error_message,
-                        ))
-                    }
+                    "AccessDeniedException" => DeleteLoadBalancerTlsCertificateError::AccessDenied(
+                        String::from(error_message),
+                    ),
                     "AccountSetupInProgressException" => {
-                        DeleteLoadBalancerTlsCertificateError::AccountSetupInProgress(
-                            String::from(error_message),
-                        )
-                    }
-                    "InvalidInputException" => {
-                        DeleteLoadBalancerTlsCertificateError::InvalidInput(String::from(
+                        DeleteLoadBalancerTlsCertificateError::AccountSetupInProgress(String::from(
                             error_message,
                         ))
                     }
+                    "InvalidInputException" => DeleteLoadBalancerTlsCertificateError::InvalidInput(
+                        String::from(error_message),
+                    ),
                     "NotFoundException" => {
                         DeleteLoadBalancerTlsCertificateError::NotFound(String::from(error_message))
                     }

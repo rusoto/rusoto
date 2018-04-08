@@ -5978,16 +5978,12 @@ impl CreateAssociationError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "AssociationAlreadyExists" => {
-                        CreateAssociationError::AssociationAlreadyExists(String::from(
-                            error_message,
-                        ))
-                    }
-                    "AssociationLimitExceeded" => {
-                        CreateAssociationError::AssociationLimitExceeded(String::from(
-                            error_message,
-                        ))
-                    }
+                    "AssociationAlreadyExists" => CreateAssociationError::AssociationAlreadyExists(
+                        String::from(error_message),
+                    ),
+                    "AssociationLimitExceeded" => CreateAssociationError::AssociationLimitExceeded(
+                        String::from(error_message),
+                    ),
                     "InternalServerError" => {
                         CreateAssociationError::InternalServerError(String::from(error_message))
                     }
@@ -7462,11 +7458,9 @@ impl DeregisterPatchBaselineForPatchGroupError {
                             error_message,
                         ))
                     }
-                    "ValidationException" => {
-                        DeregisterPatchBaselineForPatchGroupError::Validation(
-                            error_message.to_string(),
-                        )
-                    }
+                    "ValidationException" => DeregisterPatchBaselineForPatchGroupError::Validation(
+                        error_message.to_string(),
+                    ),
                     _ => DeregisterPatchBaselineForPatchGroupError::Unknown(String::from(body)),
                 }
             }
@@ -7650,9 +7644,9 @@ impl DeregisterTaskFromMaintenanceWindowError {
                         ))
                     }
                     "InternalServerError" => {
-                        DeregisterTaskFromMaintenanceWindowError::InternalServerError(
-                            String::from(error_message),
-                        )
+                        DeregisterTaskFromMaintenanceWindowError::InternalServerError(String::from(
+                            error_message,
+                        ))
                     }
                     "ValidationException" => DeregisterTaskFromMaintenanceWindowError::Validation(
                         error_message.to_string(),
@@ -7832,11 +7826,9 @@ impl DescribeAssociationError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "AssociationDoesNotExist" => {
-                        DescribeAssociationError::AssociationDoesNotExist(String::from(
-                            error_message,
-                        ))
-                    }
+                    "AssociationDoesNotExist" => DescribeAssociationError::AssociationDoesNotExist(
+                        String::from(error_message),
+                    ),
                     "InternalServerError" => {
                         DescribeAssociationError::InternalServerError(String::from(error_message))
                     }
@@ -8416,9 +8408,9 @@ impl DescribeEffectiveInstanceAssociationsError {
                         )
                     }
                     "InvalidInstanceId" => {
-                        DescribeEffectiveInstanceAssociationsError::InvalidInstanceId(
-                            String::from(error_message),
-                        )
+                        DescribeEffectiveInstanceAssociationsError::InvalidInstanceId(String::from(
+                            error_message,
+                        ))
                     }
                     "InvalidNextToken" => {
                         DescribeEffectiveInstanceAssociationsError::InvalidNextToken(String::from(
@@ -8724,11 +8716,9 @@ impl DescribeInstanceInformationError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "InternalServerError" => {
-                        DescribeInstanceInformationError::InternalServerError(String::from(
-                            error_message,
-                        ))
-                    }
+                    "InternalServerError" => DescribeInstanceInformationError::InternalServerError(
+                        String::from(error_message),
+                    ),
                     "InvalidFilterKey" => DescribeInstanceInformationError::InvalidFilterKey(
                         String::from(error_message),
                     ),
@@ -8828,11 +8818,9 @@ impl DescribeInstancePatchStatesError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "InternalServerError" => {
-                        DescribeInstancePatchStatesError::InternalServerError(String::from(
-                            error_message,
-                        ))
-                    }
+                    "InternalServerError" => DescribeInstancePatchStatesError::InternalServerError(
+                        String::from(error_message),
+                    ),
                     "InvalidNextToken" => DescribeInstancePatchStatesError::InvalidNextToken(
                         String::from(error_message),
                     ),
@@ -9116,11 +9104,25 @@ impl DescribeMaintenanceWindowExecutionTaskInvocationsError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                                    "DoesNotExistException" => DescribeMaintenanceWindowExecutionTaskInvocationsError::DoesNotExist(String::from(error_message)),
-"InternalServerError" => DescribeMaintenanceWindowExecutionTaskInvocationsError::InternalServerError(String::from(error_message)),
-"ValidationException" => DescribeMaintenanceWindowExecutionTaskInvocationsError::Validation(error_message.to_string()),
-_ => DescribeMaintenanceWindowExecutionTaskInvocationsError::Unknown(String::from(body))
-                                }
+                    "DoesNotExistException" => {
+                        DescribeMaintenanceWindowExecutionTaskInvocationsError::DoesNotExist(
+                            String::from(error_message),
+                        )
+                    }
+                    "InternalServerError" => {
+                        DescribeMaintenanceWindowExecutionTaskInvocationsError::InternalServerError(
+                            String::from(error_message),
+                        )
+                    }
+                    "ValidationException" => {
+                        DescribeMaintenanceWindowExecutionTaskInvocationsError::Validation(
+                            error_message.to_string(),
+                        )
+                    }
+                    _ => DescribeMaintenanceWindowExecutionTaskInvocationsError::Unknown(
+                        String::from(body),
+                    ),
+                }
             }
             Err(_) => {
                 DescribeMaintenanceWindowExecutionTaskInvocationsError::Unknown(String::from(body))
@@ -9301,9 +9303,9 @@ impl DescribeMaintenanceWindowExecutionsError {
 
                 match *error_type {
                     "InternalServerError" => {
-                        DescribeMaintenanceWindowExecutionsError::InternalServerError(
-                            String::from(error_message),
-                        )
+                        DescribeMaintenanceWindowExecutionsError::InternalServerError(String::from(
+                            error_message,
+                        ))
                     }
                     "ValidationException" => DescribeMaintenanceWindowExecutionsError::Validation(
                         error_message.to_string(),
@@ -9384,11 +9386,9 @@ impl DescribeMaintenanceWindowTargetsError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "DoesNotExistException" => {
-                        DescribeMaintenanceWindowTargetsError::DoesNotExist(String::from(
-                            error_message,
-                        ))
-                    }
+                    "DoesNotExistException" => DescribeMaintenanceWindowTargetsError::DoesNotExist(
+                        String::from(error_message),
+                    ),
                     "InternalServerError" => {
                         DescribeMaintenanceWindowTargetsError::InternalServerError(String::from(
                             error_message,
@@ -13523,9 +13523,9 @@ impl RegisterTargetWithMaintenanceWindowError {
                         )
                     }
                     "InternalServerError" => {
-                        RegisterTargetWithMaintenanceWindowError::InternalServerError(
-                            String::from(error_message),
-                        )
+                        RegisterTargetWithMaintenanceWindowError::InternalServerError(String::from(
+                            error_message,
+                        ))
                     }
                     "ResourceLimitExceededException" => {
                         RegisterTargetWithMaintenanceWindowError::ResourceLimitExceeded(
@@ -13643,9 +13643,9 @@ impl RegisterTaskWithMaintenanceWindowError {
                         ))
                     }
                     "ResourceLimitExceededException" => {
-                        RegisterTaskWithMaintenanceWindowError::ResourceLimitExceeded(
-                            String::from(error_message),
-                        )
+                        RegisterTaskWithMaintenanceWindowError::ResourceLimitExceeded(String::from(
+                            error_message,
+                        ))
                     }
                     "ValidationException" => RegisterTaskWithMaintenanceWindowError::Validation(
                         error_message.to_string(),
@@ -14945,11 +14945,9 @@ impl UpdateMaintenanceWindowTaskError {
                     "DoesNotExistException" => {
                         UpdateMaintenanceWindowTaskError::DoesNotExist(String::from(error_message))
                     }
-                    "InternalServerError" => {
-                        UpdateMaintenanceWindowTaskError::InternalServerError(String::from(
-                            error_message,
-                        ))
-                    }
+                    "InternalServerError" => UpdateMaintenanceWindowTaskError::InternalServerError(
+                        String::from(error_message),
+                    ),
                     "ValidationException" => {
                         UpdateMaintenanceWindowTaskError::Validation(error_message.to_string())
                     }
@@ -17206,7 +17204,9 @@ where
                         body = b"{}".to_vec();
                     }
 
-                    serde_json::from_str::<DescribeMaintenanceWindowExecutionTaskInvocationsResult>(String::from_utf8_lossy(body.as_ref()).as_ref()).unwrap()
+                    serde_json::from_str::<DescribeMaintenanceWindowExecutionTaskInvocationsResult>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    ).unwrap()
                 }))
             } else {
                 future::Either::B(response.buffer().from_err().and_then(|response| {
@@ -17982,11 +17982,9 @@ where
                 }))
             } else {
                 future::Either::B(response.buffer().from_err().and_then(|response| {
-                    Err(
-                        GetMaintenanceWindowExecutionTaskInvocationError::from_body(
-                            String::from_utf8_lossy(response.body.as_ref()).as_ref(),
-                        ),
-                    )
+                    Err(GetMaintenanceWindowExecutionTaskInvocationError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
                 }))
             }
         });

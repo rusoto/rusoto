@@ -5243,11 +5243,9 @@ impl InstallToRemoteAccessSessionError {
                     "NotFoundException" => {
                         InstallToRemoteAccessSessionError::NotFound(String::from(error_message))
                     }
-                    "ServiceAccountException" => {
-                        InstallToRemoteAccessSessionError::ServiceAccount(String::from(
-                            error_message,
-                        ))
-                    }
+                    "ServiceAccountException" => InstallToRemoteAccessSessionError::ServiceAccount(
+                        String::from(error_message),
+                    ),
                     "ValidationException" => {
                         InstallToRemoteAccessSessionError::Validation(error_message.to_string())
                     }

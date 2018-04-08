@@ -2656,9 +2656,9 @@ impl DescribeCreateAccountStatusError {
                         DescribeCreateAccountStatusError::AccessDenied(String::from(error_message))
                     }
                     "CreateAccountStatusNotFoundException" => {
-                        DescribeCreateAccountStatusError::CreateAccountStatusNotFound(
-                            String::from(error_message),
-                        )
+                        DescribeCreateAccountStatusError::CreateAccountStatusNotFound(String::from(
+                            error_message,
+                        ))
                     }
                     "InvalidInputException" => {
                         DescribeCreateAccountStatusError::InvalidInput(String::from(error_message))
@@ -3000,11 +3000,9 @@ impl DescribeOrganizationalUnitError {
                     "ServiceException" => {
                         DescribeOrganizationalUnitError::Service(String::from(error_message))
                     }
-                    "TooManyRequestsException" => {
-                        DescribeOrganizationalUnitError::TooManyRequests(String::from(
-                            error_message,
-                        ))
-                    }
+                    "TooManyRequestsException" => DescribeOrganizationalUnitError::TooManyRequests(
+                        String::from(error_message),
+                    ),
                     "ValidationException" => {
                         DescribeOrganizationalUnitError::Validation(error_message.to_string())
                     }
@@ -4244,9 +4242,9 @@ impl ListAWSServiceAccessForOrganizationError {
                         ))
                     }
                     "ConstraintViolationException" => {
-                        ListAWSServiceAccessForOrganizationError::ConstraintViolation(
-                            String::from(error_message),
-                        )
+                        ListAWSServiceAccessForOrganizationError::ConstraintViolation(String::from(
+                            error_message,
+                        ))
                     }
                     "InvalidInputException" => {
                         ListAWSServiceAccessForOrganizationError::InvalidInput(String::from(
@@ -5004,16 +5002,12 @@ impl ListOrganizationalUnitsForParentError {
                             String::from(error_message),
                         )
                     }
-                    "AccessDeniedException" => {
-                        ListOrganizationalUnitsForParentError::AccessDenied(String::from(
-                            error_message,
-                        ))
-                    }
-                    "InvalidInputException" => {
-                        ListOrganizationalUnitsForParentError::InvalidInput(String::from(
-                            error_message,
-                        ))
-                    }
+                    "AccessDeniedException" => ListOrganizationalUnitsForParentError::AccessDenied(
+                        String::from(error_message),
+                    ),
+                    "InvalidInputException" => ListOrganizationalUnitsForParentError::InvalidInput(
+                        String::from(error_message),
+                    ),
                     "ParentNotFoundException" => {
                         ListOrganizationalUnitsForParentError::ParentNotFound(String::from(
                             error_message,

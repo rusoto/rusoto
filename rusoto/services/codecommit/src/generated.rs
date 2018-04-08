@@ -4685,9 +4685,9 @@ impl MergePullRequestByFastForwardError {
                         )
                     }
                     "EncryptionKeyAccessDeniedException" => {
-                        MergePullRequestByFastForwardError::EncryptionKeyAccessDenied(
-                            String::from(error_message),
-                        )
+                        MergePullRequestByFastForwardError::EncryptionKeyAccessDenied(String::from(
+                            error_message,
+                        ))
                     }
                     "EncryptionKeyDisabledException" => {
                         MergePullRequestByFastForwardError::EncryptionKeyDisabled(String::from(
@@ -4901,9 +4901,9 @@ impl PostCommentForComparedCommitError {
                         )
                     }
                     "ClientRequestTokenRequiredException" => {
-                        PostCommentForComparedCommitError::ClientRequestTokenRequired(
-                            String::from(error_message),
-                        )
+                        PostCommentForComparedCommitError::ClientRequestTokenRequired(String::from(
+                            error_message,
+                        ))
                     }
                     "CommentContentRequiredException" => {
                         PostCommentForComparedCommitError::CommentContentRequired(String::from(
@@ -5865,9 +5865,9 @@ impl PutRepositoryTriggersError {
                         ))
                     }
                     "MaximumRepositoryTriggersExceededException" => {
-                        PutRepositoryTriggersError::MaximumRepositoryTriggersExceeded(
-                            String::from(error_message),
-                        )
+                        PutRepositoryTriggersError::MaximumRepositoryTriggersExceeded(String::from(
+                            error_message,
+                        ))
                     }
                     "RepositoryDoesNotExistException" => {
                         PutRepositoryTriggersError::RepositoryDoesNotExist(String::from(
@@ -6648,9 +6648,9 @@ impl UpdatePullRequestStatusError {
 
                 match *error_type {
                     "EncryptionIntegrityChecksFailedException" => {
-                        UpdatePullRequestStatusError::EncryptionIntegrityChecksFailed(
-                            String::from(error_message),
-                        )
+                        UpdatePullRequestStatusError::EncryptionIntegrityChecksFailed(String::from(
+                            error_message,
+                        ))
                     }
                     "EncryptionKeyAccessDeniedException" => {
                         UpdatePullRequestStatusError::EncryptionKeyAccessDenied(String::from(

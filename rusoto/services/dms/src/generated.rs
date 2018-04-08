@@ -2360,11 +2360,9 @@ impl CreateEventSubscriptionError {
                             error_message,
                         ))
                     }
-                    "ResourceNotFoundFault" => {
-                        CreateEventSubscriptionError::ResourceNotFoundFault(String::from(
-                            error_message,
-                        ))
-                    }
+                    "ResourceNotFoundFault" => CreateEventSubscriptionError::ResourceNotFoundFault(
+                        String::from(error_message),
+                    ),
                     "ResourceQuotaExceededFault" => {
                         CreateEventSubscriptionError::ResourceQuotaExceededFault(String::from(
                             error_message,
@@ -2477,19 +2475,57 @@ impl CreateReplicationInstanceError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                                    "AccessDeniedFault" => CreateReplicationInstanceError::AccessDeniedFault(String::from(error_message)),
-"InsufficientResourceCapacityFault" => CreateReplicationInstanceError::InsufficientResourceCapacityFault(String::from(error_message)),
-"InvalidResourceStateFault" => CreateReplicationInstanceError::InvalidResourceStateFault(String::from(error_message)),
-"InvalidSubnet" => CreateReplicationInstanceError::InvalidSubnet(String::from(error_message)),
-"KMSKeyNotAccessibleFault" => CreateReplicationInstanceError::KMSKeyNotAccessibleFault(String::from(error_message)),
-"ReplicationSubnetGroupDoesNotCoverEnoughAZs" => CreateReplicationInstanceError::ReplicationSubnetGroupDoesNotCoverEnoughAZs(String::from(error_message)),
-"ResourceAlreadyExistsFault" => CreateReplicationInstanceError::ResourceAlreadyExistsFault(String::from(error_message)),
-"ResourceNotFoundFault" => CreateReplicationInstanceError::ResourceNotFoundFault(String::from(error_message)),
-"ResourceQuotaExceededFault" => CreateReplicationInstanceError::ResourceQuotaExceededFault(String::from(error_message)),
-"StorageQuotaExceededFault" => CreateReplicationInstanceError::StorageQuotaExceededFault(String::from(error_message)),
-"ValidationException" => CreateReplicationInstanceError::Validation(error_message.to_string()),
-_ => CreateReplicationInstanceError::Unknown(String::from(body))
-                                }
+                    "AccessDeniedFault" => CreateReplicationInstanceError::AccessDeniedFault(
+                        String::from(error_message),
+                    ),
+                    "InsufficientResourceCapacityFault" => {
+                        CreateReplicationInstanceError::InsufficientResourceCapacityFault(
+                            String::from(error_message),
+                        )
+                    }
+                    "InvalidResourceStateFault" => {
+                        CreateReplicationInstanceError::InvalidResourceStateFault(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidSubnet" => {
+                        CreateReplicationInstanceError::InvalidSubnet(String::from(error_message))
+                    }
+                    "KMSKeyNotAccessibleFault" => {
+                        CreateReplicationInstanceError::KMSKeyNotAccessibleFault(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ReplicationSubnetGroupDoesNotCoverEnoughAZs" => {
+                        CreateReplicationInstanceError::ReplicationSubnetGroupDoesNotCoverEnoughAZs(
+                            String::from(error_message),
+                        )
+                    }
+                    "ResourceAlreadyExistsFault" => {
+                        CreateReplicationInstanceError::ResourceAlreadyExistsFault(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ResourceNotFoundFault" => {
+                        CreateReplicationInstanceError::ResourceNotFoundFault(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ResourceQuotaExceededFault" => {
+                        CreateReplicationInstanceError::ResourceQuotaExceededFault(String::from(
+                            error_message,
+                        ))
+                    }
+                    "StorageQuotaExceededFault" => {
+                        CreateReplicationInstanceError::StorageQuotaExceededFault(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ValidationException" => {
+                        CreateReplicationInstanceError::Validation(error_message.to_string())
+                    }
+                    _ => CreateReplicationInstanceError::Unknown(String::from(body)),
+                }
             }
             Err(_) => CreateReplicationInstanceError::Unknown(String::from(body)),
         }
@@ -2968,11 +3004,9 @@ impl DeleteEventSubscriptionError {
                             error_message,
                         ))
                     }
-                    "ResourceNotFoundFault" => {
-                        DeleteEventSubscriptionError::ResourceNotFoundFault(String::from(
-                            error_message,
-                        ))
-                    }
+                    "ResourceNotFoundFault" => DeleteEventSubscriptionError::ResourceNotFoundFault(
+                        String::from(error_message),
+                    ),
                     "ValidationException" => {
                         DeleteEventSubscriptionError::Validation(error_message.to_string())
                     }
@@ -4616,11 +4650,9 @@ impl DescribeTableStatisticsError {
                             error_message,
                         ))
                     }
-                    "ResourceNotFoundFault" => {
-                        DescribeTableStatisticsError::ResourceNotFoundFault(String::from(
-                            error_message,
-                        ))
-                    }
+                    "ResourceNotFoundFault" => DescribeTableStatisticsError::ResourceNotFoundFault(
+                        String::from(error_message),
+                    ),
                     "ValidationException" => {
                         DescribeTableStatisticsError::Validation(error_message.to_string())
                     }
@@ -4983,11 +5015,9 @@ impl ModifyEventSubscriptionError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "ResourceNotFoundFault" => {
-                        ModifyEventSubscriptionError::ResourceNotFoundFault(String::from(
-                            error_message,
-                        ))
-                    }
+                    "ResourceNotFoundFault" => ModifyEventSubscriptionError::ResourceNotFoundFault(
+                        String::from(error_message),
+                    ),
                     "ResourceQuotaExceededFault" => {
                         ModifyEventSubscriptionError::ResourceQuotaExceededFault(String::from(
                             error_message,
@@ -5117,9 +5147,9 @@ impl ModifyReplicationInstanceError {
                         ))
                     }
                     "UpgradeDependencyFailureFault" => {
-                        ModifyReplicationInstanceError::UpgradeDependencyFailureFault(
-                            String::from(error_message),
-                        )
+                        ModifyReplicationInstanceError::UpgradeDependencyFailureFault(String::from(
+                            error_message,
+                        ))
                     }
                     "ValidationException" => {
                         ModifyReplicationInstanceError::Validation(error_message.to_string())

@@ -5708,9 +5708,10 @@ impl TargetGroupDeserializer {
                         )));
                     }
                     "TargetGroupArn" => {
-                        obj.target_group_arn = Some(try!(
-                            TargetGroupArnDeserializer::deserialize("TargetGroupArn", stack)
-                        ));
+                        obj.target_group_arn = Some(try!(TargetGroupArnDeserializer::deserialize(
+                            "TargetGroupArn",
+                            stack
+                        )));
                     }
                     "TargetGroupName" => {
                         obj.target_group_name = Some(try!(
@@ -5811,9 +5812,10 @@ impl TargetGroupAttributeDeserializer {
                         )));
                     }
                     "Value" => {
-                        obj.value = Some(try!(
-                            TargetGroupAttributeValueDeserializer::deserialize("Value", stack)
-                        ));
+                        obj.value = Some(try!(TargetGroupAttributeValueDeserializer::deserialize(
+                            "Value",
+                            stack
+                        )));
                     }
                     _ => skip_tree(stack),
                 },
@@ -6035,27 +6037,27 @@ impl TargetHealthDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "Description" => {
-                            obj.description = Some(try!(DescriptionDeserializer::deserialize(
-                                "Description",
-                                stack
-                            )));
-                        }
-                        "Reason" => {
-                            obj.reason = Some(try!(
-                                TargetHealthReasonEnumDeserializer::deserialize("Reason", stack)
-                            ));
-                        }
-                        "State" => {
-                            obj.state = Some(try!(
-                                TargetHealthStateEnumDeserializer::deserialize("State", stack)
-                            ));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "Description" => {
+                        obj.description = Some(try!(DescriptionDeserializer::deserialize(
+                            "Description",
+                            stack
+                        )));
                     }
-                }
+                    "Reason" => {
+                        obj.reason = Some(try!(TargetHealthReasonEnumDeserializer::deserialize(
+                            "Reason",
+                            stack
+                        )));
+                    }
+                    "State" => {
+                        obj.state = Some(try!(TargetHealthStateEnumDeserializer::deserialize(
+                            "State",
+                            stack
+                        )));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -6288,9 +6290,9 @@ impl AddListenerCertificatesError {
                 "CertificateNotFound" => AddListenerCertificatesError::CertificateNotFound(
                     String::from(parsed_error.message),
                 ),
-                "ListenerNotFound" => AddListenerCertificatesError::ListenerNotFound(
-                    String::from(parsed_error.message),
-                ),
+                "ListenerNotFound" => AddListenerCertificatesError::ListenerNotFound(String::from(
+                    parsed_error.message,
+                )),
                 "TooManyCertificates" => AddListenerCertificatesError::TooManyCertificates(
                     String::from(parsed_error.message),
                 ),
@@ -10372,12 +10374,10 @@ where
                     let _start_document = stack.next();
                     let actual_tag_name = try!(peek_at_name(&mut stack));
                     try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(
-                        DescribeListenerCertificatesOutputDeserializer::deserialize(
-                            "DescribeListenerCertificatesResult",
-                            &mut stack
-                        )
-                    );
+                    result = try!(DescribeListenerCertificatesOutputDeserializer::deserialize(
+                        "DescribeListenerCertificatesResult",
+                        &mut stack
+                    ));
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
@@ -10940,12 +10940,10 @@ where
                     let _start_document = stack.next();
                     let actual_tag_name = try!(peek_at_name(&mut stack));
                     try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(
-                        ModifyLoadBalancerAttributesOutputDeserializer::deserialize(
-                            "ModifyLoadBalancerAttributesResult",
-                            &mut stack
-                        )
-                    );
+                    result = try!(ModifyLoadBalancerAttributesOutputDeserializer::deserialize(
+                        "ModifyLoadBalancerAttributesResult",
+                        &mut stack
+                    ));
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }

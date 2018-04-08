@@ -709,9 +709,10 @@ impl ApplicationVersionDescriptionDeserializer {
                         )));
                     }
                     "Status" => {
-                        obj.status = Some(try!(
-                            ApplicationVersionStatusDeserializer::deserialize("Status", stack)
-                        ));
+                        obj.status = Some(try!(ApplicationVersionStatusDeserializer::deserialize(
+                            "Status",
+                            stack
+                        )));
                     }
                     "VersionLabel" => {
                         obj.version_label = Some(try!(VersionLabelDeserializer::deserialize(
@@ -1585,21 +1586,21 @@ impl CheckDNSAvailabilityResultMessageDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "Available" => {
-                            obj.available = Some(try!(
-                                CnameAvailabilityDeserializer::deserialize("Available", stack)
-                            ));
-                        }
-                        "FullyQualifiedCNAME" => {
-                            obj.fully_qualified_cname = Some(try!(
-                                DNSCnameDeserializer::deserialize("FullyQualifiedCNAME", stack)
-                            ));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "Available" => {
+                        obj.available = Some(try!(CnameAvailabilityDeserializer::deserialize(
+                            "Available",
+                            stack
+                        )));
                     }
-                }
+                    "FullyQualifiedCNAME" => {
+                        obj.fully_qualified_cname = Some(try!(DNSCnameDeserializer::deserialize(
+                            "FullyQualifiedCNAME",
+                            stack
+                        )));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -1808,12 +1809,11 @@ impl ConfigurationOptionDescriptionDeserializer {
                         ));
                     }
                     "ValueType" => {
-                        obj.value_type = Some(try!(
-                            ConfigurationOptionValueTypeDeserializer::deserialize(
+                        obj.value_type =
+                            Some(try!(ConfigurationOptionValueTypeDeserializer::deserialize(
                                 "ValueType",
                                 stack
-                            )
-                        ));
+                            )));
                     }
                     _ => skip_tree(stack),
                 },
@@ -2468,9 +2468,10 @@ impl ConfigurationSettingsValidationMessagesDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "Messages" => {
-                        obj.messages = Some(try!(
-                            ValidationMessagesListDeserializer::deserialize("Messages", stack)
-                        ));
+                        obj.messages = Some(try!(ValidationMessagesListDeserializer::deserialize(
+                            "Messages",
+                            stack
+                        )));
                     }
                     _ => skip_tree(stack),
                 },
@@ -4524,12 +4525,11 @@ impl EnvironmentDescriptionDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "AbortableOperationInProgress" => {
-                        obj.abortable_operation_in_progress = Some(try!(
-                            AbortableOperationInProgressDeserializer::deserialize(
+                        obj.abortable_operation_in_progress =
+                            Some(try!(AbortableOperationInProgressDeserializer::deserialize(
                                 "AbortableOperationInProgress",
                                 stack
-                            )
-                        ));
+                            )));
                     }
                     "ApplicationName" => {
                         obj.application_name = Some(try!(
@@ -5137,9 +5137,10 @@ impl EnvironmentResourceDescriptionDeserializer {
                             )));
                     }
                     "LoadBalancers" => {
-                        obj.load_balancers = Some(try!(
-                            LoadBalancerListDeserializer::deserialize("LoadBalancers", stack)
-                        ));
+                        obj.load_balancers = Some(try!(LoadBalancerListDeserializer::deserialize(
+                            "LoadBalancers",
+                            stack
+                        )));
                     }
                     "Queues" => {
                         obj.queues =
@@ -7483,12 +7484,11 @@ impl PlatformDescriptionDeserializer {
                         ));
                     }
                     "ProgrammingLanguages" => {
-                        obj.programming_languages = Some(try!(
-                            PlatformProgrammingLanguagesDeserializer::deserialize(
+                        obj.programming_languages =
+                            Some(try!(PlatformProgrammingLanguagesDeserializer::deserialize(
                                 "ProgrammingLanguages",
                                 stack
-                            )
-                        ));
+                            )));
                     }
                     "SolutionStackName" => {
                         obj.solution_stack_name = Some(try!(
@@ -8338,9 +8338,10 @@ impl ResourceQuotasDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "ApplicationQuota" => {
-                        obj.application_quota = Some(try!(
-                            ResourceQuotaDeserializer::deserialize("ApplicationQuota", stack)
-                        ));
+                        obj.application_quota = Some(try!(ResourceQuotaDeserializer::deserialize(
+                            "ApplicationQuota",
+                            stack
+                        )));
                     }
                     "ApplicationVersionQuota" => {
                         obj.application_version_quota =
@@ -8362,9 +8363,10 @@ impl ResourceQuotasDeserializer {
                         ));
                     }
                     "EnvironmentQuota" => {
-                        obj.environment_quota = Some(try!(
-                            ResourceQuotaDeserializer::deserialize("EnvironmentQuota", stack)
-                        ));
+                        obj.environment_quota = Some(try!(ResourceQuotaDeserializer::deserialize(
+                            "EnvironmentQuota",
+                            stack
+                        )));
                     }
                     _ => skip_tree(stack),
                 },
@@ -10133,9 +10135,10 @@ impl ValidationMessageDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "Message" => {
-                        obj.message = Some(try!(
-                            ValidationMessageStringDeserializer::deserialize("Message", stack)
-                        ));
+                        obj.message = Some(try!(ValidationMessageStringDeserializer::deserialize(
+                            "Message",
+                            stack
+                        )));
                     }
                     "Namespace" => {
                         obj.namespace = Some(try!(OptionNamespaceDeserializer::deserialize(
@@ -11337,11 +11340,9 @@ impl DeleteApplicationVersionError {
                         parsed_error.message,
                     ))
                 }
-                "OperationInProgressFailure" => {
-                    DeleteApplicationVersionError::OperationInProgress(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "OperationInProgressFailure" => DeleteApplicationVersionError::OperationInProgress(
+                    String::from(parsed_error.message),
+                ),
                 "S3LocationNotInServiceRegionException" => {
                     DeleteApplicationVersionError::S3LocationNotInServiceRegion(String::from(
                         parsed_error.message,
@@ -14794,12 +14795,10 @@ where
                     let _start_document = stack.next();
                     let actual_tag_name = try!(peek_at_name(&mut stack));
                     try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(
-                        CreateStorageLocationResultMessageDeserializer::deserialize(
-                            "CreateStorageLocationResult",
-                            &mut stack
-                        )
-                    );
+                    result = try!(CreateStorageLocationResultMessageDeserializer::deserialize(
+                        "CreateStorageLocationResult",
+                        &mut stack
+                    ));
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }

@@ -1128,6 +1128,20 @@ impl ::futures::Stream for StreamingBody {
         self.inner.poll()
     }
 }
+struct BodyDeserializer;
+impl BodyDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<u8>, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let obj = try!(characters(stack)).into_bytes();
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
 
 pub struct BodySerializer;
 impl BodySerializer {
@@ -1459,6 +1473,34 @@ impl BucketsDeserializer {
                 }
             }
         }
+
+        Ok(obj)
+    }
+}
+struct BytesProcessedDeserializer;
+impl BytesProcessedDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<i64, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+struct BytesScannedDeserializer;
+impl BytesScannedDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<i64, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
+        try!(end_element(tag_name, stack));
 
         Ok(obj)
     }
@@ -2233,6 +2275,26 @@ impl CompletedPartListSerializer {
     }
 }
 
+pub struct CompressionTypeSerializer;
+impl CompressionTypeSerializer {
+    #[allow(unused_variables, warnings)]
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &String,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
+    {
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!(
+            "{value}",
+            value = obj.to_string()
+        )))?;
+        writer.write(xml::writer::XmlEvent::end_element())
+    }
+}
+
 #[derive(Default, Debug, Clone)]
 pub struct Condition {
     /// <p>The HTTP error code when the redirect is applied. In the event of an error, if the error code equals this value, then the specified redirect is applied. Required when parent element Condition is specified and sibling KeyPrefixEquals is not specified. If both are specified, then both must be true for the redirect to be applied.</p>
@@ -2324,6 +2386,25 @@ impl ConditionSerializer {
     }
 }
 
+#[derive(Default, Debug, Clone)]
+pub struct ContinuationEvent {}
+
+struct ContinuationEventDeserializer;
+impl ContinuationEventDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ContinuationEvent, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let obj = ContinuationEvent::default();
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
 #[derive(Default, Debug, Clone)]
 pub struct CopyObjectOutput {
     pub copy_object_result: Option<CopyObjectResult>,
@@ -3598,6 +3679,26 @@ impl EmailAddressSerializer {
     }
 }
 
+pub struct EnableRequestProgressSerializer;
+impl EnableRequestProgressSerializer {
+    #[allow(unused_variables, warnings)]
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &bool,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
+    {
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!(
+            "{value}",
+            value = obj.to_string()
+        )))?;
+        writer.write(xml::writer::XmlEvent::end_element())
+    }
+}
+
 struct EncodingTypeDeserializer;
 impl EncodingTypeDeserializer {
     #[allow(unused_variables)]
@@ -3755,6 +3856,25 @@ impl EncryptionConfigurationSerializer {
     }
 }
 
+#[derive(Default, Debug, Clone)]
+pub struct EndEvent {}
+
+struct EndEventDeserializer;
+impl EndEventDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<EndEvent, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let obj = EndEvent::default();
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
 #[derive(Default, Debug, Clone)]
 pub struct S3Error {
     pub code: Option<String>,
@@ -6200,6 +6320,10 @@ impl InitiatorDeserializer {
 pub struct InputSerialization {
     /// <p>Describes the serialization of a CSV-encoded object.</p>
     pub csv: Option<CSVInput>,
+    /// <p>Specifies object&#39;s compression format. Valid values: NONE, GZIP. Default Value: NONE.</p>
+    pub compression_type: Option<String>,
+    /// <p>Specifies JSON as object&#39;s input serialization format.</p>
+    pub json: Option<JSONInput>,
 }
 
 pub struct InputSerializationSerializer;
@@ -6216,6 +6340,17 @@ impl InputSerializationSerializer {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.csv {
             &CSVInputSerializer::serialize(&mut writer, "CSV", value)?;
+        }
+        if let Some(ref value) = obj.compression_type {
+            writer.write(xml::writer::XmlEvent::start_element("CompressionType"))?;
+            writer.write(xml::writer::XmlEvent::characters(&format!(
+                "{value}",
+                value = value
+            )));
+            writer.write(xml::writer::XmlEvent::end_element())?;
+        }
+        if let Some(ref value) = obj.json {
+            &JSONInputSerializer::serialize(&mut writer, "JSON", value)?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -7091,6 +7226,85 @@ impl IsTruncatedDeserializer {
         Ok(obj)
     }
 }
+#[derive(Default, Debug, Clone)]
+pub struct JSONInput {
+    /// <p>The type of JSON. Valid values: Document, Lines.</p>
+    pub type_: Option<String>,
+}
+
+pub struct JSONInputSerializer;
+impl JSONInputSerializer {
+    #[allow(unused_variables, warnings)]
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &JSONInput,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
+    {
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        if let Some(ref value) = obj.type_ {
+            writer.write(xml::writer::XmlEvent::start_element("Type"))?;
+            writer.write(xml::writer::XmlEvent::characters(&format!(
+                "{value}",
+                value = value
+            )));
+            writer.write(xml::writer::XmlEvent::end_element())?;
+        }
+        writer.write(xml::writer::XmlEvent::end_element())
+    }
+}
+
+#[derive(Default, Debug, Clone)]
+pub struct JSONOutput {
+    /// <p>The value used to separate individual records in the output.</p>
+    pub record_delimiter: Option<String>,
+}
+
+pub struct JSONOutputSerializer;
+impl JSONOutputSerializer {
+    #[allow(unused_variables, warnings)]
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &JSONOutput,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
+    {
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        if let Some(ref value) = obj.record_delimiter {
+            writer.write(xml::writer::XmlEvent::start_element("RecordDelimiter"))?;
+            writer.write(xml::writer::XmlEvent::characters(&format!(
+                "{value}",
+                value = value
+            )));
+            writer.write(xml::writer::XmlEvent::end_element())?;
+        }
+        writer.write(xml::writer::XmlEvent::end_element())
+    }
+}
+
+pub struct JSONTypeSerializer;
+impl JSONTypeSerializer {
+    #[allow(unused_variables, warnings)]
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &String,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
+    {
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!(
+            "{value}",
+            value = obj.to_string()
+        )))?;
+        writer.write(xml::writer::XmlEvent::end_element())
+    }
+}
 
 pub struct KMSContextSerializer;
 impl KMSContextSerializer {
@@ -7278,9 +7492,10 @@ impl LambdaFunctionConfigurationDeserializer {
                         obj.id = Some(try!(NotificationIdDeserializer::deserialize("Id", stack)));
                     }
                     "CloudFunction" => {
-                        obj.lambda_function_arn = try!(
-                            LambdaFunctionArnDeserializer::deserialize("CloudFunction", stack)
-                        );
+                        obj.lambda_function_arn = try!(LambdaFunctionArnDeserializer::deserialize(
+                            "CloudFunction",
+                            stack
+                        ));
                     }
                     _ => skip_tree(stack),
                 },
@@ -8277,9 +8492,10 @@ impl ListMultipartUploadsOutputDeserializer {
                         obj.prefix = Some(try!(PrefixDeserializer::deserialize("Prefix", stack)));
                     }
                     "UploadIdMarker" => {
-                        obj.upload_id_marker = Some(try!(
-                            UploadIdMarkerDeserializer::deserialize("UploadIdMarker", stack)
-                        ));
+                        obj.upload_id_marker = Some(try!(UploadIdMarkerDeserializer::deserialize(
+                            "UploadIdMarker",
+                            stack
+                        )));
                     }
                     "Upload" => {
                         obj.uploads = Some(try!(MultipartUploadListDeserializer::deserialize(
@@ -8875,13 +9091,14 @@ impl LocationPrefixSerializer {
     }
 }
 
+/// <p>Container for logging information. Presence of this element indicates that logging is enabled. Parameters TargetBucket and TargetPrefix are required in this case.</p>
 #[derive(Default, Debug, Clone)]
 pub struct LoggingEnabled {
     /// <p>Specifies the bucket where you want Amazon S3 to store server access logs. You can have your logs delivered to any bucket that you own, including the same bucket that is being logged. You can also configure multiple buckets to deliver their logs to the same target bucket. In this case you should choose a different TargetPrefix for each source bucket so that the delivered log files can be distinguished by key.</p>
-    pub target_bucket: Option<String>,
+    pub target_bucket: String,
     pub target_grants: Option<Vec<TargetGrant>>,
     /// <p>This element lets you specify a prefix for the keys that the log files will be stored under.</p>
-    pub target_prefix: Option<String>,
+    pub target_prefix: String,
 }
 
 struct LoggingEnabledDeserializer;
@@ -8907,10 +9124,8 @@ impl LoggingEnabledDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "TargetBucket" => {
-                        obj.target_bucket = Some(try!(TargetBucketDeserializer::deserialize(
-                            "TargetBucket",
-                            stack
-                        )));
+                        obj.target_bucket =
+                            try!(TargetBucketDeserializer::deserialize("TargetBucket", stack));
                     }
                     "TargetGrants" => {
                         obj.target_grants = Some(try!(TargetGrantsDeserializer::deserialize(
@@ -8919,10 +9134,8 @@ impl LoggingEnabledDeserializer {
                         )));
                     }
                     "TargetPrefix" => {
-                        obj.target_prefix = Some(try!(TargetPrefixDeserializer::deserialize(
-                            "TargetPrefix",
-                            stack
-                        )));
+                        obj.target_prefix =
+                            try!(TargetPrefixDeserializer::deserialize("TargetPrefix", stack));
                     }
                     _ => skip_tree(stack),
                 },
@@ -8951,25 +9164,21 @@ impl LoggingEnabledSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        if let Some(ref value) = obj.target_bucket {
-            writer.write(xml::writer::XmlEvent::start_element("TargetBucket"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
-        }
+        writer.write(xml::writer::XmlEvent::start_element("TargetBucket"))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!(
+            "{value}",
+            value = obj.target_bucket
+        )))?;
+        writer.write(xml::writer::XmlEvent::end_element())?;
         if let Some(ref value) = obj.target_grants {
             &TargetGrantsSerializer::serialize(&mut writer, "TargetGrants", value)?;
         }
-        if let Some(ref value) = obj.target_prefix {
-            writer.write(xml::writer::XmlEvent::start_element("TargetPrefix"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
-        }
+        writer.write(xml::writer::XmlEvent::start_element("TargetPrefix"))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!(
+            "{value}",
+            value = obj.target_prefix
+        )))?;
+        writer.write(xml::writer::XmlEvent::end_element())?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
@@ -9881,7 +10090,7 @@ impl NoncurrentVersionExpirationSerializer {
     }
 }
 
-/// <p>Container for the transition rule that describes when noncurrent objects transition to the STANDARD<em>IA or GLACIER storage class. If your bucket is versioning-enabled (or versioning is suspended), you can set this action to request that Amazon S3 transition noncurrent object versions to the STANDARD</em>IA or GLACIER storage class at a specific period in the object&#39;s lifetime.</p>
+/// <p>Container for the transition rule that describes when noncurrent objects transition to the STANDARD<em>IA, ONEZONE</em>IA or GLACIER storage class. If your bucket is versioning-enabled (or versioning is suspended), you can set this action to request that Amazon S3 transition noncurrent object versions to the STANDARD<em>IA, ONEZONE</em>IA or GLACIER storage class at a specific period in the object&#39;s lifetime.</p>
 #[derive(Default, Debug, Clone)]
 pub struct NoncurrentVersionTransition {
     /// <p>Specifies the number of days an object is noncurrent before Amazon S3 can perform the associated action. For information about the noncurrent days calculations, see <a href="http://docs.aws.amazon.com/AmazonS3/latest/dev/s3-access-control.html">How Amazon S3 Calculates When an Object Became Noncurrent</a> in the Amazon Simple Storage Service Developer Guide.</p>
@@ -10148,20 +10357,18 @@ impl NotificationConfigurationDeprecatedDeserializer {
                             )));
                     }
                     "QueueConfiguration" => {
-                        obj.queue_configuration = Some(try!(
-                            QueueConfigurationDeprecatedDeserializer::deserialize(
+                        obj.queue_configuration =
+                            Some(try!(QueueConfigurationDeprecatedDeserializer::deserialize(
                                 "QueueConfiguration",
                                 stack
-                            )
-                        ));
+                            )));
                     }
                     "TopicConfiguration" => {
-                        obj.topic_configuration = Some(try!(
-                            TopicConfigurationDeprecatedDeserializer::deserialize(
+                        obj.topic_configuration =
+                            Some(try!(TopicConfigurationDeprecatedDeserializer::deserialize(
                                 "TopicConfiguration",
                                 stack
-                            )
-                        ));
+                            )));
                     }
                     _ => skip_tree(stack),
                 },
@@ -10733,6 +10940,8 @@ impl OutputLocationSerializer {
 pub struct OutputSerialization {
     /// <p>Describes the serialization of CSV-encoded Select results.</p>
     pub csv: Option<CSVOutput>,
+    /// <p>Specifies JSON as request&#39;s output serialization format.</p>
+    pub json: Option<JSONOutput>,
 }
 
 pub struct OutputSerializationSerializer;
@@ -10749,6 +10958,9 @@ impl OutputSerializationSerializer {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.csv {
             &CSVOutputSerializer::serialize(&mut writer, "CSV", value)?;
+        }
+        if let Some(ref value) = obj.json {
+            &JSONOutputSerializer::serialize(&mut writer, "JSON", value)?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -11159,6 +11371,108 @@ impl PrefixSerializer {
     }
 }
 
+#[derive(Default, Debug, Clone)]
+pub struct Progress {
+    /// <p>Current number of uncompressed object bytes processed.</p>
+    pub bytes_processed: Option<i64>,
+    /// <p>Current number of object bytes scanned.</p>
+    pub bytes_scanned: Option<i64>,
+}
+
+struct ProgressDeserializer;
+impl ProgressDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Progress, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = Progress::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "BytesProcessed" => {
+                        obj.bytes_processed = Some(try!(BytesProcessedDeserializer::deserialize(
+                            "BytesProcessed",
+                            stack
+                        )));
+                    }
+                    "BytesScanned" => {
+                        obj.bytes_scanned = Some(try!(BytesScannedDeserializer::deserialize(
+                            "BytesScanned",
+                            stack
+                        )));
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+#[derive(Default, Debug, Clone)]
+pub struct ProgressEvent {
+    /// <p>The Progress event details.</p>
+    pub details: Option<Progress>,
+}
+
+struct ProgressEventDeserializer;
+impl ProgressEventDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ProgressEvent, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = ProgressEvent::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "Details" => {
+                        obj.details =
+                            Some(try!(ProgressDeserializer::deserialize("Details", stack)));
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
 struct ProtocolDeserializer;
 impl ProtocolDeserializer {
     #[allow(unused_variables)]
@@ -11880,6 +12194,51 @@ impl RecordDelimiterSerializer {
 }
 
 #[derive(Default, Debug, Clone)]
+pub struct RecordsEvent {
+    /// <p>The byte array of partial, one or more result records.</p>
+    pub payload: Option<Vec<u8>>,
+}
+
+struct RecordsEventDeserializer;
+impl RecordsEventDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<RecordsEvent, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = RecordsEvent::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "Payload" => {
+                        obj.payload = Some(try!(BodyDeserializer::deserialize("Payload", stack)));
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+#[derive(Default, Debug, Clone)]
 pub struct Redirect {
     /// <p>The host name to use in the redirect request.</p>
     pub host_name: Option<String>,
@@ -11936,9 +12295,10 @@ impl RedirectDeserializer {
                             )));
                     }
                     "ReplaceKeyWith" => {
-                        obj.replace_key_with = Some(try!(
-                            ReplaceKeyWithDeserializer::deserialize("ReplaceKeyWith", stack)
-                        ));
+                        obj.replace_key_with = Some(try!(ReplaceKeyWithDeserializer::deserialize(
+                            "ReplaceKeyWith",
+                            stack
+                        )));
                     }
                     _ => skip_tree(stack),
                 },
@@ -12498,6 +12858,36 @@ impl RequestPaymentConfigurationSerializer {
             value = obj.payer
         )))?;
         writer.write(xml::writer::XmlEvent::end_element())?;
+        writer.write(xml::writer::XmlEvent::end_element())
+    }
+}
+
+#[derive(Default, Debug, Clone)]
+pub struct RequestProgress {
+    /// <p>Specifies whether periodic QueryProgress frames should be sent. Valid values: TRUE, FALSE. Default value: FALSE.</p>
+    pub enabled: Option<bool>,
+}
+
+pub struct RequestProgressSerializer;
+impl RequestProgressSerializer {
+    #[allow(unused_variables, warnings)]
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &RequestProgress,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
+    {
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        if let Some(ref value) = obj.enabled {
+            writer.write(xml::writer::XmlEvent::start_element("Enabled"))?;
+            writer.write(xml::writer::XmlEvent::characters(&format!(
+                "{value}",
+                value = value
+            )));
+            writer.write(xml::writer::XmlEvent::end_element())?;
+        }
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
@@ -13409,6 +13799,185 @@ impl SSES3Serializer {
     }
 }
 
+#[derive(Default, Debug, Clone)]
+pub struct SelectObjectContentEventStream {
+    /// <p>The Continuation Event.</p>
+    pub cont: Option<ContinuationEvent>,
+    /// <p>The End Event.</p>
+    pub end: Option<EndEvent>,
+    /// <p>The Progress Event.</p>
+    pub progress: Option<ProgressEvent>,
+    /// <p>The Records Event.</p>
+    pub records: Option<RecordsEvent>,
+    /// <p>The Stats Event.</p>
+    pub stats: Option<StatsEvent>,
+}
+
+struct SelectObjectContentEventStreamDeserializer;
+impl SelectObjectContentEventStreamDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<SelectObjectContentEventStream, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = SelectObjectContentEventStream::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "Cont" => {
+                        obj.cont = Some(try!(ContinuationEventDeserializer::deserialize(
+                            "Cont",
+                            stack
+                        )));
+                    }
+                    "End" => {
+                        obj.end = Some(try!(EndEventDeserializer::deserialize("End", stack)));
+                    }
+                    "Progress" => {
+                        obj.progress = Some(try!(ProgressEventDeserializer::deserialize(
+                            "Progress",
+                            stack
+                        )));
+                    }
+                    "Records" => {
+                        obj.records = Some(try!(RecordsEventDeserializer::deserialize(
+                            "Records",
+                            stack
+                        )));
+                    }
+                    "Stats" => {
+                        obj.stats = Some(try!(StatsEventDeserializer::deserialize("Stats", stack)));
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+#[derive(Default, Debug, Clone)]
+pub struct SelectObjectContentOutput {
+    pub payload: Option<SelectObjectContentEventStream>,
+}
+
+struct SelectObjectContentOutputDeserializer;
+impl SelectObjectContentOutputDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<SelectObjectContentOutput, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = SelectObjectContentOutput::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "Payload" => {
+                        obj.payload = Some(try!(
+                            SelectObjectContentEventStreamDeserializer::deserialize(
+                                "Payload",
+                                stack
+                            )
+                        ));
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+/// <p>Request to filter the contents of an Amazon S3 object based on a simple Structured Query Language (SQL) statement. In the request, along with the SQL expression, you must also specify a data serialization format (JSON or CSV) of the object. Amazon S3 uses this to parse object data into records, and returns only records that match the specified SQL expression. You must also specify the data serialization format for the response. For more information, go to <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/RESTObjectSELECTContent.html">S3Select API Documentation</a>.</p>
+#[derive(Default, Debug, Clone)]
+pub struct SelectObjectContentRequest {
+    /// <p>The S3 Bucket.</p>
+    pub bucket: String,
+    /// <p>The expression that is used to query the object.</p>
+    pub expression: String,
+    /// <p>The type of the provided expression (e.g., SQL).</p>
+    pub expression_type: String,
+    /// <p>Describes the format of the data in the object that is being queried.</p>
+    pub input_serialization: InputSerialization,
+    /// <p>The Object Key.</p>
+    pub key: String,
+    /// <p>Describes the format of the data that you want Amazon S3 to return in response.</p>
+    pub output_serialization: OutputSerialization,
+    /// <p>Specifies if periodic request progress information should be enabled.</p>
+    pub request_progress: Option<RequestProgress>,
+    /// <p>The SSE Algorithm used to encrypt the object. For more information, go to <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/ServerSideEncryptionCustomerKeys.html"> Server-Side Encryption (Using Customer-Provided Encryption Keys</a>.</p>
+    pub sse_customer_algorithm: Option<String>,
+    /// <p>The SSE Customer Key. For more information, go to <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/ServerSideEncryptionCustomerKeys.html"> Server-Side Encryption (Using Customer-Provided Encryption Keys</a>.</p>
+    pub sse_customer_key: Option<String>,
+    /// <p>The SSE Customer Key MD5. For more information, go to <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/ServerSideEncryptionCustomerKeys.html"> Server-Side Encryption (Using Customer-Provided Encryption Keys</a>.</p>
+    pub sse_customer_key_md5: Option<String>,
+}
+
+pub struct SelectObjectContentRequestSerializer;
+impl SelectObjectContentRequestSerializer {
+    #[allow(unused_variables, warnings)]
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &SelectObjectContentRequest,
+        xmlns: &str,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
+    {
+        writer.write(xml::writer::XmlEvent::start_element(name).default_ns(xmlns))?;
+        ExpressionSerializer::serialize(&mut writer, "Expression", &obj.expression)?;
+        ExpressionTypeSerializer::serialize(&mut writer, "ExpressionType", &obj.expression_type)?;
+        InputSerializationSerializer::serialize(
+            &mut writer,
+            "InputSerialization",
+            &obj.input_serialization,
+        )?;
+        OutputSerializationSerializer::serialize(
+            &mut writer,
+            "OutputSerialization",
+            &obj.output_serialization,
+        )?;
+        if let Some(ref value) = obj.request_progress {
+            &RequestProgressSerializer::serialize(&mut writer, "RequestProgress", value)?;
+        }
+        writer.write(xml::writer::XmlEvent::end_element())
+    }
+}
 /// <p>Describes the parameters for Select job types.</p>
 #[derive(Default, Debug, Clone)]
 pub struct SelectParameters {
@@ -14002,6 +14571,107 @@ impl StartAfterSerializer {
     }
 }
 
+#[derive(Default, Debug, Clone)]
+pub struct Stats {
+    /// <p>Total number of uncompressed object bytes processed.</p>
+    pub bytes_processed: Option<i64>,
+    /// <p>Total number of object bytes scanned.</p>
+    pub bytes_scanned: Option<i64>,
+}
+
+struct StatsDeserializer;
+impl StatsDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Stats, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = Stats::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "BytesProcessed" => {
+                        obj.bytes_processed = Some(try!(BytesProcessedDeserializer::deserialize(
+                            "BytesProcessed",
+                            stack
+                        )));
+                    }
+                    "BytesScanned" => {
+                        obj.bytes_scanned = Some(try!(BytesScannedDeserializer::deserialize(
+                            "BytesScanned",
+                            stack
+                        )));
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+#[derive(Default, Debug, Clone)]
+pub struct StatsEvent {
+    /// <p>The Stats event details.</p>
+    pub details: Option<Stats>,
+}
+
+struct StatsEventDeserializer;
+impl StatsEventDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<StatsEvent, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = StatsEvent::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "Details" => {
+                        obj.details = Some(try!(StatsDeserializer::deserialize("Details", stack)));
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
 struct StorageClassDeserializer;
 impl StorageClassDeserializer {
     #[allow(unused_variables)]
@@ -14494,9 +15164,10 @@ impl TargetGrantDeserializer {
                             Some(try!(GranteeDeserializer::deserialize("Grantee", stack)));
                     }
                     "Permission" => {
-                        obj.permission = Some(try!(
-                            BucketLogsPermissionDeserializer::deserialize("Permission", stack)
-                        ));
+                        obj.permission = Some(try!(BucketLogsPermissionDeserializer::deserialize(
+                            "Permission",
+                            stack
+                        )));
                     }
                     _ => skip_tree(stack),
                 },
@@ -15281,9 +15952,10 @@ impl UploadPartCopyOutputDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "CopyPartResult" => {
-                        obj.copy_part_result = Some(try!(
-                            CopyPartResultDeserializer::deserialize("CopyPartResult", stack)
-                        ));
+                        obj.copy_part_result = Some(try!(CopyPartResultDeserializer::deserialize(
+                            "CopyPartResult",
+                            stack
+                        )));
                     }
                     _ => skip_tree(stack),
                 },
@@ -20960,6 +21632,78 @@ impl Error for RestoreObjectError {
         }
     }
 }
+/// Errors returned by SelectObjectContent
+#[derive(Debug, PartialEq)]
+pub enum SelectObjectContentError {
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl SelectObjectContentError {
+    pub fn from_body(body: &str) -> SelectObjectContentError {
+        let reader = EventReader::new(body.as_bytes());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        find_start_element(&mut stack);
+        match Self::deserialize(&mut stack) {
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                _ => SelectObjectContentError::Unknown(String::from(body)),
+            },
+            Err(_) => SelectObjectContentError::Unknown(body.to_string()),
+        }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+
+impl From<XmlParseError> for SelectObjectContentError {
+    fn from(err: XmlParseError) -> SelectObjectContentError {
+        let XmlParseError(message) = err;
+        SelectObjectContentError::Unknown(message.to_string())
+    }
+}
+impl From<CredentialsError> for SelectObjectContentError {
+    fn from(err: CredentialsError) -> SelectObjectContentError {
+        SelectObjectContentError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for SelectObjectContentError {
+    fn from(err: HttpDispatchError) -> SelectObjectContentError {
+        SelectObjectContentError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for SelectObjectContentError {
+    fn from(err: io::Error) -> SelectObjectContentError {
+        SelectObjectContentError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for SelectObjectContentError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for SelectObjectContentError {
+    fn description(&self) -> &str {
+        match *self {
+            SelectObjectContentError::Validation(ref cause) => cause,
+            SelectObjectContentError::Credentials(ref err) => err.description(),
+            SelectObjectContentError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            SelectObjectContentError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by UploadPart
 #[derive(Debug, PartialEq)]
 pub enum UploadPartError {
@@ -21531,6 +22275,12 @@ pub trait S3 {
         &self,
         input: &RestoreObjectRequest,
     ) -> RusotoFuture<RestoreObjectOutput, RestoreObjectError>;
+
+    /// <p>This operation filters the contents of an Amazon S3 object based on a simple Structured Query Language (SQL) statement. In the request, along with the SQL expression, you must also specify a data serialization format (JSON or CSV) of the object. Amazon S3 uses this to parse object data into records, and returns only records that match the specified SQL expression. You must also specify the data serialization format for the response.</p>
+    fn select_object_content(
+        &self,
+        input: &SelectObjectContentRequest,
+    ) -> RusotoFuture<SelectObjectContentOutput, SelectObjectContentError>;
 
     /// <p>Uploads a part in a multipart upload.</p><p><b>Note:</b> After you initiate multipart upload and upload one or more parts, you must either complete or abort multipart upload in order to stop getting charged for storage of the uploaded parts. Only after you either complete or abort multipart upload, Amazon S3 frees up the parts storage and stops charging you for the parts storage.</p>
     fn upload_part(
@@ -26259,6 +27009,86 @@ where
                     let value = restore_output_path.to_owned();
                     result.restore_output_path = Some(value)
                 };
+                Ok(result)
+            }))
+        });
+
+        RusotoFuture::new(future)
+    }
+
+    /// <p>This operation filters the contents of an Amazon S3 object based on a simple Structured Query Language (SQL) statement. In the request, along with the SQL expression, you must also specify a data serialization format (JSON or CSV) of the object. Amazon S3 uses this to parse object data into records, and returns only records that match the specified SQL expression. You must also specify the data serialization format for the response.</p>
+    #[allow(unused_variables, warnings)]
+    fn select_object_content(
+        &self,
+        input: &SelectObjectContentRequest,
+    ) -> RusotoFuture<SelectObjectContentOutput, SelectObjectContentError> {
+        let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
+
+        let mut request = SignedRequest::new("POST", "s3", &self.region, &request_uri);
+
+        if let Some(ref sse_customer_algorithm) = input.sse_customer_algorithm {
+            request.add_header(
+                "x-amz-server-side-encryption-customer-algorithm",
+                &sse_customer_algorithm.to_string(),
+            );
+        }
+
+        if let Some(ref sse_customer_key) = input.sse_customer_key {
+            request.add_header(
+                "x-amz-server-side-encryption-customer-key",
+                &sse_customer_key.to_string(),
+            );
+        }
+
+        if let Some(ref sse_customer_key_md5) = input.sse_customer_key_md5 {
+            request.add_header(
+                "x-amz-server-side-encryption-customer-key-MD5",
+                &sse_customer_key_md5.to_string(),
+            );
+        }
+        let mut params = Params::new();
+        params.put("select&select-type", "2");
+        request.set_params(params);
+        let mut writer = EventWriter::new(Vec::new());
+        SelectObjectContentRequestSerializer::serialize(
+            &mut writer,
+            "SelectObjectContentRequest",
+            &input,
+            "http://s3.amazonaws.com/doc/2006-03-01/",
+        );
+
+        request.set_payload(Some(writer.into_inner()));
+
+        let future = self.inner.sign_and_dispatch(request, |response| {
+            if response.status != StatusCode::Ok && response.status != StatusCode::NoContent
+                && response.status != StatusCode::PartialContent
+            {
+                return future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(SelectObjectContentError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
+            }
+
+            future::Either::A(response.buffer().from_err().and_then(move |response| {
+                let mut result;
+
+                if response.body.is_empty() {
+                    result = SelectObjectContentOutput::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = try!(peek_at_name(&mut stack));
+                    result = try!(SelectObjectContentOutputDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack
+                    ));
+                }
+
                 Ok(result)
             }))
         });

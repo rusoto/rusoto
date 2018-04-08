@@ -3937,11 +3937,9 @@ impl CreateDocumentationVersionError {
                     "NotFoundException" => {
                         CreateDocumentationVersionError::NotFound(String::from(error_message))
                     }
-                    "TooManyRequestsException" => {
-                        CreateDocumentationVersionError::TooManyRequests(String::from(
-                            error_message,
-                        ))
-                    }
+                    "TooManyRequestsException" => CreateDocumentationVersionError::TooManyRequests(
+                        String::from(error_message),
+                    ),
                     "UnauthorizedException" => {
                         CreateDocumentationVersionError::Unauthorized(String::from(error_message))
                     }
@@ -5550,11 +5548,9 @@ impl DeleteDocumentationVersionError {
                     "NotFoundException" => {
                         DeleteDocumentationVersionError::NotFound(String::from(error_message))
                     }
-                    "TooManyRequestsException" => {
-                        DeleteDocumentationVersionError::TooManyRequests(String::from(
-                            error_message,
-                        ))
-                    }
+                    "TooManyRequestsException" => DeleteDocumentationVersionError::TooManyRequests(
+                        String::from(error_message),
+                    ),
                     "UnauthorizedException" => {
                         DeleteDocumentationVersionError::Unauthorized(String::from(error_message))
                     }
@@ -7033,11 +7029,9 @@ impl FlushStageAuthorizersCacheError {
                     "NotFoundException" => {
                         FlushStageAuthorizersCacheError::NotFound(String::from(error_message))
                     }
-                    "TooManyRequestsException" => {
-                        FlushStageAuthorizersCacheError::TooManyRequests(String::from(
-                            error_message,
-                        ))
-                    }
+                    "TooManyRequestsException" => FlushStageAuthorizersCacheError::TooManyRequests(
+                        String::from(error_message),
+                    ),
                     "UnauthorizedException" => {
                         FlushStageAuthorizersCacheError::Unauthorized(String::from(error_message))
                     }
@@ -13600,11 +13594,9 @@ impl UpdateDocumentationVersionError {
                     "NotFoundException" => {
                         UpdateDocumentationVersionError::NotFound(String::from(error_message))
                     }
-                    "TooManyRequestsException" => {
-                        UpdateDocumentationVersionError::TooManyRequests(String::from(
-                            error_message,
-                        ))
-                    }
+                    "TooManyRequestsException" => UpdateDocumentationVersionError::TooManyRequests(
+                        String::from(error_message),
+                    ),
                     "UnauthorizedException" => {
                         UpdateDocumentationVersionError::Unauthorized(String::from(error_message))
                     }

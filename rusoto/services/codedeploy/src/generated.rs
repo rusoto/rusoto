@@ -3824,14 +3824,14 @@ impl DeleteGitHubAccountTokenError {
 
                 match *error_type {
                     "GitHubAccountTokenDoesNotExistException" => {
-                        DeleteGitHubAccountTokenError::GitHubAccountTokenDoesNotExist(
-                            String::from(error_message),
-                        )
+                        DeleteGitHubAccountTokenError::GitHubAccountTokenDoesNotExist(String::from(
+                            error_message,
+                        ))
                     }
                     "GitHubAccountTokenNameRequiredException" => {
-                        DeleteGitHubAccountTokenError::GitHubAccountTokenNameRequired(
-                            String::from(error_message),
-                        )
+                        DeleteGitHubAccountTokenError::GitHubAccountTokenNameRequired(String::from(
+                            error_message,
+                        ))
                     }
                     "InvalidGitHubAccountTokenNameException" => {
                         DeleteGitHubAccountTokenError::InvalidGitHubAccountTokenName(String::from(
@@ -5673,18 +5673,28 @@ impl fmt::Display for PutLifecycleEventHookExecutionStatusError {
 impl Error for PutLifecycleEventHookExecutionStatusError {
     fn description(&self) -> &str {
         match *self {
-                            PutLifecycleEventHookExecutionStatusError::DeploymentDoesNotExist(ref cause) => cause,
-PutLifecycleEventHookExecutionStatusError::DeploymentIdRequired(ref cause) => cause,
-PutLifecycleEventHookExecutionStatusError::InvalidDeploymentId(ref cause) => cause,
-PutLifecycleEventHookExecutionStatusError::InvalidLifecycleEventHookExecutionId(ref cause) => cause,
-PutLifecycleEventHookExecutionStatusError::InvalidLifecycleEventHookExecutionStatus(ref cause) => cause,
-PutLifecycleEventHookExecutionStatusError::LifecycleEventAlreadyCompleted(ref cause) => cause,
-PutLifecycleEventHookExecutionStatusError::UnsupportedActionForDeploymentType(ref cause) => cause,
-PutLifecycleEventHookExecutionStatusError::Validation(ref cause) => cause,
-PutLifecycleEventHookExecutionStatusError::Credentials(ref err) => err.description(),
-PutLifecycleEventHookExecutionStatusError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-PutLifecycleEventHookExecutionStatusError::Unknown(ref cause) => cause
-                        }
+            PutLifecycleEventHookExecutionStatusError::DeploymentDoesNotExist(ref cause) => cause,
+            PutLifecycleEventHookExecutionStatusError::DeploymentIdRequired(ref cause) => cause,
+            PutLifecycleEventHookExecutionStatusError::InvalidDeploymentId(ref cause) => cause,
+            PutLifecycleEventHookExecutionStatusError::InvalidLifecycleEventHookExecutionId(
+                ref cause,
+            ) => cause,
+            PutLifecycleEventHookExecutionStatusError::InvalidLifecycleEventHookExecutionStatus(
+                ref cause,
+            ) => cause,
+            PutLifecycleEventHookExecutionStatusError::LifecycleEventAlreadyCompleted(
+                ref cause,
+            ) => cause,
+            PutLifecycleEventHookExecutionStatusError::UnsupportedActionForDeploymentType(
+                ref cause,
+            ) => cause,
+            PutLifecycleEventHookExecutionStatusError::Validation(ref cause) => cause,
+            PutLifecycleEventHookExecutionStatusError::Credentials(ref err) => err.description(),
+            PutLifecycleEventHookExecutionStatusError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            PutLifecycleEventHookExecutionStatusError::Unknown(ref cause) => cause,
+        }
     }
 }
 /// Errors returned by RegisterApplicationRevision
@@ -6002,9 +6012,9 @@ impl RemoveTagsFromOnPremisesInstancesError {
 
                 match *error_type {
                     "InstanceLimitExceededException" => {
-                        RemoveTagsFromOnPremisesInstancesError::InstanceLimitExceeded(
-                            String::from(error_message),
-                        )
+                        RemoveTagsFromOnPremisesInstancesError::InstanceLimitExceeded(String::from(
+                            error_message,
+                        ))
                     }
                     "InstanceNameRequiredException" => {
                         RemoveTagsFromOnPremisesInstancesError::InstanceNameRequired(String::from(
@@ -6012,9 +6022,9 @@ impl RemoveTagsFromOnPremisesInstancesError {
                         ))
                     }
                     "InstanceNotRegisteredException" => {
-                        RemoveTagsFromOnPremisesInstancesError::InstanceNotRegistered(
-                            String::from(error_message),
-                        )
+                        RemoveTagsFromOnPremisesInstancesError::InstanceNotRegistered(String::from(
+                            error_message,
+                        ))
                     }
                     "InvalidInstanceNameException" => {
                         RemoveTagsFromOnPremisesInstancesError::InvalidInstanceName(String::from(
@@ -6125,15 +6135,41 @@ impl SkipWaitTimeForInstanceTerminationError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                                    "DeploymentAlreadyCompletedException" => SkipWaitTimeForInstanceTerminationError::DeploymentAlreadyCompleted(String::from(error_message)),
-"DeploymentDoesNotExistException" => SkipWaitTimeForInstanceTerminationError::DeploymentDoesNotExist(String::from(error_message)),
-"DeploymentIdRequiredException" => SkipWaitTimeForInstanceTerminationError::DeploymentIdRequired(String::from(error_message)),
-"DeploymentNotStartedException" => SkipWaitTimeForInstanceTerminationError::DeploymentNotStarted(String::from(error_message)),
-"InvalidDeploymentIdException" => SkipWaitTimeForInstanceTerminationError::InvalidDeploymentId(String::from(error_message)),
-"UnsupportedActionForDeploymentTypeException" => SkipWaitTimeForInstanceTerminationError::UnsupportedActionForDeploymentType(String::from(error_message)),
-"ValidationException" => SkipWaitTimeForInstanceTerminationError::Validation(error_message.to_string()),
-_ => SkipWaitTimeForInstanceTerminationError::Unknown(String::from(body))
-                                }
+                    "DeploymentAlreadyCompletedException" => {
+                        SkipWaitTimeForInstanceTerminationError::DeploymentAlreadyCompleted(
+                            String::from(error_message),
+                        )
+                    }
+                    "DeploymentDoesNotExistException" => {
+                        SkipWaitTimeForInstanceTerminationError::DeploymentDoesNotExist(
+                            String::from(error_message),
+                        )
+                    }
+                    "DeploymentIdRequiredException" => {
+                        SkipWaitTimeForInstanceTerminationError::DeploymentIdRequired(String::from(
+                            error_message,
+                        ))
+                    }
+                    "DeploymentNotStartedException" => {
+                        SkipWaitTimeForInstanceTerminationError::DeploymentNotStarted(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidDeploymentIdException" => {
+                        SkipWaitTimeForInstanceTerminationError::InvalidDeploymentId(String::from(
+                            error_message,
+                        ))
+                    }
+                    "UnsupportedActionForDeploymentTypeException" => {
+                        SkipWaitTimeForInstanceTerminationError::UnsupportedActionForDeploymentType(
+                            String::from(error_message),
+                        )
+                    }
+                    "ValidationException" => SkipWaitTimeForInstanceTerminationError::Validation(
+                        error_message.to_string(),
+                    ),
+                    _ => SkipWaitTimeForInstanceTerminationError::Unknown(String::from(body)),
+                }
             }
             Err(_) => SkipWaitTimeForInstanceTerminationError::Unknown(String::from(body)),
         }

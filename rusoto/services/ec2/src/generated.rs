@@ -555,9 +555,10 @@ impl ActiveInstanceDeserializer {
                             Some(try!(StringDeserializer::deserialize("instanceType", stack)));
                     }
                     "spotInstanceRequestId" => {
-                        obj.spot_instance_request_id = Some(try!(
-                            StringDeserializer::deserialize("spotInstanceRequestId", stack)
-                        ));
+                        obj.spot_instance_request_id = Some(try!(StringDeserializer::deserialize(
+                            "spotInstanceRequestId",
+                            stack
+                        )));
                     }
                     _ => skip_tree(stack),
                 },
@@ -3642,12 +3643,11 @@ impl CancelReservedInstancesListingResultDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "reservedInstancesListingsSet" => {
-                        obj.reserved_instances_listings = Some(try!(
-                            ReservedInstancesListingListDeserializer::deserialize(
+                        obj.reserved_instances_listings =
+                            Some(try!(ReservedInstancesListingListDeserializer::deserialize(
                                 "reservedInstancesListingsSet",
                                 stack
-                            )
-                        ));
+                            )));
                     }
                     _ => skip_tree(stack),
                 },
@@ -4153,9 +4153,10 @@ impl CancelledSpotInstanceRequestDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "spotInstanceRequestId" => {
-                        obj.spot_instance_request_id = Some(try!(
-                            StringDeserializer::deserialize("spotInstanceRequestId", stack)
-                        ));
+                        obj.spot_instance_request_id = Some(try!(StringDeserializer::deserialize(
+                            "spotInstanceRequestId",
+                            stack
+                        )));
                     }
                     "state" => {
                         obj.state = Some(try!(
@@ -4198,9 +4199,10 @@ impl CancelledSpotInstanceRequestListDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => {
                     if name == "item" {
-                        obj.push(try!(
-                            CancelledSpotInstanceRequestDeserializer::deserialize("item", stack)
-                        ));
+                        obj.push(try!(CancelledSpotInstanceRequestDeserializer::deserialize(
+                            "item",
+                            stack
+                        )));
                     } else {
                         skip_tree(stack);
                     }
@@ -7269,12 +7271,11 @@ impl CreateReservedInstancesListingResultDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "reservedInstancesListingsSet" => {
-                        obj.reserved_instances_listings = Some(try!(
-                            ReservedInstancesListingListDeserializer::deserialize(
+                        obj.reserved_instances_listings =
+                            Some(try!(ReservedInstancesListingListDeserializer::deserialize(
                                 "reservedInstancesListingsSet",
                                 stack
-                            )
-                        ));
+                            )));
                     }
                     _ => skip_tree(stack),
                 },
@@ -9692,31 +9693,31 @@ impl DeleteLaunchTemplateVersionsResponseErrorItemDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "launchTemplateId" => {
-                            obj.launch_template_id = Some(try!(StringDeserializer::deserialize(
-                                "launchTemplateId",
-                                stack
-                            )));
-                        }
-                        "launchTemplateName" => {
-                            obj.launch_template_name = Some(try!(
-                                StringDeserializer::deserialize("launchTemplateName", stack)
-                            ));
-                        }
-                        "responseError" => {
-                            obj.response_error = Some(try!(
-                                ResponseErrorDeserializer::deserialize("responseError", stack)
-                            ));
-                        }
-                        "versionNumber" => {
-                            obj.version_number =
-                                Some(try!(LongDeserializer::deserialize("versionNumber", stack)));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "launchTemplateId" => {
+                        obj.launch_template_id = Some(try!(StringDeserializer::deserialize(
+                            "launchTemplateId",
+                            stack
+                        )));
                     }
-                }
+                    "launchTemplateName" => {
+                        obj.launch_template_name = Some(try!(StringDeserializer::deserialize(
+                            "launchTemplateName",
+                            stack
+                        )));
+                    }
+                    "responseError" => {
+                        obj.response_error = Some(try!(ResponseErrorDeserializer::deserialize(
+                            "responseError",
+                            stack
+                        )));
+                    }
+                    "versionNumber" => {
+                        obj.version_number =
+                            Some(try!(LongDeserializer::deserialize("versionNumber", stack)));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -9751,7 +9752,12 @@ impl DeleteLaunchTemplateVersionsResponseErrorSetDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => {
                     if name == "item" {
-                        obj.push(try!(DeleteLaunchTemplateVersionsResponseErrorItemDeserializer::deserialize("item", stack)));
+                        obj.push(try!(
+                            DeleteLaunchTemplateVersionsResponseErrorItemDeserializer::deserialize(
+                                "item",
+                                stack
+                            )
+                        ));
                     } else {
                         skip_tree(stack);
                     }
@@ -11211,9 +11217,10 @@ impl DescribeAggregateIdFormatResultDeserializer {
                         )));
                     }
                     "useLongIdsAggregated" => {
-                        obj.use_long_ids_aggregated = Some(try!(
-                            BooleanDeserializer::deserialize("useLongIdsAggregated", stack)
-                        ));
+                        obj.use_long_ids_aggregated = Some(try!(BooleanDeserializer::deserialize(
+                            "useLongIdsAggregated",
+                            stack
+                        )));
                     }
                     _ => skip_tree(stack),
                 },
@@ -15361,12 +15368,11 @@ impl DescribeReservedInstancesListingsResultDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "reservedInstancesListingsSet" => {
-                        obj.reserved_instances_listings = Some(try!(
-                            ReservedInstancesListingListDeserializer::deserialize(
+                        obj.reserved_instances_listings =
+                            Some(try!(ReservedInstancesListingListDeserializer::deserialize(
                                 "reservedInstancesListingsSet",
                                 stack
-                            )
-                        ));
+                            )));
                     }
                     _ => skip_tree(stack),
                 },
@@ -24839,9 +24845,10 @@ impl ImageDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "architecture" => {
-                        obj.architecture = Some(try!(
-                            ArchitectureValuesDeserializer::deserialize("architecture", stack)
-                        ));
+                        obj.architecture = Some(try!(ArchitectureValuesDeserializer::deserialize(
+                            "architecture",
+                            stack
+                        )));
                     }
                     "blockDeviceMapping" => {
                         obj.block_device_mappings =
@@ -25860,11 +25867,10 @@ impl ImportInstanceTaskDetailsDeserializer {
                         )));
                     }
                     "volumes" => {
-                        obj.volumes =
-                            try!(ImportInstanceVolumeDetailSetDeserializer::deserialize(
-                                "volumes",
-                                stack
-                            ));
+                        obj.volumes = try!(ImportInstanceVolumeDetailSetDeserializer::deserialize(
+                            "volumes",
+                            stack
+                        ));
                     }
                     _ => skip_tree(stack),
                 },
@@ -26631,9 +26637,10 @@ impl InstanceDeserializer {
                         )));
                     }
                     "architecture" => {
-                        obj.architecture = Some(try!(
-                            ArchitectureValuesDeserializer::deserialize("architecture", stack)
-                        ));
+                        obj.architecture = Some(try!(ArchitectureValuesDeserializer::deserialize(
+                            "architecture",
+                            stack
+                        )));
                     }
                     "blockDeviceMapping" => {
                         obj.block_device_mappings = Some(try!(
@@ -26717,12 +26724,11 @@ impl InstanceDeserializer {
                         )));
                     }
                     "networkInterfaceSet" => {
-                        obj.network_interfaces = Some(try!(
-                            InstanceNetworkInterfaceListDeserializer::deserialize(
+                        obj.network_interfaces =
+                            Some(try!(InstanceNetworkInterfaceListDeserializer::deserialize(
                                 "networkInterfaceSet",
                                 stack
-                            )
-                        ));
+                            )));
                     }
                     "placement" => {
                         obj.placement =
@@ -26788,9 +26794,10 @@ impl InstanceDeserializer {
                         )));
                     }
                     "spotInstanceRequestId" => {
-                        obj.spot_instance_request_id = Some(try!(
-                            StringDeserializer::deserialize("spotInstanceRequestId", stack)
-                        ));
+                        obj.spot_instance_request_id = Some(try!(StringDeserializer::deserialize(
+                            "spotInstanceRequestId",
+                            stack
+                        )));
                     }
                     "sriovNetSupport" => {
                         obj.sriov_net_support = Some(try!(StringDeserializer::deserialize(
@@ -26969,9 +26976,10 @@ impl InstanceAttributeDeserializer {
                         )));
                     }
                     "rootDeviceName" => {
-                        obj.root_device_name = Some(try!(
-                            AttributeValueDeserializer::deserialize("rootDeviceName", stack)
-                        ));
+                        obj.root_device_name = Some(try!(AttributeValueDeserializer::deserialize(
+                            "rootDeviceName",
+                            stack
+                        )));
                     }
                     "sourceDestCheck" => {
                         obj.source_dest_check =
@@ -28061,12 +28069,11 @@ impl InstanceNetworkInterfaceDeserializer {
                         )));
                     }
                     "privateIpAddressesSet" => {
-                        obj.private_ip_addresses = Some(try!(
-                            InstancePrivateIpAddressListDeserializer::deserialize(
+                        obj.private_ip_addresses =
+                            Some(try!(InstancePrivateIpAddressListDeserializer::deserialize(
                                 "privateIpAddressesSet",
                                 stack
-                            )
-                        ));
+                            )));
                     }
                     "sourceDestCheck" => {
                         obj.source_dest_check = Some(try!(BooleanDeserializer::deserialize(
@@ -28330,78 +28337,79 @@ impl InstanceNetworkInterfaceSpecificationDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "associatePublicIpAddress" => {
-                            obj.associate_public_ip_address = Some(try!(
-                                BooleanDeserializer::deserialize("associatePublicIpAddress", stack)
-                            ));
-                        }
-                        "deleteOnTermination" => {
-                            obj.delete_on_termination = Some(try!(
-                                BooleanDeserializer::deserialize("deleteOnTermination", stack)
-                            ));
-                        }
-                        "description" => {
-                            obj.description =
-                                Some(try!(StringDeserializer::deserialize("description", stack)));
-                        }
-                        "deviceIndex" => {
-                            obj.device_index =
-                                Some(try!(IntegerDeserializer::deserialize("deviceIndex", stack)));
-                        }
-                        "SecurityGroupId" => {
-                            obj.groups =
-                                Some(try!(SecurityGroupIdStringListDeserializer::deserialize(
-                                    "SecurityGroupId",
-                                    stack
-                                )));
-                        }
-                        "ipv6AddressCount" => {
-                            obj.ipv_6_address_count = Some(try!(
-                                IntegerDeserializer::deserialize("ipv6AddressCount", stack)
-                            ));
-                        }
-                        "ipv6AddressesSet" => {
-                            obj.ipv_6_addresses =
-                                Some(try!(InstanceIpv6AddressListDeserializer::deserialize(
-                                    "ipv6AddressesSet",
-                                    stack
-                                )));
-                        }
-                        "networkInterfaceId" => {
-                            obj.network_interface_id = Some(try!(
-                                StringDeserializer::deserialize("networkInterfaceId", stack)
-                            ));
-                        }
-                        "privateIpAddress" => {
-                            obj.private_ip_address = Some(try!(StringDeserializer::deserialize(
-                                "privateIpAddress",
+                DeserializerNext::Element(name) => match &name[..] {
+                    "associatePublicIpAddress" => {
+                        obj.associate_public_ip_address = Some(try!(
+                            BooleanDeserializer::deserialize("associatePublicIpAddress", stack)
+                        ));
+                    }
+                    "deleteOnTermination" => {
+                        obj.delete_on_termination = Some(try!(BooleanDeserializer::deserialize(
+                            "deleteOnTermination",
+                            stack
+                        )));
+                    }
+                    "description" => {
+                        obj.description =
+                            Some(try!(StringDeserializer::deserialize("description", stack)));
+                    }
+                    "deviceIndex" => {
+                        obj.device_index =
+                            Some(try!(IntegerDeserializer::deserialize("deviceIndex", stack)));
+                    }
+                    "SecurityGroupId" => {
+                        obj.groups =
+                            Some(try!(SecurityGroupIdStringListDeserializer::deserialize(
+                                "SecurityGroupId",
                                 stack
                             )));
-                        }
-                        "privateIpAddressesSet" => {
-                            obj.private_ip_addresses = Some(try!(
-                                PrivateIpAddressSpecificationListDeserializer::deserialize(
-                                    "privateIpAddressesSet",
-                                    stack
-                                )
-                            ));
-                        }
-                        "secondaryPrivateIpAddressCount" => {
-                            obj.secondary_private_ip_address_count =
-                                Some(try!(IntegerDeserializer::deserialize(
-                                    "secondaryPrivateIpAddressCount",
-                                    stack
-                                )));
-                        }
-                        "subnetId" => {
-                            obj.subnet_id =
-                                Some(try!(StringDeserializer::deserialize("subnetId", stack)));
-                        }
-                        _ => skip_tree(stack),
                     }
-                }
+                    "ipv6AddressCount" => {
+                        obj.ipv_6_address_count = Some(try!(IntegerDeserializer::deserialize(
+                            "ipv6AddressCount",
+                            stack
+                        )));
+                    }
+                    "ipv6AddressesSet" => {
+                        obj.ipv_6_addresses =
+                            Some(try!(InstanceIpv6AddressListDeserializer::deserialize(
+                                "ipv6AddressesSet",
+                                stack
+                            )));
+                    }
+                    "networkInterfaceId" => {
+                        obj.network_interface_id = Some(try!(StringDeserializer::deserialize(
+                            "networkInterfaceId",
+                            stack
+                        )));
+                    }
+                    "privateIpAddress" => {
+                        obj.private_ip_address = Some(try!(StringDeserializer::deserialize(
+                            "privateIpAddress",
+                            stack
+                        )));
+                    }
+                    "privateIpAddressesSet" => {
+                        obj.private_ip_addresses = Some(try!(
+                            PrivateIpAddressSpecificationListDeserializer::deserialize(
+                                "privateIpAddressesSet",
+                                stack
+                            )
+                        ));
+                    }
+                    "secondaryPrivateIpAddressCount" => {
+                        obj.secondary_private_ip_address_count =
+                            Some(try!(IntegerDeserializer::deserialize(
+                                "secondaryPrivateIpAddressCount",
+                                stack
+                            )));
+                    }
+                    "subnetId" => {
+                        obj.subnet_id =
+                            Some(try!(StringDeserializer::deserialize("subnetId", stack)));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -28765,25 +28773,25 @@ impl InstanceStateChangeDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "currentState" => {
-                            obj.current_state = Some(try!(
-                                InstanceStateDeserializer::deserialize("currentState", stack)
-                            ));
-                        }
-                        "instanceId" => {
-                            obj.instance_id =
-                                Some(try!(StringDeserializer::deserialize("instanceId", stack)));
-                        }
-                        "previousState" => {
-                            obj.previous_state = Some(try!(
-                                InstanceStateDeserializer::deserialize("previousState", stack)
-                            ));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "currentState" => {
+                        obj.current_state = Some(try!(InstanceStateDeserializer::deserialize(
+                            "currentState",
+                            stack
+                        )));
                     }
-                }
+                    "instanceId" => {
+                        obj.instance_id =
+                            Some(try!(StringDeserializer::deserialize("instanceId", stack)));
+                    }
+                    "previousState" => {
+                        obj.previous_state = Some(try!(InstanceStateDeserializer::deserialize(
+                            "previousState",
+                            stack
+                        )));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -30532,90 +30540,93 @@ impl LaunchSpecificationDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "addressingType" => {
-                            obj.addressing_type = Some(try!(StringDeserializer::deserialize(
-                                "addressingType",
-                                stack
-                            )));
-                        }
-                        "blockDeviceMapping" => {
-                            obj.block_device_mappings =
-                                Some(try!(BlockDeviceMappingListDeserializer::deserialize(
-                                    "blockDeviceMapping",
-                                    stack
-                                )));
-                        }
-                        "ebsOptimized" => {
-                            obj.ebs_optimized = Some(try!(BooleanDeserializer::deserialize(
-                                "ebsOptimized",
-                                stack
-                            )));
-                        }
-                        "iamInstanceProfile" => {
-                            obj.iam_instance_profile = Some(try!(
-                                IamInstanceProfileSpecificationDeserializer::deserialize(
-                                    "iamInstanceProfile",
-                                    stack
-                                )
-                            ));
-                        }
-                        "imageId" => {
-                            obj.image_id =
-                                Some(try!(StringDeserializer::deserialize("imageId", stack)));
-                        }
-                        "instanceType" => {
-                            obj.instance_type = Some(try!(InstanceTypeDeserializer::deserialize(
-                                "instanceType",
-                                stack
-                            )));
-                        }
-                        "kernelId" => {
-                            obj.kernel_id =
-                                Some(try!(StringDeserializer::deserialize("kernelId", stack)));
-                        }
-                        "keyName" => {
-                            obj.key_name =
-                                Some(try!(StringDeserializer::deserialize("keyName", stack)));
-                        }
-                        "monitoring" => {
-                            obj.monitoring = Some(try!(
-                                RunInstancesMonitoringEnabledDeserializer::deserialize(
-                                    "monitoring",
-                                    stack
-                                )
-                            ));
-                        }
-                        "networkInterfaceSet" => {
-                            obj.network_interfaces = Some(try!(InstanceNetworkInterfaceSpecificationListDeserializer::deserialize("networkInterfaceSet", stack)));
-                        }
-                        "placement" => {
-                            obj.placement = Some(try!(SpotPlacementDeserializer::deserialize(
-                                "placement",
-                                stack
-                            )));
-                        }
-                        "ramdiskId" => {
-                            obj.ramdisk_id =
-                                Some(try!(StringDeserializer::deserialize("ramdiskId", stack)));
-                        }
-                        "groupSet" => {
-                            obj.security_groups = Some(try!(
-                                GroupIdentifierListDeserializer::deserialize("groupSet", stack)
-                            ));
-                        }
-                        "subnetId" => {
-                            obj.subnet_id =
-                                Some(try!(StringDeserializer::deserialize("subnetId", stack)));
-                        }
-                        "userData" => {
-                            obj.user_data =
-                                Some(try!(StringDeserializer::deserialize("userData", stack)));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "addressingType" => {
+                        obj.addressing_type = Some(try!(StringDeserializer::deserialize(
+                            "addressingType",
+                            stack
+                        )));
                     }
-                }
+                    "blockDeviceMapping" => {
+                        obj.block_device_mappings =
+                            Some(try!(BlockDeviceMappingListDeserializer::deserialize(
+                                "blockDeviceMapping",
+                                stack
+                            )));
+                    }
+                    "ebsOptimized" => {
+                        obj.ebs_optimized = Some(try!(BooleanDeserializer::deserialize(
+                            "ebsOptimized",
+                            stack
+                        )));
+                    }
+                    "iamInstanceProfile" => {
+                        obj.iam_instance_profile = Some(try!(
+                            IamInstanceProfileSpecificationDeserializer::deserialize(
+                                "iamInstanceProfile",
+                                stack
+                            )
+                        ));
+                    }
+                    "imageId" => {
+                        obj.image_id =
+                            Some(try!(StringDeserializer::deserialize("imageId", stack)));
+                    }
+                    "instanceType" => {
+                        obj.instance_type = Some(try!(InstanceTypeDeserializer::deserialize(
+                            "instanceType",
+                            stack
+                        )));
+                    }
+                    "kernelId" => {
+                        obj.kernel_id =
+                            Some(try!(StringDeserializer::deserialize("kernelId", stack)));
+                    }
+                    "keyName" => {
+                        obj.key_name =
+                            Some(try!(StringDeserializer::deserialize("keyName", stack)));
+                    }
+                    "monitoring" => {
+                        obj.monitoring = Some(try!(
+                            RunInstancesMonitoringEnabledDeserializer::deserialize(
+                                "monitoring",
+                                stack
+                            )
+                        ));
+                    }
+                    "networkInterfaceSet" => {
+                        obj.network_interfaces = Some(try!(
+                            InstanceNetworkInterfaceSpecificationListDeserializer::deserialize(
+                                "networkInterfaceSet",
+                                stack
+                            )
+                        ));
+                    }
+                    "placement" => {
+                        obj.placement = Some(try!(SpotPlacementDeserializer::deserialize(
+                            "placement",
+                            stack
+                        )));
+                    }
+                    "ramdiskId" => {
+                        obj.ramdisk_id =
+                            Some(try!(StringDeserializer::deserialize("ramdiskId", stack)));
+                    }
+                    "groupSet" => {
+                        obj.security_groups = Some(try!(
+                            GroupIdentifierListDeserializer::deserialize("groupSet", stack)
+                        ));
+                    }
+                    "subnetId" => {
+                        obj.subnet_id =
+                            Some(try!(StringDeserializer::deserialize("subnetId", stack)));
+                    }
+                    "userData" => {
+                        obj.user_data =
+                            Some(try!(StringDeserializer::deserialize("userData", stack)));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -30650,9 +30661,10 @@ impl LaunchSpecsListDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => {
                     if name == "item" {
-                        obj.push(try!(
-                            SpotFleetLaunchSpecificationDeserializer::deserialize("item", stack)
-                        ));
+                        obj.push(try!(SpotFleetLaunchSpecificationDeserializer::deserialize(
+                            "item",
+                            stack
+                        )));
                     } else {
                         skip_tree(stack);
                     }
@@ -31499,77 +31511,78 @@ impl LaunchTemplateInstanceNetworkInterfaceSpecificationDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "associatePublicIpAddress" => {
-                            obj.associate_public_ip_address = Some(try!(
-                                BooleanDeserializer::deserialize("associatePublicIpAddress", stack)
-                            ));
-                        }
-                        "deleteOnTermination" => {
-                            obj.delete_on_termination = Some(try!(
-                                BooleanDeserializer::deserialize("deleteOnTermination", stack)
-                            ));
-                        }
-                        "description" => {
-                            obj.description =
-                                Some(try!(StringDeserializer::deserialize("description", stack)));
-                        }
-                        "deviceIndex" => {
-                            obj.device_index =
-                                Some(try!(IntegerDeserializer::deserialize("deviceIndex", stack)));
-                        }
-                        "groupSet" => {
-                            obj.groups = Some(try!(GroupIdStringListDeserializer::deserialize(
-                                "groupSet",
-                                stack
-                            )));
-                        }
-                        "ipv6AddressCount" => {
-                            obj.ipv_6_address_count = Some(try!(
-                                IntegerDeserializer::deserialize("ipv6AddressCount", stack)
-                            ));
-                        }
-                        "ipv6AddressesSet" => {
-                            obj.ipv_6_addresses =
-                                Some(try!(InstanceIpv6AddressListDeserializer::deserialize(
-                                    "ipv6AddressesSet",
-                                    stack
-                                )));
-                        }
-                        "networkInterfaceId" => {
-                            obj.network_interface_id = Some(try!(
-                                StringDeserializer::deserialize("networkInterfaceId", stack)
-                            ));
-                        }
-                        "privateIpAddress" => {
-                            obj.private_ip_address = Some(try!(StringDeserializer::deserialize(
-                                "privateIpAddress",
-                                stack
-                            )));
-                        }
-                        "privateIpAddressesSet" => {
-                            obj.private_ip_addresses = Some(try!(
-                                PrivateIpAddressSpecificationListDeserializer::deserialize(
-                                    "privateIpAddressesSet",
-                                    stack
-                                )
-                            ));
-                        }
-                        "secondaryPrivateIpAddressCount" => {
-                            obj.secondary_private_ip_address_count =
-                                Some(try!(IntegerDeserializer::deserialize(
-                                    "secondaryPrivateIpAddressCount",
-                                    stack
-                                )));
-                        }
-                        "subnetId" => {
-                            obj.subnet_id =
-                                Some(try!(StringDeserializer::deserialize("subnetId", stack)));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "associatePublicIpAddress" => {
+                        obj.associate_public_ip_address = Some(try!(
+                            BooleanDeserializer::deserialize("associatePublicIpAddress", stack)
+                        ));
                     }
-                }
+                    "deleteOnTermination" => {
+                        obj.delete_on_termination = Some(try!(BooleanDeserializer::deserialize(
+                            "deleteOnTermination",
+                            stack
+                        )));
+                    }
+                    "description" => {
+                        obj.description =
+                            Some(try!(StringDeserializer::deserialize("description", stack)));
+                    }
+                    "deviceIndex" => {
+                        obj.device_index =
+                            Some(try!(IntegerDeserializer::deserialize("deviceIndex", stack)));
+                    }
+                    "groupSet" => {
+                        obj.groups = Some(try!(GroupIdStringListDeserializer::deserialize(
+                            "groupSet",
+                            stack
+                        )));
+                    }
+                    "ipv6AddressCount" => {
+                        obj.ipv_6_address_count = Some(try!(IntegerDeserializer::deserialize(
+                            "ipv6AddressCount",
+                            stack
+                        )));
+                    }
+                    "ipv6AddressesSet" => {
+                        obj.ipv_6_addresses =
+                            Some(try!(InstanceIpv6AddressListDeserializer::deserialize(
+                                "ipv6AddressesSet",
+                                stack
+                            )));
+                    }
+                    "networkInterfaceId" => {
+                        obj.network_interface_id = Some(try!(StringDeserializer::deserialize(
+                            "networkInterfaceId",
+                            stack
+                        )));
+                    }
+                    "privateIpAddress" => {
+                        obj.private_ip_address = Some(try!(StringDeserializer::deserialize(
+                            "privateIpAddress",
+                            stack
+                        )));
+                    }
+                    "privateIpAddressesSet" => {
+                        obj.private_ip_addresses = Some(try!(
+                            PrivateIpAddressSpecificationListDeserializer::deserialize(
+                                "privateIpAddressesSet",
+                                stack
+                            )
+                        ));
+                    }
+                    "secondaryPrivateIpAddressCount" => {
+                        obj.secondary_private_ip_address_count =
+                            Some(try!(IntegerDeserializer::deserialize(
+                                "secondaryPrivateIpAddressCount",
+                                stack
+                            )));
+                    }
+                    "subnetId" => {
+                        obj.subnet_id =
+                            Some(try!(StringDeserializer::deserialize("subnetId", stack)));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -32230,12 +32243,11 @@ impl LaunchTemplateSpotMarketOptionsDeserializer {
                         )));
                     }
                     "instanceInterruptionBehavior" => {
-                        obj.instance_interruption_behavior = Some(try!(
-                            InstanceInterruptionBehaviorDeserializer::deserialize(
+                        obj.instance_interruption_behavior =
+                            Some(try!(InstanceInterruptionBehaviorDeserializer::deserialize(
                                 "instanceInterruptionBehavior",
                                 stack
-                            )
-                        ));
+                            )));
                     }
                     "maxPrice" => {
                         obj.max_price =
@@ -33617,22 +33629,25 @@ impl ModifyInstanceCreditSpecificationResultDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "successfulInstanceCreditSpecificationSet" => {
-                            obj.successful_instance_credit_specifications = Some(try!(
-                                SuccessfulInstanceCreditSpecificationSetDeserializer::deserialize(
-                                    "successfulInstanceCreditSpecificationSet",
-                                    stack
-                                )
-                            ));
-                        }
-                        "unsuccessfulInstanceCreditSpecificationSet" => {
-                            obj.unsuccessful_instance_credit_specifications = Some(try!(UnsuccessfulInstanceCreditSpecificationSetDeserializer::deserialize("unsuccessfulInstanceCreditSpecificationSet", stack)));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "successfulInstanceCreditSpecificationSet" => {
+                        obj.successful_instance_credit_specifications = Some(try!(
+                            SuccessfulInstanceCreditSpecificationSetDeserializer::deserialize(
+                                "successfulInstanceCreditSpecificationSet",
+                                stack
+                            )
+                        ));
                     }
-                }
+                    "unsuccessfulInstanceCreditSpecificationSet" => {
+                        obj.unsuccessful_instance_credit_specifications = Some(try!(
+                            UnsuccessfulInstanceCreditSpecificationSetDeserializer::deserialize(
+                                "unsuccessfulInstanceCreditSpecificationSet",
+                                stack
+                            )
+                        ));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -42980,9 +42995,10 @@ impl ResponseLaunchTemplateDataDeserializer {
                             )));
                     }
                     "disableApiTermination" => {
-                        obj.disable_api_termination = Some(try!(
-                            BooleanDeserializer::deserialize("disableApiTermination", stack)
-                        ));
+                        obj.disable_api_termination = Some(try!(BooleanDeserializer::deserialize(
+                            "disableApiTermination",
+                            stack
+                        )));
                     }
                     "ebsOptimized" => {
                         obj.ebs_optimized = Some(try!(BooleanDeserializer::deserialize(
@@ -42999,7 +43015,12 @@ impl ResponseLaunchTemplateDataDeserializer {
                         ));
                     }
                     "iamInstanceProfile" => {
-                        obj.iam_instance_profile = Some(try!(LaunchTemplateIamInstanceProfileSpecificationDeserializer::deserialize("iamInstanceProfile", stack)));
+                        obj.iam_instance_profile = Some(try!(
+                            LaunchTemplateIamInstanceProfileSpecificationDeserializer::deserialize(
+                                "iamInstanceProfile",
+                                stack
+                            )
+                        ));
                     }
                     "imageId" => {
                         obj.image_id =
@@ -43057,9 +43078,10 @@ impl ResponseLaunchTemplateDataDeserializer {
                         ));
                     }
                     "securityGroupSet" => {
-                        obj.security_groups = Some(try!(
-                            ValueStringListDeserializer::deserialize("securityGroupSet", stack)
-                        ));
+                        obj.security_groups = Some(try!(ValueStringListDeserializer::deserialize(
+                            "securityGroupSet",
+                            stack
+                        )));
                     }
                     "tagSpecificationSet" => {
                         obj.tag_specifications = Some(try!(
@@ -44405,90 +44427,91 @@ impl ScheduledInstanceDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "availabilityZone" => {
-                        obj.availability_zone = Some(try!(StringDeserializer::deserialize(
-                            "availabilityZone",
-                            stack
-                        )));
-                    }
-                    "createDate" => {
-                        obj.create_date =
-                            Some(try!(DateTimeDeserializer::deserialize("createDate", stack)));
-                    }
-                    "hourlyPrice" => {
-                        obj.hourly_price =
-                            Some(try!(StringDeserializer::deserialize("hourlyPrice", stack)));
-                    }
-                    "instanceCount" => {
-                        obj.instance_count = Some(try!(IntegerDeserializer::deserialize(
-                            "instanceCount",
-                            stack
-                        )));
-                    }
-                    "instanceType" => {
-                        obj.instance_type =
-                            Some(try!(StringDeserializer::deserialize("instanceType", stack)));
-                    }
-                    "networkPlatform" => {
-                        obj.network_platform = Some(try!(StringDeserializer::deserialize(
-                            "networkPlatform",
-                            stack
-                        )));
-                    }
-                    "nextSlotStartTime" => {
-                        obj.next_slot_start_time = Some(try!(DateTimeDeserializer::deserialize(
-                            "nextSlotStartTime",
-                            stack
-                        )));
-                    }
-                    "platform" => {
-                        obj.platform =
-                            Some(try!(StringDeserializer::deserialize("platform", stack)));
-                    }
-                    "previousSlotEndTime" => {
-                        obj.previous_slot_end_time = Some(try!(
-                            DateTimeDeserializer::deserialize("previousSlotEndTime", stack)
-                        ));
-                    }
-                    "recurrence" => {
-                        obj.recurrence =
-                            Some(try!(ScheduledInstanceRecurrenceDeserializer::deserialize(
-                                "recurrence",
+                DeserializerNext::Element(name) => {
+                    match &name[..] {
+                        "availabilityZone" => {
+                            obj.availability_zone = Some(try!(StringDeserializer::deserialize(
+                                "availabilityZone",
                                 stack
                             )));
+                        }
+                        "createDate" => {
+                            obj.create_date =
+                                Some(try!(DateTimeDeserializer::deserialize("createDate", stack)));
+                        }
+                        "hourlyPrice" => {
+                            obj.hourly_price =
+                                Some(try!(StringDeserializer::deserialize("hourlyPrice", stack)));
+                        }
+                        "instanceCount" => {
+                            obj.instance_count = Some(try!(IntegerDeserializer::deserialize(
+                                "instanceCount",
+                                stack
+                            )));
+                        }
+                        "instanceType" => {
+                            obj.instance_type =
+                                Some(try!(StringDeserializer::deserialize("instanceType", stack)));
+                        }
+                        "networkPlatform" => {
+                            obj.network_platform = Some(try!(StringDeserializer::deserialize(
+                                "networkPlatform",
+                                stack
+                            )));
+                        }
+                        "nextSlotStartTime" => {
+                            obj.next_slot_start_time = Some(try!(
+                                DateTimeDeserializer::deserialize("nextSlotStartTime", stack)
+                            ));
+                        }
+                        "platform" => {
+                            obj.platform =
+                                Some(try!(StringDeserializer::deserialize("platform", stack)));
+                        }
+                        "previousSlotEndTime" => {
+                            obj.previous_slot_end_time = Some(try!(
+                                DateTimeDeserializer::deserialize("previousSlotEndTime", stack)
+                            ));
+                        }
+                        "recurrence" => {
+                            obj.recurrence =
+                                Some(try!(ScheduledInstanceRecurrenceDeserializer::deserialize(
+                                    "recurrence",
+                                    stack
+                                )));
+                        }
+                        "scheduledInstanceId" => {
+                            obj.scheduled_instance_id = Some(try!(
+                                StringDeserializer::deserialize("scheduledInstanceId", stack)
+                            ));
+                        }
+                        "slotDurationInHours" => {
+                            obj.slot_duration_in_hours = Some(try!(
+                                IntegerDeserializer::deserialize("slotDurationInHours", stack)
+                            ));
+                        }
+                        "termEndDate" => {
+                            obj.term_end_date = Some(try!(DateTimeDeserializer::deserialize(
+                                "termEndDate",
+                                stack
+                            )));
+                        }
+                        "termStartDate" => {
+                            obj.term_start_date = Some(try!(DateTimeDeserializer::deserialize(
+                                "termStartDate",
+                                stack
+                            )));
+                        }
+                        "totalScheduledInstanceHours" => {
+                            obj.total_scheduled_instance_hours =
+                                Some(try!(IntegerDeserializer::deserialize(
+                                    "totalScheduledInstanceHours",
+                                    stack
+                                )));
+                        }
+                        _ => skip_tree(stack),
                     }
-                    "scheduledInstanceId" => {
-                        obj.scheduled_instance_id = Some(try!(StringDeserializer::deserialize(
-                            "scheduledInstanceId",
-                            stack
-                        )));
-                    }
-                    "slotDurationInHours" => {
-                        obj.slot_duration_in_hours = Some(try!(IntegerDeserializer::deserialize(
-                            "slotDurationInHours",
-                            stack
-                        )));
-                    }
-                    "termEndDate" => {
-                        obj.term_end_date = Some(try!(DateTimeDeserializer::deserialize(
-                            "termEndDate",
-                            stack
-                        )));
-                    }
-                    "termStartDate" => {
-                        obj.term_start_date = Some(try!(DateTimeDeserializer::deserialize(
-                            "termStartDate",
-                            stack
-                        )));
-                    }
-                    "totalScheduledInstanceHours" => {
-                        obj.total_scheduled_instance_hours = Some(try!(
-                            IntegerDeserializer::deserialize("totalScheduledInstanceHours", stack)
-                        ));
-                    }
-                    _ => skip_tree(stack),
-                },
+                }
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -45496,9 +45519,10 @@ impl SecurityGroupDeserializer {
                             Some(try!(StringDeserializer::deserialize("groupName", stack)));
                     }
                     "ipPermissions" => {
-                        obj.ip_permissions = Some(try!(
-                            IpPermissionListDeserializer::deserialize("ipPermissions", stack)
-                        ));
+                        obj.ip_permissions = Some(try!(IpPermissionListDeserializer::deserialize(
+                            "ipPermissions",
+                            stack
+                        )));
                     }
                     "ipPermissionsEgress" => {
                         obj.ip_permissions_egress = Some(try!(
@@ -46818,9 +46842,10 @@ impl SpotDatafeedSubscriptionDeserializer {
                         obj.prefix = Some(try!(StringDeserializer::deserialize("prefix", stack)));
                     }
                     "state" => {
-                        obj.state = Some(try!(
-                            DatafeedSubscriptionStateDeserializer::deserialize("state", stack)
-                        ));
+                        obj.state = Some(try!(DatafeedSubscriptionStateDeserializer::deserialize(
+                            "state",
+                            stack
+                        )));
                     }
                     _ => skip_tree(stack),
                 },
@@ -46898,105 +46923,109 @@ impl SpotFleetLaunchSpecificationDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "addressingType" => {
-                            obj.addressing_type = Some(try!(StringDeserializer::deserialize(
-                                "addressingType",
-                                stack
-                            )));
-                        }
-                        "blockDeviceMapping" => {
-                            obj.block_device_mappings =
-                                Some(try!(BlockDeviceMappingListDeserializer::deserialize(
-                                    "blockDeviceMapping",
-                                    stack
-                                )));
-                        }
-                        "ebsOptimized" => {
-                            obj.ebs_optimized = Some(try!(BooleanDeserializer::deserialize(
-                                "ebsOptimized",
-                                stack
-                            )));
-                        }
-                        "iamInstanceProfile" => {
-                            obj.iam_instance_profile = Some(try!(
-                                IamInstanceProfileSpecificationDeserializer::deserialize(
-                                    "iamInstanceProfile",
-                                    stack
-                                )
-                            ));
-                        }
-                        "imageId" => {
-                            obj.image_id =
-                                Some(try!(StringDeserializer::deserialize("imageId", stack)));
-                        }
-                        "instanceType" => {
-                            obj.instance_type = Some(try!(InstanceTypeDeserializer::deserialize(
-                                "instanceType",
-                                stack
-                            )));
-                        }
-                        "kernelId" => {
-                            obj.kernel_id =
-                                Some(try!(StringDeserializer::deserialize("kernelId", stack)));
-                        }
-                        "keyName" => {
-                            obj.key_name =
-                                Some(try!(StringDeserializer::deserialize("keyName", stack)));
-                        }
-                        "monitoring" => {
-                            obj.monitoring = Some(try!(
-                                SpotFleetMonitoringDeserializer::deserialize("monitoring", stack)
-                            ));
-                        }
-                        "networkInterfaceSet" => {
-                            obj.network_interfaces = Some(try!(InstanceNetworkInterfaceSpecificationListDeserializer::deserialize("networkInterfaceSet", stack)));
-                        }
-                        "placement" => {
-                            obj.placement = Some(try!(SpotPlacementDeserializer::deserialize(
-                                "placement",
-                                stack
-                            )));
-                        }
-                        "ramdiskId" => {
-                            obj.ramdisk_id =
-                                Some(try!(StringDeserializer::deserialize("ramdiskId", stack)));
-                        }
-                        "groupSet" => {
-                            obj.security_groups = Some(try!(
-                                GroupIdentifierListDeserializer::deserialize("groupSet", stack)
-                            ));
-                        }
-                        "spotPrice" => {
-                            obj.spot_price =
-                                Some(try!(StringDeserializer::deserialize("spotPrice", stack)));
-                        }
-                        "subnetId" => {
-                            obj.subnet_id =
-                                Some(try!(StringDeserializer::deserialize("subnetId", stack)));
-                        }
-                        "tagSpecificationSet" => {
-                            obj.tag_specifications = Some(try!(
-                                SpotFleetTagSpecificationListDeserializer::deserialize(
-                                    "tagSpecificationSet",
-                                    stack
-                                )
-                            ));
-                        }
-                        "userData" => {
-                            obj.user_data =
-                                Some(try!(StringDeserializer::deserialize("userData", stack)));
-                        }
-                        "weightedCapacity" => {
-                            obj.weighted_capacity = Some(try!(DoubleDeserializer::deserialize(
-                                "weightedCapacity",
-                                stack
-                            )));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "addressingType" => {
+                        obj.addressing_type = Some(try!(StringDeserializer::deserialize(
+                            "addressingType",
+                            stack
+                        )));
                     }
-                }
+                    "blockDeviceMapping" => {
+                        obj.block_device_mappings =
+                            Some(try!(BlockDeviceMappingListDeserializer::deserialize(
+                                "blockDeviceMapping",
+                                stack
+                            )));
+                    }
+                    "ebsOptimized" => {
+                        obj.ebs_optimized = Some(try!(BooleanDeserializer::deserialize(
+                            "ebsOptimized",
+                            stack
+                        )));
+                    }
+                    "iamInstanceProfile" => {
+                        obj.iam_instance_profile = Some(try!(
+                            IamInstanceProfileSpecificationDeserializer::deserialize(
+                                "iamInstanceProfile",
+                                stack
+                            )
+                        ));
+                    }
+                    "imageId" => {
+                        obj.image_id =
+                            Some(try!(StringDeserializer::deserialize("imageId", stack)));
+                    }
+                    "instanceType" => {
+                        obj.instance_type = Some(try!(InstanceTypeDeserializer::deserialize(
+                            "instanceType",
+                            stack
+                        )));
+                    }
+                    "kernelId" => {
+                        obj.kernel_id =
+                            Some(try!(StringDeserializer::deserialize("kernelId", stack)));
+                    }
+                    "keyName" => {
+                        obj.key_name =
+                            Some(try!(StringDeserializer::deserialize("keyName", stack)));
+                    }
+                    "monitoring" => {
+                        obj.monitoring = Some(try!(SpotFleetMonitoringDeserializer::deserialize(
+                            "monitoring",
+                            stack
+                        )));
+                    }
+                    "networkInterfaceSet" => {
+                        obj.network_interfaces = Some(try!(
+                            InstanceNetworkInterfaceSpecificationListDeserializer::deserialize(
+                                "networkInterfaceSet",
+                                stack
+                            )
+                        ));
+                    }
+                    "placement" => {
+                        obj.placement = Some(try!(SpotPlacementDeserializer::deserialize(
+                            "placement",
+                            stack
+                        )));
+                    }
+                    "ramdiskId" => {
+                        obj.ramdisk_id =
+                            Some(try!(StringDeserializer::deserialize("ramdiskId", stack)));
+                    }
+                    "groupSet" => {
+                        obj.security_groups = Some(try!(
+                            GroupIdentifierListDeserializer::deserialize("groupSet", stack)
+                        ));
+                    }
+                    "spotPrice" => {
+                        obj.spot_price =
+                            Some(try!(StringDeserializer::deserialize("spotPrice", stack)));
+                    }
+                    "subnetId" => {
+                        obj.subnet_id =
+                            Some(try!(StringDeserializer::deserialize("subnetId", stack)));
+                    }
+                    "tagSpecificationSet" => {
+                        obj.tag_specifications = Some(try!(
+                            SpotFleetTagSpecificationListDeserializer::deserialize(
+                                "tagSpecificationSet",
+                                stack
+                            )
+                        ));
+                    }
+                    "userData" => {
+                        obj.user_data =
+                            Some(try!(StringDeserializer::deserialize("userData", stack)));
+                    }
+                    "weightedCapacity" => {
+                        obj.weighted_capacity = Some(try!(DoubleDeserializer::deserialize(
+                            "weightedCapacity",
+                            stack
+                        )));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -47370,12 +47399,11 @@ impl SpotFleetRequestConfigDataDeserializer {
                             try!(StringDeserializer::deserialize("iamFleetRole", stack));
                     }
                     "instanceInterruptionBehavior" => {
-                        obj.instance_interruption_behavior = Some(try!(
-                            InstanceInterruptionBehaviorDeserializer::deserialize(
+                        obj.instance_interruption_behavior =
+                            Some(try!(InstanceInterruptionBehaviorDeserializer::deserialize(
                                 "instanceInterruptionBehavior",
                                 stack
-                            )
-                        ));
+                            )));
                     }
                     "launchSpecifications" => {
                         obj.launch_specifications = Some(try!(
@@ -47818,12 +47846,11 @@ impl SpotInstanceRequestDeserializer {
                                 Some(try!(StringDeserializer::deserialize("instanceId", stack)));
                         }
                         "instanceInterruptionBehavior" => {
-                            obj.instance_interruption_behavior = Some(try!(
-                                InstanceInterruptionBehaviorDeserializer::deserialize(
+                            obj.instance_interruption_behavior =
+                                Some(try!(InstanceInterruptionBehaviorDeserializer::deserialize(
                                     "instanceInterruptionBehavior",
                                     stack
-                                )
-                            ));
+                                )));
                         }
                         "launchGroup" => {
                             obj.launch_group =
@@ -48412,9 +48439,10 @@ impl StaleIpPermissionDeserializer {
                             Some(try!(IpRangesDeserializer::deserialize("ipRanges", stack)));
                     }
                     "prefixListIds" => {
-                        obj.prefix_list_ids = Some(try!(
-                            PrefixListIdSetDeserializer::deserialize("prefixListIds", stack)
-                        ));
+                        obj.prefix_list_ids = Some(try!(PrefixListIdSetDeserializer::deserialize(
+                            "prefixListIds",
+                            stack
+                        )));
                     }
                     "toPort" => {
                         obj.to_port = Some(try!(IntegerDeserializer::deserialize("toPort", stack)));
@@ -49081,9 +49109,10 @@ impl SubnetDeserializer {
                         ));
                     }
                     "mapPublicIpOnLaunch" => {
-                        obj.map_public_ip_on_launch = Some(try!(
-                            BooleanDeserializer::deserialize("mapPublicIpOnLaunch", stack)
-                        ));
+                        obj.map_public_ip_on_launch = Some(try!(BooleanDeserializer::deserialize(
+                            "mapPublicIpOnLaunch",
+                            stack
+                        )));
                     }
                     "state" => {
                         obj.state =
@@ -51479,39 +51508,39 @@ impl VgwTelemetryDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "acceptedRouteCount" => {
-                            obj.accepted_route_count = Some(try!(
-                                IntegerDeserializer::deserialize("acceptedRouteCount", stack)
-                            ));
-                        }
-                        "lastStatusChange" => {
-                            obj.last_status_change = Some(try!(
-                                DateTimeDeserializer::deserialize("lastStatusChange", stack)
-                            ));
-                        }
-                        "outsideIpAddress" => {
-                            obj.outside_ip_address = Some(try!(StringDeserializer::deserialize(
-                                "outsideIpAddress",
-                                stack
-                            )));
-                        }
-                        "status" => {
-                            obj.status = Some(try!(TelemetryStatusDeserializer::deserialize(
-                                "status",
-                                stack
-                            )));
-                        }
-                        "statusMessage" => {
-                            obj.status_message = Some(try!(StringDeserializer::deserialize(
-                                "statusMessage",
-                                stack
-                            )));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "acceptedRouteCount" => {
+                        obj.accepted_route_count = Some(try!(IntegerDeserializer::deserialize(
+                            "acceptedRouteCount",
+                            stack
+                        )));
                     }
-                }
+                    "lastStatusChange" => {
+                        obj.last_status_change = Some(try!(DateTimeDeserializer::deserialize(
+                            "lastStatusChange",
+                            stack
+                        )));
+                    }
+                    "outsideIpAddress" => {
+                        obj.outside_ip_address = Some(try!(StringDeserializer::deserialize(
+                            "outsideIpAddress",
+                            stack
+                        )));
+                    }
+                    "status" => {
+                        obj.status = Some(try!(TelemetryStatusDeserializer::deserialize(
+                            "status",
+                            stack
+                        )));
+                    }
+                    "statusMessage" => {
+                        obj.status_message = Some(try!(StringDeserializer::deserialize(
+                            "statusMessage",
+                            stack
+                        )));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -51979,9 +52008,10 @@ impl VolumeModificationDeserializer {
                         )));
                     }
                     "originalVolumeType" => {
-                        obj.original_volume_type = Some(try!(
-                            VolumeTypeDeserializer::deserialize("originalVolumeType", stack)
-                        ));
+                        obj.original_volume_type = Some(try!(VolumeTypeDeserializer::deserialize(
+                            "originalVolumeType",
+                            stack
+                        )));
                     }
                     "progress" => {
                         obj.progress = Some(try!(LongDeserializer::deserialize("progress", stack)));
@@ -52447,20 +52477,21 @@ impl VolumeStatusInfoDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "details" => {
-                        obj.details = Some(try!(
-                            VolumeStatusDetailsListDeserializer::deserialize("details", stack)
-                        ));
+                DeserializerNext::Element(name) => {
+                    match &name[..] {
+                        "details" => {
+                            obj.details = Some(try!(
+                                VolumeStatusDetailsListDeserializer::deserialize("details", stack)
+                            ));
+                        }
+                        "status" => {
+                            obj.status = Some(try!(
+                                VolumeStatusInfoStatusDeserializer::deserialize("status", stack)
+                            ));
+                        }
+                        _ => skip_tree(stack),
                     }
-                    "status" => {
-                        obj.status = Some(try!(VolumeStatusInfoStatusDeserializer::deserialize(
-                            "status",
-                            stack
-                        )));
-                    }
-                    _ => skip_tree(stack),
-                },
+                }
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -52525,9 +52556,10 @@ impl VolumeStatusItemDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "actionsSet" => {
-                        obj.actions = Some(try!(
-                            VolumeStatusActionsListDeserializer::deserialize("actionsSet", stack)
-                        ));
+                        obj.actions = Some(try!(VolumeStatusActionsListDeserializer::deserialize(
+                            "actionsSet",
+                            stack
+                        )));
                     }
                     "availabilityZone" => {
                         obj.availability_zone = Some(try!(StringDeserializer::deserialize(
@@ -53211,9 +53243,10 @@ impl VpcEndpointDeserializer {
                         )));
                     }
                     "routeTableIdSet" => {
-                        obj.route_table_ids = Some(try!(
-                            ValueStringListDeserializer::deserialize("routeTableIdSet", stack)
-                        ));
+                        obj.route_table_ids = Some(try!(ValueStringListDeserializer::deserialize(
+                            "routeTableIdSet",
+                            stack
+                        )));
                     }
                     "serviceName" => {
                         obj.service_name =
@@ -75987,12 +76020,10 @@ where
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(
-                        AcceptVpcEndpointConnectionsResultDeserializer::deserialize(
-                            &actual_tag_name,
-                            &mut stack
-                        )
-                    );
+                    result = try!(AcceptVpcEndpointConnectionsResultDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack
+                    ));
                 }
 
                 Ok(result)
@@ -79318,12 +79349,10 @@ where
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(
-                        DeleteLaunchTemplateVersionsResultDeserializer::deserialize(
-                            &actual_tag_name,
-                            &mut stack
-                        )
-                    );
+                    result = try!(DeleteLaunchTemplateVersionsResultDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack
+                    ));
                 }
 
                 Ok(result)
@@ -80374,12 +80403,10 @@ where
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(
-                        DescribeClassicLinkInstancesResultDeserializer::deserialize(
-                            &actual_tag_name,
-                            &mut stack
-                        )
-                    );
+                    result = try!(DescribeClassicLinkInstancesResultDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack
+                    ));
                 }
 
                 Ok(result)
@@ -82829,12 +82856,10 @@ where
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(
-                        DescribeSpotFleetInstancesResponseDeserializer::deserialize(
-                            &actual_tag_name,
-                            &mut stack
-                        )
-                    );
+                    result = try!(DescribeSpotFleetInstancesResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack
+                    ));
                 }
 
                 Ok(result)
@@ -82978,12 +83003,10 @@ where
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(
-                        DescribeSpotInstanceRequestsResultDeserializer::deserialize(
-                            &actual_tag_name,
-                            &mut stack
-                        )
-                    );
+                    result = try!(DescribeSpotInstanceRequestsResultDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack
+                    ));
                 }
 
                 Ok(result)
@@ -83364,12 +83387,10 @@ where
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(
-                        DescribeVolumesModificationsResultDeserializer::deserialize(
-                            &actual_tag_name,
-                            &mut stack
-                        )
-                    );
+                    result = try!(DescribeVolumesModificationsResultDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack
+                    ));
                 }
 
                 Ok(result)
@@ -86536,12 +86557,10 @@ where
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(
-                        RejectVpcEndpointConnectionsResultDeserializer::deserialize(
-                            &actual_tag_name,
-                            &mut stack
-                        )
-                    );
+                    result = try!(RejectVpcEndpointConnectionsResultDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack
+                    ));
                 }
 
                 Ok(result)
@@ -86763,12 +86782,10 @@ where
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(
-                        ReplaceNetworkAclAssociationResultDeserializer::deserialize(
-                            &actual_tag_name,
-                            &mut stack
-                        )
-                    );
+                    result = try!(ReplaceNetworkAclAssociationResultDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack
+                    ));
                 }
 
                 Ok(result)
@@ -86866,12 +86883,10 @@ where
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(
-                        ReplaceRouteTableAssociationResultDeserializer::deserialize(
-                            &actual_tag_name,
-                            &mut stack
-                        )
-                    );
+                    result = try!(ReplaceRouteTableAssociationResultDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack
+                    ));
                 }
 
                 Ok(result)

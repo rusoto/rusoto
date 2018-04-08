@@ -221,9 +221,10 @@ impl ActivityDeserializer {
                             try!(TimestampTypeDeserializer::deserialize("StartTime", stack));
                     }
                     "StatusCode" => {
-                        obj.status_code = try!(
-                            ScalingActivityStatusCodeDeserializer::deserialize("StatusCode", stack)
-                        );
+                        obj.status_code = try!(ScalingActivityStatusCodeDeserializer::deserialize(
+                            "StatusCode",
+                            stack
+                        ));
                     }
                     "StatusMessage" => {
                         obj.status_message = Some(try!(
@@ -1045,9 +1046,10 @@ impl AutoScalingGroupsTypeDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "AutoScalingGroups" => {
-                        obj.auto_scaling_groups = try!(
-                            AutoScalingGroupsDeserializer::deserialize("AutoScalingGroups", stack)
-                        );
+                        obj.auto_scaling_groups = try!(AutoScalingGroupsDeserializer::deserialize(
+                            "AutoScalingGroups",
+                            stack
+                        ));
                     }
                     "NextToken" => {
                         obj.next_token =
@@ -1503,9 +1505,10 @@ impl BlockDeviceMappingDeserializer {
                             Some(try!(NoDeviceDeserializer::deserialize("NoDevice", stack)));
                     }
                     "VirtualName" => {
-                        obj.virtual_name = Some(try!(
-                            XmlStringMaxLen255Deserializer::deserialize("VirtualName", stack)
-                        ));
+                        obj.virtual_name = Some(try!(XmlStringMaxLen255Deserializer::deserialize(
+                            "VirtualName",
+                            stack
+                        )));
                     }
                     _ => skip_tree(stack),
                 },
@@ -2427,12 +2430,11 @@ impl DescribeAccountLimitsAnswerDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "MaxNumberOfAutoScalingGroups" => {
-                        obj.max_number_of_auto_scaling_groups = Some(try!(
-                            MaxNumberOfAutoScalingGroupsDeserializer::deserialize(
+                        obj.max_number_of_auto_scaling_groups =
+                            Some(try!(MaxNumberOfAutoScalingGroupsDeserializer::deserialize(
                                 "MaxNumberOfAutoScalingGroups",
                                 stack
-                            )
-                        ));
+                            )));
                     }
                     "MaxNumberOfLaunchConfigurations" => {
                         obj.max_number_of_launch_configurations = Some(try!(
@@ -2450,12 +2452,11 @@ impl DescribeAccountLimitsAnswerDeserializer {
                             )));
                     }
                     "NumberOfLaunchConfigurations" => {
-                        obj.number_of_launch_configurations = Some(try!(
-                            NumberOfLaunchConfigurationsDeserializer::deserialize(
+                        obj.number_of_launch_configurations =
+                            Some(try!(NumberOfLaunchConfigurationsDeserializer::deserialize(
                                 "NumberOfLaunchConfigurations",
                                 stack
-                            )
-                        ));
+                            )));
                     }
                     _ => skip_tree(stack),
                 },
@@ -2588,12 +2589,11 @@ impl DescribeAutoScalingNotificationTypesAnswerDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "AutoScalingNotificationTypes" => {
-                        obj.auto_scaling_notification_types = Some(try!(
-                            AutoScalingNotificationTypesDeserializer::deserialize(
+                        obj.auto_scaling_notification_types =
+                            Some(try!(AutoScalingNotificationTypesDeserializer::deserialize(
                                 "AutoScalingNotificationTypes",
                                 stack
-                            )
-                        ));
+                            )));
                     }
                     _ => skip_tree(stack),
                 },
@@ -2638,12 +2638,11 @@ impl DescribeLifecycleHookTypesAnswerDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "LifecycleHookTypes" => {
-                        obj.lifecycle_hook_types = Some(try!(
-                            AutoScalingNotificationTypesDeserializer::deserialize(
+                        obj.lifecycle_hook_types =
+                            Some(try!(AutoScalingNotificationTypesDeserializer::deserialize(
                                 "LifecycleHookTypes",
                                 stack
-                            )
-                        ));
+                            )));
                     }
                     _ => skip_tree(stack),
                 },
@@ -4476,12 +4475,11 @@ impl LaunchConfigurationDeserializer {
                         ));
                     }
                     "ClassicLinkVPCSecurityGroups" => {
-                        obj.classic_link_vpc_security_groups = Some(try!(
-                            ClassicLinkVPCSecurityGroupsDeserializer::deserialize(
+                        obj.classic_link_vpc_security_groups =
+                            Some(try!(ClassicLinkVPCSecurityGroupsDeserializer::deserialize(
                                 "ClassicLinkVPCSecurityGroups",
                                 stack
-                            )
-                        ));
+                            )));
                     }
                     "CreatedTime" => {
                         obj.created_time =
@@ -5389,9 +5387,10 @@ impl LoadBalancerTargetGroupStatesDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => {
                     if name == "member" {
-                        obj.push(try!(
-                            LoadBalancerTargetGroupStateDeserializer::deserialize("member", stack)
-                        ));
+                        obj.push(try!(LoadBalancerTargetGroupStateDeserializer::deserialize(
+                            "member",
+                            stack
+                        )));
                     } else {
                         skip_tree(stack);
                     }
@@ -7701,9 +7700,10 @@ impl SuspendedProcessDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "ProcessName" => {
-                        obj.process_name = Some(try!(
-                            XmlStringMaxLen255Deserializer::deserialize("ProcessName", stack)
-                        ));
+                        obj.process_name = Some(try!(XmlStringMaxLen255Deserializer::deserialize(
+                            "ProcessName",
+                            stack
+                        )));
                     }
                     "SuspensionReason" => {
                         obj.suspension_reason = Some(try!(
@@ -8132,9 +8132,10 @@ impl TargetTrackingConfigurationDeserializer {
                         ));
                     }
                     "DisableScaleIn" => {
-                        obj.disable_scale_in = Some(try!(
-                            DisableScaleInDeserializer::deserialize("DisableScaleIn", stack)
-                        ));
+                        obj.disable_scale_in = Some(try!(DisableScaleInDeserializer::deserialize(
+                            "DisableScaleIn",
+                            stack
+                        )));
                     }
                     "PredefinedMetricSpecification" => {
                         obj.predefined_metric_specification = Some(try!(
@@ -10062,11 +10063,9 @@ impl DescribeAutoScalingInstancesError {
                 "InvalidNextToken" => DescribeAutoScalingInstancesError::InvalidNextToken(
                     String::from(parsed_error.message),
                 ),
-                "ResourceContention" => {
-                    DescribeAutoScalingInstancesError::ResourceContentionFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "ResourceContention" => DescribeAutoScalingInstancesError::ResourceContentionFault(
+                    String::from(parsed_error.message),
+                ),
                 _ => DescribeAutoScalingInstancesError::Unknown(String::from(body)),
             },
             Err(_) => DescribeAutoScalingInstancesError::Unknown(body.to_string()),
@@ -10230,11 +10229,9 @@ impl DescribeLaunchConfigurationsError {
                 "InvalidNextToken" => DescribeLaunchConfigurationsError::InvalidNextToken(
                     String::from(parsed_error.message),
                 ),
-                "ResourceContention" => {
-                    DescribeLaunchConfigurationsError::ResourceContentionFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "ResourceContention" => DescribeLaunchConfigurationsError::ResourceContentionFault(
+                    String::from(parsed_error.message),
+                ),
                 _ => DescribeLaunchConfigurationsError::Unknown(String::from(body)),
             },
             Err(_) => DescribeLaunchConfigurationsError::Unknown(body.to_string()),
@@ -12022,11 +12019,9 @@ impl PutNotificationConfigurationError {
                 "LimitExceeded" => PutNotificationConfigurationError::LimitExceededFault(
                     String::from(parsed_error.message),
                 ),
-                "ResourceContention" => {
-                    PutNotificationConfigurationError::ResourceContentionFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "ResourceContention" => PutNotificationConfigurationError::ResourceContentionFault(
+                    String::from(parsed_error.message),
+                ),
                 "ServiceLinkedRoleFailure" => {
                     PutNotificationConfigurationError::ServiceLinkedRoleFailure(String::from(
                         parsed_error.message,
@@ -12793,9 +12788,9 @@ impl TerminateInstanceInAutoScalingGroupError {
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "ResourceContention" => {
-                    TerminateInstanceInAutoScalingGroupError::ResourceContentionFault(
-                        String::from(parsed_error.message),
-                    )
+                    TerminateInstanceInAutoScalingGroupError::ResourceContentionFault(String::from(
+                        parsed_error.message,
+                    ))
                 }
                 "ScalingActivityInProgress" => {
                     TerminateInstanceInAutoScalingGroupError::ScalingActivityInProgressFault(

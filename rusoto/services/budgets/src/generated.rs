@@ -1285,11 +1285,9 @@ impl DescribeNotificationsForBudgetError {
                             error_message,
                         ))
                     }
-                    "InternalErrorException" => {
-                        DescribeNotificationsForBudgetError::InternalError(String::from(
-                            error_message,
-                        ))
-                    }
+                    "InternalErrorException" => DescribeNotificationsForBudgetError::InternalError(
+                        String::from(error_message),
+                    ),
                     "InvalidNextTokenException" => {
                         DescribeNotificationsForBudgetError::InvalidNextToken(String::from(
                             error_message,

@@ -72,9 +72,10 @@ impl AccountAttributesMessageDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "AccountQuotas" => {
-                        obj.account_quotas = Some(try!(
-                            AccountQuotaListDeserializer::deserialize("AccountQuotas", stack)
-                        ));
+                        obj.account_quotas = Some(try!(AccountQuotaListDeserializer::deserialize(
+                            "AccountQuotas",
+                            stack
+                        )));
                     }
                     _ => skip_tree(stack),
                 },
@@ -3159,9 +3160,10 @@ impl DBClusterDeserializer {
                         ));
                     }
                     "AssociatedRoles" => {
-                        obj.associated_roles = Some(try!(
-                            DBClusterRolesDeserializer::deserialize("AssociatedRoles", stack)
-                        ));
+                        obj.associated_roles = Some(try!(DBClusterRolesDeserializer::deserialize(
+                            "AssociatedRoles",
+                            stack
+                        )));
                     }
                     "AvailabilityZones" => {
                         obj.availability_zones = Some(try!(
@@ -3236,9 +3238,10 @@ impl DBClusterDeserializer {
                         )));
                     }
                     "EarliestRestorableTime" => {
-                        obj.earliest_restorable_time = Some(try!(
-                            TStampDeserializer::deserialize("EarliestRestorableTime", stack)
-                        ));
+                        obj.earliest_restorable_time = Some(try!(TStampDeserializer::deserialize(
+                            "EarliestRestorableTime",
+                            stack
+                        )));
                     }
                     "Endpoint" => {
                         obj.endpoint =
@@ -4839,9 +4842,10 @@ impl DBInstanceDeserializer {
                         )));
                     }
                     "BackupRetentionPeriod" => {
-                        obj.backup_retention_period = Some(try!(
-                            IntegerDeserializer::deserialize("BackupRetentionPeriod", stack)
-                        ));
+                        obj.backup_retention_period = Some(try!(IntegerDeserializer::deserialize(
+                            "BackupRetentionPeriod",
+                            stack
+                        )));
                     }
                     "CACertificateIdentifier" => {
                         obj.ca_certificate_identifier = Some(try!(
@@ -6598,9 +6602,10 @@ impl DBSubnetGroupMessageDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "DBSubnetGroups" => {
-                        obj.db_subnet_groups = Some(try!(
-                            DBSubnetGroupsDeserializer::deserialize("DBSubnetGroups", stack)
-                        ));
+                        obj.db_subnet_groups = Some(try!(DBSubnetGroupsDeserializer::deserialize(
+                            "DBSubnetGroups",
+                            stack
+                        )));
                     }
                     "Marker" => {
                         obj.marker = Some(try!(StringDeserializer::deserialize("Marker", stack)));
@@ -9459,9 +9464,10 @@ impl DownloadDBLogFilePortionDetailsDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "AdditionalDataPending" => {
-                        obj.additional_data_pending = Some(try!(
-                            BooleanDeserializer::deserialize("AdditionalDataPending", stack)
-                        ));
+                        obj.additional_data_pending = Some(try!(BooleanDeserializer::deserialize(
+                            "AdditionalDataPending",
+                            stack
+                        )));
                     }
                     "LogFileData" => {
                         obj.log_file_data =
@@ -10127,60 +10133,60 @@ impl EventSubscriptionDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "CustSubscriptionId" => {
-                            obj.cust_subscription_id = Some(try!(
-                                StringDeserializer::deserialize("CustSubscriptionId", stack)
-                            ));
-                        }
-                        "CustomerAwsId" => {
-                            obj.customer_aws_id = Some(try!(StringDeserializer::deserialize(
-                                "CustomerAwsId",
+                DeserializerNext::Element(name) => match &name[..] {
+                    "CustSubscriptionId" => {
+                        obj.cust_subscription_id = Some(try!(StringDeserializer::deserialize(
+                            "CustSubscriptionId",
+                            stack
+                        )));
+                    }
+                    "CustomerAwsId" => {
+                        obj.customer_aws_id = Some(try!(StringDeserializer::deserialize(
+                            "CustomerAwsId",
+                            stack
+                        )));
+                    }
+                    "Enabled" => {
+                        obj.enabled =
+                            Some(try!(BooleanDeserializer::deserialize("Enabled", stack)));
+                    }
+                    "EventCategoriesList" => {
+                        obj.event_categories_list =
+                            Some(try!(EventCategoriesListDeserializer::deserialize(
+                                "EventCategoriesList",
                                 stack
                             )));
-                        }
-                        "Enabled" => {
-                            obj.enabled =
-                                Some(try!(BooleanDeserializer::deserialize("Enabled", stack)));
-                        }
-                        "EventCategoriesList" => {
-                            obj.event_categories_list =
-                                Some(try!(EventCategoriesListDeserializer::deserialize(
-                                    "EventCategoriesList",
-                                    stack
-                                )));
-                        }
-                        "EventSubscriptionArn" => {
-                            obj.event_subscription_arn = Some(try!(
-                                StringDeserializer::deserialize("EventSubscriptionArn", stack)
-                            ));
-                        }
-                        "SnsTopicArn" => {
-                            obj.sns_topic_arn =
-                                Some(try!(StringDeserializer::deserialize("SnsTopicArn", stack)));
-                        }
-                        "SourceIdsList" => {
-                            obj.source_ids_list = Some(try!(
-                                SourceIdsListDeserializer::deserialize("SourceIdsList", stack)
-                            ));
-                        }
-                        "SourceType" => {
-                            obj.source_type =
-                                Some(try!(StringDeserializer::deserialize("SourceType", stack)));
-                        }
-                        "Status" => {
-                            obj.status =
-                                Some(try!(StringDeserializer::deserialize("Status", stack)));
-                        }
-                        "SubscriptionCreationTime" => {
-                            obj.subscription_creation_time = Some(try!(
-                                StringDeserializer::deserialize("SubscriptionCreationTime", stack)
-                            ));
-                        }
-                        _ => skip_tree(stack),
                     }
-                }
+                    "EventSubscriptionArn" => {
+                        obj.event_subscription_arn = Some(try!(StringDeserializer::deserialize(
+                            "EventSubscriptionArn",
+                            stack
+                        )));
+                    }
+                    "SnsTopicArn" => {
+                        obj.sns_topic_arn =
+                            Some(try!(StringDeserializer::deserialize("SnsTopicArn", stack)));
+                    }
+                    "SourceIdsList" => {
+                        obj.source_ids_list = Some(try!(SourceIdsListDeserializer::deserialize(
+                            "SourceIdsList",
+                            stack
+                        )));
+                    }
+                    "SourceType" => {
+                        obj.source_type =
+                            Some(try!(StringDeserializer::deserialize("SourceType", stack)));
+                    }
+                    "Status" => {
+                        obj.status = Some(try!(StringDeserializer::deserialize("Status", stack)));
+                    }
+                    "SubscriptionCreationTime" => {
+                        obj.subscription_creation_time = Some(try!(
+                            StringDeserializer::deserialize("SubscriptionCreationTime", stack)
+                        ));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -12088,9 +12094,10 @@ impl OptionGroupDeserializer {
                         )));
                     }
                     "OptionGroupDescription" => {
-                        obj.option_group_description = Some(try!(
-                            StringDeserializer::deserialize("OptionGroupDescription", stack)
-                        ));
+                        obj.option_group_description = Some(try!(StringDeserializer::deserialize(
+                            "OptionGroupDescription",
+                            stack
+                        )));
                     }
                     "OptionGroupName" => {
                         obj.option_group_name = Some(try!(StringDeserializer::deserialize(
@@ -13248,9 +13255,10 @@ impl OrderableDBInstanceOptionDeserializer {
                         ));
                     }
                     "MaxIopsPerGib" => {
-                        obj.max_iops_per_gib = Some(try!(
-                            DoubleOptionalDeserializer::deserialize("MaxIopsPerGib", stack)
-                        ));
+                        obj.max_iops_per_gib = Some(try!(DoubleOptionalDeserializer::deserialize(
+                            "MaxIopsPerGib",
+                            stack
+                        )));
                     }
                     "MaxStorageSize" => {
                         obj.max_storage_size = Some(try!(
@@ -13263,9 +13271,10 @@ impl OrderableDBInstanceOptionDeserializer {
                         ));
                     }
                     "MinIopsPerGib" => {
-                        obj.min_iops_per_gib = Some(try!(
-                            DoubleOptionalDeserializer::deserialize("MinIopsPerGib", stack)
-                        ));
+                        obj.min_iops_per_gib = Some(try!(DoubleOptionalDeserializer::deserialize(
+                            "MinIopsPerGib",
+                            stack
+                        )));
                     }
                     "MinStorageSize" => {
                         obj.min_storage_size = Some(try!(
@@ -13706,9 +13715,10 @@ impl PendingCloudwatchLogsExportsDeserializer {
                         ));
                     }
                     "LogTypesToEnable" => {
-                        obj.log_types_to_enable = Some(try!(
-                            LogTypeListDeserializer::deserialize("LogTypesToEnable", stack)
-                        ));
+                        obj.log_types_to_enable = Some(try!(LogTypeListDeserializer::deserialize(
+                            "LogTypesToEnable",
+                            stack
+                        )));
                     }
                     _ => skip_tree(stack),
                 },
@@ -14002,89 +14012,89 @@ impl PendingModifiedValuesDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "AllocatedStorage" => {
-                            obj.allocated_storage = Some(try!(
-                                IntegerOptionalDeserializer::deserialize("AllocatedStorage", stack)
-                            ));
-                        }
-                        "BackupRetentionPeriod" => {
-                            obj.backup_retention_period =
-                                Some(try!(IntegerOptionalDeserializer::deserialize(
-                                    "BackupRetentionPeriod",
-                                    stack
-                                )));
-                        }
-                        "CACertificateIdentifier" => {
-                            obj.ca_certificate_identifier = Some(try!(
-                                StringDeserializer::deserialize("CACertificateIdentifier", stack)
-                            ));
-                        }
-                        "DBInstanceClass" => {
-                            obj.db_instance_class = Some(try!(StringDeserializer::deserialize(
-                                "DBInstanceClass",
-                                stack
-                            )));
-                        }
-                        "DBInstanceIdentifier" => {
-                            obj.db_instance_identifier = Some(try!(
-                                StringDeserializer::deserialize("DBInstanceIdentifier", stack)
-                            ));
-                        }
-                        "DBSubnetGroupName" => {
-                            obj.db_subnet_group_name = Some(try!(
-                                StringDeserializer::deserialize("DBSubnetGroupName", stack)
-                            ));
-                        }
-                        "EngineVersion" => {
-                            obj.engine_version = Some(try!(StringDeserializer::deserialize(
-                                "EngineVersion",
-                                stack
-                            )));
-                        }
-                        "Iops" => {
-                            obj.iops = Some(try!(IntegerOptionalDeserializer::deserialize(
-                                "Iops",
-                                stack
-                            )));
-                        }
-                        "LicenseModel" => {
-                            obj.license_model =
-                                Some(try!(StringDeserializer::deserialize("LicenseModel", stack)));
-                        }
-                        "MasterUserPassword" => {
-                            obj.master_user_password = Some(try!(
-                                StringDeserializer::deserialize("MasterUserPassword", stack)
-                            ));
-                        }
-                        "MultiAZ" => {
-                            obj.multi_az = Some(try!(BooleanOptionalDeserializer::deserialize(
-                                "MultiAZ",
-                                stack
-                            )));
-                        }
-                        "PendingCloudwatchLogsExports" => {
-                            obj.pending_cloudwatch_logs_exports = Some(try!(
-                                PendingCloudwatchLogsExportsDeserializer::deserialize(
-                                    "PendingCloudwatchLogsExports",
-                                    stack
-                                )
-                            ));
-                        }
-                        "Port" => {
-                            obj.port = Some(try!(IntegerOptionalDeserializer::deserialize(
-                                "Port",
-                                stack
-                            )));
-                        }
-                        "StorageType" => {
-                            obj.storage_type =
-                                Some(try!(StringDeserializer::deserialize("StorageType", stack)));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "AllocatedStorage" => {
+                        obj.allocated_storage = Some(try!(
+                            IntegerOptionalDeserializer::deserialize("AllocatedStorage", stack)
+                        ));
                     }
-                }
+                    "BackupRetentionPeriod" => {
+                        obj.backup_retention_period =
+                            Some(try!(IntegerOptionalDeserializer::deserialize(
+                                "BackupRetentionPeriod",
+                                stack
+                            )));
+                    }
+                    "CACertificateIdentifier" => {
+                        obj.ca_certificate_identifier = Some(try!(
+                            StringDeserializer::deserialize("CACertificateIdentifier", stack)
+                        ));
+                    }
+                    "DBInstanceClass" => {
+                        obj.db_instance_class = Some(try!(StringDeserializer::deserialize(
+                            "DBInstanceClass",
+                            stack
+                        )));
+                    }
+                    "DBInstanceIdentifier" => {
+                        obj.db_instance_identifier = Some(try!(StringDeserializer::deserialize(
+                            "DBInstanceIdentifier",
+                            stack
+                        )));
+                    }
+                    "DBSubnetGroupName" => {
+                        obj.db_subnet_group_name = Some(try!(StringDeserializer::deserialize(
+                            "DBSubnetGroupName",
+                            stack
+                        )));
+                    }
+                    "EngineVersion" => {
+                        obj.engine_version = Some(try!(StringDeserializer::deserialize(
+                            "EngineVersion",
+                            stack
+                        )));
+                    }
+                    "Iops" => {
+                        obj.iops = Some(try!(IntegerOptionalDeserializer::deserialize(
+                            "Iops",
+                            stack
+                        )));
+                    }
+                    "LicenseModel" => {
+                        obj.license_model =
+                            Some(try!(StringDeserializer::deserialize("LicenseModel", stack)));
+                    }
+                    "MasterUserPassword" => {
+                        obj.master_user_password = Some(try!(StringDeserializer::deserialize(
+                            "MasterUserPassword",
+                            stack
+                        )));
+                    }
+                    "MultiAZ" => {
+                        obj.multi_az = Some(try!(BooleanOptionalDeserializer::deserialize(
+                            "MultiAZ",
+                            stack
+                        )));
+                    }
+                    "PendingCloudwatchLogsExports" => {
+                        obj.pending_cloudwatch_logs_exports =
+                            Some(try!(PendingCloudwatchLogsExportsDeserializer::deserialize(
+                                "PendingCloudwatchLogsExports",
+                                stack
+                            )));
+                    }
+                    "Port" => {
+                        obj.port = Some(try!(IntegerOptionalDeserializer::deserialize(
+                            "Port",
+                            stack
+                        )));
+                    }
+                    "StorageType" => {
+                        obj.storage_type =
+                            Some(try!(StringDeserializer::deserialize("StorageType", stack)));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -14985,9 +14995,10 @@ impl ReservedDBInstanceDeserializer {
                         ));
                     }
                     "ReservedDBInstanceArn" => {
-                        obj.reserved_db_instance_arn = Some(try!(
-                            StringDeserializer::deserialize("ReservedDBInstanceArn", stack)
-                        ));
+                        obj.reserved_db_instance_arn = Some(try!(StringDeserializer::deserialize(
+                            "ReservedDBInstanceArn",
+                            stack
+                        )));
                     }
                     "ReservedDBInstanceId" => {
                         obj.reserved_db_instance_id = Some(try!(StringDeserializer::deserialize(
@@ -17169,9 +17180,10 @@ impl SourceRegionMessageDeserializer {
                         obj.marker = Some(try!(StringDeserializer::deserialize("Marker", stack)));
                     }
                     "SourceRegions" => {
-                        obj.source_regions = Some(try!(
-                            SourceRegionListDeserializer::deserialize("SourceRegions", stack)
-                        ));
+                        obj.source_regions = Some(try!(SourceRegionListDeserializer::deserialize(
+                            "SourceRegions",
+                            stack
+                        )));
                     }
                     _ => skip_tree(stack),
                 },
@@ -17898,9 +17910,10 @@ impl ValidDBInstanceModificationsMessageDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "Storage" => {
-                        obj.storage = Some(try!(
-                            ValidStorageOptionsListDeserializer::deserialize("Storage", stack)
-                        ));
+                        obj.storage = Some(try!(ValidStorageOptionsListDeserializer::deserialize(
+                            "Storage",
+                            stack
+                        )));
                     }
                     _ => skip_tree(stack),
                 },
@@ -18312,9 +18325,9 @@ impl AddSourceIdentifierToSubscriptionError {
                     String::from(parsed_error.message),
                 ),
                 "SubscriptionNotFound" => {
-                    AddSourceIdentifierToSubscriptionError::SubscriptionNotFoundFault(
-                        String::from(parsed_error.message),
-                    )
+                    AddSourceIdentifierToSubscriptionError::SubscriptionNotFoundFault(String::from(
+                        parsed_error.message,
+                    ))
                 }
                 _ => AddSourceIdentifierToSubscriptionError::Unknown(String::from(body)),
             },
@@ -18807,11 +18820,9 @@ impl CopyDBClusterSnapshotError {
                         parsed_error.message,
                     ))
                 }
-                "KMSKeyNotAccessibleFault" => {
-                    CopyDBClusterSnapshotError::KMSKeyNotAccessibleFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "KMSKeyNotAccessibleFault" => CopyDBClusterSnapshotError::KMSKeyNotAccessibleFault(
+                    String::from(parsed_error.message),
+                ),
                 "SnapshotQuotaExceeded" => CopyDBClusterSnapshotError::SnapshotQuotaExceededFault(
                     String::from(parsed_error.message),
                 ),
@@ -19215,11 +19226,9 @@ impl CreateDBClusterError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "DBClusterAlreadyExistsFault" => {
-                    CreateDBClusterError::DBClusterAlreadyExistsFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "DBClusterAlreadyExistsFault" => CreateDBClusterError::DBClusterAlreadyExistsFault(
+                    String::from(parsed_error.message),
+                ),
                 "DBClusterNotFoundFault" => {
                     CreateDBClusterError::DBClusterNotFoundFault(String::from(parsed_error.message))
                 }
@@ -19228,11 +19237,9 @@ impl CreateDBClusterError {
                         parsed_error.message,
                     ))
                 }
-                "DBClusterQuotaExceededFault" => {
-                    CreateDBClusterError::DBClusterQuotaExceededFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "DBClusterQuotaExceededFault" => CreateDBClusterError::DBClusterQuotaExceededFault(
+                    String::from(parsed_error.message),
+                ),
                 "DBInstanceNotFound" => CreateDBClusterError::DBInstanceNotFoundFault(
                     String::from(parsed_error.message),
                 ),
@@ -19263,11 +19270,9 @@ impl CreateDBClusterError {
                 "InvalidSubnet" => {
                     CreateDBClusterError::InvalidSubnet(String::from(parsed_error.message))
                 }
-                "InvalidVPCNetworkStateFault" => {
-                    CreateDBClusterError::InvalidVPCNetworkStateFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "InvalidVPCNetworkStateFault" => CreateDBClusterError::InvalidVPCNetworkStateFault(
+                    String::from(parsed_error.message),
+                ),
                 "KMSKeyNotAccessibleFault" => CreateDBClusterError::KMSKeyNotAccessibleFault(
                     String::from(parsed_error.message),
                 ),
@@ -19467,9 +19472,9 @@ impl CreateDBClusterSnapshotError {
                     String::from(parsed_error.message),
                 ),
                 "DBClusterSnapshotAlreadyExistsFault" => {
-                    CreateDBClusterSnapshotError::DBClusterSnapshotAlreadyExistsFault(
-                        String::from(parsed_error.message),
-                    )
+                    CreateDBClusterSnapshotError::DBClusterSnapshotAlreadyExistsFault(String::from(
+                        parsed_error.message,
+                    ))
                 }
                 "InvalidDBClusterSnapshotStateFault" => {
                     CreateDBClusterSnapshotError::InvalidDBClusterSnapshotStateFault(String::from(
@@ -19609,11 +19614,9 @@ impl CreateDBInstanceError {
                 "DBInstanceAlreadyExists" => CreateDBInstanceError::DBInstanceAlreadyExistsFault(
                     String::from(parsed_error.message),
                 ),
-                "DBParameterGroupNotFound" => {
-                    CreateDBInstanceError::DBParameterGroupNotFoundFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "DBParameterGroupNotFound" => CreateDBInstanceError::DBParameterGroupNotFoundFault(
+                    String::from(parsed_error.message),
+                ),
                 "DBSecurityGroupNotFound" => CreateDBInstanceError::DBSecurityGroupNotFoundFault(
                     String::from(parsed_error.message),
                 ),
@@ -20379,9 +20382,9 @@ impl CreateEventSubscriptionError {
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "EventSubscriptionQuotaExceeded" => {
-                    CreateEventSubscriptionError::EventSubscriptionQuotaExceededFault(
-                        String::from(parsed_error.message),
-                    )
+                    CreateEventSubscriptionError::EventSubscriptionQuotaExceededFault(String::from(
+                        parsed_error.message,
+                    ))
                 }
                 "SNSInvalidTopic" => CreateEventSubscriptionError::SNSInvalidTopicFault(
                     String::from(parsed_error.message),
@@ -20684,9 +20687,9 @@ impl DeleteDBClusterParameterGroupError {
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "DBParameterGroupNotFound" => {
-                    DeleteDBClusterParameterGroupError::DBParameterGroupNotFoundFault(
-                        String::from(parsed_error.message),
-                    )
+                    DeleteDBClusterParameterGroupError::DBParameterGroupNotFoundFault(String::from(
+                        parsed_error.message,
+                    ))
                 }
                 "InvalidDBParameterGroupState" => {
                     DeleteDBClusterParameterGroupError::InvalidDBParameterGroupStateFault(
@@ -21237,11 +21240,9 @@ impl DeleteDBSubnetGroupError {
                         parsed_error.message,
                     ))
                 }
-                "InvalidDBSubnetStateFault" => {
-                    DeleteDBSubnetGroupError::InvalidDBSubnetStateFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "InvalidDBSubnetStateFault" => DeleteDBSubnetGroupError::InvalidDBSubnetStateFault(
+                    String::from(parsed_error.message),
+                ),
                 _ => DeleteDBSubnetGroupError::Unknown(String::from(body)),
             },
             Err(_) => DeleteDBSubnetGroupError::Unknown(body.to_string()),
@@ -22527,11 +22528,9 @@ impl DescribeDBSnapshotAttributesError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "DBSnapshotNotFound" => {
-                    DescribeDBSnapshotAttributesError::DBSnapshotNotFoundFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "DBSnapshotNotFound" => DescribeDBSnapshotAttributesError::DBSnapshotNotFoundFault(
+                    String::from(parsed_error.message),
+                ),
                 _ => DescribeDBSnapshotAttributesError::Unknown(String::from(body)),
             },
             Err(_) => DescribeDBSnapshotAttributesError::Unknown(body.to_string()),
@@ -23446,9 +23445,9 @@ impl DescribeReservedDBInstancesError {
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "ReservedDBInstanceNotFound" => {
-                    DescribeReservedDBInstancesError::ReservedDBInstanceNotFoundFault(
-                        String::from(parsed_error.message),
-                    )
+                    DescribeReservedDBInstancesError::ReservedDBInstanceNotFoundFault(String::from(
+                        parsed_error.message,
+                    ))
                 }
                 _ => DescribeReservedDBInstancesError::Unknown(String::from(body)),
             },
@@ -23572,12 +23571,16 @@ impl fmt::Display for DescribeReservedDBInstancesOfferingsError {
 impl Error for DescribeReservedDBInstancesOfferingsError {
     fn description(&self) -> &str {
         match *self {
-                            DescribeReservedDBInstancesOfferingsError::ReservedDBInstancesOfferingNotFoundFault(ref cause) => cause,
-DescribeReservedDBInstancesOfferingsError::Validation(ref cause) => cause,
-DescribeReservedDBInstancesOfferingsError::Credentials(ref err) => err.description(),
-DescribeReservedDBInstancesOfferingsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-DescribeReservedDBInstancesOfferingsError::Unknown(ref cause) => cause
-                        }
+            DescribeReservedDBInstancesOfferingsError::ReservedDBInstancesOfferingNotFoundFault(
+                ref cause,
+            ) => cause,
+            DescribeReservedDBInstancesOfferingsError::Validation(ref cause) => cause,
+            DescribeReservedDBInstancesOfferingsError::Credentials(ref err) => err.description(),
+            DescribeReservedDBInstancesOfferingsError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DescribeReservedDBInstancesOfferingsError::Unknown(ref cause) => cause,
+        }
     }
 }
 /// Errors returned by DescribeSourceRegions
@@ -23858,11 +23861,9 @@ impl FailoverDBClusterError {
                 "DBClusterNotFoundFault" => FailoverDBClusterError::DBClusterNotFoundFault(
                     String::from(parsed_error.message),
                 ),
-                "InvalidDBClusterStateFault" => {
-                    FailoverDBClusterError::InvalidDBClusterStateFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "InvalidDBClusterStateFault" => FailoverDBClusterError::InvalidDBClusterStateFault(
+                    String::from(parsed_error.message),
+                ),
                 "InvalidDBInstanceState" => FailoverDBClusterError::InvalidDBInstanceStateFault(
                     String::from(parsed_error.message),
                 ),
@@ -24055,11 +24056,9 @@ impl ModifyDBClusterError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "DBClusterAlreadyExistsFault" => {
-                    ModifyDBClusterError::DBClusterAlreadyExistsFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "DBClusterAlreadyExistsFault" => ModifyDBClusterError::DBClusterAlreadyExistsFault(
+                    String::from(parsed_error.message),
+                ),
                 "DBClusterNotFoundFault" => {
                     ModifyDBClusterError::DBClusterNotFoundFault(String::from(parsed_error.message))
                 }
@@ -24090,11 +24089,9 @@ impl ModifyDBClusterError {
                 "InvalidSubnet" => {
                     ModifyDBClusterError::InvalidSubnet(String::from(parsed_error.message))
                 }
-                "InvalidVPCNetworkStateFault" => {
-                    ModifyDBClusterError::InvalidVPCNetworkStateFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "InvalidVPCNetworkStateFault" => ModifyDBClusterError::InvalidVPCNetworkStateFault(
+                    String::from(parsed_error.message),
+                ),
                 "StorageQuotaExceeded" => ModifyDBClusterError::StorageQuotaExceededFault(
                     String::from(parsed_error.message),
                 ),
@@ -24185,9 +24182,9 @@ impl ModifyDBClusterParameterGroupError {
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "DBParameterGroupNotFound" => {
-                    ModifyDBClusterParameterGroupError::DBParameterGroupNotFoundFault(
-                        String::from(parsed_error.message),
-                    )
+                    ModifyDBClusterParameterGroupError::DBParameterGroupNotFoundFault(String::from(
+                        parsed_error.message,
+                    ))
                 }
                 "InvalidDBParameterGroupState" => {
                     ModifyDBClusterParameterGroupError::InvalidDBParameterGroupStateFault(
@@ -24418,11 +24415,9 @@ impl ModifyDBInstanceError {
                 "DBInstanceNotFound" => ModifyDBInstanceError::DBInstanceNotFoundFault(
                     String::from(parsed_error.message),
                 ),
-                "DBParameterGroupNotFound" => {
-                    ModifyDBInstanceError::DBParameterGroupNotFoundFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "DBParameterGroupNotFound" => ModifyDBInstanceError::DBParameterGroupNotFoundFault(
+                    String::from(parsed_error.message),
+                ),
                 "DBSecurityGroupNotFound" => ModifyDBInstanceError::DBSecurityGroupNotFoundFault(
                     String::from(parsed_error.message),
                 ),
@@ -24936,9 +24931,9 @@ impl ModifyEventSubscriptionError {
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "EventSubscriptionQuotaExceeded" => {
-                    ModifyEventSubscriptionError::EventSubscriptionQuotaExceededFault(
-                        String::from(parsed_error.message),
-                    )
+                    ModifyEventSubscriptionError::EventSubscriptionQuotaExceededFault(String::from(
+                        parsed_error.message,
+                    ))
                 }
                 "SNSInvalidTopic" => ModifyEventSubscriptionError::SNSInvalidTopicFault(
                     String::from(parsed_error.message),
@@ -25349,14 +25344,22 @@ impl fmt::Display for PurchaseReservedDBInstancesOfferingError {
 impl Error for PurchaseReservedDBInstancesOfferingError {
     fn description(&self) -> &str {
         match *self {
-                            PurchaseReservedDBInstancesOfferingError::ReservedDBInstanceAlreadyExistsFault(ref cause) => cause,
-PurchaseReservedDBInstancesOfferingError::ReservedDBInstanceQuotaExceededFault(ref cause) => cause,
-PurchaseReservedDBInstancesOfferingError::ReservedDBInstancesOfferingNotFoundFault(ref cause) => cause,
-PurchaseReservedDBInstancesOfferingError::Validation(ref cause) => cause,
-PurchaseReservedDBInstancesOfferingError::Credentials(ref err) => err.description(),
-PurchaseReservedDBInstancesOfferingError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-PurchaseReservedDBInstancesOfferingError::Unknown(ref cause) => cause
-                        }
+            PurchaseReservedDBInstancesOfferingError::ReservedDBInstanceAlreadyExistsFault(
+                ref cause,
+            ) => cause,
+            PurchaseReservedDBInstancesOfferingError::ReservedDBInstanceQuotaExceededFault(
+                ref cause,
+            ) => cause,
+            PurchaseReservedDBInstancesOfferingError::ReservedDBInstancesOfferingNotFoundFault(
+                ref cause,
+            ) => cause,
+            PurchaseReservedDBInstancesOfferingError::Validation(ref cause) => cause,
+            PurchaseReservedDBInstancesOfferingError::Credentials(ref err) => err.description(),
+            PurchaseReservedDBInstancesOfferingError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            PurchaseReservedDBInstancesOfferingError::Unknown(ref cause) => cause,
+        }
     }
 }
 /// Errors returned by RebootDBInstance
@@ -25954,9 +25957,9 @@ impl RestoreDBClusterFromS3Error {
                     String::from(parsed_error.message),
                 ),
                 "DBClusterParameterGroupNotFound" => {
-                    RestoreDBClusterFromS3Error::DBClusterParameterGroupNotFoundFault(
-                        String::from(parsed_error.message),
-                    )
+                    RestoreDBClusterFromS3Error::DBClusterParameterGroupNotFoundFault(String::from(
+                        parsed_error.message,
+                    ))
                 }
                 "DBClusterQuotaExceededFault" => {
                     RestoreDBClusterFromS3Error::DBClusterQuotaExceededFault(String::from(
@@ -26131,15 +26134,13 @@ impl RestoreDBClusterFromSnapshotError {
                     ))
                 }
                 "DBClusterSnapshotNotFoundFault" => {
-                    RestoreDBClusterFromSnapshotError::DBClusterSnapshotNotFoundFault(
-                        String::from(parsed_error.message),
-                    )
-                }
-                "DBSnapshotNotFound" => {
-                    RestoreDBClusterFromSnapshotError::DBSnapshotNotFoundFault(String::from(
+                    RestoreDBClusterFromSnapshotError::DBClusterSnapshotNotFoundFault(String::from(
                         parsed_error.message,
                     ))
                 }
+                "DBSnapshotNotFound" => RestoreDBClusterFromSnapshotError::DBSnapshotNotFoundFault(
+                    String::from(parsed_error.message),
+                ),
                 "DBSubnetGroupNotFoundFault" => {
                     RestoreDBClusterFromSnapshotError::DBSubnetGroupNotFoundFault(String::from(
                         parsed_error.message,
@@ -26370,9 +26371,9 @@ impl RestoreDBClusterToPointInTimeError {
                 "InvalidRestoreFault" => RestoreDBClusterToPointInTimeError::InvalidRestoreFault(
                     String::from(parsed_error.message),
                 ),
-                "InvalidSubnet" => RestoreDBClusterToPointInTimeError::InvalidSubnet(
-                    String::from(parsed_error.message),
-                ),
+                "InvalidSubnet" => RestoreDBClusterToPointInTimeError::InvalidSubnet(String::from(
+                    parsed_error.message,
+                )),
                 "InvalidVPCNetworkStateFault" => {
                     RestoreDBClusterToPointInTimeError::InvalidVPCNetworkStateFault(String::from(
                         parsed_error.message,
@@ -26554,11 +26555,9 @@ impl RestoreDBInstanceFromDBSnapshotError {
                         parsed_error.message,
                     ))
                 }
-                "DomainNotFoundFault" => {
-                    RestoreDBInstanceFromDBSnapshotError::DomainNotFoundFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "DomainNotFoundFault" => RestoreDBInstanceFromDBSnapshotError::DomainNotFoundFault(
+                    String::from(parsed_error.message),
+                ),
                 "InstanceQuotaExceeded" => {
                     RestoreDBInstanceFromDBSnapshotError::InstanceQuotaExceededFault(String::from(
                         parsed_error.message,
@@ -26570,22 +26569,20 @@ impl RestoreDBInstanceFromDBSnapshotError {
                     )
                 }
                 "InvalidDBSnapshotState" => {
-                    RestoreDBInstanceFromDBSnapshotError::InvalidDBSnapshotStateFault(
-                        String::from(parsed_error.message),
-                    )
-                }
-                "InvalidRestoreFault" => {
-                    RestoreDBInstanceFromDBSnapshotError::InvalidRestoreFault(String::from(
+                    RestoreDBInstanceFromDBSnapshotError::InvalidDBSnapshotStateFault(String::from(
                         parsed_error.message,
                     ))
                 }
+                "InvalidRestoreFault" => RestoreDBInstanceFromDBSnapshotError::InvalidRestoreFault(
+                    String::from(parsed_error.message),
+                ),
                 "InvalidSubnet" => RestoreDBInstanceFromDBSnapshotError::InvalidSubnet(
                     String::from(parsed_error.message),
                 ),
                 "InvalidVPCNetworkStateFault" => {
-                    RestoreDBInstanceFromDBSnapshotError::InvalidVPCNetworkStateFault(
-                        String::from(parsed_error.message),
-                    )
+                    RestoreDBInstanceFromDBSnapshotError::InvalidVPCNetworkStateFault(String::from(
+                        parsed_error.message,
+                    ))
                 }
                 "KMSKeyNotAccessibleFault" => {
                     RestoreDBInstanceFromDBSnapshotError::KMSKeyNotAccessibleFault(String::from(
@@ -26777,9 +26774,9 @@ impl RestoreDBInstanceFromS3Error {
                     ))
                 }
                 "InsufficientDBInstanceCapacity" => {
-                    RestoreDBInstanceFromS3Error::InsufficientDBInstanceCapacityFault(
-                        String::from(parsed_error.message),
-                    )
+                    RestoreDBInstanceFromS3Error::InsufficientDBInstanceCapacityFault(String::from(
+                        parsed_error.message,
+                    ))
                 }
                 "InvalidS3BucketFault" => RestoreDBInstanceFromS3Error::InvalidS3BucketFault(
                     String::from(parsed_error.message),
@@ -26948,9 +26945,9 @@ impl RestoreDBInstanceToPointInTimeError {
                     ))
                 }
                 "DBInstanceAlreadyExists" => {
-                    RestoreDBInstanceToPointInTimeError::DBInstanceAlreadyExistsFault(
-                        String::from(parsed_error.message),
-                    )
+                    RestoreDBInstanceToPointInTimeError::DBInstanceAlreadyExistsFault(String::from(
+                        parsed_error.message,
+                    ))
                 }
                 "DBInstanceNotFound" => {
                     RestoreDBInstanceToPointInTimeError::DBInstanceNotFoundFault(String::from(
@@ -26958,9 +26955,9 @@ impl RestoreDBInstanceToPointInTimeError {
                     ))
                 }
                 "DBSecurityGroupNotFound" => {
-                    RestoreDBInstanceToPointInTimeError::DBSecurityGroupNotFoundFault(
-                        String::from(parsed_error.message),
-                    )
+                    RestoreDBInstanceToPointInTimeError::DBSecurityGroupNotFoundFault(String::from(
+                        parsed_error.message,
+                    ))
                 }
                 "DBSubnetGroupDoesNotCoverEnoughAZs" => {
                     RestoreDBInstanceToPointInTimeError::DBSubnetGroupDoesNotCoverEnoughAZs(
@@ -27027,9 +27024,9 @@ impl RestoreDBInstanceToPointInTimeError {
                     ))
                 }
                 "StorageTypeNotSupported" => {
-                    RestoreDBInstanceToPointInTimeError::StorageTypeNotSupportedFault(
-                        String::from(parsed_error.message),
-                    )
+                    RestoreDBInstanceToPointInTimeError::StorageTypeNotSupportedFault(String::from(
+                        parsed_error.message,
+                    ))
                 }
                 _ => RestoreDBInstanceToPointInTimeError::Unknown(String::from(body)),
             },
@@ -27281,11 +27278,9 @@ impl StartDBInstanceError {
                 "InvalidSubnet" => {
                     StartDBInstanceError::InvalidSubnet(String::from(parsed_error.message))
                 }
-                "InvalidVPCNetworkStateFault" => {
-                    StartDBInstanceError::InvalidVPCNetworkStateFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "InvalidVPCNetworkStateFault" => StartDBInstanceError::InvalidVPCNetworkStateFault(
+                    String::from(parsed_error.message),
+                ),
                 "KMSKeyNotAccessibleFault" => StartDBInstanceError::KMSKeyNotAccessibleFault(
                     String::from(parsed_error.message),
                 ),
@@ -30192,12 +30187,10 @@ where
                     let _start_document = stack.next();
                     let actual_tag_name = try!(peek_at_name(&mut stack));
                     try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(
-                        DescribeDBSnapshotAttributesResultDeserializer::deserialize(
-                            "DescribeDBSnapshotAttributesResult",
-                            &mut stack
-                        )
-                    );
+                    result = try!(DescribeDBSnapshotAttributesResultDeserializer::deserialize(
+                        "DescribeDBSnapshotAttributesResult",
+                        &mut stack
+                    ));
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
@@ -30868,12 +30861,10 @@ where
                     let _start_document = stack.next();
                     let actual_tag_name = try!(peek_at_name(&mut stack));
                     try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(
-                        ReservedDBInstancesOfferingMessageDeserializer::deserialize(
-                            "DescribeReservedDBInstancesOfferingsResult",
-                            &mut stack
-                        )
-                    );
+                    result = try!(ReservedDBInstancesOfferingMessageDeserializer::deserialize(
+                        "DescribeReservedDBInstancesOfferingsResult",
+                        &mut stack
+                    ));
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
@@ -31232,12 +31223,10 @@ where
                     let _start_document = stack.next();
                     let actual_tag_name = try!(peek_at_name(&mut stack));
                     try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(
-                        DBClusterParameterGroupNameMessageDeserializer::deserialize(
-                            "ModifyDBClusterParameterGroupResult",
-                            &mut stack
-                        )
-                    );
+                    result = try!(DBClusterParameterGroupNameMessageDeserializer::deserialize(
+                        "ModifyDBClusterParameterGroupResult",
+                        &mut stack
+                    ));
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
@@ -32017,12 +32006,10 @@ where
                     let _start_document = stack.next();
                     let actual_tag_name = try!(peek_at_name(&mut stack));
                     try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(
-                        DBClusterParameterGroupNameMessageDeserializer::deserialize(
-                            "ResetDBClusterParameterGroupResult",
-                            &mut stack
-                        )
-                    );
+                    result = try!(DBClusterParameterGroupNameMessageDeserializer::deserialize(
+                        "ResetDBClusterParameterGroupResult",
+                        &mut stack
+                    ));
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
@@ -32172,12 +32159,10 @@ where
                     let _start_document = stack.next();
                     let actual_tag_name = try!(peek_at_name(&mut stack));
                     try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(
-                        RestoreDBClusterFromSnapshotResultDeserializer::deserialize(
-                            "RestoreDBClusterFromSnapshotResult",
-                            &mut stack
-                        )
-                    );
+                    result = try!(RestoreDBClusterFromSnapshotResultDeserializer::deserialize(
+                        "RestoreDBClusterFromSnapshotResult",
+                        &mut stack
+                    ));
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
@@ -32437,12 +32422,10 @@ where
                     let _start_document = stack.next();
                     let actual_tag_name = try!(peek_at_name(&mut stack));
                     try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(
-                        RevokeDBSecurityGroupIngressResultDeserializer::deserialize(
-                            "RevokeDBSecurityGroupIngressResult",
-                            &mut stack
-                        )
-                    );
+                    result = try!(RevokeDBSecurityGroupIngressResultDeserializer::deserialize(
+                        "RevokeDBSecurityGroupIngressResult",
+                        &mut stack
+                    ));
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }

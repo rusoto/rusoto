@@ -1815,9 +1815,9 @@ impl BatchGetResourceConfigError {
 
                 match *error_type {
                     "NoAvailableConfigurationRecorderException" => {
-                        BatchGetResourceConfigError::NoAvailableConfigurationRecorder(
-                            String::from(error_message),
-                        )
+                        BatchGetResourceConfigError::NoAvailableConfigurationRecorder(String::from(
+                            error_message,
+                        ))
                     }
                     "ValidationException" => {
                         BatchGetResourceConfigError::Validation(error_message.to_string())
@@ -2145,9 +2145,9 @@ impl DeleteConfigurationRecorderError {
 
                 match *error_type {
                     "NoSuchConfigurationRecorderException" => {
-                        DeleteConfigurationRecorderError::NoSuchConfigurationRecorder(
-                            String::from(error_message),
-                        )
+                        DeleteConfigurationRecorderError::NoSuchConfigurationRecorder(String::from(
+                            error_message,
+                        ))
                     }
                     "ValidationException" => {
                         DeleteConfigurationRecorderError::Validation(error_message.to_string())
@@ -2586,12 +2586,28 @@ impl DescribeAggregateComplianceByConfigRulesError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                                    "InvalidLimitException" => DescribeAggregateComplianceByConfigRulesError::InvalidLimit(String::from(error_message)),
-"InvalidNextTokenException" => DescribeAggregateComplianceByConfigRulesError::InvalidNextToken(String::from(error_message)),
-"NoSuchConfigurationAggregatorException" => DescribeAggregateComplianceByConfigRulesError::NoSuchConfigurationAggregator(String::from(error_message)),
-"ValidationException" => DescribeAggregateComplianceByConfigRulesError::Validation(error_message.to_string()),
-_ => DescribeAggregateComplianceByConfigRulesError::Unknown(String::from(body))
-                                }
+                    "InvalidLimitException" => {
+                        DescribeAggregateComplianceByConfigRulesError::InvalidLimit(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidNextTokenException" => {
+                        DescribeAggregateComplianceByConfigRulesError::InvalidNextToken(
+                            String::from(error_message),
+                        )
+                    }
+                    "NoSuchConfigurationAggregatorException" => {
+                        DescribeAggregateComplianceByConfigRulesError::NoSuchConfigurationAggregator(
+                            String::from(error_message),
+                        )
+                    }
+                    "ValidationException" => {
+                        DescribeAggregateComplianceByConfigRulesError::Validation(
+                            error_message.to_string(),
+                        )
+                    }
+                    _ => DescribeAggregateComplianceByConfigRulesError::Unknown(String::from(body)),
+                }
             }
             Err(_) => DescribeAggregateComplianceByConfigRulesError::Unknown(String::from(body)),
         }
@@ -2685,9 +2701,9 @@ impl DescribeAggregationAuthorizationsError {
                         ))
                     }
                     "InvalidParameterValueException" => {
-                        DescribeAggregationAuthorizationsError::InvalidParameterValue(
-                            String::from(error_message),
-                        )
+                        DescribeAggregationAuthorizationsError::InvalidParameterValue(String::from(
+                            error_message,
+                        ))
                     }
                     "ValidationException" => DescribeAggregationAuthorizationsError::Validation(
                         error_message.to_string(),
@@ -3244,11 +3260,9 @@ impl DescribeConfigurationAggregatorsError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "InvalidLimitException" => {
-                        DescribeConfigurationAggregatorsError::InvalidLimit(String::from(
-                            error_message,
-                        ))
-                    }
+                    "InvalidLimitException" => DescribeConfigurationAggregatorsError::InvalidLimit(
+                        String::from(error_message),
+                    ),
                     "InvalidNextTokenException" => {
                         DescribeConfigurationAggregatorsError::InvalidNextToken(String::from(
                             error_message,
@@ -3866,12 +3880,28 @@ impl GetAggregateConfigRuleComplianceSummaryError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                                    "InvalidLimitException" => GetAggregateConfigRuleComplianceSummaryError::InvalidLimit(String::from(error_message)),
-"InvalidNextTokenException" => GetAggregateConfigRuleComplianceSummaryError::InvalidNextToken(String::from(error_message)),
-"NoSuchConfigurationAggregatorException" => GetAggregateConfigRuleComplianceSummaryError::NoSuchConfigurationAggregator(String::from(error_message)),
-"ValidationException" => GetAggregateConfigRuleComplianceSummaryError::Validation(error_message.to_string()),
-_ => GetAggregateConfigRuleComplianceSummaryError::Unknown(String::from(body))
-                                }
+                    "InvalidLimitException" => {
+                        GetAggregateConfigRuleComplianceSummaryError::InvalidLimit(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidNextTokenException" => {
+                        GetAggregateConfigRuleComplianceSummaryError::InvalidNextToken(
+                            String::from(error_message),
+                        )
+                    }
+                    "NoSuchConfigurationAggregatorException" => {
+                        GetAggregateConfigRuleComplianceSummaryError::NoSuchConfigurationAggregator(
+                            String::from(error_message),
+                        )
+                    }
+                    "ValidationException" => {
+                        GetAggregateConfigRuleComplianceSummaryError::Validation(
+                            error_message.to_string(),
+                        )
+                    }
+                    _ => GetAggregateConfigRuleComplianceSummaryError::Unknown(String::from(body)),
+                }
             }
             Err(_) => GetAggregateConfigRuleComplianceSummaryError::Unknown(String::from(body)),
         }

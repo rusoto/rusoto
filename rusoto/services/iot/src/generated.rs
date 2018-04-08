@@ -13915,11 +13915,9 @@ impl ListThingRegistrationTaskReportsError {
                     "ThrottlingException" => ListThingRegistrationTaskReportsError::Throttling(
                         String::from(error_message),
                     ),
-                    "UnauthorizedException" => {
-                        ListThingRegistrationTaskReportsError::Unauthorized(String::from(
-                            error_message,
-                        ))
-                    }
+                    "UnauthorizedException" => ListThingRegistrationTaskReportsError::Unauthorized(
+                        String::from(error_message),
+                    ),
                     "ValidationException" => {
                         ListThingRegistrationTaskReportsError::Validation(error_message.to_string())
                     }
@@ -14006,11 +14004,9 @@ impl ListThingRegistrationTasksError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "InternalFailureException" => {
-                        ListThingRegistrationTasksError::InternalFailure(String::from(
-                            error_message,
-                        ))
-                    }
+                    "InternalFailureException" => ListThingRegistrationTasksError::InternalFailure(
+                        String::from(error_message),
+                    ),
                     "InvalidRequestException" => {
                         ListThingRegistrationTasksError::InvalidRequest(String::from(error_message))
                     }
@@ -15920,11 +15916,9 @@ impl StartThingRegistrationTaskError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "InternalFailureException" => {
-                        StartThingRegistrationTaskError::InternalFailure(String::from(
-                            error_message,
-                        ))
-                    }
+                    "InternalFailureException" => StartThingRegistrationTaskError::InternalFailure(
+                        String::from(error_message),
+                    ),
                     "InvalidRequestException" => {
                         StartThingRegistrationTaskError::InvalidRequest(String::from(error_message))
                     }
@@ -22167,9 +22161,9 @@ where
 
                     debug!("Response body: {:?}", body);
                     debug!("Response status: {}", response.status);
-                    let result =
-                        serde_json::from_slice::<ListThingRegistrationTaskReportsResponse>(&body)
-                            .unwrap();
+                    let result = serde_json::from_slice::<ListThingRegistrationTaskReportsResponse>(
+                        &body,
+                    ).unwrap();
 
                     result
                 }))

@@ -90,9 +90,10 @@ impl AccessKeyDeserializer {
                             Some(try!(DateTypeDeserializer::deserialize("CreateDate", stack)));
                     }
                     "SecretAccessKey" => {
-                        obj.secret_access_key = try!(
-                            AccessKeySecretTypeDeserializer::deserialize("SecretAccessKey", stack)
-                        );
+                        obj.secret_access_key = try!(AccessKeySecretTypeDeserializer::deserialize(
+                            "SecretAccessKey",
+                            stack
+                        ));
                     }
                     "Status" => {
                         obj.status = try!(StatusTypeDeserializer::deserialize("Status", stack));
@@ -4097,9 +4098,10 @@ impl GetOpenIDConnectProviderResponseDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "ClientIDList" => {
-                        obj.client_id_list = Some(try!(
-                            ClientIDListTypeDeserializer::deserialize("ClientIDList", stack)
-                        ));
+                        obj.client_id_list = Some(try!(ClientIDListTypeDeserializer::deserialize(
+                            "ClientIDList",
+                            stack
+                        )));
                     }
                     "CreateDate" => {
                         obj.create_date =
@@ -5979,34 +5981,36 @@ impl ListEntitiesForPolicyResponseDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "IsTruncated" => {
-                        obj.is_truncated = Some(try!(BooleanTypeDeserializer::deserialize(
-                            "IsTruncated",
-                            stack
-                        )));
+                DeserializerNext::Element(name) => {
+                    match &name[..] {
+                        "IsTruncated" => {
+                            obj.is_truncated = Some(try!(BooleanTypeDeserializer::deserialize(
+                                "IsTruncated",
+                                stack
+                            )));
+                        }
+                        "Marker" => {
+                            obj.marker =
+                                Some(try!(MarkerTypeDeserializer::deserialize("Marker", stack)));
+                        }
+                        "PolicyGroups" => {
+                            obj.policy_groups = Some(try!(
+                                PolicyGroupListTypeDeserializer::deserialize("PolicyGroups", stack)
+                            ));
+                        }
+                        "PolicyRoles" => {
+                            obj.policy_roles = Some(try!(
+                                PolicyRoleListTypeDeserializer::deserialize("PolicyRoles", stack)
+                            ));
+                        }
+                        "PolicyUsers" => {
+                            obj.policy_users = Some(try!(
+                                PolicyUserListTypeDeserializer::deserialize("PolicyUsers", stack)
+                            ));
+                        }
+                        _ => skip_tree(stack),
                     }
-                    "Marker" => {
-                        obj.marker =
-                            Some(try!(MarkerTypeDeserializer::deserialize("Marker", stack)));
-                    }
-                    "PolicyGroups" => {
-                        obj.policy_groups = Some(try!(
-                            PolicyGroupListTypeDeserializer::deserialize("PolicyGroups", stack)
-                        ));
-                    }
-                    "PolicyRoles" => {
-                        obj.policy_roles = Some(try!(
-                            PolicyRoleListTypeDeserializer::deserialize("PolicyRoles", stack)
-                        ));
-                    }
-                    "PolicyUsers" => {
-                        obj.policy_users = Some(try!(
-                            PolicyUserListTypeDeserializer::deserialize("PolicyUsers", stack)
-                        ));
-                    }
-                    _ => skip_tree(stack),
-                },
+                }
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -8435,73 +8439,73 @@ impl PasswordPolicyDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "AllowUsersToChangePassword" => {
-                            obj.allow_users_to_change_password =
-                                Some(try!(BooleanTypeDeserializer::deserialize(
-                                    "AllowUsersToChangePassword",
-                                    stack
-                                )));
-                        }
-                        "ExpirePasswords" => {
-                            obj.expire_passwords = Some(try!(
-                                BooleanTypeDeserializer::deserialize("ExpirePasswords", stack)
-                            ));
-                        }
-                        "HardExpiry" => {
-                            obj.hard_expiry = Some(try!(
-                                BooleanObjectTypeDeserializer::deserialize("HardExpiry", stack)
-                            ));
-                        }
-                        "MaxPasswordAge" => {
-                            obj.max_password_age =
-                                Some(try!(MaxPasswordAgeTypeDeserializer::deserialize(
-                                    "MaxPasswordAge",
-                                    stack
-                                )));
-                        }
-                        "MinimumPasswordLength" => {
-                            obj.minimum_password_length =
-                                Some(try!(MinimumPasswordLengthTypeDeserializer::deserialize(
-                                    "MinimumPasswordLength",
-                                    stack
-                                )));
-                        }
-                        "PasswordReusePrevention" => {
-                            obj.password_reuse_prevention =
-                                Some(try!(PasswordReusePreventionTypeDeserializer::deserialize(
-                                    "PasswordReusePrevention",
-                                    stack
-                                )));
-                        }
-                        "RequireLowercaseCharacters" => {
-                            obj.require_lowercase_characters =
-                                Some(try!(BooleanTypeDeserializer::deserialize(
-                                    "RequireLowercaseCharacters",
-                                    stack
-                                )));
-                        }
-                        "RequireNumbers" => {
-                            obj.require_numbers = Some(try!(
-                                BooleanTypeDeserializer::deserialize("RequireNumbers", stack)
-                            ));
-                        }
-                        "RequireSymbols" => {
-                            obj.require_symbols = Some(try!(
-                                BooleanTypeDeserializer::deserialize("RequireSymbols", stack)
-                            ));
-                        }
-                        "RequireUppercaseCharacters" => {
-                            obj.require_uppercase_characters =
-                                Some(try!(BooleanTypeDeserializer::deserialize(
-                                    "RequireUppercaseCharacters",
-                                    stack
-                                )));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "AllowUsersToChangePassword" => {
+                        obj.allow_users_to_change_password =
+                            Some(try!(BooleanTypeDeserializer::deserialize(
+                                "AllowUsersToChangePassword",
+                                stack
+                            )));
                     }
-                }
+                    "ExpirePasswords" => {
+                        obj.expire_passwords = Some(try!(BooleanTypeDeserializer::deserialize(
+                            "ExpirePasswords",
+                            stack
+                        )));
+                    }
+                    "HardExpiry" => {
+                        obj.hard_expiry = Some(try!(BooleanObjectTypeDeserializer::deserialize(
+                            "HardExpiry",
+                            stack
+                        )));
+                    }
+                    "MaxPasswordAge" => {
+                        obj.max_password_age = Some(try!(
+                            MaxPasswordAgeTypeDeserializer::deserialize("MaxPasswordAge", stack)
+                        ));
+                    }
+                    "MinimumPasswordLength" => {
+                        obj.minimum_password_length =
+                            Some(try!(MinimumPasswordLengthTypeDeserializer::deserialize(
+                                "MinimumPasswordLength",
+                                stack
+                            )));
+                    }
+                    "PasswordReusePrevention" => {
+                        obj.password_reuse_prevention =
+                            Some(try!(PasswordReusePreventionTypeDeserializer::deserialize(
+                                "PasswordReusePrevention",
+                                stack
+                            )));
+                    }
+                    "RequireLowercaseCharacters" => {
+                        obj.require_lowercase_characters =
+                            Some(try!(BooleanTypeDeserializer::deserialize(
+                                "RequireLowercaseCharacters",
+                                stack
+                            )));
+                    }
+                    "RequireNumbers" => {
+                        obj.require_numbers = Some(try!(BooleanTypeDeserializer::deserialize(
+                            "RequireNumbers",
+                            stack
+                        )));
+                    }
+                    "RequireSymbols" => {
+                        obj.require_symbols = Some(try!(BooleanTypeDeserializer::deserialize(
+                            "RequireSymbols",
+                            stack
+                        )));
+                    }
+                    "RequireUppercaseCharacters" => {
+                        obj.require_uppercase_characters =
+                            Some(try!(BooleanTypeDeserializer::deserialize(
+                                "RequireUppercaseCharacters",
+                                stack
+                            )));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -9292,9 +9296,10 @@ impl PolicyVersionDeserializer {
                                 Some(try!(DateTypeDeserializer::deserialize("CreateDate", stack)));
                         }
                         "Document" => {
-                            obj.document = Some(try!(
-                                PolicyDocumentTypeDeserializer::deserialize("Document", stack)
-                            ));
+                            obj.document = Some(try!(PolicyDocumentTypeDeserializer::deserialize(
+                                "Document",
+                                stack
+                            )));
                         }
                         "IsDefaultVersion" => {
                             obj.is_default_version = Some(try!(
@@ -10033,9 +10038,10 @@ impl RoleDeserializer {
                             try!(DateTypeDeserializer::deserialize("CreateDate", stack));
                     }
                     "Description" => {
-                        obj.description = Some(try!(
-                            RoleDescriptionTypeDeserializer::deserialize("Description", stack)
-                        ));
+                        obj.description = Some(try!(RoleDescriptionTypeDeserializer::deserialize(
+                            "Description",
+                            stack
+                        )));
                     }
                     "MaxSessionDuration" => {
                         obj.max_session_duration =
@@ -14327,9 +14333,9 @@ impl CreateOpenIDConnectProviderError {
                 "LimitExceeded" => CreateOpenIDConnectProviderError::LimitExceeded(String::from(
                     parsed_error.message,
                 )),
-                "ServiceFailure" => CreateOpenIDConnectProviderError::ServiceFailure(
-                    String::from(parsed_error.message),
-                ),
+                "ServiceFailure" => CreateOpenIDConnectProviderError::ServiceFailure(String::from(
+                    parsed_error.message,
+                )),
                 _ => CreateOpenIDConnectProviderError::Unknown(String::from(body)),
             },
             Err(_) => CreateOpenIDConnectProviderError::Unknown(body.to_string()),
@@ -14913,14 +14919,12 @@ impl CreateServiceSpecificCredentialError {
                 "LimitExceeded" => CreateServiceSpecificCredentialError::LimitExceeded(
                     String::from(parsed_error.message),
                 ),
-                "NoSuchEntity" => CreateServiceSpecificCredentialError::NoSuchEntity(
+                "NoSuchEntity" => CreateServiceSpecificCredentialError::NoSuchEntity(String::from(
+                    parsed_error.message,
+                )),
+                "NotSupportedService" => CreateServiceSpecificCredentialError::ServiceNotSupported(
                     String::from(parsed_error.message),
                 ),
-                "NotSupportedService" => {
-                    CreateServiceSpecificCredentialError::ServiceNotSupported(String::from(
-                        parsed_error.message,
-                    ))
-                }
                 _ => CreateServiceSpecificCredentialError::Unknown(String::from(body)),
             },
             Err(_) => CreateServiceSpecificCredentialError::Unknown(body.to_string()),
@@ -15472,9 +15476,9 @@ impl DeleteAccountPasswordPolicyError {
                 "NoSuchEntity" => DeleteAccountPasswordPolicyError::NoSuchEntity(String::from(
                     parsed_error.message,
                 )),
-                "ServiceFailure" => DeleteAccountPasswordPolicyError::ServiceFailure(
-                    String::from(parsed_error.message),
-                ),
+                "ServiceFailure" => DeleteAccountPasswordPolicyError::ServiceFailure(String::from(
+                    parsed_error.message,
+                )),
                 _ => DeleteAccountPasswordPolicyError::Unknown(String::from(body)),
             },
             Err(_) => DeleteAccountPasswordPolicyError::Unknown(body.to_string()),
@@ -15945,9 +15949,9 @@ impl DeleteOpenIDConnectProviderError {
                 "NoSuchEntity" => DeleteOpenIDConnectProviderError::NoSuchEntity(String::from(
                     parsed_error.message,
                 )),
-                "ServiceFailure" => DeleteOpenIDConnectProviderError::ServiceFailure(
-                    String::from(parsed_error.message),
-                ),
+                "ServiceFailure" => DeleteOpenIDConnectProviderError::ServiceFailure(String::from(
+                    parsed_error.message,
+                )),
                 _ => DeleteOpenIDConnectProviderError::Unknown(String::from(body)),
             },
             Err(_) => DeleteOpenIDConnectProviderError::Unknown(body.to_string()),
@@ -16788,9 +16792,9 @@ impl DeleteServiceSpecificCredentialError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "NoSuchEntity" => DeleteServiceSpecificCredentialError::NoSuchEntity(
-                    String::from(parsed_error.message),
-                ),
+                "NoSuchEntity" => DeleteServiceSpecificCredentialError::NoSuchEntity(String::from(
+                    parsed_error.message,
+                )),
                 _ => DeleteServiceSpecificCredentialError::Unknown(String::from(body)),
             },
             Err(_) => DeleteServiceSpecificCredentialError::Unknown(body.to_string()),
@@ -18216,9 +18220,9 @@ impl GetCredentialReportError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "ReportExpired" => GetCredentialReportError::CredentialReportExpired(
-                    String::from(parsed_error.message),
-                ),
+                "ReportExpired" => GetCredentialReportError::CredentialReportExpired(String::from(
+                    parsed_error.message,
+                )),
                 "ReportNotPresent" => GetCredentialReportError::CredentialReportNotPresent(
                     String::from(parsed_error.message),
                 ),
@@ -20439,9 +20443,9 @@ impl ListInstanceProfilesForRoleError {
                 "NoSuchEntity" => ListInstanceProfilesForRoleError::NoSuchEntity(String::from(
                     parsed_error.message,
                 )),
-                "ServiceFailure" => ListInstanceProfilesForRoleError::ServiceFailure(
-                    String::from(parsed_error.message),
-                ),
+                "ServiceFailure" => ListInstanceProfilesForRoleError::ServiceFailure(String::from(
+                    parsed_error.message,
+                )),
                 _ => ListInstanceProfilesForRoleError::Unknown(String::from(body)),
             },
             Err(_) => ListInstanceProfilesForRoleError::Unknown(body.to_string()),
@@ -22037,9 +22041,9 @@ impl RemoveRoleFromInstanceProfileError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "LimitExceeded" => RemoveRoleFromInstanceProfileError::LimitExceeded(
-                    String::from(parsed_error.message),
-                ),
+                "LimitExceeded" => RemoveRoleFromInstanceProfileError::LimitExceeded(String::from(
+                    parsed_error.message,
+                )),
                 "NoSuchEntity" => RemoveRoleFromInstanceProfileError::NoSuchEntity(String::from(
                     parsed_error.message,
                 )),
@@ -22585,9 +22589,9 @@ impl SimulatePrincipalPolicyError {
                 "NoSuchEntity" => {
                     SimulatePrincipalPolicyError::NoSuchEntity(String::from(parsed_error.message))
                 }
-                "PolicyEvaluation" => SimulatePrincipalPolicyError::PolicyEvaluation(
-                    String::from(parsed_error.message),
-                ),
+                "PolicyEvaluation" => SimulatePrincipalPolicyError::PolicyEvaluation(String::from(
+                    parsed_error.message,
+                )),
                 _ => SimulatePrincipalPolicyError::Unknown(String::from(body)),
             },
             Err(_) => SimulatePrincipalPolicyError::Unknown(body.to_string()),
@@ -22772,9 +22776,9 @@ impl UpdateAccountPasswordPolicyError {
                 "NoSuchEntity" => UpdateAccountPasswordPolicyError::NoSuchEntity(String::from(
                     parsed_error.message,
                 )),
-                "ServiceFailure" => UpdateAccountPasswordPolicyError::ServiceFailure(
-                    String::from(parsed_error.message),
-                ),
+                "ServiceFailure" => UpdateAccountPasswordPolicyError::ServiceFailure(String::from(
+                    parsed_error.message,
+                )),
                 _ => UpdateAccountPasswordPolicyError::Unknown(String::from(body)),
             },
             Err(_) => UpdateAccountPasswordPolicyError::Unknown(body.to_string()),
@@ -23699,9 +23703,9 @@ impl UpdateServiceSpecificCredentialError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "NoSuchEntity" => UpdateServiceSpecificCredentialError::NoSuchEntity(
-                    String::from(parsed_error.message),
-                ),
+                "NoSuchEntity" => UpdateServiceSpecificCredentialError::NoSuchEntity(String::from(
+                    parsed_error.message,
+                )),
                 _ => UpdateServiceSpecificCredentialError::Unknown(String::from(body)),
             },
             Err(_) => UpdateServiceSpecificCredentialError::Unknown(body.to_string()),
@@ -28463,12 +28467,10 @@ where
                     let _start_document = stack.next();
                     let actual_tag_name = try!(peek_at_name(&mut stack));
                     try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(
-                        ListOpenIDConnectProvidersResponseDeserializer::deserialize(
-                            "ListOpenIDConnectProvidersResult",
-                            &mut stack
-                        )
-                    );
+                    result = try!(ListOpenIDConnectProvidersResponseDeserializer::deserialize(
+                        "ListOpenIDConnectProvidersResult",
+                        &mut stack
+                    ));
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }

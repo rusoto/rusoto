@@ -1287,9 +1287,10 @@ impl CreateStackInstancesOutputDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "OperationId" => {
-                        obj.operation_id = Some(try!(
-                            ClientRequestTokenDeserializer::deserialize("OperationId", stack)
-                        ));
+                        obj.operation_id = Some(try!(ClientRequestTokenDeserializer::deserialize(
+                            "OperationId",
+                            stack
+                        )));
                     }
                     _ => skip_tree(stack),
                 },
@@ -1682,9 +1683,10 @@ impl DeleteStackInstancesOutputDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "OperationId" => {
-                        obj.operation_id = Some(try!(
-                            ClientRequestTokenDeserializer::deserialize("OperationId", stack)
-                        ));
+                        obj.operation_id = Some(try!(ClientRequestTokenDeserializer::deserialize(
+                            "OperationId",
+                            stack
+                        )));
                     }
                     _ => skip_tree(stack),
                 },
@@ -1812,9 +1814,10 @@ impl DescribeAccountLimitsOutputDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "AccountLimits" => {
-                        obj.account_limits = Some(try!(
-                            AccountLimitListDeserializer::deserialize("AccountLimits", stack)
-                        ));
+                        obj.account_limits = Some(try!(AccountLimitListDeserializer::deserialize(
+                            "AccountLimits",
+                            stack
+                        )));
                     }
                     "NextToken" => {
                         obj.next_token =
@@ -5159,32 +5162,33 @@ impl ResourceChangeDetailDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "CausingEntity" => {
-                        obj.causing_entity = Some(try!(CausingEntityDeserializer::deserialize(
-                            "CausingEntity",
-                            stack
-                        )));
+                DeserializerNext::Element(name) => {
+                    match &name[..] {
+                        "CausingEntity" => {
+                            obj.causing_entity = Some(try!(
+                                CausingEntityDeserializer::deserialize("CausingEntity", stack)
+                            ));
+                        }
+                        "ChangeSource" => {
+                            obj.change_source = Some(try!(ChangeSourceDeserializer::deserialize(
+                                "ChangeSource",
+                                stack
+                            )));
+                        }
+                        "Evaluation" => {
+                            obj.evaluation = Some(try!(EvaluationTypeDeserializer::deserialize(
+                                "Evaluation",
+                                stack
+                            )));
+                        }
+                        "Target" => {
+                            obj.target = Some(try!(
+                                ResourceTargetDefinitionDeserializer::deserialize("Target", stack)
+                            ));
+                        }
+                        _ => skip_tree(stack),
                     }
-                    "ChangeSource" => {
-                        obj.change_source = Some(try!(ChangeSourceDeserializer::deserialize(
-                            "ChangeSource",
-                            stack
-                        )));
-                    }
-                    "Evaluation" => {
-                        obj.evaluation = Some(try!(EvaluationTypeDeserializer::deserialize(
-                            "Evaluation",
-                            stack
-                        )));
-                    }
-                    "Target" => {
-                        obj.target = Some(try!(
-                            ResourceTargetDefinitionDeserializer::deserialize("Target", stack)
-                        ));
-                    }
-                    _ => skip_tree(stack),
-                },
+                }
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -6461,9 +6465,10 @@ impl StackResourceDeserializer {
                         )));
                     }
                     "LogicalResourceId" => {
-                        obj.logical_resource_id = try!(
-                            LogicalResourceIdDeserializer::deserialize("LogicalResourceId", stack)
-                        );
+                        obj.logical_resource_id = try!(LogicalResourceIdDeserializer::deserialize(
+                            "LogicalResourceId",
+                            stack
+                        ));
                     }
                     "PhysicalResourceId" => {
                         obj.physical_resource_id =
@@ -6575,9 +6580,10 @@ impl StackResourceDetailDeserializer {
                         ));
                     }
                     "LogicalResourceId" => {
-                        obj.logical_resource_id = try!(
-                            LogicalResourceIdDeserializer::deserialize("LogicalResourceId", stack)
-                        );
+                        obj.logical_resource_id = try!(LogicalResourceIdDeserializer::deserialize(
+                            "LogicalResourceId",
+                            stack
+                        ));
                     }
                     "Metadata" => {
                         obj.metadata =
@@ -6718,9 +6724,10 @@ impl StackResourceSummaryDeserializer {
                         ));
                     }
                     "LogicalResourceId" => {
-                        obj.logical_resource_id = try!(
-                            LogicalResourceIdDeserializer::deserialize("LogicalResourceId", stack)
-                        );
+                        obj.logical_resource_id = try!(LogicalResourceIdDeserializer::deserialize(
+                            "LogicalResourceId",
+                            stack
+                        ));
                     }
                     "PhysicalResourceId" => {
                         obj.physical_resource_id =
@@ -6851,9 +6858,10 @@ impl StackSetDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "AdministrationRoleARN" => {
-                        obj.administration_role_arn = Some(try!(
-                            RoleARNDeserializer::deserialize("AdministrationRoleARN", stack)
-                        ));
+                        obj.administration_role_arn = Some(try!(RoleARNDeserializer::deserialize(
+                            "AdministrationRoleARN",
+                            stack
+                        )));
                     }
                     "Capabilities" => {
                         obj.capabilities = Some(try!(CapabilitiesDeserializer::deserialize(
@@ -7006,62 +7014,62 @@ impl StackSetOperationDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "Action" => {
-                        obj.action = Some(try!(StackSetOperationActionDeserializer::deserialize(
-                            "Action",
-                            stack
-                        )));
-                    }
-                    "AdministrationRoleARN" => {
-                        obj.administration_role_arn = Some(try!(
-                            RoleARNDeserializer::deserialize("AdministrationRoleARN", stack)
-                        ));
-                    }
-                    "CreationTimestamp" => {
-                        obj.creation_timestamp = Some(try!(TimestampDeserializer::deserialize(
-                            "CreationTimestamp",
-                            stack
-                        )));
-                    }
-                    "EndTimestamp" => {
-                        obj.end_timestamp = Some(try!(TimestampDeserializer::deserialize(
-                            "EndTimestamp",
-                            stack
-                        )));
-                    }
-                    "OperationId" => {
-                        obj.operation_id = Some(try!(
-                            ClientRequestTokenDeserializer::deserialize("OperationId", stack)
-                        ));
-                    }
-                    "OperationPreferences" => {
-                        obj.operation_preferences = Some(try!(
-                            StackSetOperationPreferencesDeserializer::deserialize(
-                                "OperationPreferences",
+                DeserializerNext::Element(name) => {
+                    match &name[..] {
+                        "Action" => {
+                            obj.action = Some(try!(
+                                StackSetOperationActionDeserializer::deserialize("Action", stack)
+                            ));
+                        }
+                        "AdministrationRoleARN" => {
+                            obj.administration_role_arn = Some(try!(
+                                RoleARNDeserializer::deserialize("AdministrationRoleARN", stack)
+                            ));
+                        }
+                        "CreationTimestamp" => {
+                            obj.creation_timestamp = Some(try!(
+                                TimestampDeserializer::deserialize("CreationTimestamp", stack)
+                            ));
+                        }
+                        "EndTimestamp" => {
+                            obj.end_timestamp = Some(try!(TimestampDeserializer::deserialize(
+                                "EndTimestamp",
                                 stack
-                            )
-                        ));
+                            )));
+                        }
+                        "OperationId" => {
+                            obj.operation_id = Some(try!(
+                                ClientRequestTokenDeserializer::deserialize("OperationId", stack)
+                            ));
+                        }
+                        "OperationPreferences" => {
+                            obj.operation_preferences =
+                                Some(try!(StackSetOperationPreferencesDeserializer::deserialize(
+                                    "OperationPreferences",
+                                    stack
+                                )));
+                        }
+                        "RetainStacks" => {
+                            obj.retain_stacks =
+                                Some(try!(RetainStacksNullableDeserializer::deserialize(
+                                    "RetainStacks",
+                                    stack
+                                )));
+                        }
+                        "StackSetId" => {
+                            obj.stack_set_id = Some(try!(StackSetIdDeserializer::deserialize(
+                                "StackSetId",
+                                stack
+                            )));
+                        }
+                        "Status" => {
+                            obj.status = Some(try!(
+                                StackSetOperationStatusDeserializer::deserialize("Status", stack)
+                            ));
+                        }
+                        _ => skip_tree(stack),
                     }
-                    "RetainStacks" => {
-                        obj.retain_stacks = Some(try!(
-                            RetainStacksNullableDeserializer::deserialize("RetainStacks", stack)
-                        ));
-                    }
-                    "StackSetId" => {
-                        obj.stack_set_id = Some(try!(StackSetIdDeserializer::deserialize(
-                            "StackSetId",
-                            stack
-                        )));
-                    }
-                    "Status" => {
-                        obj.status = Some(try!(StackSetOperationStatusDeserializer::deserialize(
-                            "Status",
-                            stack
-                        )));
-                    }
-                    _ => skip_tree(stack),
-                },
+                }
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -8569,9 +8577,10 @@ impl UpdateStackInstancesOutputDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "OperationId" => {
-                        obj.operation_id = Some(try!(
-                            ClientRequestTokenDeserializer::deserialize("OperationId", stack)
-                        ));
+                        obj.operation_id = Some(try!(ClientRequestTokenDeserializer::deserialize(
+                            "OperationId",
+                            stack
+                        )));
                     }
                     _ => skip_tree(stack),
                 },
@@ -8765,9 +8774,10 @@ impl UpdateStackSetOutputDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "OperationId" => {
-                        obj.operation_id = Some(try!(
-                            ClientRequestTokenDeserializer::deserialize("OperationId", stack)
-                        ));
+                        obj.operation_id = Some(try!(ClientRequestTokenDeserializer::deserialize(
+                            "OperationId",
+                            stack
+                        )));
                     }
                     _ => skip_tree(stack),
                 },
@@ -11383,11 +11393,9 @@ impl ListStackSetOperationResultsError {
                         parsed_error.message,
                     ))
                 }
-                "StackSetNotFoundException" => {
-                    ListStackSetOperationResultsError::StackSetNotFound(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "StackSetNotFoundException" => ListStackSetOperationResultsError::StackSetNotFound(
+                    String::from(parsed_error.message),
+                ),
                 _ => ListStackSetOperationResultsError::Unknown(String::from(body)),
             },
             Err(_) => ListStackSetOperationResultsError::Unknown(body.to_string()),
@@ -14092,12 +14100,10 @@ where
                     let _start_document = stack.next();
                     let actual_tag_name = try!(peek_at_name(&mut stack));
                     try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(
-                        ListStackSetOperationResultsOutputDeserializer::deserialize(
-                            "ListStackSetOperationResultsResult",
-                            &mut stack
-                        )
-                    );
+                    result = try!(ListStackSetOperationResultsOutputDeserializer::deserialize(
+                        "ListStackSetOperationResultsResult",
+                        &mut stack
+                    ));
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }

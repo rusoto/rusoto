@@ -651,9 +651,10 @@ impl CredentialsDeserializer {
                             try!(DateTypeDeserializer::deserialize("Expiration", stack));
                     }
                     "SecretAccessKey" => {
-                        obj.secret_access_key = try!(
-                            AccessKeySecretTypeDeserializer::deserialize("SecretAccessKey", stack)
-                        );
+                        obj.secret_access_key = try!(AccessKeySecretTypeDeserializer::deserialize(
+                            "SecretAccessKey",
+                            stack
+                        ));
                     }
                     "SessionToken" => {
                         obj.session_token =
@@ -2129,12 +2130,10 @@ where
                     let _start_document = stack.next();
                     let actual_tag_name = try!(peek_at_name(&mut stack));
                     try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(
-                        DecodeAuthorizationMessageResponseDeserializer::deserialize(
-                            "DecodeAuthorizationMessageResult",
-                            &mut stack
-                        )
-                    );
+                    result = try!(DecodeAuthorizationMessageResponseDeserializer::deserialize(
+                        "DecodeAuthorizationMessageResult",
+                        &mut stack
+                    ));
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
