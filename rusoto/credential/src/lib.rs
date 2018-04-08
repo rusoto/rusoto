@@ -15,11 +15,11 @@ extern crate regex;
 extern crate serde_json;
 extern crate tokio_core;
 
-pub use environment::EnvironmentProvider;
-pub use container::ContainerProvider;
+pub use environment::{EnvironmentProvider, EnvironmentProviderFuture};
+pub use container::{ContainerProvider, ContainerProviderFuture};
 pub use static_provider::StaticProvider;
-pub use instance_metadata::InstanceMetadataProvider;
-pub use profile::ProfileProvider;
+pub use instance_metadata::{InstanceMetadataProvider, InstanceMetadataProviderFuture};
+pub use profile::{ProfileProvider, ProfileProviderFuture};
 
 mod request;
 mod container;
@@ -40,10 +40,10 @@ use std::time::Duration;
 use std::cell::RefCell;
 use std::collections::BTreeMap;
 
-use chrono::{Duration as ChronoDuration, Utc, DateTime, ParseError};
+use chrono::{DateTime, Duration as ChronoDuration, ParseError, Utc};
 use futures::{Async, Future, Poll};
-use futures::future::{Either, Shared, SharedItem, err};
-use hyper::{Error as HyperError};
+use futures::future::{err, Either, Shared, SharedItem};
+use hyper::Error as HyperError;
 use hyper::error::UriError;
 use serde_json::{from_str as json_from_str, Value};
 use tokio_core::reactor::Handle;
@@ -153,7 +153,9 @@ impl CredentialsError {
     where
         S: Into<String>,
     {
-        CredentialsError { message: message.into() }
+        CredentialsError {
+            message: message.into(),
+        }
     }
 }
 
@@ -189,16 +191,14 @@ impl From<UriError> for CredentialsError {
 
 impl From<HyperError> for CredentialsError {
     fn from(err: HyperError) -> CredentialsError {
-        CredentialsError::new(
-            format!("Couldn't connect to credentials provider: {}", err),
-        )
+        CredentialsError::new(format!("Couldn't connect to credentials provider: {}", err))
     }
 }
 
 /// A trait for types that produce `AwsCredentials`.
 pub trait ProvideAwsCredentials {
     /// The future response value.
-    type Future: Future<Item=AwsCredentials, Error=CredentialsError> + 'static;
+    type Future: Future<Item = AwsCredentials, Error = CredentialsError> + 'static;
 
     /// Produce a new `AwsCredentials` future.
     fn credentials(&self) -> Self::Future;
@@ -233,7 +233,7 @@ impl<P: ProvideAwsCredentials + 'static, T> BaseAutoRefreshingProvider<P, T> {
 
 enum AutoRefreshingFutureInner<P: ProvideAwsCredentials + 'static> {
     Cached(SharedItem<AwsCredentials>),
-    NotCached(Shared<P::Future>)
+    NotCached(Shared<P::Future>),
 }
 
 impl<P: ProvideAwsCredentials + 'static> AutoRefreshingFutureInner<P> {
@@ -242,8 +242,9 @@ impl<P: ProvideAwsCredentials + 'static> AutoRefreshingFutureInner<P> {
             // no result from the future yet, let's keep using it
             None => AutoRefreshingFutureInner::NotCached(future.clone()),
             // successful result from the future, use it if not expired
-            Some(Ok(ref creds)) if !creds.credentials_are_expired() =>
-                AutoRefreshingFutureInner::Cached(creds.clone()),
+            Some(Ok(ref creds)) if !creds.credentials_are_expired() => {
+                AutoRefreshingFutureInner::Cached(creds.clone())
+            }
             Some(_) => {
                 // else launch a new future
                 *future = provider.credentials().shared();
@@ -256,17 +257,19 @@ impl<P: ProvideAwsCredentials + 'static> AutoRefreshingFutureInner<P> {
 impl<P: ProvideAwsCredentials + 'static> Clone for AutoRefreshingFutureInner<P> {
     fn clone(&self) -> Self {
         match *self {
-            AutoRefreshingFutureInner::Cached(ref shared_item) =>
-                AutoRefreshingFutureInner::Cached(shared_item.clone()),
-            AutoRefreshingFutureInner::NotCached(ref shared_future) =>
+            AutoRefreshingFutureInner::Cached(ref shared_item) => {
+                AutoRefreshingFutureInner::Cached(shared_item.clone())
+            }
+            AutoRefreshingFutureInner::NotCached(ref shared_future) => {
                 AutoRefreshingFutureInner::NotCached(shared_future.clone())
+            }
         }
     }
 }
 
 /// Future returned from `AutoRefreshingProvider`.
 pub struct AutoRefreshingProviderFuture<P: ProvideAwsCredentials + 'static> {
-    inner: AutoRefreshingFutureInner<P>
+    inner: AutoRefreshingFutureInner<P>,
 }
 
 impl<P: ProvideAwsCredentials + 'static> Future for AutoRefreshingProviderFuture<P> {
@@ -276,13 +279,13 @@ impl<P: ProvideAwsCredentials + 'static> Future for AutoRefreshingProviderFuture
     fn poll(&mut self) -> Poll<Self::Item, Self::Error> {
         match self.inner {
             AutoRefreshingFutureInner::Cached(ref creds) => Ok(Async::Ready(creds.deref().clone())),
-            AutoRefreshingFutureInner::NotCached(ref mut future) => {
-                match future.poll() {
-                    Err(err) => Err(CredentialsError { message: err.message.to_owned() }),
-                    Ok(Async::NotReady) => Ok(Async::NotReady),
-                    Ok(Async::Ready(item)) => Ok(Async::Ready(item.deref().clone()))
-                }
-            }
+            AutoRefreshingFutureInner::NotCached(ref mut future) => match future.poll() {
+                Err(err) => Err(CredentialsError {
+                    message: err.message.to_owned(),
+                }),
+                Ok(Async::NotReady) => Ok(Async::NotReady),
+                Ok(Async::Ready(item)) => Ok(Async::Ready(item.deref().clone())),
+            },
         }
     }
 }
@@ -306,11 +309,14 @@ impl<P: ProvideAwsCredentials + 'static> ProvideAwsCredentials for AutoRefreshin
     type Future = AutoRefreshingProviderFuture<P>;
 
     fn credentials(&self) -> Self::Future {
-        let mut shared_future = self.shared_future.lock().expect(
-            "Failed to lock the cached credentials Mutex",
-        );
+        let mut shared_future = self.shared_future
+            .lock()
+            .expect("Failed to lock the cached credentials Mutex");
         AutoRefreshingProviderFuture {
-            inner: AutoRefreshingFutureInner::from_shared_future(&mut shared_future, &self.credentials_provider)
+            inner: AutoRefreshingFutureInner::from_shared_future(
+                &mut shared_future,
+                &self.credentials_provider,
+            ),
         }
     }
 }
@@ -337,7 +343,10 @@ impl<P: ProvideAwsCredentials + 'static> ProvideAwsCredentials for AutoRefreshin
     fn credentials(&self) -> Self::Future {
         let mut shared_future = self.shared_future.borrow_mut();
         AutoRefreshingProviderFuture {
-            inner: AutoRefreshingFutureInner::from_shared_future(&mut shared_future, &self.credentials_provider)
+            inner: AutoRefreshingFutureInner::from_shared_future(
+                &mut shared_future,
+                &self.credentials_provider,
+            ),
         }
     }
 }
@@ -429,7 +438,7 @@ impl ChainProvider {
 
 /// Future returned from `ChainProvider`.
 pub struct ChainProviderFuture {
-    inner: Box<Future<Item=AwsCredentials, Error=CredentialsError>>
+    inner: Box<Future<Item = AwsCredentials, Error = CredentialsError>>,
 }
 
 impl Future for ChainProviderFuture {
@@ -448,7 +457,8 @@ impl ProvideAwsCredentials for ChainProvider {
         let profile_provider = self.profile_provider.clone();
         let instance_metadata_provider = self.instance_metadata_provider.clone();
         let container_provider = self.container_provider.clone();
-        let future = EnvironmentProvider.credentials()
+        let future = EnvironmentProvider
+            .credentials()
             .or_else(move |_| match profile_provider {
                 Some(ref provider) => Either::A(provider.credentials()),
                 None => Either::B(err(CredentialsError::new(""))),
@@ -461,7 +471,7 @@ impl ProvideAwsCredentials for ChainProvider {
                 ))
             });
         ChainProviderFuture {
-            inner: Box::new(future)
+            inner: Box::new(future),
         }
     }
 }
@@ -472,16 +482,19 @@ impl ChainProvider {
         ChainProvider {
             profile_provider: ProfileProvider::new().ok(),
             instance_metadata_provider: InstanceMetadataProvider::new(handle),
-            container_provider: ContainerProvider::new(handle)
+            container_provider: ContainerProvider::new(handle),
         }
     }
 
     /// Create a new `ChainProvider` using the provided `ProfileProvider`.
-    pub fn with_profile_provider(handle: &Handle, profile_provider: ProfileProvider) -> ChainProvider {
+    pub fn with_profile_provider(
+        handle: &Handle,
+        profile_provider: ProfileProvider,
+    ) -> ChainProvider {
         ChainProvider {
             profile_provider: Some(profile_provider),
             instance_metadata_provider: InstanceMetadataProvider::new(handle),
-            container_provider: ContainerProvider::new(handle)
+            container_provider: ContainerProvider::new(handle),
         }
     }
 }
@@ -490,8 +503,12 @@ impl ChainProvider {
 /// <https://github.com/rust-lang/rfcs/issues/2036> also affects the implementation of this.
 fn non_empty_env_var(name: &str) -> Option<String> {
     match env_var(name) {
-        Ok(value) => if value.is_empty() { None } else { Some(value) },
-        Err(_) => None
+        Ok(value) => if value.is_empty() {
+            None
+        } else {
+            Some(value)
+        },
+        Err(_) => None,
     }
 }
 
@@ -501,14 +518,13 @@ fn extract_string_value_from_json(
     key: &str,
 ) -> Result<String, CredentialsError> {
     match json_object.get(key) {
-        Some(v) => Ok(
-            v.as_str()
-                .expect(&format!("{} value was not a string", key))
-                .to_owned(),
-        ),
-        None => Err(CredentialsError::new(
-            format!("Couldn't find {} in response.", key),
-        )),
+        Some(v) => Ok(v.as_str()
+            .expect(&format!("{} value was not a string", key))
+            .to_owned()),
+        None => Err(CredentialsError::new(format!(
+            "Couldn't find {} in response.",
+            key
+        ))),
     }
 }
 
@@ -542,10 +558,12 @@ fn parse_credentials_from_aws_service(response: &str) -> Result<AwsCredentials, 
 }
 
 #[cfg(test)]
-#[macro_use] extern crate lazy_static;
+#[macro_use]
+extern crate lazy_static;
 
 #[cfg(test)]
-#[macro_use] extern crate quickcheck;
+#[macro_use]
+extern crate quickcheck;
 
 #[cfg(test)]
 mod tests {
