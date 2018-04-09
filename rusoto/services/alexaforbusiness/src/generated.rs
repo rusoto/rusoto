@@ -30,6 +30,53 @@ use rusoto_core::signature::SignedRequest;
 use serde_json::Value as SerdeJsonValue;
 use serde_json::from_str;
 use hyper::StatusCode;
+/// <p>An address book with attributes.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct AddressBook {
+    /// <p>The ARN of the address book.</p>
+    #[serde(rename = "AddressBookArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub address_book_arn: Option<String>,
+    /// <p>The description of the address book.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The name of the address book.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+}
+
+/// <p>Information related to an address book.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct AddressBookData {
+    /// <p>The ARN of the address book.</p>
+    #[serde(rename = "AddressBookArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub address_book_arn: Option<String>,
+    /// <p>The description of the address book.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The name of the address book.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct AssociateContactWithAddressBookRequest {
+    /// <p>The ARN of the address book with which to associate the contact.</p>
+    #[serde(rename = "AddressBookArn")]
+    pub address_book_arn: String,
+    /// <p>The ARN of the contact to associate with an address book.</p>
+    #[serde(rename = "ContactArn")]
+    pub contact_arn: String,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct AssociateContactWithAddressBookResponse {}
+
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct AssociateDeviceWithRoomRequest {
     /// <p>The ARN of the device to associate to a room. Required.</p>
@@ -59,6 +106,109 @@ pub struct AssociateSkillGroupWithRoomRequest {
 
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct AssociateSkillGroupWithRoomResponse {}
+
+/// <p>A contact with attributes.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct Contact {
+    /// <p>The ARN of the contact.</p>
+    #[serde(rename = "ContactArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub contact_arn: Option<String>,
+    /// <p>The name of the contact to display on the AWS management console.</p>
+    #[serde(rename = "DisplayName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub display_name: Option<String>,
+    /// <p>The first name of the contact that is used to call the contact on the device.</p>
+    #[serde(rename = "FirstName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub first_name: Option<String>,
+    /// <p>The last name of the contact that is used to call the contact on the device.</p>
+    #[serde(rename = "LastName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_name: Option<String>,
+    /// <p>The phone number of the contact.</p>
+    #[serde(rename = "PhoneNumber")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub phone_number: Option<String>,
+}
+
+/// <p>Information related to a contact.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct ContactData {
+    /// <p>The ARN of the contact.</p>
+    #[serde(rename = "ContactArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub contact_arn: Option<String>,
+    /// <p>The name of the contact to display on the AWS management console.</p>
+    #[serde(rename = "DisplayName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub display_name: Option<String>,
+    /// <p>The first name of the contact that is used to call the contact on the device.</p>
+    #[serde(rename = "FirstName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub first_name: Option<String>,
+    /// <p>The last name of the contact that is used to call the contact on the device.</p>
+    #[serde(rename = "LastName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_name: Option<String>,
+    /// <p>The phone number of the contact.</p>
+    #[serde(rename = "PhoneNumber")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub phone_number: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct CreateAddressBookRequest {
+    /// <p>A unique, user-specified identifier for the request that ensures idempotency.</p>
+    #[serde(rename = "ClientRequestToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub client_request_token: Option<String>,
+    /// <p>The description of the address book.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The name of the address book.</p>
+    #[serde(rename = "Name")]
+    pub name: String,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct CreateAddressBookResponse {
+    /// <p>The ARN of the newly created address book.</p>
+    #[serde(rename = "AddressBookArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub address_book_arn: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct CreateContactRequest {
+    /// <p>A unique, user-specified identifier for this request that ensures idempotency.</p>
+    #[serde(rename = "ClientRequestToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub client_request_token: Option<String>,
+    /// <p>The name of the contact to display on the AWS management console.</p>
+    #[serde(rename = "DisplayName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub display_name: Option<String>,
+    /// <p>The first name of the contact that is used to call the contact on the device.</p>
+    #[serde(rename = "FirstName")]
+    pub first_name: String,
+    /// <p>The last name of the contact that is used to call the contact on the device.</p>
+    #[serde(rename = "LastName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_name: Option<String>,
+    /// <p>The phone number of the contact in E164 format.</p>
+    #[serde(rename = "PhoneNumber")]
+    pub phone_number: String,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct CreateContactResponse {
+    /// <p>The ARN of the newly created address book.</p>
+    #[serde(rename = "ContactArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub contact_arn: Option<String>,
+}
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateProfileRequest {
@@ -200,6 +350,26 @@ pub struct CreateUserResponse {
 }
 
 #[derive(Default, Debug, Clone, Serialize)]
+pub struct DeleteAddressBookRequest {
+    /// <p>The ARN of the address book to delete.</p>
+    #[serde(rename = "AddressBookArn")]
+    pub address_book_arn: String,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct DeleteAddressBookResponse {}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct DeleteContactRequest {
+    /// <p>The ARN of the contact to delete.</p>
+    #[serde(rename = "ContactArn")]
+    pub contact_arn: String,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct DeleteContactResponse {}
+
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteProfileRequest {
     /// <p>The ARN of the room profile to delete. Required.</p>
     #[serde(rename = "ProfileArn")]
@@ -278,10 +448,14 @@ pub struct Device {
     #[serde(rename = "DeviceSerialNumber")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub device_serial_number: Option<String>,
-    /// <p>The status of a device.</p>
+    /// <p>The status of a device. If the status is not READY, check the DeviceStatusInfo for details.</p>
     #[serde(rename = "DeviceStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub device_status: Option<String>,
+    /// <p>Detailed information about a device's status.</p>
+    #[serde(rename = "DeviceStatusInfo")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub device_status_info: Option<DeviceStatusInfo>,
     /// <p>The type of a device.</p>
     #[serde(rename = "DeviceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -319,6 +493,10 @@ pub struct DeviceData {
     #[serde(rename = "DeviceStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub device_status: Option<String>,
+    /// <p>Detailed information about a device's status.</p>
+    #[serde(rename = "DeviceStatusInfo")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub device_status_info: Option<DeviceStatusInfo>,
     /// <p>The type of a device.</p>
     #[serde(rename = "DeviceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -340,6 +518,37 @@ pub struct DeviceData {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub software_version: Option<String>,
 }
+
+/// <p>Details of a device’s status.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct DeviceStatusDetail {
+    /// <p>The device status detail code.</p>
+    #[serde(rename = "Code")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub code: Option<String>,
+}
+
+/// <p>Detailed information about a device's status.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct DeviceStatusInfo {
+    /// <p>One or more device status detail descriptions.</p>
+    #[serde(rename = "DeviceStatusDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub device_status_details: Option<Vec<DeviceStatusDetail>>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct DisassociateContactFromAddressBookRequest {
+    /// <p>The ARN of the address from which to disassociate the contact.</p>
+    #[serde(rename = "AddressBookArn")]
+    pub address_book_arn: String,
+    /// <p>The ARN of the contact to disassociate from an address book.</p>
+    #[serde(rename = "ContactArn")]
+    pub contact_arn: String,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct DisassociateContactFromAddressBookResponse {}
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DisassociateDeviceFromRoomRequest {
@@ -376,6 +585,36 @@ pub struct Filter {
     /// <p>The values of a filter.</p>
     #[serde(rename = "Values")]
     pub values: Vec<String>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct GetAddressBookRequest {
+    /// <p>The ARN of the address book for which to request details.</p>
+    #[serde(rename = "AddressBookArn")]
+    pub address_book_arn: String,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct GetAddressBookResponse {
+    /// <p>The details of the requested address book.</p>
+    #[serde(rename = "AddressBook")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub address_book: Option<AddressBook>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct GetContactRequest {
+    /// <p>The ARN of the contact for which to request details.</p>
+    #[serde(rename = "ContactArn")]
+    pub contact_arn: String,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct GetContactResponse {
+    /// <p>The details of the requested contact.</p>
+    #[serde(rename = "Contact")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub contact: Option<Contact>,
 }
 
 #[derive(Default, Debug, Clone, Serialize)]
@@ -721,8 +960,80 @@ pub struct RoomSkillParameter {
 }
 
 #[derive(Default, Debug, Clone, Serialize)]
+pub struct SearchAddressBooksRequest {
+    /// <p>The filters to use to list a specified set of address books. The supported filter key is AddressBookName.</p>
+    #[serde(rename = "Filters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub filters: Option<Vec<Filter>>,
+    /// <p>The maximum number of results to include in the response. If more results exist than the specified MaxResults value, a token is included in the response so that the remaining results can be retrieved.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>An optional token returned from a prior request. Use this token for pagination of results from this action. If this parameter is specified, the response only includes results beyond the token, up to the value specified by MaxResults.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The sort order to use in listing the specified set of address books. The supported sort key is AddressBookName.</p>
+    #[serde(rename = "SortCriteria")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sort_criteria: Option<Vec<Sort>>,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct SearchAddressBooksResponse {
+    /// <p>The address books that meet the specified set of filter criteria, in sort order.</p>
+    #[serde(rename = "AddressBooks")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub address_books: Option<Vec<AddressBookData>>,
+    /// <p>The token returned to indicate that there is more data available.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The total number of address books returned.</p>
+    #[serde(rename = "TotalCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub total_count: Option<i64>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct SearchContactsRequest {
+    /// <p>The filters to use to list a specified set of address books. The supported filter keys are DisplayName, FirstName, LastName, and AddressBookArns.</p>
+    #[serde(rename = "Filters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub filters: Option<Vec<Filter>>,
+    /// <p>The maximum number of results to include in the response. If more results exist than the specified MaxResults value, a token is included in the response so that the remaining results can be retrieved.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>An optional token returned from a prior request. Use this token for pagination of results from this action. If this parameter is specified, the response only includes results beyond the token, up to the value specified by MaxResults.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The sort order to use in listing the specified set of contacts. The supported sort keys are DisplayName, FirstName, and LastName.</p>
+    #[serde(rename = "SortCriteria")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sort_criteria: Option<Vec<Sort>>,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct SearchContactsResponse {
+    /// <p>The contacts that meet the specified set of filter criteria, in sort order.</p>
+    #[serde(rename = "Contacts")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub contacts: Option<Vec<ContactData>>,
+    /// <p>The token returned to indicate that there is more data available.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The total number of contacts returned.</p>
+    #[serde(rename = "TotalCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub total_count: Option<i64>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct SearchDevicesRequest {
-    /// <p>The filters to use to list a specified set of devices. Supported filter keys are DeviceName, DeviceStatus, RoomName, DeviceType, DeviceSerialNumber, and UnassociatedOnly.</p>
+    /// <p>The filters to use to list a specified set of devices. Supported filter keys are DeviceName, DeviceStatus, DeviceStatusDetailCode, RoomName, DeviceType, DeviceSerialNumber, and UnassociatedOnly.</p>
     #[serde(rename = "Filters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub filters: Option<Vec<Filter>>,
@@ -1031,6 +1342,50 @@ pub struct UntagResourceRequest {
 pub struct UntagResourceResponse {}
 
 #[derive(Default, Debug, Clone, Serialize)]
+pub struct UpdateAddressBookRequest {
+    /// <p>The ARN of the room to update.</p>
+    #[serde(rename = "AddressBookArn")]
+    pub address_book_arn: String,
+    /// <p>The updated description of the room.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The updated name of the room.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct UpdateAddressBookResponse {}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct UpdateContactRequest {
+    /// <p>The ARN of the contact to update.</p>
+    #[serde(rename = "ContactArn")]
+    pub contact_arn: String,
+    /// <p>The updated display name of the contact.</p>
+    #[serde(rename = "DisplayName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub display_name: Option<String>,
+    /// <p>The updated first name of the contact.</p>
+    #[serde(rename = "FirstName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub first_name: Option<String>,
+    /// <p>The updated last name of the contact.</p>
+    #[serde(rename = "LastName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_name: Option<String>,
+    /// <p>The updated phone number of the contact.</p>
+    #[serde(rename = "PhoneNumber")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub phone_number: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct UpdateContactResponse {}
+
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct UpdateDeviceRequest {
     /// <p>The ARN of the device to update. Required.</p>
     #[serde(rename = "DeviceArn")]
@@ -1167,6 +1522,80 @@ pub struct UserData {
     pub user_arn: Option<String>,
 }
 
+/// Errors returned by AssociateContactWithAddressBook
+#[derive(Debug, PartialEq)]
+pub enum AssociateContactWithAddressBookError {
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl AssociateContactWithAddressBookError {
+    pub fn from_body(body: &str) -> AssociateContactWithAddressBookError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "ValidationException" => {
+                        AssociateContactWithAddressBookError::Validation(error_message.to_string())
+                    }
+                    _ => AssociateContactWithAddressBookError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => AssociateContactWithAddressBookError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for AssociateContactWithAddressBookError {
+    fn from(err: serde_json::error::Error) -> AssociateContactWithAddressBookError {
+        AssociateContactWithAddressBookError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for AssociateContactWithAddressBookError {
+    fn from(err: CredentialsError) -> AssociateContactWithAddressBookError {
+        AssociateContactWithAddressBookError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for AssociateContactWithAddressBookError {
+    fn from(err: HttpDispatchError) -> AssociateContactWithAddressBookError {
+        AssociateContactWithAddressBookError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for AssociateContactWithAddressBookError {
+    fn from(err: io::Error) -> AssociateContactWithAddressBookError {
+        AssociateContactWithAddressBookError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for AssociateContactWithAddressBookError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for AssociateContactWithAddressBookError {
+    fn description(&self) -> &str {
+        match *self {
+            AssociateContactWithAddressBookError::Validation(ref cause) => cause,
+            AssociateContactWithAddressBookError::Credentials(ref err) => err.description(),
+            AssociateContactWithAddressBookError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            AssociateContactWithAddressBookError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by AssociateDeviceWithRoom
 #[derive(Debug, PartialEq)]
 pub enum AssociateDeviceWithRoomError {
@@ -1318,6 +1747,176 @@ impl Error for AssociateSkillGroupWithRoomError {
                 dispatch_error.description()
             }
             AssociateSkillGroupWithRoomError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by CreateAddressBook
+#[derive(Debug, PartialEq)]
+pub enum CreateAddressBookError {
+    /// <p>The resource being created already exists. HTTP Status Code: 400</p>
+    AlreadyExists(String),
+    /// <p>You are performing an action that would put you beyond your account's limits. HTTP Status Code: 400</p>
+    LimitExceeded(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl CreateAddressBookError {
+    pub fn from_body(body: &str) -> CreateAddressBookError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "AlreadyExistsException" => {
+                        CreateAddressBookError::AlreadyExists(String::from(error_message))
+                    }
+                    "LimitExceededException" => {
+                        CreateAddressBookError::LimitExceeded(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        CreateAddressBookError::Validation(error_message.to_string())
+                    }
+                    _ => CreateAddressBookError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => CreateAddressBookError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for CreateAddressBookError {
+    fn from(err: serde_json::error::Error) -> CreateAddressBookError {
+        CreateAddressBookError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for CreateAddressBookError {
+    fn from(err: CredentialsError) -> CreateAddressBookError {
+        CreateAddressBookError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for CreateAddressBookError {
+    fn from(err: HttpDispatchError) -> CreateAddressBookError {
+        CreateAddressBookError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateAddressBookError {
+    fn from(err: io::Error) -> CreateAddressBookError {
+        CreateAddressBookError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for CreateAddressBookError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for CreateAddressBookError {
+    fn description(&self) -> &str {
+        match *self {
+            CreateAddressBookError::AlreadyExists(ref cause) => cause,
+            CreateAddressBookError::LimitExceeded(ref cause) => cause,
+            CreateAddressBookError::Validation(ref cause) => cause,
+            CreateAddressBookError::Credentials(ref err) => err.description(),
+            CreateAddressBookError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            CreateAddressBookError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by CreateContact
+#[derive(Debug, PartialEq)]
+pub enum CreateContactError {
+    /// <p>The resource being created already exists. HTTP Status Code: 400</p>
+    AlreadyExists(String),
+    /// <p>You are performing an action that would put you beyond your account's limits. HTTP Status Code: 400</p>
+    LimitExceeded(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl CreateContactError {
+    pub fn from_body(body: &str) -> CreateContactError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "AlreadyExistsException" => {
+                        CreateContactError::AlreadyExists(String::from(error_message))
+                    }
+                    "LimitExceededException" => {
+                        CreateContactError::LimitExceeded(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        CreateContactError::Validation(error_message.to_string())
+                    }
+                    _ => CreateContactError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => CreateContactError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for CreateContactError {
+    fn from(err: serde_json::error::Error) -> CreateContactError {
+        CreateContactError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for CreateContactError {
+    fn from(err: CredentialsError) -> CreateContactError {
+        CreateContactError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for CreateContactError {
+    fn from(err: HttpDispatchError) -> CreateContactError {
+        CreateContactError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateContactError {
+    fn from(err: io::Error) -> CreateContactError {
+        CreateContactError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for CreateContactError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for CreateContactError {
+    fn description(&self) -> &str {
+        match *self {
+            CreateContactError::AlreadyExists(ref cause) => cause,
+            CreateContactError::LimitExceeded(ref cause) => cause,
+            CreateContactError::Validation(ref cause) => cause,
+            CreateContactError::Credentials(ref err) => err.description(),
+            CreateContactError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            CreateContactError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -1650,6 +2249,164 @@ impl Error for CreateUserError {
             CreateUserError::Credentials(ref err) => err.description(),
             CreateUserError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
             CreateUserError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DeleteAddressBook
+#[derive(Debug, PartialEq)]
+pub enum DeleteAddressBookError {
+    /// <p>The resource is not found. HTTP Status Code: 400</p>
+    NotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl DeleteAddressBookError {
+    pub fn from_body(body: &str) -> DeleteAddressBookError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "NotFoundException" => {
+                        DeleteAddressBookError::NotFound(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        DeleteAddressBookError::Validation(error_message.to_string())
+                    }
+                    _ => DeleteAddressBookError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => DeleteAddressBookError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for DeleteAddressBookError {
+    fn from(err: serde_json::error::Error) -> DeleteAddressBookError {
+        DeleteAddressBookError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DeleteAddressBookError {
+    fn from(err: CredentialsError) -> DeleteAddressBookError {
+        DeleteAddressBookError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DeleteAddressBookError {
+    fn from(err: HttpDispatchError) -> DeleteAddressBookError {
+        DeleteAddressBookError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteAddressBookError {
+    fn from(err: io::Error) -> DeleteAddressBookError {
+        DeleteAddressBookError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DeleteAddressBookError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeleteAddressBookError {
+    fn description(&self) -> &str {
+        match *self {
+            DeleteAddressBookError::NotFound(ref cause) => cause,
+            DeleteAddressBookError::Validation(ref cause) => cause,
+            DeleteAddressBookError::Credentials(ref err) => err.description(),
+            DeleteAddressBookError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DeleteAddressBookError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DeleteContact
+#[derive(Debug, PartialEq)]
+pub enum DeleteContactError {
+    /// <p>The resource is not found. HTTP Status Code: 400</p>
+    NotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl DeleteContactError {
+    pub fn from_body(body: &str) -> DeleteContactError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "NotFoundException" => {
+                        DeleteContactError::NotFound(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        DeleteContactError::Validation(error_message.to_string())
+                    }
+                    _ => DeleteContactError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => DeleteContactError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for DeleteContactError {
+    fn from(err: serde_json::error::Error) -> DeleteContactError {
+        DeleteContactError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DeleteContactError {
+    fn from(err: CredentialsError) -> DeleteContactError {
+        DeleteContactError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DeleteContactError {
+    fn from(err: HttpDispatchError) -> DeleteContactError {
+        DeleteContactError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteContactError {
+    fn from(err: io::Error) -> DeleteContactError {
+        DeleteContactError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DeleteContactError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeleteContactError {
+    fn description(&self) -> &str {
+        match *self {
+            DeleteContactError::NotFound(ref cause) => cause,
+            DeleteContactError::Validation(ref cause) => cause,
+            DeleteContactError::Credentials(ref err) => err.description(),
+            DeleteContactError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            DeleteContactError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -2031,6 +2788,80 @@ impl Error for DeleteUserError {
         }
     }
 }
+/// Errors returned by DisassociateContactFromAddressBook
+#[derive(Debug, PartialEq)]
+pub enum DisassociateContactFromAddressBookError {
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl DisassociateContactFromAddressBookError {
+    pub fn from_body(body: &str) -> DisassociateContactFromAddressBookError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "ValidationException" => DisassociateContactFromAddressBookError::Validation(
+                        error_message.to_string(),
+                    ),
+                    _ => DisassociateContactFromAddressBookError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => DisassociateContactFromAddressBookError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for DisassociateContactFromAddressBookError {
+    fn from(err: serde_json::error::Error) -> DisassociateContactFromAddressBookError {
+        DisassociateContactFromAddressBookError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DisassociateContactFromAddressBookError {
+    fn from(err: CredentialsError) -> DisassociateContactFromAddressBookError {
+        DisassociateContactFromAddressBookError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DisassociateContactFromAddressBookError {
+    fn from(err: HttpDispatchError) -> DisassociateContactFromAddressBookError {
+        DisassociateContactFromAddressBookError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DisassociateContactFromAddressBookError {
+    fn from(err: io::Error) -> DisassociateContactFromAddressBookError {
+        DisassociateContactFromAddressBookError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DisassociateContactFromAddressBookError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DisassociateContactFromAddressBookError {
+    fn description(&self) -> &str {
+        match *self {
+            DisassociateContactFromAddressBookError::Validation(ref cause) => cause,
+            DisassociateContactFromAddressBookError::Credentials(ref err) => err.description(),
+            DisassociateContactFromAddressBookError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DisassociateContactFromAddressBookError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by DisassociateDeviceFromRoom
 #[derive(Debug, PartialEq)]
 pub enum DisassociateDeviceFromRoomError {
@@ -2176,6 +3007,158 @@ impl Error for DisassociateSkillGroupFromRoomError {
                 dispatch_error.description()
             }
             DisassociateSkillGroupFromRoomError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by GetAddressBook
+#[derive(Debug, PartialEq)]
+pub enum GetAddressBookError {
+    /// <p>The resource is not found. HTTP Status Code: 400</p>
+    NotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl GetAddressBookError {
+    pub fn from_body(body: &str) -> GetAddressBookError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "NotFoundException" => {
+                        GetAddressBookError::NotFound(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        GetAddressBookError::Validation(error_message.to_string())
+                    }
+                    _ => GetAddressBookError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => GetAddressBookError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for GetAddressBookError {
+    fn from(err: serde_json::error::Error) -> GetAddressBookError {
+        GetAddressBookError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for GetAddressBookError {
+    fn from(err: CredentialsError) -> GetAddressBookError {
+        GetAddressBookError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for GetAddressBookError {
+    fn from(err: HttpDispatchError) -> GetAddressBookError {
+        GetAddressBookError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetAddressBookError {
+    fn from(err: io::Error) -> GetAddressBookError {
+        GetAddressBookError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for GetAddressBookError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetAddressBookError {
+    fn description(&self) -> &str {
+        match *self {
+            GetAddressBookError::NotFound(ref cause) => cause,
+            GetAddressBookError::Validation(ref cause) => cause,
+            GetAddressBookError::Credentials(ref err) => err.description(),
+            GetAddressBookError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            GetAddressBookError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by GetContact
+#[derive(Debug, PartialEq)]
+pub enum GetContactError {
+    /// <p>The resource is not found. HTTP Status Code: 400</p>
+    NotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl GetContactError {
+    pub fn from_body(body: &str) -> GetContactError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "NotFoundException" => GetContactError::NotFound(String::from(error_message)),
+                    "ValidationException" => GetContactError::Validation(error_message.to_string()),
+                    _ => GetContactError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => GetContactError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for GetContactError {
+    fn from(err: serde_json::error::Error) -> GetContactError {
+        GetContactError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for GetContactError {
+    fn from(err: CredentialsError) -> GetContactError {
+        GetContactError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for GetContactError {
+    fn from(err: HttpDispatchError) -> GetContactError {
+        GetContactError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetContactError {
+    fn from(err: io::Error) -> GetContactError {
+        GetContactError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for GetContactError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetContactError {
+    fn description(&self) -> &str {
+        match *self {
+            GetContactError::NotFound(ref cause) => cause,
+            GetContactError::Validation(ref cause) => cause,
+            GetContactError::Credentials(ref err) => err.description(),
+            GetContactError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            GetContactError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -2931,6 +3914,152 @@ impl Error for RevokeInvitationError {
         }
     }
 }
+/// Errors returned by SearchAddressBooks
+#[derive(Debug, PartialEq)]
+pub enum SearchAddressBooksError {
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl SearchAddressBooksError {
+    pub fn from_body(body: &str) -> SearchAddressBooksError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "ValidationException" => {
+                        SearchAddressBooksError::Validation(error_message.to_string())
+                    }
+                    _ => SearchAddressBooksError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => SearchAddressBooksError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for SearchAddressBooksError {
+    fn from(err: serde_json::error::Error) -> SearchAddressBooksError {
+        SearchAddressBooksError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for SearchAddressBooksError {
+    fn from(err: CredentialsError) -> SearchAddressBooksError {
+        SearchAddressBooksError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for SearchAddressBooksError {
+    fn from(err: HttpDispatchError) -> SearchAddressBooksError {
+        SearchAddressBooksError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for SearchAddressBooksError {
+    fn from(err: io::Error) -> SearchAddressBooksError {
+        SearchAddressBooksError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for SearchAddressBooksError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for SearchAddressBooksError {
+    fn description(&self) -> &str {
+        match *self {
+            SearchAddressBooksError::Validation(ref cause) => cause,
+            SearchAddressBooksError::Credentials(ref err) => err.description(),
+            SearchAddressBooksError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            SearchAddressBooksError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by SearchContacts
+#[derive(Debug, PartialEq)]
+pub enum SearchContactsError {
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl SearchContactsError {
+    pub fn from_body(body: &str) -> SearchContactsError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "ValidationException" => {
+                        SearchContactsError::Validation(error_message.to_string())
+                    }
+                    _ => SearchContactsError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => SearchContactsError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for SearchContactsError {
+    fn from(err: serde_json::error::Error) -> SearchContactsError {
+        SearchContactsError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for SearchContactsError {
+    fn from(err: CredentialsError) -> SearchContactsError {
+        SearchContactsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for SearchContactsError {
+    fn from(err: HttpDispatchError) -> SearchContactsError {
+        SearchContactsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for SearchContactsError {
+    fn from(err: io::Error) -> SearchContactsError {
+        SearchContactsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for SearchContactsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for SearchContactsError {
+    fn description(&self) -> &str {
+        match *self {
+            SearchContactsError::Validation(ref cause) => cause,
+            SearchContactsError::Credentials(ref err) => err.description(),
+            SearchContactsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            SearchContactsError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by SearchDevices
 #[derive(Debug, PartialEq)]
 pub enum SearchDevicesError {
@@ -3603,6 +4732,170 @@ impl Error for UntagResourceError {
         }
     }
 }
+/// Errors returned by UpdateAddressBook
+#[derive(Debug, PartialEq)]
+pub enum UpdateAddressBookError {
+    /// <p>The name sent in the request is already in use. HTTP Status Code: 400</p>
+    NameInUse(String),
+    /// <p>The resource is not found. HTTP Status Code: 400</p>
+    NotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl UpdateAddressBookError {
+    pub fn from_body(body: &str) -> UpdateAddressBookError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "NameInUseException" => {
+                        UpdateAddressBookError::NameInUse(String::from(error_message))
+                    }
+                    "NotFoundException" => {
+                        UpdateAddressBookError::NotFound(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        UpdateAddressBookError::Validation(error_message.to_string())
+                    }
+                    _ => UpdateAddressBookError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => UpdateAddressBookError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for UpdateAddressBookError {
+    fn from(err: serde_json::error::Error) -> UpdateAddressBookError {
+        UpdateAddressBookError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for UpdateAddressBookError {
+    fn from(err: CredentialsError) -> UpdateAddressBookError {
+        UpdateAddressBookError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for UpdateAddressBookError {
+    fn from(err: HttpDispatchError) -> UpdateAddressBookError {
+        UpdateAddressBookError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateAddressBookError {
+    fn from(err: io::Error) -> UpdateAddressBookError {
+        UpdateAddressBookError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for UpdateAddressBookError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for UpdateAddressBookError {
+    fn description(&self) -> &str {
+        match *self {
+            UpdateAddressBookError::NameInUse(ref cause) => cause,
+            UpdateAddressBookError::NotFound(ref cause) => cause,
+            UpdateAddressBookError::Validation(ref cause) => cause,
+            UpdateAddressBookError::Credentials(ref err) => err.description(),
+            UpdateAddressBookError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            UpdateAddressBookError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by UpdateContact
+#[derive(Debug, PartialEq)]
+pub enum UpdateContactError {
+    /// <p>The resource is not found. HTTP Status Code: 400</p>
+    NotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl UpdateContactError {
+    pub fn from_body(body: &str) -> UpdateContactError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "NotFoundException" => {
+                        UpdateContactError::NotFound(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        UpdateContactError::Validation(error_message.to_string())
+                    }
+                    _ => UpdateContactError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => UpdateContactError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for UpdateContactError {
+    fn from(err: serde_json::error::Error) -> UpdateContactError {
+        UpdateContactError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for UpdateContactError {
+    fn from(err: CredentialsError) -> UpdateContactError {
+        UpdateContactError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for UpdateContactError {
+    fn from(err: HttpDispatchError) -> UpdateContactError {
+        UpdateContactError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateContactError {
+    fn from(err: io::Error) -> UpdateContactError {
+        UpdateContactError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for UpdateContactError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for UpdateContactError {
+    fn description(&self) -> &str {
+        match *self {
+            UpdateContactError::NotFound(ref cause) => cause,
+            UpdateContactError::Validation(ref cause) => cause,
+            UpdateContactError::Credentials(ref err) => err.description(),
+            UpdateContactError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            UpdateContactError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by UpdateDevice
 #[derive(Debug, PartialEq)]
 pub enum UpdateDeviceError {
@@ -3927,6 +5220,12 @@ impl Error for UpdateSkillGroupError {
 }
 /// Trait representing the capabilities of the Alexa For Business API. Alexa For Business clients implement this trait.
 pub trait AlexaForBusiness {
+    /// <p>Associates a contact to a given address book.</p>
+    fn associate_contact_with_address_book(
+        &self,
+        input: &AssociateContactWithAddressBookRequest,
+    ) -> RusotoFuture<AssociateContactWithAddressBookResponse, AssociateContactWithAddressBookError>;
+
     /// <p>Associates a device to a given room. This applies all the settings from the room profile to the device, and all the skills in any skill groups added to that room. This operation requires the device to be online, or a manual sync is required. </p>
     fn associate_device_with_room(
         &self,
@@ -3938,6 +5237,18 @@ pub trait AlexaForBusiness {
         &self,
         input: &AssociateSkillGroupWithRoomRequest,
     ) -> RusotoFuture<AssociateSkillGroupWithRoomResponse, AssociateSkillGroupWithRoomError>;
+
+    /// <p>Creates an address book with the specified details.</p>
+    fn create_address_book(
+        &self,
+        input: &CreateAddressBookRequest,
+    ) -> RusotoFuture<CreateAddressBookResponse, CreateAddressBookError>;
+
+    /// <p>Creates a contact with the specified details.</p>
+    fn create_contact(
+        &self,
+        input: &CreateContactRequest,
+    ) -> RusotoFuture<CreateContactResponse, CreateContactError>;
 
     /// <p>Creates a new room profile with the specified details.</p>
     fn create_profile(
@@ -3962,6 +5273,18 @@ pub trait AlexaForBusiness {
         &self,
         input: &CreateUserRequest,
     ) -> RusotoFuture<CreateUserResponse, CreateUserError>;
+
+    /// <p>Deletes an address book by the address book ARN.</p>
+    fn delete_address_book(
+        &self,
+        input: &DeleteAddressBookRequest,
+    ) -> RusotoFuture<DeleteAddressBookResponse, DeleteAddressBookError>;
+
+    /// <p>Deletes a contact by the contact ARN.</p>
+    fn delete_contact(
+        &self,
+        input: &DeleteContactRequest,
+    ) -> RusotoFuture<DeleteContactResponse, DeleteContactError>;
 
     /// <p>Deletes a room profile by the profile ARN.</p>
     fn delete_profile(
@@ -3993,6 +5316,15 @@ pub trait AlexaForBusiness {
         input: &DeleteUserRequest,
     ) -> RusotoFuture<DeleteUserResponse, DeleteUserError>;
 
+    /// <p>Disassociates a contact from a given address book.</p>
+    fn disassociate_contact_from_address_book(
+        &self,
+        input: &DisassociateContactFromAddressBookRequest,
+    ) -> RusotoFuture<
+        DisassociateContactFromAddressBookResponse,
+        DisassociateContactFromAddressBookError,
+    >;
+
     /// <p>Disassociates a device from its current room. The device continues to be connected to the Wi-Fi network and is still registered to the account. The device settings and skills are removed from the room.</p>
     fn disassociate_device_from_room(
         &self,
@@ -4004,6 +5336,18 @@ pub trait AlexaForBusiness {
         &self,
         input: &DisassociateSkillGroupFromRoomRequest,
     ) -> RusotoFuture<DisassociateSkillGroupFromRoomResponse, DisassociateSkillGroupFromRoomError>;
+
+    /// <p>Gets address the book details by the address book ARN.</p>
+    fn get_address_book(
+        &self,
+        input: &GetAddressBookRequest,
+    ) -> RusotoFuture<GetAddressBookResponse, GetAddressBookError>;
+
+    /// <p>Gets the contact details by the contact ARN.</p>
+    fn get_contact(
+        &self,
+        input: &GetContactRequest,
+    ) -> RusotoFuture<GetContactResponse, GetContactError>;
 
     /// <p>Gets the details of a device by device ARN.</p>
     fn get_device(
@@ -4059,6 +5403,18 @@ pub trait AlexaForBusiness {
         input: &RevokeInvitationRequest,
     ) -> RusotoFuture<RevokeInvitationResponse, RevokeInvitationError>;
 
+    /// <p>Searches address books and lists the ones that meet a set of filter and sort criteria.</p>
+    fn search_address_books(
+        &self,
+        input: &SearchAddressBooksRequest,
+    ) -> RusotoFuture<SearchAddressBooksResponse, SearchAddressBooksError>;
+
+    /// <p>Searches contacts and lists the ones that meet a set of filter and sort criteria.</p>
+    fn search_contacts(
+        &self,
+        input: &SearchContactsRequest,
+    ) -> RusotoFuture<SearchContactsResponse, SearchContactsError>;
+
     /// <p>Searches devices and lists the ones that meet a set of filter criteria.</p>
     fn search_devices(
         &self,
@@ -4112,6 +5468,18 @@ pub trait AlexaForBusiness {
         &self,
         input: &UntagResourceRequest,
     ) -> RusotoFuture<UntagResourceResponse, UntagResourceError>;
+
+    /// <p>Updates address book details by the address book ARN.</p>
+    fn update_address_book(
+        &self,
+        input: &UpdateAddressBookRequest,
+    ) -> RusotoFuture<UpdateAddressBookResponse, UpdateAddressBookError>;
+
+    /// <p>Updates the contact details by the contact ARN.</p>
+    fn update_contact(
+        &self,
+        input: &UpdateContactRequest,
+    ) -> RusotoFuture<UpdateContactResponse, UpdateContactError>;
 
     /// <p>Updates the device name by device ARN.</p>
     fn update_device(
@@ -4180,6 +5548,47 @@ where
     P: ProvideAwsCredentials + 'static,
     D: DispatchSignedRequest + 'static,
 {
+    /// <p>Associates a contact to a given address book.</p>
+    fn associate_contact_with_address_book(
+        &self,
+        input: &AssociateContactWithAddressBookRequest,
+    ) -> RusotoFuture<AssociateContactWithAddressBookResponse, AssociateContactWithAddressBookError>
+    {
+        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "AlexaForBusiness.AssociateContactWithAddressBook",
+        );
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        let future = self.inner.sign_and_dispatch(request, |response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<AssociateContactWithAddressBookResponse>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(AssociateContactWithAddressBookError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        });
+
+        RusotoFuture::new(future)
+    }
+
     /// <p>Associates a device to a given room. This applies all the settings from the room profile to the device, and all the skills in any skill groups added to that room. This operation requires the device to be online, or a manual sync is required. </p>
     fn associate_device_with_room(
         &self,
@@ -4248,6 +5657,80 @@ where
             } else {
                 future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(AssociateSkillGroupWithRoomError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        });
+
+        RusotoFuture::new(future)
+    }
+
+    /// <p>Creates an address book with the specified details.</p>
+    fn create_address_book(
+        &self,
+        input: &CreateAddressBookRequest,
+    ) -> RusotoFuture<CreateAddressBookResponse, CreateAddressBookError> {
+        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AlexaForBusiness.CreateAddressBook");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        let future = self.inner.sign_and_dispatch(request, |response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<CreateAddressBookResponse>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(CreateAddressBookError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        });
+
+        RusotoFuture::new(future)
+    }
+
+    /// <p>Creates a contact with the specified details.</p>
+    fn create_contact(
+        &self,
+        input: &CreateContactRequest,
+    ) -> RusotoFuture<CreateContactResponse, CreateContactError> {
+        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AlexaForBusiness.CreateContact");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        let future = self.inner.sign_and_dispatch(request, |response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<CreateContactResponse>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(CreateContactError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
@@ -4396,6 +5879,80 @@ where
             } else {
                 future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(CreateUserError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        });
+
+        RusotoFuture::new(future)
+    }
+
+    /// <p>Deletes an address book by the address book ARN.</p>
+    fn delete_address_book(
+        &self,
+        input: &DeleteAddressBookRequest,
+    ) -> RusotoFuture<DeleteAddressBookResponse, DeleteAddressBookError> {
+        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AlexaForBusiness.DeleteAddressBook");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        let future = self.inner.sign_and_dispatch(request, |response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<DeleteAddressBookResponse>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DeleteAddressBookError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        });
+
+        RusotoFuture::new(future)
+    }
+
+    /// <p>Deletes a contact by the contact ARN.</p>
+    fn delete_contact(
+        &self,
+        input: &DeleteContactRequest,
+    ) -> RusotoFuture<DeleteContactResponse, DeleteContactError> {
+        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AlexaForBusiness.DeleteContact");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        let future = self.inner.sign_and_dispatch(request, |response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<DeleteContactResponse>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DeleteContactError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
@@ -4590,6 +6147,49 @@ where
         RusotoFuture::new(future)
     }
 
+    /// <p>Disassociates a contact from a given address book.</p>
+    fn disassociate_contact_from_address_book(
+        &self,
+        input: &DisassociateContactFromAddressBookRequest,
+    ) -> RusotoFuture<
+        DisassociateContactFromAddressBookResponse,
+        DisassociateContactFromAddressBookError,
+    > {
+        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "AlexaForBusiness.DisassociateContactFromAddressBook",
+        );
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        let future = self.inner.sign_and_dispatch(request, |response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<DisassociateContactFromAddressBookResponse>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DisassociateContactFromAddressBookError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        });
+
+        RusotoFuture::new(future)
+    }
+
     /// <p>Disassociates a device from its current room. The device continues to be connected to the Wi-Fi network and is still registered to the account. The device settings and skills are removed from the room.</p>
     fn disassociate_device_from_room(
         &self,
@@ -4662,6 +6262,80 @@ where
             } else {
                 future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DisassociateSkillGroupFromRoomError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        });
+
+        RusotoFuture::new(future)
+    }
+
+    /// <p>Gets address the book details by the address book ARN.</p>
+    fn get_address_book(
+        &self,
+        input: &GetAddressBookRequest,
+    ) -> RusotoFuture<GetAddressBookResponse, GetAddressBookError> {
+        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AlexaForBusiness.GetAddressBook");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        let future = self.inner.sign_and_dispatch(request, |response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<GetAddressBookResponse>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(GetAddressBookError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        });
+
+        RusotoFuture::new(future)
+    }
+
+    /// <p>Gets the contact details by the contact ARN.</p>
+    fn get_contact(
+        &self,
+        input: &GetContactRequest,
+    ) -> RusotoFuture<GetContactResponse, GetContactError> {
+        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AlexaForBusiness.GetContact");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        let future = self.inner.sign_and_dispatch(request, |response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<GetContactResponse>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(GetContactError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
@@ -5035,6 +6709,80 @@ where
         RusotoFuture::new(future)
     }
 
+    /// <p>Searches address books and lists the ones that meet a set of filter and sort criteria.</p>
+    fn search_address_books(
+        &self,
+        input: &SearchAddressBooksRequest,
+    ) -> RusotoFuture<SearchAddressBooksResponse, SearchAddressBooksError> {
+        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AlexaForBusiness.SearchAddressBooks");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        let future = self.inner.sign_and_dispatch(request, |response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<SearchAddressBooksResponse>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(SearchAddressBooksError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        });
+
+        RusotoFuture::new(future)
+    }
+
+    /// <p>Searches contacts and lists the ones that meet a set of filter and sort criteria.</p>
+    fn search_contacts(
+        &self,
+        input: &SearchContactsRequest,
+    ) -> RusotoFuture<SearchContactsResponse, SearchContactsError> {
+        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AlexaForBusiness.SearchContacts");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        let future = self.inner.sign_and_dispatch(request, |response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<SearchContactsResponse>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(SearchContactsError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        });
+
+        RusotoFuture::new(future)
+    }
+
     /// <p>Searches devices and lists the ones that meet a set of filter criteria.</p>
     fn search_devices(
         &self,
@@ -5359,6 +7107,80 @@ where
             } else {
                 future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(UntagResourceError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        });
+
+        RusotoFuture::new(future)
+    }
+
+    /// <p>Updates address book details by the address book ARN.</p>
+    fn update_address_book(
+        &self,
+        input: &UpdateAddressBookRequest,
+    ) -> RusotoFuture<UpdateAddressBookResponse, UpdateAddressBookError> {
+        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AlexaForBusiness.UpdateAddressBook");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        let future = self.inner.sign_and_dispatch(request, |response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<UpdateAddressBookResponse>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(UpdateAddressBookError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        });
+
+        RusotoFuture::new(future)
+    }
+
+    /// <p>Updates the contact details by the contact ARN.</p>
+    fn update_contact(
+        &self,
+        input: &UpdateContactRequest,
+    ) -> RusotoFuture<UpdateContactResponse, UpdateContactError> {
+        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AlexaForBusiness.UpdateContact");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        let future = self.inner.sign_and_dispatch(request, |response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<UpdateContactResponse>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(UpdateContactError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))

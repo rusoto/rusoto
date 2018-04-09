@@ -1361,9 +1361,9 @@ impl ModifyMountTargetSecurityGroupsError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "BadRequest" => ModifyMountTargetSecurityGroupsError::BadRequest(
-                        String::from(error_message),
-                    ),
+                    "BadRequest" => ModifyMountTargetSecurityGroupsError::BadRequest(String::from(
+                        error_message,
+                    )),
                     "IncorrectMountTargetState" => {
                         ModifyMountTargetSecurityGroupsError::IncorrectMountTargetState(
                             String::from(error_message),
@@ -1847,9 +1847,9 @@ where
 
                     debug!("Response body: {:?}", body);
                     debug!("Response status: {}", response.status);
-                    let result =
-                        serde_json::from_slice::<DescribeMountTargetSecurityGroupsResponse>(&body)
-                            .unwrap();
+                    let result = serde_json::from_slice::<DescribeMountTargetSecurityGroupsResponse>(
+                        &body,
+                    ).unwrap();
 
                     result
                 }))

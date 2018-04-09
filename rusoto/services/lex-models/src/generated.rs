@@ -920,6 +920,45 @@ pub struct GetExportResponse {
 }
 
 #[derive(Default, Debug, Clone, Serialize)]
+pub struct GetImportRequest {
+    /// <p>The identifier of the import job information to return.</p>
+    #[serde(rename = "importId")]
+    pub import_id: String,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct GetImportResponse {
+    /// <p>A timestamp for the date and time that the import job was created.</p>
+    #[serde(rename = "createdDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_date: Option<f64>,
+    /// <p>A string that describes why an import job failed to complete.</p>
+    #[serde(rename = "failureReason")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub failure_reason: Option<Vec<String>>,
+    /// <p>The identifier for the specific import job.</p>
+    #[serde(rename = "importId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub import_id: Option<String>,
+    /// <p>The status of the import job. If the status is <code>FAILED</code>, you can get the reason for the failure from the <code>failureReason</code> field.</p>
+    #[serde(rename = "importStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub import_status: Option<String>,
+    /// <p>The action taken when there was a conflict between an existing resource and a resource in the import file.</p>
+    #[serde(rename = "mergeStrategy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub merge_strategy: Option<String>,
+    /// <p>The name given to the import job.</p>
+    #[serde(rename = "name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The type of resource imported.</p>
+    #[serde(rename = "resourceType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_type: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetIntentRequest {
     /// <p>The name of the intent. The name is case sensitive. </p>
     #[serde(rename = "name")]
@@ -1219,6 +1258,10 @@ pub struct Message {
     /// <p>The content type of the message string.</p>
     #[serde(rename = "contentType")]
     pub content_type: String,
+    /// <p>Identifies the message group that the message belongs to. When a group is assigned to a message, Amazon Lex returns one message from each group in the response.</p>
+    #[serde(rename = "groupNumber")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub group_number: Option<i64>,
 }
 
 /// <p>Obtains information from the user. To define a prompt, provide one or more messages and specify the number of attempts to get information from the user. If you provide more than one message, Amazon Lex chooses one of the messages to use to prompt the user. For more information, see <a>how-it-works</a>.</p>
@@ -1306,6 +1349,9 @@ pub struct PutBotRequest {
     #[serde(rename = "clarificationPrompt")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub clarification_prompt: Option<Prompt>,
+    #[serde(rename = "createVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub create_version: Option<bool>,
     /// <p>A description of the bot.</p>
     #[serde(rename = "description")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1324,7 +1370,7 @@ pub struct PutBotRequest {
     /// <p>The name of the bot. The name is <i>not</i> case sensitive. </p>
     #[serde(rename = "name")]
     pub name: String,
-    /// <p>If you set the <code>processBehavior</code> element to <code>Build</code>, Amazon Lex builds the bot so that it can be run. If you set the element to <code>Save</code>Amazon Lex saves the bot, but doesn't build it. </p> <p>If you don't specify this value, the default value is <code>Save</code>.</p>
+    /// <p>If you set the <code>processBehavior</code> element to <code>BUILD</code>, Amazon Lex builds the bot so that it can be run. If you set the element to <code>SAVE</code> Amazon Lex saves the bot, but doesn't build it. </p> <p>If you don't specify this value, the default value is <code>BUILD</code>.</p>
     #[serde(rename = "processBehavior")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub process_behavior: Option<String>,
@@ -1352,6 +1398,9 @@ pub struct PutBotResponse {
     #[serde(rename = "clarificationPrompt")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub clarification_prompt: Option<Prompt>,
+    #[serde(rename = "createVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub create_version: Option<bool>,
     /// <p>The date that the bot was created.</p>
     #[serde(rename = "createdDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1412,6 +1461,9 @@ pub struct PutIntentRequest {
     #[serde(rename = "confirmationPrompt")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub confirmation_prompt: Option<Prompt>,
+    #[serde(rename = "createVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub create_version: Option<bool>,
     /// <p>A description of the intent.</p>
     #[serde(rename = "description")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1463,6 +1515,9 @@ pub struct PutIntentResponse {
     #[serde(rename = "confirmationPrompt")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub confirmation_prompt: Option<Prompt>,
+    #[serde(rename = "createVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub create_version: Option<bool>,
     /// <p>The date that the intent was created.</p>
     #[serde(rename = "createdDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1519,6 +1574,9 @@ pub struct PutSlotTypeRequest {
     #[serde(rename = "checksum")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub checksum: Option<String>,
+    #[serde(rename = "createVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub create_version: Option<bool>,
     /// <p>A description of the slot type.</p>
     #[serde(rename = "description")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1542,6 +1600,9 @@ pub struct PutSlotTypeResponse {
     #[serde(rename = "checksum")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub checksum: Option<String>,
+    #[serde(rename = "createVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub create_version: Option<bool>,
     /// <p>The date that the slot type was created.</p>
     #[serde(rename = "createdDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1643,6 +1704,49 @@ pub struct SlotTypeMetadata {
     #[serde(rename = "version")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub version: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct StartImportRequest {
+    /// <p><p>Specifies the action that the <code>StartImport</code> operation should take when there is an existing resource with the same name.</p> <ul> <li> <p>FAIL<em>ON</em>CONFLICT - The import operation is stopped on the first conflict between a resource in the import file and an existing resource. The name of the resource causing the conflict is in the <code>failureReason</code> field of the response to the <code>GetImport</code> operation.</p> <p>OVERWRITE_LATEST - The import operation proceeds even if there is a conflict with an existing resource. The $LASTEST version of the existing resource is overwritten with the data from the import file.</p> </li> </ul></p>
+    #[serde(rename = "mergeStrategy")]
+    pub merge_strategy: String,
+    /// <p>A zip archive in binary format. The archive should contain one file, a JSON file containing the resource to import. The resource should match the type specified in the <code>resourceType</code> field.</p>
+    #[serde(rename = "payload")]
+    #[serde(deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
+            serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob", default)]
+    pub payload: Vec<u8>,
+    /// <p><p>Specifies the type of resource to export. Each resource also exports any resources that it depends on. </p> <ul> <li> <p>A bot exports dependent intents.</p> </li> <li> <p>An intent exports dependent slot types.</p> </li> </ul></p>
+    #[serde(rename = "resourceType")]
+    pub resource_type: String,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct StartImportResponse {
+    /// <p>A timestamp for the date and time that the import job was requested.</p>
+    #[serde(rename = "createdDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_date: Option<f64>,
+    /// <p>The identifier for the specific import job.</p>
+    #[serde(rename = "importId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub import_id: Option<String>,
+    /// <p>The status of the import job. If the status is <code>FAILED</code>, you can get the reason for the failure using the <code>GetImport</code> operation.</p>
+    #[serde(rename = "importStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub import_status: Option<String>,
+    /// <p>The action to take when there is a merge conflict.</p>
+    #[serde(rename = "mergeStrategy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub merge_strategy: Option<String>,
+    /// <p>The name given to the import job.</p>
+    #[serde(rename = "name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The type of resource to import.</p>
+    #[serde(rename = "resourceType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_type: Option<String>,
 }
 
 /// <p>A collection of messages that convey information to the user. At runtime, Amazon Lex selects the message to convey. </p>
@@ -3997,6 +4101,98 @@ impl Error for GetExportError {
         }
     }
 }
+/// Errors returned by GetImport
+#[derive(Debug, PartialEq)]
+pub enum GetImportError {
+    /// <p>The request is not well formed. For example, a value is invalid or a required field is missing. Check the field values, and try again.</p>
+    BadRequest(String),
+    /// <p>An internal Amazon Lex error occurred. Try your request again.</p>
+    InternalFailure(String),
+    /// <p>The request exceeded a limit. Try your request again.</p>
+    LimitExceeded(String),
+    /// <p>The resource specified in the request was not found. Check the resource and try again.</p>
+    NotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl GetImportError {
+    pub fn from_body(body: &str) -> GetImportError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "BadRequestException" => {
+                        GetImportError::BadRequest(String::from(error_message))
+                    }
+                    "InternalFailureException" => {
+                        GetImportError::InternalFailure(String::from(error_message))
+                    }
+                    "LimitExceededException" => {
+                        GetImportError::LimitExceeded(String::from(error_message))
+                    }
+                    "NotFoundException" => GetImportError::NotFound(String::from(error_message)),
+                    "ValidationException" => GetImportError::Validation(error_message.to_string()),
+                    _ => GetImportError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => GetImportError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for GetImportError {
+    fn from(err: serde_json::error::Error) -> GetImportError {
+        GetImportError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for GetImportError {
+    fn from(err: CredentialsError) -> GetImportError {
+        GetImportError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for GetImportError {
+    fn from(err: HttpDispatchError) -> GetImportError {
+        GetImportError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetImportError {
+    fn from(err: io::Error) -> GetImportError {
+        GetImportError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for GetImportError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetImportError {
+    fn description(&self) -> &str {
+        match *self {
+            GetImportError::BadRequest(ref cause) => cause,
+            GetImportError::InternalFailure(ref cause) => cause,
+            GetImportError::LimitExceeded(ref cause) => cause,
+            GetImportError::NotFound(ref cause) => cause,
+            GetImportError::Validation(ref cause) => cause,
+            GetImportError::Credentials(ref err) => err.description(),
+            GetImportError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            GetImportError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by GetIntent
 #[derive(Debug, PartialEq)]
 pub enum GetIntentError {
@@ -5051,6 +5247,96 @@ impl Error for PutSlotTypeError {
         }
     }
 }
+/// Errors returned by StartImport
+#[derive(Debug, PartialEq)]
+pub enum StartImportError {
+    /// <p>The request is not well formed. For example, a value is invalid or a required field is missing. Check the field values, and try again.</p>
+    BadRequest(String),
+    /// <p>An internal Amazon Lex error occurred. Try your request again.</p>
+    InternalFailure(String),
+    /// <p>The request exceeded a limit. Try your request again.</p>
+    LimitExceeded(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl StartImportError {
+    pub fn from_body(body: &str) -> StartImportError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "BadRequestException" => {
+                        StartImportError::BadRequest(String::from(error_message))
+                    }
+                    "InternalFailureException" => {
+                        StartImportError::InternalFailure(String::from(error_message))
+                    }
+                    "LimitExceededException" => {
+                        StartImportError::LimitExceeded(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        StartImportError::Validation(error_message.to_string())
+                    }
+                    _ => StartImportError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => StartImportError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for StartImportError {
+    fn from(err: serde_json::error::Error) -> StartImportError {
+        StartImportError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for StartImportError {
+    fn from(err: CredentialsError) -> StartImportError {
+        StartImportError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for StartImportError {
+    fn from(err: HttpDispatchError) -> StartImportError {
+        StartImportError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for StartImportError {
+    fn from(err: io::Error) -> StartImportError {
+        StartImportError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for StartImportError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for StartImportError {
+    fn description(&self) -> &str {
+        match *self {
+            StartImportError::BadRequest(ref cause) => cause,
+            StartImportError::InternalFailure(ref cause) => cause,
+            StartImportError::LimitExceeded(ref cause) => cause,
+            StartImportError::Validation(ref cause) => cause,
+            StartImportError::Credentials(ref err) => err.description(),
+            StartImportError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            StartImportError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Trait representing the capabilities of the Amazon Lex Model Building Service API. Amazon Lex Model Building Service clients implement this trait.
 pub trait LexModels {
     /// <p>Creates a new version of the bot based on the <code>$LATEST</code> version. If the <code>$LATEST</code> version of this resource hasn't changed since you created the last version, Amazon Lex doesn't create a new version. It returns the last created version.</p> <note> <p>You can update only the <code>$LATEST</code> version of the bot. You can't update the numbered versions that you create with the <code>CreateBotVersion</code> operation.</p> </note> <p> When you create the first version of a bot, Amazon Lex sets the version to 1. Subsequent versions increment by 1. For more information, see <a>versioning-intro</a>. </p> <p> This operation requires permission for the <code>lex:CreateBotVersion</code> action. </p>
@@ -5113,7 +5399,7 @@ pub trait LexModels {
         input: &DeleteSlotTypeVersionRequest,
     ) -> RusotoFuture<(), DeleteSlotTypeVersionError>;
 
-    /// <p>Deletes stored utterances.</p> <p>Amazon Lex stores the utterances that users send to your bot unless the <code>childDirected</code> field in the bot is set to <code>true</code>. Utterances are stored for 15 days for use with the <a>GetUtterancesView</a> operation, and then stored indefinitely for use in improving the ability of your bot to respond to user input.</p> <p>Use the <code>DeleteStoredUtterances</code> operation to manually delete stored utterances for a specific user.</p> <p>This operation requires permissions for the <code>lex:DeleteUtterances</code> action.</p>
+    /// <p>Deletes stored utterances.</p> <p>Amazon Lex stores the utterances that users send to your bot. Utterances are stored for 15 days for use with the <a>GetUtterancesView</a> operation, and then stored indefinitely for use in improving the ability of your bot to respond to user input.</p> <p>Use the <code>DeleteStoredUtterances</code> operation to manually delete stored utterances for a specific user.</p> <p>This operation requires permissions for the <code>lex:DeleteUtterances</code> action.</p>
     fn delete_utterances(
         &self,
         input: &DeleteUtterancesRequest,
@@ -5179,6 +5465,12 @@ pub trait LexModels {
         input: &GetExportRequest,
     ) -> RusotoFuture<GetExportResponse, GetExportError>;
 
+    /// <p>Gets information about an import job started with the <code>StartImport</code> operation.</p>
+    fn get_import(
+        &self,
+        input: &GetImportRequest,
+    ) -> RusotoFuture<GetImportResponse, GetImportError>;
+
     /// <p> Returns information about an intent. In addition to the intent name, you must specify the intent version. </p> <p> This operation requires permissions to perform the <code>lex:GetIntent</code> action. </p>
     fn get_intent(
         &self,
@@ -5215,13 +5507,13 @@ pub trait LexModels {
         input: &GetSlotTypesRequest,
     ) -> RusotoFuture<GetSlotTypesResponse, GetSlotTypesError>;
 
-    /// <p>Use the <code>GetUtterancesView</code> operation to get information about the utterances that your users have made to your bot. You can use this list to tune the utterances that your bot responds to.</p> <p>For example, say that you have created a bot to order flowers. After your users have used your bot for a while, use the <code>GetUtterancesView</code> operation to see the requests that they have made and whether they have been successful. You might find that the utterance "I want flowers" is not being recognized. You could add this utterance to the <code>OrderFlowers</code> intent so that your bot recognizes that utterance.</p> <p>After you publish a new version of a bot, you can get information about the old version and the new so that you can compare the performance across the two versions. </p> <p>Data is available for the last 15 days. You can request information for up to 5 versions in each request. The response contains information about a maximum of 100 utterances for each version.</p> <p>If the bot's <code>childDirected</code> field is set to <code>true</code>, utterances for the bot are not stored and cannot be retrieved with the <code>GetUtterancesView</code> operation. For more information, see <a>PutBot</a>.</p> <p>This operation requires permissions for the <code>lex:GetUtterancesView</code> action.</p>
+    /// <p>Use the <code>GetUtterancesView</code> operation to get information about the utterances that your users have made to your bot. You can use this list to tune the utterances that your bot responds to.</p> <p>For example, say that you have created a bot to order flowers. After your users have used your bot for a while, use the <code>GetUtterancesView</code> operation to see the requests that they have made and whether they have been successful. You might find that the utterance "I want flowers" is not being recognized. You could add this utterance to the <code>OrderFlowers</code> intent so that your bot recognizes that utterance.</p> <p>After you publish a new version of a bot, you can get information about the old version and the new so that you can compare the performance across the two versions. </p> <note> <p>Utterance statistics are generated once a day. Data is available for the last 15 days. You can request information for up to 5 versions in each request. The response contains information about a maximum of 100 utterances for each version.</p> </note> <p>This operation requires permissions for the <code>lex:GetUtterancesView</code> action.</p>
     fn get_utterances_view(
         &self,
         input: &GetUtterancesViewRequest,
     ) -> RusotoFuture<GetUtterancesViewResponse, GetUtterancesViewError>;
 
-    /// <p>Creates an Amazon Lex conversational bot or replaces an existing bot. When you create or update a bot you are only required to specify a name. You can use this to add intents later, or to remove intents from an existing bot. When you create a bot with a name only, the bot is created or updated but Amazon Lex returns the <code/> response <code>FAILED</code>. You can build the bot after you add one or more intents. For more information about Amazon Lex bots, see <a>how-it-works</a>. </p> <p>If you specify the name of an existing bot, the fields in the request replace the existing values in the <code>$LATEST</code> version of the bot. Amazon Lex removes any fields that you don't provide values for in the request, except for the <code>idleTTLInSeconds</code> and <code>privacySettings</code> fields, which are set to their default values. If you don't specify values for required fields, Amazon Lex throws an exception.</p> <p>This operation requires permissions for the <code>lex:PutBot</code> action. For more information, see <a>auth-and-access-control</a>.</p>
+    /// <p>Creates an Amazon Lex conversational bot or replaces an existing bot. When you create or update a bot you are only required to specify a name, a locale, and whether the bot is directed toward children under age 13. You can use this to add intents later, or to remove intents from an existing bot. When you create a bot with the minimum information, the bot is created or updated but Amazon Lex returns the <code/> response <code>FAILED</code>. You can build the bot after you add one or more intents. For more information about Amazon Lex bots, see <a>how-it-works</a>. </p> <p>If you specify the name of an existing bot, the fields in the request replace the existing values in the <code>$LATEST</code> version of the bot. Amazon Lex removes any fields that you don't provide values for in the request, except for the <code>idleTTLInSeconds</code> and <code>privacySettings</code> fields, which are set to their default values. If you don't specify values for required fields, Amazon Lex throws an exception.</p> <p>This operation requires permissions for the <code>lex:PutBot</code> action. For more information, see <a>auth-and-access-control</a>.</p>
     fn put_bot(&self, input: &PutBotRequest) -> RusotoFuture<PutBotResponse, PutBotError>;
 
     /// <p>Creates an alias for the specified version of the bot or replaces an alias for the specified bot. To change the version of the bot that the alias points to, replace the alias. For more information about aliases, see <a>versioning-aliases</a>.</p> <p>This operation requires permissions for the <code>lex:PutBotAlias</code> action. </p>
@@ -5241,6 +5533,12 @@ pub trait LexModels {
         &self,
         input: &PutSlotTypeRequest,
     ) -> RusotoFuture<PutSlotTypeResponse, PutSlotTypeError>;
+
+    /// <p>Starts a job to import a resource to Amazon Lex.</p>
+    fn start_import(
+        &self,
+        input: &StartImportRequest,
+    ) -> RusotoFuture<StartImportResponse, StartImportError>;
 }
 /// A client for the Amazon Lex Model Building Service API.
 pub struct LexModelsClient<P = CredentialsProvider, D = RequestDispatcher>
@@ -5673,7 +5971,7 @@ where
         RusotoFuture::new(future)
     }
 
-    /// <p>Deletes stored utterances.</p> <p>Amazon Lex stores the utterances that users send to your bot unless the <code>childDirected</code> field in the bot is set to <code>true</code>. Utterances are stored for 15 days for use with the <a>GetUtterancesView</a> operation, and then stored indefinitely for use in improving the ability of your bot to respond to user input.</p> <p>Use the <code>DeleteStoredUtterances</code> operation to manually delete stored utterances for a specific user.</p> <p>This operation requires permissions for the <code>lex:DeleteUtterances</code> action.</p>
+    /// <p>Deletes stored utterances.</p> <p>Amazon Lex stores the utterances that users send to your bot. Utterances are stored for 15 days for use with the <a>GetUtterancesView</a> operation, and then stored indefinitely for use in improving the ability of your bot to respond to user input.</p> <p>Use the <code>DeleteStoredUtterances</code> operation to manually delete stored utterances for a specific user.</p> <p>This operation requires permissions for the <code>lex:DeleteUtterances</code> action.</p>
     fn delete_utterances(
         &self,
         input: &DeleteUtterancesRequest,
@@ -6234,6 +6532,45 @@ where
         RusotoFuture::new(future)
     }
 
+    /// <p>Gets information about an import job started with the <code>StartImport</code> operation.</p>
+    fn get_import(
+        &self,
+        input: &GetImportRequest,
+    ) -> RusotoFuture<GetImportResponse, GetImportError> {
+        let request_uri = format!("/imports/{import_id}", import_id = input.import_id);
+
+        let mut request = SignedRequest::new("GET", "lex", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("models.lex".to_string());
+
+        let future = self.inner.sign_and_dispatch(request, |response| {
+            if response.status.as_u16() == 200 {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<GetImportResponse>(&body).unwrap();
+
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(GetImportError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        });
+
+        RusotoFuture::new(future)
+    }
+
     /// <p> Returns information about an intent. In addition to the intent name, you must specify the intent version. </p> <p> This operation requires permissions to perform the <code>lex:GetIntent</code> action. </p>
     fn get_intent(
         &self,
@@ -6520,7 +6857,7 @@ where
         RusotoFuture::new(future)
     }
 
-    /// <p>Use the <code>GetUtterancesView</code> operation to get information about the utterances that your users have made to your bot. You can use this list to tune the utterances that your bot responds to.</p> <p>For example, say that you have created a bot to order flowers. After your users have used your bot for a while, use the <code>GetUtterancesView</code> operation to see the requests that they have made and whether they have been successful. You might find that the utterance "I want flowers" is not being recognized. You could add this utterance to the <code>OrderFlowers</code> intent so that your bot recognizes that utterance.</p> <p>After you publish a new version of a bot, you can get information about the old version and the new so that you can compare the performance across the two versions. </p> <p>Data is available for the last 15 days. You can request information for up to 5 versions in each request. The response contains information about a maximum of 100 utterances for each version.</p> <p>If the bot's <code>childDirected</code> field is set to <code>true</code>, utterances for the bot are not stored and cannot be retrieved with the <code>GetUtterancesView</code> operation. For more information, see <a>PutBot</a>.</p> <p>This operation requires permissions for the <code>lex:GetUtterancesView</code> action.</p>
+    /// <p>Use the <code>GetUtterancesView</code> operation to get information about the utterances that your users have made to your bot. You can use this list to tune the utterances that your bot responds to.</p> <p>For example, say that you have created a bot to order flowers. After your users have used your bot for a while, use the <code>GetUtterancesView</code> operation to see the requests that they have made and whether they have been successful. You might find that the utterance "I want flowers" is not being recognized. You could add this utterance to the <code>OrderFlowers</code> intent so that your bot recognizes that utterance.</p> <p>After you publish a new version of a bot, you can get information about the old version and the new so that you can compare the performance across the two versions. </p> <note> <p>Utterance statistics are generated once a day. Data is available for the last 15 days. You can request information for up to 5 versions in each request. The response contains information about a maximum of 100 utterances for each version.</p> </note> <p>This operation requires permissions for the <code>lex:GetUtterancesView</code> action.</p>
     fn get_utterances_view(
         &self,
         input: &GetUtterancesViewRequest,
@@ -6568,7 +6905,7 @@ where
         RusotoFuture::new(future)
     }
 
-    /// <p>Creates an Amazon Lex conversational bot or replaces an existing bot. When you create or update a bot you are only required to specify a name. You can use this to add intents later, or to remove intents from an existing bot. When you create a bot with a name only, the bot is created or updated but Amazon Lex returns the <code/> response <code>FAILED</code>. You can build the bot after you add one or more intents. For more information about Amazon Lex bots, see <a>how-it-works</a>. </p> <p>If you specify the name of an existing bot, the fields in the request replace the existing values in the <code>$LATEST</code> version of the bot. Amazon Lex removes any fields that you don't provide values for in the request, except for the <code>idleTTLInSeconds</code> and <code>privacySettings</code> fields, which are set to their default values. If you don't specify values for required fields, Amazon Lex throws an exception.</p> <p>This operation requires permissions for the <code>lex:PutBot</code> action. For more information, see <a>auth-and-access-control</a>.</p>
+    /// <p>Creates an Amazon Lex conversational bot or replaces an existing bot. When you create or update a bot you are only required to specify a name, a locale, and whether the bot is directed toward children under age 13. You can use this to add intents later, or to remove intents from an existing bot. When you create a bot with the minimum information, the bot is created or updated but Amazon Lex returns the <code/> response <code>FAILED</code>. You can build the bot after you add one or more intents. For more information about Amazon Lex bots, see <a>how-it-works</a>. </p> <p>If you specify the name of an existing bot, the fields in the request replace the existing values in the <code>$LATEST</code> version of the bot. Amazon Lex removes any fields that you don't provide values for in the request, except for the <code>idleTTLInSeconds</code> and <code>privacySettings</code> fields, which are set to their default values. If you don't specify values for required fields, Amazon Lex throws an exception.</p> <p>This operation requires permissions for the <code>lex:PutBot</code> action. For more information, see <a>auth-and-access-control</a>.</p>
     fn put_bot(&self, input: &PutBotRequest) -> RusotoFuture<PutBotResponse, PutBotError> {
         let request_uri = format!("/bots/{name}/versions/$LATEST", name = input.name);
 
@@ -6724,6 +7061,47 @@ where
             } else {
                 future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(PutSlotTypeError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        });
+
+        RusotoFuture::new(future)
+    }
+
+    /// <p>Starts a job to import a resource to Amazon Lex.</p>
+    fn start_import(
+        &self,
+        input: &StartImportRequest,
+    ) -> RusotoFuture<StartImportResponse, StartImportError> {
+        let request_uri = "/imports/";
+
+        let mut request = SignedRequest::new("POST", "lex", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("models.lex".to_string());
+        let encoded = Some(serde_json::to_vec(input).unwrap());
+        request.set_payload(encoded);
+
+        let future = self.inner.sign_and_dispatch(request, |response| {
+            if response.status.as_u16() == 201 {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<StartImportResponse>(&body).unwrap();
+
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(StartImportError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))

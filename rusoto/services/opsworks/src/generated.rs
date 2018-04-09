@@ -254,7 +254,7 @@ pub struct CloneStackRequest {
     #[serde(rename = "DefaultInstanceProfileArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub default_instance_profile_arn: Option<String>,
-    /// <p><p>The stack&#39;s operating system, which must be set to one of the following.</p> <ul> <li> <p>A supported Linux operating system: An Amazon Linux version, such as <code>Amazon Linux 2017.03</code>, <code>Amazon Linux 2016.09</code>, <code>Amazon Linux 2016.03</code>, <code>Amazon Linux 2015.09</code>, or <code>Amazon Linux 2015.03</code>.</p> </li> <li> <p>A supported Ubuntu operating system, such as <code>Ubuntu 16.04 LTS</code>, <code>Ubuntu 14.04 LTS</code>, or <code>Ubuntu 12.04 LTS</code>.</p> </li> <li> <p> <code>CentOS Linux 7</code> </p> </li> <li> <p> <code>Red Hat Enterprise Linux 7</code> </p> </li> <li> <p> <code>Microsoft Windows Server 2012 R2 Base</code>, <code>Microsoft Windows Server 2012 R2 with SQL Server Express</code>, <code>Microsoft Windows Server 2012 R2 with SQL Server Standard</code>, or <code>Microsoft Windows Server 2012 R2 with SQL Server Web</code>.</p> </li> <li> <p>A custom AMI: <code>Custom</code>. You specify the custom AMI you want to use when you create instances. For more information on how to use custom AMIs with OpsWorks, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/workinginstances-custom-ami.html">Using Custom AMIs</a>.</p> </li> </ul> <p>The default option is the parent stack&#39;s operating system. For more information on the supported operating systems, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/workinginstances-os.html">AWS OpsWorks Stacks Operating Systems</a>.</p> <note> <p>You can specify a different Linux operating system for the cloned stack, but you cannot change from Linux to Windows or Windows to Linux.</p> </note></p>
+    /// <p><p>The stack&#39;s operating system, which must be set to one of the following.</p> <ul> <li> <p>A supported Linux operating system: An Amazon Linux version, such as <code>Amazon Linux 2017.09</code>, <code>Amazon Linux 2017.03</code>, <code>Amazon Linux 2016.09</code>, <code>Amazon Linux 2016.03</code>, <code>Amazon Linux 2015.09</code>, or <code>Amazon Linux 2015.03</code>.</p> </li> <li> <p>A supported Ubuntu operating system, such as <code>Ubuntu 16.04 LTS</code>, <code>Ubuntu 14.04 LTS</code>, or <code>Ubuntu 12.04 LTS</code>.</p> </li> <li> <p> <code>CentOS Linux 7</code> </p> </li> <li> <p> <code>Red Hat Enterprise Linux 7</code> </p> </li> <li> <p> <code>Microsoft Windows Server 2012 R2 Base</code>, <code>Microsoft Windows Server 2012 R2 with SQL Server Express</code>, <code>Microsoft Windows Server 2012 R2 with SQL Server Standard</code>, or <code>Microsoft Windows Server 2012 R2 with SQL Server Web</code>.</p> </li> <li> <p>A custom AMI: <code>Custom</code>. You specify the custom AMI you want to use when you create instances. For more information on how to use custom AMIs with OpsWorks, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/workinginstances-custom-ami.html">Using Custom AMIs</a>.</p> </li> </ul> <p>The default option is the parent stack&#39;s operating system. For more information on the supported operating systems, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/workinginstances-os.html">AWS OpsWorks Stacks Operating Systems</a>.</p> <note> <p>You can specify a different Linux operating system for the cloned stack, but you cannot change from Linux to Windows or Windows to Linux.</p> </note></p>
     #[serde(rename = "DefaultOs")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub default_os: Option<String>,
@@ -559,7 +559,7 @@ pub struct CreateInstanceRequest {
     /// <p>An array that contains the instance's layer IDs.</p>
     #[serde(rename = "LayerIds")]
     pub layer_ids: Vec<String>,
-    /// <p>The instance's operating system, which must be set to one of the following.</p> <ul> <li> <p>A supported Linux operating system: An Amazon Linux version, such as <code>Amazon Linux 2017.03</code>, <code>Amazon Linux 2016.09</code>, <code>Amazon Linux 2016.03</code>, <code>Amazon Linux 2015.09</code>, or <code>Amazon Linux 2015.03</code>.</p> </li> <li> <p>A supported Ubuntu operating system, such as <code>Ubuntu 16.04 LTS</code>, <code>Ubuntu 14.04 LTS</code>, or <code>Ubuntu 12.04 LTS</code>.</p> </li> <li> <p> <code>CentOS Linux 7</code> </p> </li> <li> <p> <code>Red Hat Enterprise Linux 7</code> </p> </li> <li> <p>A supported Windows operating system, such as <code>Microsoft Windows Server 2012 R2 Base</code>, <code>Microsoft Windows Server 2012 R2 with SQL Server Express</code>, <code>Microsoft Windows Server 2012 R2 with SQL Server Standard</code>, or <code>Microsoft Windows Server 2012 R2 with SQL Server Web</code>.</p> </li> <li> <p>A custom AMI: <code>Custom</code>.</p> </li> </ul> <p>For more information on the supported operating systems, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/workinginstances-os.html">AWS OpsWorks Stacks Operating Systems</a>.</p> <p>The default option is the current Amazon Linux version. If you set this parameter to <code>Custom</code>, you must use the <a>CreateInstance</a> action's AmiId parameter to specify the custom AMI that you want to use. Block device mappings are not supported if the value is <code>Custom</code>. For more information on the supported operating systems, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/workinginstances-os.html">Operating Systems</a>For more information on how to use custom AMIs with AWS OpsWorks Stacks, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/workinginstances-custom-ami.html">Using Custom AMIs</a>.</p>
+    /// <p>The instance's operating system, which must be set to one of the following.</p> <ul> <li> <p>A supported Linux operating system: An Amazon Linux version, such as <code>Amazon Linux 2017.09</code>, <code>Amazon Linux 2017.03</code>, <code>Amazon Linux 2016.09</code>, <code>Amazon Linux 2016.03</code>, <code>Amazon Linux 2015.09</code>, or <code>Amazon Linux 2015.03</code>.</p> </li> <li> <p>A supported Ubuntu operating system, such as <code>Ubuntu 16.04 LTS</code>, <code>Ubuntu 14.04 LTS</code>, or <code>Ubuntu 12.04 LTS</code>.</p> </li> <li> <p> <code>CentOS Linux 7</code> </p> </li> <li> <p> <code>Red Hat Enterprise Linux 7</code> </p> </li> <li> <p>A supported Windows operating system, such as <code>Microsoft Windows Server 2012 R2 Base</code>, <code>Microsoft Windows Server 2012 R2 with SQL Server Express</code>, <code>Microsoft Windows Server 2012 R2 with SQL Server Standard</code>, or <code>Microsoft Windows Server 2012 R2 with SQL Server Web</code>.</p> </li> <li> <p>A custom AMI: <code>Custom</code>.</p> </li> </ul> <p>For more information on the supported operating systems, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/workinginstances-os.html">AWS OpsWorks Stacks Operating Systems</a>.</p> <p>The default option is the current Amazon Linux version. If you set this parameter to <code>Custom</code>, you must use the <a>CreateInstance</a> action's AmiId parameter to specify the custom AMI that you want to use. Block device mappings are not supported if the value is <code>Custom</code>. For more information on the supported operating systems, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/workinginstances-os.html">Operating Systems</a>For more information on how to use custom AMIs with AWS OpsWorks Stacks, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/workinginstances-custom-ami.html">Using Custom AMIs</a>.</p>
     #[serde(rename = "Os")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub os: Option<String>,
@@ -710,7 +710,7 @@ pub struct CreateStackRequest {
     /// <p>The Amazon Resource Name (ARN) of an IAM profile that is the default profile for all of the stack's EC2 instances. For more information about IAM ARNs, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html">Using Identifiers</a>.</p>
     #[serde(rename = "DefaultInstanceProfileArn")]
     pub default_instance_profile_arn: String,
-    /// <p>The stack's default operating system, which is installed on every instance unless you specify a different operating system when you create the instance. You can specify one of the following.</p> <ul> <li> <p>A supported Linux operating system: An Amazon Linux version, such as <code>Amazon Linux 2017.03</code>, <code>Amazon Linux 2016.09</code>, <code>Amazon Linux 2016.03</code>, <code>Amazon Linux 2015.09</code>, or <code>Amazon Linux 2015.03</code>.</p> </li> <li> <p>A supported Ubuntu operating system, such as <code>Ubuntu 16.04 LTS</code>, <code>Ubuntu 14.04 LTS</code>, or <code>Ubuntu 12.04 LTS</code>.</p> </li> <li> <p> <code>CentOS Linux 7</code> </p> </li> <li> <p> <code>Red Hat Enterprise Linux 7</code> </p> </li> <li> <p>A supported Windows operating system, such as <code>Microsoft Windows Server 2012 R2 Base</code>, <code>Microsoft Windows Server 2012 R2 with SQL Server Express</code>, <code>Microsoft Windows Server 2012 R2 with SQL Server Standard</code>, or <code>Microsoft Windows Server 2012 R2 with SQL Server Web</code>.</p> </li> <li> <p>A custom AMI: <code>Custom</code>. You specify the custom AMI you want to use when you create instances. For more information, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/workinginstances-custom-ami.html"> Using Custom AMIs</a>.</p> </li> </ul> <p>The default option is the current Amazon Linux version. For more information on the supported operating systems, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/workinginstances-os.html">AWS OpsWorks Stacks Operating Systems</a>.</p>
+    /// <p>The stack's default operating system, which is installed on every instance unless you specify a different operating system when you create the instance. You can specify one of the following.</p> <ul> <li> <p>A supported Linux operating system: An Amazon Linux version, such as <code>Amazon Linux 2017.09</code>, <code>Amazon Linux 2017.03</code>, <code>Amazon Linux 2016.09</code>, <code>Amazon Linux 2016.03</code>, <code>Amazon Linux 2015.09</code>, or <code>Amazon Linux 2015.03</code>.</p> </li> <li> <p>A supported Ubuntu operating system, such as <code>Ubuntu 16.04 LTS</code>, <code>Ubuntu 14.04 LTS</code>, or <code>Ubuntu 12.04 LTS</code>.</p> </li> <li> <p> <code>CentOS Linux 7</code> </p> </li> <li> <p> <code>Red Hat Enterprise Linux 7</code> </p> </li> <li> <p>A supported Windows operating system, such as <code>Microsoft Windows Server 2012 R2 Base</code>, <code>Microsoft Windows Server 2012 R2 with SQL Server Express</code>, <code>Microsoft Windows Server 2012 R2 with SQL Server Standard</code>, or <code>Microsoft Windows Server 2012 R2 with SQL Server Web</code>.</p> </li> <li> <p>A custom AMI: <code>Custom</code>. You specify the custom AMI you want to use when you create instances. For more information, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/workinginstances-custom-ami.html"> Using Custom AMIs</a>.</p> </li> </ul> <p>The default option is the current Amazon Linux version. For more information on the supported operating systems, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/workinginstances-os.html">AWS OpsWorks Stacks Operating Systems</a>.</p>
     #[serde(rename = "DefaultOs")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub default_os: Option<String>,
@@ -801,7 +801,7 @@ pub struct DataSource {
     #[serde(rename = "DatabaseName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub database_name: Option<String>,
-    /// <p>The data source's type, <code>AutoSelectOpsworksMysqlInstance</code>, <code>OpsworksMysqlInstance</code>, or <code>RdsDbInstance</code>.</p>
+    /// <p>The data source's type, <code>AutoSelectOpsworksMysqlInstance</code>, <code>OpsworksMysqlInstance</code>, <code>RdsDbInstance</code>, or <code>None</code>.</p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
@@ -1018,15 +1018,15 @@ pub struct DescribeCommandsResult {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeDeploymentsRequest {
-    /// <p>The app ID. If you include this parameter, <code>DescribeDeployments</code> returns a description of the commands associated with the specified app.</p>
+    /// <p>The app ID. If you include this parameter, the command returns a description of the commands associated with the specified app.</p>
     #[serde(rename = "AppId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub app_id: Option<String>,
-    /// <p>An array of deployment IDs to be described. If you include this parameter, <code>DescribeDeployments</code> returns a description of the specified deployments. Otherwise, it returns a description of every deployment.</p>
+    /// <p>An array of deployment IDs to be described. If you include this parameter, the command returns a description of the specified deployments. Otherwise, it returns a description of every deployment.</p>
     #[serde(rename = "DeploymentIds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub deployment_ids: Option<Vec<String>>,
-    /// <p>The stack ID. If you include this parameter, <code>DescribeDeployments</code> returns a description of the commands associated with the specified stack.</p>
+    /// <p>The stack ID. If you include this parameter, the command returns a description of the commands associated with the specified stack.</p>
     #[serde(rename = "StackId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub stack_id: Option<String>,
@@ -1189,6 +1189,14 @@ pub struct DescribeMyUserProfileResult {
     #[serde(rename = "UserProfile")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub user_profile: Option<SelfUserProfile>,
+}
+
+/// <p>The response to a <code>DescribeOperatingSystems</code> request.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct DescribeOperatingSystemsResponse {
+    #[serde(rename = "OperatingSystems")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub operating_systems: Option<Vec<OperatingSystem>>,
 }
 
 #[derive(Default, Debug, Clone, Serialize)]
@@ -1433,7 +1441,7 @@ pub struct EbsBlockDevice {
     #[serde(rename = "VolumeSize")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub volume_size: Option<i64>,
-    /// <p>The volume type. <code>gp2</code> for General Purpose (SSD) volumes, <code>io1</code> for Provisioned IOPS (SSD) volumes, and <code>standard</code> for Magnetic volumes.</p>
+    /// <p>The volume type. <code>gp2</code> for General Purpose (SSD) volumes, <code>io1</code> for Provisioned IOPS (SSD) volumes, <code>st1</code> for Throughput Optimized hard disk drives (HDD), <code>sc1</code> for Cold HDD,and <code>standard</code> for Magnetic volumes.</p> <p>If you specify the <code>io1</code> volume type, you must also specify a value for the <code>Iops</code> attribute. The maximum ratio of provisioned IOPS to requested volume size (in GiB) is 50:1. AWS uses the default volume size (in GiB) specified in the AMI attributes to set IOPS to 50 x (volume size).</p>
     #[serde(rename = "VolumeType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub volume_type: Option<String>,
@@ -1821,6 +1829,9 @@ pub struct InstancesCount {
     #[serde(rename = "StartFailed")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub start_failed: Option<i64>,
+    #[serde(rename = "StopFailed")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub stop_failed: Option<i64>,
     /// <p>The number of instances with <code>stopped</code> status.</p>
     #[serde(rename = "Stopped")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1994,6 +2005,52 @@ pub struct LoadBasedAutoScalingConfiguration {
     #[serde(rename = "UpScaling")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub up_scaling: Option<AutoScalingThresholds>,
+}
+
+/// <p>Describes supported operating systems in AWS OpsWorks Stacks.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct OperatingSystem {
+    /// <p>Supported configuration manager name and versions for an AWS OpsWorks Stacks operating system.</p>
+    #[serde(rename = "ConfigurationManagers")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub configuration_managers: Option<Vec<OperatingSystemConfigurationManager>>,
+    /// <p>The ID of a supported operating system, such as <code>Amazon Linux 2017.09</code>.</p>
+    #[serde(rename = "Id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    /// <p>The name of the operating system, such as <code>Amazon Linux 2017.09</code>.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>A short name for the operating system manufacturer.</p>
+    #[serde(rename = "ReportedName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub reported_name: Option<String>,
+    /// <p>The version of the operating system, including the release and edition, if applicable.</p>
+    #[serde(rename = "ReportedVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub reported_version: Option<String>,
+    /// <p>Indicates that an operating system is not supported for new instances.</p>
+    #[serde(rename = "Supported")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub supported: Option<bool>,
+    /// <p>The type of a supported operating system, either <code>Linux</code> or <code>Windows</code>.</p>
+    #[serde(rename = "Type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub type_: Option<String>,
+}
+
+/// <p>A block that contains information about the configuration manager (Chef) and the versions of the configuration manager that are supported for an operating system.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct OperatingSystemConfigurationManager {
+    /// <p>The name of the configuration manager, which is Chef.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The versions of the configuration manager that are supported by an operating system.</p>
+    #[serde(rename = "Version")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub version: Option<String>,
 }
 
 /// <p>Describes stack or user permissions.</p>
@@ -2591,6 +2648,9 @@ pub struct StartStackRequest {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct StopInstanceRequest {
+    #[serde(rename = "Force")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub force: Option<bool>,
     /// <p>The instance ID.</p>
     #[serde(rename = "InstanceId")]
     pub instance_id: String,
@@ -2770,7 +2830,7 @@ pub struct UpdateInstanceRequest {
     #[serde(rename = "LayerIds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub layer_ids: Option<Vec<String>>,
-    /// <p><p>The instance&#39;s operating system, which must be set to one of the following. You cannot update an instance that is using a custom AMI.</p> <ul> <li> <p>A supported Linux operating system: An Amazon Linux version, such as <code>Amazon Linux 2017.03</code>, <code>Amazon Linux 2016.09</code>, <code>Amazon Linux 2016.03</code>, <code>Amazon Linux 2015.09</code>, or <code>Amazon Linux 2015.03</code>.</p> </li> <li> <p>A supported Ubuntu operating system, such as <code>Ubuntu 16.04 LTS</code>, <code>Ubuntu 14.04 LTS</code>, or <code>Ubuntu 12.04 LTS</code>.</p> </li> <li> <p> <code>CentOS Linux 7</code> </p> </li> <li> <p> <code>Red Hat Enterprise Linux 7</code> </p> </li> <li> <p>A supported Windows operating system, such as <code>Microsoft Windows Server 2012 R2 Base</code>, <code>Microsoft Windows Server 2012 R2 with SQL Server Express</code>, <code>Microsoft Windows Server 2012 R2 with SQL Server Standard</code>, or <code>Microsoft Windows Server 2012 R2 with SQL Server Web</code>.</p> </li> </ul> <p>For more information on the supported operating systems, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/workinginstances-os.html">AWS OpsWorks Stacks Operating Systems</a>.</p> <p>The default option is the current Amazon Linux version. If you set this parameter to <code>Custom</code>, you must use the AmiId parameter to specify the custom AMI that you want to use. For more information on the supported operating systems, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/workinginstances-os.html">Operating Systems</a>. For more information on how to use custom AMIs with OpsWorks, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/workinginstances-custom-ami.html">Using Custom AMIs</a>.</p> <note> <p>You can specify a different Linux operating system for the updated stack, but you cannot change from Linux to Windows or Windows to Linux.</p> </note></p>
+    /// <p><p>The instance&#39;s operating system, which must be set to one of the following. You cannot update an instance that is using a custom AMI.</p> <ul> <li> <p>A supported Linux operating system: An Amazon Linux version, such as <code>Amazon Linux 2017.09</code>, <code>Amazon Linux 2017.03</code>, <code>Amazon Linux 2016.09</code>, <code>Amazon Linux 2016.03</code>, <code>Amazon Linux 2015.09</code>, or <code>Amazon Linux 2015.03</code>.</p> </li> <li> <p>A supported Ubuntu operating system, such as <code>Ubuntu 16.04 LTS</code>, <code>Ubuntu 14.04 LTS</code>, or <code>Ubuntu 12.04 LTS</code>.</p> </li> <li> <p> <code>CentOS Linux 7</code> </p> </li> <li> <p> <code>Red Hat Enterprise Linux 7</code> </p> </li> <li> <p>A supported Windows operating system, such as <code>Microsoft Windows Server 2012 R2 Base</code>, <code>Microsoft Windows Server 2012 R2 with SQL Server Express</code>, <code>Microsoft Windows Server 2012 R2 with SQL Server Standard</code>, or <code>Microsoft Windows Server 2012 R2 with SQL Server Web</code>.</p> </li> </ul> <p>For more information on the supported operating systems, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/workinginstances-os.html">AWS OpsWorks Stacks Operating Systems</a>.</p> <p>The default option is the current Amazon Linux version. If you set this parameter to <code>Custom</code>, you must use the AmiId parameter to specify the custom AMI that you want to use. For more information on the supported operating systems, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/workinginstances-os.html">Operating Systems</a>. For more information on how to use custom AMIs with OpsWorks, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/workinginstances-custom-ami.html">Using Custom AMIs</a>.</p> <note> <p>You can specify a different Linux operating system for the updated stack, but you cannot change from Linux to Windows or Windows to Linux.</p> </note></p>
     #[serde(rename = "Os")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub os: Option<String>,
@@ -2907,7 +2967,7 @@ pub struct UpdateStackRequest {
     #[serde(rename = "DefaultInstanceProfileArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub default_instance_profile_arn: Option<String>,
-    /// <p>The stack's operating system, which must be set to one of the following:</p> <ul> <li> <p>A supported Linux operating system: An Amazon Linux version, such as <code>Amazon Linux 2017.03</code>, <code>Amazon Linux 2016.09</code>, <code>Amazon Linux 2016.03</code>, <code>Amazon Linux 2015.09</code>, or <code>Amazon Linux 2015.03</code>.</p> </li> <li> <p>A supported Ubuntu operating system, such as <code>Ubuntu 16.04 LTS</code>, <code>Ubuntu 14.04 LTS</code>, or <code>Ubuntu 12.04 LTS</code>.</p> </li> <li> <p> <code>CentOS Linux 7</code> </p> </li> <li> <p> <code>Red Hat Enterprise Linux 7</code> </p> </li> <li> <p>A supported Windows operating system, such as <code>Microsoft Windows Server 2012 R2 Base</code>, <code>Microsoft Windows Server 2012 R2 with SQL Server Express</code>, <code>Microsoft Windows Server 2012 R2 with SQL Server Standard</code>, or <code>Microsoft Windows Server 2012 R2 with SQL Server Web</code>.</p> </li> <li> <p>A custom AMI: <code>Custom</code>. You specify the custom AMI you want to use when you create instances. For more information on how to use custom AMIs with OpsWorks, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/workinginstances-custom-ami.html">Using Custom AMIs</a>.</p> </li> </ul> <p>The default option is the stack's current operating system. For more information on the supported operating systems, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/workinginstances-os.html">AWS OpsWorks Stacks Operating Systems</a>.</p>
+    /// <p>The stack's operating system, which must be set to one of the following:</p> <ul> <li> <p>A supported Linux operating system: An Amazon Linux version, such as <code>Amazon Linux 2017.09</code>, <code>Amazon Linux 2017.03</code>, <code>Amazon Linux 2016.09</code>, <code>Amazon Linux 2016.03</code>, <code>Amazon Linux 2015.09</code>, or <code>Amazon Linux 2015.03</code>.</p> </li> <li> <p>A supported Ubuntu operating system, such as <code>Ubuntu 16.04 LTS</code>, <code>Ubuntu 14.04 LTS</code>, or <code>Ubuntu 12.04 LTS</code>.</p> </li> <li> <p> <code>CentOS Linux 7</code> </p> </li> <li> <p> <code>Red Hat Enterprise Linux 7</code> </p> </li> <li> <p>A supported Windows operating system, such as <code>Microsoft Windows Server 2012 R2 Base</code>, <code>Microsoft Windows Server 2012 R2 with SQL Server Express</code>, <code>Microsoft Windows Server 2012 R2 with SQL Server Standard</code>, or <code>Microsoft Windows Server 2012 R2 with SQL Server Web</code>.</p> </li> <li> <p>A custom AMI: <code>Custom</code>. You specify the custom AMI you want to use when you create instances. For more information on how to use custom AMIs with OpsWorks, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/workinginstances-custom-ami.html">Using Custom AMIs</a>.</p> </li> </ul> <p>The default option is the stack's current operating system. For more information on the supported operating systems, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/workinginstances-os.html">AWS OpsWorks Stacks Operating Systems</a>.</p>
     #[serde(rename = "DefaultOs")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub default_os: Option<String>,
@@ -3022,6 +3082,9 @@ pub struct Volume {
     #[serde(rename = "Ec2VolumeId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ec_2_volume_id: Option<String>,
+    #[serde(rename = "Encrypted")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub encrypted: Option<bool>,
     /// <p>The instance ID.</p>
     #[serde(rename = "InstanceId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3067,6 +3130,10 @@ pub struct Volume {
 /// <p>Describes an Amazon EBS volume configuration.</p>
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct VolumeConfiguration {
+    /// <p>Specifies whether an Amazon EBS volume is encrypted. For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSEncryption.html">Amazon EBS Encryption</a>.</p>
+    #[serde(rename = "Encrypted")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub encrypted: Option<bool>,
     /// <p>For PIOPS volumes, the IOPS per disk.</p>
     #[serde(rename = "Iops")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3084,7 +3151,7 @@ pub struct VolumeConfiguration {
     /// <p>The volume size.</p>
     #[serde(rename = "Size")]
     pub size: i64,
-    /// <p><p>The volume type:</p> <ul> <li> <p> <code>standard</code> - Magnetic</p> </li> <li> <p> <code>io1</code> - Provisioned IOPS (SSD)</p> </li> <li> <p> <code>gp2</code> - General Purpose (SSD)</p> </li> </ul></p>
+    /// <p><p>The volume type. For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSVolumeTypes.html"> Amazon EBS Volume Types</a>.</p> <ul> <li> <p> <code>standard</code> - Magnetic</p> </li> <li> <p> <code>io1</code> - Provisioned IOPS (SSD)</p> </li> <li> <p> <code>gp2</code> - General Purpose (SSD)</p> </li> <li> <p> <code>st1</code> - Throughput Optimized hard disk drive (HDD)</p> </li> <li> <p> <code>sc1</code> - Cold HDD</p> </li> </ul></p>
     #[serde(rename = "VolumeType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub volume_type: Option<String>,
@@ -5630,6 +5697,80 @@ impl Error for DescribeMyUserProfileError {
                 dispatch_error.description()
             }
             DescribeMyUserProfileError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DescribeOperatingSystems
+#[derive(Debug, PartialEq)]
+pub enum DescribeOperatingSystemsError {
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl DescribeOperatingSystemsError {
+    pub fn from_body(body: &str) -> DescribeOperatingSystemsError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "ValidationException" => {
+                        DescribeOperatingSystemsError::Validation(error_message.to_string())
+                    }
+                    _ => DescribeOperatingSystemsError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => DescribeOperatingSystemsError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for DescribeOperatingSystemsError {
+    fn from(err: serde_json::error::Error) -> DescribeOperatingSystemsError {
+        DescribeOperatingSystemsError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DescribeOperatingSystemsError {
+    fn from(err: CredentialsError) -> DescribeOperatingSystemsError {
+        DescribeOperatingSystemsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DescribeOperatingSystemsError {
+    fn from(err: HttpDispatchError) -> DescribeOperatingSystemsError {
+        DescribeOperatingSystemsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeOperatingSystemsError {
+    fn from(err: io::Error) -> DescribeOperatingSystemsError {
+        DescribeOperatingSystemsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DescribeOperatingSystemsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeOperatingSystemsError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeOperatingSystemsError::Validation(ref cause) => cause,
+            DescribeOperatingSystemsError::Credentials(ref err) => err.description(),
+            DescribeOperatingSystemsError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DescribeOperatingSystemsError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -9040,6 +9181,11 @@ pub trait OpsWorks {
         &self,
     ) -> RusotoFuture<DescribeMyUserProfileResult, DescribeMyUserProfileError>;
 
+    /// <p>Describes the operating systems that are supported by AWS OpsWorks Stacks.</p>
+    fn describe_operating_systems(
+        &self,
+    ) -> RusotoFuture<DescribeOperatingSystemsResponse, DescribeOperatingSystemsError>;
+
     /// <p>Describes the permissions for a specified stack.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
     fn describe_permissions(
         &self,
@@ -10326,6 +10472,41 @@ where
             } else {
                 future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeMyUserProfileError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        });
+
+        RusotoFuture::new(future)
+    }
+
+    /// <p>Describes the operating systems that are supported by AWS OpsWorks Stacks.</p>
+    fn describe_operating_systems(
+        &self,
+    ) -> RusotoFuture<DescribeOperatingSystemsResponse, DescribeOperatingSystemsError> {
+        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "OpsWorks_20130218.DescribeOperatingSystems");
+        request.set_payload(Some(b"{}".to_vec()));
+
+        let future = self.inner.sign_and_dispatch(request, |response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<DescribeOperatingSystemsResponse>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeOperatingSystemsError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))

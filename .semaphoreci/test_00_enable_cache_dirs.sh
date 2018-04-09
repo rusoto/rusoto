@@ -5,9 +5,6 @@ set -Eeu
 # https://semaphoreci.com/docs/caching-between-builds.html#additional-dir-caching
 cached_dirs=(
     ~/.cargo
-    target
-    service_crategen/target
-    integration_tests/target
 )
 
 for dir in "${cached_dirs[@]}"; do

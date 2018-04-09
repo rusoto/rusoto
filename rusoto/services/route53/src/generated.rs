@@ -1863,9 +1863,10 @@ impl DelegationSetDeserializer {
                         obj.id = Some(try!(ResourceIdDeserializer::deserialize("Id", stack)));
                     }
                     "NameServers" => {
-                        obj.name_servers = try!(
-                            DelegationSetNameServersDeserializer::deserialize("NameServers", stack)
-                        );
+                        obj.name_servers = try!(DelegationSetNameServersDeserializer::deserialize(
+                            "NameServers",
+                            stack
+                        ));
                     }
                     _ => skip_tree(stack),
                 },
@@ -3923,17 +3924,17 @@ impl HealthCheckDeserializer {
                         ));
                     }
                     "CloudWatchAlarmConfiguration" => {
-                        obj.cloud_watch_alarm_configuration = Some(try!(
-                            CloudWatchAlarmConfigurationDeserializer::deserialize(
+                        obj.cloud_watch_alarm_configuration =
+                            Some(try!(CloudWatchAlarmConfigurationDeserializer::deserialize(
                                 "CloudWatchAlarmConfiguration",
                                 stack
-                            )
-                        ));
+                            )));
                     }
                     "HealthCheckConfig" => {
-                        obj.health_check_config = try!(
-                            HealthCheckConfigDeserializer::deserialize("HealthCheckConfig", stack)
-                        );
+                        obj.health_check_config = try!(HealthCheckConfigDeserializer::deserialize(
+                            "HealthCheckConfig",
+                            stack
+                        ));
                     }
                     "HealthCheckVersion" => {
                         obj.health_check_version =
@@ -4062,12 +4063,11 @@ impl HealthCheckConfigDeserializer {
                             Some(try!(IPAddressDeserializer::deserialize("IPAddress", stack)));
                     }
                     "InsufficientDataHealthStatus" => {
-                        obj.insufficient_data_health_status = Some(try!(
-                            InsufficientDataHealthStatusDeserializer::deserialize(
+                        obj.insufficient_data_health_status =
+                            Some(try!(InsufficientDataHealthStatusDeserializer::deserialize(
                                 "InsufficientDataHealthStatus",
                                 stack
-                            )
-                        ));
+                            )));
                     }
                     "Inverted" => {
                         obj.inverted =
@@ -5221,9 +5221,10 @@ impl LinkedServiceDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "Description" => {
-                        obj.description = Some(try!(
-                            ResourceDescriptionDeserializer::deserialize("Description", stack)
-                        ));
+                        obj.description = Some(try!(ResourceDescriptionDeserializer::deserialize(
+                            "Description",
+                            stack
+                        )));
                     }
                     "ServicePrincipal" => {
                         obj.service_principal = Some(try!(
@@ -10231,9 +10232,9 @@ impl ChangeTagsForResourceError {
                 "InvalidInput" => {
                     ChangeTagsForResourceError::InvalidInput(String::from(parsed_error.message))
                 }
-                "NoSuchHealthCheck" => ChangeTagsForResourceError::NoSuchHealthCheck(
-                    String::from(parsed_error.message),
-                ),
+                "NoSuchHealthCheck" => ChangeTagsForResourceError::NoSuchHealthCheck(String::from(
+                    parsed_error.message,
+                )),
                 "NoSuchHostedZone" => {
                     ChangeTagsForResourceError::NoSuchHostedZone(String::from(parsed_error.message))
                 }
@@ -10692,9 +10693,9 @@ impl CreateReusableDelegationSetError {
                 "InvalidInput" => CreateReusableDelegationSetError::InvalidInput(String::from(
                     parsed_error.message,
                 )),
-                "LimitsExceeded" => CreateReusableDelegationSetError::LimitsExceeded(
-                    String::from(parsed_error.message),
-                ),
+                "LimitsExceeded" => CreateReusableDelegationSetError::LimitsExceeded(String::from(
+                    parsed_error.message,
+                )),
                 _ => CreateReusableDelegationSetError::Unknown(String::from(body)),
             },
             Err(_) => CreateReusableDelegationSetError::Unknown(body.to_string()),
@@ -10976,6 +10977,8 @@ pub enum CreateTrafficPolicyVersionError {
     InvalidTrafficPolicyDocument(String),
     /// <p>No traffic policy exists with the specified ID.</p>
     NoSuchTrafficPolicy(String),
+    /// <p>This traffic policy version can't be created because you've reached the limit of 1000 on the number of versions that you can create for the current traffic policy.</p> <p>To create more traffic policy versions, you can use <a>GetTrafficPolicy</a> to get the traffic policy document for a specified traffic policy version, and then use <a>CreateTrafficPolicy</a> to create a new traffic policy using the traffic policy document.</p>
+    TooManyTrafficPolicyVersionsForCurrentPolicy(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -11009,6 +11012,11 @@ impl CreateTrafficPolicyVersionError {
                 "NoSuchTrafficPolicy" => CreateTrafficPolicyVersionError::NoSuchTrafficPolicy(
                     String::from(parsed_error.message),
                 ),
+                "TooManyTrafficPolicyVersionsForCurrentPolicy" => {
+                    CreateTrafficPolicyVersionError::TooManyTrafficPolicyVersionsForCurrentPolicy(
+                        String::from(parsed_error.message),
+                    )
+                }
                 _ => CreateTrafficPolicyVersionError::Unknown(String::from(body)),
             },
             Err(_) => CreateTrafficPolicyVersionError::Unknown(body.to_string()),
@@ -11057,6 +11065,9 @@ impl Error for CreateTrafficPolicyVersionError {
             CreateTrafficPolicyVersionError::InvalidInput(ref cause) => cause,
             CreateTrafficPolicyVersionError::InvalidTrafficPolicyDocument(ref cause) => cause,
             CreateTrafficPolicyVersionError::NoSuchTrafficPolicy(ref cause) => cause,
+            CreateTrafficPolicyVersionError::TooManyTrafficPolicyVersionsForCurrentPolicy(
+                ref cause,
+            ) => cause,
             CreateTrafficPolicyVersionError::Validation(ref cause) => cause,
             CreateTrafficPolicyVersionError::Credentials(ref err) => err.description(),
             CreateTrafficPolicyVersionError::HttpDispatch(ref dispatch_error) => {
@@ -12463,9 +12474,9 @@ impl GetHealthCheckLastFailureReasonError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidInput" => GetHealthCheckLastFailureReasonError::InvalidInput(
-                    String::from(parsed_error.message),
-                ),
+                "InvalidInput" => GetHealthCheckLastFailureReasonError::InvalidInput(String::from(
+                    parsed_error.message,
+                )),
                 "NoSuchHealthCheck" => GetHealthCheckLastFailureReasonError::NoSuchHealthCheck(
                     String::from(parsed_error.message),
                 ),
@@ -12889,11 +12900,9 @@ impl GetQueryLoggingConfigError {
                 "InvalidInput" => {
                     GetQueryLoggingConfigError::InvalidInput(String::from(parsed_error.message))
                 }
-                "NoSuchQueryLoggingConfig" => {
-                    GetQueryLoggingConfigError::NoSuchQueryLoggingConfig(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "NoSuchQueryLoggingConfig" => GetQueryLoggingConfigError::NoSuchQueryLoggingConfig(
+                    String::from(parsed_error.message),
+                ),
                 _ => GetQueryLoggingConfigError::Unknown(String::from(body)),
             },
             Err(_) => GetQueryLoggingConfigError::Unknown(body.to_string()),
@@ -13643,9 +13652,9 @@ impl ListHostedZonesByNameError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "InvalidDomainName" => ListHostedZonesByNameError::InvalidDomainName(
-                    String::from(parsed_error.message),
-                ),
+                "InvalidDomainName" => ListHostedZonesByNameError::InvalidDomainName(String::from(
+                    parsed_error.message,
+                )),
                 "InvalidInput" => {
                     ListHostedZonesByNameError::InvalidInput(String::from(parsed_error.message))
                 }
@@ -13736,9 +13745,9 @@ impl ListQueryLoggingConfigsError {
                 "InvalidPaginationToken" => ListQueryLoggingConfigsError::InvalidPaginationToken(
                     String::from(parsed_error.message),
                 ),
-                "NoSuchHostedZone" => ListQueryLoggingConfigsError::NoSuchHostedZone(
-                    String::from(parsed_error.message),
-                ),
+                "NoSuchHostedZone" => ListQueryLoggingConfigsError::NoSuchHostedZone(String::from(
+                    parsed_error.message,
+                )),
                 _ => ListQueryLoggingConfigsError::Unknown(String::from(body)),
             },
             Err(_) => ListQueryLoggingConfigsError::Unknown(body.to_string()),
@@ -14812,11 +14821,9 @@ impl UpdateHealthCheckError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "HealthCheckVersionMismatch" => {
-                    UpdateHealthCheckError::HealthCheckVersionMismatch(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "HealthCheckVersionMismatch" => UpdateHealthCheckError::HealthCheckVersionMismatch(
+                    String::from(parsed_error.message),
+                ),
                 "InvalidInput" => {
                     UpdateHealthCheckError::InvalidInput(String::from(parsed_error.message))
                 }
@@ -14906,9 +14913,9 @@ impl UpdateHostedZoneCommentError {
                 "InvalidInput" => {
                     UpdateHostedZoneCommentError::InvalidInput(String::from(parsed_error.message))
                 }
-                "NoSuchHostedZone" => UpdateHostedZoneCommentError::NoSuchHostedZone(
-                    String::from(parsed_error.message),
-                ),
+                "NoSuchHostedZone" => UpdateHostedZoneCommentError::NoSuchHostedZone(String::from(
+                    parsed_error.message,
+                )),
                 _ => UpdateHostedZoneCommentError::Unknown(String::from(body)),
             },
             Err(_) => UpdateHostedZoneCommentError::Unknown(body.to_string()),
@@ -15604,12 +15611,10 @@ where
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(
-                        AssociateVPCWithHostedZoneResponseDeserializer::deserialize(
-                            &actual_tag_name,
-                            &mut stack
-                        )
-                    );
+                    result = try!(AssociateVPCWithHostedZoneResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack
+                    ));
                 }
 
                 Ok(result)
@@ -16142,12 +16147,10 @@ where
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(
-                        CreateTrafficPolicyVersionResponseDeserializer::deserialize(
-                            &actual_tag_name,
-                            &mut stack
-                        )
-                    );
+                    result = try!(CreateTrafficPolicyVersionResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack
+                    ));
                 }
 
                 let value = response.headers.get("Location").unwrap().to_owned();
@@ -17881,12 +17884,10 @@ where
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(
-                        ListReusableDelegationSetsResponseDeserializer::deserialize(
-                            &actual_tag_name,
-                            &mut stack
-                        )
-                    );
+                    result = try!(ListReusableDelegationSetsResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack
+                    ));
                 }
 
                 Ok(result)
@@ -18112,12 +18113,10 @@ where
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(
-                        ListTrafficPolicyInstancesResponseDeserializer::deserialize(
-                            &actual_tag_name,
-                            &mut stack
-                        )
-                    );
+                    result = try!(ListTrafficPolicyInstancesResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack
+                    ));
                 }
 
                 Ok(result)
@@ -18606,12 +18605,10 @@ where
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(
-                        UpdateTrafficPolicyCommentResponseDeserializer::deserialize(
-                            &actual_tag_name,
-                            &mut stack
-                        )
-                    );
+                    result = try!(UpdateTrafficPolicyCommentResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack
+                    ));
                 }
 
                 Ok(result)

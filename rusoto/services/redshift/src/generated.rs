@@ -324,6 +324,7 @@ impl AuthorizeSnapshotAccessResultDeserializer {
 pub struct AvailabilityZone {
     /// <p>The name of the availability zone.</p>
     pub name: Option<String>,
+    pub supported_platforms: Option<Vec<SupportedPlatform>>,
 }
 
 struct AvailabilityZoneDeserializer;
@@ -350,6 +351,13 @@ impl AvailabilityZoneDeserializer {
                 DeserializerNext::Element(name) => match &name[..] {
                     "Name" => {
                         obj.name = Some(try!(StringDeserializer::deserialize("Name", stack)));
+                    }
+                    "SupportedPlatforms" => {
+                        obj.supported_platforms =
+                            Some(try!(SupportedPlatformsListDeserializer::deserialize(
+                                "SupportedPlatforms",
+                                stack
+                            )));
                     }
                     _ => skip_tree(stack),
                 },
@@ -686,9 +694,10 @@ impl ClusterDeserializer {
                                 )));
                         }
                         "PubliclyAccessible" => {
-                            obj.publicly_accessible = Some(try!(
-                                BooleanDeserializer::deserialize("PubliclyAccessible", stack)
-                            ));
+                            obj.publicly_accessible = Some(try!(BooleanDeserializer::deserialize(
+                                "PubliclyAccessible",
+                                stack
+                            )));
                         }
                         "RestoreStatus" => {
                             obj.restore_status = Some(try!(
@@ -1058,28 +1067,28 @@ impl ClusterParameterGroupDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "Description" => {
-                            obj.description =
-                                Some(try!(StringDeserializer::deserialize("Description", stack)));
-                        }
-                        "ParameterGroupFamily" => {
-                            obj.parameter_group_family = Some(try!(
-                                StringDeserializer::deserialize("ParameterGroupFamily", stack)
-                            ));
-                        }
-                        "ParameterGroupName" => {
-                            obj.parameter_group_name = Some(try!(
-                                StringDeserializer::deserialize("ParameterGroupName", stack)
-                            ));
-                        }
-                        "Tags" => {
-                            obj.tags = Some(try!(TagListDeserializer::deserialize("Tags", stack)));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "Description" => {
+                        obj.description =
+                            Some(try!(StringDeserializer::deserialize("Description", stack)));
                     }
-                }
+                    "ParameterGroupFamily" => {
+                        obj.parameter_group_family = Some(try!(StringDeserializer::deserialize(
+                            "ParameterGroupFamily",
+                            stack
+                        )));
+                    }
+                    "ParameterGroupName" => {
+                        obj.parameter_group_name = Some(try!(StringDeserializer::deserialize(
+                            "ParameterGroupName",
+                            stack
+                        )));
+                    }
+                    "Tags" => {
+                        obj.tags = Some(try!(TagListDeserializer::deserialize("Tags", stack)));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -1176,21 +1185,21 @@ impl ClusterParameterGroupNameMessageDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "ParameterGroupName" => {
-                            obj.parameter_group_name = Some(try!(
-                                StringDeserializer::deserialize("ParameterGroupName", stack)
-                            ));
-                        }
-                        "ParameterGroupStatus" => {
-                            obj.parameter_group_status = Some(try!(
-                                StringDeserializer::deserialize("ParameterGroupStatus", stack)
-                            ));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "ParameterGroupName" => {
+                        obj.parameter_group_name = Some(try!(StringDeserializer::deserialize(
+                            "ParameterGroupName",
+                            stack
+                        )));
                     }
-                }
+                    "ParameterGroupStatus" => {
+                        obj.parameter_group_status = Some(try!(StringDeserializer::deserialize(
+                            "ParameterGroupStatus",
+                            stack
+                        )));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -1235,28 +1244,28 @@ impl ClusterParameterGroupStatusDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "ClusterParameterStatusList" => {
-                            obj.cluster_parameter_status_list =
-                                Some(try!(ClusterParameterStatusListDeserializer::deserialize(
-                                    "ClusterParameterStatusList",
-                                    stack
-                                )));
-                        }
-                        "ParameterApplyStatus" => {
-                            obj.parameter_apply_status = Some(try!(
-                                StringDeserializer::deserialize("ParameterApplyStatus", stack)
-                            ));
-                        }
-                        "ParameterGroupName" => {
-                            obj.parameter_group_name = Some(try!(
-                                StringDeserializer::deserialize("ParameterGroupName", stack)
-                            ));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "ClusterParameterStatusList" => {
+                        obj.cluster_parameter_status_list =
+                            Some(try!(ClusterParameterStatusListDeserializer::deserialize(
+                                "ClusterParameterStatusList",
+                                stack
+                            )));
                     }
-                }
+                    "ParameterApplyStatus" => {
+                        obj.parameter_apply_status = Some(try!(StringDeserializer::deserialize(
+                            "ParameterApplyStatus",
+                            stack
+                        )));
+                    }
+                    "ParameterGroupName" => {
+                        obj.parameter_group_name = Some(try!(StringDeserializer::deserialize(
+                            "ParameterGroupName",
+                            stack
+                        )));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -1804,9 +1813,10 @@ impl ClusterSnapshotCopyStatusDeserializer {
                         )));
                     }
                     "SnapshotCopyGrantName" => {
-                        obj.snapshot_copy_grant_name = Some(try!(
-                            StringDeserializer::deserialize("SnapshotCopyGrantName", stack)
-                        ));
+                        obj.snapshot_copy_grant_name = Some(try!(StringDeserializer::deserialize(
+                            "SnapshotCopyGrantName",
+                            stack
+                        )));
                     }
                     _ => skip_tree(stack),
                 },
@@ -2333,9 +2343,9 @@ pub struct CreateClusterMessage {
     pub kms_key_id: Option<String>,
     /// <p><p>The password associated with the master user account for the cluster that is being created.</p> <p>Constraints:</p> <ul> <li> <p>Must be between 8 and 64 characters in length.</p> </li> <li> <p>Must contain at least one uppercase letter.</p> </li> <li> <p>Must contain at least one lowercase letter.</p> </li> <li> <p>Must contain one number.</p> </li> <li> <p>Can be any printable ASCII character (ASCII code 33 to 126) except &#39; (single quote), &quot; (double quote), \, /, @, or space.</p> </li> </ul></p>
     pub master_user_password: String,
-    /// <p><p>The user name associated with the master user account for the cluster that is being created.</p> <p>Constraints:</p> <ul> <li> <p>Must be 1 - 128 alphanumeric characters.</p> </li> <li> <p>First character must be a letter.</p> </li> <li> <p>Cannot be a reserved word. A list of reserved words can be found in <a href="http://docs.aws.amazon.com/redshift/latest/dg/r_pg_keywords.html">Reserved Words</a> in the Amazon Redshift Database Developer Guide. </p> </li> </ul></p>
+    /// <p><p>The user name associated with the master user account for the cluster that is being created.</p> <p>Constraints:</p> <ul> <li> <p>Must be 1 - 128 alphanumeric characters. The user name can&#39;t be <code>PUBLIC</code>.</p> </li> <li> <p>First character must be a letter.</p> </li> <li> <p>Cannot be a reserved word. A list of reserved words can be found in <a href="http://docs.aws.amazon.com/redshift/latest/dg/r_pg_keywords.html">Reserved Words</a> in the Amazon Redshift Database Developer Guide. </p> </li> </ul></p>
     pub master_username: String,
-    /// <p>The node type to be provisioned for the cluster. For information about node types, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html#how-many-nodes"> Working with Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>. </p> <p>Valid Values: <code>ds1.xlarge</code> | <code>ds1.8xlarge</code> | <code>ds2.xlarge</code> | <code>ds2.8xlarge</code> | <code>dc1.large</code> | <code>dc1.8xlarge</code>. </p>
+    /// <p>The node type to be provisioned for the cluster. For information about node types, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html#how-many-nodes"> Working with Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>. </p> <p>Valid Values: <code>ds2.xlarge</code> | <code>ds2.8xlarge</code> | <code>ds2.xlarge</code> | <code>ds2.8xlarge</code> | <code>dc1.large</code> | <code>dc1.8xlarge</code> | <code>dc2.large</code> | <code>dc2.8xlarge</code> </p>
     pub node_type: String,
     /// <p>The number of compute nodes in the cluster. This parameter is required when the <b>ClusterType</b> parameter is specified as <code>multi-node</code>. </p> <p>For information about determining how many nodes you need, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html#how-many-nodes"> Working with Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>. </p> <p>If you don't specify this parameter, you get a single-node cluster. When requesting a multi-node cluster, you must specify the number of nodes that you want in the cluster.</p> <p>Default: <code>1</code> </p> <p>Constraints: Value must be at least 1 and no more than 100.</p>
     pub number_of_nodes: Option<i64>,
@@ -3898,6 +3908,8 @@ impl DescribeClusterSecurityGroupsMessageSerializer {
 /// <p><p/></p>
 #[derive(Default, Debug, Clone)]
 pub struct DescribeClusterSnapshotsMessage {
+    /// <p>A value that indicates whether to return snapshots only for an existing cluster. Table-level restore can be performed only using a snapshot of an existing cluster, that is, a cluster that has not been deleted. If <code>ClusterExists</code> is set to <code>true</code>, <code>ClusterIdentifier</code> is required.</p>
+    pub cluster_exists: Option<bool>,
     /// <p>The identifier of the cluster for which information about snapshots is requested.</p>
     pub cluster_identifier: Option<String>,
     /// <p>A time value that requests only snapshots created at or before the specified time. The time value is specified in ISO 8601 format. For more information about ISO 8601, go to the <a href="http://en.wikipedia.org/wiki/ISO_8601">ISO8601 Wikipedia page.</a> </p> <p>Example: <code>2012-07-16T18:00:00Z</code> </p>
@@ -3929,6 +3941,12 @@ impl DescribeClusterSnapshotsMessageSerializer {
             prefix.push_str(".");
         }
 
+        if let Some(ref field_value) = obj.cluster_exists {
+            params.put(
+                &format!("{}{}", prefix, "ClusterExists"),
+                &field_value.to_string().replace("+", "%2B"),
+            );
+        }
         if let Some(ref field_value) = obj.cluster_identifier {
             params.put(
                 &format!("{}{}", prefix, "ClusterIdentifier"),
@@ -6049,7 +6067,7 @@ pub struct GetClusterCredentialsMessage {
     pub db_groups: Option<Vec<String>>,
     /// <p><p>The name of a database that <code>DbUser</code> is authorized to log on to. If <code>DbName</code> is not specified, <code>DbUser</code> can log on to any existing database.</p> <p>Constraints:</p> <ul> <li> <p>Must be 1 to 64 alphanumeric characters or hyphens</p> </li> <li> <p>Must contain only lowercase letters, numbers, underscore, plus sign, period (dot), at symbol (@), or hyphen.</p> </li> <li> <p>First character must be a letter.</p> </li> <li> <p>Must not contain a colon ( : ) or slash ( / ). </p> </li> <li> <p>Cannot be a reserved word. A list of reserved words can be found in <a href="http://docs.aws.amazon.com/redshift/latest/dg/r_pg_keywords.html">Reserved Words</a> in the Amazon Redshift Database Developer Guide.</p> </li> </ul></p>
     pub db_name: Option<String>,
-    /// <p><p>The name of a database user. If a user name matching <code>DbUser</code> exists in the database, the temporary user credentials have the same permissions as the existing user. If <code>DbUser</code> doesn&#39;t exist in the database and <code>Autocreate</code> is <code>True</code>, a new user is created using the value for <code>DbUser</code> with PUBLIC permissions. If a database user matching the value for <code>DbUser</code> doesn&#39;t exist and <code>Autocreate</code> is <code>False</code>, then the command succeeds but the connection attempt will fail because the user doesn&#39;t exist in the database.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/redshift/latest/dg/r_CREATE_USER.html">CREATE USER</a> in the Amazon Redshift Database Developer Guide. </p> <p>Constraints:</p> <ul> <li> <p>Must be 1 to 64 alphanumeric characters or hyphens</p> </li> <li> <p>Must contain only lowercase letters, numbers, underscore, plus sign, period (dot), at symbol (@), or hyphen.</p> </li> <li> <p>First character must be a letter.</p> </li> <li> <p>Must not contain a colon ( : ) or slash ( / ). </p> </li> <li> <p>Cannot be a reserved word. A list of reserved words can be found in <a href="http://docs.aws.amazon.com/redshift/latest/dg/r_pg_keywords.html">Reserved Words</a> in the Amazon Redshift Database Developer Guide.</p> </li> </ul></p>
+    /// <p><p>The name of a database user. If a user name matching <code>DbUser</code> exists in the database, the temporary user credentials have the same permissions as the existing user. If <code>DbUser</code> doesn&#39;t exist in the database and <code>Autocreate</code> is <code>True</code>, a new user is created using the value for <code>DbUser</code> with PUBLIC permissions. If a database user matching the value for <code>DbUser</code> doesn&#39;t exist and <code>Autocreate</code> is <code>False</code>, then the command succeeds but the connection attempt will fail because the user doesn&#39;t exist in the database.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/redshift/latest/dg/r_CREATE_USER.html">CREATE USER</a> in the Amazon Redshift Database Developer Guide. </p> <p>Constraints:</p> <ul> <li> <p>Must be 1 to 64 alphanumeric characters or hyphens. The user name can&#39;t be <code>PUBLIC</code>.</p> </li> <li> <p>Must contain only lowercase letters, numbers, underscore, plus sign, period (dot), at symbol (@), or hyphen.</p> </li> <li> <p>First character must be a letter.</p> </li> <li> <p>Must not contain a colon ( : ) or slash ( / ). </p> </li> <li> <p>Cannot be a reserved word. A list of reserved words can be found in <a href="http://docs.aws.amazon.com/redshift/latest/dg/r_pg_keywords.html">Reserved Words</a> in the Amazon Redshift Database Developer Guide.</p> </li> </ul></p>
     pub db_user: String,
     /// <p>The number of seconds until the returned temporary password expires.</p> <p>Constraint: minimum 900, maximum 3600.</p> <p>Default: 900</p>
     pub duration_seconds: Option<i64>,
@@ -6976,7 +6994,7 @@ pub struct ModifyClusterMessage {
     pub master_user_password: Option<String>,
     /// <p>The new identifier for the cluster.</p> <p>Constraints:</p> <ul> <li> <p>Must contain from 1 to 63 alphanumeric characters or hyphens.</p> </li> <li> <p>Alphabetic characters must be lowercase.</p> </li> <li> <p>First character must be a letter.</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens.</p> </li> <li> <p>Must be unique for all clusters within an AWS account.</p> </li> </ul> <p>Example: <code>examplecluster</code> </p>
     pub new_cluster_identifier: Option<String>,
-    /// <p>The new node type of the cluster. If you specify a new node type, you must also specify the number of nodes parameter.</p> <p>When you submit your request to resize a cluster, Amazon Redshift sets access permissions for the cluster to read-only. After Amazon Redshift provisions a new cluster according to your resize requirements, there will be a temporary outage while the old cluster is deleted and your connection is switched to the new cluster. When the new connection is complete, the original access permissions for the cluster are restored. You can use <a>DescribeResize</a> to track the progress of the resize request. </p> <p>Valid Values: <code> ds1.xlarge</code> | <code>ds1.8xlarge</code> | <code> ds2.xlarge</code> | <code>ds2.8xlarge</code> | <code>dc1.large</code> | <code>dc1.8xlarge</code>.</p>
+    /// <p>The new node type of the cluster. If you specify a new node type, you must also specify the number of nodes parameter.</p> <p>When you submit your request to resize a cluster, Amazon Redshift sets access permissions for the cluster to read-only. After Amazon Redshift provisions a new cluster according to your resize requirements, there will be a temporary outage while the old cluster is deleted and your connection is switched to the new cluster. When the new connection is complete, the original access permissions for the cluster are restored. You can use <a>DescribeResize</a> to track the progress of the resize request. </p> <p>Valid Values: <code>ds2.xlarge</code> | <code>ds2.8xlarge</code> | <code>dc1.large</code> | <code>dc1.8xlarge</code> | <code>dc2.large</code> | <code>dc2.8xlarge</code> </p>
     pub node_type: Option<String>,
     /// <p>The new number of nodes of the cluster. If you specify a new number of nodes, you must also specify the node type parameter.</p> <p>When you submit your request to resize a cluster, Amazon Redshift sets access permissions for the cluster to read-only. After Amazon Redshift provisions a new cluster according to your resize requirements, there will be a temporary outage while the old cluster is deleted and your connection is switched to the new cluster. When the new connection is complete, the original access permissions for the cluster are restored. You can use <a>DescribeResize</a> to track the progress of the resize request. </p> <p>Valid Values: Integer greater than <code>0</code>.</p>
     pub number_of_nodes: Option<i64>,
@@ -7996,9 +8014,10 @@ impl PendingModifiedValuesDeserializer {
                             Some(try!(StringDeserializer::deserialize("NodeType", stack)));
                     }
                     "NumberOfNodes" => {
-                        obj.number_of_nodes = Some(try!(
-                            IntegerOptionalDeserializer::deserialize("NumberOfNodes", stack)
-                        ));
+                        obj.number_of_nodes = Some(try!(IntegerOptionalDeserializer::deserialize(
+                            "NumberOfNodes",
+                            stack
+                        )));
                     }
                     "PubliclyAccessible" => {
                         obj.publicly_accessible = Some(try!(
@@ -8285,6 +8304,7 @@ pub struct ReservedNode {
     pub reserved_node_id: Option<String>,
     /// <p>The identifier for the reserved node offering.</p>
     pub reserved_node_offering_id: Option<String>,
+    pub reserved_node_offering_type: Option<String>,
     /// <p>The time the reservation started. You purchase a reserved node offering for a duration. This is the start time of that duration.</p>
     pub start_time: Option<String>,
     /// <p><p>The state of the reserved compute node.</p> <p>Possible Values:</p> <ul> <li> <p>pending-payment-This reserved node has recently been purchased, and the sale has been approved, but payment has not yet been confirmed.</p> </li> <li> <p>active-This reserved node is owned by the caller and is available for use.</p> </li> <li> <p>payment-failed-Payment failed for the purchase attempt.</p> </li> </ul></p>
@@ -8354,6 +8374,13 @@ impl ReservedNodeDeserializer {
                         obj.reserved_node_offering_id = Some(try!(
                             StringDeserializer::deserialize("ReservedNodeOfferingId", stack)
                         ));
+                    }
+                    "ReservedNodeOfferingType" => {
+                        obj.reserved_node_offering_type =
+                            Some(try!(ReservedNodeOfferingTypeDeserializer::deserialize(
+                                "ReservedNodeOfferingType",
+                                stack
+                            )));
                     }
                     "StartTime" => {
                         obj.start_time =
@@ -8440,6 +8467,7 @@ pub struct ReservedNodeOffering {
     pub recurring_charges: Option<Vec<RecurringCharge>>,
     /// <p>The offering identifier.</p>
     pub reserved_node_offering_id: Option<String>,
+    pub reserved_node_offering_type: Option<String>,
     /// <p>The rate you are charged for each hour the cluster that is using the offering is running.</p>
     pub usage_price: Option<f64>,
 }
@@ -8495,6 +8523,13 @@ impl ReservedNodeOfferingDeserializer {
                         obj.reserved_node_offering_id = Some(try!(
                             StringDeserializer::deserialize("ReservedNodeOfferingId", stack)
                         ));
+                    }
+                    "ReservedNodeOfferingType" => {
+                        obj.reserved_node_offering_type =
+                            Some(try!(ReservedNodeOfferingTypeDeserializer::deserialize(
+                                "ReservedNodeOfferingType",
+                                stack
+                            )));
                     }
                     "UsagePrice" => {
                         obj.usage_price =
@@ -8553,6 +8588,20 @@ impl ReservedNodeOfferingListDeserializer {
                 }
             }
         }
+
+        Ok(obj)
+    }
+}
+struct ReservedNodeOfferingTypeDeserializer;
+impl ReservedNodeOfferingTypeDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let obj = try!(characters(stack));
+        try!(end_element(tag_name, stack));
 
         Ok(obj)
     }
@@ -8647,9 +8696,10 @@ impl ReservedNodesMessageDeserializer {
                         obj.marker = Some(try!(StringDeserializer::deserialize("Marker", stack)));
                     }
                     "ReservedNodes" => {
-                        obj.reserved_nodes = Some(try!(
-                            ReservedNodeListDeserializer::deserialize("ReservedNodes", stack)
-                        ));
+                        obj.reserved_nodes = Some(try!(ReservedNodeListDeserializer::deserialize(
+                            "ReservedNodes",
+                            stack
+                        )));
                     }
                     _ => skip_tree(stack),
                 },
@@ -8913,7 +8963,7 @@ pub struct RestoreFromClusterSnapshotMessage {
     pub iam_roles: Option<Vec<String>>,
     /// <p>The AWS Key Management Service (KMS) key ID of the encryption key that you want to use to encrypt data in the cluster that you restore from a shared snapshot.</p>
     pub kms_key_id: Option<String>,
-    /// <p>The node type that the restored cluster will be provisioned with.</p> <p>Default: The node type of the cluster from which the snapshot was taken. You can modify this if you are using any DS node type. In that case, you can choose to restore into another DS node type of the same size. For example, you can restore ds1.8xlarge into ds2.8xlarge, or ds2.xlarge into ds1.xlarge. If you have a DC instance type, you must restore into that same instance type and size. In other words, you can only restore a dc1.large instance type into another dc1.large instance type. For more information about node types, see <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html#rs-about-clusters-and-nodes"> About Clusters and Nodes</a> in the <i>Amazon Redshift Cluster Management Guide</i> </p>
+    /// <p>The node type that the restored cluster will be provisioned with.</p> <p>Default: The node type of the cluster from which the snapshot was taken. You can modify this if you are using any DS node type. In that case, you can choose to restore into another DS node type of the same size. For example, you can restore ds1.8xlarge into ds2.8xlarge, or ds1.xlarge into ds2.xlarge. If you have a DC instance type, you must restore into that same instance type and size. In other words, you can only restore a dc1.large instance type into another dc1.large instance type or dc2.large instance type. You can't restore dc1.8xlarge to dc2.8xlarge. First restore to a dc1.8xlareg cluster, then resize to a dc2.8large cluster. For more information about node types, see <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html#rs-about-clusters-and-nodes"> About Clusters and Nodes</a> in the <i>Amazon Redshift Cluster Management Guide</i>. </p>
     pub node_type: Option<String>,
     /// <p>The AWS customer account used to create or copy the snapshot. Required if you are restoring a snapshot you do not own, optional if you own the snapshot.</p>
     pub owner_account: Option<String>,
@@ -9870,9 +9920,10 @@ impl SnapshotCopyGrantDeserializer {
                             Some(try!(StringDeserializer::deserialize("KmsKeyId", stack)));
                     }
                     "SnapshotCopyGrantName" => {
-                        obj.snapshot_copy_grant_name = Some(try!(
-                            StringDeserializer::deserialize("SnapshotCopyGrantName", stack)
-                        ));
+                        obj.snapshot_copy_grant_name = Some(try!(StringDeserializer::deserialize(
+                            "SnapshotCopyGrantName",
+                            stack
+                        )));
                     }
                     "Tags" => {
                         obj.tags = Some(try!(TagListDeserializer::deserialize("Tags", stack)));
@@ -10278,6 +10329,94 @@ impl SubnetListDeserializer {
         Ok(obj)
     }
 }
+/// <p>A list of supported platforms for orderable clusters.</p>
+#[derive(Default, Debug, Clone)]
+pub struct SupportedPlatform {
+    pub name: Option<String>,
+}
+
+struct SupportedPlatformDeserializer;
+impl SupportedPlatformDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<SupportedPlatform, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = SupportedPlatform::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "Name" => {
+                        obj.name = Some(try!(StringDeserializer::deserialize("Name", stack)));
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+struct SupportedPlatformsListDeserializer;
+impl SupportedPlatformsListDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<SupportedPlatform>, XmlParseError> {
+        let mut obj = vec![];
+        try!(start_element(tag_name, stack));
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => {
+                    if name == "SupportedPlatform" {
+                        obj.push(try!(SupportedPlatformDeserializer::deserialize(
+                            "SupportedPlatform",
+                            stack
+                        )));
+                    } else {
+                        skip_tree(stack);
+                    }
+                }
+                DeserializerNext::Close => {
+                    try!(end_element(tag_name, stack));
+                    break;
+                }
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        Ok(obj)
+    }
+}
 struct TStampDeserializer;
 impl TStampDeserializer {
     #[allow(unused_variables)]
@@ -10400,9 +10539,10 @@ impl TableRestoreStatusDeserializer {
                         )));
                     }
                     "TableRestoreRequestId" => {
-                        obj.table_restore_request_id = Some(try!(
-                            StringDeserializer::deserialize("TableRestoreRequestId", stack)
-                        ));
+                        obj.table_restore_request_id = Some(try!(StringDeserializer::deserialize(
+                            "TableRestoreRequestId",
+                            stack
+                        )));
                     }
                     "TargetDatabaseName" => {
                         obj.target_database_name = Some(try!(StringDeserializer::deserialize(
@@ -10987,13 +11127,31 @@ impl AuthorizeClusterSecurityGroupIngressError {
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
-                            Ok(parsed_error) => {
-                                match &parsed_error.code[..] {
-                                    "AuthorizationAlreadyExists" => AuthorizeClusterSecurityGroupIngressError::AuthorizationAlreadyExistsFault(String::from(parsed_error.message)),"AuthorizationQuotaExceeded" => AuthorizeClusterSecurityGroupIngressError::AuthorizationQuotaExceededFault(String::from(parsed_error.message)),"ClusterSecurityGroupNotFound" => AuthorizeClusterSecurityGroupIngressError::ClusterSecurityGroupNotFoundFault(String::from(parsed_error.message)),"InvalidClusterSecurityGroupState" => AuthorizeClusterSecurityGroupIngressError::InvalidClusterSecurityGroupStateFault(String::from(parsed_error.message)),_ => AuthorizeClusterSecurityGroupIngressError::Unknown(String::from(body))
-                                }
-                           },
-                           Err(_) => AuthorizeClusterSecurityGroupIngressError::Unknown(body.to_string())
-                       }
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                "AuthorizationAlreadyExists" => {
+                    AuthorizeClusterSecurityGroupIngressError::AuthorizationAlreadyExistsFault(
+                        String::from(parsed_error.message),
+                    )
+                }
+                "AuthorizationQuotaExceeded" => {
+                    AuthorizeClusterSecurityGroupIngressError::AuthorizationQuotaExceededFault(
+                        String::from(parsed_error.message),
+                    )
+                }
+                "ClusterSecurityGroupNotFound" => {
+                    AuthorizeClusterSecurityGroupIngressError::ClusterSecurityGroupNotFoundFault(
+                        String::from(parsed_error.message),
+                    )
+                }
+                "InvalidClusterSecurityGroupState" => {
+                    AuthorizeClusterSecurityGroupIngressError::InvalidClusterSecurityGroupStateFault(
+                        String::from(parsed_error.message),
+                    )
+                }
+                _ => AuthorizeClusterSecurityGroupIngressError::Unknown(String::from(body)),
+            },
+            Err(_) => AuthorizeClusterSecurityGroupIngressError::Unknown(body.to_string()),
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -11527,11 +11685,9 @@ impl CreateClusterParameterGroupError {
                 "InvalidTagFault" => CreateClusterParameterGroupError::InvalidTagFault(
                     String::from(parsed_error.message),
                 ),
-                "TagLimitExceededFault" => {
-                    CreateClusterParameterGroupError::TagLimitExceededFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "TagLimitExceededFault" => CreateClusterParameterGroupError::TagLimitExceededFault(
+                    String::from(parsed_error.message),
+                ),
                 _ => CreateClusterParameterGroupError::Unknown(String::from(body)),
             },
             Err(_) => CreateClusterParameterGroupError::Unknown(body.to_string()),
@@ -11985,9 +12141,9 @@ impl CreateEventSubscriptionError {
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "EventSubscriptionQuotaExceeded" => {
-                    CreateEventSubscriptionError::EventSubscriptionQuotaExceededFault(
-                        String::from(parsed_error.message),
-                    )
+                    CreateEventSubscriptionError::EventSubscriptionQuotaExceededFault(String::from(
+                        parsed_error.message,
+                    ))
                 }
                 "InvalidTagFault" => CreateEventSubscriptionError::InvalidTagFault(String::from(
                     parsed_error.message,
@@ -12341,14 +12497,14 @@ impl CreateSnapshotCopyGrantError {
                     String::from(parsed_error.message),
                 ),
                 "SnapshotCopyGrantAlreadyExistsFault" => {
-                    CreateSnapshotCopyGrantError::SnapshotCopyGrantAlreadyExistsFault(
-                        String::from(parsed_error.message),
-                    )
+                    CreateSnapshotCopyGrantError::SnapshotCopyGrantAlreadyExistsFault(String::from(
+                        parsed_error.message,
+                    ))
                 }
                 "SnapshotCopyGrantQuotaExceededFault" => {
-                    CreateSnapshotCopyGrantError::SnapshotCopyGrantQuotaExceededFault(
-                        String::from(parsed_error.message),
-                    )
+                    CreateSnapshotCopyGrantError::SnapshotCopyGrantQuotaExceededFault(String::from(
+                        parsed_error.message,
+                    ))
                 }
                 "TagLimitExceededFault" => CreateSnapshotCopyGrantError::TagLimitExceededFault(
                     String::from(parsed_error.message),
@@ -13673,6 +13829,8 @@ impl Error for DescribeClusterSecurityGroupsError {
 /// Errors returned by DescribeClusterSnapshots
 #[derive(Debug, PartialEq)]
 pub enum DescribeClusterSnapshotsError {
+    /// <p>The <code>ClusterIdentifier</code> parameter does not refer to an existing cluster. </p>
+    ClusterNotFoundFault(String),
     /// <p>The snapshot identifier does not refer to an existing cluster snapshot.</p>
     ClusterSnapshotNotFoundFault(String),
     /// <p>The tag is invalid.</p>
@@ -13694,6 +13852,9 @@ impl DescribeClusterSnapshotsError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
+                "ClusterNotFound" => DescribeClusterSnapshotsError::ClusterNotFoundFault(
+                    String::from(parsed_error.message),
+                ),
                 "ClusterSnapshotNotFound" => {
                     DescribeClusterSnapshotsError::ClusterSnapshotNotFoundFault(String::from(
                         parsed_error.message,
@@ -13746,6 +13907,7 @@ impl fmt::Display for DescribeClusterSnapshotsError {
 impl Error for DescribeClusterSnapshotsError {
     fn description(&self) -> &str {
         match *self {
+            DescribeClusterSnapshotsError::ClusterNotFoundFault(ref cause) => cause,
             DescribeClusterSnapshotsError::ClusterSnapshotNotFoundFault(ref cause) => cause,
             DescribeClusterSnapshotsError::InvalidTagFault(ref cause) => cause,
             DescribeClusterSnapshotsError::Validation(ref cause) => cause,
@@ -13782,9 +13944,9 @@ impl DescribeClusterSubnetGroupsError {
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "ClusterSubnetGroupNotFoundFault" => {
-                    DescribeClusterSubnetGroupsError::ClusterSubnetGroupNotFoundFault(
-                        String::from(parsed_error.message),
-                    )
+                    DescribeClusterSubnetGroupsError::ClusterSubnetGroupNotFoundFault(String::from(
+                        parsed_error.message,
+                    ))
                 }
                 "InvalidTagFault" => DescribeClusterSubnetGroupsError::InvalidTagFault(
                     String::from(parsed_error.message),
@@ -14422,9 +14584,9 @@ impl DescribeHsmConfigurationsError {
                         parsed_error.message,
                     ))
                 }
-                "InvalidTagFault" => DescribeHsmConfigurationsError::InvalidTagFault(
-                    String::from(parsed_error.message),
-                ),
+                "InvalidTagFault" => DescribeHsmConfigurationsError::InvalidTagFault(String::from(
+                    parsed_error.message,
+                )),
                 _ => DescribeHsmConfigurationsError::Unknown(String::from(body)),
             },
             Err(_) => DescribeHsmConfigurationsError::Unknown(body.to_string()),
@@ -16319,9 +16481,9 @@ impl ModifySnapshotCopyRetentionPeriodError {
                     ))
                 }
                 "SnapshotCopyDisabledFault" => {
-                    ModifySnapshotCopyRetentionPeriodError::SnapshotCopyDisabledFault(
-                        String::from(parsed_error.message),
-                    )
+                    ModifySnapshotCopyRetentionPeriodError::SnapshotCopyDisabledFault(String::from(
+                        parsed_error.message,
+                    ))
                 }
                 "UnauthorizedOperation" => {
                     ModifySnapshotCopyRetentionPeriodError::UnauthorizedOperation(String::from(
@@ -16414,9 +16576,9 @@ impl PurchaseReservedNodeOfferingError {
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "ReservedNodeAlreadyExists" => {
-                    PurchaseReservedNodeOfferingError::ReservedNodeAlreadyExistsFault(
-                        String::from(parsed_error.message),
-                    )
+                    PurchaseReservedNodeOfferingError::ReservedNodeAlreadyExistsFault(String::from(
+                        parsed_error.message,
+                    ))
                 }
                 "ReservedNodeOfferingNotFound" => {
                     PurchaseReservedNodeOfferingError::ReservedNodeOfferingNotFoundFault(
@@ -16424,9 +16586,9 @@ impl PurchaseReservedNodeOfferingError {
                     )
                 }
                 "ReservedNodeQuotaExceeded" => {
-                    PurchaseReservedNodeOfferingError::ReservedNodeQuotaExceededFault(
-                        String::from(parsed_error.message),
-                    )
+                    PurchaseReservedNodeOfferingError::ReservedNodeQuotaExceededFault(String::from(
+                        parsed_error.message,
+                    ))
                 }
                 "UnsupportedOperation" => {
                     PurchaseReservedNodeOfferingError::UnsupportedOperationFault(String::from(
@@ -16779,14 +16941,14 @@ impl RestoreFromClusterSnapshotError {
                     ))
                 }
                 "InsufficientClusterCapacity" => {
-                    RestoreFromClusterSnapshotError::InsufficientClusterCapacityFault(
-                        String::from(parsed_error.message),
-                    )
+                    RestoreFromClusterSnapshotError::InsufficientClusterCapacityFault(String::from(
+                        parsed_error.message,
+                    ))
                 }
                 "InvalidClusterSnapshotState" => {
-                    RestoreFromClusterSnapshotError::InvalidClusterSnapshotStateFault(
-                        String::from(parsed_error.message),
-                    )
+                    RestoreFromClusterSnapshotError::InvalidClusterSnapshotStateFault(String::from(
+                        parsed_error.message,
+                    ))
                 }
                 "InvalidClusterSubnetGroupStateFault" => {
                     RestoreFromClusterSnapshotError::InvalidClusterSubnetGroupStateFault(
@@ -17163,11 +17325,9 @@ impl RevokeSnapshotAccessError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "AccessToSnapshotDenied" => {
-                    RevokeSnapshotAccessError::AccessToSnapshotDeniedFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "AccessToSnapshotDenied" => RevokeSnapshotAccessError::AccessToSnapshotDeniedFault(
+                    String::from(parsed_error.message),
+                ),
                 "AuthorizationNotFound" => RevokeSnapshotAccessError::AuthorizationNotFoundFault(
                     String::from(parsed_error.message),
                 ),
@@ -20384,12 +20544,10 @@ where
                     let _start_document = stack.next();
                     let actual_tag_name = try!(peek_at_name(&mut stack));
                     try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(
-                        PurchaseReservedNodeOfferingResultDeserializer::deserialize(
-                            "PurchaseReservedNodeOfferingResult",
-                            &mut stack
-                        )
-                    );
+                    result = try!(PurchaseReservedNodeOfferingResultDeserializer::deserialize(
+                        "PurchaseReservedNodeOfferingResult",
+                        &mut stack
+                    ));
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }

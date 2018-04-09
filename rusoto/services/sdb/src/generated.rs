@@ -76,26 +76,27 @@ impl AttributeDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "AlternateNameEncoding" => {
-                        obj.alternate_name_encoding = Some(try!(StringDeserializer::deserialize(
-                            "AlternateNameEncoding",
-                            stack
-                        )));
+                DeserializerNext::Element(name) => {
+                    match &name[..] {
+                        "AlternateNameEncoding" => {
+                            obj.alternate_name_encoding = Some(try!(
+                                StringDeserializer::deserialize("AlternateNameEncoding", stack)
+                            ));
+                        }
+                        "AlternateValueEncoding" => {
+                            obj.alternate_value_encoding = Some(try!(
+                                StringDeserializer::deserialize("AlternateValueEncoding", stack)
+                            ));
+                        }
+                        "Name" => {
+                            obj.name = try!(StringDeserializer::deserialize("Name", stack));
+                        }
+                        "Value" => {
+                            obj.value = try!(StringDeserializer::deserialize("Value", stack));
+                        }
+                        _ => skip_tree(stack),
                     }
-                    "AlternateValueEncoding" => {
-                        obj.alternate_value_encoding = Some(try!(
-                            StringDeserializer::deserialize("AlternateValueEncoding", stack)
-                        ));
-                    }
-                    "Name" => {
-                        obj.name = try!(StringDeserializer::deserialize("Name", stack));
-                    }
-                    "Value" => {
-                        obj.value = try!(StringDeserializer::deserialize("Value", stack));
-                    }
-                    _ => skip_tree(stack),
-                },
+                }
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -1861,11 +1862,9 @@ impl PutAttributesError {
                 "NumberDomainBytesExceeded" => PutAttributesError::NumberDomainBytesExceeded(
                     String::from(parsed_error.message),
                 ),
-                "NumberItemAttributesExceeded" => {
-                    PutAttributesError::NumberItemAttributesExceeded(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "NumberItemAttributesExceeded" => PutAttributesError::NumberItemAttributesExceeded(
+                    String::from(parsed_error.message),
+                ),
                 _ => PutAttributesError::Unknown(String::from(body)),
             },
             Err(_) => PutAttributesError::Unknown(body.to_string()),

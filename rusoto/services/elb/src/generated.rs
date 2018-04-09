@@ -78,9 +78,10 @@ impl AccessLogDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "EmitInterval" => {
-                        obj.emit_interval = Some(try!(
-                            AccessLogIntervalDeserializer::deserialize("EmitInterval", stack)
-                        ));
+                        obj.emit_interval = Some(try!(AccessLogIntervalDeserializer::deserialize(
+                            "EmitInterval",
+                            stack
+                        )));
                     }
                     "Enabled" => {
                         obj.enabled =
@@ -1644,11 +1645,10 @@ impl CrossZoneLoadBalancingDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "Enabled" => {
-                        obj.enabled =
-                            try!(CrossZoneLoadBalancingEnabledDeserializer::deserialize(
-                                "Enabled",
-                                stack
-                            ));
+                        obj.enabled = try!(CrossZoneLoadBalancingEnabledDeserializer::deserialize(
+                            "Enabled",
+                            stack
+                        ));
                     }
                     _ => skip_tree(stack),
                 },
@@ -4336,9 +4336,10 @@ impl PolicyDescriptionDeserializer {
                         )));
                     }
                     "PolicyTypeName" => {
-                        obj.policy_type_name = Some(try!(
-                            PolicyTypeNameDeserializer::deserialize("PolicyTypeName", stack)
-                        ));
+                        obj.policy_type_name = Some(try!(PolicyTypeNameDeserializer::deserialize(
+                            "PolicyTypeName",
+                            stack
+                        )));
                     }
                     _ => skip_tree(stack),
                 },
@@ -4511,9 +4512,10 @@ impl PolicyTypeDescriptionDeserializer {
                         ));
                     }
                     "PolicyTypeName" => {
-                        obj.policy_type_name = Some(try!(
-                            PolicyTypeNameDeserializer::deserialize("PolicyTypeName", stack)
-                        ));
+                        obj.policy_type_name = Some(try!(PolicyTypeNameDeserializer::deserialize(
+                            "PolicyTypeName",
+                            stack
+                        )));
                     }
                     _ => skip_tree(stack),
                 },
@@ -5813,9 +5815,9 @@ impl AttachLoadBalancerToSubnetsError {
                 "InvalidSubnet" => AttachLoadBalancerToSubnetsError::InvalidSubnet(String::from(
                     parsed_error.message,
                 )),
-                "SubnetNotFound" => AttachLoadBalancerToSubnetsError::SubnetNotFound(
-                    String::from(parsed_error.message),
-                ),
+                "SubnetNotFound" => AttachLoadBalancerToSubnetsError::SubnetNotFound(String::from(
+                    parsed_error.message,
+                )),
                 _ => AttachLoadBalancerToSubnetsError::Unknown(String::from(body)),
             },
             Err(_) => AttachLoadBalancerToSubnetsError::Unknown(body.to_string()),
@@ -5985,15 +5987,13 @@ impl CreateAppCookieStickinessPolicyError {
                         parsed_error.message,
                     ))
                 }
-                "DuplicatePolicyName" => {
-                    CreateAppCookieStickinessPolicyError::DuplicatePolicyName(String::from(
+                "DuplicatePolicyName" => CreateAppCookieStickinessPolicyError::DuplicatePolicyName(
+                    String::from(parsed_error.message),
+                ),
+                "InvalidConfigurationRequest" => {
+                    CreateAppCookieStickinessPolicyError::InvalidConfigurationRequest(String::from(
                         parsed_error.message,
                     ))
-                }
-                "InvalidConfigurationRequest" => {
-                    CreateAppCookieStickinessPolicyError::InvalidConfigurationRequest(
-                        String::from(parsed_error.message),
-                    )
                 }
                 "TooManyPolicies" => CreateAppCookieStickinessPolicyError::TooManyPolicies(
                     String::from(parsed_error.message),
@@ -6083,11 +6083,9 @@ impl CreateLBCookieStickinessPolicyError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "LoadBalancerNotFound" => {
-                    CreateLBCookieStickinessPolicyError::AccessPointNotFound(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "LoadBalancerNotFound" => CreateLBCookieStickinessPolicyError::AccessPointNotFound(
+                    String::from(parsed_error.message),
+                ),
                 "DuplicatePolicyName" => CreateLBCookieStickinessPolicyError::DuplicatePolicyName(
                     String::from(parsed_error.message),
                 ),
@@ -6173,6 +6171,8 @@ pub enum CreateLoadBalancerError {
     InvalidSecurityGroup(String),
     /// <p>The specified VPC has no associated Internet gateway.</p>
     InvalidSubnet(String),
+    /// <p>This operation is not allowed.</p>
+    OperationNotPermitted(String),
     /// <p>One or more of the specified subnets do not exist.</p>
     SubnetNotFound(String),
     /// <p>The quota for the number of load balancers has been reached.</p>
@@ -6221,6 +6221,9 @@ impl CreateLoadBalancerError {
                 "InvalidSubnet" => {
                     CreateLoadBalancerError::InvalidSubnet(String::from(parsed_error.message))
                 }
+                "OperationNotPermitted" => CreateLoadBalancerError::OperationNotPermitted(
+                    String::from(parsed_error.message),
+                ),
                 "SubnetNotFound" => {
                     CreateLoadBalancerError::SubnetNotFound(String::from(parsed_error.message))
                 }
@@ -6284,6 +6287,7 @@ impl Error for CreateLoadBalancerError {
             CreateLoadBalancerError::InvalidScheme(ref cause) => cause,
             CreateLoadBalancerError::InvalidSecurityGroup(ref cause) => cause,
             CreateLoadBalancerError::InvalidSubnet(ref cause) => cause,
+            CreateLoadBalancerError::OperationNotPermitted(ref cause) => cause,
             CreateLoadBalancerError::SubnetNotFound(ref cause) => cause,
             CreateLoadBalancerError::TooManyAccessPoints(ref cause) => cause,
             CreateLoadBalancerError::TooManyTags(ref cause) => cause,
@@ -7015,11 +7019,9 @@ impl DescribeLoadBalancerAttributesError {
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
-                "LoadBalancerNotFound" => {
-                    DescribeLoadBalancerAttributesError::AccessPointNotFound(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "LoadBalancerNotFound" => DescribeLoadBalancerAttributesError::AccessPointNotFound(
+                    String::from(parsed_error.message),
+                ),
                 "LoadBalancerAttributeNotFound" => {
                     DescribeLoadBalancerAttributesError::LoadBalancerAttributeNotFound(
                         String::from(parsed_error.message),
@@ -7518,9 +7520,9 @@ impl DisableAvailabilityZonesForLoadBalancerError {
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "LoadBalancerNotFound" => {
-                    DisableAvailabilityZonesForLoadBalancerError::AccessPointNotFound(
-                        String::from(parsed_error.message),
-                    )
+                    DisableAvailabilityZonesForLoadBalancerError::AccessPointNotFound(String::from(
+                        parsed_error.message,
+                    ))
                 }
                 "InvalidConfigurationRequest" => {
                     DisableAvailabilityZonesForLoadBalancerError::InvalidConfigurationRequest(
@@ -7969,11 +7971,9 @@ impl SetLoadBalancerListenerSSLCertificateError {
                         String::from(parsed_error.message),
                     )
                 }
-                "ListenerNotFound" => {
-                    SetLoadBalancerListenerSSLCertificateError::ListenerNotFound(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "ListenerNotFound" => SetLoadBalancerListenerSSLCertificateError::ListenerNotFound(
+                    String::from(parsed_error.message),
+                ),
                 "UnsupportedProtocol" => {
                     SetLoadBalancerListenerSSLCertificateError::UnsupportedProtocol(String::from(
                         parsed_error.message,
@@ -8066,9 +8066,9 @@ impl SetLoadBalancerPoliciesForBackendServerError {
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "LoadBalancerNotFound" => {
-                    SetLoadBalancerPoliciesForBackendServerError::AccessPointNotFound(
-                        String::from(parsed_error.message),
-                    )
+                    SetLoadBalancerPoliciesForBackendServerError::AccessPointNotFound(String::from(
+                        parsed_error.message,
+                    ))
                 }
                 "InvalidConfigurationRequest" => {
                     SetLoadBalancerPoliciesForBackendServerError::InvalidConfigurationRequest(
@@ -9320,12 +9320,10 @@ where
                     let _start_document = stack.next();
                     let actual_tag_name = try!(peek_at_name(&mut stack));
                     try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(
-                        DescribeLoadBalancerPoliciesOutputDeserializer::deserialize(
-                            "DescribeLoadBalancerPoliciesResult",
-                            &mut stack
-                        )
-                    );
+                    result = try!(DescribeLoadBalancerPoliciesOutputDeserializer::deserialize(
+                        "DescribeLoadBalancerPoliciesResult",
+                        &mut stack
+                    ));
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
@@ -9685,12 +9683,10 @@ where
                     let _start_document = stack.next();
                     let actual_tag_name = try!(peek_at_name(&mut stack));
                     try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(
-                        ModifyLoadBalancerAttributesOutputDeserializer::deserialize(
-                            "ModifyLoadBalancerAttributesResult",
-                            &mut stack
-                        )
-                    );
+                    result = try!(ModifyLoadBalancerAttributesOutputDeserializer::deserialize(
+                        "ModifyLoadBalancerAttributesResult",
+                        &mut stack
+                    ));
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }

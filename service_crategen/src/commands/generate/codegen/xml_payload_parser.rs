@@ -43,21 +43,27 @@ pub fn generate_response_parser(service: &Service,
         return "future::Either::A(future::ok(::std::mem::drop(response)))".to_string();
     }
 
-    let shape_name = &operation.output.as_ref().unwrap().shape;
-    let result_wrapper = &operation.output.as_ref().unwrap().result_wrapper;
-    let output_shape = service.get_shape(shape_name).unwrap();
+    let shape_name = &operation.output.as_ref()
+        .expect("failed to get output").shape;
+    let result_wrapper = &operation.output.as_ref()
+        .expect("failed to get output").result_wrapper;
+    let output_shape = service.get_shape(shape_name)
+        .expect("failed to get output shape");
     let mutated_shape_name = mutate_type_name(service, shape_name);
 
     // if the 'payload' field on the output shape is a blob or string, it indicates that
     // the entire payload is set as one of the struct members, and not parsed
     match output_shape.payload {
         None => xml_body_parser(&mutated_shape_name, result_wrapper, mutable_result, parse_non_payload),
-        Some(ref payload_member) => {
-            let payload_shape = service.get_shape(payload_member).unwrap();
+        Some(ref payload_member_name) => {
+            let payload_member = output_shape.members
+                .as_ref().expect("failed to get output shape members")
+                .get(payload_member_name).expect("failed to get payload member");
+            let payload_shape = service.get_shape(&payload_member.shape).expect("failed to get output member shape");
             match payload_shape.shape_type {
                 payload_type if payload_type == ShapeType::Blob ||
                                 payload_type == ShapeType::String => {
-                    payload_body_parser(payload_type, &mutated_shape_name, payload_member, has_streaming_payload(output_shape), parse_non_payload)
+                    payload_body_parser(payload_type, &mutated_shape_name, payload_member_name, has_streaming_payload(output_shape), parse_non_payload)
                 }
                 _ => xml_body_parser(&mutated_shape_name, result_wrapper, mutable_result, parse_non_payload),
             }

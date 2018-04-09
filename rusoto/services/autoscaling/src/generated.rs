@@ -221,9 +221,10 @@ impl ActivityDeserializer {
                             try!(TimestampTypeDeserializer::deserialize("StartTime", stack));
                     }
                     "StatusCode" => {
-                        obj.status_code = try!(
-                            ScalingActivityStatusCodeDeserializer::deserialize("StatusCode", stack)
-                        );
+                        obj.status_code = try!(ScalingActivityStatusCodeDeserializer::deserialize(
+                            "StatusCode",
+                            stack
+                        ));
                     }
                     "StatusMessage" => {
                         obj.status_message = Some(try!(
@@ -522,7 +523,7 @@ impl AssociatePublicIpAddressDeserializer {
 pub struct AttachInstancesQuery {
     /// <p>The name of the Auto Scaling group.</p>
     pub auto_scaling_group_name: String,
-    /// <p>One or more instance IDs.</p>
+    /// <p>The IDs of the instances. You can specify up to 20 instances.</p>
     pub instance_ids: Option<Vec<String>>,
 }
 
@@ -572,7 +573,7 @@ impl AttachLoadBalancerTargetGroupsResultTypeDeserializer {
 pub struct AttachLoadBalancerTargetGroupsType {
     /// <p>The name of the Auto Scaling group.</p>
     pub auto_scaling_group_name: String,
-    /// <p>The Amazon Resource Names (ARN) of the target groups.</p>
+    /// <p>The Amazon Resource Names (ARN) of the target groups. You can specify up to 10 target groups.</p>
     pub target_group_ar_ns: Vec<String>,
 }
 
@@ -620,7 +621,7 @@ impl AttachLoadBalancersResultTypeDeserializer {
 pub struct AttachLoadBalancersType {
     /// <p>The name of the Auto Scaling group.</p>
     pub auto_scaling_group_name: String,
-    /// <p>One or more load balancer names.</p>
+    /// <p>The names of the load balancers. You can specify up to 10 load balancers.</p>
     pub load_balancer_names: Vec<String>,
 }
 
@@ -682,6 +683,8 @@ pub struct AutoScalingGroup {
     pub new_instances_protected_from_scale_in: Option<bool>,
     /// <p>The name of the placement group into which you'll launch your instances, if any. For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/placement-groups.html">Placement Groups</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
     pub placement_group: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) of the service-linked role that the Auto Scaling group uses to call other AWS services on your behalf.</p>
+    pub service_linked_role_arn: Option<String>,
     /// <p>The current state of the group when <a>DeleteAutoScalingGroup</a> is in progress.</p>
     pub status: Option<String>,
     /// <p>The suspended processes associated with the group.</p>
@@ -815,6 +818,11 @@ impl AutoScalingGroupDeserializer {
                     "PlacementGroup" => {
                         obj.placement_group = Some(try!(
                             XmlStringMaxLen255Deserializer::deserialize("PlacementGroup", stack)
+                        ));
+                    }
+                    "ServiceLinkedRoleARN" => {
+                        obj.service_linked_role_arn = Some(try!(
+                            ResourceNameDeserializer::deserialize("ServiceLinkedRoleARN", stack)
                         ));
                     }
                     "Status" => {
@@ -1038,9 +1046,10 @@ impl AutoScalingGroupsTypeDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "AutoScalingGroups" => {
-                        obj.auto_scaling_groups = try!(
-                            AutoScalingGroupsDeserializer::deserialize("AutoScalingGroups", stack)
-                        );
+                        obj.auto_scaling_groups = try!(AutoScalingGroupsDeserializer::deserialize(
+                            "AutoScalingGroups",
+                            stack
+                        ));
                     }
                     "NextToken" => {
                         obj.next_token =
@@ -1496,9 +1505,10 @@ impl BlockDeviceMappingDeserializer {
                             Some(try!(NoDeviceDeserializer::deserialize("NoDevice", stack)));
                     }
                     "VirtualName" => {
-                        obj.virtual_name = Some(try!(
-                            XmlStringMaxLen255Deserializer::deserialize("VirtualName", stack)
-                        ));
+                        obj.virtual_name = Some(try!(XmlStringMaxLen255Deserializer::deserialize(
+                            "VirtualName",
+                            stack
+                        )));
                     }
                     _ => skip_tree(stack),
                 },
@@ -1771,6 +1781,8 @@ pub struct CreateAutoScalingGroupType {
     pub new_instances_protected_from_scale_in: Option<bool>,
     /// <p>The name of the placement group into which you'll launch your instances, if any. For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/placement-groups.html">Placement Groups</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
     pub placement_group: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) of the service-linked role that the Auto Scaling group uses to call other AWS services on your behalf. By default, Auto Scaling uses a service-linked role named AWSServiceRoleForAutoScaling, which it creates if it does not exist.</p>
+    pub service_linked_role_arn: Option<String>,
     /// <p>One or more tags.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/autoscaling/latest/userguide/autoscaling-tagging.html">Tagging Auto Scaling Groups and Instances</a> in the <i>Auto Scaling User Guide</i>.</p>
     pub tags: Option<Vec<Tag>>,
     /// <p>The Amazon Resource Names (ARN) of the target groups.</p>
@@ -1878,6 +1890,12 @@ impl CreateAutoScalingGroupTypeSerializer {
                 &field_value.replace("+", "%2B"),
             );
         }
+        if let Some(ref field_value) = obj.service_linked_role_arn {
+            params.put(
+                &format!("{}{}", prefix, "ServiceLinkedRoleARN"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
         if let Some(ref field_value) = obj.tags {
             TagsSerializer::serialize(params, &format!("{}{}", prefix, "Tags"), field_value);
         }
@@ -1906,7 +1924,7 @@ impl CreateAutoScalingGroupTypeSerializer {
 
 #[derive(Default, Debug, Clone)]
 pub struct CreateLaunchConfigurationType {
-    /// <p>Used for groups that launch instances into a virtual private cloud (VPC). Specifies whether to assign a public IP address to each instance. For more information, see <a href="http://docs.aws.amazon.com/autoscaling/latest/userguide/asg-in-vpc.html">Launching Auto Scaling Instances in a VPC</a> in the <i>Auto Scaling User Guide</i>.</p> <p>If you specify this parameter, be sure to specify at least one subnet when you create your group.</p> <p>Default: If the instance is launched into a default subnet, the default is <code>true</code>. If the instance is launched into a nondefault subnet, the default is <code>false</code>. For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-supported-platforms.html">Supported Platforms</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
+    /// <p>Used for groups that launch instances into a virtual private cloud (VPC). Specifies whether to assign a public IP address to each instance. For more information, see <a href="http://docs.aws.amazon.com/autoscaling/latest/userguide/asg-in-vpc.html">Launching Auto Scaling Instances in a VPC</a> in the <i>Auto Scaling User Guide</i>.</p> <p>If you specify this parameter, be sure to specify at least one subnet when you create your group.</p> <p>Default: If the instance is launched into a default subnet, the default is to assign a public IP address. If the instance is launched into a nondefault subnet, the default is not to assign a public IP address.</p>
     pub associate_public_ip_address: Option<bool>,
     /// <p>One or more mappings that specify how block devices are exposed to the instance. For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/block-device-mapping-concepts.html">Block Device Mapping</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
     pub block_device_mappings: Option<Vec<BlockDeviceMapping>>,
@@ -2412,12 +2430,11 @@ impl DescribeAccountLimitsAnswerDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "MaxNumberOfAutoScalingGroups" => {
-                        obj.max_number_of_auto_scaling_groups = Some(try!(
-                            MaxNumberOfAutoScalingGroupsDeserializer::deserialize(
+                        obj.max_number_of_auto_scaling_groups =
+                            Some(try!(MaxNumberOfAutoScalingGroupsDeserializer::deserialize(
                                 "MaxNumberOfAutoScalingGroups",
                                 stack
-                            )
-                        ));
+                            )));
                     }
                     "MaxNumberOfLaunchConfigurations" => {
                         obj.max_number_of_launch_configurations = Some(try!(
@@ -2435,12 +2452,11 @@ impl DescribeAccountLimitsAnswerDeserializer {
                             )));
                     }
                     "NumberOfLaunchConfigurations" => {
-                        obj.number_of_launch_configurations = Some(try!(
-                            NumberOfLaunchConfigurationsDeserializer::deserialize(
+                        obj.number_of_launch_configurations =
+                            Some(try!(NumberOfLaunchConfigurationsDeserializer::deserialize(
                                 "NumberOfLaunchConfigurations",
                                 stack
-                            )
-                        ));
+                            )));
                     }
                     _ => skip_tree(stack),
                 },
@@ -2507,7 +2523,7 @@ impl DescribeAdjustmentTypesAnswerDeserializer {
 pub struct DescribeAutoScalingInstancesType {
     /// <p>The instances to describe; up to 50 instance IDs. If you omit this parameter, all Auto Scaling instances are described. If you specify an ID that does not exist, it is ignored with no error.</p>
     pub instance_ids: Option<Vec<String>>,
-    /// <p>The maximum number of items to return with this call. The default value is 50 and the maximum value is 100.</p>
+    /// <p>The maximum number of items to return with this call. The default value is 50 and the maximum value is 50.</p>
     pub max_records: Option<i64>,
     /// <p>The token for the next set of items to return. (You received this token from a previous call.)</p>
     pub next_token: Option<String>,
@@ -2573,12 +2589,11 @@ impl DescribeAutoScalingNotificationTypesAnswerDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "AutoScalingNotificationTypes" => {
-                        obj.auto_scaling_notification_types = Some(try!(
-                            AutoScalingNotificationTypesDeserializer::deserialize(
+                        obj.auto_scaling_notification_types =
+                            Some(try!(AutoScalingNotificationTypesDeserializer::deserialize(
                                 "AutoScalingNotificationTypes",
                                 stack
-                            )
-                        ));
+                            )));
                     }
                     _ => skip_tree(stack),
                 },
@@ -2623,12 +2638,11 @@ impl DescribeLifecycleHookTypesAnswerDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "LifecycleHookTypes" => {
-                        obj.lifecycle_hook_types = Some(try!(
-                            AutoScalingNotificationTypesDeserializer::deserialize(
+                        obj.lifecycle_hook_types =
+                            Some(try!(AutoScalingNotificationTypesDeserializer::deserialize(
                                 "LifecycleHookTypes",
                                 stack
-                            )
-                        ));
+                            )));
                     }
                     _ => skip_tree(stack),
                 },
@@ -2727,7 +2741,7 @@ impl DescribeLifecycleHooksTypeSerializer {
 pub struct DescribeLoadBalancerTargetGroupsRequest {
     /// <p>The name of the Auto Scaling group.</p>
     pub auto_scaling_group_name: String,
-    /// <p>The maximum number of items to return with this call. The default value is 50 and the maximum value is 100.</p>
+    /// <p>The maximum number of items to return with this call. The default value is 100 and the maximum value is 100.</p>
     pub max_records: Option<i64>,
     /// <p>The token for the next set of items to return. (You received this token from a previous call.)</p>
     pub next_token: Option<String>,
@@ -2821,7 +2835,7 @@ impl DescribeLoadBalancerTargetGroupsResponseDeserializer {
 pub struct DescribeLoadBalancersRequest {
     /// <p>The name of the Auto Scaling group.</p>
     pub auto_scaling_group_name: String,
-    /// <p>The maximum number of items to return with this call. The default value is 50 and the maximum value is 100.</p>
+    /// <p>The maximum number of items to return with this call. The default value is 100 and the maximum value is 100.</p>
     pub max_records: Option<i64>,
     /// <p>The token for the next set of items to return. (You received this token from a previous call.)</p>
     pub next_token: Option<String>,
@@ -3123,7 +3137,7 @@ pub struct DescribeScalingActivitiesType {
     pub activity_ids: Option<Vec<String>>,
     /// <p>The name of the Auto Scaling group.</p>
     pub auto_scaling_group_name: Option<String>,
-    /// <p>The maximum number of items to return with this call. The default value is 100.</p>
+    /// <p>The maximum number of items to return with this call. The default value is 100 and the maximum value is 100.</p>
     pub max_records: Option<i64>,
     /// <p>The token for the next set of items to return. (You received this token from a previous call.)</p>
     pub next_token: Option<String>,
@@ -3369,9 +3383,9 @@ impl DetachInstancesAnswerDeserializer {
 pub struct DetachInstancesQuery {
     /// <p>The name of the Auto Scaling group.</p>
     pub auto_scaling_group_name: String,
-    /// <p>One or more instance IDs.</p>
+    /// <p>The IDs of the instances. You can specify up to 20 instances.</p>
     pub instance_ids: Option<Vec<String>>,
-    /// <p>If <code>True</code>, the Auto Scaling group decrements the desired capacity value by the number of instances detached.</p>
+    /// <p>Indicates whether the Auto Scaling group decrements the desired capacity value by the number of instances detached.</p>
     pub should_decrement_desired_capacity: bool,
 }
 
@@ -3427,7 +3441,7 @@ impl DetachLoadBalancerTargetGroupsResultTypeDeserializer {
 pub struct DetachLoadBalancerTargetGroupsType {
     /// <p>The name of the Auto Scaling group.</p>
     pub auto_scaling_group_name: String,
-    /// <p>The Amazon Resource Names (ARN) of the target groups.</p>
+    /// <p>The Amazon Resource Names (ARN) of the target groups. You can specify up to 10 target groups.</p>
     pub target_group_ar_ns: Vec<String>,
 }
 
@@ -3475,7 +3489,7 @@ impl DetachLoadBalancersResultTypeDeserializer {
 pub struct DetachLoadBalancersType {
     /// <p>The name of the Auto Scaling group.</p>
     pub auto_scaling_group_name: String,
-    /// <p>One or more load balancer names.</p>
+    /// <p>The names of the load balancers. You can specify up to 10 load balancers.</p>
     pub load_balancer_names: Vec<String>,
 }
 
@@ -3544,7 +3558,7 @@ impl DisableScaleInDeserializer {
 /// <p>Describes an Amazon EBS volume.</p>
 #[derive(Default, Debug, Clone)]
 pub struct Ebs {
-    /// <p>Indicates whether the volume is deleted on instance termination.</p> <p>Default: <code>true</code> </p>
+    /// <p>Indicates whether the volume is deleted on instance termination. The default is <code>true</code>.</p>
     pub delete_on_termination: Option<bool>,
     /// <p>Indicates whether the volume should be encrypted. Encrypted EBS volumes must be attached to instances that support Amazon EBS encryption. Volumes that are created from encrypted snapshots are automatically encrypted. There is no way to create an encrypted volume from an unencrypted snapshot or an unencrypted volume from an encrypted snapshot. For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSEncryption.html">Amazon EBS Encryption</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
     pub encrypted: Option<bool>,
@@ -3877,9 +3891,9 @@ impl EnterStandbyAnswerDeserializer {
 pub struct EnterStandbyQuery {
     /// <p>The name of the Auto Scaling group.</p>
     pub auto_scaling_group_name: String,
-    /// <p>One or more instances to move into <code>Standby</code> mode. You must specify at least one instance ID.</p>
+    /// <p>The IDs of the instances. You can specify up to 20 instances.</p>
     pub instance_ids: Option<Vec<String>>,
-    /// <p>Specifies whether the instances moved to <code>Standby</code> mode count as part of the Auto Scaling group's desired capacity. If set, the desired capacity for the Auto Scaling group decrements by the number of instances moved to <code>Standby</code> mode.</p>
+    /// <p>Indicates whether to decrement the desired capacity of the Auto Scaling group by the number of instances moved to <code>Standby</code> mode.</p>
     pub should_decrement_desired_capacity: bool,
 }
 
@@ -3932,7 +3946,7 @@ pub struct ExecutePolicyType {
     pub auto_scaling_group_name: Option<String>,
     /// <p>The breach threshold for the alarm.</p> <p>This parameter is required if the policy type is <code>StepScaling</code> and not supported otherwise.</p>
     pub breach_threshold: Option<f64>,
-    /// <p>If this parameter is true, Auto Scaling waits for the cooldown period to complete before executing the policy. Otherwise, Auto Scaling executes the policy without waiting for the cooldown period to complete.</p> <p>This parameter is not supported if the policy type is <code>StepScaling</code>.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/autoscaling/latest/userguide/Cooldown.html">Auto Scaling Cooldowns</a> in the <i>Auto Scaling User Guide</i>.</p>
+    /// <p>Indicates whether Auto Scaling waits for the cooldown period to complete before executing the policy.</p> <p>This parameter is not supported if the policy type is <code>StepScaling</code>.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/autoscaling/latest/userguide/Cooldown.html">Auto Scaling Cooldowns</a> in the <i>Auto Scaling User Guide</i>.</p>
     pub honor_cooldown: Option<bool>,
     /// <p>The metric value to compare to <code>BreachThreshold</code>. This enables you to execute a policy of type <code>StepScaling</code> and determine which step adjustment to use. For example, if the breach threshold is 50 and you want to use a step adjustment with a lower bound of 0 and an upper bound of 10, you can set the metric value to 59.</p> <p>If you specify a metric value that doesn't correspond to a step adjustment for the policy, the call returns an error.</p> <p>This parameter is required if the policy type is <code>StepScaling</code> and not supported otherwise.</p>
     pub metric_value: Option<f64>,
@@ -4032,7 +4046,7 @@ impl ExitStandbyAnswerDeserializer {
 pub struct ExitStandbyQuery {
     /// <p>The name of the Auto Scaling group.</p>
     pub auto_scaling_group_name: String,
-    /// <p>One or more instance IDs. You must specify at least one instance ID.</p>
+    /// <p>The IDs of the instances. You can specify up to 20 instances.</p>
     pub instance_ids: Option<Vec<String>>,
 }
 
@@ -4461,12 +4475,11 @@ impl LaunchConfigurationDeserializer {
                         ));
                     }
                     "ClassicLinkVPCSecurityGroups" => {
-                        obj.classic_link_vpc_security_groups = Some(try!(
-                            ClassicLinkVPCSecurityGroupsDeserializer::deserialize(
+                        obj.classic_link_vpc_security_groups =
+                            Some(try!(ClassicLinkVPCSecurityGroupsDeserializer::deserialize(
                                 "ClassicLinkVPCSecurityGroups",
                                 stack
-                            )
-                        ));
+                            )));
                     }
                     "CreatedTime" => {
                         obj.created_time =
@@ -4762,7 +4775,7 @@ pub struct LaunchTemplateSpecification {
     pub launch_template_id: Option<String>,
     /// <p>The name of the launch template. You must specify either a template name or a template ID.</p>
     pub launch_template_name: Option<String>,
-    /// <p>The version number. By default, the default version of the launch template is used.</p>
+    /// <p>The version number, <code>$Latest</code>, or <code>$Default</code>. If the value is <code>$Latest</code>, Auto Scaling selects the latest version of the launch template when launching instances. If the value is <code>$Default</code>, Auto Scaling selects the default version of the launch template when launching instances. The default value is <code>$Default</code>.</p>
     pub version: Option<String>,
 }
 
@@ -5374,9 +5387,10 @@ impl LoadBalancerTargetGroupStatesDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => {
                     if name == "member" {
-                        obj.push(try!(
-                            LoadBalancerTargetGroupStateDeserializer::deserialize("member", stack)
-                        ));
+                        obj.push(try!(LoadBalancerTargetGroupStateDeserializer::deserialize(
+                            "member",
+                            stack
+                        )));
                     } else {
                         skip_tree(stack);
                     }
@@ -7373,7 +7387,7 @@ pub struct SetDesiredCapacityType {
     pub auto_scaling_group_name: String,
     /// <p>The number of EC2 instances that should be running in the Auto Scaling group.</p>
     pub desired_capacity: i64,
-    /// <p>By default, <code>SetDesiredCapacity</code> overrides any cooldown period associated with the Auto Scaling group. Specify <code>True</code> to make Auto Scaling to wait for the cool-down period associated with the Auto Scaling group to complete before initiating a scaling activity to set your Auto Scaling group to its new capacity.</p>
+    /// <p>Indicates whether Auto Scaling waits for the cooldown period to complete before initiating a scaling activity to set your Auto Scaling group to its new capacity. By default, Auto Scaling does not honor the cooldown period during manual scaling activities.</p>
     pub honor_cooldown: Option<bool>,
 }
 
@@ -7686,9 +7700,10 @@ impl SuspendedProcessDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "ProcessName" => {
-                        obj.process_name = Some(try!(
-                            XmlStringMaxLen255Deserializer::deserialize("ProcessName", stack)
-                        ));
+                        obj.process_name = Some(try!(XmlStringMaxLen255Deserializer::deserialize(
+                            "ProcessName",
+                            stack
+                        )));
                     }
                     "SuspensionReason" => {
                         obj.suspension_reason = Some(try!(
@@ -8078,7 +8093,7 @@ impl TargetGroupARNsSerializer {
 pub struct TargetTrackingConfiguration {
     /// <p>A customized metric.</p>
     pub customized_metric_specification: Option<CustomizedMetricSpecification>,
-    /// <p>Indicates whether scale in by the target tracking policy is disabled. If the value is <code>true</code>, scale in is disabled and the target tracking policy won't remove instances from the Auto Scaling group. Otherwise, scale in is enabled and the target tracking policy can remove instances from the Auto Scaling group. The default value is <code>false</code>.</p>
+    /// <p>Indicates whether scale in by the target tracking policy is disabled. If scale in is disabled, the target tracking policy won't remove instances from the Auto Scaling group. Otherwise, the target tracking policy can remove instances from the Auto Scaling group. The default is disabled.</p>
     pub disable_scale_in: Option<bool>,
     /// <p>A predefined metric. You can specify either a predefined metric or a customized metric.</p>
     pub predefined_metric_specification: Option<PredefinedMetricSpecification>,
@@ -8117,9 +8132,10 @@ impl TargetTrackingConfigurationDeserializer {
                         ));
                     }
                     "DisableScaleIn" => {
-                        obj.disable_scale_in = Some(try!(
-                            DisableScaleInDeserializer::deserialize("DisableScaleIn", stack)
-                        ));
+                        obj.disable_scale_in = Some(try!(DisableScaleInDeserializer::deserialize(
+                            "DisableScaleIn",
+                            stack
+                        )));
                     }
                     "PredefinedMetricSpecification" => {
                         obj.predefined_metric_specification = Some(try!(
@@ -8188,7 +8204,7 @@ impl TargetTrackingConfigurationSerializer {
 pub struct TerminateInstanceInAutoScalingGroupType {
     /// <p>The ID of the instance.</p>
     pub instance_id: String,
-    /// <p>If <code>true</code>, terminating the instance also decrements the size of the Auto Scaling group.</p>
+    /// <p>Indicates whether terminating the instance also decrements the size of the Auto Scaling group.</p>
     pub should_decrement_desired_capacity: bool,
 }
 
@@ -8297,9 +8313,9 @@ pub struct UpdateAutoScalingGroupType {
     pub health_check_grace_period: Option<i64>,
     /// <p>The service to use for the health checks. The valid values are <code>EC2</code> and <code>ELB</code>.</p>
     pub health_check_type: Option<String>,
-    /// <p>The name of the launch configuration. You must specify either a launch configuration or a launch template.</p>
+    /// <p>The name of the launch configuration. If you specify a launch configuration, you can't specify a launch template.</p>
     pub launch_configuration_name: Option<String>,
-    /// <p>The launch template to use to specify the updates. You must specify a launch configuration or a launch template.</p>
+    /// <p>The launch template to use to specify the updates. If you specify a launch template, you can't specify a launch configuration.</p>
     pub launch_template: Option<LaunchTemplateSpecification>,
     /// <p>The maximum size of the Auto Scaling group.</p>
     pub max_size: Option<i64>,
@@ -8309,6 +8325,8 @@ pub struct UpdateAutoScalingGroupType {
     pub new_instances_protected_from_scale_in: Option<bool>,
     /// <p>The name of the placement group into which you'll launch your instances, if any. For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/placement-groups.html">Placement Groups</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
     pub placement_group: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) of the service-linked role that the Auto Scaling group uses to call other AWS services on your behalf.</p>
+    pub service_linked_role_arn: Option<String>,
     /// <p>A standalone termination policy or a list of termination policies used to select the instance to terminate. The policies are executed in the order that they are listed.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/autoscaling/latest/userguide/as-instance-termination.html">Controlling Which Instances Auto Scaling Terminates During Scale In</a> in the <i>Auto Scaling User Guide</i>.</p>
     pub termination_policies: Option<Vec<String>>,
     /// <p>The ID of the subnet, if you are launching into a VPC. You can specify several subnets in a comma-separated list.</p> <p>When you specify <code>VPCZoneIdentifier</code> with <code>AvailabilityZones</code>, ensure that the subnets' Availability Zones match the values you specify for <code>AvailabilityZones</code>.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/autoscaling/latest/userguide/asg-in-vpc.html">Launching Auto Scaling Instances in a VPC</a> in the <i>Auto Scaling User Guide</i>.</p>
@@ -8393,6 +8411,12 @@ impl UpdateAutoScalingGroupTypeSerializer {
         if let Some(ref field_value) = obj.placement_group {
             params.put(
                 &format!("{}{}", prefix, "PlacementGroup"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
+        if let Some(ref field_value) = obj.service_linked_role_arn {
+            params.put(
+                &format!("{}{}", prefix, "ServiceLinkedRoleARN"),
                 &field_value.replace("+", "%2B"),
             );
         }
@@ -8568,6 +8592,8 @@ impl XmlStringUserDataDeserializer {
 pub enum AttachInstancesError {
     /// <p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
     ResourceContentionFault(String),
+    /// <p>The service-linked role is not yet ready for use.</p>
+    ServiceLinkedRoleFailure(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -8586,6 +8612,9 @@ impl AttachInstancesError {
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "ResourceContention" => AttachInstancesError::ResourceContentionFault(
+                    String::from(parsed_error.message),
+                ),
+                "ServiceLinkedRoleFailure" => AttachInstancesError::ServiceLinkedRoleFailure(
                     String::from(parsed_error.message),
                 ),
                 _ => AttachInstancesError::Unknown(String::from(body)),
@@ -8633,6 +8662,7 @@ impl Error for AttachInstancesError {
     fn description(&self) -> &str {
         match *self {
             AttachInstancesError::ResourceContentionFault(ref cause) => cause,
+            AttachInstancesError::ServiceLinkedRoleFailure(ref cause) => cause,
             AttachInstancesError::Validation(ref cause) => cause,
             AttachInstancesError::Credentials(ref err) => err.description(),
             AttachInstancesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
@@ -8645,6 +8675,8 @@ impl Error for AttachInstancesError {
 pub enum AttachLoadBalancerTargetGroupsError {
     /// <p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
     ResourceContentionFault(String),
+    /// <p>The service-linked role is not yet ready for use.</p>
+    ServiceLinkedRoleFailure(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -8664,6 +8696,11 @@ impl AttachLoadBalancerTargetGroupsError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "ResourceContention" => {
                     AttachLoadBalancerTargetGroupsError::ResourceContentionFault(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                "ServiceLinkedRoleFailure" => {
+                    AttachLoadBalancerTargetGroupsError::ServiceLinkedRoleFailure(String::from(
                         parsed_error.message,
                     ))
                 }
@@ -8712,6 +8749,7 @@ impl Error for AttachLoadBalancerTargetGroupsError {
     fn description(&self) -> &str {
         match *self {
             AttachLoadBalancerTargetGroupsError::ResourceContentionFault(ref cause) => cause,
+            AttachLoadBalancerTargetGroupsError::ServiceLinkedRoleFailure(ref cause) => cause,
             AttachLoadBalancerTargetGroupsError::Validation(ref cause) => cause,
             AttachLoadBalancerTargetGroupsError::Credentials(ref err) => err.description(),
             AttachLoadBalancerTargetGroupsError::HttpDispatch(ref dispatch_error) => {
@@ -8726,6 +8764,8 @@ impl Error for AttachLoadBalancerTargetGroupsError {
 pub enum AttachLoadBalancersError {
     /// <p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
     ResourceContentionFault(String),
+    /// <p>The service-linked role is not yet ready for use.</p>
+    ServiceLinkedRoleFailure(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -8744,6 +8784,9 @@ impl AttachLoadBalancersError {
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "ResourceContention" => AttachLoadBalancersError::ResourceContentionFault(
+                    String::from(parsed_error.message),
+                ),
+                "ServiceLinkedRoleFailure" => AttachLoadBalancersError::ServiceLinkedRoleFailure(
                     String::from(parsed_error.message),
                 ),
                 _ => AttachLoadBalancersError::Unknown(String::from(body)),
@@ -8791,6 +8834,7 @@ impl Error for AttachLoadBalancersError {
     fn description(&self) -> &str {
         match *self {
             AttachLoadBalancersError::ResourceContentionFault(ref cause) => cause,
+            AttachLoadBalancersError::ServiceLinkedRoleFailure(ref cause) => cause,
             AttachLoadBalancersError::Validation(ref cause) => cause,
             AttachLoadBalancersError::Credentials(ref err) => err.description(),
             AttachLoadBalancersError::HttpDispatch(ref dispatch_error) => {
@@ -8888,6 +8932,8 @@ pub enum CreateAutoScalingGroupError {
     LimitExceededFault(String),
     /// <p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
     ResourceContentionFault(String),
+    /// <p>The service-linked role is not yet ready for use.</p>
+    ServiceLinkedRoleFailure(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -8914,6 +8960,11 @@ impl CreateAutoScalingGroupError {
                 "ResourceContention" => CreateAutoScalingGroupError::ResourceContentionFault(
                     String::from(parsed_error.message),
                 ),
+                "ServiceLinkedRoleFailure" => {
+                    CreateAutoScalingGroupError::ServiceLinkedRoleFailure(String::from(
+                        parsed_error.message,
+                    ))
+                }
                 _ => CreateAutoScalingGroupError::Unknown(String::from(body)),
             },
             Err(_) => CreateAutoScalingGroupError::Unknown(body.to_string()),
@@ -8961,6 +9012,7 @@ impl Error for CreateAutoScalingGroupError {
             CreateAutoScalingGroupError::AlreadyExistsFault(ref cause) => cause,
             CreateAutoScalingGroupError::LimitExceededFault(ref cause) => cause,
             CreateAutoScalingGroupError::ResourceContentionFault(ref cause) => cause,
+            CreateAutoScalingGroupError::ServiceLinkedRoleFailure(ref cause) => cause,
             CreateAutoScalingGroupError::Validation(ref cause) => cause,
             CreateAutoScalingGroupError::Credentials(ref err) => err.description(),
             CreateAutoScalingGroupError::HttpDispatch(ref dispatch_error) => {
@@ -9501,6 +9553,8 @@ impl Error for DeleteNotificationConfigurationError {
 pub enum DeletePolicyError {
     /// <p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
     ResourceContentionFault(String),
+    /// <p>The service-linked role is not yet ready for use.</p>
+    ServiceLinkedRoleFailure(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -9520,6 +9574,9 @@ impl DeletePolicyError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "ResourceContention" => {
                     DeletePolicyError::ResourceContentionFault(String::from(parsed_error.message))
+                }
+                "ServiceLinkedRoleFailure" => {
+                    DeletePolicyError::ServiceLinkedRoleFailure(String::from(parsed_error.message))
                 }
                 _ => DeletePolicyError::Unknown(String::from(body)),
             },
@@ -9566,6 +9623,7 @@ impl Error for DeletePolicyError {
     fn description(&self) -> &str {
         match *self {
             DeletePolicyError::ResourceContentionFault(ref cause) => cause,
+            DeletePolicyError::ServiceLinkedRoleFailure(ref cause) => cause,
             DeletePolicyError::Validation(ref cause) => cause,
             DeletePolicyError::Credentials(ref err) => err.description(),
             DeletePolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
@@ -10005,11 +10063,9 @@ impl DescribeAutoScalingInstancesError {
                 "InvalidNextToken" => DescribeAutoScalingInstancesError::InvalidNextToken(
                     String::from(parsed_error.message),
                 ),
-                "ResourceContention" => {
-                    DescribeAutoScalingInstancesError::ResourceContentionFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "ResourceContention" => DescribeAutoScalingInstancesError::ResourceContentionFault(
+                    String::from(parsed_error.message),
+                ),
                 _ => DescribeAutoScalingInstancesError::Unknown(String::from(body)),
             },
             Err(_) => DescribeAutoScalingInstancesError::Unknown(body.to_string()),
@@ -10173,11 +10229,9 @@ impl DescribeLaunchConfigurationsError {
                 "InvalidNextToken" => DescribeLaunchConfigurationsError::InvalidNextToken(
                     String::from(parsed_error.message),
                 ),
-                "ResourceContention" => {
-                    DescribeLaunchConfigurationsError::ResourceContentionFault(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "ResourceContention" => DescribeLaunchConfigurationsError::ResourceContentionFault(
+                    String::from(parsed_error.message),
+                ),
                 _ => DescribeLaunchConfigurationsError::Unknown(String::from(body)),
             },
             Err(_) => DescribeLaunchConfigurationsError::Unknown(body.to_string()),
@@ -10726,6 +10780,8 @@ pub enum DescribePoliciesError {
     InvalidNextToken(String),
     /// <p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
     ResourceContentionFault(String),
+    /// <p>The service-linked role is not yet ready for use.</p>
+    ServiceLinkedRoleFailure(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -10747,6 +10803,9 @@ impl DescribePoliciesError {
                     DescribePoliciesError::InvalidNextToken(String::from(parsed_error.message))
                 }
                 "ResourceContention" => DescribePoliciesError::ResourceContentionFault(
+                    String::from(parsed_error.message),
+                ),
+                "ServiceLinkedRoleFailure" => DescribePoliciesError::ServiceLinkedRoleFailure(
                     String::from(parsed_error.message),
                 ),
                 _ => DescribePoliciesError::Unknown(String::from(body)),
@@ -10795,6 +10854,7 @@ impl Error for DescribePoliciesError {
         match *self {
             DescribePoliciesError::InvalidNextToken(ref cause) => cause,
             DescribePoliciesError::ResourceContentionFault(ref cause) => cause,
+            DescribePoliciesError::ServiceLinkedRoleFailure(ref cause) => cause,
             DescribePoliciesError::Validation(ref cause) => cause,
             DescribePoliciesError::Credentials(ref err) => err.description(),
             DescribePoliciesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
@@ -11937,6 +11997,8 @@ pub enum PutNotificationConfigurationError {
     LimitExceededFault(String),
     /// <p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
     ResourceContentionFault(String),
+    /// <p>The service-linked role is not yet ready for use.</p>
+    ServiceLinkedRoleFailure(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -11957,8 +12019,11 @@ impl PutNotificationConfigurationError {
                 "LimitExceeded" => PutNotificationConfigurationError::LimitExceededFault(
                     String::from(parsed_error.message),
                 ),
-                "ResourceContention" => {
-                    PutNotificationConfigurationError::ResourceContentionFault(String::from(
+                "ResourceContention" => PutNotificationConfigurationError::ResourceContentionFault(
+                    String::from(parsed_error.message),
+                ),
+                "ServiceLinkedRoleFailure" => {
+                    PutNotificationConfigurationError::ServiceLinkedRoleFailure(String::from(
                         parsed_error.message,
                     ))
                 }
@@ -12008,6 +12073,7 @@ impl Error for PutNotificationConfigurationError {
         match *self {
             PutNotificationConfigurationError::LimitExceededFault(ref cause) => cause,
             PutNotificationConfigurationError::ResourceContentionFault(ref cause) => cause,
+            PutNotificationConfigurationError::ServiceLinkedRoleFailure(ref cause) => cause,
             PutNotificationConfigurationError::Validation(ref cause) => cause,
             PutNotificationConfigurationError::Credentials(ref err) => err.description(),
             PutNotificationConfigurationError::HttpDispatch(ref dispatch_error) => {
@@ -12024,6 +12090,8 @@ pub enum PutScalingPolicyError {
     LimitExceededFault(String),
     /// <p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
     ResourceContentionFault(String),
+    /// <p>The service-linked role is not yet ready for use.</p>
+    ServiceLinkedRoleFailure(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -12045,6 +12113,9 @@ impl PutScalingPolicyError {
                     PutScalingPolicyError::LimitExceededFault(String::from(parsed_error.message))
                 }
                 "ResourceContention" => PutScalingPolicyError::ResourceContentionFault(
+                    String::from(parsed_error.message),
+                ),
+                "ServiceLinkedRoleFailure" => PutScalingPolicyError::ServiceLinkedRoleFailure(
                     String::from(parsed_error.message),
                 ),
                 _ => PutScalingPolicyError::Unknown(String::from(body)),
@@ -12093,6 +12164,7 @@ impl Error for PutScalingPolicyError {
         match *self {
             PutScalingPolicyError::LimitExceededFault(ref cause) => cause,
             PutScalingPolicyError::ResourceContentionFault(ref cause) => cause,
+            PutScalingPolicyError::ServiceLinkedRoleFailure(ref cause) => cause,
             PutScalingPolicyError::Validation(ref cause) => cause,
             PutScalingPolicyError::Credentials(ref err) => err.description(),
             PutScalingPolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
@@ -12716,9 +12788,9 @@ impl TerminateInstanceInAutoScalingGroupError {
         match Self::deserialize(&mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "ResourceContention" => {
-                    TerminateInstanceInAutoScalingGroupError::ResourceContentionFault(
-                        String::from(parsed_error.message),
-                    )
+                    TerminateInstanceInAutoScalingGroupError::ResourceContentionFault(String::from(
+                        parsed_error.message,
+                    ))
                 }
                 "ScalingActivityInProgress" => {
                     TerminateInstanceInAutoScalingGroupError::ScalingActivityInProgressFault(
@@ -12789,6 +12861,8 @@ pub enum UpdateAutoScalingGroupError {
     ResourceContentionFault(String),
     /// <p>The operation can't be performed because there are scaling activities in progress.</p>
     ScalingActivityInProgressFault(String),
+    /// <p>The service-linked role is not yet ready for use.</p>
+    ServiceLinkedRoleFailure(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -12811,6 +12885,11 @@ impl UpdateAutoScalingGroupError {
                 ),
                 "ScalingActivityInProgress" => {
                     UpdateAutoScalingGroupError::ScalingActivityInProgressFault(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                "ServiceLinkedRoleFailure" => {
+                    UpdateAutoScalingGroupError::ServiceLinkedRoleFailure(String::from(
                         parsed_error.message,
                     ))
                 }
@@ -12860,6 +12939,7 @@ impl Error for UpdateAutoScalingGroupError {
         match *self {
             UpdateAutoScalingGroupError::ResourceContentionFault(ref cause) => cause,
             UpdateAutoScalingGroupError::ScalingActivityInProgressFault(ref cause) => cause,
+            UpdateAutoScalingGroupError::ServiceLinkedRoleFailure(ref cause) => cause,
             UpdateAutoScalingGroupError::Validation(ref cause) => cause,
             UpdateAutoScalingGroupError::Credentials(ref err) => err.description(),
             UpdateAutoScalingGroupError::HttpDispatch(ref dispatch_error) => {
@@ -12895,13 +12975,13 @@ pub trait Autoscaling {
         input: &CompleteLifecycleActionType,
     ) -> RusotoFuture<CompleteLifecycleActionAnswer, CompleteLifecycleActionError>;
 
-    /// <p>Creates an Auto Scaling group with the specified name and attributes.</p> <p>If you exceed your maximum limit of Auto Scaling groups, which by default is 20 per region, the call fails. For information about viewing and updating this limit, see <a>DescribeAccountLimits</a>.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/autoscaling/latest/userguide/AutoScalingGroup.html">Auto Scaling Groups</a> in the <i>Auto Scaling User Guide</i>.</p>
+    /// <p>Creates an Auto Scaling group with the specified name and attributes.</p> <p>If you exceed your maximum limit of Auto Scaling groups, the call fails. For information about viewing this limit, see <a>DescribeAccountLimits</a>. For information about updating this limit, see <a href="http://docs.aws.amazon.com/autoscaling/latest/userguide/as-account-limits.html">Auto Scaling Limits</a> in the <i>Auto Scaling User Guide</i>.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/autoscaling/latest/userguide/AutoScalingGroup.html">Auto Scaling Groups</a> in the <i>Auto Scaling User Guide</i>.</p>
     fn create_auto_scaling_group(
         &self,
         input: &CreateAutoScalingGroupType,
     ) -> RusotoFuture<(), CreateAutoScalingGroupError>;
 
-    /// <p>Creates a launch configuration.</p> <p>If you exceed your maximum limit of launch configurations, which by default is 100 per region, the call fails. For information about viewing and updating this limit, see <a>DescribeAccountLimits</a>.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/autoscaling/latest/userguide/LaunchConfiguration.html">Launch Configurations</a> in the <i>Auto Scaling User Guide</i>.</p>
+    /// <p>Creates a launch configuration.</p> <p>If you exceed your maximum limit of launch configurations, the call fails. For information about viewing this limit, see <a>DescribeAccountLimits</a>. For information about updating this limit, see <a href="http://docs.aws.amazon.com/autoscaling/latest/userguide/as-account-limits.html">Auto Scaling Limits</a> in the <i>Auto Scaling User Guide</i>.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/autoscaling/latest/userguide/LaunchConfiguration.html">Launch Configurations</a> in the <i>Auto Scaling User Guide</i>.</p>
     fn create_launch_configuration(
         &self,
         input: &CreateLaunchConfigurationType,
@@ -12949,7 +13029,7 @@ pub trait Autoscaling {
     /// <p>Deletes the specified tags.</p>
     fn delete_tags(&self, input: &DeleteTagsType) -> RusotoFuture<(), DeleteTagsError>;
 
-    /// <p>Describes the current Auto Scaling resource limits for your AWS account.</p> <p>For information about requesting an increase in these limits, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html">AWS Service Limits</a> in the <i>Amazon Web Services General Reference</i>.</p>
+    /// <p>Describes the current Auto Scaling resource limits for your AWS account.</p> <p>For information about requesting an increase in these limits, see <a href="http://docs.aws.amazon.com/autoscaling/latest/userguide/as-account-limits.html">Auto Scaling Limits</a> in the <i>Auto Scaling User Guide</i>.</p>
     fn describe_account_limits(
         &self,
     ) -> RusotoFuture<DescribeAccountLimitsAnswer, DescribeAccountLimitsError>;
@@ -13397,7 +13477,7 @@ where
         RusotoFuture::new(future)
     }
 
-    /// <p>Creates an Auto Scaling group with the specified name and attributes.</p> <p>If you exceed your maximum limit of Auto Scaling groups, which by default is 20 per region, the call fails. For information about viewing and updating this limit, see <a>DescribeAccountLimits</a>.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/autoscaling/latest/userguide/AutoScalingGroup.html">Auto Scaling Groups</a> in the <i>Auto Scaling User Guide</i>.</p>
+    /// <p>Creates an Auto Scaling group with the specified name and attributes.</p> <p>If you exceed your maximum limit of Auto Scaling groups, the call fails. For information about viewing this limit, see <a>DescribeAccountLimits</a>. For information about updating this limit, see <a href="http://docs.aws.amazon.com/autoscaling/latest/userguide/as-account-limits.html">Auto Scaling Limits</a> in the <i>Auto Scaling User Guide</i>.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/autoscaling/latest/userguide/AutoScalingGroup.html">Auto Scaling Groups</a> in the <i>Auto Scaling User Guide</i>.</p>
     fn create_auto_scaling_group(
         &self,
         input: &CreateAutoScalingGroupType,
@@ -13425,7 +13505,7 @@ where
         RusotoFuture::new(future)
     }
 
-    /// <p>Creates a launch configuration.</p> <p>If you exceed your maximum limit of launch configurations, which by default is 100 per region, the call fails. For information about viewing and updating this limit, see <a>DescribeAccountLimits</a>.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/autoscaling/latest/userguide/LaunchConfiguration.html">Launch Configurations</a> in the <i>Auto Scaling User Guide</i>.</p>
+    /// <p>Creates a launch configuration.</p> <p>If you exceed your maximum limit of launch configurations, the call fails. For information about viewing this limit, see <a>DescribeAccountLimits</a>. For information about updating this limit, see <a href="http://docs.aws.amazon.com/autoscaling/latest/userguide/as-account-limits.html">Auto Scaling Limits</a> in the <i>Auto Scaling User Guide</i>.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/autoscaling/latest/userguide/LaunchConfiguration.html">Launch Configurations</a> in the <i>Auto Scaling User Guide</i>.</p>
     fn create_launch_configuration(
         &self,
         input: &CreateLaunchConfigurationType,
@@ -13694,7 +13774,7 @@ where
         RusotoFuture::new(future)
     }
 
-    /// <p>Describes the current Auto Scaling resource limits for your AWS account.</p> <p>For information about requesting an increase in these limits, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html">AWS Service Limits</a> in the <i>Amazon Web Services General Reference</i>.</p>
+    /// <p>Describes the current Auto Scaling resource limits for your AWS account.</p> <p>For information about requesting an increase in these limits, see <a href="http://docs.aws.amazon.com/autoscaling/latest/userguide/as-account-limits.html">Auto Scaling Limits</a> in the <i>Auto Scaling User Guide</i>.</p>
     fn describe_account_limits(
         &self,
     ) -> RusotoFuture<DescribeAccountLimitsAnswer, DescribeAccountLimitsError> {

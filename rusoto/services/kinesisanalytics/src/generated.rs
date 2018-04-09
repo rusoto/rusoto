@@ -2066,9 +2066,9 @@ impl DeleteApplicationInputProcessingConfigurationError {
                             error_message.to_string(),
                         )
                     }
-                    _ => DeleteApplicationInputProcessingConfigurationError::Unknown(
-                        String::from(body),
-                    ),
+                    _ => DeleteApplicationInputProcessingConfigurationError::Unknown(String::from(
+                        body,
+                    )),
                 }
             }
             Err(_) => {
@@ -2281,11 +2281,9 @@ impl DeleteApplicationReferenceDataSourceError {
                             error_message,
                         ))
                     }
-                    "ValidationException" => {
-                        DeleteApplicationReferenceDataSourceError::Validation(
-                            error_message.to_string(),
-                        )
-                    }
+                    "ValidationException" => DeleteApplicationReferenceDataSourceError::Validation(
+                        error_message.to_string(),
+                    ),
                     _ => DeleteApplicationReferenceDataSourceError::Unknown(String::from(body)),
                 }
             }
