@@ -522,7 +522,7 @@ all = [
 	   	"route53domains",
 	   	"s3",
 	   	"sdb",
-			"secretsmanager",
+	   	    "secretsmanager",
 	   	"serverlessrepo",
 		"servicecatalog",
 	   	"ses",
