@@ -16,6 +16,5 @@ fn should_list_invitations() {
   };
 
   let result = client.list_secrets(&request).sync();
-  println!("{:#?}", result);
   assert!(result.is_ok());
 }
