@@ -4,7 +4,7 @@ extern crate env_logger;
 extern crate rusoto_core;
 extern crate rusoto_secretsmanager;
 
-use rusoto_guardduty::{ListSecretsRequest, SecretsManager, SecretsManagerClient};
+use rusoto_secretsmanager::{ListSecretsRequest, SecretsManager, SecretsManagerClient};
 use rusoto_core::Region;
 
 #[test]
