@@ -1,0 +1,369 @@
+{
+  "version": "2.0",
+  "metadata": {
+    "apiVersion": "2014-10-06",
+    "endpointPrefix": "codedeploy-commands",
+    "jsonVersion": "1.1",
+    "serviceAbbreviation": "CodeDeployCommand",
+    "serviceFullName": "AWS CodeDeploy Command Service",
+    "signatureVersion": "v4",
+    "targetPrefix": "CodeDeployCommandService_v20141006",
+    "protocol": "json"
+  },
+  "documentation": "Control plane for the CodeDeploy stack. Exposes APIs needed by CodeDeploy clients to run deployment commands.",
+  "operations": {
+    "GetDeploymentSpecification": {
+      "name": "GetDeploymentSpecification",
+      "http": {
+        "method": "POST",
+        "requestUri": "/"
+      },
+      "input": {
+        "shape": "GetDeploymentSpecificationInput"
+      },
+      "output": {
+        "shape": "GetDeploymentSpecificationOutput"
+      },
+      "errors": [
+        {
+          "shape": "ClientException",
+          "exception": true,
+          "documentation": "This exception indicates that the request failed due to the fault of the customer (either an invalid request was provided, referred to a non-existant object, or another reason within the client's control)."
+        },
+        {
+          "shape": "ServerException",
+          "exception": true,
+          "fault": true,
+          "documentation": "This exception indicates that the request failed due to a problem on the server, or with the server's dependencies."
+        }
+      ],
+      "documentation": "Retrieve the deployment specification for the deployment and host, consisting of the client metadata provided when the deployment was created. The generic client metadata will be provided, as well as the client metadata for the host's variant (if variant-specific metadata was provided). Throws DeploymentNotFoundException if the DeploymentExecutionId does not identify a current deployment. Throws HostNotFoundException if the host is not recognized by the deployment engine. Throws ServerException for failures caused by the deployment system or its dependencies."
+    },
+    "PollHostCommand": {
+      "name": "PollHostCommand",
+      "http": {
+        "method": "POST",
+        "requestUri": "/"
+      },
+      "input": {
+        "shape": "PollHostCommandInput"
+      },
+      "output": {
+        "shape": "PollHostCommandOutput"
+      },
+      "errors": [
+        {
+          "shape": "ClientException",
+          "exception": true,
+          "documentation": "This exception indicates that the request failed due to the fault of the customer (either an invalid request was provided, referred to a non-existant object, or another reason within the client's control)."
+        },
+        {
+          "shape": "ServerException",
+          "exception": true,
+          "fault": true,
+          "documentation": "This exception indicates that the request failed due to a problem on the server, or with the server's dependencies."
+        }
+      ],
+      "documentation": "This requests a command from the deployment workflow engine. If no command is ready to be dispatched, the output will be empty (HostCommand will be null). Throws HostNotFoundException if the host is not recognized by the deployment engine. Throws ServerException for failures caused by the deployment system or its dependencies."
+    },
+    "PostHostCommandUpdate": {
+      "name": "PostHostCommandUpdate",
+      "http": {
+        "method": "POST",
+        "requestUri": "/"
+      },
+      "input": {
+        "shape": "PostHostCommandUpdateInput"
+      },
+      "output": {
+        "shape": "PostHostCommandUpdateOutput"
+      },
+      "errors": [
+        {
+          "shape": "ClientException",
+          "exception": true,
+          "documentation": "This exception indicates that the request failed due to the fault of the customer (either an invalid request was provided, referred to a non-existant object, or another reason within the client's control)."
+        },
+        {
+          "shape": "ServerException",
+          "exception": true,
+          "fault": true,
+          "documentation": "This exception indicates that the request failed due to a problem on the server, or with the server's dependencies."
+        }
+      ],
+      "documentation": "This updates the central workflow engine with the current progress of the host command. This will also return the status of the host command centrally if possible, so agents can skip processing the command if it has been aborted / timed out. However, the status is optional, so if no status is returned the agent should treat it as if it was ok to continue. Throws ClientException for an invalid HostCommandIdentifier or Diagnostics. Throws ServerException for failures caused by the deployment system or its dependencies."
+    },
+    "PutHostCommandAcknowledgement": {
+      "name": "PutHostCommandAcknowledgement",
+      "http": {
+        "method": "POST",
+        "requestUri": "/"
+      },
+      "input": {
+        "shape": "PutHostCommandAcknowledgementInput"
+      },
+      "output": {
+        "shape": "PutHostCommandAcknowledgementOutput"
+      },
+      "errors": [
+        {
+          "shape": "ClientException",
+          "exception": true,
+          "documentation": "This exception indicates that the request failed due to the fault of the customer (either an invalid request was provided, referred to a non-existant object, or another reason within the client's control)."
+        },
+        {
+          "shape": "ServerException",
+          "exception": true,
+          "fault": true,
+          "documentation": "This exception indicates that the request failed due to a problem on the server, or with the server's dependencies."
+        }
+      ],
+      "documentation": "This notifies the central workflow engine that the agent has received the specified command and is ready to start execution. This will also return the status of the host command centrally if possible, so agents can skip processing the command if it has been aborted / timed out. However, the status is optional, so if no status is returned the agent should treat it as if it was ok to continue. Throws ClientException for an invalid HostCommandIdentifier or Diagnostics. Throws ServerException for failures caused by the deployment system or its dependencies."
+    },
+    "PutHostCommandComplete": {
+      "name": "PutHostCommandComplete",
+      "http": {
+        "method": "POST",
+        "requestUri": "/"
+      },
+      "input": {
+        "shape": "PutHostCommandCompleteInput"
+      },
+      "errors": [
+        {
+          "shape": "ClientException",
+          "exception": true,
+          "documentation": "This exception indicates that the request failed due to the fault of the customer (either an invalid request was provided, referred to a non-existant object, or another reason within the client's control)."
+        },
+        {
+          "shape": "ServerException",
+          "exception": true,
+          "fault": true,
+          "documentation": "This exception indicates that the request failed due to a problem on the server, or with the server's dependencies."
+        }
+      ],
+      "documentation": "This reports completion of the command back to the workflow engine. Throws ClientException for an invalid HostCommandIdentifier or Diagnostics. Throws ServerException for failures caused by the deployment system or its dependencies."
+    }
+  },
+  "shapes": {
+    "ClientException": {
+      "type": "structure",
+      "members": {
+      },
+      "exception": true,
+      "documentation": "This exception indicates that the request failed due to the fault of the customer (either an invalid request was provided, referred to a non-existant object, or another reason within the client's control)."
+    },
+    "DeploymentCommandName": {
+      "type": "string"
+    },
+    "DeploymentCommandStatus": {
+      "type": "string",
+      "enum": [
+        "Pending",
+        "InProgress",
+        "Succeeded",
+        "Failed"
+      ]
+    },
+    "DeploymentExecutionId": {
+      "type": "string",
+      "min": 1,
+      "max": 129,
+      "pattern": "^[^/]+/[^/]+/[^/]+/.+$"
+    },
+    "DeploymentSpecification": {
+      "type": "structure",
+      "members": {
+        "GenericEnvelope": {
+          "shape": "Envelope"
+        },
+        "VariantId": {
+          "shape": "VariantId"
+        },
+        "VariantEnvelope": {
+          "shape": "Envelope"
+        }
+      },
+      "documentation": "The DeploymentSpecification contains an envelope for the generic client metadata, and if there is variant-specific metadata, the ID of the variant for the host and the envelope containing that variant's metadata. All fields are optional, though an empty DeploymentSpecification is likely indicative of an error."
+    },
+    "Envelope": {
+      "type": "structure",
+      "members": {
+        "Format": {
+          "shape": "Format"
+        },
+        "Payload": {
+          "shape": "Payload"
+        }
+      },
+      "documentation": "For an Envelope used for host command diagnostics, Format is limited to 64 characters and Payload is limited to 8192 characters."
+    },
+    "Format": {
+      "type": "string",
+      "min": 1,
+      "max": 64
+    },
+    "GenericDateTimestamp": {
+      "type": "timestamp"
+    },
+    "GenericLong": {
+      "type": "long"
+    },
+    "GenericString": {
+      "type": "string"
+    },
+    "GetDeploymentSpecificationInput": {
+      "type": "structure",
+      "required": [
+        "DeploymentExecutionId",
+        "HostIdentifier"
+      ],
+      "members": {
+        "DeploymentExecutionId": {
+          "shape": "DeploymentExecutionId"
+        },
+        "HostIdentifier": {
+          "shape": "HostIdentifier"
+        }
+      }
+    },
+    "GetDeploymentSpecificationOutput": {
+      "type": "structure",
+      "members": {
+        "DeploymentSystem": {
+          "shape": "GenericString"
+        },
+        "DeploymentSpecification": {
+          "shape": "DeploymentSpecification"
+        }
+      }
+    },
+    "HostCommandIdentifier": {
+      "type": "string"
+    },
+    "HostCommandInstance": {
+      "type": "structure",
+      "members": {
+        "HostCommandIdentifier": {
+          "shape": "HostCommandIdentifier"
+        },
+        "HostIdentifier": {
+          "shape": "HostIdentifier"
+        },
+        "DeploymentExecutionId": {
+          "shape": "DeploymentExecutionId"
+        },
+        "CommandName": {
+          "shape": "DeploymentCommandName"
+        },
+        "Nonce": {
+          "shape": "GenericLong"
+        }
+      }
+    },
+    "HostIdentifier": {
+      "type": "string",
+      "documentation": "An identifier for referring to a unit of capacity."
+    },
+    "Payload": {
+      "type": "string",
+      "min": 0,
+      "max": 8192
+    },
+    "PollHostCommandInput": {
+      "type": "structure",
+      "required": [
+        "HostIdentifier"
+      ],
+      "members": {
+        "HostIdentifier": {
+          "shape": "HostIdentifier"
+        }
+      }
+    },
+    "PollHostCommandOutput": {
+      "type": "structure",
+      "members": {
+        "HostCommand": {
+          "shape": "HostCommandInstance"
+        }
+      }
+    },
+    "PostHostCommandUpdateInput": {
+      "type": "structure",
+      "required": [
+        "HostCommandIdentifier"
+      ],
+      "members": {
+        "HostCommandIdentifier": {
+          "shape": "HostCommandIdentifier"
+        },
+        "EstimatedCompletionTime": {
+          "shape": "GenericDateTimestamp"
+        },
+        "Diagnostics": {
+          "shape": "Envelope"
+        }
+      }
+    },
+    "PostHostCommandUpdateOutput": {
+      "type": "structure",
+      "members": {
+        "CommandStatus": {
+          "shape": "DeploymentCommandStatus"
+        }
+      }
+    },
+    "PutHostCommandAcknowledgementInput": {
+      "type": "structure",
+      "required": [
+        "HostCommandIdentifier"
+      ],
+      "members": {
+        "HostCommandIdentifier": {
+          "shape": "HostCommandIdentifier"
+        },
+        "Diagnostics": {
+          "shape": "Envelope"
+        }
+      }
+    },
+    "PutHostCommandAcknowledgementOutput": {
+      "type": "structure",
+      "members": {
+        "CommandStatus": {
+          "shape": "DeploymentCommandStatus"
+        }
+      }
+    },
+    "PutHostCommandCompleteInput": {
+      "type": "structure",
+      "required": [
+        "HostCommandIdentifier",
+        "CommandStatus"
+      ],
+      "members": {
+        "HostCommandIdentifier": {
+          "shape": "HostCommandIdentifier"
+        },
+        "CommandStatus": {
+          "shape": "DeploymentCommandStatus"
+        },
+        "Diagnostics": {
+          "shape": "Envelope"
+        }
+      }
+    },
+    "ServerException": {
+      "type": "structure",
+      "members": {
+      },
+      "exception": true,
+      "fault": true,
+      "documentation": "This exception indicates that the request failed due to a problem on the server, or with the server's dependencies."
+    },
+    "VariantId": {
+      "type": "string"
+    }
+  }
+}

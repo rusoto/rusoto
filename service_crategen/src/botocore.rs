@@ -2,9 +2,9 @@ use std::collections::{BTreeSet, BTreeMap};
 use std::error;
 use std::fmt::{Formatter, Result as FmtResult};
 use std::fs::{self, File};
-use std::io::BufReader;
+use std::io::{ErrorKind, BufReader};
 use std::marker::PhantomData;
-use std::path::Path;
+use std::path::{Path, PathBuf};
 
 use serde_json;
 use serde::{Deserialize, Deserializer};
@@ -13,6 +13,7 @@ use serde::de::{Error as SerdeError, Visitor, MapAccess};
 use util;
 
 const BOTOCORE_DIR: &'static str = concat!(env!("CARGO_MANIFEST_DIR"), "/botocore/botocore/data/");
+const EMBEDDED_DIR: &'static str = concat!(env!("CARGO_MANIFEST_DIR"), "/embedded/");
 
 #[derive(Debug, Deserialize)]
 pub struct ServiceDefinition {
@@ -27,18 +28,17 @@ pub struct ServiceDefinition {
 
 impl ServiceDefinition {
     pub fn load(name: &str, protocol_version: &str) -> Result<Self, Box<error::Error>> {
-        let input_path = Path::new(BOTOCORE_DIR)
-            .join(format!("{}/{}/service-2.json", name, protocol_version));
-
-        let input_file = BufReader::new(File::open(&input_path)?);
-
+        let service_json_path = resolve_service_json_path(name, protocol_version)?;
+        let input_file = BufReader::new(File::open(&service_json_path)?);
         let service: ServiceDefinition = serde_json::from_reader(input_file)?;
-
         Ok(service)
     }
 
     pub fn load_all() -> Result<BTreeMap<String, Self>, Box<error::Error>> {
-        fs::read_dir(BOTOCORE_DIR)?
+        let botocore_iter = fs::read_dir(BOTOCORE_DIR)?;
+        let embedded_iter = fs::read_dir(EMBEDDED_DIR)?;
+        let all_iter = botocore_iter.chain(embedded_iter);
+        all_iter
             .filter_map(|e| e.ok())
             .map(|e| e.path())
             .filter(|p| p.is_dir())
@@ -59,18 +59,35 @@ impl ServiceDefinition {
                 version_dirs.sort();
 
                 version_dirs.last().cloned().map(|version_path| {
-                    (path.file_name().unwrap().to_string_lossy().into_owned(), version_path.clone())
+                    let service_name = path.file_name().unwrap().to_string_lossy().into_owned();
+                    let protocol_version = version_path.file_name().unwrap().to_string_lossy().into_owned();
+                    (service_name, protocol_version)
                 })
             })
-            .map(|(service_name, path)| {
-                let input_file = BufReader::new(File::open(&format!("{}/service-2.json", path.display()))?);
-
-                let service: ServiceDefinition = serde_json::from_reader(input_file)?;
-
-                Ok((service_name, service))
+            .map(|(service_name, protocol_version)| {
+                ServiceDefinition::load(&service_name, &protocol_version).map(|service| (service_name, service))
             })
             .collect()
     }
+}
+
+fn resolve_service_json_path(name: &str, protocol_version: &str) -> Result<PathBuf, Box<error::Error>> {
+    // Look in botocore first.
+    let botocore_path = Path::new(BOTOCORE_DIR)
+        .join(format!("{}/{}/service-2.json", name, protocol_version));
+    if botocore_path.exists() {
+        return Ok(botocore_path);
+    }
+
+    // If no matching file found in botocore, look for embedded files next.
+    let embedded_path = Path::new(EMBEDDED_DIR)
+        .join(format!("{}/{}/service-2.json", name, protocol_version));
+    if embedded_path.exists() {
+        return Ok(embedded_path);
+    }
+
+    // Otherwise, we failed to find the service JSON file.
+    Err(Box::new(::std::io::Error::new(ErrorKind::NotFound, format!("No service-2.json file found for service {} with version {}", name, protocol_version))))
 }
 
 #[derive(Debug, Deserialize)]

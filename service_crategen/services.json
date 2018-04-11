@@ -125,6 +125,12 @@
     "protocolVersion": "2014-10-06",
     "baseTypeName": "CodeDeploy"
   },
+  "codedeploy-commands": {
+    "version": "0.32.0",
+    "coreVersion": "0.32.0",
+    "protocolVersion": "2014-10-06",
+    "baseTypeName": "CodeDeployCommands"
+  },
   "codepipeline": {
     "version": "0.32.0",
     "coreVersion": "0.32.0",
