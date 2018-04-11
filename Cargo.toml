@@ -23,6 +23,7 @@ members = [
     "rusoto/services/codebuild",
     "rusoto/services/codecommit",
     "rusoto/services/codedeploy",
+    "rusoto/services/codedeploy-commands",
     "rusoto/services/codepipeline",
     "rusoto/services/codestar",
     "rusoto/services/cognito-identity",
