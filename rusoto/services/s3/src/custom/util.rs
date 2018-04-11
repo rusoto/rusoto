@@ -71,7 +71,7 @@ pub fn generate_presigned_url(region: &Region, credentials: &AwsCredentials, inp
     }
 
     match input_request {
-        PresignedRequestMethod::Get(input) => {
+        PresignedRequestMethod::Get(ref input) => {
             let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
             let mut request = SignedRequest::new("GET", "s3", &region, &request_uri);
             let mut params = Params::new();
@@ -105,7 +105,7 @@ pub fn generate_presigned_url(region: &Region, credentials: &AwsCredentials, inp
             request.set_params(params);
             request.generate_presigned_url(&credentials)
         },
-        // PresignedRequestMethod::Post(input) => {
+        // PresignedRequestMethod::Post(ref input) => {
         //     let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
         //     let mut request = SignedRequest::new("POST", "s3", &region, &request_uri);
         //     let mut params = Params::new();
@@ -122,7 +122,7 @@ pub fn generate_presigned_url(region: &Region, credentials: &AwsCredentials, inp
         //     request.set_params(params);
         //     request.generate_presigned_url(&credentials)
         // },
-        PresignedRequestMethod::Put(input) => {
+        PresignedRequestMethod::Put(ref input) => {
             let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
             let mut request = SignedRequest::new("PUT", "s3", &region, &request_uri);
             let mut params = Params::new();
@@ -169,7 +169,7 @@ pub fn generate_presigned_url(region: &Region, credentials: &AwsCredentials, inp
             request.set_params(params);
             request.generate_presigned_url(&credentials)
         },
-        PresignedRequestMethod::Delete(input) => {
+        PresignedRequestMethod::Delete(ref input) => {
             let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
             let mut request = SignedRequest::new("DELETE", "s3", &region, &request_uri);
             let mut params = Params::new();
