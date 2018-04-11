@@ -68,7 +68,7 @@ pub struct AttachDiskResult {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct AttachInstancesToLoadBalancerRequest {
-    /// <p>An array of strings representing the instance name(s) you want to attach to your load balancer.</p>
+    /// <p>An array of strings representing the instance name(s) you want to attach to your load balancer.</p> <p>An instance must be <code>running</code> before you can attach it to your load balancer.</p> <p>There are no additional limits on the number of instances you can attach to your load balancer, aside from the limit of Lightsail instances you can create in your account (20).</p>
     #[serde(rename = "instanceNames")]
     pub instance_names: Vec<String>,
     /// <p>The name of the load balancer.</p>
@@ -86,17 +86,17 @@ pub struct AttachInstancesToLoadBalancerResult {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct AttachLoadBalancerTlsCertificateRequest {
-    /// <p>The name of your TLS/SSL certificate.</p>
+    /// <p>The name of your SSL/TLS certificate.</p>
     #[serde(rename = "certificateName")]
     pub certificate_name: String,
-    /// <p>The name of the load balancer to which you want to associate the TLS/SSL certificate.</p>
+    /// <p>The name of the load balancer to which you want to associate the SSL/TLS certificate.</p>
     #[serde(rename = "loadBalancerName")]
     pub load_balancer_name: String,
 }
 
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct AttachLoadBalancerTlsCertificateResult {
-    /// <p>An object representing the API operations.</p>
+    /// <p>An object representing the API operations.</p> <p>These SSL/TLS certificates are only usable by Lightsail load balancers. You can't get the certificate and use it for another purpose.</p>
     #[serde(rename = "operations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub operations: Option<Vec<Operation>>,
@@ -464,7 +464,7 @@ pub struct CreateKeyPairResult {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateLoadBalancerRequest {
-    /// <p>The alternative domain names to use with your TLS/SSL certificate (e.g., <code>www.example.com</code>, <code>www.ejemplo.com</code>, <code>ejemplo.com</code>).</p>
+    /// <p>The optional alternative domains and subdomains to use with your SSL/TLS certificate (e.g., <code>www.example.com</code>, <code>example.com</code>, <code>m.example.com</code>, <code>blog.example.com</code>).</p>
     #[serde(rename = "certificateAlternativeNames")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub certificate_alternative_names: Option<Vec<String>>,
@@ -472,11 +472,11 @@ pub struct CreateLoadBalancerRequest {
     #[serde(rename = "certificateDomainName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub certificate_domain_name: Option<String>,
-    /// <p>The name of the TLS/SSL certificate.</p> <p>If you specify <code>certificateName</code>, then <code>certificateDomainName</code> is required (and vice-versa).</p>
+    /// <p>The name of the SSL/TLS certificate.</p> <p>If you specify <code>certificateName</code>, then <code>certificateDomainName</code> is required (and vice-versa).</p>
     #[serde(rename = "certificateName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub certificate_name: Option<String>,
-    /// <p>The path you provided to perform the load balancer health check. If you didn't specify a health check path, Lightsail uses the root path of your website (e.g., <code>"/"</code>).</p>
+    /// <p>The path you provided to perform the load balancer health check. If you didn't specify a health check path, Lightsail uses the root path of your website (e.g., <code>"/"</code>).</p> <p>You may want to specify a custom health check path other than the root of your application if your home page loads slowly or has a lot of media or scripting on it.</p>
     #[serde(rename = "healthCheckPath")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub health_check_path: Option<String>,
@@ -498,17 +498,17 @@ pub struct CreateLoadBalancerResult {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateLoadBalancerTlsCertificateRequest {
-    /// <p>An array of strings listing alternative domain names for your TLS/SSL certificate.</p>
+    /// <p>An array of strings listing alternative domains and subdomains for your SSL/TLS certificate. Lightsail will de-dupe the names for you. You can have a maximum of 9 alternative names (in addition to the 1 primary domain). We do not support wildcards (e.g., <code>*.example.com</code>).</p>
     #[serde(rename = "certificateAlternativeNames")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub certificate_alternative_names: Option<Vec<String>>,
-    /// <p>The domain name (e.g., <code>example.com</code>) for your TLS/SSL certificate.</p>
+    /// <p>The domain name (e.g., <code>example.com</code>) for your SSL/TLS certificate.</p>
     #[serde(rename = "certificateDomainName")]
     pub certificate_domain_name: String,
-    /// <p>The TLS/SSL certificate name.</p>
+    /// <p>The SSL/TLS certificate name.</p> <p>You can have up to 10 certificates in your account at one time. Each Lightsail load balancer can have up to 2 certificates associated with it at one time. There is also an overall limit to the number of certificates that can be issue in a 365-day period. For more information, see <a href="http://docs.aws.amazon.com/acm/latest/userguide/acm-limits.html">Limits</a>.</p>
     #[serde(rename = "certificateName")]
     pub certificate_name: String,
-    /// <p>The load balancer name where you want to create the TLS/SSL certificate.</p>
+    /// <p>The load balancer name where you want to create the SSL/TLS certificate.</p>
     #[serde(rename = "loadBalancerName")]
     pub load_balancer_name: String,
 }
@@ -646,10 +646,10 @@ pub struct DeleteLoadBalancerResult {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteLoadBalancerTlsCertificateRequest {
-    /// <p>The TLS/SSL certificate name.</p>
+    /// <p>The SSL/TLS certificate name.</p>
     #[serde(rename = "certificateName")]
     pub certificate_name: String,
-    /// <p>When <code>true</code>, forces the deletion of a TLS/SSL certificate.</p>
+    /// <p>When <code>true</code>, forces the deletion of an SSL/TLS certificate.</p> <p>There can be two certificates associated with a Lightsail load balancer: the primary and the backup. The force parameter is required when the primary SSL/TLS certificate is in use by an instance attached to the load balancer.</p>
     #[serde(rename = "force")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub force: Option<bool>,
@@ -873,7 +873,7 @@ pub struct DomainEntry {
     #[serde(rename = "id")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
-    /// <p>When <code>true</code>, specifies whether the domain entry is an alias used by the Lightsail load balancer.</p>
+    /// <p>When <code>true</code>, specifies whether the domain entry is an alias used by the Lightsail load balancer. You can include an alias (A type) record in your request, which points to a load balancer DNS name and routes traffic to your load balancer</p>
     #[serde(rename = "isAlias")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub is_alias: Option<bool>,
@@ -881,7 +881,7 @@ pub struct DomainEntry {
     #[serde(rename = "name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p>The target AWS name server (e.g., <code>ns-111.awsdns-22.com.</code>).</p>
+    /// <p>The target AWS name server (e.g., <code>ns-111.awsdns-22.com.</code>).</p> <p>For Lightsail load balancers, the value looks like <code>ab1234c56789c6b86aba6fb203d443bc-123456789.us-east-2.elb.amazonaws.com</code>. Be sure to also set <code>isAlias</code> to <code>true</code> when setting up an A record for a load balancer.</p>
     #[serde(rename = "target")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub target: Option<String>,
@@ -1287,7 +1287,7 @@ pub struct GetLoadBalancerMetricDataRequest {
     /// <p>The start time of the period.</p>
     #[serde(rename = "startTime")]
     pub start_time: f64,
-    /// <p>An array of statistics that you want to request metrics for. Valid values are listed below.</p>
+    /// <p><p>An array of statistics that you want to request metrics for. Valid values are listed below.</p> <ul> <li> <p> <b> <code>SampleCount</code> </b> - The count (number) of data points used for the statistical calculation.</p> </li> <li> <p> <b> <code>Average</code> </b> - The value of Sum / SampleCount during the specified period. By comparing this statistic with the Minimum and Maximum, you can determine the full scope of a metric and how close the average use is to the Minimum and Maximum. This comparison helps you to know when to increase or decrease your resources as needed.</p> </li> <li> <p> <b> <code>Sum</code> </b> - All values submitted for the matching metric added together. This statistic can be useful for determining the total volume of a metric.</p> </li> <li> <p> <b> <code>Minimum</code> </b> - The lowest value observed during the specified period. You can use this value to determine low volumes of activity for your application.</p> </li> <li> <p> <b> <code>Maximum</code> </b> - The highest value observed during the specified period. You can use this value to determine high volumes of activity for your application.</p> </li> </ul></p>
     #[serde(rename = "statistics")]
     pub statistics: Vec<String>,
     /// <p>The unit for the time period request. Valid values are listed below.</p>
@@ -1301,7 +1301,7 @@ pub struct GetLoadBalancerMetricDataResult {
     #[serde(rename = "metricData")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub metric_data: Option<Vec<MetricDatapoint>>,
-    /// <p>The metric about which you are receiving information. Valid values are listed below.</p>
+    /// <p><p>The metric about which you are receiving information. Valid values are listed below, along with the most useful <code>statistics</code> to include in your request.</p> <ul> <li> <p> <b> <code>ClientTLSNegotiationErrorCount</code> </b> - The number of TLS connections initiated by the client that did not establish a session with the load balancer. Possible causes include a mismatch of ciphers or protocols.</p> <p> <code>Statistics</code>: The most useful statistic is <code>Sum</code>.</p> </li> <li> <p> <b> <code>HealthyHostCount</code> </b> - The number of target instances that are considered healthy.</p> <p> <code>Statistics</code>: The most useful statistic are <code>Average</code>, <code>Minimum</code>, and <code>Maximum</code>.</p> </li> <li> <p> <b> <code>UnhealthyHostCount</code> </b> - The number of target instances that are considered unhealthy.</p> <p> <code>Statistics</code>: The most useful statistic are <code>Average</code>, <code>Minimum</code>, and <code>Maximum</code>.</p> </li> <li> <p> <b> <code>HTTPCode<em>LB</em>4XX<em>Count</code> </b> - The number of HTTP 4XX client error codes that originate from the load balancer. Client errors are generated when requests are malformed or incomplete. These requests have not been received by the target instance. This count does not include any response codes generated by the target instances.</p> <p> <code>Statistics</code>: The most useful statistic is <code>Sum</code>. Note that <code>Minimum</code>, <code>Maximum</code>, and <code>Average</code> all return <code>1</code>.</p> </li> <li> <p> <b> <code>HTTPCode</em>LB<em>5XX</em>Count</code> </b> - The number of HTTP 5XX server error codes that originate from the load balancer. This count does not include any response codes generated by the target instances.</p> <p> <code>Statistics</code>: The most useful statistic is <code>Sum</code>. Note that <code>Minimum</code>, <code>Maximum</code>, and <code>Average</code> all return <code>1</code>. Note that <code>Minimum</code>, <code>Maximum</code>, and <code>Average</code> all return <code>1</code>.</p> </li> <li> <p> <b> <code>HTTPCode<em>Instance</em>2XX<em>Count</code> </b> - The number of HTTP response codes generated by the target instances. This does not include any response codes generated by the load balancer.</p> <p> <code>Statistics</code>: The most useful statistic is <code>Sum</code>. Note that <code>Minimum</code>, <code>Maximum</code>, and <code>Average</code> all return <code>1</code>.</p> </li> <li> <p> <b> <code>HTTPCode</em>Instance<em>3XX</em>Count</code> </b> - The number of HTTP response codes generated by the target instances. This does not include any response codes generated by the load balancer. </p> <p> <code>Statistics</code>: The most useful statistic is <code>Sum</code>. Note that <code>Minimum</code>, <code>Maximum</code>, and <code>Average</code> all return <code>1</code>.</p> </li> <li> <p> <b> <code>HTTPCode<em>Instance</em>4XX<em>Count</code> </b> - The number of HTTP response codes generated by the target instances. This does not include any response codes generated by the load balancer.</p> <p> <code>Statistics</code>: The most useful statistic is <code>Sum</code>. Note that <code>Minimum</code>, <code>Maximum</code>, and <code>Average</code> all return <code>1</code>.</p> </li> <li> <p> <b> <code>HTTPCode</em>Instance<em>5XX</em>Count</code> </b> - The number of HTTP response codes generated by the target instances. This does not include any response codes generated by the load balancer.</p> <p> <code>Statistics</code>: The most useful statistic is <code>Sum</code>. Note that <code>Minimum</code>, <code>Maximum</code>, and <code>Average</code> all return <code>1</code>.</p> </li> <li> <p> <b> <code>InstanceResponseTime</code> </b> - The time elapsed, in seconds, after the request leaves the load balancer until a response from the target instance is received.</p> <p> <code>Statistics</code>: The most useful statistic is <code>Average</code>.</p> </li> <li> <p> <b> <code>RejectedConnectionCount</code> </b> - The number of connections that were rejected because the load balancer had reached its maximum number of connections.</p> <p> <code>Statistics</code>: The most useful statistic is <code>Sum</code>.</p> </li> <li> <p> <b> <code>RequestCount</code> </b> - The number of requests processed over IPv4. This count includes only the requests with a response generated by a target instance of the load balancer.</p> <p> <code>Statistics</code>: The most useful statistic is <code>Sum</code>. Note that <code>Minimum</code>, <code>Maximum</code>, and <code>Average</code> all return <code>1</code>.</p> </li> </ul></p>
     #[serde(rename = "metricName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub metric_name: Option<String>,
@@ -1324,14 +1324,14 @@ pub struct GetLoadBalancerResult {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct GetLoadBalancerTlsCertificatesRequest {
-    /// <p>The name of the load balancer where you stored your TLS/SSL certificate.</p>
+    /// <p>The name of the load balancer you associated with your SSL/TLS certificate.</p>
     #[serde(rename = "loadBalancerName")]
     pub load_balancer_name: String,
 }
 
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetLoadBalancerTlsCertificatesResult {
-    /// <p>An array of LoadBalancerTlsCertificate objects describing your TLS/SSL certificates.</p>
+    /// <p>An array of LoadBalancerTlsCertificate objects describing your SSL/TLS certificates.</p>
     #[serde(rename = "tlsCertificates")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tls_certificates: Option<Vec<LoadBalancerTlsCertificate>>,
@@ -1626,7 +1626,7 @@ pub struct InstanceHealthSummary {
     #[serde(rename = "instanceHealth")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub instance_health: Option<String>,
-    /// <p>More information about the instance health. Valid values are below.</p>
+    /// <p><p>More information about the instance health. If the <code>instanceHealth</code> is <code>healthy</code>, then an <code>instanceHealthReason</code> value is not provided.</p> <p>If <b> <code>instanceHealth</code> </b> is <code>initial</code>, the <b> <code>instanceHealthReason</code> </b> value can be one of the following:</p> <ul> <li> <p> <b> <code>Lb.RegistrationInProgress</code> </b> - The target instance is in the process of being registered with the load balancer.</p> </li> <li> <p> <b> <code>Lb.InitialHealthChecking</code> </b> - The Lightsail load balancer is still sending the target instance the minimum number of health checks required to determine its health status.</p> </li> </ul> <p>If <b> <code>instanceHealth</code> </b> is <code>unhealthy</code>, the <b> <code>instanceHealthReason</code> </b> value can be one of the following:</p> <ul> <li> <p> <b> <code>Instance.ResponseCodeMismatch</code> </b> - The health checks did not return an expected HTTP code.</p> </li> <li> <p> <b> <code>Instance.Timeout</code> </b> - The health check requests timed out.</p> </li> <li> <p> <b> <code>Instance.FailedHealthChecks</code> </b> - The health checks failed because the connection to the target instance timed out, the target instance response was malformed, or the target instance failed the health check for an unknown reason.</p> </li> <li> <p> <b> <code>Lb.InternalError</code> </b> - The health checks failed due to an internal error.</p> </li> </ul> <p>If <b> <code>instanceHealth</code> </b> is <code>unused</code>, the <b> <code>instanceHealthReason</code> </b> value can be one of the following:</p> <ul> <li> <p> <b> <code>Instance.NotRegistered</code> </b> - The target instance is not registered with the target group.</p> </li> <li> <p> <b> <code>Instance.NotInUse</code> </b> - The target group is not used by any load balancer, or the target instance is in an Availability Zone that is not enabled for its load balancer.</p> </li> <li> <p> <b> <code>Instance.IpUnusable</code> </b> - The target IP address is reserved for use by a Lightsail load balancer.</p> </li> <li> <p> <b> <code>Instance.InvalidState</code> </b> - The target is in the stopped or terminated state.</p> </li> </ul> <p>If <b> <code>instanceHealth</code> </b> is <code>draining</code>, the <b> <code>instanceHealthReason</code> </b> value can be one of the following:</p> <ul> <li> <p> <b> <code>Instance.DeregistrationInProgress</code> </b> - The target instance is in the process of being deregistered and the deregistration delay period has not expired.</p> </li> </ul></p>
     #[serde(rename = "instanceHealthReason")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub instance_health_reason: Option<String>,
@@ -1848,11 +1848,11 @@ pub struct LoadBalancer {
     #[serde(rename = "instanceHealthSummary")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub instance_health_summary: Option<Vec<InstanceHealthSummary>>,
-    /// <p>The instance port where the load balancer is listening.</p>
+    /// <p>The port where the load balancer will direct traffic to your Lightsail instances. For HTTP traffic, it's port 80. For HTTPS traffic, it's port 443.</p>
     #[serde(rename = "instancePort")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub instance_port: Option<i64>,
-    /// <p>The AWS Region and Availability Zone where your load balancer was created (e.g., <code>us-east-2a</code>).</p>
+    /// <p>The AWS Region where your load balancer was created (e.g., <code>us-east-2a</code>). Lightsail automatically creates your load balancer across Availability Zones.</p>
     #[serde(rename = "location")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub location: Option<ResourceLocation>,
@@ -1860,11 +1860,11 @@ pub struct LoadBalancer {
     #[serde(rename = "name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p>The protocol you have enabled for your load balancer. Valid values are below.</p>
+    /// <p>The protocol you have enabled for your load balancer. Valid values are below.</p> <p>You can't just have <code>HTTP_HTTPS</code>, but you can have just <code>HTTP</code>.</p>
     #[serde(rename = "protocol")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub protocol: Option<String>,
-    /// <p>An array of public port settings for your load balancer.</p>
+    /// <p>An array of public port settings for your load balancer. For HTTP, use port 80. For HTTPS, use port 443.</p>
     #[serde(rename = "publicPorts")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub public_ports: Option<Vec<i64>>,
@@ -1880,24 +1880,24 @@ pub struct LoadBalancer {
     #[serde(rename = "supportCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub support_code: Option<String>,
-    /// <p>An array of LoadBalancerTlsCertificateSummary objects that provide additional information about the TLS/SSL certificates.</p>
+    /// <p>An array of LoadBalancerTlsCertificateSummary objects that provide additional information about the SSL/TLS certificates. For example, if <code>true</code>, the certificate is attached to the load balancer.</p>
     #[serde(rename = "tlsCertificateSummaries")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tls_certificate_summaries: Option<Vec<LoadBalancerTlsCertificateSummary>>,
 }
 
-/// <p>Describes a load balancer TLS/SSL certificate.</p> <p>TLS is just an updated, more secure version of Secure Socket Layer (SSL).</p>
+/// <p>Describes a load balancer SSL/TLS certificate.</p> <p>TLS is just an updated, more secure version of Secure Socket Layer (SSL).</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct LoadBalancerTlsCertificate {
-    /// <p>The Amazon Resource Name (ARN) of the TLS/SSL certificate.</p>
+    /// <p>The Amazon Resource Name (ARN) of the SSL/TLS certificate.</p>
     #[serde(rename = "arn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub arn: Option<String>,
-    /// <p>The time when you created your TLS/SSL certificate.</p>
+    /// <p>The time when you created your SSL/TLS certificate.</p>
     #[serde(rename = "createdAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub created_at: Option<f64>,
-    /// <p>The domain name for your TLS/SSL certificate.</p>
+    /// <p>The domain name for your SSL/TLS certificate.</p>
     #[serde(rename = "domainName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub domain_name: Option<String>,
@@ -1905,15 +1905,15 @@ pub struct LoadBalancerTlsCertificate {
     #[serde(rename = "domainValidationRecords")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub domain_validation_records: Option<Vec<LoadBalancerTlsCertificateDomainValidationRecord>>,
-    /// <p>The reason for the TLS/SSL certificate validation failure.</p>
+    /// <p>The reason for the SSL/TLS certificate validation failure.</p>
     #[serde(rename = "failureReason")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub failure_reason: Option<String>,
-    /// <p>When <code>true</code>, the TLS/SSL certificate is attached to the Lightsail load balancer.</p>
+    /// <p>When <code>true</code>, the SSL/TLS certificate is attached to the Lightsail load balancer.</p>
     #[serde(rename = "isAttached")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub is_attached: Option<bool>,
-    /// <p>The time when the TLS/SSL certificate was issued.</p>
+    /// <p>The time when the SSL/TLS certificate was issued.</p>
     #[serde(rename = "issuedAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub issued_at: Option<f64>,
@@ -1925,7 +1925,7 @@ pub struct LoadBalancerTlsCertificate {
     #[serde(rename = "keyAlgorithm")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub key_algorithm: Option<String>,
-    /// <p>The load balancer name where your TLS/SSL certificate is attached.</p>
+    /// <p>The load balancer name where your SSL/TLS certificate is attached.</p>
     #[serde(rename = "loadBalancerName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub load_balancer_name: Option<String>,
@@ -1933,15 +1933,15 @@ pub struct LoadBalancerTlsCertificate {
     #[serde(rename = "location")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub location: Option<ResourceLocation>,
-    /// <p>The name of the TLS/SSL certificate (e.g., <code>my-certificate</code>).</p>
+    /// <p>The name of the SSL/TLS certificate (e.g., <code>my-certificate</code>).</p>
     #[serde(rename = "name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p>The timestamp when the TLS/SSL certificate expires.</p>
+    /// <p>The timestamp when the SSL/TLS certificate expires.</p>
     #[serde(rename = "notAfter")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub not_after: Option<f64>,
-    /// <p>The timestamp when the TLS/SSL certificate is first valid.</p>
+    /// <p>The timestamp when the SSL/TLS certificate is first valid.</p>
     #[serde(rename = "notBefore")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub not_before: Option<f64>,
@@ -1949,7 +1949,7 @@ pub struct LoadBalancerTlsCertificate {
     #[serde(rename = "renewalSummary")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub renewal_summary: Option<LoadBalancerTlsCertificateRenewalSummary>,
-    /// <p>The resource type (e.g., <code>LoadBalancerTlsCertificate</code>.</p>
+    /// <p><p>The resource type (e.g., <code>LoadBalancerTlsCertificate</code>).</p> <ul> <li> <p> <b> <code>Instance</code> </b> - A Lightsail instance (a virtual private server)</p> </li> <li> <p> <b> <code>StaticIp</code> </b> - A static IP address</p> </li> <li> <p> <b> <code>KeyPair</code> </b> - The key pair used to connect to a Lightsail instance</p> </li> <li> <p> <b> <code>InstanceSnapshot</code> </b> - A Lightsail instance snapshot</p> </li> <li> <p> <b> <code>Domain</code> </b> - A DNS zone</p> </li> <li> <p> <b> <code>PeeredVpc</code> </b> - A peered VPC</p> </li> <li> <p> <b> <code>LoadBalancer</code> </b> - A Lightsail load balancer</p> </li> <li> <p> <b> <code>LoadBalancerTlsCertificate</code> </b> - An SSL/TLS certificate associated with a Lightsail load balancer</p> </li> <li> <p> <b> <code>Disk</code> </b> - A Lightsail block storage disk</p> </li> <li> <p> <b> <code>DiskSnapshot</code> </b> - A block storage disk snapshot</p> </li> </ul></p>
     #[serde(rename = "resourceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_type: Option<String>,
@@ -1957,7 +1957,7 @@ pub struct LoadBalancerTlsCertificate {
     #[serde(rename = "revocationReason")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub revocation_reason: Option<String>,
-    /// <p>The timestamp when the TLS/SSL certificate was revoked.</p>
+    /// <p>The timestamp when the SSL/TLS certificate was revoked.</p>
     #[serde(rename = "revokedAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub revoked_at: Option<f64>,
@@ -1969,7 +1969,7 @@ pub struct LoadBalancerTlsCertificate {
     #[serde(rename = "signatureAlgorithm")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub signature_algorithm: Option<String>,
-    /// <p>The status of the TLS/SSL certificate. Valid values are below.</p>
+    /// <p>The status of the SSL/TLS certificate. Valid values are below.</p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
@@ -1977,20 +1977,20 @@ pub struct LoadBalancerTlsCertificate {
     #[serde(rename = "subject")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub subject: Option<String>,
-    /// <p>One or more domain names (subject alternative names) included in the certificate. This list contains the domain names that are bound to the public key that is contained in the certificate. The subject alternative names include the canonical domain name (CN) of the certificate and additional domain names that can be used to connect to the website.</p>
+    /// <p>One or more domains or subdomains included in the certificate. This list contains the domain names that are bound to the public key that is contained in the certificate. The subject alternative names include the canonical domain name (CNAME) of the certificate and additional domain names that can be used to connect to the website, such as <code>example.com</code>, <code>www.example.com</code>, or <code>m.example.com</code>.</p>
     #[serde(rename = "subjectAlternativeNames")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub subject_alternative_names: Option<Vec<String>>,
-    /// <p>The support code. Include this code in your email to support when you have questions about your Lightsail load balancer or TLS/SSL certificate. This code enables our support team to look up your Lightsail information more easily.</p>
+    /// <p>The support code. Include this code in your email to support when you have questions about your Lightsail load balancer or SSL/TLS certificate. This code enables our support team to look up your Lightsail information more easily.</p>
     #[serde(rename = "supportCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub support_code: Option<String>,
 }
 
-/// <p>Contains information about the domain names on a TLS/SSL certificate that you will use to validate domain ownership.</p>
+/// <p>Contains information about the domain names on an SSL/TLS certificate that you will use to validate domain ownership.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct LoadBalancerTlsCertificateDomainValidationOption {
-    /// <p>A fully qualified domain name in the certificate request.</p>
+    /// <p>The fully qualified domain name in the certificate request.</p>
     #[serde(rename = "domainName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub domain_name: Option<String>,
@@ -2000,10 +2000,10 @@ pub struct LoadBalancerTlsCertificateDomainValidationOption {
     pub validation_status: Option<String>,
 }
 
-/// <p>Describes the validation record of each domain name in the TLS/SSL certificate.</p>
+/// <p>Describes the validation record of each domain name in the SSL/TLS certificate.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct LoadBalancerTlsCertificateDomainValidationRecord {
-    /// <p>The domain name against which your TLS/SSL certificate was validated.</p>
+    /// <p>The domain name against which your SSL/TLS certificate was validated.</p>
     #[serde(rename = "domainName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub domain_name: Option<String>,
@@ -2038,14 +2038,14 @@ pub struct LoadBalancerTlsCertificateRenewalSummary {
     pub renewal_status: Option<String>,
 }
 
-/// <p>Provides a summary of TLS/SSL certificate metadata.</p>
+/// <p>Provides a summary of SSL/TLS certificate metadata.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct LoadBalancerTlsCertificateSummary {
-    /// <p>When <code>true</code>, the TLS/SSL certificate is attached to the Lightsail load balancer.</p>
+    /// <p>When <code>true</code>, the SSL/TLS certificate is attached to the Lightsail load balancer.</p>
     #[serde(rename = "isAttached")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub is_attached: Option<bool>,
-    /// <p>The name of the TLS/SSL certificate.</p>
+    /// <p>The name of the SSL/TLS certificate.</p>
     #[serde(rename = "name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
@@ -2232,7 +2232,7 @@ pub struct RebootInstanceRequest {
 
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct RebootInstanceResult {
-    /// <p>An array of key-value pairs containing information about the request operation.</p>
+    /// <p>An array of key-value pairs containing information about the request operations.</p>
     #[serde(rename = "operations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub operations: Option<Vec<Operation>>,
@@ -2403,7 +2403,7 @@ pub struct UpdateLoadBalancerAttributeRequest {
     /// <p>The value that you want to specify for the attribute name.</p>
     #[serde(rename = "attributeValue")]
     pub attribute_value: String,
-    /// <p>The name of the load balancer that you want to modify.</p>
+    /// <p>The name of the load balancer that you want to modify (e.g., <code>my-load-balancer</code>.</p>
     #[serde(rename = "loadBalancerName")]
     pub load_balancer_name: String,
 }
@@ -2423,7 +2423,7 @@ pub enum AllocateStaticIpError {
     AccessDenied(String),
     /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
     AccountSetupInProgress(String),
-    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your AWS Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
     InvalidInput(String),
     /// <p>Lightsail throws this exception when it cannot find a resource.</p>
     NotFound(String),
@@ -2537,7 +2537,7 @@ pub enum AttachDiskError {
     AccessDenied(String),
     /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
     AccountSetupInProgress(String),
-    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your AWS Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
     InvalidInput(String),
     /// <p>Lightsail throws this exception when it cannot find a resource.</p>
     NotFound(String),
@@ -2645,7 +2645,7 @@ pub enum AttachInstancesToLoadBalancerError {
     AccessDenied(String),
     /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
     AccountSetupInProgress(String),
-    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your AWS Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
     InvalidInput(String),
     /// <p>Lightsail throws this exception when it cannot find a resource.</p>
     NotFound(String),
@@ -2767,7 +2767,7 @@ pub enum AttachLoadBalancerTlsCertificateError {
     AccessDenied(String),
     /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
     AccountSetupInProgress(String),
-    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your AWS Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
     InvalidInput(String),
     /// <p>Lightsail throws this exception when it cannot find a resource.</p>
     NotFound(String),
@@ -2800,21 +2800,17 @@ impl AttachLoadBalancerTlsCertificateError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "AccessDeniedException" => {
-                        AttachLoadBalancerTlsCertificateError::AccessDenied(String::from(
-                            error_message,
-                        ))
-                    }
+                    "AccessDeniedException" => AttachLoadBalancerTlsCertificateError::AccessDenied(
+                        String::from(error_message),
+                    ),
                     "AccountSetupInProgressException" => {
-                        AttachLoadBalancerTlsCertificateError::AccountSetupInProgress(
-                            String::from(error_message),
-                        )
-                    }
-                    "InvalidInputException" => {
-                        AttachLoadBalancerTlsCertificateError::InvalidInput(String::from(
+                        AttachLoadBalancerTlsCertificateError::AccountSetupInProgress(String::from(
                             error_message,
                         ))
                     }
+                    "InvalidInputException" => AttachLoadBalancerTlsCertificateError::InvalidInput(
+                        String::from(error_message),
+                    ),
                     "NotFoundException" => {
                         AttachLoadBalancerTlsCertificateError::NotFound(String::from(error_message))
                     }
@@ -2893,7 +2889,7 @@ pub enum AttachStaticIpError {
     AccessDenied(String),
     /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
     AccountSetupInProgress(String),
-    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your AWS Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
     InvalidInput(String),
     /// <p>Lightsail throws this exception when it cannot find a resource.</p>
     NotFound(String),
@@ -3005,7 +3001,7 @@ pub enum CloseInstancePublicPortsError {
     AccessDenied(String),
     /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
     AccountSetupInProgress(String),
-    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your AWS Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
     InvalidInput(String),
     /// <p>Lightsail throws this exception when it cannot find a resource.</p>
     NotFound(String),
@@ -3123,7 +3119,7 @@ pub enum CreateDiskError {
     AccessDenied(String),
     /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
     AccountSetupInProgress(String),
-    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your AWS Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
     InvalidInput(String),
     /// <p>Lightsail throws this exception when it cannot find a resource.</p>
     NotFound(String),
@@ -3231,7 +3227,7 @@ pub enum CreateDiskFromSnapshotError {
     AccessDenied(String),
     /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
     AccountSetupInProgress(String),
-    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your AWS Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
     InvalidInput(String),
     /// <p>Lightsail throws this exception when it cannot find a resource.</p>
     NotFound(String),
@@ -3349,7 +3345,7 @@ pub enum CreateDiskSnapshotError {
     AccessDenied(String),
     /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
     AccountSetupInProgress(String),
-    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your AWS Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
     InvalidInput(String),
     /// <p>Lightsail throws this exception when it cannot find a resource.</p>
     NotFound(String),
@@ -3465,7 +3461,7 @@ pub enum CreateDomainError {
     AccessDenied(String),
     /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
     AccountSetupInProgress(String),
-    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your AWS Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
     InvalidInput(String),
     /// <p>Lightsail throws this exception when it cannot find a resource.</p>
     NotFound(String),
@@ -3575,7 +3571,7 @@ pub enum CreateDomainEntryError {
     AccessDenied(String),
     /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
     AccountSetupInProgress(String),
-    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your AWS Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
     InvalidInput(String),
     /// <p>Lightsail throws this exception when it cannot find a resource.</p>
     NotFound(String),
@@ -3691,7 +3687,7 @@ pub enum CreateInstanceSnapshotError {
     AccessDenied(String),
     /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
     AccountSetupInProgress(String),
-    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your AWS Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
     InvalidInput(String),
     /// <p>Lightsail throws this exception when it cannot find a resource.</p>
     NotFound(String),
@@ -3809,7 +3805,7 @@ pub enum CreateInstancesError {
     AccessDenied(String),
     /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
     AccountSetupInProgress(String),
-    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your AWS Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
     InvalidInput(String),
     /// <p>Lightsail throws this exception when it cannot find a resource.</p>
     NotFound(String),
@@ -3923,7 +3919,7 @@ pub enum CreateInstancesFromSnapshotError {
     AccessDenied(String),
     /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
     AccountSetupInProgress(String),
-    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your AWS Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
     InvalidInput(String),
     /// <p>Lightsail throws this exception when it cannot find a resource.</p>
     NotFound(String),
@@ -4045,7 +4041,7 @@ pub enum CreateKeyPairError {
     AccessDenied(String),
     /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
     AccountSetupInProgress(String),
-    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your AWS Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
     InvalidInput(String),
     /// <p>Lightsail throws this exception when it cannot find a resource.</p>
     NotFound(String),
@@ -4157,7 +4153,7 @@ pub enum CreateLoadBalancerError {
     AccessDenied(String),
     /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
     AccountSetupInProgress(String),
-    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your AWS Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
     InvalidInput(String),
     /// <p>Lightsail throws this exception when it cannot find a resource.</p>
     NotFound(String),
@@ -4273,7 +4269,7 @@ pub enum CreateLoadBalancerTlsCertificateError {
     AccessDenied(String),
     /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
     AccountSetupInProgress(String),
-    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your AWS Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
     InvalidInput(String),
     /// <p>Lightsail throws this exception when it cannot find a resource.</p>
     NotFound(String),
@@ -4306,21 +4302,17 @@ impl CreateLoadBalancerTlsCertificateError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "AccessDeniedException" => {
-                        CreateLoadBalancerTlsCertificateError::AccessDenied(String::from(
-                            error_message,
-                        ))
-                    }
+                    "AccessDeniedException" => CreateLoadBalancerTlsCertificateError::AccessDenied(
+                        String::from(error_message),
+                    ),
                     "AccountSetupInProgressException" => {
-                        CreateLoadBalancerTlsCertificateError::AccountSetupInProgress(
-                            String::from(error_message),
-                        )
-                    }
-                    "InvalidInputException" => {
-                        CreateLoadBalancerTlsCertificateError::InvalidInput(String::from(
+                        CreateLoadBalancerTlsCertificateError::AccountSetupInProgress(String::from(
                             error_message,
                         ))
                     }
+                    "InvalidInputException" => CreateLoadBalancerTlsCertificateError::InvalidInput(
+                        String::from(error_message),
+                    ),
                     "NotFoundException" => {
                         CreateLoadBalancerTlsCertificateError::NotFound(String::from(error_message))
                     }
@@ -4399,7 +4391,7 @@ pub enum DeleteDiskError {
     AccessDenied(String),
     /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
     AccountSetupInProgress(String),
-    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your AWS Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
     InvalidInput(String),
     /// <p>Lightsail throws this exception when it cannot find a resource.</p>
     NotFound(String),
@@ -4507,7 +4499,7 @@ pub enum DeleteDiskSnapshotError {
     AccessDenied(String),
     /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
     AccountSetupInProgress(String),
-    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your AWS Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
     InvalidInput(String),
     /// <p>Lightsail throws this exception when it cannot find a resource.</p>
     NotFound(String),
@@ -4623,7 +4615,7 @@ pub enum DeleteDomainError {
     AccessDenied(String),
     /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
     AccountSetupInProgress(String),
-    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your AWS Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
     InvalidInput(String),
     /// <p>Lightsail throws this exception when it cannot find a resource.</p>
     NotFound(String),
@@ -4733,7 +4725,7 @@ pub enum DeleteDomainEntryError {
     AccessDenied(String),
     /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
     AccountSetupInProgress(String),
-    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your AWS Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
     InvalidInput(String),
     /// <p>Lightsail throws this exception when it cannot find a resource.</p>
     NotFound(String),
@@ -4849,7 +4841,7 @@ pub enum DeleteInstanceError {
     AccessDenied(String),
     /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
     AccountSetupInProgress(String),
-    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your AWS Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
     InvalidInput(String),
     /// <p>Lightsail throws this exception when it cannot find a resource.</p>
     NotFound(String),
@@ -4961,7 +4953,7 @@ pub enum DeleteInstanceSnapshotError {
     AccessDenied(String),
     /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
     AccountSetupInProgress(String),
-    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your AWS Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
     InvalidInput(String),
     /// <p>Lightsail throws this exception when it cannot find a resource.</p>
     NotFound(String),
@@ -5079,7 +5071,7 @@ pub enum DeleteKeyPairError {
     AccessDenied(String),
     /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
     AccountSetupInProgress(String),
-    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your AWS Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
     InvalidInput(String),
     /// <p>Lightsail throws this exception when it cannot find a resource.</p>
     NotFound(String),
@@ -5191,7 +5183,7 @@ pub enum DeleteLoadBalancerError {
     AccessDenied(String),
     /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
     AccountSetupInProgress(String),
-    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your AWS Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
     InvalidInput(String),
     /// <p>Lightsail throws this exception when it cannot find a resource.</p>
     NotFound(String),
@@ -5307,7 +5299,7 @@ pub enum DeleteLoadBalancerTlsCertificateError {
     AccessDenied(String),
     /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
     AccountSetupInProgress(String),
-    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your AWS Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
     InvalidInput(String),
     /// <p>Lightsail throws this exception when it cannot find a resource.</p>
     NotFound(String),
@@ -5340,21 +5332,17 @@ impl DeleteLoadBalancerTlsCertificateError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "AccessDeniedException" => {
-                        DeleteLoadBalancerTlsCertificateError::AccessDenied(String::from(
-                            error_message,
-                        ))
-                    }
+                    "AccessDeniedException" => DeleteLoadBalancerTlsCertificateError::AccessDenied(
+                        String::from(error_message),
+                    ),
                     "AccountSetupInProgressException" => {
-                        DeleteLoadBalancerTlsCertificateError::AccountSetupInProgress(
-                            String::from(error_message),
-                        )
-                    }
-                    "InvalidInputException" => {
-                        DeleteLoadBalancerTlsCertificateError::InvalidInput(String::from(
+                        DeleteLoadBalancerTlsCertificateError::AccountSetupInProgress(String::from(
                             error_message,
                         ))
                     }
+                    "InvalidInputException" => DeleteLoadBalancerTlsCertificateError::InvalidInput(
+                        String::from(error_message),
+                    ),
                     "NotFoundException" => {
                         DeleteLoadBalancerTlsCertificateError::NotFound(String::from(error_message))
                     }
@@ -5433,7 +5421,7 @@ pub enum DetachDiskError {
     AccessDenied(String),
     /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
     AccountSetupInProgress(String),
-    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your AWS Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
     InvalidInput(String),
     /// <p>Lightsail throws this exception when it cannot find a resource.</p>
     NotFound(String),
@@ -5541,7 +5529,7 @@ pub enum DetachInstancesFromLoadBalancerError {
     AccessDenied(String),
     /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
     AccountSetupInProgress(String),
-    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your AWS Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
     InvalidInput(String),
     /// <p>Lightsail throws this exception when it cannot find a resource.</p>
     NotFound(String),
@@ -5663,7 +5651,7 @@ pub enum DetachStaticIpError {
     AccessDenied(String),
     /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
     AccountSetupInProgress(String),
-    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your AWS Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
     InvalidInput(String),
     /// <p>Lightsail throws this exception when it cannot find a resource.</p>
     NotFound(String),
@@ -5775,7 +5763,7 @@ pub enum DownloadDefaultKeyPairError {
     AccessDenied(String),
     /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
     AccountSetupInProgress(String),
-    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your AWS Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
     InvalidInput(String),
     /// <p>Lightsail throws this exception when it cannot find a resource.</p>
     NotFound(String),
@@ -5893,7 +5881,7 @@ pub enum GetActiveNamesError {
     AccessDenied(String),
     /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
     AccountSetupInProgress(String),
-    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your AWS Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
     InvalidInput(String),
     /// <p>Lightsail throws this exception when it cannot find a resource.</p>
     NotFound(String),
@@ -6005,7 +5993,7 @@ pub enum GetBlueprintsError {
     AccessDenied(String),
     /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
     AccountSetupInProgress(String),
-    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your AWS Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
     InvalidInput(String),
     /// <p>Lightsail throws this exception when it cannot find a resource.</p>
     NotFound(String),
@@ -6117,7 +6105,7 @@ pub enum GetBundlesError {
     AccessDenied(String),
     /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
     AccountSetupInProgress(String),
-    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your AWS Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
     InvalidInput(String),
     /// <p>Lightsail throws this exception when it cannot find a resource.</p>
     NotFound(String),
@@ -6225,7 +6213,7 @@ pub enum GetDiskError {
     AccessDenied(String),
     /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
     AccountSetupInProgress(String),
-    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your AWS Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
     InvalidInput(String),
     /// <p>Lightsail throws this exception when it cannot find a resource.</p>
     NotFound(String),
@@ -6333,7 +6321,7 @@ pub enum GetDiskSnapshotError {
     AccessDenied(String),
     /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
     AccountSetupInProgress(String),
-    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your AWS Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
     InvalidInput(String),
     /// <p>Lightsail throws this exception when it cannot find a resource.</p>
     NotFound(String),
@@ -6447,7 +6435,7 @@ pub enum GetDiskSnapshotsError {
     AccessDenied(String),
     /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
     AccountSetupInProgress(String),
-    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your AWS Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
     InvalidInput(String),
     /// <p>Lightsail throws this exception when it cannot find a resource.</p>
     NotFound(String),
@@ -6561,7 +6549,7 @@ pub enum GetDisksError {
     AccessDenied(String),
     /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
     AccountSetupInProgress(String),
-    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your AWS Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
     InvalidInput(String),
     /// <p>Lightsail throws this exception when it cannot find a resource.</p>
     NotFound(String),
@@ -6669,7 +6657,7 @@ pub enum GetDomainError {
     AccessDenied(String),
     /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
     AccountSetupInProgress(String),
-    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your AWS Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
     InvalidInput(String),
     /// <p>Lightsail throws this exception when it cannot find a resource.</p>
     NotFound(String),
@@ -6777,7 +6765,7 @@ pub enum GetDomainsError {
     AccessDenied(String),
     /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
     AccountSetupInProgress(String),
-    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your AWS Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
     InvalidInput(String),
     /// <p>Lightsail throws this exception when it cannot find a resource.</p>
     NotFound(String),
@@ -6885,7 +6873,7 @@ pub enum GetInstanceError {
     AccessDenied(String),
     /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
     AccountSetupInProgress(String),
-    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your AWS Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
     InvalidInput(String),
     /// <p>Lightsail throws this exception when it cannot find a resource.</p>
     NotFound(String),
@@ -6995,7 +6983,7 @@ pub enum GetInstanceAccessDetailsError {
     AccessDenied(String),
     /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
     AccountSetupInProgress(String),
-    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your AWS Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
     InvalidInput(String),
     /// <p>Lightsail throws this exception when it cannot find a resource.</p>
     NotFound(String),
@@ -7113,7 +7101,7 @@ pub enum GetInstanceMetricDataError {
     AccessDenied(String),
     /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
     AccountSetupInProgress(String),
-    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your AWS Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
     InvalidInput(String),
     /// <p>Lightsail throws this exception when it cannot find a resource.</p>
     NotFound(String),
@@ -7231,7 +7219,7 @@ pub enum GetInstancePortStatesError {
     AccessDenied(String),
     /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
     AccountSetupInProgress(String),
-    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your AWS Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
     InvalidInput(String),
     /// <p>Lightsail throws this exception when it cannot find a resource.</p>
     NotFound(String),
@@ -7349,7 +7337,7 @@ pub enum GetInstanceSnapshotError {
     AccessDenied(String),
     /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
     AccountSetupInProgress(String),
-    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your AWS Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
     InvalidInput(String),
     /// <p>Lightsail throws this exception when it cannot find a resource.</p>
     NotFound(String),
@@ -7467,7 +7455,7 @@ pub enum GetInstanceSnapshotsError {
     AccessDenied(String),
     /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
     AccountSetupInProgress(String),
-    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your AWS Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
     InvalidInput(String),
     /// <p>Lightsail throws this exception when it cannot find a resource.</p>
     NotFound(String),
@@ -7585,7 +7573,7 @@ pub enum GetInstanceStateError {
     AccessDenied(String),
     /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
     AccountSetupInProgress(String),
-    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your AWS Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
     InvalidInput(String),
     /// <p>Lightsail throws this exception when it cannot find a resource.</p>
     NotFound(String),
@@ -7699,7 +7687,7 @@ pub enum GetInstancesError {
     AccessDenied(String),
     /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
     AccountSetupInProgress(String),
-    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your AWS Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
     InvalidInput(String),
     /// <p>Lightsail throws this exception when it cannot find a resource.</p>
     NotFound(String),
@@ -7809,7 +7797,7 @@ pub enum GetKeyPairError {
     AccessDenied(String),
     /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
     AccountSetupInProgress(String),
-    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your AWS Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
     InvalidInput(String),
     /// <p>Lightsail throws this exception when it cannot find a resource.</p>
     NotFound(String),
@@ -7917,7 +7905,7 @@ pub enum GetKeyPairsError {
     AccessDenied(String),
     /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
     AccountSetupInProgress(String),
-    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your AWS Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
     InvalidInput(String),
     /// <p>Lightsail throws this exception when it cannot find a resource.</p>
     NotFound(String),
@@ -8027,7 +8015,7 @@ pub enum GetLoadBalancerError {
     AccessDenied(String),
     /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
     AccountSetupInProgress(String),
-    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your AWS Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
     InvalidInput(String),
     /// <p>Lightsail throws this exception when it cannot find a resource.</p>
     NotFound(String),
@@ -8141,7 +8129,7 @@ pub enum GetLoadBalancerMetricDataError {
     AccessDenied(String),
     /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
     AccountSetupInProgress(String),
-    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your AWS Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
     InvalidInput(String),
     /// <p>Lightsail throws this exception when it cannot find a resource.</p>
     NotFound(String),
@@ -8261,7 +8249,7 @@ pub enum GetLoadBalancerTlsCertificatesError {
     AccessDenied(String),
     /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
     AccountSetupInProgress(String),
-    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your AWS Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
     InvalidInput(String),
     /// <p>Lightsail throws this exception when it cannot find a resource.</p>
     NotFound(String),
@@ -8383,7 +8371,7 @@ pub enum GetLoadBalancersError {
     AccessDenied(String),
     /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
     AccountSetupInProgress(String),
-    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your AWS Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
     InvalidInput(String),
     /// <p>Lightsail throws this exception when it cannot find a resource.</p>
     NotFound(String),
@@ -8497,7 +8485,7 @@ pub enum GetOperationError {
     AccessDenied(String),
     /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
     AccountSetupInProgress(String),
-    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your AWS Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
     InvalidInput(String),
     /// <p>Lightsail throws this exception when it cannot find a resource.</p>
     NotFound(String),
@@ -8607,7 +8595,7 @@ pub enum GetOperationsError {
     AccessDenied(String),
     /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
     AccountSetupInProgress(String),
-    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your AWS Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
     InvalidInput(String),
     /// <p>Lightsail throws this exception when it cannot find a resource.</p>
     NotFound(String),
@@ -8719,7 +8707,7 @@ pub enum GetOperationsForResourceError {
     AccessDenied(String),
     /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
     AccountSetupInProgress(String),
-    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your AWS Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
     InvalidInput(String),
     /// <p>Lightsail throws this exception when it cannot find a resource.</p>
     NotFound(String),
@@ -8837,7 +8825,7 @@ pub enum GetRegionsError {
     AccessDenied(String),
     /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
     AccountSetupInProgress(String),
-    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your AWS Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
     InvalidInput(String),
     /// <p>Lightsail throws this exception when it cannot find a resource.</p>
     NotFound(String),
@@ -8945,7 +8933,7 @@ pub enum GetStaticIpError {
     AccessDenied(String),
     /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
     AccountSetupInProgress(String),
-    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your AWS Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
     InvalidInput(String),
     /// <p>Lightsail throws this exception when it cannot find a resource.</p>
     NotFound(String),
@@ -9055,7 +9043,7 @@ pub enum GetStaticIpsError {
     AccessDenied(String),
     /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
     AccountSetupInProgress(String),
-    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your AWS Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
     InvalidInput(String),
     /// <p>Lightsail throws this exception when it cannot find a resource.</p>
     NotFound(String),
@@ -9165,7 +9153,7 @@ pub enum ImportKeyPairError {
     AccessDenied(String),
     /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
     AccountSetupInProgress(String),
-    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your AWS Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
     InvalidInput(String),
     /// <p>Lightsail throws this exception when it cannot find a resource.</p>
     NotFound(String),
@@ -9277,7 +9265,7 @@ pub enum IsVpcPeeredError {
     AccessDenied(String),
     /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
     AccountSetupInProgress(String),
-    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your AWS Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
     InvalidInput(String),
     /// <p>Lightsail throws this exception when it cannot find a resource.</p>
     NotFound(String),
@@ -9387,7 +9375,7 @@ pub enum OpenInstancePublicPortsError {
     AccessDenied(String),
     /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
     AccountSetupInProgress(String),
-    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your AWS Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
     InvalidInput(String),
     /// <p>Lightsail throws this exception when it cannot find a resource.</p>
     NotFound(String),
@@ -9505,7 +9493,7 @@ pub enum PeerVpcError {
     AccessDenied(String),
     /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
     AccountSetupInProgress(String),
-    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your AWS Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
     InvalidInput(String),
     /// <p>Lightsail throws this exception when it cannot find a resource.</p>
     NotFound(String),
@@ -9613,7 +9601,7 @@ pub enum PutInstancePublicPortsError {
     AccessDenied(String),
     /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
     AccountSetupInProgress(String),
-    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your AWS Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
     InvalidInput(String),
     /// <p>Lightsail throws this exception when it cannot find a resource.</p>
     NotFound(String),
@@ -9731,7 +9719,7 @@ pub enum RebootInstanceError {
     AccessDenied(String),
     /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
     AccountSetupInProgress(String),
-    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your AWS Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
     InvalidInput(String),
     /// <p>Lightsail throws this exception when it cannot find a resource.</p>
     NotFound(String),
@@ -9843,7 +9831,7 @@ pub enum ReleaseStaticIpError {
     AccessDenied(String),
     /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
     AccountSetupInProgress(String),
-    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your AWS Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
     InvalidInput(String),
     /// <p>Lightsail throws this exception when it cannot find a resource.</p>
     NotFound(String),
@@ -9957,7 +9945,7 @@ pub enum StartInstanceError {
     AccessDenied(String),
     /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
     AccountSetupInProgress(String),
-    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your AWS Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
     InvalidInput(String),
     /// <p>Lightsail throws this exception when it cannot find a resource.</p>
     NotFound(String),
@@ -10069,7 +10057,7 @@ pub enum StopInstanceError {
     AccessDenied(String),
     /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
     AccountSetupInProgress(String),
-    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your AWS Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
     InvalidInput(String),
     /// <p>Lightsail throws this exception when it cannot find a resource.</p>
     NotFound(String),
@@ -10179,7 +10167,7 @@ pub enum UnpeerVpcError {
     AccessDenied(String),
     /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
     AccountSetupInProgress(String),
-    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your AWS Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
     InvalidInput(String),
     /// <p>Lightsail throws this exception when it cannot find a resource.</p>
     NotFound(String),
@@ -10287,7 +10275,7 @@ pub enum UpdateDomainEntryError {
     AccessDenied(String),
     /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
     AccountSetupInProgress(String),
-    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your AWS Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
     InvalidInput(String),
     /// <p>Lightsail throws this exception when it cannot find a resource.</p>
     NotFound(String),
@@ -10403,7 +10391,7 @@ pub enum UpdateLoadBalancerAttributeError {
     AccessDenied(String),
     /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
     AccountSetupInProgress(String),
-    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your AWS Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
     InvalidInput(String),
     /// <p>Lightsail throws this exception when it cannot find a resource.</p>
     NotFound(String),
@@ -10532,13 +10520,13 @@ pub trait Lightsail {
         input: &AttachDiskRequest,
     ) -> RusotoFuture<AttachDiskResult, AttachDiskError>;
 
-    /// <p>Attaches one or more Lightsail instances to a load balancer.</p>
+    /// <p>Attaches one or more Lightsail instances to a load balancer.</p> <p>After some time, the instances are attached to the load balancer and the health check status is available.</p>
     fn attach_instances_to_load_balancer(
         &self,
         input: &AttachInstancesToLoadBalancerRequest,
     ) -> RusotoFuture<AttachInstancesToLoadBalancerResult, AttachInstancesToLoadBalancerError>;
 
-    /// <p>Attaches a Transport Layer Security (TLS) certificate to your load balancer.</p> <p>TLS is just an updated, more secure version of Secure Socket Layer (SSL).</p>
+    /// <p>Attaches a Transport Layer Security (TLS) certificate to your load balancer. TLS is just an updated, more secure version of Secure Socket Layer (SSL).</p> <p>Once you create and validate your certificate, you can attach it to your load balancer. You can also use this API to rotate the certificates on your account. Use the <code>AttachLoadBalancerTlsCertificate</code> operation with the non-attached certificate, and it will replace the existing one and become the attached certificate.</p>
     fn attach_load_balancer_tls_certificate(
         &self,
         input: &AttachLoadBalancerTlsCertificateRequest,
@@ -10610,7 +10598,7 @@ pub trait Lightsail {
         input: &CreateKeyPairRequest,
     ) -> RusotoFuture<CreateKeyPairResult, CreateKeyPairError>;
 
-    /// <p>Creates a Lightsail load balancer.</p> <p>When you create a load balancer, you can specify certificates and port settings. You can create up to 5 load balancers per AWS Region in your account.</p>
+    /// <p>Creates a Lightsail load balancer. To learn more about deciding whether to load balance your application, see <a href="https://lightsail.aws.amazon.com/ls/docs/how-to/article/configure-lightsail-instances-for-load-balancing">Configure your Lightsail instances for load balancing</a>. You can create up to 5 load balancers per AWS Region in your account.</p> <p>When you create a load balancer, you can specify a unique name and port settings. To change additional load balancer settings, use the <code>UpdateLoadBalancerAttribute</code> operation.</p>
     fn create_load_balancer(
         &self,
         input: &CreateLoadBalancerRequest,
@@ -10664,13 +10652,13 @@ pub trait Lightsail {
         input: &DeleteKeyPairRequest,
     ) -> RusotoFuture<DeleteKeyPairResult, DeleteKeyPairError>;
 
-    /// <p>Deletes a Lightsail load balancer.</p>
+    /// <p>Deletes a Lightsail load balancer and all its associated SSL/TLS certificates. Once the load balancer is deleted, you will need to create a new load balancer, create a new certificate, and verify domain ownership again.</p>
     fn delete_load_balancer(
         &self,
         input: &DeleteLoadBalancerRequest,
     ) -> RusotoFuture<DeleteLoadBalancerResult, DeleteLoadBalancerError>;
 
-    /// <p>Deletes a TLS/SSL certificate associated with a Lightsail load balancer.</p>
+    /// <p>Deletes an SSL/TLS certificate associated with a Lightsail load balancer.</p>
     fn delete_load_balancer_tls_certificate(
         &self,
         input: &DeleteLoadBalancerTlsCertificateRequest,
@@ -10682,7 +10670,7 @@ pub trait Lightsail {
         input: &DetachDiskRequest,
     ) -> RusotoFuture<DetachDiskResult, DetachDiskError>;
 
-    /// <p>Detaches the specified instances from a Lightsail load balancer.</p>
+    /// <p>Detaches the specified instances from a Lightsail load balancer.</p> <p>This operation waits until the instances are no longer needed before they are detached from the load balancer.</p>
     fn detach_instances_from_load_balancer(
         &self,
         input: &DetachInstancesFromLoadBalancerRequest,
@@ -10817,7 +10805,7 @@ pub trait Lightsail {
         input: &GetLoadBalancerMetricDataRequest,
     ) -> RusotoFuture<GetLoadBalancerMetricDataResult, GetLoadBalancerMetricDataError>;
 
-    /// <p>Returns information about the TLS certificates that are associated with the specified Lightsail load balancer.</p> <p>TLS is just an updated, more secure version of Secure Socket Layer (SSL).</p>
+    /// <p>Returns information about the TLS certificates that are associated with the specified Lightsail load balancer.</p> <p>TLS is just an updated, more secure version of Secure Socket Layer (SSL).</p> <p>You can have a maximum of 2 certificates associated with a Lightsail load balancer. One is active and the other is inactive.</p>
     fn get_load_balancer_tls_certificates(
         &self,
         input: &GetLoadBalancerTlsCertificatesRequest,
@@ -10922,7 +10910,7 @@ pub trait Lightsail {
         input: &UpdateDomainEntryRequest,
     ) -> RusotoFuture<UpdateDomainEntryResult, UpdateDomainEntryError>;
 
-    /// <p>Updates the specified attribute for a load balancer.</p>
+    /// <p>Updates the specified attribute for a load balancer. You can only update one attribute at a time.</p>
     fn update_load_balancer_attribute(
         &self,
         input: &UpdateLoadBalancerAttributeRequest,
@@ -11045,7 +11033,7 @@ where
         RusotoFuture::new(future)
     }
 
-    /// <p>Attaches one or more Lightsail instances to a load balancer.</p>
+    /// <p>Attaches one or more Lightsail instances to a load balancer.</p> <p>After some time, the instances are attached to the load balancer and the health check status is available.</p>
     fn attach_instances_to_load_balancer(
         &self,
         input: &AttachInstancesToLoadBalancerRequest,
@@ -11085,7 +11073,7 @@ where
         RusotoFuture::new(future)
     }
 
-    /// <p>Attaches a Transport Layer Security (TLS) certificate to your load balancer.</p> <p>TLS is just an updated, more secure version of Secure Socket Layer (SSL).</p>
+    /// <p>Attaches a Transport Layer Security (TLS) certificate to your load balancer. TLS is just an updated, more secure version of Secure Socket Layer (SSL).</p> <p>Once you create and validate your certificate, you can attach it to your load balancer. You can also use this API to rotate the certificates on your account. Use the <code>AttachLoadBalancerTlsCertificate</code> operation with the non-attached certificate, and it will replace the existing one and become the attached certificate.</p>
     fn attach_load_balancer_tls_certificate(
         &self,
         input: &AttachLoadBalancerTlsCertificateRequest,
@@ -11539,7 +11527,7 @@ where
         RusotoFuture::new(future)
     }
 
-    /// <p>Creates a Lightsail load balancer.</p> <p>When you create a load balancer, you can specify certificates and port settings. You can create up to 5 load balancers per AWS Region in your account.</p>
+    /// <p>Creates a Lightsail load balancer. To learn more about deciding whether to load balance your application, see <a href="https://lightsail.aws.amazon.com/ls/docs/how-to/article/configure-lightsail-instances-for-load-balancing">Configure your Lightsail instances for load balancing</a>. You can create up to 5 load balancers per AWS Region in your account.</p> <p>When you create a load balancer, you can specify a unique name and port settings. To change additional load balancer settings, use the <code>UpdateLoadBalancerAttribute</code> operation.</p>
     fn create_load_balancer(
         &self,
         input: &CreateLoadBalancerRequest,
@@ -11876,7 +11864,7 @@ where
         RusotoFuture::new(future)
     }
 
-    /// <p>Deletes a Lightsail load balancer.</p>
+    /// <p>Deletes a Lightsail load balancer and all its associated SSL/TLS certificates. Once the load balancer is deleted, you will need to create a new load balancer, create a new certificate, and verify domain ownership again.</p>
     fn delete_load_balancer(
         &self,
         input: &DeleteLoadBalancerRequest,
@@ -11913,7 +11901,7 @@ where
         RusotoFuture::new(future)
     }
 
-    /// <p>Deletes a TLS/SSL certificate associated with a Lightsail load balancer.</p>
+    /// <p>Deletes an SSL/TLS certificate associated with a Lightsail load balancer.</p>
     fn delete_load_balancer_tls_certificate(
         &self,
         input: &DeleteLoadBalancerTlsCertificateRequest,
@@ -11991,7 +11979,7 @@ where
         RusotoFuture::new(future)
     }
 
-    /// <p>Detaches the specified instances from a Lightsail load balancer.</p>
+    /// <p>Detaches the specified instances from a Lightsail load balancer.</p> <p>This operation waits until the instances are no longer needed before they are detached from the load balancer.</p>
     fn detach_instances_from_load_balancer(
         &self,
         input: &DetachInstancesFromLoadBalancerRequest,
@@ -12881,7 +12869,7 @@ where
         RusotoFuture::new(future)
     }
 
-    /// <p>Returns information about the TLS certificates that are associated with the specified Lightsail load balancer.</p> <p>TLS is just an updated, more secure version of Secure Socket Layer (SSL).</p>
+    /// <p>Returns information about the TLS certificates that are associated with the specified Lightsail load balancer.</p> <p>TLS is just an updated, more secure version of Secure Socket Layer (SSL).</p> <p>You can have a maximum of 2 certificates associated with a Lightsail load balancer. One is active and the other is inactive.</p>
     fn get_load_balancer_tls_certificates(
         &self,
         input: &GetLoadBalancerTlsCertificatesRequest,
@@ -13579,7 +13567,7 @@ where
         RusotoFuture::new(future)
     }
 
-    /// <p>Updates the specified attribute for a load balancer.</p>
+    /// <p>Updates the specified attribute for a load balancer. You can only update one attribute at a time.</p>
     fn update_load_balancer_attribute(
         &self,
         input: &UpdateLoadBalancerAttributeRequest,

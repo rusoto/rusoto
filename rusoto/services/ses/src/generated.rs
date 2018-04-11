@@ -2139,9 +2139,10 @@ impl DescribeActiveReceiptRuleSetResponseDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "Metadata" => {
-                        obj.metadata = Some(try!(
-                            ReceiptRuleSetMetadataDeserializer::deserialize("Metadata", stack)
-                        ));
+                        obj.metadata = Some(try!(ReceiptRuleSetMetadataDeserializer::deserialize(
+                            "Metadata",
+                            stack
+                        )));
                     }
                     "Rules" => {
                         obj.rules = Some(try!(ReceiptRulesListDeserializer::deserialize(
@@ -2394,9 +2395,10 @@ impl DescribeReceiptRuleSetResponseDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "Metadata" => {
-                        obj.metadata = Some(try!(
-                            ReceiptRuleSetMetadataDeserializer::deserialize("Metadata", stack)
-                        ));
+                        obj.metadata = Some(try!(ReceiptRuleSetMetadataDeserializer::deserialize(
+                            "Metadata",
+                            stack
+                        )));
                     }
                     "Rules" => {
                         obj.rules = Some(try!(ReceiptRulesListDeserializer::deserialize(
@@ -6202,9 +6204,10 @@ impl ReputationOptionsDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "LastFreshStart" => {
-                        obj.last_fresh_start = Some(try!(
-                            LastFreshStartDeserializer::deserialize("LastFreshStart", stack)
-                        ));
+                        obj.last_fresh_start = Some(try!(LastFreshStartDeserializer::deserialize(
+                            "LastFreshStart",
+                            stack
+                        )));
                     }
                     "ReputationMetricsEnabled" => {
                         obj.reputation_metrics_enabled = Some(try!(
@@ -6763,11 +6766,10 @@ impl SendBulkTemplatedEmailResponseDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "Status" => {
-                        obj.status =
-                            try!(BulkEmailDestinationStatusListDeserializer::deserialize(
-                                "Status",
-                                stack
-                            ));
+                        obj.status = try!(BulkEmailDestinationStatusListDeserializer::deserialize(
+                            "Status",
+                            stack
+                        ));
                     }
                     _ => skip_tree(stack),
                 },
@@ -17463,12 +17465,10 @@ where
                     let _start_document = stack.next();
                     let actual_tag_name = try!(peek_at_name(&mut stack));
                     try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(
-                        ListVerifiedEmailAddressesResponseDeserializer::deserialize(
-                            "ListVerifiedEmailAddressesResult",
-                            &mut stack
-                        )
-                    );
+                    result = try!(ListVerifiedEmailAddressesResponseDeserializer::deserialize(
+                        "ListVerifiedEmailAddressesResult",
+                        &mut stack
+                    ));
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }

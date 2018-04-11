@@ -709,9 +709,10 @@ impl ApplicationVersionDescriptionDeserializer {
                         )));
                     }
                     "Status" => {
-                        obj.status = Some(try!(
-                            ApplicationVersionStatusDeserializer::deserialize("Status", stack)
-                        ));
+                        obj.status = Some(try!(ApplicationVersionStatusDeserializer::deserialize(
+                            "Status",
+                            stack
+                        )));
                     }
                     "VersionLabel" => {
                         obj.version_label = Some(try!(VersionLabelDeserializer::deserialize(
@@ -1585,21 +1586,21 @@ impl CheckDNSAvailabilityResultMessageDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "Available" => {
-                            obj.available = Some(try!(
-                                CnameAvailabilityDeserializer::deserialize("Available", stack)
-                            ));
-                        }
-                        "FullyQualifiedCNAME" => {
-                            obj.fully_qualified_cname = Some(try!(
-                                DNSCnameDeserializer::deserialize("FullyQualifiedCNAME", stack)
-                            ));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "Available" => {
+                        obj.available = Some(try!(CnameAvailabilityDeserializer::deserialize(
+                            "Available",
+                            stack
+                        )));
                     }
-                }
+                    "FullyQualifiedCNAME" => {
+                        obj.fully_qualified_cname = Some(try!(DNSCnameDeserializer::deserialize(
+                            "FullyQualifiedCNAME",
+                            stack
+                        )));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -1808,12 +1809,11 @@ impl ConfigurationOptionDescriptionDeserializer {
                         ));
                     }
                     "ValueType" => {
-                        obj.value_type = Some(try!(
-                            ConfigurationOptionValueTypeDeserializer::deserialize(
+                        obj.value_type =
+                            Some(try!(ConfigurationOptionValueTypeDeserializer::deserialize(
                                 "ValueType",
                                 stack
-                            )
-                        ));
+                            )));
                     }
                     _ => skip_tree(stack),
                 },
@@ -2468,9 +2468,10 @@ impl ConfigurationSettingsValidationMessagesDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "Messages" => {
-                        obj.messages = Some(try!(
-                            ValidationMessagesListDeserializer::deserialize("Messages", stack)
-                        ));
+                        obj.messages = Some(try!(ValidationMessagesListDeserializer::deserialize(
+                            "Messages",
+                            stack
+                        )));
                     }
                     _ => skip_tree(stack),
                 },
@@ -3411,6 +3412,54 @@ impl DeploymentTimestampDeserializer {
     ) -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+#[derive(Default, Debug, Clone)]
+pub struct DescribeAccountAttributesResult {
+    /// <p>The Elastic Beanstalk resource quotas associated with the calling AWS account.</p>
+    pub resource_quotas: Option<ResourceQuotas>,
+}
+
+struct DescribeAccountAttributesResultDeserializer;
+impl DescribeAccountAttributesResultDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DescribeAccountAttributesResult, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = DescribeAccountAttributesResult::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "ResourceQuotas" => {
+                        obj.resource_quotas = Some(try!(ResourceQuotasDeserializer::deserialize(
+                            "ResourceQuotas",
+                            stack
+                        )));
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
         try!(end_element(tag_name, stack));
 
         Ok(obj)
@@ -4476,12 +4525,11 @@ impl EnvironmentDescriptionDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "AbortableOperationInProgress" => {
-                        obj.abortable_operation_in_progress = Some(try!(
-                            AbortableOperationInProgressDeserializer::deserialize(
+                        obj.abortable_operation_in_progress =
+                            Some(try!(AbortableOperationInProgressDeserializer::deserialize(
                                 "AbortableOperationInProgress",
                                 stack
-                            )
-                        ));
+                            )));
                     }
                     "ApplicationName" => {
                         obj.application_name = Some(try!(
@@ -5089,9 +5137,10 @@ impl EnvironmentResourceDescriptionDeserializer {
                             )));
                     }
                     "LoadBalancers" => {
-                        obj.load_balancers = Some(try!(
-                            LoadBalancerListDeserializer::deserialize("LoadBalancers", stack)
-                        ));
+                        obj.load_balancers = Some(try!(LoadBalancerListDeserializer::deserialize(
+                            "LoadBalancers",
+                            stack
+                        )));
                     }
                     "Queues" => {
                         obj.queues =
@@ -7435,12 +7484,11 @@ impl PlatformDescriptionDeserializer {
                         ));
                     }
                     "ProgrammingLanguages" => {
-                        obj.programming_languages = Some(try!(
-                            PlatformProgrammingLanguagesDeserializer::deserialize(
+                        obj.programming_languages =
+                            Some(try!(PlatformProgrammingLanguagesDeserializer::deserialize(
                                 "ProgrammingLanguages",
                                 stack
-                            )
-                        ));
+                            )));
                     }
                     "SolutionStackName" => {
                         obj.solution_stack_name = Some(try!(
@@ -8200,6 +8248,135 @@ impl ResourceNameDeserializer {
     ) -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+/// <p>The AWS Elastic Beanstalk quota information for a single resource type in an AWS account. It reflects the resource's limits for this account.</p>
+#[derive(Default, Debug, Clone)]
+pub struct ResourceQuota {
+    /// <p>The maximum number of instances of this Elastic Beanstalk resource type that an AWS account can use.</p>
+    pub maximum: Option<i64>,
+}
+
+struct ResourceQuotaDeserializer;
+impl ResourceQuotaDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ResourceQuota, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = ResourceQuota::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "Maximum" => {
+                        obj.maximum =
+                            Some(try!(BoxedIntDeserializer::deserialize("Maximum", stack)));
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+/// <p>A set of per-resource AWS Elastic Beanstalk quotas associated with an AWS account. They reflect Elastic Beanstalk resource limits for this account.</p>
+#[derive(Default, Debug, Clone)]
+pub struct ResourceQuotas {
+    /// <p>The quota for applications in the AWS account.</p>
+    pub application_quota: Option<ResourceQuota>,
+    /// <p>The quota for application versions in the AWS account.</p>
+    pub application_version_quota: Option<ResourceQuota>,
+    /// <p>The quota for configuration templates in the AWS account.</p>
+    pub configuration_template_quota: Option<ResourceQuota>,
+    /// <p>The quota for custom platforms in the AWS account.</p>
+    pub custom_platform_quota: Option<ResourceQuota>,
+    /// <p>The quota for environments in the AWS account.</p>
+    pub environment_quota: Option<ResourceQuota>,
+}
+
+struct ResourceQuotasDeserializer;
+impl ResourceQuotasDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ResourceQuotas, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = ResourceQuotas::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "ApplicationQuota" => {
+                        obj.application_quota = Some(try!(ResourceQuotaDeserializer::deserialize(
+                            "ApplicationQuota",
+                            stack
+                        )));
+                    }
+                    "ApplicationVersionQuota" => {
+                        obj.application_version_quota =
+                            Some(try!(ResourceQuotaDeserializer::deserialize(
+                                "ApplicationVersionQuota",
+                                stack
+                            )));
+                    }
+                    "ConfigurationTemplateQuota" => {
+                        obj.configuration_template_quota =
+                            Some(try!(ResourceQuotaDeserializer::deserialize(
+                                "ConfigurationTemplateQuota",
+                                stack
+                            )));
+                    }
+                    "CustomPlatformQuota" => {
+                        obj.custom_platform_quota = Some(try!(
+                            ResourceQuotaDeserializer::deserialize("CustomPlatformQuota", stack)
+                        ));
+                    }
+                    "EnvironmentQuota" => {
+                        obj.environment_quota = Some(try!(ResourceQuotaDeserializer::deserialize(
+                            "EnvironmentQuota",
+                            stack
+                        )));
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
         try!(end_element(tag_name, stack));
 
         Ok(obj)
@@ -9958,9 +10135,10 @@ impl ValidationMessageDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "Message" => {
-                        obj.message = Some(try!(
-                            ValidationMessageStringDeserializer::deserialize("Message", stack)
-                        ));
+                        obj.message = Some(try!(ValidationMessageStringDeserializer::deserialize(
+                            "Message",
+                            stack
+                        )));
                     }
                     "Namespace" => {
                         obj.namespace = Some(try!(OptionNamespaceDeserializer::deserialize(
@@ -10159,7 +10337,7 @@ impl VirtualizationTypeDeserializer {
 /// Errors returned by AbortEnvironmentUpdate
 #[derive(Debug, PartialEq)]
 pub enum AbortEnvironmentUpdateError {
-    /// <p>The specified account does not have sufficient privileges for one of more AWS services.</p>
+    /// <p>The specified account does not have sufficient privileges for one or more AWS services.</p>
     InsufficientPrivileges(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -10402,7 +10580,7 @@ impl Error for CheckDNSAvailabilityError {
 /// Errors returned by ComposeEnvironments
 #[derive(Debug, PartialEq)]
 pub enum ComposeEnvironmentsError {
-    /// <p>The specified account does not have sufficient privileges for one of more AWS services.</p>
+    /// <p>The specified account does not have sufficient privileges for one or more AWS services.</p>
     InsufficientPrivileges(String),
     /// <p>The specified account has reached its limit of environments.</p>
     TooManyEnvironments(String),
@@ -10570,7 +10748,7 @@ impl Error for CreateApplicationError {
 pub enum CreateApplicationVersionError {
     /// <p>AWS CodeBuild is not available in the specified region.</p>
     CodeBuildNotInServiceRegion(String),
-    /// <p>The specified account does not have sufficient privileges for one of more AWS services.</p>
+    /// <p>The specified account does not have sufficient privileges for one or more AWS services.</p>
     InsufficientPrivileges(String),
     /// <p><p>The specified S3 bucket does not belong to the S3 region in which the service is running. The following regions are supported:</p> <ul> <li> <p>IAD/us-east-1</p> </li> <li> <p>PDX/us-west-2</p> </li> <li> <p>DUB/eu-west-1</p> </li> </ul></p>
     S3LocationNotInServiceRegion(String),
@@ -10681,7 +10859,7 @@ impl Error for CreateApplicationVersionError {
 /// Errors returned by CreateConfigurationTemplate
 #[derive(Debug, PartialEq)]
 pub enum CreateConfigurationTemplateError {
-    /// <p>The specified account does not have sufficient privileges for one of more AWS services.</p>
+    /// <p>The specified account does not have sufficient privileges for one or more AWS services.</p>
     InsufficientPrivileges(String),
     /// <p>The specified account has reached its limit of Amazon S3 buckets.</p>
     TooManyBuckets(String),
@@ -10776,7 +10954,7 @@ impl Error for CreateConfigurationTemplateError {
 /// Errors returned by CreateEnvironment
 #[derive(Debug, PartialEq)]
 pub enum CreateEnvironmentError {
-    /// <p>The specified account does not have sufficient privileges for one of more AWS services.</p>
+    /// <p>The specified account does not have sufficient privileges for one or more AWS services.</p>
     InsufficientPrivileges(String),
     /// <p>The specified account has reached its limit of environments.</p>
     TooManyEnvironments(String),
@@ -10865,7 +11043,7 @@ impl Error for CreateEnvironmentError {
 pub enum CreatePlatformVersionError {
     /// <p>A generic service exception has occurred.</p>
     ElasticBeanstalkService(String),
-    /// <p>The specified account does not have sufficient privileges for one of more AWS services.</p>
+    /// <p>The specified account does not have sufficient privileges for one or more AWS services.</p>
     InsufficientPrivileges(String),
     /// <p>You have exceeded the maximum number of allowed platforms associated with the account.</p>
     TooManyPlatforms(String),
@@ -10958,7 +11136,7 @@ impl Error for CreatePlatformVersionError {
 /// Errors returned by CreateStorageLocation
 #[derive(Debug, PartialEq)]
 pub enum CreateStorageLocationError {
-    /// <p>The specified account does not have sufficient privileges for one of more AWS services.</p>
+    /// <p>The specified account does not have sufficient privileges for one or more AWS services.</p>
     InsufficientPrivileges(String),
     /// <p>The specified account does not have a subscription to Amazon S3.</p>
     S3SubscriptionRequired(String),
@@ -11132,7 +11310,7 @@ impl Error for DeleteApplicationError {
 /// Errors returned by DeleteApplicationVersion
 #[derive(Debug, PartialEq)]
 pub enum DeleteApplicationVersionError {
-    /// <p>The specified account does not have sufficient privileges for one of more AWS services.</p>
+    /// <p>The specified account does not have sufficient privileges for one or more AWS services.</p>
     InsufficientPrivileges(String),
     /// <p>Unable to perform the specified operation because another operation that effects an element in this activity is already in progress.</p>
     OperationInProgress(String),
@@ -11162,11 +11340,9 @@ impl DeleteApplicationVersionError {
                         parsed_error.message,
                     ))
                 }
-                "OperationInProgressFailure" => {
-                    DeleteApplicationVersionError::OperationInProgress(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "OperationInProgressFailure" => DeleteApplicationVersionError::OperationInProgress(
+                    String::from(parsed_error.message),
+                ),
                 "S3LocationNotInServiceRegionException" => {
                     DeleteApplicationVersionError::S3LocationNotInServiceRegion(String::from(
                         parsed_error.message,
@@ -11393,7 +11569,7 @@ impl Error for DeleteEnvironmentConfigurationError {
 pub enum DeletePlatformVersionError {
     /// <p>A generic service exception has occurred.</p>
     ElasticBeanstalkService(String),
-    /// <p>The specified account does not have sufficient privileges for one of more AWS services.</p>
+    /// <p>The specified account does not have sufficient privileges for one or more AWS services.</p>
     InsufficientPrivileges(String),
     /// <p>Unable to perform the specified operation because another operation that effects an element in this activity is already in progress.</p>
     OperationInProgress(String),
@@ -11488,6 +11664,87 @@ impl Error for DeletePlatformVersionError {
                 dispatch_error.description()
             }
             DeletePlatformVersionError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DescribeAccountAttributes
+#[derive(Debug, PartialEq)]
+pub enum DescribeAccountAttributesError {
+    /// <p>The specified account does not have sufficient privileges for one or more AWS services.</p>
+    InsufficientPrivileges(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl DescribeAccountAttributesError {
+    pub fn from_body(body: &str) -> DescribeAccountAttributesError {
+        let reader = EventReader::new(body.as_bytes());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        find_start_element(&mut stack);
+        match Self::deserialize(&mut stack) {
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                "InsufficientPrivilegesException" => {
+                    DescribeAccountAttributesError::InsufficientPrivileges(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                _ => DescribeAccountAttributesError::Unknown(String::from(body)),
+            },
+            Err(_) => DescribeAccountAttributesError::Unknown(body.to_string()),
+        }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+
+impl From<XmlParseError> for DescribeAccountAttributesError {
+    fn from(err: XmlParseError) -> DescribeAccountAttributesError {
+        let XmlParseError(message) = err;
+        DescribeAccountAttributesError::Unknown(message.to_string())
+    }
+}
+impl From<CredentialsError> for DescribeAccountAttributesError {
+    fn from(err: CredentialsError) -> DescribeAccountAttributesError {
+        DescribeAccountAttributesError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DescribeAccountAttributesError {
+    fn from(err: HttpDispatchError) -> DescribeAccountAttributesError {
+        DescribeAccountAttributesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeAccountAttributesError {
+    fn from(err: io::Error) -> DescribeAccountAttributesError {
+        DescribeAccountAttributesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DescribeAccountAttributesError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeAccountAttributesError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeAccountAttributesError::InsufficientPrivileges(ref cause) => cause,
+            DescribeAccountAttributesError::Validation(ref cause) => cause,
+            DescribeAccountAttributesError::Credentials(ref err) => err.description(),
+            DescribeAccountAttributesError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DescribeAccountAttributesError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -12049,7 +12306,7 @@ impl Error for DescribeEnvironmentManagedActionsError {
 /// Errors returned by DescribeEnvironmentResources
 #[derive(Debug, PartialEq)]
 pub enum DescribeEnvironmentResourcesError {
-    /// <p>The specified account does not have sufficient privileges for one of more AWS services.</p>
+    /// <p>The specified account does not have sufficient privileges for one or more AWS services.</p>
     InsufficientPrivileges(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -12363,7 +12620,7 @@ impl Error for DescribeInstancesHealthError {
 pub enum DescribePlatformVersionError {
     /// <p>A generic service exception has occurred.</p>
     ElasticBeanstalkService(String),
-    /// <p>The specified account does not have sufficient privileges for one of more AWS services.</p>
+    /// <p>The specified account does not have sufficient privileges for one or more AWS services.</p>
     InsufficientPrivileges(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -12525,7 +12782,7 @@ impl Error for ListAvailableSolutionStacksError {
 pub enum ListPlatformVersionsError {
     /// <p>A generic service exception has occurred.</p>
     ElasticBeanstalkService(String),
-    /// <p>The specified account does not have sufficient privileges for one of more AWS services.</p>
+    /// <p>The specified account does not have sufficient privileges for one or more AWS services.</p>
     InsufficientPrivileges(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -12612,7 +12869,7 @@ impl Error for ListPlatformVersionsError {
 /// Errors returned by ListTagsForResource
 #[derive(Debug, PartialEq)]
 pub enum ListTagsForResourceError {
-    /// <p>The specified account does not have sufficient privileges for one of more AWS services.</p>
+    /// <p>The specified account does not have sufficient privileges for one or more AWS services.</p>
     InsufficientPrivileges(String),
     /// <p>A resource doesn't exist for the specified Amazon Resource Name (ARN).</p>
     ResourceNotFound(String),
@@ -12707,7 +12964,7 @@ impl Error for ListTagsForResourceError {
 /// Errors returned by RebuildEnvironment
 #[derive(Debug, PartialEq)]
 pub enum RebuildEnvironmentError {
-    /// <p>The specified account does not have sufficient privileges for one of more AWS services.</p>
+    /// <p>The specified account does not have sufficient privileges for one or more AWS services.</p>
     InsufficientPrivileges(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -13078,7 +13335,7 @@ impl Error for SwapEnvironmentCNAMEsError {
 /// Errors returned by TerminateEnvironment
 #[derive(Debug, PartialEq)]
 pub enum TerminateEnvironmentError {
-    /// <p>The specified account does not have sufficient privileges for one of more AWS services.</p>
+    /// <p>The specified account does not have sufficient privileges for one or more AWS services.</p>
     InsufficientPrivileges(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -13232,7 +13489,7 @@ impl Error for UpdateApplicationError {
 /// Errors returned by UpdateApplicationResourceLifecycle
 #[derive(Debug, PartialEq)]
 pub enum UpdateApplicationResourceLifecycleError {
-    /// <p>The specified account does not have sufficient privileges for one of more AWS services.</p>
+    /// <p>The specified account does not have sufficient privileges for one or more AWS services.</p>
     InsufficientPrivileges(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -13386,7 +13643,7 @@ impl Error for UpdateApplicationVersionError {
 /// Errors returned by UpdateConfigurationTemplate
 #[derive(Debug, PartialEq)]
 pub enum UpdateConfigurationTemplateError {
-    /// <p>The specified account does not have sufficient privileges for one of more AWS services.</p>
+    /// <p>The specified account does not have sufficient privileges for one or more AWS services.</p>
     InsufficientPrivileges(String),
     /// <p>The specified account has reached its limit of Amazon S3 buckets.</p>
     TooManyBuckets(String),
@@ -13473,7 +13730,7 @@ impl Error for UpdateConfigurationTemplateError {
 /// Errors returned by UpdateEnvironment
 #[derive(Debug, PartialEq)]
 pub enum UpdateEnvironmentError {
-    /// <p>The specified account does not have sufficient privileges for one of more AWS services.</p>
+    /// <p>The specified account does not have sufficient privileges for one or more AWS services.</p>
     InsufficientPrivileges(String),
     /// <p>The specified account has reached its limit of Amazon S3 buckets.</p>
     TooManyBuckets(String),
@@ -13560,7 +13817,7 @@ impl Error for UpdateEnvironmentError {
 /// Errors returned by UpdateTagsForResource
 #[derive(Debug, PartialEq)]
 pub enum UpdateTagsForResourceError {
-    /// <p>The specified account does not have sufficient privileges for one of more AWS services.</p>
+    /// <p>The specified account does not have sufficient privileges for one or more AWS services.</p>
     InsufficientPrivileges(String),
     /// <p>Unable to perform the specified operation because another operation that effects an element in this activity is already in progress.</p>
     OperationInProgress(String),
@@ -13667,7 +13924,7 @@ impl Error for UpdateTagsForResourceError {
 /// Errors returned by ValidateConfigurationSettings
 #[derive(Debug, PartialEq)]
 pub enum ValidateConfigurationSettingsError {
-    /// <p>The specified account does not have sufficient privileges for one of more AWS services.</p>
+    /// <p>The specified account does not have sufficient privileges for one or more AWS services.</p>
     InsufficientPrivileges(String),
     /// <p>The specified account has reached its limit of Amazon S3 buckets.</p>
     TooManyBuckets(String),
@@ -13841,6 +14098,11 @@ pub trait ElasticBeanstalk {
         &self,
         input: &DeletePlatformVersionRequest,
     ) -> RusotoFuture<DeletePlatformVersionResult, DeletePlatformVersionError>;
+
+    /// <p>Returns attributes related to AWS Elastic Beanstalk that are associated with the calling AWS account.</p> <p>The result currently has one set of attributes—resource quotas.</p>
+    fn describe_account_attributes(
+        &self,
+    ) -> RusotoFuture<DescribeAccountAttributesResult, DescribeAccountAttributesError>;
 
     /// <p>Retrieve a list of application versions.</p>
     fn describe_application_versions(
@@ -14533,12 +14795,10 @@ where
                     let _start_document = stack.next();
                     let actual_tag_name = try!(peek_at_name(&mut stack));
                     try!(start_element(&actual_tag_name, &mut stack));
-                    result = try!(
-                        CreateStorageLocationResultMessageDeserializer::deserialize(
-                            "CreateStorageLocationResult",
-                            &mut stack
-                        )
-                    );
+                    result = try!(CreateStorageLocationResultMessageDeserializer::deserialize(
+                        "CreateStorageLocationResult",
+                        &mut stack
+                    ));
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
@@ -14700,6 +14960,56 @@ where
                     try!(start_element(&actual_tag_name, &mut stack));
                     result = try!(DeletePlatformVersionResultDeserializer::deserialize(
                         "DeletePlatformVersionResult",
+                        &mut stack
+                    ));
+                    skip_tree(&mut stack);
+                    try!(end_element(&actual_tag_name, &mut stack));
+                }
+
+                Ok(result)
+            }))
+        });
+
+        RusotoFuture::new(future)
+    }
+
+    /// <p>Returns attributes related to AWS Elastic Beanstalk that are associated with the calling AWS account.</p> <p>The result currently has one set of attributes—resource quotas.</p>
+    fn describe_account_attributes(
+        &self,
+    ) -> RusotoFuture<DescribeAccountAttributesResult, DescribeAccountAttributesError> {
+        let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "DescribeAccountAttributes");
+        params.put("Version", "2010-12-01");
+
+        request.set_params(params);
+
+        let future = self.inner.sign_and_dispatch(request, |response| {
+            if response.status != StatusCode::Ok {
+                return future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeAccountAttributesError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
+            }
+
+            future::Either::A(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = DescribeAccountAttributesResult::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = try!(peek_at_name(&mut stack));
+                    try!(start_element(&actual_tag_name, &mut stack));
+                    result = try!(DescribeAccountAttributesResultDeserializer::deserialize(
+                        "DescribeAccountAttributesResult",
                         &mut stack
                     ));
                     skip_tree(&mut stack);

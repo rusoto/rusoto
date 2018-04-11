@@ -1332,9 +1332,9 @@ impl StartOnDemandReplicationRunError {
                         ))
                     }
                     "ReplicationRunLimitExceededException" => {
-                        StartOnDemandReplicationRunError::ReplicationRunLimitExceeded(
-                            String::from(error_message),
-                        )
+                        StartOnDemandReplicationRunError::ReplicationRunLimitExceeded(String::from(
+                            error_message,
+                        ))
                     }
                     "UnauthorizedOperationException" => {
                         StartOnDemandReplicationRunError::UnauthorizedOperation(String::from(

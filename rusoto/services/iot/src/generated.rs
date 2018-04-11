@@ -342,6 +342,15 @@ pub struct CACertificateDescription {
     #[serde(rename = "creationDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_date: Option<f64>,
+    #[serde(rename = "customerVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub customer_version: Option<i64>,
+    #[serde(rename = "generationId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub generation_id: Option<String>,
+    #[serde(rename = "lastModifiedDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_modified_date: Option<f64>,
     /// <p>The owner of the CA certificate.</p>
     #[serde(rename = "ownedBy")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -431,6 +440,12 @@ pub struct CertificateDescription {
     #[serde(rename = "creationDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_date: Option<f64>,
+    #[serde(rename = "customerVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub customer_version: Option<i64>,
+    #[serde(rename = "generationId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub generation_id: Option<String>,
     /// <p>The date and time the certificate was last modified.</p>
     #[serde(rename = "lastModifiedDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1822,10 +1837,19 @@ pub struct GetPolicyRequest {
 /// <p>The output from the GetPolicy operation.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetPolicyResponse {
+    #[serde(rename = "creationDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_date: Option<f64>,
     /// <p>The default policy version ID.</p>
     #[serde(rename = "defaultVersionId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub default_version_id: Option<String>,
+    #[serde(rename = "generationId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub generation_id: Option<String>,
+    #[serde(rename = "lastModifiedDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_modified_date: Option<f64>,
     /// <p>The policy ARN.</p>
     #[serde(rename = "policyArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1854,10 +1878,19 @@ pub struct GetPolicyVersionRequest {
 /// <p>The output from the GetPolicyVersion operation.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetPolicyVersionResponse {
+    #[serde(rename = "creationDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_date: Option<f64>,
+    #[serde(rename = "generationId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub generation_id: Option<String>,
     /// <p>Specifies whether the policy version is the default.</p>
     #[serde(rename = "isDefaultVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub is_default_version: Option<bool>,
+    #[serde(rename = "lastModifiedDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_modified_date: Option<f64>,
     /// <p>The policy ARN.</p>
     #[serde(rename = "policyArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3492,6 +3525,9 @@ pub struct RoleAliasDescription {
     #[serde(rename = "roleAlias")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub role_alias: Option<String>,
+    #[serde(rename = "roleAliasArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub role_alias_arn: Option<String>,
     /// <p>The role ARN.</p>
     #[serde(rename = "roleArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -13879,11 +13915,9 @@ impl ListThingRegistrationTaskReportsError {
                     "ThrottlingException" => ListThingRegistrationTaskReportsError::Throttling(
                         String::from(error_message),
                     ),
-                    "UnauthorizedException" => {
-                        ListThingRegistrationTaskReportsError::Unauthorized(String::from(
-                            error_message,
-                        ))
-                    }
+                    "UnauthorizedException" => ListThingRegistrationTaskReportsError::Unauthorized(
+                        String::from(error_message),
+                    ),
                     "ValidationException" => {
                         ListThingRegistrationTaskReportsError::Validation(error_message.to_string())
                     }
@@ -13970,11 +14004,9 @@ impl ListThingRegistrationTasksError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "InternalFailureException" => {
-                        ListThingRegistrationTasksError::InternalFailure(String::from(
-                            error_message,
-                        ))
-                    }
+                    "InternalFailureException" => ListThingRegistrationTasksError::InternalFailure(
+                        String::from(error_message),
+                    ),
                     "InvalidRequestException" => {
                         ListThingRegistrationTasksError::InvalidRequest(String::from(error_message))
                     }
@@ -15345,6 +15377,8 @@ pub enum SetDefaultAuthorizerError {
     InternalFailure(String),
     /// <p>The request is not valid.</p>
     InvalidRequest(String),
+    /// <p>The resource already exists.</p>
+    ResourceAlreadyExists(String),
     /// <p>The specified resource does not exist.</p>
     ResourceNotFound(String),
     /// <p>The service is temporarily unavailable.</p>
@@ -15381,6 +15415,11 @@ impl SetDefaultAuthorizerError {
                     }
                     "InvalidRequestException" => {
                         SetDefaultAuthorizerError::InvalidRequest(String::from(error_message))
+                    }
+                    "ResourceAlreadyExistsException" => {
+                        SetDefaultAuthorizerError::ResourceAlreadyExists(String::from(
+                            error_message,
+                        ))
                     }
                     "ResourceNotFoundException" => {
                         SetDefaultAuthorizerError::ResourceNotFound(String::from(error_message))
@@ -15435,6 +15474,7 @@ impl Error for SetDefaultAuthorizerError {
         match *self {
             SetDefaultAuthorizerError::InternalFailure(ref cause) => cause,
             SetDefaultAuthorizerError::InvalidRequest(ref cause) => cause,
+            SetDefaultAuthorizerError::ResourceAlreadyExists(ref cause) => cause,
             SetDefaultAuthorizerError::ResourceNotFound(ref cause) => cause,
             SetDefaultAuthorizerError::ServiceUnavailable(ref cause) => cause,
             SetDefaultAuthorizerError::Throttling(ref cause) => cause,
@@ -15876,11 +15916,9 @@ impl StartThingRegistrationTaskError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "InternalFailureException" => {
-                        StartThingRegistrationTaskError::InternalFailure(String::from(
-                            error_message,
-                        ))
-                    }
+                    "InternalFailureException" => StartThingRegistrationTaskError::InternalFailure(
+                        String::from(error_message),
+                    ),
                     "InvalidRequestException" => {
                         StartThingRegistrationTaskError::InvalidRequest(String::from(error_message))
                     }
@@ -22123,9 +22161,9 @@ where
 
                     debug!("Response body: {:?}", body);
                     debug!("Response status: {}", response.status);
-                    let result =
-                        serde_json::from_slice::<ListThingRegistrationTaskReportsResponse>(&body)
-                            .unwrap();
+                    let result = serde_json::from_slice::<ListThingRegistrationTaskReportsResponse>(
+                        &body,
+                    ).unwrap();
 
                     result
                 }))

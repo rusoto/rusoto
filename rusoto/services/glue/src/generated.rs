@@ -33,7 +33,7 @@ use hyper::StatusCode;
 /// <p>Defines an action to be initiated by a trigger.</p>
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct Action {
-    /// <p>Arguments to be passed to the job.</p>
+    /// <p>Arguments to be passed to the job.</p> <p>You can specify arguments here that your own job-execution script consumes, as well as arguments that AWS Glue itself consumes.</p> <p>For information about how to specify and consume your own Job arguments, see the <a href="http://docs.aws.amazon.com/glue/latest/dg/aws-glue-programming-python-calling.html">Calling AWS Glue APIs in Python</a> topic in the developer guide.</p> <p>For information about the key-value pairs that AWS Glue consumes to set up your job, see the <a href="http://docs.aws.amazon.com/glue/latest/dg/aws-glue-programming-python-glue-arguments.html">Special Parameters Used by AWS Glue</a> topic in the developer guide.</p>
     #[serde(rename = "Arguments")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub arguments: Option<::std::collections::HashMap<String, String>>,
@@ -122,7 +122,7 @@ pub struct BatchDeleteTableRequest {
     #[serde(rename = "CatalogId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub catalog_id: Option<String>,
-    /// <p>The name of the catalog database where the tables to delete reside.</p>
+    /// <p>The name of the catalog database where the tables to delete reside. For Hive compatibility, this name is entirely lowercase.</p>
     #[serde(rename = "DatabaseName")]
     pub database_name: String,
     /// <p>A list of the table to delete.</p>
@@ -136,6 +136,31 @@ pub struct BatchDeleteTableResponse {
     #[serde(rename = "Errors")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub errors: Option<Vec<TableError>>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct BatchDeleteTableVersionRequest {
+    /// <p>The ID of the Data Catalog where the tables reside. If none is supplied, the AWS account ID is used by default.</p>
+    #[serde(rename = "CatalogId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub catalog_id: Option<String>,
+    /// <p>The database in the catalog in which the table resides. For Hive compatibility, this name is entirely lowercase.</p>
+    #[serde(rename = "DatabaseName")]
+    pub database_name: String,
+    /// <p>The name of the table. For Hive compatibility, this name is entirely lowercase.</p>
+    #[serde(rename = "TableName")]
+    pub table_name: String,
+    /// <p>A list of the IDs of versions to be deleted.</p>
+    #[serde(rename = "VersionIds")]
+    pub version_ids: Vec<String>,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct BatchDeleteTableVersionResponse {
+    /// <p>A list of errors encountered while trying to delete the specified table versions.</p>
+    #[serde(rename = "Errors")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub errors: Option<Vec<TableVersionError>>,
 }
 
 #[derive(Default, Debug, Clone, Serialize)]
@@ -167,18 +192,18 @@ pub struct BatchGetPartitionResponse {
     pub unprocessed_keys: Option<Vec<PartitionValueList>>,
 }
 
-/// <p>Details about the job run and the error that occurred while trying to submit it for stopping.</p>
+/// <p>Records an error that occurred when attempting to stop a specified JobRun.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct BatchStopJobRunError {
-    /// <p>The details of the error that occurred.</p>
+    /// <p>Specifies details about the error that was encountered.</p>
     #[serde(rename = "ErrorDetail")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub error_detail: Option<ErrorDetail>,
-    /// <p>The name of the job.</p>
+    /// <p>The name of the Job in question.</p>
     #[serde(rename = "JobName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub job_name: Option<String>,
-    /// <p>The job run Id.</p>
+    /// <p>The JobRunId of the JobRun in question.</p>
     #[serde(rename = "JobRunId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub job_run_id: Option<String>,
@@ -186,34 +211,34 @@ pub struct BatchStopJobRunError {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct BatchStopJobRunRequest {
-    /// <p>The name of the job whose job runs are to be stopped.</p>
+    /// <p>The name of the Job in question.</p>
     #[serde(rename = "JobName")]
     pub job_name: String,
-    /// <p>A list of job run Ids of the given job to be stopped.</p>
+    /// <p>A list of the JobRunIds that should be stopped for that Job.</p>
     #[serde(rename = "JobRunIds")]
     pub job_run_ids: Vec<String>,
 }
 
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct BatchStopJobRunResponse {
-    /// <p>A list containing the job run Ids and details of the error that occurred for each job run while submitting to stop.</p>
+    /// <p>A list of the errors that were encountered in tryng to stop JobRuns, including the JobRunId for which each error was encountered and details about the error.</p>
     #[serde(rename = "Errors")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub errors: Option<Vec<BatchStopJobRunError>>,
-    /// <p>A list of job runs which are successfully submitted for stopping.</p>
+    /// <p>A list of the JobRuns that were successfully submitted for stopping.</p>
     #[serde(rename = "SuccessfulSubmissions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub successful_submissions: Option<Vec<BatchStopJobRunSuccessfulSubmission>>,
 }
 
-/// <p>Details about the job run which is submitted successfully for stopping.</p>
+/// <p>Records a successful request to stop a specified JobRun.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct BatchStopJobRunSuccessfulSubmission {
-    /// <p>The name of the job.</p>
+    /// <p>The Name of the Job in question.</p>
     #[serde(rename = "JobName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub job_name: Option<String>,
-    /// <p>The job run Id.</p>
+    /// <p>The JobRunId of the JobRun in question.</p>
     #[serde(rename = "JobRunId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub job_run_id: Option<String>,
@@ -247,13 +272,17 @@ pub struct CatalogImportStatus {
     pub imported_by: Option<String>,
 }
 
-/// <p>Classifiers are written in Python and triggered during a crawl task. You can write your own classifiers to best categorize your data sources and specify the appropriate schemas to use for them. A classifier checks whether a given file is in a format it can handle, and if it is, the classifier creates a schema in the form of a <code>StructType</code> object that matches that data format.</p> <p>A classifier can be either a <code>grok</code> classifier or an XML classifier, specified in one or the other field of the <code>Classifier</code> object.</p>
+/// <p>Classifiers are written in Python and triggered during a crawl task. You can write your own classifiers to best categorize your data sources and specify the appropriate schemas to use for them. A classifier checks whether a given file is in a format it can handle, and if it is, the classifier creates a schema in the form of a <code>StructType</code> object that matches that data format.</p> <p>A classifier can be a <code>grok</code> classifier, an XML classifier, or a JSON classifier, asspecified in one of the fields in the <code>Classifier</code> object.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct Classifier {
     /// <p>A <code>GrokClassifier</code> object.</p>
     #[serde(rename = "GrokClassifier")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub grok_classifier: Option<GrokClassifier>,
+    /// <p>A <code>JsonClassifier</code> object.</p>
+    #[serde(rename = "JsonClassifier")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub json_classifier: Option<JsonClassifier>,
     /// <p>An <code>XMLClassifier</code> object.</p>
     #[serde(rename = "XMLClassifier")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -327,7 +356,7 @@ pub struct Column {
 /// <p>Defines a condition under which a trigger fires.</p>
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct Condition {
-    /// <p>The name of the job in question.</p>
+    /// <p>The name of the Job to whose JobRuns this condition applies and on which this trigger waits.</p>
     #[serde(rename = "JobName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub job_name: Option<String>,
@@ -335,7 +364,7 @@ pub struct Condition {
     #[serde(rename = "LogicalOperator")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub logical_operator: Option<String>,
-    /// <p>The condition state.</p>
+    /// <p>The condition state. Currently, the values supported are SUCCEEDED, STOPPED and FAILED.</p>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub state: Option<String>,
@@ -387,12 +416,10 @@ pub struct Connection {
 pub struct ConnectionInput {
     /// <p>A list of key-value pairs used as parameters for this connection.</p>
     #[serde(rename = "ConnectionProperties")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub connection_properties: Option<::std::collections::HashMap<String, String>>,
+    pub connection_properties: ::std::collections::HashMap<String, String>,
     /// <p>The type of the connection. Currently, only JDBC is supported; SFTP is not supported.</p>
     #[serde(rename = "ConnectionType")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub connection_type: Option<String>,
+    pub connection_type: String,
     /// <p>Description of the connection.</p>
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -403,8 +430,7 @@ pub struct ConnectionInput {
     pub match_criteria: Option<Vec<String>>,
     /// <p>The name of the connection.</p>
     #[serde(rename = "Name")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub name: Option<String>,
+    pub name: String,
     /// <p>A map of physical connection requirements, such as VPC and SecurityGroup, needed for making this connection successfully.</p>
     #[serde(rename = "PhysicalConnectionRequirements")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -427,7 +453,7 @@ pub struct Crawler {
     #[serde(rename = "Classifiers")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub classifiers: Option<Vec<String>>,
-    /// <p>Crawler configuration information. This versioned JSON string allows users to specify aspects of a Crawler's behavior.</p> <p>You can use this field to force partitions to inherit metadata such as classification, input format, output format, serde information, and schema from their parent table, rather than detect this information separately for each partition. Use the following JSON string to specify that behavior:</p>
+    /// <p>Crawler configuration information. This versioned JSON string allows users to specify aspects of a Crawler's behavior.</p> <p>You can use this field to force partitions to inherit metadata such as classification, input format, output format, serde information, and schema from their parent table, rather than detect this information separately for each partition. Use the following JSON string to specify that behavior:</p> <p>Example: <code>'{ "Version": 1.0, "CrawlerOutput": { "Partitions": { "AddOrUpdateBehavior": "InheritFromTable" } } }'</code> </p>
     #[serde(rename = "Configuration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub configuration: Option<String>,
@@ -545,6 +571,10 @@ pub struct CreateClassifierRequest {
     #[serde(rename = "GrokClassifier")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub grok_classifier: Option<CreateGrokClassifierRequest>,
+    /// <p>A <code>JsonClassifier</code> object specifying the classifier to create.</p>
+    #[serde(rename = "JsonClassifier")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub json_classifier: Option<CreateJsonClassifierRequest>,
     /// <p>An <code>XMLClassifier</code> object specifying the classifier to create.</p>
     #[serde(rename = "XMLClassifier")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -574,7 +604,7 @@ pub struct CreateCrawlerRequest {
     #[serde(rename = "Classifiers")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub classifiers: Option<Vec<String>>,
-    /// <p>Crawler configuration information. This versioned JSON string allows users to specify aspects of a Crawler's behavior.</p> <p>You can use this field to force partitions to inherit metadata such as classification, input format, output format, serde information, and schema from their parent table, rather than detect this information separately for each partition.</p>
+    /// <p>Crawler configuration information. This versioned JSON string allows users to specify aspects of a Crawler's behavior.</p> <p>You can use this field to force partitions to inherit metadata such as classification, input format, output format, serde information, and schema from their parent table, rather than detect this information separately for each partition. Use the following JSON string to specify that behavior:</p> <p>Example: <code>'{ "Version": 1.0, "CrawlerOutput": { "Partitions": { "AddOrUpdateBehavior": "InheritFromTable" } } }'</code> </p>
     #[serde(rename = "Configuration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub configuration: Option<String>,
@@ -644,7 +674,8 @@ pub struct CreateDevEndpointRequest {
     pub number_of_nodes: Option<i64>,
     /// <p>The public key to use for authentication.</p>
     #[serde(rename = "PublicKey")]
-    pub public_key: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub public_key: Option<String>,
     /// <p>The IAM role for the DevEndpoint.</p>
     #[serde(rename = "RoleArn")]
     pub role_arn: String,
@@ -738,7 +769,7 @@ pub struct CreateGrokClassifierRequest {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateJobRequest {
-    /// <p>The number of capacity units allocated to this job.</p>
+    /// <p>The number of AWS Glue data processing units (DPUs) to allocate to this Job. From 2 to 100 DPUs can be allocated; the default is 10. A DPU is a relative measure of processing power that consists of 4 vCPUs of compute capacity and 16 GB of memory. For more information, see the <a href="https://aws.amazon.com/glue/pricing/">AWS Glue pricing page</a>.</p>
     #[serde(rename = "AllocatedCapacity")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub allocated_capacity: Option<i64>,
@@ -749,7 +780,7 @@ pub struct CreateJobRequest {
     #[serde(rename = "Connections")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub connections: Option<ConnectionsList>,
-    /// <p>The default parameters for this job.</p>
+    /// <p>The default arguments for this job.</p> <p>You can specify arguments here that your own job-execution script consumes, as well as arguments that AWS Glue itself consumes.</p> <p>For information about how to specify and consume your own Job arguments, see the <a href="http://docs.aws.amazon.com/glue/latest/dg/aws-glue-programming-python-calling.html">Calling AWS Glue APIs in Python</a> topic in the developer guide.</p> <p>For information about the key-value pairs that AWS Glue consumes to set up your job, see the <a href="http://docs.aws.amazon.com/glue/latest/dg/aws-glue-programming-python-glue-arguments.html">Special Parameters Used by AWS Glue</a> topic in the developer guide.</p>
     #[serde(rename = "DefaultArguments")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub default_arguments: Option<::std::collections::HashMap<String, String>>,
@@ -769,20 +800,31 @@ pub struct CreateJobRequest {
     #[serde(rename = "MaxRetries")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_retries: Option<i64>,
-    /// <p>The name you assign to this job.</p>
+    /// <p>The name you assign to this job. It must be unique in your account.</p>
     #[serde(rename = "Name")]
     pub name: String,
-    /// <p>The role associated with this job.</p>
+    /// <p>The name of the IAM role associated with this job.</p>
     #[serde(rename = "Role")]
     pub role: String,
 }
 
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct CreateJobResponse {
-    /// <p>The unique name of the new job that has been created.</p>
+    /// <p>The unique name that was provided.</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
+}
+
+/// <p>Specifies a JSON classifier for <code>CreateClassifier</code> to create.</p>
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct CreateJsonClassifierRequest {
+    /// <p>A <code>JsonPath</code> string defining the JSON data for the classifier to classify. AWS Glue supports a subset of JsonPath, as described in <a href="https://docs.aws.amazon.com/glue/latest/dg/custom-classifier.html#custom-classifier-json">Writing JsonPath Custom Classifiers</a>.</p>
+    #[serde(rename = "JsonPath")]
+    pub json_path: String,
+    /// <p>The name of the classifier.</p>
+    #[serde(rename = "Name")]
+    pub name: String,
 }
 
 #[derive(Default, Debug, Clone, Serialize)]
@@ -815,6 +857,10 @@ pub struct CreateScriptRequest {
     #[serde(rename = "DagNodes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub dag_nodes: Option<Vec<CodeGenNode>>,
+    /// <p>The programming language of the resulting code from the DAG.</p>
+    #[serde(rename = "Language")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub language: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, Deserialize)]
@@ -823,6 +869,10 @@ pub struct CreateScriptResponse {
     #[serde(rename = "PythonScript")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub python_script: Option<String>,
+    /// <p>The Scala code generated from the DAG.</p>
+    #[serde(rename = "ScalaCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub scala_code: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, Serialize)]
@@ -831,7 +881,7 @@ pub struct CreateTableRequest {
     #[serde(rename = "CatalogId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub catalog_id: Option<String>,
-    /// <p>The catalog database in which to create the new table.</p>
+    /// <p>The catalog database in which to create the new table. For Hive compatibility, this name is entirely lowercase.</p>
     #[serde(rename = "DatabaseName")]
     pub database_name: String,
     /// <p>The <code>TableInput</code> object that defines the metadata table to create in the catalog.</p>
@@ -851,14 +901,14 @@ pub struct CreateTriggerRequest {
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p>The name to assign to the new trigger.</p>
+    /// <p>The name of the trigger.</p>
     #[serde(rename = "Name")]
     pub name: String,
-    /// <p>A predicate to specify when the new trigger should fire.</p>
+    /// <p>A predicate to specify when the new trigger should fire.</p> <p>This field is required when the trigger type is CONDITIONAL.</p>
     #[serde(rename = "Predicate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub predicate: Option<Predicate>,
-    /// <p>A <code>cron</code> expression used to specify the schedule (see <a href="http://docs.aws.amazon.com/glue/latest/dg/monitor-data-warehouse-schedule.html">Time-Based Schedules for Jobs and Crawlers</a>. For example, to run something every day at 12:15 UTC, you would specify: <code>cron(15 12 * * ? *)</code>.</p>
+    /// <p>A <code>cron</code> expression used to specify the schedule (see <a href="http://docs.aws.amazon.com/glue/latest/dg/monitor-data-warehouse-schedule.html">Time-Based Schedules for Jobs and Crawlers</a>. For example, to run something every day at 12:15 UTC, you would specify: <code>cron(15 12 * * ? *)</code>.</p> <p>This field is required when the trigger type is SCHEDULED.</p>
     #[serde(rename = "Schedule")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub schedule: Option<String>,
@@ -869,7 +919,7 @@ pub struct CreateTriggerRequest {
 
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct CreateTriggerResponse {
-    /// <p>The name assigned to the new trigger.</p>
+    /// <p>The name of the trigger.</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
@@ -901,7 +951,7 @@ pub struct CreateXMLClassifierRequest {
     /// <p>The name of the classifier.</p>
     #[serde(rename = "Name")]
     pub name: String,
-    /// <p>The XML tag designating the element that contains each record in an XML document being parsed. Note that this cannot be an empty element. It must contain child elements representing fields in the record.</p>
+    /// <p>The XML tag designating the element that contains each record in an XML document being parsed. Note that this cannot identify a self-closing element (closed by <code>/&gt;</code>). An empty row element that contains only attributes can be parsed as long as it ends with a closing tag (for example, <code>&lt;row item_a="A" item_b="B"&gt;&lt;/row&gt;</code> is okay, but <code>&lt;row item_a="A" item_b="B" /&gt;</code> is not).</p>
     #[serde(rename = "RowTag")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub row_tag: Option<String>,
@@ -922,7 +972,7 @@ pub struct Database {
     #[serde(rename = "LocationUri")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub location_uri: Option<String>,
-    /// <p>Name of the database.</p>
+    /// <p>Name of the database. For Hive compatibility, this is folded to lowercase when it is stored.</p>
     #[serde(rename = "Name")]
     pub name: String,
     /// <p>A list of key-value pairs that define parameters and properties of the database.</p>
@@ -931,7 +981,7 @@ pub struct Database {
     pub parameters: Option<::std::collections::HashMap<String, String>>,
 }
 
-/// <p>The structure used to create or updata a database.</p>
+/// <p>The structure used to create or update a database.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DatabaseInput {
     /// <p>Description of the database</p>
@@ -942,7 +992,7 @@ pub struct DatabaseInput {
     #[serde(rename = "LocationUri")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub location_uri: Option<String>,
-    /// <p>Name of the database.</p>
+    /// <p>Name of the database. For Hive compatibility, this is folded to lowercase when it is stored.</p>
     #[serde(rename = "Name")]
     pub name: String,
     /// <p>A list of key-value pairs that define parameters and properties of the database.</p>
@@ -991,7 +1041,7 @@ pub struct DeleteDatabaseRequest {
     #[serde(rename = "CatalogId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub catalog_id: Option<String>,
-    /// <p>The name of the Database to delete.</p>
+    /// <p>The name of the Database to delete. For Hive compatibility, this must be all lowercase.</p>
     #[serde(rename = "Name")]
     pub name: String,
 }
@@ -1050,16 +1100,36 @@ pub struct DeleteTableRequest {
     #[serde(rename = "CatalogId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub catalog_id: Option<String>,
-    /// <p>The name of the catalog database in which the table resides.</p>
+    /// <p>The name of the catalog database in which the table resides. For Hive compatibility, this name is entirely lowercase.</p>
     #[serde(rename = "DatabaseName")]
     pub database_name: String,
-    /// <p>The name of the table to be deleted.</p>
+    /// <p>The name of the table to be deleted. For Hive compatibility, this name is entirely lowercase.</p>
     #[serde(rename = "Name")]
     pub name: String,
 }
 
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct DeleteTableResponse {}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct DeleteTableVersionRequest {
+    /// <p>The ID of the Data Catalog where the tables reside. If none is supplied, the AWS account ID is used by default.</p>
+    #[serde(rename = "CatalogId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub catalog_id: Option<String>,
+    /// <p>The database in the catalog in which the table resides. For Hive compatibility, this name is entirely lowercase.</p>
+    #[serde(rename = "DatabaseName")]
+    pub database_name: String,
+    /// <p>The name of the table. For Hive compatibility, this name is entirely lowercase.</p>
+    #[serde(rename = "TableName")]
+    pub table_name: String,
+    /// <p>The ID of the table version to be deleted.</p>
+    #[serde(rename = "VersionId")]
+    pub version_id: String,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct DeleteTableVersionResponse {}
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteTriggerRequest {
@@ -1132,7 +1202,11 @@ pub struct DevEndpoint {
     #[serde(rename = "NumberOfNodes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub number_of_nodes: Option<i64>,
-    /// <p>The public address used by this DevEndpoint.</p>
+    /// <p>The private address used by this DevEndpoint.</p>
+    #[serde(rename = "PrivateAddress")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub private_address: Option<String>,
+    /// <p>The public VPC address used by this DevEndpoint.</p>
     #[serde(rename = "PublicAddress")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub public_address: Option<String>,
@@ -1199,7 +1273,7 @@ pub struct ErrorDetail {
 /// <p>An execution property of a job.</p>
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct ExecutionProperty {
-    /// <p>The maximum number of concurrent runs allowed for a job.</p>
+    /// <p>The maximum number of concurrent runs allowed for a job. The default is 1. An error is returned when this threshold is reached. The maximum value you can specify is controlled by a service limit.</p>
     #[serde(rename = "MaxConcurrentRuns")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_concurrent_runs: Option<i64>,
@@ -1397,7 +1471,7 @@ pub struct GetDatabaseRequest {
     #[serde(rename = "CatalogId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub catalog_id: Option<String>,
-    /// <p>The name of the database to retrieve.</p>
+    /// <p>The name of the database to retrieve. For Hive compatibility, this should be all lowercase.</p>
     #[serde(rename = "Name")]
     pub name: String,
 }
@@ -1516,7 +1590,7 @@ pub struct GetJobRunRequest {
     /// <p>Name of the job being run.</p>
     #[serde(rename = "JobName")]
     pub job_name: String,
-    /// <p>A list of the predecessor runs to return as well.</p>
+    /// <p>True if a list of predecessor runs should be returned.</p>
     #[serde(rename = "PredecessorsIncluded")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub predecessors_included: Option<bool>,
@@ -1675,6 +1749,10 @@ pub struct GetPartitionsResponse {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct GetPlanRequest {
+    /// <p>The programming language of the code to perform the mapping.</p>
+    #[serde(rename = "Language")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub language: Option<String>,
     /// <p>Parameters for the mapping.</p>
     #[serde(rename = "Location")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1697,6 +1775,10 @@ pub struct GetPlanResponse {
     #[serde(rename = "PythonScript")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub python_script: Option<String>,
+    /// <p>Scala code to perform the mapping.</p>
+    #[serde(rename = "ScalaCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub scala_code: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, Serialize)]
@@ -1705,10 +1787,10 @@ pub struct GetTableRequest {
     #[serde(rename = "CatalogId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub catalog_id: Option<String>,
-    /// <p>The name of the database in the catalog in which the table resides.</p>
+    /// <p>The name of the database in the catalog in which the table resides. For Hive compatibility, this name is entirely lowercase.</p>
     #[serde(rename = "DatabaseName")]
     pub database_name: String,
-    /// <p>The name of the table for which to retrieve the definition.</p>
+    /// <p>The name of the table for which to retrieve the definition. For Hive compatibility, this name is entirely lowercase.</p>
     #[serde(rename = "Name")]
     pub name: String,
 }
@@ -1722,12 +1804,38 @@ pub struct GetTableResponse {
 }
 
 #[derive(Default, Debug, Clone, Serialize)]
+pub struct GetTableVersionRequest {
+    /// <p>The ID of the Data Catalog where the tables reside. If none is supplied, the AWS account ID is used by default.</p>
+    #[serde(rename = "CatalogId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub catalog_id: Option<String>,
+    /// <p>The database in the catalog in which the table resides. For Hive compatibility, this name is entirely lowercase.</p>
+    #[serde(rename = "DatabaseName")]
+    pub database_name: String,
+    /// <p>The name of the table. For Hive compatibility, this name is entirely lowercase.</p>
+    #[serde(rename = "TableName")]
+    pub table_name: String,
+    /// <p>The ID value of the table version to be retrieved.</p>
+    #[serde(rename = "VersionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub version_id: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct GetTableVersionResponse {
+    /// <p>The requested table version.</p>
+    #[serde(rename = "TableVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub table_version: Option<TableVersion>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetTableVersionsRequest {
     /// <p>The ID of the Data Catalog where the tables reside. If none is supplied, the AWS account ID is used by default.</p>
     #[serde(rename = "CatalogId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub catalog_id: Option<String>,
-    /// <p>The database in the catalog in which the table resides.</p>
+    /// <p>The database in the catalog in which the table resides. For Hive compatibility, this name is entirely lowercase.</p>
     #[serde(rename = "DatabaseName")]
     pub database_name: String,
     /// <p>The maximum number of table versions to return in one response.</p>
@@ -1738,7 +1846,7 @@ pub struct GetTableVersionsRequest {
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>The name of the table.</p>
+    /// <p>The name of the table. For Hive compatibility, this name is entirely lowercase.</p>
     #[serde(rename = "TableName")]
     pub table_name: String,
 }
@@ -1761,7 +1869,7 @@ pub struct GetTablesRequest {
     #[serde(rename = "CatalogId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub catalog_id: Option<String>,
-    /// <p>The database in the catalog whose tables to list.</p>
+    /// <p>The database in the catalog whose tables to list. For Hive compatibility, this name is entirely lowercase.</p>
     #[serde(rename = "DatabaseName")]
     pub database_name: String,
     /// <p>A regular expression pattern. If present, only those tables whose names match the pattern are returned.</p>
@@ -1807,7 +1915,7 @@ pub struct GetTriggerResponse {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct GetTriggersRequest {
-    /// <p>The name of the job for which to retrieve triggers.</p>
+    /// <p>The name of the job for which to retrieve triggers. The trigger that can start this job will be returned, and if there is no such trigger, all triggers will be returned.</p>
     #[serde(rename = "DependentJobName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub dependent_job_name: Option<String>,
@@ -1947,10 +2055,10 @@ pub struct JdbcTarget {
     pub path: Option<String>,
 }
 
-/// <p>Specifies a job in the Data Catalog.</p>
+/// <p>Specifies a job.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct Job {
-    /// <p>The number of capacity units allocated to this job.</p>
+    /// <p>The number of AWS Glue data processing units (DPUs) allocated to this Job. From 2 to 100 DPUs can be allocated; the default is 10. A DPU is a relative measure of processing power that consists of 4 vCPUs of compute capacity and 16 GB of memory. For more information, see the <a href="https://aws.amazon.com/glue/pricing/">AWS Glue pricing page</a>.</p>
     #[serde(rename = "AllocatedCapacity")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub allocated_capacity: Option<i64>,
@@ -1966,7 +2074,7 @@ pub struct Job {
     #[serde(rename = "CreatedOn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub created_on: Option<f64>,
-    /// <p>The default parameters for this job.</p>
+    /// <p>The default arguments for this job, specified as name-value pairs.</p> <p>You can specify arguments here that your own job-execution script consumes, as well as arguments that AWS Glue itself consumes.</p> <p>For information about how to specify and consume your own Job arguments, see the <a href="http://docs.aws.amazon.com/glue/latest/dg/aws-glue-programming-python-calling.html">Calling AWS Glue APIs in Python</a> topic in the developer guide.</p> <p>For information about the key-value pairs that AWS Glue consumes to set up your job, see the <a href="http://docs.aws.amazon.com/glue/latest/dg/aws-glue-programming-python-glue-arguments.html">Special Parameters Used by AWS Glue</a> topic in the developer guide.</p>
     #[serde(rename = "DefaultArguments")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub default_arguments: Option<::std::collections::HashMap<String, String>>,
@@ -1994,7 +2102,7 @@ pub struct Job {
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p>The role associated with this job.</p>
+    /// <p>The name of the IAM role associated with this job.</p>
     #[serde(rename = "Role")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub role: Option<String>,
@@ -2028,11 +2136,11 @@ pub struct JobBookmarkEntry {
 /// <p>Specifies code that executes a job.</p>
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct JobCommand {
-    /// <p>The name of this job command.</p>
+    /// <p>The name of the job command: this must be <code>glueetl</code>.</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p>Specifies the location of a script that executes a job.</p>
+    /// <p>Specifies the S3 path to a script that executes a job (required).</p>
     #[serde(rename = "ScriptLocation")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub script_location: Option<String>,
@@ -2041,15 +2149,15 @@ pub struct JobCommand {
 /// <p>Contains information about a job run.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct JobRun {
-    /// <p>The amount of infrastructure capacity allocated to this job run.</p>
+    /// <p>The number of AWS Glue data processing units (DPUs) allocated to this JobRun. From 2 to 100 DPUs can be allocated; the default is 10. A DPU is a relative measure of processing power that consists of 4 vCPUs of compute capacity and 16 GB of memory. For more information, see the <a href="https://aws.amazon.com/glue/pricing/">AWS Glue pricing page</a>.</p>
     #[serde(rename = "AllocatedCapacity")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub allocated_capacity: Option<i64>,
-    /// <p>The job arguments associated with this run.</p>
+    /// <p>The job arguments associated with this run. These override equivalent default arguments set for the job.</p> <p>You can specify arguments here that your own job-execution script consumes, as well as arguments that AWS Glue itself consumes.</p> <p>For information about how to specify and consume your own job arguments, see the <a href="http://docs.aws.amazon.com/glue/latest/dg/aws-glue-programming-python-calling.html">Calling AWS Glue APIs in Python</a> topic in the developer guide.</p> <p>For information about the key-value pairs that AWS Glue consumes to set up your job, see the <a href="http://docs.aws.amazon.com/glue/latest/dg/aws-glue-programming-python-glue-arguments.html">Special Parameters Used by AWS Glue</a> topic in the developer guide.</p>
     #[serde(rename = "Arguments")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub arguments: Option<::std::collections::HashMap<String, String>>,
-    /// <p>The number or the attempt to run this job.</p>
+    /// <p>The number of the attempt to run this job.</p>
     #[serde(rename = "Attempt")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub attempt: Option<i64>,
@@ -2081,7 +2189,7 @@ pub struct JobRun {
     #[serde(rename = "PredecessorRuns")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub predecessor_runs: Option<Vec<Predecessor>>,
-    /// <p>The ID of the previous run of this job.</p>
+    /// <p>The ID of the previous run of this job. For example, the JobRunId specified in the StartJobRun action.</p>
     #[serde(rename = "PreviousRunId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub previous_run_id: Option<String>,
@@ -2089,20 +2197,20 @@ pub struct JobRun {
     #[serde(rename = "StartedOn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub started_on: Option<f64>,
-    /// <p>The name of the trigger for this job run.</p>
+    /// <p>The name of the trigger that started this job run.</p>
     #[serde(rename = "TriggerName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub trigger_name: Option<String>,
 }
 
-/// <p>Specifies information used to update an existing job.</p>
+/// <p>Specifies information used to update an existing job. Note that the previous job definition will be completely overwritten by this information.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct JobUpdate {
-    /// <p>The number of capacity units allocated to this job.</p>
+    /// <p>The number of AWS Glue data processing units (DPUs) to allocate to this Job. From 2 to 100 DPUs can be allocated; the default is 10. A DPU is a relative measure of processing power that consists of 4 vCPUs of compute capacity and 16 GB of memory. For more information, see the <a href="https://aws.amazon.com/glue/pricing/">AWS Glue pricing page</a>.</p>
     #[serde(rename = "AllocatedCapacity")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub allocated_capacity: Option<i64>,
-    /// <p>The JobCommand that executes this job.</p>
+    /// <p>The JobCommand that executes this job (required).</p>
     #[serde(rename = "Command")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub command: Option<JobCommand>,
@@ -2110,7 +2218,7 @@ pub struct JobUpdate {
     #[serde(rename = "Connections")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub connections: Option<ConnectionsList>,
-    /// <p>The default parameters for this job.</p>
+    /// <p>The default arguments for this job.</p> <p>You can specify arguments here that your own job-execution script consumes, as well as arguments that AWS Glue itself consumes.</p> <p>For information about how to specify and consume your own Job arguments, see the <a href="http://docs.aws.amazon.com/glue/latest/dg/aws-glue-programming-python-calling.html">Calling AWS Glue APIs in Python</a> topic in the developer guide.</p> <p>For information about the key-value pairs that AWS Glue consumes to set up your job, see the <a href="http://docs.aws.amazon.com/glue/latest/dg/aws-glue-programming-python-glue-arguments.html">Special Parameters Used by AWS Glue</a> topic in the developer guide.</p>
     #[serde(rename = "DefaultArguments")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub default_arguments: Option<::std::collections::HashMap<String, String>>,
@@ -2130,10 +2238,33 @@ pub struct JobUpdate {
     #[serde(rename = "MaxRetries")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_retries: Option<i64>,
-    /// <p>The role associated with this job.</p>
+    /// <p>The name of the IAM role associated with this job (required).</p>
     #[serde(rename = "Role")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub role: Option<String>,
+}
+
+/// <p>A classifier for <code>JSON</code> content.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct JsonClassifier {
+    /// <p>The time this classifier was registered.</p>
+    #[serde(rename = "CreationTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_time: Option<f64>,
+    /// <p>A <code>JsonPath</code> string defining the JSON data for the classifier to classify. AWS Glue supports a subset of JsonPath, as described in <a href="https://docs.aws.amazon.com/glue/latest/dg/custom-classifier.html#custom-classifier-json">Writing JsonPath Custom Classifiers</a>.</p>
+    #[serde(rename = "JsonPath")]
+    pub json_path: String,
+    /// <p>The time this classifier was last updated.</p>
+    #[serde(rename = "LastUpdated")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_updated: Option<f64>,
+    /// <p>The name of the classifier.</p>
+    #[serde(rename = "Name")]
+    pub name: String,
+    /// <p>The version of this classifier.</p>
+    #[serde(rename = "Version")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub version: Option<i64>,
 }
 
 /// <p>Status and error information about the most recent crawl.</p>
@@ -2304,7 +2435,7 @@ pub struct PartitionValueList {
 /// <p>Specifies the physical requirements for a connection.</p>
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct PhysicalConnectionRequirements {
-    /// <p>The connection's availability zone.</p>
+    /// <p>The connection's availability zone. This field is deprecated and has no effect.</p>
     #[serde(rename = "AvailabilityZone")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub availability_zone: Option<String>,
@@ -2318,14 +2449,14 @@ pub struct PhysicalConnectionRequirements {
     pub subnet_id: Option<String>,
 }
 
-/// <p>A job run that preceded this one.</p>
+/// <p>A job run that was used in the predicate of a conditional trigger that triggered this job run.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct Predecessor {
     /// <p>The name of the predecessor job.</p>
     #[serde(rename = "JobName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub job_name: Option<String>,
-    /// <p>The job-run ID of the precessor job run.</p>
+    /// <p>The job-run ID of the predecessor job run.</p>
     #[serde(rename = "RunId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub run_id: Option<String>,
@@ -2478,18 +2609,18 @@ pub struct StartCrawlerScheduleResponse {}
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct StartJobRunRequest {
-    /// <p>The infrastructure capacity to allocate to this job.</p>
+    /// <p>The number of AWS Glue data processing units (DPUs) to allocate to this JobRun. From 2 to 100 DPUs can be allocated; the default is 10. A DPU is a relative measure of processing power that consists of 4 vCPUs of compute capacity and 16 GB of memory. For more information, see the <a href="https://aws.amazon.com/glue/pricing/">AWS Glue pricing page</a>.</p>
     #[serde(rename = "AllocatedCapacity")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub allocated_capacity: Option<i64>,
-    /// <p>Specific arguments for this job run.</p>
+    /// <p>The job arguments specifically for this run. They override the equivalent default arguments set for the job itself.</p> <p>You can specify arguments here that your own job-execution script consumes, as well as arguments that AWS Glue itself consumes.</p> <p>For information about how to specify and consume your own Job arguments, see the <a href="http://docs.aws.amazon.com/glue/latest/dg/aws-glue-programming-python-calling.html">Calling AWS Glue APIs in Python</a> topic in the developer guide.</p> <p>For information about the key-value pairs that AWS Glue consumes to set up your job, see the <a href="http://docs.aws.amazon.com/glue/latest/dg/aws-glue-programming-python-glue-arguments.html">Special Parameters Used by AWS Glue</a> topic in the developer guide.</p>
     #[serde(rename = "Arguments")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub arguments: Option<::std::collections::HashMap<String, String>>,
     /// <p>The name of the job to start.</p>
     #[serde(rename = "JobName")]
     pub job_name: String,
-    /// <p>The ID of the job run to start.</p>
+    /// <p>The ID of a previous JobRun to retry.</p>
     #[serde(rename = "JobRunId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub job_run_id: Option<String>,
@@ -2617,7 +2748,7 @@ pub struct Table {
     #[serde(rename = "CreatedBy")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub created_by: Option<String>,
-    /// <p>Name of the metadata database where the table metadata resides.</p>
+    /// <p>Name of the metadata database where the table metadata resides. For Hive compatibility, this must be all lowercase.</p>
     #[serde(rename = "DatabaseName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub database_name: Option<String>,
@@ -2633,7 +2764,7 @@ pub struct Table {
     #[serde(rename = "LastAnalyzedTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_analyzed_time: Option<f64>,
-    /// <p>Name of the table.</p>
+    /// <p>Name of the table. For Hive compatibility, this must be entirely lowercase.</p>
     #[serde(rename = "Name")]
     pub name: String,
     /// <p>Owner of the table.</p>
@@ -2681,7 +2812,7 @@ pub struct TableError {
     #[serde(rename = "ErrorDetail")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub error_detail: Option<ErrorDetail>,
-    /// <p>Name of the table.</p>
+    /// <p>Name of the table. For Hive compatibility, this must be entirely lowercase.</p>
     #[serde(rename = "TableName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub table_name: Option<String>,
@@ -2702,7 +2833,7 @@ pub struct TableInput {
     #[serde(rename = "LastAnalyzedTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_analyzed_time: Option<f64>,
-    /// <p>Name of the table.</p>
+    /// <p>Name of the table. For Hive compatibility, this is folded to lowercase when it is stored.</p>
     #[serde(rename = "Name")]
     pub name: String,
     /// <p>Owner of the table.</p>
@@ -2752,6 +2883,23 @@ pub struct TableVersion {
     pub version_id: Option<String>,
 }
 
+/// <p>An error record for table-version operations.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct TableVersionError {
+    /// <p>Detail about the error.</p>
+    #[serde(rename = "ErrorDetail")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub error_detail: Option<ErrorDetail>,
+    /// <p>The name of the table in question.</p>
+    #[serde(rename = "TableName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub table_name: Option<String>,
+    /// <p>The ID value of the version in question.</p>
+    #[serde(rename = "VersionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub version_id: Option<String>,
+}
+
 /// <p>Information about a specific trigger.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct Trigger {
@@ -2763,7 +2911,7 @@ pub struct Trigger {
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p>The trigger ID.</p>
+    /// <p>Reserved for future use.</p>
     #[serde(rename = "Id")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
@@ -2771,7 +2919,7 @@ pub struct Trigger {
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p>The predicate of this trigger.</p>
+    /// <p>The predicate of this trigger, which defines when it will fire.</p>
     #[serde(rename = "Predicate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub predicate: Option<Predicate>,
@@ -2789,7 +2937,7 @@ pub struct Trigger {
     pub type_: Option<String>,
 }
 
-/// <p>A structure used to provide information used to updata a trigger.</p>
+/// <p>A structure used to provide information used to update a trigger. This object will update the the previous trigger definition by overwriting it completely.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct TriggerUpdate {
     /// <p>The actions initiated by this trigger.</p>
@@ -2800,7 +2948,7 @@ pub struct TriggerUpdate {
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p>The name of the trigger.</p>
+    /// <p>Reserved for future use.</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
@@ -2808,7 +2956,7 @@ pub struct TriggerUpdate {
     #[serde(rename = "Predicate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub predicate: Option<Predicate>,
-    /// <p>An updated <code>cron</code> expression used to specify the schedule (see <a href="http://docs.aws.amazon.com/glue/latest/dg/monitor-data-warehouse-schedule.html">Time-Based Schedules for Jobs and Crawlers</a>. For example, to run something every day at 12:15 UTC, you would specify: <code>cron(15 12 * * ? *)</code>.</p>
+    /// <p>A <code>cron</code> expression used to specify the schedule (see <a href="http://docs.aws.amazon.com/glue/latest/dg/monitor-data-warehouse-schedule.html">Time-Based Schedules for Jobs and Crawlers</a>. For example, to run something every day at 12:15 UTC, you would specify: <code>cron(15 12 * * ? *)</code>.</p>
     #[serde(rename = "Schedule")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub schedule: Option<String>,
@@ -2820,6 +2968,10 @@ pub struct UpdateClassifierRequest {
     #[serde(rename = "GrokClassifier")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub grok_classifier: Option<UpdateGrokClassifierRequest>,
+    /// <p>A <code>JsonClassifier</code> object with updated fields.</p>
+    #[serde(rename = "JsonClassifier")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub json_classifier: Option<UpdateJsonClassifierRequest>,
     /// <p>An <code>XMLClassifier</code> object with updated fields.</p>
     #[serde(rename = "XMLClassifier")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2852,7 +3004,7 @@ pub struct UpdateCrawlerRequest {
     #[serde(rename = "Classifiers")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub classifiers: Option<Vec<String>>,
-    /// <p>Crawler configuration information. This versioned JSON string allows users to specify aspects of a Crawler's behavior.</p> <p>You can use this field to force partitions to inherit metadata such as classification, input format, output format, serde information, and schema from their parent table, rather than detect this information separately for each partition. Use the following JSON string to specify that behavior:</p>
+    /// <p>Crawler configuration information. This versioned JSON string allows users to specify aspects of a Crawler's behavior.</p> <p>You can use this field to force partitions to inherit metadata such as classification, input format, output format, serde information, and schema from their parent table, rather than detect this information separately for each partition. Use the following JSON string to specify that behavior:</p> <p>Example: <code>'{ "Version": 1.0, "CrawlerOutput": { "Partitions": { "AddOrUpdateBehavior": "InheritFromTable" } } }'</code> </p>
     #[serde(rename = "Configuration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub configuration: Option<String>,
@@ -2915,7 +3067,7 @@ pub struct UpdateDatabaseRequest {
     /// <p>A <code>DatabaseInput</code> object specifying the new definition of the metadata database in the catalog.</p>
     #[serde(rename = "DatabaseInput")]
     pub database_input: DatabaseInput,
-    /// <p>The name of the metadata database to update in the catalog.</p>
+    /// <p>The name of the database to update in the catalog. For Hive compatibility, this is folded to lowercase.</p>
     #[serde(rename = "Name")]
     pub name: String,
 }
@@ -2983,6 +3135,18 @@ pub struct UpdateJobResponse {
     pub job_name: Option<String>,
 }
 
+/// <p>Specifies a JSON classifier to be updated.</p>
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct UpdateJsonClassifierRequest {
+    /// <p>A <code>JsonPath</code> string defining the JSON data for the classifier to classify. AWS Glue supports a subset of JsonPath, as described in <a href="https://docs.aws.amazon.com/glue/latest/dg/custom-classifier.html#custom-classifier-json">Writing JsonPath Custom Classifiers</a>.</p>
+    #[serde(rename = "JsonPath")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub json_path: Option<String>,
+    /// <p>The name of the classifier.</p>
+    #[serde(rename = "Name")]
+    pub name: String,
+}
+
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct UpdatePartitionRequest {
     /// <p>The ID of the Data Catalog where the partition to be updated resides. If none is supplied, the AWS account ID is used by default.</p>
@@ -3012,9 +3176,13 @@ pub struct UpdateTableRequest {
     #[serde(rename = "CatalogId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub catalog_id: Option<String>,
-    /// <p>The name of the catalog database in which the table resides.</p>
+    /// <p>The name of the catalog database in which the table resides. For Hive compatibility, this name is entirely lowercase.</p>
     #[serde(rename = "DatabaseName")]
     pub database_name: String,
+    /// <p>By default, <code>UpdateTable</code> always creates an archived version of the table before updating it. If <code>skipArchive</code> is set to true, however, <code>UpdateTable</code> does not create the archived version.</p>
+    #[serde(rename = "SkipArchive")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub skip_archive: Option<bool>,
     /// <p>An updated <code>TableInput</code> object to define the metadata table in the catalog.</p>
     #[serde(rename = "TableInput")]
     pub table_input: TableInput,
@@ -3071,7 +3239,7 @@ pub struct UpdateXMLClassifierRequest {
     /// <p>The name of the classifier.</p>
     #[serde(rename = "Name")]
     pub name: String,
-    /// <p>The XML tag designating the element that contains each record in an XML document being parsed. Note that this cannot be an empty element. It must contain child elements representing fields in the record.</p>
+    /// <p>The XML tag designating the element that contains each record in an XML document being parsed. Note that this cannot identify a self-closing element (closed by <code>/&gt;</code>). An empty row element that contains only attributes can be parsed as long as it ends with a closing tag (for example, <code>&lt;row item_a="A" item_b="B"&gt;&lt;/row&gt;</code> is okay, but <code>&lt;row item_a="A" item_b="B" /&gt;</code> is not).</p>
     #[serde(rename = "RowTag")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub row_tag: Option<String>,
@@ -3148,7 +3316,7 @@ pub struct XMLClassifier {
     /// <p>The name of the classifier.</p>
     #[serde(rename = "Name")]
     pub name: String,
-    /// <p>The XML tag designating the element that contains each record in an XML document being parsed. Note that this cannot be an empty element. It must contain child elements representing fields in the record.</p>
+    /// <p>The XML tag designating the element that contains each record in an XML document being parsed. Note that this cannot identify a self-closing element (closed by <code>/&gt;</code>). An empty row element that contains only attributes can be parsed as long as it ends with a closing tag (for example, <code>&lt;row item_a="A" item_b="B"&gt;&lt;/row&gt;</code> is okay, but <code>&lt;row item_a="A" item_b="B" /&gt;</code> is not).</p>
     #[serde(rename = "RowTag")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub row_tag: Option<String>,
@@ -3550,6 +3718,104 @@ impl Error for BatchDeleteTableError {
         }
     }
 }
+/// Errors returned by BatchDeleteTableVersion
+#[derive(Debug, PartialEq)]
+pub enum BatchDeleteTableVersionError {
+    /// <p>A specified entity does not exist</p>
+    EntityNotFound(String),
+    /// <p>An internal service error occurred.</p>
+    InternalService(String),
+    /// <p>The input provided was not valid.</p>
+    InvalidInput(String),
+    /// <p>The operation timed out.</p>
+    OperationTimeout(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl BatchDeleteTableVersionError {
+    pub fn from_body(body: &str) -> BatchDeleteTableVersionError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "EntityNotFoundException" => {
+                        BatchDeleteTableVersionError::EntityNotFound(String::from(error_message))
+                    }
+                    "InternalServiceException" => {
+                        BatchDeleteTableVersionError::InternalService(String::from(error_message))
+                    }
+                    "InvalidInputException" => {
+                        BatchDeleteTableVersionError::InvalidInput(String::from(error_message))
+                    }
+                    "OperationTimeoutException" => {
+                        BatchDeleteTableVersionError::OperationTimeout(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        BatchDeleteTableVersionError::Validation(error_message.to_string())
+                    }
+                    _ => BatchDeleteTableVersionError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => BatchDeleteTableVersionError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for BatchDeleteTableVersionError {
+    fn from(err: serde_json::error::Error) -> BatchDeleteTableVersionError {
+        BatchDeleteTableVersionError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for BatchDeleteTableVersionError {
+    fn from(err: CredentialsError) -> BatchDeleteTableVersionError {
+        BatchDeleteTableVersionError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for BatchDeleteTableVersionError {
+    fn from(err: HttpDispatchError) -> BatchDeleteTableVersionError {
+        BatchDeleteTableVersionError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for BatchDeleteTableVersionError {
+    fn from(err: io::Error) -> BatchDeleteTableVersionError {
+        BatchDeleteTableVersionError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for BatchDeleteTableVersionError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for BatchDeleteTableVersionError {
+    fn description(&self) -> &str {
+        match *self {
+            BatchDeleteTableVersionError::EntityNotFound(ref cause) => cause,
+            BatchDeleteTableVersionError::InternalService(ref cause) => cause,
+            BatchDeleteTableVersionError::InvalidInput(ref cause) => cause,
+            BatchDeleteTableVersionError::OperationTimeout(ref cause) => cause,
+            BatchDeleteTableVersionError::Validation(ref cause) => cause,
+            BatchDeleteTableVersionError::Credentials(ref err) => err.description(),
+            BatchDeleteTableVersionError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            BatchDeleteTableVersionError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by BatchGetPartition
 #[derive(Debug, PartialEq)]
 pub enum BatchGetPartitionError {
@@ -3839,6 +4105,8 @@ pub enum CreateConnectionError {
     InvalidInput(String),
     /// <p>The operation timed out.</p>
     OperationTimeout(String),
+    /// <p>A resource numerical limit was exceeded.</p>
+    ResourceNumberLimitExceeded(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -3870,6 +4138,11 @@ impl CreateConnectionError {
                     }
                     "OperationTimeoutException" => {
                         CreateConnectionError::OperationTimeout(String::from(error_message))
+                    }
+                    "ResourceNumberLimitExceededException" => {
+                        CreateConnectionError::ResourceNumberLimitExceeded(String::from(
+                            error_message,
+                        ))
                     }
                     "ValidationException" => {
                         CreateConnectionError::Validation(error_message.to_string())
@@ -3913,6 +4186,7 @@ impl Error for CreateConnectionError {
             CreateConnectionError::AlreadyExists(ref cause) => cause,
             CreateConnectionError::InvalidInput(ref cause) => cause,
             CreateConnectionError::OperationTimeout(ref cause) => cause,
+            CreateConnectionError::ResourceNumberLimitExceeded(ref cause) => cause,
             CreateConnectionError::Validation(ref cause) => cause,
             CreateConnectionError::Credentials(ref err) => err.description(),
             CreateConnectionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
@@ -4245,6 +4519,8 @@ impl Error for CreateDevEndpointError {
 pub enum CreateJobError {
     /// <p>A resource to be created or added already exists.</p>
     AlreadyExists(String),
+    /// <p>Two processes are trying to modify a resource simultaneously.</p>
+    ConcurrentModification(String),
     /// <p>The same unique identifier was associated with two different records.</p>
     IdempotentParameterMismatch(String),
     /// <p>An internal service error occurred.</p>
@@ -4280,6 +4556,9 @@ impl CreateJobError {
                 match *error_type {
                     "AlreadyExistsException" => {
                         CreateJobError::AlreadyExists(String::from(error_message))
+                    }
+                    "ConcurrentModificationException" => {
+                        CreateJobError::ConcurrentModification(String::from(error_message))
                     }
                     "IdempotentParameterMismatchException" => {
                         CreateJobError::IdempotentParameterMismatch(String::from(error_message))
@@ -4334,6 +4613,7 @@ impl Error for CreateJobError {
     fn description(&self) -> &str {
         match *self {
             CreateJobError::AlreadyExists(ref cause) => cause,
+            CreateJobError::ConcurrentModification(ref cause) => cause,
             CreateJobError::IdempotentParameterMismatch(ref cause) => cause,
             CreateJobError::InternalService(ref cause) => cause,
             CreateJobError::InvalidInput(ref cause) => cause,
@@ -4659,6 +4939,10 @@ impl Error for CreateTableError {
 pub enum CreateTriggerError {
     /// <p>A resource to be created or added already exists.</p>
     AlreadyExists(String),
+    /// <p>Two processes are trying to modify a resource simultaneously.</p>
+    ConcurrentModification(String),
+    /// <p>The same unique identifier was associated with two different records.</p>
+    IdempotentParameterMismatch(String),
     /// <p>An internal service error occurred.</p>
     InternalService(String),
     /// <p>The input provided was not valid.</p>
@@ -4692,6 +4976,12 @@ impl CreateTriggerError {
                 match *error_type {
                     "AlreadyExistsException" => {
                         CreateTriggerError::AlreadyExists(String::from(error_message))
+                    }
+                    "ConcurrentModificationException" => {
+                        CreateTriggerError::ConcurrentModification(String::from(error_message))
+                    }
+                    "IdempotentParameterMismatchException" => {
+                        CreateTriggerError::IdempotentParameterMismatch(String::from(error_message))
                     }
                     "InternalServiceException" => {
                         CreateTriggerError::InternalService(String::from(error_message))
@@ -4745,6 +5035,8 @@ impl Error for CreateTriggerError {
     fn description(&self) -> &str {
         match *self {
             CreateTriggerError::AlreadyExists(ref cause) => cause,
+            CreateTriggerError::ConcurrentModification(ref cause) => cause,
+            CreateTriggerError::IdempotentParameterMismatch(ref cause) => cause,
             CreateTriggerError::InternalService(ref cause) => cause,
             CreateTriggerError::InvalidInput(ref cause) => cause,
             CreateTriggerError::OperationTimeout(ref cause) => cause,
@@ -4769,6 +5061,8 @@ pub enum CreateUserDefinedFunctionError {
     InvalidInput(String),
     /// <p>The operation timed out.</p>
     OperationTimeout(String),
+    /// <p>A resource numerical limit was exceeded.</p>
+    ResourceNumberLimitExceeded(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -4806,6 +5100,11 @@ impl CreateUserDefinedFunctionError {
                     }
                     "OperationTimeoutException" => {
                         CreateUserDefinedFunctionError::OperationTimeout(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ResourceNumberLimitExceededException" => {
+                        CreateUserDefinedFunctionError::ResourceNumberLimitExceeded(String::from(
                             error_message,
                         ))
                     }
@@ -4853,6 +5152,7 @@ impl Error for CreateUserDefinedFunctionError {
             CreateUserDefinedFunctionError::InternalService(ref cause) => cause,
             CreateUserDefinedFunctionError::InvalidInput(ref cause) => cause,
             CreateUserDefinedFunctionError::OperationTimeout(ref cause) => cause,
+            CreateUserDefinedFunctionError::ResourceNumberLimitExceeded(ref cause) => cause,
             CreateUserDefinedFunctionError::Validation(ref cause) => cause,
             CreateUserDefinedFunctionError::Credentials(ref err) => err.description(),
             CreateUserDefinedFunctionError::HttpDispatch(ref dispatch_error) => {
@@ -5600,9 +5900,109 @@ impl Error for DeleteTableError {
         }
     }
 }
+/// Errors returned by DeleteTableVersion
+#[derive(Debug, PartialEq)]
+pub enum DeleteTableVersionError {
+    /// <p>A specified entity does not exist</p>
+    EntityNotFound(String),
+    /// <p>An internal service error occurred.</p>
+    InternalService(String),
+    /// <p>The input provided was not valid.</p>
+    InvalidInput(String),
+    /// <p>The operation timed out.</p>
+    OperationTimeout(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl DeleteTableVersionError {
+    pub fn from_body(body: &str) -> DeleteTableVersionError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "EntityNotFoundException" => {
+                        DeleteTableVersionError::EntityNotFound(String::from(error_message))
+                    }
+                    "InternalServiceException" => {
+                        DeleteTableVersionError::InternalService(String::from(error_message))
+                    }
+                    "InvalidInputException" => {
+                        DeleteTableVersionError::InvalidInput(String::from(error_message))
+                    }
+                    "OperationTimeoutException" => {
+                        DeleteTableVersionError::OperationTimeout(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        DeleteTableVersionError::Validation(error_message.to_string())
+                    }
+                    _ => DeleteTableVersionError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => DeleteTableVersionError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for DeleteTableVersionError {
+    fn from(err: serde_json::error::Error) -> DeleteTableVersionError {
+        DeleteTableVersionError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DeleteTableVersionError {
+    fn from(err: CredentialsError) -> DeleteTableVersionError {
+        DeleteTableVersionError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DeleteTableVersionError {
+    fn from(err: HttpDispatchError) -> DeleteTableVersionError {
+        DeleteTableVersionError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteTableVersionError {
+    fn from(err: io::Error) -> DeleteTableVersionError {
+        DeleteTableVersionError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DeleteTableVersionError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeleteTableVersionError {
+    fn description(&self) -> &str {
+        match *self {
+            DeleteTableVersionError::EntityNotFound(ref cause) => cause,
+            DeleteTableVersionError::InternalService(ref cause) => cause,
+            DeleteTableVersionError::InvalidInput(ref cause) => cause,
+            DeleteTableVersionError::OperationTimeout(ref cause) => cause,
+            DeleteTableVersionError::Validation(ref cause) => cause,
+            DeleteTableVersionError::Credentials(ref err) => err.description(),
+            DeleteTableVersionError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DeleteTableVersionError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by DeleteTrigger
 #[derive(Debug, PartialEq)]
 pub enum DeleteTriggerError {
+    /// <p>Two processes are trying to modify a resource simultaneously.</p>
+    ConcurrentModification(String),
     /// <p>An internal service error occurred.</p>
     InternalService(String),
     /// <p>The input provided was not valid.</p>
@@ -5632,6 +6032,9 @@ impl DeleteTriggerError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
+                    "ConcurrentModificationException" => {
+                        DeleteTriggerError::ConcurrentModification(String::from(error_message))
+                    }
                     "InternalServiceException" => {
                         DeleteTriggerError::InternalService(String::from(error_message))
                     }
@@ -5680,6 +6083,7 @@ impl fmt::Display for DeleteTriggerError {
 impl Error for DeleteTriggerError {
     fn description(&self) -> &str {
         match *self {
+            DeleteTriggerError::ConcurrentModification(ref cause) => cause,
             DeleteTriggerError::InternalService(ref cause) => cause,
             DeleteTriggerError::InvalidInput(ref cause) => cause,
             DeleteTriggerError::OperationTimeout(ref cause) => cause,
@@ -7758,6 +8162,102 @@ impl Error for GetTableError {
         }
     }
 }
+/// Errors returned by GetTableVersion
+#[derive(Debug, PartialEq)]
+pub enum GetTableVersionError {
+    /// <p>A specified entity does not exist</p>
+    EntityNotFound(String),
+    /// <p>An internal service error occurred.</p>
+    InternalService(String),
+    /// <p>The input provided was not valid.</p>
+    InvalidInput(String),
+    /// <p>The operation timed out.</p>
+    OperationTimeout(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl GetTableVersionError {
+    pub fn from_body(body: &str) -> GetTableVersionError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "EntityNotFoundException" => {
+                        GetTableVersionError::EntityNotFound(String::from(error_message))
+                    }
+                    "InternalServiceException" => {
+                        GetTableVersionError::InternalService(String::from(error_message))
+                    }
+                    "InvalidInputException" => {
+                        GetTableVersionError::InvalidInput(String::from(error_message))
+                    }
+                    "OperationTimeoutException" => {
+                        GetTableVersionError::OperationTimeout(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        GetTableVersionError::Validation(error_message.to_string())
+                    }
+                    _ => GetTableVersionError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => GetTableVersionError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for GetTableVersionError {
+    fn from(err: serde_json::error::Error) -> GetTableVersionError {
+        GetTableVersionError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for GetTableVersionError {
+    fn from(err: CredentialsError) -> GetTableVersionError {
+        GetTableVersionError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for GetTableVersionError {
+    fn from(err: HttpDispatchError) -> GetTableVersionError {
+        GetTableVersionError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetTableVersionError {
+    fn from(err: io::Error) -> GetTableVersionError {
+        GetTableVersionError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for GetTableVersionError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetTableVersionError {
+    fn description(&self) -> &str {
+        match *self {
+            GetTableVersionError::EntityNotFound(ref cause) => cause,
+            GetTableVersionError::InternalService(ref cause) => cause,
+            GetTableVersionError::InvalidInput(ref cause) => cause,
+            GetTableVersionError::OperationTimeout(ref cause) => cause,
+            GetTableVersionError::Validation(ref cause) => cause,
+            GetTableVersionError::Credentials(ref err) => err.description(),
+            GetTableVersionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            GetTableVersionError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by GetTableVersions
 #[derive(Debug, PartialEq)]
 pub enum GetTableVersionsError {
@@ -9127,6 +9627,8 @@ impl Error for StopCrawlerScheduleError {
 /// Errors returned by StopTrigger
 #[derive(Debug, PartialEq)]
 pub enum StopTriggerError {
+    /// <p>Two processes are trying to modify a resource simultaneously.</p>
+    ConcurrentModification(String),
     /// <p>A specified entity does not exist</p>
     EntityNotFound(String),
     /// <p>An internal service error occurred.</p>
@@ -9158,6 +9660,9 @@ impl StopTriggerError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
+                    "ConcurrentModificationException" => {
+                        StopTriggerError::ConcurrentModification(String::from(error_message))
+                    }
                     "EntityNotFoundException" => {
                         StopTriggerError::EntityNotFound(String::from(error_message))
                     }
@@ -9209,6 +9714,7 @@ impl fmt::Display for StopTriggerError {
 impl Error for StopTriggerError {
     fn description(&self) -> &str {
         match *self {
+            StopTriggerError::ConcurrentModification(ref cause) => cause,
             StopTriggerError::EntityNotFound(ref cause) => cause,
             StopTriggerError::InternalService(ref cause) => cause,
             StopTriggerError::InvalidInput(ref cause) => cause,
@@ -9811,6 +10317,8 @@ impl Error for UpdateDevEndpointError {
 /// Errors returned by UpdateJob
 #[derive(Debug, PartialEq)]
 pub enum UpdateJobError {
+    /// <p>Two processes are trying to modify a resource simultaneously.</p>
+    ConcurrentModification(String),
     /// <p>A specified entity does not exist</p>
     EntityNotFound(String),
     /// <p>An internal service error occurred.</p>
@@ -9842,6 +10350,9 @@ impl UpdateJobError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
+                    "ConcurrentModificationException" => {
+                        UpdateJobError::ConcurrentModification(String::from(error_message))
+                    }
                     "EntityNotFoundException" => {
                         UpdateJobError::EntityNotFound(String::from(error_message))
                     }
@@ -9891,6 +10402,7 @@ impl fmt::Display for UpdateJobError {
 impl Error for UpdateJobError {
     fn description(&self) -> &str {
         match *self {
+            UpdateJobError::ConcurrentModification(ref cause) => cause,
             UpdateJobError::EntityNotFound(ref cause) => cause,
             UpdateJobError::InternalService(ref cause) => cause,
             UpdateJobError::InvalidInput(ref cause) => cause,
@@ -10011,6 +10523,8 @@ pub enum UpdateTableError {
     InvalidInput(String),
     /// <p>The operation timed out.</p>
     OperationTimeout(String),
+    /// <p>A resource numerical limit was exceeded.</p>
+    ResourceNumberLimitExceeded(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -10048,6 +10562,9 @@ impl UpdateTableError {
                     }
                     "OperationTimeoutException" => {
                         UpdateTableError::OperationTimeout(String::from(error_message))
+                    }
+                    "ResourceNumberLimitExceededException" => {
+                        UpdateTableError::ResourceNumberLimitExceeded(String::from(error_message))
                     }
                     "ValidationException" => {
                         UpdateTableError::Validation(error_message.to_string())
@@ -10093,6 +10610,7 @@ impl Error for UpdateTableError {
             UpdateTableError::InternalService(ref cause) => cause,
             UpdateTableError::InvalidInput(ref cause) => cause,
             UpdateTableError::OperationTimeout(ref cause) => cause,
+            UpdateTableError::ResourceNumberLimitExceeded(ref cause) => cause,
             UpdateTableError::Validation(ref cause) => cause,
             UpdateTableError::Credentials(ref err) => err.description(),
             UpdateTableError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
@@ -10103,6 +10621,8 @@ impl Error for UpdateTableError {
 /// Errors returned by UpdateTrigger
 #[derive(Debug, PartialEq)]
 pub enum UpdateTriggerError {
+    /// <p>Two processes are trying to modify a resource simultaneously.</p>
+    ConcurrentModification(String),
     /// <p>A specified entity does not exist</p>
     EntityNotFound(String),
     /// <p>An internal service error occurred.</p>
@@ -10134,6 +10654,9 @@ impl UpdateTriggerError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
+                    "ConcurrentModificationException" => {
+                        UpdateTriggerError::ConcurrentModification(String::from(error_message))
+                    }
                     "EntityNotFoundException" => {
                         UpdateTriggerError::EntityNotFound(String::from(error_message))
                     }
@@ -10185,6 +10708,7 @@ impl fmt::Display for UpdateTriggerError {
 impl Error for UpdateTriggerError {
     fn description(&self) -> &str {
         match *self {
+            UpdateTriggerError::ConcurrentModification(ref cause) => cause,
             UpdateTriggerError::EntityNotFound(ref cause) => cause,
             UpdateTriggerError::InternalService(ref cause) => cause,
             UpdateTriggerError::InvalidInput(ref cause) => cause,
@@ -10322,19 +10846,25 @@ pub trait Glue {
         input: &BatchDeleteTableRequest,
     ) -> RusotoFuture<BatchDeleteTableResponse, BatchDeleteTableError>;
 
+    /// <p>Deletes a specified batch of versions of a table.</p>
+    fn batch_delete_table_version(
+        &self,
+        input: &BatchDeleteTableVersionRequest,
+    ) -> RusotoFuture<BatchDeleteTableVersionResponse, BatchDeleteTableVersionError>;
+
     /// <p>Retrieves partitions in a batch request.</p>
     fn batch_get_partition(
         &self,
         input: &BatchGetPartitionRequest,
     ) -> RusotoFuture<BatchGetPartitionResponse, BatchGetPartitionError>;
 
-    /// <p>Stops a batch of job runs for a given job.</p>
+    /// <p>Stops one or more job runs for a specified Job.</p>
     fn batch_stop_job_run(
         &self,
         input: &BatchStopJobRunRequest,
     ) -> RusotoFuture<BatchStopJobRunResponse, GlueBatchStopJobRunError>;
 
-    /// <p>Creates a classifier in the user's account. This may be either a <code>GrokClassifier</code> or an <code>XMLClassifier</code>. </p>
+    /// <p>Creates a classifier in the user's account. This may be a <code>GrokClassifier</code>, an <code>XMLClassifier</code>, or abbrev <code>JsonClassifier</code>, depending on which field of the request is present.</p>
     fn create_classifier(
         &self,
         input: &CreateClassifierRequest,
@@ -10376,7 +10906,7 @@ pub trait Glue {
         input: &CreatePartitionRequest,
     ) -> RusotoFuture<CreatePartitionResponse, CreatePartitionError>;
 
-    /// <p>Transforms a directed acyclic graph (DAG) into a Python script.</p>
+    /// <p>Transforms a directed acyclic graph (DAG) into code.</p>
     fn create_script(
         &self,
         input: &CreateScriptRequest,
@@ -10430,7 +10960,7 @@ pub trait Glue {
         input: &DeleteDevEndpointRequest,
     ) -> RusotoFuture<DeleteDevEndpointResponse, DeleteDevEndpointError>;
 
-    /// <p>Deletes a specified job.</p>
+    /// <p>Deletes a specified job. If the job is not found, no exception is thrown.</p>
     fn delete_job(
         &self,
         input: &DeleteJobRequest,
@@ -10448,7 +10978,13 @@ pub trait Glue {
         input: &DeleteTableRequest,
     ) -> RusotoFuture<DeleteTableResponse, DeleteTableError>;
 
-    /// <p>Deletes a specified trigger.</p>
+    /// <p>Deletes a specified version of a table.</p>
+    fn delete_table_version(
+        &self,
+        input: &DeleteTableVersionRequest,
+    ) -> RusotoFuture<DeleteTableVersionResponse, DeleteTableVersionError>;
+
+    /// <p>Deletes a specified trigger. If the trigger is not found, no exception is thrown.</p>
     fn delete_trigger(
         &self,
         input: &DeleteTriggerRequest,
@@ -10574,11 +11110,17 @@ pub trait Glue {
         input: &GetPartitionsRequest,
     ) -> RusotoFuture<GetPartitionsResponse, GetPartitionsError>;
 
-    /// <p>Gets a Python script to perform a specified mapping.</p>
+    /// <p>Gets code to perform a specified mapping.</p>
     fn get_plan(&self, input: &GetPlanRequest) -> RusotoFuture<GetPlanResponse, GetPlanError>;
 
     /// <p>Retrieves the <code>Table</code> definition in a Data Catalog for a specified table.</p>
     fn get_table(&self, input: &GetTableRequest) -> RusotoFuture<GetTableResponse, GetTableError>;
+
+    /// <p>Retrieves a specified version of a table.</p>
+    fn get_table_version(
+        &self,
+        input: &GetTableVersionRequest,
+    ) -> RusotoFuture<GetTableVersionResponse, GetTableVersionError>;
 
     /// <p>Retrieves a list of strings that identify available versions of a specified table.</p>
     fn get_table_versions(
@@ -10646,7 +11188,7 @@ pub trait Glue {
         input: &StartJobRunRequest,
     ) -> RusotoFuture<StartJobRunResponse, StartJobRunError>;
 
-    /// <p>Starts an existing trigger.</p>
+    /// <p>Starts an existing trigger. See <a href="http://docs.aws.amazon.com/glue/latest/dg/trigger-job.html">Triggering Jobs</a> for information about how different types of trigger are started.</p>
     fn start_trigger(
         &self,
         input: &StartTriggerRequest,
@@ -10670,7 +11212,7 @@ pub trait Glue {
         input: &StopTriggerRequest,
     ) -> RusotoFuture<StopTriggerResponse, StopTriggerError>;
 
-    /// <p>Modifies an existing classifier (either a <code>GrokClassifier</code> or an <code>XMLClassifier</code>).</p>
+    /// <p>Modifies an existing classifier (a <code>GrokClassifier</code>, <code>XMLClassifier</code>, or <code>JsonClassifier</code>, depending on which field is present).</p>
     fn update_classifier(
         &self,
         input: &UpdateClassifierRequest,
@@ -10927,6 +11469,43 @@ where
         RusotoFuture::new(future)
     }
 
+    /// <p>Deletes a specified batch of versions of a table.</p>
+    fn batch_delete_table_version(
+        &self,
+        input: &BatchDeleteTableVersionRequest,
+    ) -> RusotoFuture<BatchDeleteTableVersionResponse, BatchDeleteTableVersionError> {
+        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AWSGlue.BatchDeleteTableVersion");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        let future = self.inner.sign_and_dispatch(request, |response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<BatchDeleteTableVersionResponse>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(BatchDeleteTableVersionError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        });
+
+        RusotoFuture::new(future)
+    }
+
     /// <p>Retrieves partitions in a batch request.</p>
     fn batch_get_partition(
         &self,
@@ -10964,7 +11543,7 @@ where
         RusotoFuture::new(future)
     }
 
-    /// <p>Stops a batch of job runs for a given job.</p>
+    /// <p>Stops one or more job runs for a specified Job.</p>
     fn batch_stop_job_run(
         &self,
         input: &BatchStopJobRunRequest,
@@ -11001,7 +11580,7 @@ where
         RusotoFuture::new(future)
     }
 
-    /// <p>Creates a classifier in the user's account. This may be either a <code>GrokClassifier</code> or an <code>XMLClassifier</code>. </p>
+    /// <p>Creates a classifier in the user's account. This may be a <code>GrokClassifier</code>, an <code>XMLClassifier</code>, or abbrev <code>JsonClassifier</code>, depending on which field of the request is present.</p>
     fn create_classifier(
         &self,
         input: &CreateClassifierRequest,
@@ -11260,7 +11839,7 @@ where
         RusotoFuture::new(future)
     }
 
-    /// <p>Transforms a directed acyclic graph (DAG) into a Python script.</p>
+    /// <p>Transforms a directed acyclic graph (DAG) into code.</p>
     fn create_script(
         &self,
         input: &CreateScriptRequest,
@@ -11593,7 +12172,7 @@ where
         RusotoFuture::new(future)
     }
 
-    /// <p>Deletes a specified job.</p>
+    /// <p>Deletes a specified job. If the job is not found, no exception is thrown.</p>
     fn delete_job(
         &self,
         input: &DeleteJobRequest,
@@ -11704,7 +12283,44 @@ where
         RusotoFuture::new(future)
     }
 
-    /// <p>Deletes a specified trigger.</p>
+    /// <p>Deletes a specified version of a table.</p>
+    fn delete_table_version(
+        &self,
+        input: &DeleteTableVersionRequest,
+    ) -> RusotoFuture<DeleteTableVersionResponse, DeleteTableVersionError> {
+        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AWSGlue.DeleteTableVersion");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        let future = self.inner.sign_and_dispatch(request, |response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<DeleteTableVersionResponse>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DeleteTableVersionError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        });
+
+        RusotoFuture::new(future)
+    }
+
+    /// <p>Deletes a specified trigger. If the trigger is not found, no exception is thrown.</p>
     fn delete_trigger(
         &self,
         input: &DeleteTriggerRequest,
@@ -12512,7 +13128,7 @@ where
         RusotoFuture::new(future)
     }
 
-    /// <p>Gets a Python script to perform a specified mapping.</p>
+    /// <p>Gets code to perform a specified mapping.</p>
     fn get_plan(&self, input: &GetPlanRequest) -> RusotoFuture<GetPlanResponse, GetPlanError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
@@ -12571,6 +13187,43 @@ where
             } else {
                 future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(GetTableError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        });
+
+        RusotoFuture::new(future)
+    }
+
+    /// <p>Retrieves a specified version of a table.</p>
+    fn get_table_version(
+        &self,
+        input: &GetTableVersionRequest,
+    ) -> RusotoFuture<GetTableVersionResponse, GetTableVersionError> {
+        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AWSGlue.GetTableVersion");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        let future = self.inner.sign_and_dispatch(request, |response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<GetTableVersionResponse>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(GetTableVersionError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
@@ -12987,7 +13640,7 @@ where
         RusotoFuture::new(future)
     }
 
-    /// <p>Starts an existing trigger.</p>
+    /// <p>Starts an existing trigger. See <a href="http://docs.aws.amazon.com/glue/latest/dg/trigger-job.html">Triggering Jobs</a> for information about how different types of trigger are started.</p>
     fn start_trigger(
         &self,
         input: &StartTriggerRequest,
@@ -13135,7 +13788,7 @@ where
         RusotoFuture::new(future)
     }
 
-    /// <p>Modifies an existing classifier (either a <code>GrokClassifier</code> or an <code>XMLClassifier</code>).</p>
+    /// <p>Modifies an existing classifier (a <code>GrokClassifier</code>, <code>XMLClassifier</code>, or <code>JsonClassifier</code>, depending on which field is present).</p>
     fn update_classifier(
         &self,
         input: &UpdateClassifierRequest,

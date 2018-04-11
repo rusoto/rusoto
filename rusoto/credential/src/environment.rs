@@ -21,6 +21,7 @@ const E_INVALID_EXPIRATION: &str = "Invalid AWS_CREDENTIAL_EXPIRATION in environ
 #[derive(Debug)]
 pub struct EnvironmentProvider;
 
+/// Provides AWS credentials from environment variables as a Future.
 pub struct EnvironmentProviderFuture {
     inner: FutureResult<AwsCredentials, CredentialsError>
 }

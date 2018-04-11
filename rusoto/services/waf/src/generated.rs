@@ -33,11 +33,11 @@ use hyper::StatusCode;
 /// <p>The <code>ActivatedRule</code> object in an <a>UpdateWebACL</a> request specifies a <code>Rule</code> that you want to insert or delete, the priority of the <code>Rule</code> in the <code>WebACL</code>, and the action that you want AWS WAF to take when a web request matches the <code>Rule</code> (<code>ALLOW</code>, <code>BLOCK</code>, or <code>COUNT</code>).</p> <p>To specify whether to insert or delete a <code>Rule</code>, use the <code>Action</code> parameter in the <a>WebACLUpdate</a> data type.</p>
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct ActivatedRule {
-    /// <p>Specifies the action that CloudFront or AWS WAF takes when a web request matches the conditions in the <code>Rule</code>. Valid values for <code>Action</code> include the following:</p> <ul> <li> <p> <code>ALLOW</code>: CloudFront responds with the requested object.</p> </li> <li> <p> <code>BLOCK</code>: CloudFront responds with an HTTP 403 (Forbidden) status code.</p> </li> <li> <p> <code>COUNT</code>: AWS WAF increments a counter of requests that match the conditions in the rule and then continues to inspect the web request based on the remaining rules in the web ACL. </p> </li> </ul> <p>The <code>Action</code> data type within <code>ActivatedRule</code> is used only when submitting an <code>UpdateWebACL</code> request. <code>ActivatedRule|Action</code> is not applicable and therefore not available for <code>UpdateRuleGroup</code>.</p>
+    /// <p>Specifies the action that CloudFront or AWS WAF takes when a web request matches the conditions in the <code>Rule</code>. Valid values for <code>Action</code> include the following:</p> <ul> <li> <p> <code>ALLOW</code>: CloudFront responds with the requested object.</p> </li> <li> <p> <code>BLOCK</code>: CloudFront responds with an HTTP 403 (Forbidden) status code.</p> </li> <li> <p> <code>COUNT</code>: AWS WAF increments a counter of requests that match the conditions in the rule and then continues to inspect the web request based on the remaining rules in the web ACL. </p> </li> </ul> <p> <code>ActivatedRule|OverrideAction</code> applies only when updating or adding a <code>RuleGroup</code> to a <code>WebACL</code>. In this case you do not use <code>ActivatedRule|Action</code>. For all other update requests, <code>ActivatedRule|Action</code> is used instead of <code>ActivatedRule|OverrideAction</code>.</p>
     #[serde(rename = "Action")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub action: Option<WafAction>,
-    /// <p>Use the <code>OverrideAction</code> to test your <code>RuleGroup</code>.</p> <p>Any rule in a <code>RuleGroup</code> can potentially block a request. If you set the <code>OverrideAction</code> to <code>None</code>, the <code>RuleGroup</code> will block a request if any individual rule in the <code>RuleGroup</code> matches the request and is configured to block that request. However if you first want to test the <code>RuleGroup</code>, set the <code>OverrideAction</code> to <code>Count</code>. The <code>RuleGroup</code> will then override any block action specified by individual rules contained within the group. Instead of blocking matching requests, those requests will be counted. You can view a record of counted requests using <a>GetSampledRequests</a>. </p> <p>The <code>OverrideAction</code> data type within <code>ActivatedRule</code> is used only when submitting an <code>UpdateRuleGroup</code> request. <code>ActivatedRule|OverrideAction</code> is not applicable and therefore not available for <code>UpdateWebACL</code>.</p>
+    /// <p>Use the <code>OverrideAction</code> to test your <code>RuleGroup</code>.</p> <p>Any rule in a <code>RuleGroup</code> can potentially block a request. If you set the <code>OverrideAction</code> to <code>None</code>, the <code>RuleGroup</code> will block a request if any individual rule in the <code>RuleGroup</code> matches the request and is configured to block that request. However if you first want to test the <code>RuleGroup</code>, set the <code>OverrideAction</code> to <code>Count</code>. The <code>RuleGroup</code> will then override any block action specified by individual rules contained within the group. Instead of blocking matching requests, those requests will be counted. You can view a record of counted requests using <a>GetSampledRequests</a>. </p> <p> <code>ActivatedRule|OverrideAction</code> applies only when updating or adding a <code>RuleGroup</code> to a <code>WebACL</code>. In this case you do not use <code>ActivatedRule|Action</code>. For all other update requests, <code>ActivatedRule|Action</code> is used instead of <code>ActivatedRule|OverrideAction</code>.</p>
     #[serde(rename = "OverrideAction")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub override_action: Option<WafOverrideAction>,
@@ -453,6 +453,16 @@ pub struct DeleteIPSetResponse {
 }
 
 #[derive(Default, Debug, Clone, Serialize)]
+pub struct DeletePermissionPolicyRequest {
+    /// <p>The Amazon Resource Name (ARN) of the RuleGroup from which you want to delete the policy.</p> <p>The user making the request must be the owner of the RuleGroup.</p>
+    #[serde(rename = "ResourceArn")]
+    pub resource_arn: String,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct DeletePermissionPolicyResponse {}
+
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteRateBasedRuleRequest {
     /// <p>The value returned by the most recent call to <a>GetChangeToken</a>.</p>
     #[serde(rename = "ChangeToken")]
@@ -747,6 +757,21 @@ pub struct GetIPSetResponse {
     #[serde(rename = "IPSet")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ip_set: Option<IPSet>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct GetPermissionPolicyRequest {
+    /// <p>The Amazon Resource Name (ARN) of the RuleGroup for which you want to get the policy.</p>
+    #[serde(rename = "ResourceArn")]
+    pub resource_arn: String,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct GetPermissionPolicyResponse {
+    /// <p>The IAM policy attached to the specified RuleGroup.</p>
+    #[serde(rename = "Policy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub policy: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, Serialize)]
@@ -1391,6 +1416,19 @@ pub struct Predicate {
     pub type_: String,
 }
 
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct PutPermissionPolicyRequest {
+    /// <p>The policy to attach to the specified RuleGroup.</p>
+    #[serde(rename = "Policy")]
+    pub policy: String,
+    /// <p>The Amazon Resource Name (ARN) of the RuleGroup to which you want to attach the policy.</p>
+    #[serde(rename = "ResourceArn")]
+    pub resource_arn: String,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct PutPermissionPolicyResponse {}
+
 /// <p>A <code>RateBasedRule</code> is identical to a regular <a>Rule</a>, with one addition: a <code>RateBasedRule</code> counts the number of requests that arrive from a specified IP address every five minutes. For example, based on recent requests that you've seen from an attacker, you might create a <code>RateBasedRule</code> that includes the following conditions: </p> <ul> <li> <p>The requests come from 192.0.2.44.</p> </li> <li> <p>They contain the value <code>BadBot</code> in the <code>User-Agent</code> header.</p> </li> </ul> <p>In the rule, you also define the rate limit as 15,000.</p> <p>Requests that meet both of these conditions and exceed 15,000 requests every five minutes trigger the rule's action (block or count), which is defined in the web ACL.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct RateBasedRule {
@@ -1872,7 +1910,7 @@ pub struct UpdateRuleGroupRequest {
     /// <p>The <code>RuleGroupId</code> of the <a>RuleGroup</a> that you want to update. <code>RuleGroupId</code> is returned by <a>CreateRuleGroup</a> and by <a>ListRuleGroups</a>.</p>
     #[serde(rename = "RuleGroupId")]
     pub rule_group_id: String,
-    /// <p>An array of <code>RuleGroupUpdate</code> objects that you want to insert into or delete from a <a>RuleGroup</a>.</p> <p>You can only insert <code>REGULAR</code> rules into a rule group.</p> <p>The <code>Action</code> data type within <code>ActivatedRule</code> is used only when submitting an <code>UpdateWebACL</code> request. <code>ActivatedRule|Action</code> is not applicable and therefore not available for <code>UpdateRuleGroup</code>.</p>
+    /// <p>An array of <code>RuleGroupUpdate</code> objects that you want to insert into or delete from a <a>RuleGroup</a>.</p> <p>You can only insert <code>REGULAR</code> rules into a rule group.</p> <p> <code>ActivatedRule|OverrideAction</code> applies only when updating or adding a <code>RuleGroup</code> to a <code>WebACL</code>. In this case you do not use <code>ActivatedRule|Action</code>. For all other update requests, <code>ActivatedRule|Action</code> is used instead of <code>ActivatedRule|OverrideAction</code>.</p>
     #[serde(rename = "Updates")]
     pub updates: Vec<RuleGroupUpdate>,
 }
@@ -1959,7 +1997,7 @@ pub struct UpdateWebACLRequest {
     #[serde(rename = "DefaultAction")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub default_action: Option<WafAction>,
-    /// <p><p>An array of updates to make to the <a>WebACL</a>.</p> <p>An array of <code>WebACLUpdate</code> objects that you want to insert into or delete from a <a>WebACL</a>. For more information, see the applicable data types:</p> <ul> <li> <p> <a>WebACLUpdate</a>: Contains <code>Action</code> and <code>ActivatedRule</code> </p> </li> <li> <p> <a>ActivatedRule</a>: Contains <code>Action</code>, <code>Priority</code>, <code>RuleId</code>, and <code>Type</code>. The <code>OverrideAction</code> data type within <code>ActivatedRule</code> is used only when submitting an <code>UpdateRuleGroup</code> request. <code>ActivatedRule|OverrideAction</code> is not applicable and therefore not available for <code>UpdateWebACL</code>. </p> </li> <li> <p> <a>WafAction</a>: Contains <code>Type</code> </p> </li> </ul></p>
+    /// <p><p>An array of updates to make to the <a>WebACL</a>.</p> <p>An array of <code>WebACLUpdate</code> objects that you want to insert into or delete from a <a>WebACL</a>. For more information, see the applicable data types:</p> <ul> <li> <p> <a>WebACLUpdate</a>: Contains <code>Action</code> and <code>ActivatedRule</code> </p> </li> <li> <p> <a>ActivatedRule</a>: Contains <code>Action</code>, <code>OverrideAction</code>, <code>Priority</code>, <code>RuleId</code>, and <code>Type</code>. <code>ActivatedRule|OverrideAction</code> applies only when updating or adding a <code>RuleGroup</code> to a <code>WebACL</code>. In this case you do not use <code>ActivatedRule|Action</code>. For all other update requests, <code>ActivatedRule|Action</code> is used instead of <code>ActivatedRule|OverrideAction</code>. </p> </li> <li> <p> <a>WafAction</a>: Contains <code>Type</code> </p> </li> </ul></p>
     #[serde(rename = "Updates")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub updates: Option<Vec<WebACLUpdate>>,
@@ -3709,6 +3747,98 @@ impl Error for DeleteIPSetError {
         }
     }
 }
+/// Errors returned by DeletePermissionPolicy
+#[derive(Debug, PartialEq)]
+pub enum DeletePermissionPolicyError {
+    /// <p>The operation failed because of a system problem, even though the request was valid. Retry your request.</p>
+    WAFInternalError(String),
+    /// <p>The operation failed because the referenced object doesn't exist.</p>
+    WAFNonexistentItem(String),
+    /// <p>The operation failed because you tried to create, update, or delete an object by using a change token that has already been used.</p>
+    WAFStaleData(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl DeletePermissionPolicyError {
+    pub fn from_body(body: &str) -> DeletePermissionPolicyError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "WAFInternalErrorException" => {
+                        DeletePermissionPolicyError::WAFInternalError(String::from(error_message))
+                    }
+                    "WAFNonexistentItemException" => {
+                        DeletePermissionPolicyError::WAFNonexistentItem(String::from(error_message))
+                    }
+                    "WAFStaleDataException" => {
+                        DeletePermissionPolicyError::WAFStaleData(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        DeletePermissionPolicyError::Validation(error_message.to_string())
+                    }
+                    _ => DeletePermissionPolicyError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => DeletePermissionPolicyError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for DeletePermissionPolicyError {
+    fn from(err: serde_json::error::Error) -> DeletePermissionPolicyError {
+        DeletePermissionPolicyError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DeletePermissionPolicyError {
+    fn from(err: CredentialsError) -> DeletePermissionPolicyError {
+        DeletePermissionPolicyError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DeletePermissionPolicyError {
+    fn from(err: HttpDispatchError) -> DeletePermissionPolicyError {
+        DeletePermissionPolicyError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeletePermissionPolicyError {
+    fn from(err: io::Error) -> DeletePermissionPolicyError {
+        DeletePermissionPolicyError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DeletePermissionPolicyError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeletePermissionPolicyError {
+    fn description(&self) -> &str {
+        match *self {
+            DeletePermissionPolicyError::WAFInternalError(ref cause) => cause,
+            DeletePermissionPolicyError::WAFNonexistentItem(ref cause) => cause,
+            DeletePermissionPolicyError::WAFStaleData(ref cause) => cause,
+            DeletePermissionPolicyError::Validation(ref cause) => cause,
+            DeletePermissionPolicyError::Credentials(ref err) => err.description(),
+            DeletePermissionPolicyError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DeletePermissionPolicyError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by DeleteRateBasedRule
 #[derive(Debug, PartialEq)]
 pub enum DeleteRateBasedRuleError {
@@ -5126,6 +5256,92 @@ impl Error for GetIPSetError {
             GetIPSetError::Credentials(ref err) => err.description(),
             GetIPSetError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
             GetIPSetError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by GetPermissionPolicy
+#[derive(Debug, PartialEq)]
+pub enum GetPermissionPolicyError {
+    /// <p>The operation failed because of a system problem, even though the request was valid. Retry your request.</p>
+    WAFInternalError(String),
+    /// <p>The operation failed because the referenced object doesn't exist.</p>
+    WAFNonexistentItem(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl GetPermissionPolicyError {
+    pub fn from_body(body: &str) -> GetPermissionPolicyError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "WAFInternalErrorException" => {
+                        GetPermissionPolicyError::WAFInternalError(String::from(error_message))
+                    }
+                    "WAFNonexistentItemException" => {
+                        GetPermissionPolicyError::WAFNonexistentItem(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        GetPermissionPolicyError::Validation(error_message.to_string())
+                    }
+                    _ => GetPermissionPolicyError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => GetPermissionPolicyError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for GetPermissionPolicyError {
+    fn from(err: serde_json::error::Error) -> GetPermissionPolicyError {
+        GetPermissionPolicyError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for GetPermissionPolicyError {
+    fn from(err: CredentialsError) -> GetPermissionPolicyError {
+        GetPermissionPolicyError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for GetPermissionPolicyError {
+    fn from(err: HttpDispatchError) -> GetPermissionPolicyError {
+        GetPermissionPolicyError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetPermissionPolicyError {
+    fn from(err: io::Error) -> GetPermissionPolicyError {
+        GetPermissionPolicyError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for GetPermissionPolicyError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetPermissionPolicyError {
+    fn description(&self) -> &str {
+        match *self {
+            GetPermissionPolicyError::WAFInternalError(ref cause) => cause,
+            GetPermissionPolicyError::WAFNonexistentItem(ref cause) => cause,
+            GetPermissionPolicyError::Validation(ref cause) => cause,
+            GetPermissionPolicyError::Credentials(ref err) => err.description(),
+            GetPermissionPolicyError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            GetPermissionPolicyError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -7329,6 +7545,106 @@ impl Error for ListXssMatchSetsError {
         }
     }
 }
+/// Errors returned by PutPermissionPolicy
+#[derive(Debug, PartialEq)]
+pub enum PutPermissionPolicyError {
+    /// <p>The operation failed because of a system problem, even though the request was valid. Retry your request.</p>
+    WAFInternalError(String),
+    /// <p><p>The operation failed because the specified policy is not in the proper format. </p> <p>The policy is subject to the following restrictions:</p> <ul> <li> <p>You can attach only one policy with each <code>PutPermissionPolicy</code> request.</p> </li> <li> <p>The policy must include an <code>Effect</code>, <code>Action</code> and <code>Principal</code>. </p> </li> <li> <p> <code>Effect</code> must specify <code>Allow</code>.</p> </li> <li> <p>The <code>Action</code> in the policy must be <code>waf:UpdateWebACL</code> or <code>waf-regional:UpdateWebACL</code>. Any extra or wildcard actions in the policy will be rejected.</p> </li> <li> <p>The policy cannot include a <code>Resource</code> parameter.</p> </li> <li> <p>The ARN in the request must be a valid WAF RuleGroup ARN and the RuleGroup must exist in the same region.</p> </li> <li> <p>The user making the request must be the owner of the RuleGroup.</p> </li> <li> <p>Your policy must be composed using IAM Policy version 2012-10-17.</p> </li> </ul></p>
+    WAFInvalidPermissionPolicy(String),
+    /// <p>The operation failed because the referenced object doesn't exist.</p>
+    WAFNonexistentItem(String),
+    /// <p>The operation failed because you tried to create, update, or delete an object by using a change token that has already been used.</p>
+    WAFStaleData(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl PutPermissionPolicyError {
+    pub fn from_body(body: &str) -> PutPermissionPolicyError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "WAFInternalErrorException" => {
+                        PutPermissionPolicyError::WAFInternalError(String::from(error_message))
+                    }
+                    "WAFInvalidPermissionPolicyException" => {
+                        PutPermissionPolicyError::WAFInvalidPermissionPolicy(String::from(
+                            error_message,
+                        ))
+                    }
+                    "WAFNonexistentItemException" => {
+                        PutPermissionPolicyError::WAFNonexistentItem(String::from(error_message))
+                    }
+                    "WAFStaleDataException" => {
+                        PutPermissionPolicyError::WAFStaleData(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        PutPermissionPolicyError::Validation(error_message.to_string())
+                    }
+                    _ => PutPermissionPolicyError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => PutPermissionPolicyError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for PutPermissionPolicyError {
+    fn from(err: serde_json::error::Error) -> PutPermissionPolicyError {
+        PutPermissionPolicyError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for PutPermissionPolicyError {
+    fn from(err: CredentialsError) -> PutPermissionPolicyError {
+        PutPermissionPolicyError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for PutPermissionPolicyError {
+    fn from(err: HttpDispatchError) -> PutPermissionPolicyError {
+        PutPermissionPolicyError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for PutPermissionPolicyError {
+    fn from(err: io::Error) -> PutPermissionPolicyError {
+        PutPermissionPolicyError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for PutPermissionPolicyError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for PutPermissionPolicyError {
+    fn description(&self) -> &str {
+        match *self {
+            PutPermissionPolicyError::WAFInternalError(ref cause) => cause,
+            PutPermissionPolicyError::WAFInvalidPermissionPolicy(ref cause) => cause,
+            PutPermissionPolicyError::WAFNonexistentItem(ref cause) => cause,
+            PutPermissionPolicyError::WAFStaleData(ref cause) => cause,
+            PutPermissionPolicyError::Validation(ref cause) => cause,
+            PutPermissionPolicyError::Credentials(ref err) => err.description(),
+            PutPermissionPolicyError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            PutPermissionPolicyError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by UpdateByteMatchSet
 #[derive(Debug, PartialEq)]
 pub enum UpdateByteMatchSetError {
@@ -8943,6 +9259,12 @@ pub trait Waf {
         input: &DeleteIPSetRequest,
     ) -> RusotoFuture<DeleteIPSetResponse, DeleteIPSetError>;
 
+    /// <p>Permanently deletes an IAM policy from the specified RuleGroup.</p> <p>The user making the request must be the owner of the RuleGroup.</p>
+    fn delete_permission_policy(
+        &self,
+        input: &DeletePermissionPolicyRequest,
+    ) -> RusotoFuture<DeletePermissionPolicyResponse, DeletePermissionPolicyError>;
+
     /// <p><p>Permanently deletes a <a>RateBasedRule</a>. You can&#39;t delete a rule if it&#39;s still used in any <code>WebACL</code> objects or if it still includes any predicates, such as <code>ByteMatchSet</code> objects.</p> <p>If you just want to remove a rule from a <code>WebACL</code>, use <a>UpdateWebACL</a>.</p> <p>To permanently delete a <code>RateBasedRule</code> from AWS WAF, perform the following steps:</p> <ol> <li> <p>Update the <code>RateBasedRule</code> to remove predicates, if any. For more information, see <a>UpdateRateBasedRule</a>.</p> </li> <li> <p>Use <a>GetChangeToken</a> to get the change token that you provide in the <code>ChangeToken</code> parameter of a <code>DeleteRateBasedRule</code> request.</p> </li> <li> <p>Submit a <code>DeleteRateBasedRule</code> request.</p> </li> </ol></p>
     fn delete_rate_based_rule(
         &self,
@@ -9020,6 +9342,12 @@ pub trait Waf {
 
     /// <p>Returns the <a>IPSet</a> that is specified by <code>IPSetId</code>.</p>
     fn get_ip_set(&self, input: &GetIPSetRequest) -> RusotoFuture<GetIPSetResponse, GetIPSetError>;
+
+    /// <p>Returns the IAM policy attached to the RuleGroup.</p>
+    fn get_permission_policy(
+        &self,
+        input: &GetPermissionPolicyRequest,
+    ) -> RusotoFuture<GetPermissionPolicyResponse, GetPermissionPolicyError>;
 
     /// <p>Returns the <a>RateBasedRule</a> that is specified by the <code>RuleId</code> that you included in the <code>GetRateBasedRule</code> request.</p>
     fn get_rate_based_rule(
@@ -9167,6 +9495,12 @@ pub trait Waf {
         &self,
         input: &ListXssMatchSetsRequest,
     ) -> RusotoFuture<ListXssMatchSetsResponse, ListXssMatchSetsError>;
+
+    /// <p>Attaches a IAM policy to the specified resource. The only supported use for this action is to share a RuleGroup across accounts.</p> <p>The <code>PutPermissionPolicy</code> is subject to the following restrictions:</p> <ul> <li> <p>You can attach only one policy with each <code>PutPermissionPolicy</code> request.</p> </li> <li> <p>The policy must include an <code>Effect</code>, <code>Action</code> and <code>Principal</code>. </p> </li> <li> <p> <code>Effect</code> must specify <code>Allow</code>.</p> </li> <li> <p>The <code>Action</code> in the policy must be <code>waf:UpdateWebACL</code> and <code>waf-regional:UpdateWebACL</code>. Any extra or wildcard actions in the policy will be rejected.</p> </li> <li> <p>The policy cannot include a <code>Resource</code> parameter.</p> </li> <li> <p>The ARN in the request must be a valid WAF RuleGroup ARN and the RuleGroup must exist in the same region.</p> </li> <li> <p>The user making the request must be the owner of the RuleGroup.</p> </li> <li> <p>Your policy must be composed using IAM Policy version 2012-10-17.</p> </li> </ul> <p>For more information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies.html">IAM Policies</a>. </p> <p>An example of a valid policy parameter is shown in the Examples section below.</p>
+    fn put_permission_policy(
+        &self,
+        input: &PutPermissionPolicyRequest,
+    ) -> RusotoFuture<PutPermissionPolicyResponse, PutPermissionPolicyError>;
 
     /// <p>Inserts or deletes <a>ByteMatchTuple</a> objects (filters) in a <a>ByteMatchSet</a>. For each <code>ByteMatchTuple</code> object, you specify the following values: </p> <ul> <li> <p>Whether to insert or delete the object from the array. If you want to change a <code>ByteMatchSetUpdate</code> object, you delete the existing object and add a new one.</p> </li> <li> <p>The part of a web request that you want AWS WAF to inspect, such as a query string or the value of the <code>User-Agent</code> header. </p> </li> <li> <p>The bytes (typically a string that corresponds with ASCII characters) that you want AWS WAF to look for. For more information, including how you specify the values for the AWS WAF API and the AWS CLI or SDKs, see <code>TargetString</code> in the <a>ByteMatchTuple</a> data type. </p> </li> <li> <p>Where to look, such as at the beginning or the end of a query string.</p> </li> <li> <p>Whether to perform any conversions on the request, such as converting it to lowercase, before inspecting it for the specified string.</p> </li> </ul> <p>For example, you can add a <code>ByteMatchSetUpdate</code> object that matches web requests in which <code>User-Agent</code> headers contain the string <code>BadBot</code>. You can then configure AWS WAF to block those requests.</p> <p>To create and configure a <code>ByteMatchSet</code>, perform the following steps:</p> <ol> <li> <p>Create a <code>ByteMatchSet.</code> For more information, see <a>CreateByteMatchSet</a>.</p> </li> <li> <p>Use <a>GetChangeToken</a> to get the change token that you provide in the <code>ChangeToken</code> parameter of an <code>UpdateByteMatchSet</code> request.</p> </li> <li> <p>Submit an <code>UpdateByteMatchSet</code> request to specify the part of the request that you want AWS WAF to inspect (for example, the header or the URI) and the value that you want AWS WAF to watch for.</p> </li> </ol> <p>For more information about how to use the AWS WAF API to allow or block HTTP requests, see the <a href="http://docs.aws.amazon.com/waf/latest/developerguide/">AWS WAF Developer Guide</a>.</p>
     fn update_byte_match_set(
@@ -9838,6 +10172,43 @@ where
         RusotoFuture::new(future)
     }
 
+    /// <p>Permanently deletes an IAM policy from the specified RuleGroup.</p> <p>The user making the request must be the owner of the RuleGroup.</p>
+    fn delete_permission_policy(
+        &self,
+        input: &DeletePermissionPolicyRequest,
+    ) -> RusotoFuture<DeletePermissionPolicyResponse, DeletePermissionPolicyError> {
+        let mut request = SignedRequest::new("POST", "waf", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AWSWAF_20150824.DeletePermissionPolicy");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        let future = self.inner.sign_and_dispatch(request, |response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<DeletePermissionPolicyResponse>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DeletePermissionPolicyError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        });
+
+        RusotoFuture::new(future)
+    }
+
     /// <p><p>Permanently deletes a <a>RateBasedRule</a>. You can&#39;t delete a rule if it&#39;s still used in any <code>WebACL</code> objects or if it still includes any predicates, such as <code>ByteMatchSet</code> objects.</p> <p>If you just want to remove a rule from a <code>WebACL</code>, use <a>UpdateWebACL</a>.</p> <p>To permanently delete a <code>RateBasedRule</code> from AWS WAF, perform the following steps:</p> <ol> <li> <p>Update the <code>RateBasedRule</code> to remove predicates, if any. For more information, see <a>UpdateRateBasedRule</a>.</p> </li> <li> <p>Use <a>GetChangeToken</a> to get the change token that you provide in the <code>ChangeToken</code> parameter of a <code>DeleteRateBasedRule</code> request.</p> </li> <li> <p>Submit a <code>DeleteRateBasedRule</code> request.</p> </li> </ol></p>
     fn delete_rate_based_rule(
         &self,
@@ -10340,6 +10711,43 @@ where
             } else {
                 future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(GetIPSetError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        });
+
+        RusotoFuture::new(future)
+    }
+
+    /// <p>Returns the IAM policy attached to the RuleGroup.</p>
+    fn get_permission_policy(
+        &self,
+        input: &GetPermissionPolicyRequest,
+    ) -> RusotoFuture<GetPermissionPolicyResponse, GetPermissionPolicyError> {
+        let mut request = SignedRequest::new("POST", "waf", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AWSWAF_20150824.GetPermissionPolicy");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        let future = self.inner.sign_and_dispatch(request, |response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<GetPermissionPolicyResponse>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(GetPermissionPolicyError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
@@ -11269,6 +11677,43 @@ where
             } else {
                 future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(ListXssMatchSetsError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        });
+
+        RusotoFuture::new(future)
+    }
+
+    /// <p>Attaches a IAM policy to the specified resource. The only supported use for this action is to share a RuleGroup across accounts.</p> <p>The <code>PutPermissionPolicy</code> is subject to the following restrictions:</p> <ul> <li> <p>You can attach only one policy with each <code>PutPermissionPolicy</code> request.</p> </li> <li> <p>The policy must include an <code>Effect</code>, <code>Action</code> and <code>Principal</code>. </p> </li> <li> <p> <code>Effect</code> must specify <code>Allow</code>.</p> </li> <li> <p>The <code>Action</code> in the policy must be <code>waf:UpdateWebACL</code> and <code>waf-regional:UpdateWebACL</code>. Any extra or wildcard actions in the policy will be rejected.</p> </li> <li> <p>The policy cannot include a <code>Resource</code> parameter.</p> </li> <li> <p>The ARN in the request must be a valid WAF RuleGroup ARN and the RuleGroup must exist in the same region.</p> </li> <li> <p>The user making the request must be the owner of the RuleGroup.</p> </li> <li> <p>Your policy must be composed using IAM Policy version 2012-10-17.</p> </li> </ul> <p>For more information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies.html">IAM Policies</a>. </p> <p>An example of a valid policy parameter is shown in the Examples section below.</p>
+    fn put_permission_policy(
+        &self,
+        input: &PutPermissionPolicyRequest,
+    ) -> RusotoFuture<PutPermissionPolicyResponse, PutPermissionPolicyError> {
+        let mut request = SignedRequest::new("POST", "waf", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AWSWAF_20150824.PutPermissionPolicy");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        let future = self.inner.sign_and_dispatch(request, |response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<PutPermissionPolicyResponse>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(PutPermissionPolicyError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))

@@ -65,7 +65,7 @@ pub struct Application {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct AssociateFleetRequest {
-    /// <p>The name of the fleet.</p>
+    /// <p>The name of the fleet. </p>
     #[serde(rename = "FleetName")]
     pub fleet_name: String,
     /// <p>The name of the stack.</p>
@@ -102,6 +102,31 @@ pub struct ComputeCapacityStatus {
     #[serde(rename = "Running")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub running: Option<i64>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct CopyImageRequest {
+    /// <p>The description that the image will have when it is copied to the destination.</p>
+    #[serde(rename = "DestinationImageDescription")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub destination_image_description: Option<String>,
+    /// <p>The name that the image will have when it is copied to the destination.</p>
+    #[serde(rename = "DestinationImageName")]
+    pub destination_image_name: String,
+    /// <p>The destination region to which the image will be copied. This parameter is required, even if you are copying an image within the same region.</p>
+    #[serde(rename = "DestinationRegion")]
+    pub destination_region: String,
+    /// <p>The name of the image to copy.</p>
+    #[serde(rename = "SourceImageName")]
+    pub source_image_name: String,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct CopyImageResponse {
+    /// <p>The name of the destination image.</p>
+    #[serde(rename = "DestinationImageName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub destination_image_name: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, Serialize)]
@@ -259,9 +284,17 @@ pub struct CreateStackRequest {
     #[serde(rename = "DisplayName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub display_name: Option<String>,
+    /// <p>The URL that users are redirected to after they click the Send Feedback link. If no URL is specified, no Send Feedback link is displayed.</p>
+    #[serde(rename = "FeedbackURL")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub feedback_url: Option<String>,
     /// <p>The name of the stack.</p>
     #[serde(rename = "Name")]
     pub name: String,
+    /// <p>The URL that users are redirected to after their streaming session ends.</p>
+    #[serde(rename = "RedirectURL")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub redirect_url: Option<String>,
     /// <p>The storage connectors to enable.</p>
     #[serde(rename = "StorageConnectors")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -391,7 +424,7 @@ pub struct DescribeDirectoryConfigsRequest {
 
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeDirectoryConfigsResult {
-    /// <p>Information about the directory configurations.</p>
+    /// <p>Information about the directory configurations. Note that although the response syntax in this topic includes the account password, this password is not returned in the actual response. </p>
     #[serde(rename = "DirectoryConfigs")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub directory_configs: Option<Vec<DirectoryConfig>>,
@@ -475,7 +508,7 @@ pub struct DescribeSessionsRequest {
     #[serde(rename = "AuthenticationType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authentication_type: Option<String>,
-    /// <p>The name of the fleet.</p>
+    /// <p>The name of the fleet. This value is case-sensitive.</p>
     #[serde(rename = "FleetName")]
     pub fleet_name: String,
     /// <p>The size of each page of results. The default value is 20 and the maximum value is 50.</p>
@@ -486,7 +519,7 @@ pub struct DescribeSessionsRequest {
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>The name of the stack.</p>
+    /// <p>The name of the stack. This value is case-sensitive.</p>
     #[serde(rename = "StackName")]
     pub stack_name: String,
     /// <p>The user ID.</p>
@@ -945,9 +978,17 @@ pub struct Stack {
     #[serde(rename = "DisplayName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub display_name: Option<String>,
+    /// <p>The URL that users are redirected to after they click the Send Feedback link. If no URL is specified, no Send Feedback link is displayed.</p>
+    #[serde(rename = "FeedbackURL")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub feedback_url: Option<String>,
     /// <p>The name of the stack.</p>
     #[serde(rename = "Name")]
     pub name: String,
+    /// <p>The URL that users are redirected to after their streaming session ends.</p>
+    #[serde(rename = "RedirectURL")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub redirect_url: Option<String>,
     /// <p>The errors for the stack.</p>
     #[serde(rename = "StackErrors")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1147,10 +1188,10 @@ pub struct UpdateFleetResult {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct UpdateStackRequest {
-    /// <p>Deletes the storage connectors currently enabled for the stack.</p>
-    #[serde(rename = "DeleteStorageConnectors")]
+    /// <p>The stack attributes to delete.</p>
+    #[serde(rename = "AttributesToDelete")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub delete_storage_connectors: Option<bool>,
+    pub attributes_to_delete: Option<Vec<String>>,
     /// <p>The description for display.</p>
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1159,9 +1200,17 @@ pub struct UpdateStackRequest {
     #[serde(rename = "DisplayName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub display_name: Option<String>,
+    /// <p>The URL that users are redirected to after they click the Send Feedback link. If no URL is specified, no Send Feedback link is displayed.</p>
+    #[serde(rename = "FeedbackURL")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub feedback_url: Option<String>,
     /// <p>The name of the stack.</p>
     #[serde(rename = "Name")]
     pub name: String,
+    /// <p>The URL that users are redirected to after their streaming session ends.</p>
+    #[serde(rename = "RedirectURL")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub redirect_url: Option<String>,
     /// <p>The storage connectors to enable.</p>
     #[serde(rename = "StorageConnectors")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1196,6 +1245,8 @@ pub enum AssociateFleetError {
     ConcurrentModification(String),
     /// <p>The image does not support storage connectors.</p>
     IncompatibleImage(String),
+    /// <p>The resource cannot be created because your AWS account is suspended. For assistance, contact AWS Support. </p>
+    InvalidAccountStatus(String),
     /// <p>The requested limit exceeds the permitted limit for an account.</p>
     LimitExceeded(String),
     /// <p>The attempted operation is not permitted.</p>
@@ -1230,6 +1281,9 @@ impl AssociateFleetError {
                     }
                     "IncompatibleImageException" => {
                         AssociateFleetError::IncompatibleImage(String::from(error_message))
+                    }
+                    "InvalidAccountStatusException" => {
+                        AssociateFleetError::InvalidAccountStatus(String::from(error_message))
                     }
                     "LimitExceededException" => {
                         AssociateFleetError::LimitExceeded(String::from(error_message))
@@ -1281,6 +1335,7 @@ impl Error for AssociateFleetError {
         match *self {
             AssociateFleetError::ConcurrentModification(ref cause) => cause,
             AssociateFleetError::IncompatibleImage(ref cause) => cause,
+            AssociateFleetError::InvalidAccountStatus(ref cause) => cause,
             AssociateFleetError::LimitExceeded(ref cause) => cause,
             AssociateFleetError::OperationNotPermitted(ref cause) => cause,
             AssociateFleetError::ResourceNotFound(ref cause) => cause,
@@ -1291,9 +1346,117 @@ impl Error for AssociateFleetError {
         }
     }
 }
+/// Errors returned by CopyImage
+#[derive(Debug, PartialEq)]
+pub enum CopyImageError {
+    /// <p>The image does not support storage connectors.</p>
+    IncompatibleImage(String),
+    /// <p>The resource cannot be created because your AWS account is suspended. For assistance, contact AWS Support. </p>
+    InvalidAccountStatus(String),
+    /// <p>The requested limit exceeds the permitted limit for an account.</p>
+    LimitExceeded(String),
+    /// <p>The specified resource already exists.</p>
+    ResourceAlreadyExists(String),
+    /// <p>The specified resource exists and is not in use, but isn't available.</p>
+    ResourceNotAvailable(String),
+    /// <p>The specified resource was not found.</p>
+    ResourceNotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl CopyImageError {
+    pub fn from_body(body: &str) -> CopyImageError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "IncompatibleImageException" => {
+                        CopyImageError::IncompatibleImage(String::from(error_message))
+                    }
+                    "InvalidAccountStatusException" => {
+                        CopyImageError::InvalidAccountStatus(String::from(error_message))
+                    }
+                    "LimitExceededException" => {
+                        CopyImageError::LimitExceeded(String::from(error_message))
+                    }
+                    "ResourceAlreadyExistsException" => {
+                        CopyImageError::ResourceAlreadyExists(String::from(error_message))
+                    }
+                    "ResourceNotAvailableException" => {
+                        CopyImageError::ResourceNotAvailable(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        CopyImageError::ResourceNotFound(String::from(error_message))
+                    }
+                    "ValidationException" => CopyImageError::Validation(error_message.to_string()),
+                    _ => CopyImageError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => CopyImageError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for CopyImageError {
+    fn from(err: serde_json::error::Error) -> CopyImageError {
+        CopyImageError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for CopyImageError {
+    fn from(err: CredentialsError) -> CopyImageError {
+        CopyImageError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for CopyImageError {
+    fn from(err: HttpDispatchError) -> CopyImageError {
+        CopyImageError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CopyImageError {
+    fn from(err: io::Error) -> CopyImageError {
+        CopyImageError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for CopyImageError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for CopyImageError {
+    fn description(&self) -> &str {
+        match *self {
+            CopyImageError::IncompatibleImage(ref cause) => cause,
+            CopyImageError::InvalidAccountStatus(ref cause) => cause,
+            CopyImageError::LimitExceeded(ref cause) => cause,
+            CopyImageError::ResourceAlreadyExists(ref cause) => cause,
+            CopyImageError::ResourceNotAvailable(ref cause) => cause,
+            CopyImageError::ResourceNotFound(ref cause) => cause,
+            CopyImageError::Validation(ref cause) => cause,
+            CopyImageError::Credentials(ref err) => err.description(),
+            CopyImageError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            CopyImageError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by CreateDirectoryConfig
 #[derive(Debug, PartialEq)]
 pub enum CreateDirectoryConfigError {
+    /// <p>The resource cannot be created because your AWS account is suspended. For assistance, contact AWS Support. </p>
+    InvalidAccountStatus(String),
     /// <p>The requested limit exceeds the permitted limit for an account.</p>
     LimitExceeded(String),
     /// <p>The specified resource already exists.</p>
@@ -1321,6 +1484,11 @@ impl CreateDirectoryConfigError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
+                    "InvalidAccountStatusException" => {
+                        CreateDirectoryConfigError::InvalidAccountStatus(String::from(
+                            error_message,
+                        ))
+                    }
                     "LimitExceededException" => {
                         CreateDirectoryConfigError::LimitExceeded(String::from(error_message))
                     }
@@ -1368,6 +1536,7 @@ impl fmt::Display for CreateDirectoryConfigError {
 impl Error for CreateDirectoryConfigError {
     fn description(&self) -> &str {
         match *self {
+            CreateDirectoryConfigError::InvalidAccountStatus(ref cause) => cause,
             CreateDirectoryConfigError::LimitExceeded(ref cause) => cause,
             CreateDirectoryConfigError::ResourceAlreadyExists(ref cause) => cause,
             CreateDirectoryConfigError::Validation(ref cause) => cause,
@@ -1386,6 +1555,8 @@ pub enum CreateFleetError {
     ConcurrentModification(String),
     /// <p>The image does not support storage connectors.</p>
     IncompatibleImage(String),
+    /// <p>The resource cannot be created because your AWS account is suspended. For assistance, contact AWS Support. </p>
+    InvalidAccountStatus(String),
     /// <p>Indicates an incorrect combination of parameters, or a missing parameter.</p>
     InvalidParameterCombination(String),
     /// <p>The specified role is invalid.</p>
@@ -1426,6 +1597,9 @@ impl CreateFleetError {
                     }
                     "IncompatibleImageException" => {
                         CreateFleetError::IncompatibleImage(String::from(error_message))
+                    }
+                    "InvalidAccountStatusException" => {
+                        CreateFleetError::InvalidAccountStatus(String::from(error_message))
                     }
                     "InvalidParameterCombinationException" => {
                         CreateFleetError::InvalidParameterCombination(String::from(error_message))
@@ -1486,6 +1660,7 @@ impl Error for CreateFleetError {
         match *self {
             CreateFleetError::ConcurrentModification(ref cause) => cause,
             CreateFleetError::IncompatibleImage(ref cause) => cause,
+            CreateFleetError::InvalidAccountStatus(ref cause) => cause,
             CreateFleetError::InvalidParameterCombination(ref cause) => cause,
             CreateFleetError::InvalidRole(ref cause) => cause,
             CreateFleetError::LimitExceeded(ref cause) => cause,
@@ -1506,6 +1681,8 @@ pub enum CreateImageBuilderError {
     ConcurrentModification(String),
     /// <p>The image does not support storage connectors.</p>
     IncompatibleImage(String),
+    /// <p>The resource cannot be created because your AWS account is suspended. For assistance, contact AWS Support. </p>
+    InvalidAccountStatus(String),
     /// <p>Indicates an incorrect combination of parameters, or a missing parameter.</p>
     InvalidParameterCombination(String),
     /// <p>The specified role is invalid.</p>
@@ -1546,6 +1723,9 @@ impl CreateImageBuilderError {
                     }
                     "IncompatibleImageException" => {
                         CreateImageBuilderError::IncompatibleImage(String::from(error_message))
+                    }
+                    "InvalidAccountStatusException" => {
+                        CreateImageBuilderError::InvalidAccountStatus(String::from(error_message))
                     }
                     "InvalidParameterCombinationException" => {
                         CreateImageBuilderError::InvalidParameterCombination(String::from(
@@ -1608,6 +1788,7 @@ impl Error for CreateImageBuilderError {
         match *self {
             CreateImageBuilderError::ConcurrentModification(ref cause) => cause,
             CreateImageBuilderError::IncompatibleImage(ref cause) => cause,
+            CreateImageBuilderError::InvalidAccountStatus(ref cause) => cause,
             CreateImageBuilderError::InvalidParameterCombination(ref cause) => cause,
             CreateImageBuilderError::InvalidRole(ref cause) => cause,
             CreateImageBuilderError::LimitExceeded(ref cause) => cause,
@@ -1718,6 +1899,8 @@ impl Error for CreateImageBuilderStreamingURLError {
 pub enum CreateStackError {
     /// <p>An API error occurred. Wait a few minutes and try again.</p>
     ConcurrentModification(String),
+    /// <p>The resource cannot be created because your AWS account is suspended. For assistance, contact AWS Support. </p>
+    InvalidAccountStatus(String),
     /// <p>Indicates an incorrect combination of parameters, or a missing parameter.</p>
     InvalidParameterCombination(String),
     /// <p>The specified role is invalid.</p>
@@ -1753,6 +1936,9 @@ impl CreateStackError {
                 match *error_type {
                     "ConcurrentModificationException" => {
                         CreateStackError::ConcurrentModification(String::from(error_message))
+                    }
+                    "InvalidAccountStatusException" => {
+                        CreateStackError::InvalidAccountStatus(String::from(error_message))
                     }
                     "InvalidParameterCombinationException" => {
                         CreateStackError::InvalidParameterCombination(String::from(error_message))
@@ -1809,6 +1995,7 @@ impl Error for CreateStackError {
     fn description(&self) -> &str {
         match *self {
             CreateStackError::ConcurrentModification(ref cause) => cause,
+            CreateStackError::InvalidAccountStatus(ref cause) => cause,
             CreateStackError::InvalidParameterCombination(ref cause) => cause,
             CreateStackError::InvalidRole(ref cause) => cause,
             CreateStackError::LimitExceeded(ref cause) => cause,
@@ -3246,6 +3433,8 @@ impl Error for ListTagsForResourceError {
 pub enum StartFleetError {
     /// <p>An API error occurred. Wait a few minutes and try again.</p>
     ConcurrentModification(String),
+    /// <p>The resource cannot be created because your AWS account is suspended. For assistance, contact AWS Support. </p>
+    InvalidAccountStatus(String),
     /// <p>The requested limit exceeds the permitted limit for an account.</p>
     LimitExceeded(String),
     /// <p>The attempted operation is not permitted.</p>
@@ -3277,6 +3466,9 @@ impl StartFleetError {
                 match *error_type {
                     "ConcurrentModificationException" => {
                         StartFleetError::ConcurrentModification(String::from(error_message))
+                    }
+                    "InvalidAccountStatusException" => {
+                        StartFleetError::InvalidAccountStatus(String::from(error_message))
                     }
                     "LimitExceededException" => {
                         StartFleetError::LimitExceeded(String::from(error_message))
@@ -3325,6 +3517,7 @@ impl Error for StartFleetError {
     fn description(&self) -> &str {
         match *self {
             StartFleetError::ConcurrentModification(ref cause) => cause,
+            StartFleetError::InvalidAccountStatus(ref cause) => cause,
             StartFleetError::LimitExceeded(ref cause) => cause,
             StartFleetError::OperationNotPermitted(ref cause) => cause,
             StartFleetError::ResourceNotFound(ref cause) => cause,
@@ -3342,6 +3535,8 @@ pub enum StartImageBuilderError {
     ConcurrentModification(String),
     /// <p>The image does not support storage connectors.</p>
     IncompatibleImage(String),
+    /// <p>The resource cannot be created because your AWS account is suspended. For assistance, contact AWS Support. </p>
+    InvalidAccountStatus(String),
     /// <p>The specified resource exists and is not in use, but isn't available.</p>
     ResourceNotAvailable(String),
     /// <p>The specified resource was not found.</p>
@@ -3374,6 +3569,9 @@ impl StartImageBuilderError {
                     }
                     "IncompatibleImageException" => {
                         StartImageBuilderError::IncompatibleImage(String::from(error_message))
+                    }
+                    "InvalidAccountStatusException" => {
+                        StartImageBuilderError::InvalidAccountStatus(String::from(error_message))
                     }
                     "ResourceNotAvailableException" => {
                         StartImageBuilderError::ResourceNotAvailable(String::from(error_message))
@@ -3422,6 +3620,7 @@ impl Error for StartImageBuilderError {
         match *self {
             StartImageBuilderError::ConcurrentModification(ref cause) => cause,
             StartImageBuilderError::IncompatibleImage(ref cause) => cause,
+            StartImageBuilderError::InvalidAccountStatus(ref cause) => cause,
             StartImageBuilderError::ResourceNotAvailable(ref cause) => cause,
             StartImageBuilderError::ResourceNotFound(ref cause) => cause,
             StartImageBuilderError::Validation(ref cause) => cause,
@@ -3608,6 +3807,8 @@ impl Error for StopImageBuilderError {
 /// Errors returned by TagResource
 #[derive(Debug, PartialEq)]
 pub enum TagResourceError {
+    /// <p>The resource cannot be created because your AWS account is suspended. For assistance, contact AWS Support. </p>
+    InvalidAccountStatus(String),
     /// <p>The requested limit exceeds the permitted limit for an account.</p>
     LimitExceeded(String),
     /// <p>The specified resource was not found.</p>
@@ -3635,6 +3836,9 @@ impl TagResourceError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
+                    "InvalidAccountStatusException" => {
+                        TagResourceError::InvalidAccountStatus(String::from(error_message))
+                    }
                     "LimitExceededException" => {
                         TagResourceError::LimitExceeded(String::from(error_message))
                     }
@@ -3680,6 +3884,7 @@ impl fmt::Display for TagResourceError {
 impl Error for TagResourceError {
     fn description(&self) -> &str {
         match *self {
+            TagResourceError::InvalidAccountStatus(ref cause) => cause,
             TagResourceError::LimitExceeded(ref cause) => cause,
             TagResourceError::ResourceNotFound(ref cause) => cause,
             TagResourceError::Validation(ref cause) => cause,
@@ -3868,6 +4073,8 @@ pub enum UpdateFleetError {
     ConcurrentModification(String),
     /// <p>The image does not support storage connectors.</p>
     IncompatibleImage(String),
+    /// <p>The resource cannot be created because your AWS account is suspended. For assistance, contact AWS Support. </p>
+    InvalidAccountStatus(String),
     /// <p>Indicates an incorrect combination of parameters, or a missing parameter.</p>
     InvalidParameterCombination(String),
     /// <p>The specified role is invalid.</p>
@@ -3910,6 +4117,9 @@ impl UpdateFleetError {
                     }
                     "IncompatibleImageException" => {
                         UpdateFleetError::IncompatibleImage(String::from(error_message))
+                    }
+                    "InvalidAccountStatusException" => {
+                        UpdateFleetError::InvalidAccountStatus(String::from(error_message))
                     }
                     "InvalidParameterCombinationException" => {
                         UpdateFleetError::InvalidParameterCombination(String::from(error_message))
@@ -3973,6 +4183,7 @@ impl Error for UpdateFleetError {
         match *self {
             UpdateFleetError::ConcurrentModification(ref cause) => cause,
             UpdateFleetError::IncompatibleImage(ref cause) => cause,
+            UpdateFleetError::InvalidAccountStatus(ref cause) => cause,
             UpdateFleetError::InvalidParameterCombination(ref cause) => cause,
             UpdateFleetError::InvalidRole(ref cause) => cause,
             UpdateFleetError::LimitExceeded(ref cause) => cause,
@@ -3992,6 +4203,8 @@ impl Error for UpdateFleetError {
 pub enum UpdateStackError {
     /// <p>The image does not support storage connectors.</p>
     IncompatibleImage(String),
+    /// <p>The resource cannot be created because your AWS account is suspended. For assistance, contact AWS Support. </p>
+    InvalidAccountStatus(String),
     /// <p>Indicates an incorrect combination of parameters, or a missing parameter.</p>
     InvalidParameterCombination(String),
     /// <p>The specified role is invalid.</p>
@@ -4027,6 +4240,9 @@ impl UpdateStackError {
                 match *error_type {
                     "IncompatibleImageException" => {
                         UpdateStackError::IncompatibleImage(String::from(error_message))
+                    }
+                    "InvalidAccountStatusException" => {
+                        UpdateStackError::InvalidAccountStatus(String::from(error_message))
                     }
                     "InvalidParameterCombinationException" => {
                         UpdateStackError::InvalidParameterCombination(String::from(error_message))
@@ -4083,6 +4299,7 @@ impl Error for UpdateStackError {
     fn description(&self) -> &str {
         match *self {
             UpdateStackError::IncompatibleImage(ref cause) => cause,
+            UpdateStackError::InvalidAccountStatus(ref cause) => cause,
             UpdateStackError::InvalidParameterCombination(ref cause) => cause,
             UpdateStackError::InvalidRole(ref cause) => cause,
             UpdateStackError::LimitExceeded(ref cause) => cause,
@@ -4102,6 +4319,12 @@ pub trait AppStream {
         &self,
         input: &AssociateFleetRequest,
     ) -> RusotoFuture<AssociateFleetResult, AssociateFleetError>;
+
+    /// <p>Copies the image within the same region or to a new region within the same AWS account. Note that any tags you added to the image will not be copied.</p>
+    fn copy_image(
+        &self,
+        input: &CopyImageRequest,
+    ) -> RusotoFuture<CopyImageResponse, CopyImageError>;
 
     /// <p>Creates a directory configuration.</p>
     fn create_directory_config(
@@ -4169,7 +4392,7 @@ pub trait AppStream {
         input: &DeleteStackRequest,
     ) -> RusotoFuture<DeleteStackResult, DeleteStackError>;
 
-    /// <p>Describes the specified directory configurations.</p>
+    /// <p>Describes the specified directory configurations. Note that although the response syntax in this topic includes the account password, this password is not returned in the actual response. </p>
     fn describe_directory_configs(
         &self,
         input: &DescribeDirectoryConfigsRequest,
@@ -4229,7 +4452,7 @@ pub trait AppStream {
         input: &ListAssociatedStacksRequest,
     ) -> RusotoFuture<ListAssociatedStacksResult, ListAssociatedStacksError>;
 
-    /// <p>Lists the tags for the specified AppStream 2.0 resource. You can tag AppStream 2.0 image builders, images, fleets, and stacks.</p> <p>For more information about tags, see <a href="http://docs.aws.amazon.com/appstream2/latest/developerguide/tagging-basic">Tagging Your Resources</a> in the <i>Amazon AppStream 2.0 Developer Guide</i>.</p>
+    /// <p>Lists the tags for the specified AppStream 2.0 resource. You can tag AppStream 2.0 image builders, images, fleets, and stacks.</p> <p>For more information about tags, see <a href="http://docs.aws.amazon.com/appstream2/latest/developerguide/tagging-basic.html">Tagging Your Resources</a> in the <i>Amazon AppStream 2.0 Developer Guide</i>.</p>
     fn list_tags_for_resource(
         &self,
         input: &ListTagsForResourceRequest,
@@ -4257,13 +4480,13 @@ pub trait AppStream {
         input: &StopImageBuilderRequest,
     ) -> RusotoFuture<StopImageBuilderResult, StopImageBuilderError>;
 
-    /// <p>Adds or overwrites one or more tags for the specified AppStream 2.0 resource. You can tag AppStream 2.0 image builders, images, fleets, and stacks.</p> <p>Each tag consists of a key and an optional value. If a resource already has a tag with the same key, this operation updates its value.</p> <p>To list the current tags for your resources, use <a>ListTagsForResource</a>. To disassociate tags from your resources, use <a>UntagResource</a>.</p> <p>For more information about tags, see <a href="http://docs.aws.amazon.com/appstream2/latest/developerguide/tagging-basic">Tagging Your Resources</a> in the <i>Amazon AppStream 2.0 Developer Guide</i>.</p>
+    /// <p>Adds or overwrites one or more tags for the specified AppStream 2.0 resource. You can tag AppStream 2.0 image builders, images, fleets, and stacks.</p> <p>Each tag consists of a key and an optional value. If a resource already has a tag with the same key, this operation updates its value.</p> <p>To list the current tags for your resources, use <a>ListTagsForResource</a>. To disassociate tags from your resources, use <a>UntagResource</a>.</p> <p>For more information about tags, see <a href="http://docs.aws.amazon.com/appstream2/latest/developerguide/tagging-basic.html">Tagging Your Resources</a> in the <i>Amazon AppStream 2.0 Developer Guide</i>.</p>
     fn tag_resource(
         &self,
         input: &TagResourceRequest,
     ) -> RusotoFuture<TagResourceResponse, TagResourceError>;
 
-    /// <p>Disassociates the specified tags from the specified AppStream 2.0 resource.</p> <p>To list the current tags for your resources, use <a>ListTagsForResource</a>.</p> <p>For more information about tags, see <a href="http://docs.aws.amazon.com/appstream2/latest/developerguide/tagging-basic">Tagging Your Resources</a> in the <i>Amazon AppStream 2.0 Developer Guide</i>.</p>
+    /// <p>Disassociates the specified tags from the specified AppStream 2.0 resource.</p> <p>To list the current tags for your resources, use <a>ListTagsForResource</a>.</p> <p>For more information about tags, see <a href="http://docs.aws.amazon.com/appstream2/latest/developerguide/tagging-basic.html">Tagging Your Resources</a> in the <i>Amazon AppStream 2.0 Developer Guide</i>.</p>
     fn untag_resource(
         &self,
         input: &UntagResourceRequest,
@@ -4358,6 +4581,43 @@ where
             } else {
                 future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(AssociateFleetError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        });
+
+        RusotoFuture::new(future)
+    }
+
+    /// <p>Copies the image within the same region or to a new region within the same AWS account. Note that any tags you added to the image will not be copied.</p>
+    fn copy_image(
+        &self,
+        input: &CopyImageRequest,
+    ) -> RusotoFuture<CopyImageResponse, CopyImageError> {
+        let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
+        request.set_endpoint_prefix("appstream2".to_string());
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "PhotonAdminProxyService.CopyImage");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        let future = self.inner.sign_and_dispatch(request, |response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<CopyImageResponse>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(CopyImageError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
@@ -4784,7 +5044,7 @@ where
         RusotoFuture::new(future)
     }
 
-    /// <p>Describes the specified directory configurations.</p>
+    /// <p>Describes the specified directory configurations. Note that although the response syntax in this topic includes the account password, this password is not returned in the actual response. </p>
     fn describe_directory_configs(
         &self,
         input: &DescribeDirectoryConfigsRequest,
@@ -5166,7 +5426,7 @@ where
         RusotoFuture::new(future)
     }
 
-    /// <p>Lists the tags for the specified AppStream 2.0 resource. You can tag AppStream 2.0 image builders, images, fleets, and stacks.</p> <p>For more information about tags, see <a href="http://docs.aws.amazon.com/appstream2/latest/developerguide/tagging-basic">Tagging Your Resources</a> in the <i>Amazon AppStream 2.0 Developer Guide</i>.</p>
+    /// <p>Lists the tags for the specified AppStream 2.0 resource. You can tag AppStream 2.0 image builders, images, fleets, and stacks.</p> <p>For more information about tags, see <a href="http://docs.aws.amazon.com/appstream2/latest/developerguide/tagging-basic.html">Tagging Your Resources</a> in the <i>Amazon AppStream 2.0 Developer Guide</i>.</p>
     fn list_tags_for_resource(
         &self,
         input: &ListTagsForResourceRequest,
@@ -5354,7 +5614,7 @@ where
         RusotoFuture::new(future)
     }
 
-    /// <p>Adds or overwrites one or more tags for the specified AppStream 2.0 resource. You can tag AppStream 2.0 image builders, images, fleets, and stacks.</p> <p>Each tag consists of a key and an optional value. If a resource already has a tag with the same key, this operation updates its value.</p> <p>To list the current tags for your resources, use <a>ListTagsForResource</a>. To disassociate tags from your resources, use <a>UntagResource</a>.</p> <p>For more information about tags, see <a href="http://docs.aws.amazon.com/appstream2/latest/developerguide/tagging-basic">Tagging Your Resources</a> in the <i>Amazon AppStream 2.0 Developer Guide</i>.</p>
+    /// <p>Adds or overwrites one or more tags for the specified AppStream 2.0 resource. You can tag AppStream 2.0 image builders, images, fleets, and stacks.</p> <p>Each tag consists of a key and an optional value. If a resource already has a tag with the same key, this operation updates its value.</p> <p>To list the current tags for your resources, use <a>ListTagsForResource</a>. To disassociate tags from your resources, use <a>UntagResource</a>.</p> <p>For more information about tags, see <a href="http://docs.aws.amazon.com/appstream2/latest/developerguide/tagging-basic.html">Tagging Your Resources</a> in the <i>Amazon AppStream 2.0 Developer Guide</i>.</p>
     fn tag_resource(
         &self,
         input: &TagResourceRequest,
@@ -5391,7 +5651,7 @@ where
         RusotoFuture::new(future)
     }
 
-    /// <p>Disassociates the specified tags from the specified AppStream 2.0 resource.</p> <p>To list the current tags for your resources, use <a>ListTagsForResource</a>.</p> <p>For more information about tags, see <a href="http://docs.aws.amazon.com/appstream2/latest/developerguide/tagging-basic">Tagging Your Resources</a> in the <i>Amazon AppStream 2.0 Developer Guide</i>.</p>
+    /// <p>Disassociates the specified tags from the specified AppStream 2.0 resource.</p> <p>To list the current tags for your resources, use <a>ListTagsForResource</a>.</p> <p>For more information about tags, see <a href="http://docs.aws.amazon.com/appstream2/latest/developerguide/tagging-basic.html">Tagging Your Resources</a> in the <i>Amazon AppStream 2.0 Developer Guide</i>.</p>
     fn untag_resource(
         &self,
         input: &UntagResourceRequest,

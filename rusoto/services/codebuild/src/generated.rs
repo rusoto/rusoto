@@ -142,7 +142,7 @@ pub struct Build {
     #[serde(rename = "phases")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub phases: Option<Vec<BuildPhase>>,
-    /// <p>The name of the build project.</p>
+    /// <p>The name of the AWS CodeBuild project.</p>
     #[serde(rename = "projectName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub project_name: Option<String>,
@@ -285,7 +285,11 @@ pub struct CreateProjectOutput {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateWebhookInput {
-    /// <p>The name of the build project.</p>
+    /// <p>A regular expression used to determine which branches in a repository are built when a webhook is triggered. If the name of a branch matches the regular expression, then it is built. If it doesn't match, then it is not. If branchFilter is empty, then all branches are built.</p>
+    #[serde(rename = "branchFilter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub branch_filter: Option<String>,
+    /// <p>The name of the AWS CodeBuild project.</p>
     #[serde(rename = "projectName")]
     pub project_name: String,
 }
@@ -310,7 +314,7 @@ pub struct DeleteProjectOutput {}
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteWebhookInput {
-    /// <p>The name of the build project.</p>
+    /// <p>The name of the AWS CodeBuild project.</p>
     #[serde(rename = "projectName")]
     pub project_name: String,
 }
@@ -378,7 +382,7 @@ pub struct EnvironmentVariable {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct InvalidateProjectCacheInput {
-    /// <p>The name of the build project that the cache will be reset for.</p>
+    /// <p>The name of the AWS CodeBuild build project that the cache will be reset for.</p>
     #[serde(rename = "projectName")]
     pub project_name: String,
 }
@@ -392,7 +396,7 @@ pub struct ListBuildsForProjectInput {
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>The name of the build project.</p>
+    /// <p>The name of the AWS CodeBuild project.</p>
     #[serde(rename = "projectName")]
     pub project_name: String,
     /// <p><p>The order to list build IDs. Valid values include:</p> <ul> <li> <p> <code>ASCENDING</code>: List the build IDs in ascending order by build ID.</p> </li> <li> <p> <code>DESCENDING</code>: List the build IDs in descending order by build ID.</p> </li> </ul></p>
@@ -644,6 +648,10 @@ pub struct ProjectCache {
 /// <p>Information about the build environment of the build project.</p>
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct ProjectEnvironment {
+    /// <p>The certificate to use with this build project.</p>
+    #[serde(rename = "certificate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub certificate: Option<String>,
     /// <p><p>Information about the compute resources the build project will use. Available values include:</p> <ul> <li> <p> <code>BUILD<em>GENERAL1</em>SMALL</code>: Use up to 3 GB memory and 2 vCPUs for builds.</p> </li> <li> <p> <code>BUILD<em>GENERAL1</em>MEDIUM</code>: Use up to 7 GB memory and 4 vCPUs for builds.</p> </li> <li> <p> <code>BUILD<em>GENERAL1</em>LARGE</code>: Use up to 15 GB memory and 8 vCPUs for builds.</p> </li> </ul></p>
     #[serde(rename = "computeType")]
     pub compute_type: String,
@@ -654,7 +662,7 @@ pub struct ProjectEnvironment {
     /// <p>The ID of the Docker image to use for this build project.</p>
     #[serde(rename = "image")]
     pub image: String,
-    /// <p>If set to true, enables running the Docker daemon inside a Docker container; otherwise, false or not specified (the default). This value must be set to true only if this build project will be used to build Docker images, and the specified build environment image is not one provided by AWS CodeBuild with Docker support. Otherwise, all associated builds that attempt to interact with the Docker daemon will fail. Note that you must also start the Docker daemon so that your builds can interact with it as needed. One way to do this is to initialize the Docker daemon in the install phase of your build spec by running the following build commands. (Do not run the following build commands if the specified build environment image is provided by AWS CodeBuild with Docker support.)</p> <p> <code>- nohup /usr/local/bin/dockerd --host=unix:///var/run/docker.sock --host=tcp://0.0.0.0:2375 --storage-driver=overlay&amp; - timeout -t 15 sh -c "until docker info; do echo .; sleep 1; done"</code> </p>
+    /// <p>Enables running the Docker daemon inside a Docker container. Set to true only if the build project is be used to build Docker images, and the specified build environment image is not provided by AWS CodeBuild with Docker support. Otherwise, all associated builds that attempt to interact with the Docker daemon will fail. Note that you must also start the Docker daemon so that builds can interact with it. One way to do this is to initialize the Docker daemon during the install phase of your build spec by running the following build commands. (Do not run the following build commands if the specified build environment image is provided by AWS CodeBuild with Docker support.)</p> <p> <code>- nohup /usr/local/bin/dockerd --host=unix:///var/run/docker.sock --host=tcp://0.0.0.0:2375 --storage-driver=overlay&amp; - timeout -t 15 sh -c "until docker info; do echo .; sleep 1; done"</code> </p>
     #[serde(rename = "privilegedMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub privileged_mode: Option<bool>,
@@ -674,6 +682,14 @@ pub struct ProjectSource {
     #[serde(rename = "buildspec")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub buildspec: Option<String>,
+    /// <p>Information about the git clone depth for the build project.</p>
+    #[serde(rename = "gitCloneDepth")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub git_clone_depth: Option<i64>,
+    /// <p>Enable this flag to ignore SSL warnings while connecting to the project source code.</p>
+    #[serde(rename = "insecureSsl")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub insecure_ssl: Option<bool>,
     /// <p><p>Information about the location of the source code to be built. Valid values include:</p> <ul> <li> <p>For source code settings that are specified in the source action of a pipeline in AWS CodePipeline, <code>location</code> should not be specified. If it is specified, AWS CodePipeline will ignore it. This is because AWS CodePipeline uses the settings in a pipeline&#39;s source action instead of this value.</p> </li> <li> <p>For source code in an AWS CodeCommit repository, the HTTPS clone URL to the repository that contains the source code and the build spec (for example, <code>https://git-codecommit.<i>region-ID</i>.amazonaws.com/v1/repos/<i>repo-name</i> </code>).</p> </li> <li> <p>For source code in an Amazon Simple Storage Service (Amazon S3) input bucket, the path to the ZIP file that contains the source code (for example, <code> <i>bucket-name</i>/<i>path</i>/<i>to</i>/<i>object-name</i>.zip</code>)</p> </li> <li> <p>For source code in a GitHub repository, the HTTPS clone URL to the repository that contains the source and the build spec. Also, you must connect your AWS account to your GitHub account. To do this, use the AWS CodeBuild console to begin creating a build project. When you use the console to connect (or reconnect) with GitHub, on the GitHub <b>Authorize application</b> page that displays, for <b>Organization access</b>, choose <b>Request access</b> next to each repository you want to allow AWS CodeBuild to have access to. Then choose <b>Authorize application</b>. (After you have connected to your GitHub account, you do not need to finish creating the build project, and you may then leave the AWS CodeBuild console.) To instruct AWS CodeBuild to then use this connection, in the <code>source</code> object, set the <code>auth</code> object&#39;s <code>type</code> value to <code>OAUTH</code>.</p> </li> <li> <p>For source code in a Bitbucket repository, the HTTPS clone URL to the repository that contains the source and the build spec. Also, you must connect your AWS account to your Bitbucket account. To do this, use the AWS CodeBuild console to begin creating a build project. When you use the console to connect (or reconnect) with Bitbucket, on the Bitbucket <b>Confirm access to your account</b> page that displays, choose <b>Grant access</b>. (After you have connected to your Bitbucket account, you do not need to finish creating the build project, and you may then leave the AWS CodeBuild console.) To instruct AWS CodeBuild to then use this connection, in the <code>source</code> object, set the <code>auth</code> object&#39;s <code>type</code> value to <code>OAUTH</code>.</p> </li> </ul></p>
     #[serde(rename = "location")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -709,7 +725,11 @@ pub struct StartBuildInput {
     #[serde(rename = "environmentVariablesOverride")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub environment_variables_override: Option<Vec<EnvironmentVariable>>,
-    /// <p>The name of the build project to start running a build.</p>
+    /// <p>The user-defined depth of history, with a minimum value of 0, that overrides, for this build only, any previous depth of history defined in the build project.</p>
+    #[serde(rename = "gitCloneDepthOverride")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub git_clone_depth_override: Option<i64>,
+    /// <p>The name of the AWS CodeBuild build project to start running a build.</p>
     #[serde(rename = "projectName")]
     pub project_name: String,
     /// <p><p>A version of the build input to be built, for this build only. If not specified, the latest version will be used. If specified, must be one of:</p> <ul> <li> <p>For AWS CodeCommit: the commit ID to use.</p> </li> <li> <p>For GitHub: the commit ID, pull request ID, branch name, or tag name that corresponds to the version of the source code you want to build. If a pull request ID is specified, it must use the format <code>pr/pull-request-ID</code> (for example <code>pr/25</code>). If a branch name is specified, the branch&#39;s HEAD commit ID will be used. If not specified, the default branch&#39;s HEAD commit ID will be used.</p> </li> <li> <p>For Bitbucket: the commit ID, branch name, or tag name that corresponds to the version of the source code you want to build. If a branch name is specified, the branch&#39;s HEAD commit ID will be used. If not specified, the default branch&#39;s HEAD commit ID will be used.</p> </li> <li> <p>For Amazon Simple Storage Service (Amazon S3): the version ID of the object representing the build input ZIP file to use.</p> </li> </ul></p>
@@ -817,6 +837,29 @@ pub struct UpdateProjectOutput {
     pub project: Option<Project>,
 }
 
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct UpdateWebhookInput {
+    /// <p>A regular expression used to determine which branches in a repository are built when a webhook is triggered. If the name of a branch matches the regular expression, then it is built. If it doesn't match, then it is not. If branchFilter is empty, then all branches are built.</p>
+    #[serde(rename = "branchFilter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub branch_filter: Option<String>,
+    /// <p>The name of the AWS CodeBuild project.</p>
+    #[serde(rename = "projectName")]
+    pub project_name: String,
+    /// <p> A boolean value that specifies whether the associated repository's secret token should be updated. </p>
+    #[serde(rename = "rotateSecret")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub rotate_secret: Option<bool>,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct UpdateWebhookOutput {
+    /// <p> Information about a repository's webhook that is associated with a project in AWS CodeBuild. </p>
+    #[serde(rename = "webhook")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub webhook: Option<Webhook>,
+}
+
 /// <p>Information about the VPC configuration that AWS CodeBuild will access.</p>
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct VpcConfig {
@@ -837,6 +880,22 @@ pub struct VpcConfig {
 /// <p>Information about a webhook in GitHub that connects repository events to a build project in AWS CodeBuild.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct Webhook {
+    /// <p>A regular expression used to determine which branches in a repository are built when a webhook is triggered. If the name of a branch matches the regular expression, then it is built. If it doesn't match, then it is not. If branchFilter is empty, then all branches are built.</p>
+    #[serde(rename = "branchFilter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub branch_filter: Option<String>,
+    /// <p> A timestamp indicating the last time a repository's secret token was modified. </p>
+    #[serde(rename = "lastModifiedSecret")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_modified_secret: Option<f64>,
+    /// <p> The CodeBuild endpoint where webhook events are sent.</p>
+    #[serde(rename = "payloadUrl")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub payload_url: Option<String>,
+    /// <p> The secret token of the associated repository. </p>
+    #[serde(rename = "secret")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub secret: Option<String>,
     /// <p>The URL to the webhook.</p>
     #[serde(rename = "url")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2087,6 +2146,96 @@ impl Error for UpdateProjectError {
         }
     }
 }
+/// Errors returned by UpdateWebhook
+#[derive(Debug, PartialEq)]
+pub enum UpdateWebhookError {
+    /// <p>The input value that was provided is not valid.</p>
+    InvalidInput(String),
+    /// <p>There was a problem with the underlying OAuth provider.</p>
+    OAuthProvider(String),
+    /// <p>The specified AWS resource cannot be found.</p>
+    ResourceNotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl UpdateWebhookError {
+    pub fn from_body(body: &str) -> UpdateWebhookError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InvalidInputException" => {
+                        UpdateWebhookError::InvalidInput(String::from(error_message))
+                    }
+                    "OAuthProviderException" => {
+                        UpdateWebhookError::OAuthProvider(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        UpdateWebhookError::ResourceNotFound(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        UpdateWebhookError::Validation(error_message.to_string())
+                    }
+                    _ => UpdateWebhookError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => UpdateWebhookError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for UpdateWebhookError {
+    fn from(err: serde_json::error::Error) -> UpdateWebhookError {
+        UpdateWebhookError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for UpdateWebhookError {
+    fn from(err: CredentialsError) -> UpdateWebhookError {
+        UpdateWebhookError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for UpdateWebhookError {
+    fn from(err: HttpDispatchError) -> UpdateWebhookError {
+        UpdateWebhookError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateWebhookError {
+    fn from(err: io::Error) -> UpdateWebhookError {
+        UpdateWebhookError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for UpdateWebhookError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for UpdateWebhookError {
+    fn description(&self) -> &str {
+        match *self {
+            UpdateWebhookError::InvalidInput(ref cause) => cause,
+            UpdateWebhookError::OAuthProvider(ref cause) => cause,
+            UpdateWebhookError::ResourceNotFound(ref cause) => cause,
+            UpdateWebhookError::Validation(ref cause) => cause,
+            UpdateWebhookError::Credentials(ref err) => err.description(),
+            UpdateWebhookError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            UpdateWebhookError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Trait representing the capabilities of the AWS CodeBuild API. AWS CodeBuild clients implement this trait.
 pub trait CodeBuild {
     /// <p>Deletes one or more builds.</p>
@@ -2113,7 +2262,7 @@ pub trait CodeBuild {
         input: &CreateProjectInput,
     ) -> RusotoFuture<CreateProjectOutput, CreateProjectError>;
 
-    /// <p><p>For an existing AWS CodeBuild build project that has its source code stored in a GitHub repository, enables AWS CodeBuild to begin automatically rebuilding the source code every time a code change is pushed to the repository.</p> <important> <p>If you enable webhooks for an AWS CodeBuild project, and the project is used as a build step in AWS CodePipeline, then two identical builds will be created for each commit. One build is triggered through webhooks, and one through AWS CodePipeline. Because billing is on a per-build basis, you will be billed for both builds. Therefore, if you are using AWS CodePipeline, we recommend that you disable webhooks in CodeBuild. In the AWS CodeBuild console, clear the Webhook box. For more information, see step 9 in <a href="http://docs.aws.amazon.com/codebuild/latest/userguide/change-project.html#change-project-console">Change a Build Project’s Settings</a>.</p> </important></p>
+    /// <p><p>For an existing AWS CodeBuild build project that has its source code stored in a GitHub repository, enables AWS CodeBuild to begin automatically rebuilding the source code every time a code change is pushed to the repository.</p> <important> <p>If you enable webhooks for an AWS CodeBuild project, and the project is used as a build step in AWS CodePipeline, then two identical builds will be created for each commit. One build is triggered through webhooks, and one through AWS CodePipeline. Because billing is on a per-build basis, you will be billed for both builds. Therefore, if you are using AWS CodePipeline, we recommend that you disable webhooks in CodeBuild. In the AWS CodeBuild console, clear the Webhook box. For more information, see step 9 in <a href="http://docs.aws.amazon.com/codebuild/latest/userguide/change-project.html#change-project-console">Change a Build Project&#39;s Settings</a>.</p> </important></p>
     fn create_webhook(
         &self,
         input: &CreateWebhookInput,
@@ -2174,6 +2323,12 @@ pub trait CodeBuild {
         &self,
         input: &UpdateProjectInput,
     ) -> RusotoFuture<UpdateProjectOutput, UpdateProjectError>;
+
+    /// <p> Updates the webhook associated with an AWS CodeBuild build project. </p>
+    fn update_webhook(
+        &self,
+        input: &UpdateWebhookInput,
+    ) -> RusotoFuture<UpdateWebhookOutput, UpdateWebhookError>;
 }
 /// A client for the AWS CodeBuild API.
 pub struct CodeBuildClient<P = CredentialsProvider, D = RequestDispatcher>
@@ -2366,7 +2521,7 @@ where
         RusotoFuture::new(future)
     }
 
-    /// <p><p>For an existing AWS CodeBuild build project that has its source code stored in a GitHub repository, enables AWS CodeBuild to begin automatically rebuilding the source code every time a code change is pushed to the repository.</p> <important> <p>If you enable webhooks for an AWS CodeBuild project, and the project is used as a build step in AWS CodePipeline, then two identical builds will be created for each commit. One build is triggered through webhooks, and one through AWS CodePipeline. Because billing is on a per-build basis, you will be billed for both builds. Therefore, if you are using AWS CodePipeline, we recommend that you disable webhooks in CodeBuild. In the AWS CodeBuild console, clear the Webhook box. For more information, see step 9 in <a href="http://docs.aws.amazon.com/codebuild/latest/userguide/change-project.html#change-project-console">Change a Build Project’s Settings</a>.</p> </important></p>
+    /// <p><p>For an existing AWS CodeBuild build project that has its source code stored in a GitHub repository, enables AWS CodeBuild to begin automatically rebuilding the source code every time a code change is pushed to the repository.</p> <important> <p>If you enable webhooks for an AWS CodeBuild project, and the project is used as a build step in AWS CodePipeline, then two identical builds will be created for each commit. One build is triggered through webhooks, and one through AWS CodePipeline. Because billing is on a per-build basis, you will be billed for both builds. Therefore, if you are using AWS CodePipeline, we recommend that you disable webhooks in CodeBuild. In the AWS CodeBuild console, clear the Webhook box. For more information, see step 9 in <a href="http://docs.aws.amazon.com/codebuild/latest/userguide/change-project.html#change-project-console">Change a Build Project&#39;s Settings</a>.</p> </important></p>
     fn create_webhook(
         &self,
         input: &CreateWebhookInput,
@@ -2762,6 +2917,43 @@ where
             } else {
                 future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(UpdateProjectError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        });
+
+        RusotoFuture::new(future)
+    }
+
+    /// <p> Updates the webhook associated with an AWS CodeBuild build project. </p>
+    fn update_webhook(
+        &self,
+        input: &UpdateWebhookInput,
+    ) -> RusotoFuture<UpdateWebhookOutput, UpdateWebhookError> {
+        let mut request = SignedRequest::new("POST", "codebuild", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "CodeBuild_20161006.UpdateWebhook");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        let future = self.inner.sign_and_dispatch(request, |response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<UpdateWebhookOutput>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(UpdateWebhookError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))

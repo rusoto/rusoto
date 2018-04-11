@@ -555,9 +555,10 @@ impl ActiveInstanceDeserializer {
                             Some(try!(StringDeserializer::deserialize("instanceType", stack)));
                     }
                     "spotInstanceRequestId" => {
-                        obj.spot_instance_request_id = Some(try!(
-                            StringDeserializer::deserialize("spotInstanceRequestId", stack)
-                        ));
+                        obj.spot_instance_request_id = Some(try!(StringDeserializer::deserialize(
+                            "spotInstanceRequestId",
+                            stack
+                        )));
                     }
                     _ => skip_tree(stack),
                 },
@@ -2213,7 +2214,7 @@ impl AttributeBooleanValueSerializer {
 /// <p>Describes a value for a resource attribute that is a String.</p>
 #[derive(Default, Debug, Clone)]
 pub struct AttributeValue {
-    /// <p>The attribute value. Note that the value is case-sensitive.</p>
+    /// <p>The attribute value. The value is case-sensitive.</p>
     pub value: Option<String>,
 }
 
@@ -3642,12 +3643,11 @@ impl CancelReservedInstancesListingResultDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "reservedInstancesListingsSet" => {
-                        obj.reserved_instances_listings = Some(try!(
-                            ReservedInstancesListingListDeserializer::deserialize(
+                        obj.reserved_instances_listings =
+                            Some(try!(ReservedInstancesListingListDeserializer::deserialize(
                                 "reservedInstancesListingsSet",
                                 stack
-                            )
-                        ));
+                            )));
                     }
                     _ => skip_tree(stack),
                 },
@@ -4153,9 +4153,10 @@ impl CancelledSpotInstanceRequestDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "spotInstanceRequestId" => {
-                        obj.spot_instance_request_id = Some(try!(
-                            StringDeserializer::deserialize("spotInstanceRequestId", stack)
-                        ));
+                        obj.spot_instance_request_id = Some(try!(StringDeserializer::deserialize(
+                            "spotInstanceRequestId",
+                            stack
+                        )));
                     }
                     "state" => {
                         obj.state = Some(try!(
@@ -4198,9 +4199,10 @@ impl CancelledSpotInstanceRequestListDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => {
                     if name == "item" {
-                        obj.push(try!(
-                            CancelledSpotInstanceRequestDeserializer::deserialize("item", stack)
-                        ));
+                        obj.push(try!(CancelledSpotInstanceRequestDeserializer::deserialize(
+                            "item",
+                            stack
+                        )));
                     } else {
                         skip_tree(stack);
                     }
@@ -5245,7 +5247,7 @@ pub struct CopyImageRequest {
     pub dry_run: Option<bool>,
     /// <p>Specifies whether the destination snapshots of the copied image should be encrypted. The default CMK for EBS is used unless a non-default AWS Key Management Service (AWS KMS) CMK is specified with <code>KmsKeyId</code>. For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSEncryption.html">Amazon EBS Encryption</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
     pub encrypted: Option<bool>,
-    /// <p>The full ARN of the AWS Key Management Service (AWS KMS) CMK to use when encrypting the snapshots of an image during a copy operation. This parameter is only required if you want to use a non-default CMK; if this parameter is not specified, the default CMK for EBS is used. The ARN contains the <code>arn:aws:kms</code> namespace, followed by the region of the CMK, the AWS account ID of the CMK owner, the <code>key</code> namespace, and then the CMK ID. For example, arn:aws:kms:<i>us-east-1</i>:<i>012345678910</i>:key/<i>abcd1234-a123-456a-a12b-a123b4cd56ef</i>. The specified CMK must exist in the region that the snapshot is being copied to. If a <code>KmsKeyId</code> is specified, the <code>Encrypted</code> flag must also be set.</p>
+    /// <p>An identifier for the AWS Key Management Service (AWS KMS) customer master key (CMK) to use when creating the encrypted volume. This parameter is only required if you want to use a non-default CMK; if this parameter is not specified, the default CMK for EBS is used. If a <code>KmsKeyId</code> is specified, the <code>Encrypted</code> flag must also be set. </p> <p>The CMK identifier may be provided in any of the following formats: </p> <ul> <li> <p>Key ID</p> </li> <li> <p>Key alias, in the form <code>alias/<i>ExampleAlias</i> </code> </p> </li> <li> <p>ARN using key ID. The ID ARN contains the <code>arn:aws:kms</code> namespace, followed by the region of the CMK, the AWS account ID of the CMK owner, the <code>key</code> namespace, and then the CMK ID. For example, arn:aws:kms:<i>us-east-1</i>:<i>012345678910</i>:key/<i>abcd1234-a123-456a-a12b-a123b4cd56ef</i>. </p> </li> <li> <p>ARN using key alias. The alias ARN contains the <code>arn:aws:kms</code> namespace, followed by the region of the CMK, the AWS account ID of the CMK owner, the <code>alias</code> namespace, and then the CMK alias. For example, arn:aws:kms:<i>us-east-1</i>:<i>012345678910</i>:alias/<i>ExampleAlias</i>. </p> </li> </ul> <p>AWS parses <code>KmsKeyId</code> asynchronously, meaning that the action you call may appear to complete even though you provided an invalid identifier. This action will eventually report failure. </p> <p>The specified CMK must exist in the region that the snapshot is being copied to. </p>
     pub kms_key_id: Option<String>,
     /// <p>The name of the new AMI in the destination region.</p>
     pub name: String,
@@ -5367,9 +5369,9 @@ pub struct CopySnapshotRequest {
     pub dry_run: Option<bool>,
     /// <p>Specifies whether the destination snapshot should be encrypted. You can encrypt a copy of an unencrypted snapshot using this flag, but you cannot use it to create an unencrypted copy from an encrypted snapshot. Your default CMK for EBS is used unless a non-default AWS Key Management Service (AWS KMS) CMK is specified with <code>KmsKeyId</code>. For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSEncryption.html">Amazon EBS Encryption</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
     pub encrypted: Option<bool>,
-    /// <p>The full ARN of the AWS Key Management Service (AWS KMS) CMK to use when creating the snapshot copy. This parameter is only required if you want to use a non-default CMK; if this parameter is not specified, the default CMK for EBS is used. The ARN contains the <code>arn:aws:kms</code> namespace, followed by the region of the CMK, the AWS account ID of the CMK owner, the <code>key</code> namespace, and then the CMK ID. For example, arn:aws:kms:<i>us-east-1</i>:<i>012345678910</i>:key/<i>abcd1234-a123-456a-a12b-a123b4cd56ef</i>. The specified CMK must exist in the region that the snapshot is being copied to. If a <code>KmsKeyId</code> is specified, the <code>Encrypted</code> flag must also be set.</p>
+    /// <p>An identifier for the AWS Key Management Service (AWS KMS) customer master key (CMK) to use when creating the encrypted volume. This parameter is only required if you want to use a non-default CMK; if this parameter is not specified, the default CMK for EBS is used. If a <code>KmsKeyId</code> is specified, the <code>Encrypted</code> flag must also be set. </p> <p>The CMK identifier may be provided in any of the following formats: </p> <ul> <li> <p>Key ID</p> </li> <li> <p>Key alias</p> </li> <li> <p>ARN using key ID. The ID ARN contains the <code>arn:aws:kms</code> namespace, followed by the region of the CMK, the AWS account ID of the CMK owner, the <code>key</code> namespace, and then the CMK ID. For example, arn:aws:kms:<i>us-east-1</i>:<i>012345678910</i>:key/<i>abcd1234-a123-456a-a12b-a123b4cd56ef</i>. </p> </li> <li> <p>ARN using key alias. The alias ARN contains the <code>arn:aws:kms</code> namespace, followed by the region of the CMK, the AWS account ID of the CMK owner, the <code>alias</code> namespace, and then the CMK alias. For example, arn:aws:kms:<i>us-east-1</i>:<i>012345678910</i>:alias/<i>ExampleAlias</i>. </p> </li> </ul> <p>AWS parses <code>KmsKeyId</code> asynchronously, meaning that the action you call may appear to complete even though you provided an invalid identifier. The action will eventually fail. </p>
     pub kms_key_id: Option<String>,
-    /// <p>The pre-signed URL that facilitates copying an encrypted snapshot. This parameter is only required when copying an encrypted snapshot with the Amazon EC2 Query API; it is available as an optional parameter in all other cases. The <code>PresignedUrl</code> should use the snapshot source endpoint, the <code>CopySnapshot</code> action, and include the <code>SourceRegion</code>, <code>SourceSnapshotId</code>, and <code>DestinationRegion</code> parameters. The <code>PresignedUrl</code> must be signed using AWS Signature Version 4. Because EBS snapshots are stored in Amazon S3, the signing algorithm for this parameter uses the same logic that is described in <a href="http://docs.aws.amazon.com/AmazonS3/latest/API/sigv4-query-string-auth.html">Authenticating Requests by Using Query Parameters (AWS Signature Version 4)</a> in the <i>Amazon Simple Storage Service API Reference</i>. An invalid or improperly signed <code>PresignedUrl</code> will cause the copy operation to fail asynchronously, and the snapshot will move to an <code>error</code> state.</p>
+    /// <p>The pre-signed URL parameter is required when copying an encrypted snapshot with the Amazon EC2 Query API; it is available as an optional parameter in all other cases. For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/APIReference/Query-Requests.html">Query Requests</a>.</p> <p>The <code>PresignedUrl</code> should use the snapshot source endpoint, the <code>CopySnapshot</code> action, and include the <code>SourceRegion</code>, <code>SourceSnapshotId</code>, and <code>DestinationRegion</code> parameters. The <code>PresignedUrl</code> must be signed using AWS Signature Version 4. Because EBS snapshots are stored in Amazon S3, the signing algorithm for this parameter uses the same logic that is described in <a href="http://docs.aws.amazon.com/AmazonS3/latest/API/sigv4-query-string-auth.html">Authenticating Requests by Using Query Parameters (AWS Signature Version 4)</a> in the <i>Amazon Simple Storage Service API Reference</i>. An invalid or improperly signed <code>PresignedUrl</code> will cause the copy operation to fail asynchronously, and the snapshot will move to an <code>error</code> state.</p>
     pub presigned_url: Option<String>,
     /// <p>The ID of the region that contains the snapshot to be copied.</p>
     pub source_region: String,
@@ -7269,12 +7271,11 @@ impl CreateReservedInstancesListingResultDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "reservedInstancesListingsSet" => {
-                        obj.reserved_instances_listings = Some(try!(
-                            ReservedInstancesListingListDeserializer::deserialize(
+                        obj.reserved_instances_listings =
+                            Some(try!(ReservedInstancesListingListDeserializer::deserialize(
                                 "reservedInstancesListingsSet",
                                 stack
-                            )
-                        ));
+                            )));
                     }
                     _ => skip_tree(stack),
                 },
@@ -7518,7 +7519,7 @@ pub struct CreateSecurityGroupRequest {
     pub description: String,
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
-    /// <p>The name of the security group.</p> <p>Constraints: Up to 255 characters in length</p> <p>Constraints for EC2-Classic: ASCII characters</p> <p>Constraints for EC2-VPC: a-z, A-Z, 0-9, spaces, and ._-:/()#,@[]+=&amp;;{}!$*</p>
+    /// <p>The name of the security group.</p> <p>Constraints: Up to 255 characters in length. Cannot start with <code>sg-</code>.</p> <p>Constraints for EC2-Classic: ASCII characters</p> <p>Constraints for EC2-VPC: a-z, A-Z, 0-9, spaces, and ._-:/()#,@[]+=&amp;;{}!$*</p>
     pub group_name: String,
     /// <p>[EC2-VPC] The ID of the VPC. Required for EC2-VPC.</p>
     pub vpc_id: Option<String>,
@@ -7610,6 +7611,8 @@ pub struct CreateSnapshotRequest {
     pub description: Option<String>,
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
+    /// <p>The tags to apply to the snapshot during creation.</p>
+    pub tag_specifications: Option<Vec<TagSpecification>>,
     /// <p>The ID of the EBS volume.</p>
     pub volume_id: String,
 }
@@ -7633,6 +7636,13 @@ impl CreateSnapshotRequestSerializer {
             params.put(
                 &format!("{}{}", prefix, "DryRun"),
                 &field_value.to_string().replace("+", "%2B"),
+            );
+        }
+        if let Some(ref field_value) = obj.tag_specifications {
+            TagSpecificationListSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "TagSpecification"),
+                field_value,
             );
         }
         params.put(
@@ -8045,7 +8055,7 @@ pub struct CreateVolumeRequest {
     pub encrypted: Option<bool>,
     /// <p>Only valid for Provisioned IOPS SSD volumes. The number of I/O operations per second (IOPS) to provision for the volume, with a maximum ratio of 50 IOPS/GiB.</p> <p>Constraint: Range is 100 to 20000 for Provisioned IOPS SSD volumes </p>
     pub iops: Option<i64>,
-    /// <p>The full ARN of the AWS Key Management Service (AWS KMS) customer master key (CMK) to use when creating the encrypted volume. This parameter is only required if you want to use a non-default CMK; if this parameter is not specified, the default CMK for EBS is used. The ARN contains the <code>arn:aws:kms</code> namespace, followed by the region of the CMK, the AWS account ID of the CMK owner, the <code>key</code> namespace, and then the CMK ID. For example, arn:aws:kms:<i>us-east-1</i>:<i>012345678910</i>:key/<i>abcd1234-a123-456a-a12b-a123b4cd56ef</i>. If a <code>KmsKeyId</code> is specified, the <code>Encrypted</code> flag must also be set.</p>
+    /// <p>An identifier for the AWS Key Management Service (AWS KMS) customer master key (CMK) to use when creating the encrypted volume. This parameter is only required if you want to use a non-default CMK; if this parameter is not specified, the default CMK for EBS is used. If a <code>KmsKeyId</code> is specified, the <code>Encrypted</code> flag must also be set. </p> <p>The CMK identifier may be provided in any of the following formats: </p> <ul> <li> <p>Key ID</p> </li> <li> <p>Key alias</p> </li> <li> <p>ARN using key ID. The ID ARN contains the <code>arn:aws:kms</code> namespace, followed by the region of the CMK, the AWS account ID of the CMK owner, the <code>key</code> namespace, and then the CMK ID. For example, arn:aws:kms:<i>us-east-1</i>:<i>012345678910</i>:key/<i>abcd1234-a123-456a-a12b-a123b4cd56ef</i>. </p> </li> <li> <p>ARN using key alias. The alias ARN contains the <code>arn:aws:kms</code> namespace, followed by the region of the CMK, the AWS account ID of the CMK owner, the <code>alias</code> namespace, and then the CMK alias. For example, arn:aws:kms:<i>us-east-1</i>:<i>012345678910</i>:alias/<i>ExampleAlias</i>. </p> </li> </ul> <p>AWS parses <code>KmsKeyId</code> asynchronously, meaning that the action you call may appear to complete even though you provided an invalid identifier. The action will eventually fail. </p>
     pub kms_key_id: Option<String>,
     /// <p>The size of the volume, in GiBs.</p> <p>Constraints: 1-16384 for <code>gp2</code>, 4-16384 for <code>io1</code>, 500-16384 for <code>st1</code>, 500-16384 for <code>sc1</code>, and 1-1024 for <code>standard</code>. If you specify a snapshot, the volume size must be equal to or larger than the snapshot size.</p> <p>Default: If you're creating the volume from a snapshot and don't specify a volume size, the default is the snapshot size.</p>
     pub size: Option<i64>,
@@ -8257,7 +8267,7 @@ pub struct CreateVpcEndpointRequest {
     pub route_table_ids: Option<Vec<String>>,
     /// <p>(Interface endpoint) The ID of one or more security groups to associate with the endpoint network interface.</p>
     pub security_group_ids: Option<Vec<String>>,
-    /// <p>The service name. To get a list of available services, use the <a>DescribeVpcEndpointServices</a> request.</p>
+    /// <p>The service name. To get a list of available services, use the <a>DescribeVpcEndpointServices</a> request, or get the name from the service provider.</p>
     pub service_name: String,
     /// <p>(Interface endpoint) The ID of one or more subnets in which to create an endpoint network interface.</p>
     pub subnet_ids: Option<Vec<String>>,
@@ -9683,31 +9693,31 @@ impl DeleteLaunchTemplateVersionsResponseErrorItemDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "launchTemplateId" => {
-                            obj.launch_template_id = Some(try!(StringDeserializer::deserialize(
-                                "launchTemplateId",
-                                stack
-                            )));
-                        }
-                        "launchTemplateName" => {
-                            obj.launch_template_name = Some(try!(
-                                StringDeserializer::deserialize("launchTemplateName", stack)
-                            ));
-                        }
-                        "responseError" => {
-                            obj.response_error = Some(try!(
-                                ResponseErrorDeserializer::deserialize("responseError", stack)
-                            ));
-                        }
-                        "versionNumber" => {
-                            obj.version_number =
-                                Some(try!(LongDeserializer::deserialize("versionNumber", stack)));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "launchTemplateId" => {
+                        obj.launch_template_id = Some(try!(StringDeserializer::deserialize(
+                            "launchTemplateId",
+                            stack
+                        )));
                     }
-                }
+                    "launchTemplateName" => {
+                        obj.launch_template_name = Some(try!(StringDeserializer::deserialize(
+                            "launchTemplateName",
+                            stack
+                        )));
+                    }
+                    "responseError" => {
+                        obj.response_error = Some(try!(ResponseErrorDeserializer::deserialize(
+                            "responseError",
+                            stack
+                        )));
+                    }
+                    "versionNumber" => {
+                        obj.version_number =
+                            Some(try!(LongDeserializer::deserialize("versionNumber", stack)));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -9742,7 +9752,12 @@ impl DeleteLaunchTemplateVersionsResponseErrorSetDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => {
                     if name == "item" {
-                        obj.push(try!(DeleteLaunchTemplateVersionsResponseErrorItemDeserializer::deserialize("item", stack)));
+                        obj.push(try!(
+                            DeleteLaunchTemplateVersionsResponseErrorItemDeserializer::deserialize(
+                                "item",
+                                stack
+                            )
+                        ));
                     } else {
                         skip_tree(stack);
                     }
@@ -10421,7 +10436,7 @@ pub struct DeleteTagsRequest {
     pub dry_run: Option<bool>,
     /// <p>The IDs of one or more resources.</p>
     pub resources: Vec<String>,
-    /// <p>One or more tags to delete. If you omit this parameter, we delete all tags for the specified resources. Specify a tag key and an optional tag value to delete specific tags. If you specify a tag key without a tag value, we delete any tag with this key regardless of its value. If you specify a tag key with an empty string as the tag value, we delete the tag only if its value is an empty string.</p>
+    /// <p>One or more tags to delete. Specify a tag key and an optional tag value to delete specific tags. If you specify a tag key without a tag value, we delete any tag with this key regardless of its value. If you specify a tag key with an empty string as the tag value, we delete the tag only if its value is an empty string.</p> <p>If you omit this parameter, we delete all user-defined tags for the specified resources. We do not delete AWS-generated tags (tags that have the <code>aws:</code> prefix).</p>
     pub tags: Option<Vec<Tag>>,
 }
 
@@ -11047,7 +11062,7 @@ pub struct DescribeAddressesRequest {
     pub allocation_ids: Option<Vec<String>>,
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
-    /// <p><p>One or more filters. Filter names and values are case-sensitive.</p> <ul> <li> <p> <code>allocation-id</code> - [EC2-VPC] The allocation ID for the address.</p> </li> <li> <p> <code>association-id</code> - [EC2-VPC] The association ID for the address.</p> </li> <li> <p> <code>domain</code> - Indicates whether the address is for use in EC2-Classic (<code>standard</code>) or in a VPC (<code>vpc</code>).</p> </li> <li> <p> <code>instance-id</code> - The ID of the instance the address is associated with, if any.</p> </li> <li> <p> <code>network-interface-id</code> - [EC2-VPC] The ID of the network interface that the address is associated with, if any.</p> </li> <li> <p> <code>network-interface-owner-id</code> - The AWS account ID of the owner.</p> </li> <li> <p> <code>private-ip-address</code> - [EC2-VPC] The private IP address associated with the Elastic IP address.</p> </li> <li> <p> <code>public-ip</code> - The Elastic IP address.</p> </li> </ul></p>
+    /// <p><p>One or more filters. Filter names and values are case-sensitive.</p> <ul> <li> <p> <code>allocation-id</code> - [EC2-VPC] The allocation ID for the address.</p> </li> <li> <p> <code>association-id</code> - [EC2-VPC] The association ID for the address.</p> </li> <li> <p> <code>domain</code> - Indicates whether the address is for use in EC2-Classic (<code>standard</code>) or in a VPC (<code>vpc</code>).</p> </li> <li> <p> <code>instance-id</code> - The ID of the instance the address is associated with, if any.</p> </li> <li> <p> <code>network-interface-id</code> - [EC2-VPC] The ID of the network interface that the address is associated with, if any.</p> </li> <li> <p> <code>network-interface-owner-id</code> - The AWS account ID of the owner.</p> </li> <li> <p> <code>private-ip-address</code> - [EC2-VPC] The private IP address associated with the Elastic IP address.</p> </li> <li> <p> <code>public-ip</code> - The Elastic IP address.</p> </li> <li> <p> <code>tag</code>:<i>key</i>=<i>value</i> - The key/value combination of a tag assigned to the resource. Specify the key of the tag in the filter name and the value of the tag in the filter value. For example, for the tag Purpose=X, specify <code>tag:Purpose</code> for the filter name and <code>X</code> for the filter value.</p> </li> <li> <p> <code>tag-key</code> - The key of a tag assigned to the resource. This filter is independent of the <code>tag-value</code> filter. For example, if you use both the filter &quot;tag-key=Purpose&quot; and the filter &quot;tag-value=X&quot;, you get any resources assigned both the tag key Purpose (regardless of what the tag&#39;s value is), and the tag value X (regardless of the tag&#39;s key). If you want to list only resources where Purpose is X, see the <code>tag</code>:<i>key</i>=<i>value</i> filter.</p> </li> </ul></p>
     pub filters: Option<Vec<Filter>>,
     /// <p>[EC2-Classic] One or more Elastic IP addresses.</p> <p>Default: Describes all your Elastic IP addresses.</p>
     pub public_ips: Option<Vec<String>>,
@@ -11124,6 +11139,86 @@ impl DescribeAddressesResultDeserializer {
                     "addressesSet" => {
                         obj.addresses = Some(try!(AddressListDeserializer::deserialize(
                             "addressesSet",
+                            stack
+                        )));
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+#[derive(Default, Debug, Clone)]
+pub struct DescribeAggregateIdFormatRequest {
+    /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
+    pub dry_run: Option<bool>,
+}
+
+/// Serialize `DescribeAggregateIdFormatRequest` contents to a `SignedRequest`.
+struct DescribeAggregateIdFormatRequestSerializer;
+impl DescribeAggregateIdFormatRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DescribeAggregateIdFormatRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.dry_run {
+            params.put(
+                &format!("{}{}", prefix, "DryRun"),
+                &field_value.to_string().replace("+", "%2B"),
+            );
+        }
+    }
+}
+
+#[derive(Default, Debug, Clone)]
+pub struct DescribeAggregateIdFormatResult {
+    /// <p>Information about each resource's ID format.</p>
+    pub statuses: Option<Vec<IdFormat>>,
+    /// <p>Indicates whether all resource types in the region are configured to use longer IDs. This value is only <code>true</code> if all users are configured to use longer IDs for all resources types in the region.</p>
+    pub use_long_ids_aggregated: Option<bool>,
+}
+
+struct DescribeAggregateIdFormatResultDeserializer;
+impl DescribeAggregateIdFormatResultDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DescribeAggregateIdFormatResult, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = DescribeAggregateIdFormatResult::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "statusSet" => {
+                        obj.statuses = Some(try!(IdFormatListDeserializer::deserialize(
+                            "statusSet",
+                            stack
+                        )));
+                    }
+                    "useLongIdsAggregated" => {
+                        obj.use_long_ids_aggregated = Some(try!(BooleanDeserializer::deserialize(
+                            "useLongIdsAggregated",
                             stack
                         )));
                     }
@@ -12798,7 +12893,7 @@ impl DescribeIamInstanceProfileAssociationsResultDeserializer {
 /// <p>Contains the parameters for DescribeIdFormat.</p>
 #[derive(Default, Debug, Clone)]
 pub struct DescribeIdFormatRequest {
-    /// <p>The type of resource: <code>instance</code> | <code>reservation</code> | <code>snapshot</code> | <code>volume</code> </p>
+    /// <p>The type of resource: <code>bundle</code> | <code>conversion-task</code> | <code>customer-gateway</code> | <code>dhcp-options</code> | <code>elastic-ip-allocation</code> | <code>elastic-ip-association</code> | <code>export-task</code> | <code>flow-log</code> | <code>image</code> | <code>import-task</code> | <code>instance</code> | <code>internet-gateway</code> | <code>network-acl</code> | <code>network-acl-association</code> | <code>network-interface</code> | <code>network-interface-attachment</code> | <code>prefix-list</code> | <code>reservation</code> | <code>route-table</code> | <code>route-table-association</code> | <code>security-group</code> | <code>snapshot</code> | <code>subnet</code> | <code>subnet-cidr-block-association</code> | <code>volume</code> | <code>vpc</code> | <code>vpc-cidr-block-association</code> | <code>vpc-endpoint</code> | <code>vpc-peering-connection</code> | <code>vpn-connection</code> | <code>vpn-gateway</code> </p>
     pub resource: Option<String>,
 }
 
@@ -12874,7 +12969,7 @@ impl DescribeIdFormatResultDeserializer {
 pub struct DescribeIdentityIdFormatRequest {
     /// <p>The ARN of the principal, which can be an IAM role, IAM user, or the root user.</p>
     pub principal_arn: String,
-    /// <p>The type of resource: <code>instance</code> | <code>reservation</code> | <code>snapshot</code> | <code>volume</code> </p>
+    /// <p>The type of resource: <code>bundle</code> | <code>conversion-task</code> | <code>customer-gateway</code> | <code>dhcp-options</code> | <code>elastic-ip-allocation</code> | <code>elastic-ip-association</code> | <code>export-task</code> | <code>flow-log</code> | <code>image</code> | <code>import-task</code> | <code>instance</code> | <code>internet-gateway</code> | <code>network-acl</code> | <code>network-acl-association</code> | <code>network-interface</code> | <code>network-interface-attachment</code> | <code>prefix-list</code> | <code>reservation</code> | <code>route-table</code> | <code>route-table-association</code> | <code>security-group</code> | <code>snapshot</code> | <code>subnet</code> | <code>subnet-cidr-block-association</code> | <code>volume</code> | <code>vpc</code> | <code>vpc-cidr-block-association</code> | <code>vpc-endpoint</code> | <code>vpc-peering-connection</code> | <code>vpn-connection</code> | <code>vpn-gateway</code> </p>
     pub resource: Option<String>,
 }
 
@@ -14046,7 +14141,7 @@ impl DescribeLaunchTemplateVersionsResultDeserializer {
 pub struct DescribeLaunchTemplatesRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
-    /// <p><p>One or more filters.</p> <ul> <li> <p> <code>create-time</code> - The time the launch template was created.</p> </li> <li> <p> <code>launch-template-name</code> - The name of the launch template.</p> </li> </ul></p>
+    /// <p><p>One or more filters.</p> <ul> <li> <p> <code>create-time</code> - The time the launch template was created.</p> </li> <li> <p> <code>launch-template-name</code> - The name of the launch template.</p> </li> <li> <p> <code>tag</code>:<i>key</i>=<i>value</i> - The key/value combination of a tag assigned to the resource. Specify the key of the tag in the filter name and the value of the tag in the filter value. For example, for the tag Purpose=X, specify <code>tag:Purpose</code> for the filter name and <code>X</code> for the filter value.</p> </li> <li> <p> <code>tag-key</code> - The key of a tag assigned to the resource. This filter is independent of the <code>tag-value</code> filter. For example, if you use both the filter &quot;tag-key=Purpose&quot; and the filter &quot;tag-value=X&quot;, you get any resources assigned both the tag key Purpose (regardless of what the tag&#39;s value is), and the tag value X (regardless of the tag&#39;s key). If you want to list only resources where Purpose is X, see the <code>tag</code>:<i>key</i>=<i>value</i> filter.</p> </li> </ul></p>
     pub filters: Option<Vec<Filter>>,
     /// <p>One or more launch template IDs.</p>
     pub launch_template_ids: Option<Vec<String>>,
@@ -15007,6 +15102,108 @@ impl DescribePrefixListsResultDeserializer {
         Ok(obj)
     }
 }
+#[derive(Default, Debug, Clone)]
+pub struct DescribePrincipalIdFormatRequest {
+    /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
+    pub dry_run: Option<bool>,
+    /// <p>The maximum number of results to return in a single call. To retrieve the remaining results, make another call with the returned NextToken value. </p>
+    pub max_results: Option<i64>,
+    /// <p>The token to request the next page of results.</p>
+    pub next_token: Option<String>,
+    /// <p>The type of resource: <code>bundle</code> | <code>conversion-task</code> | <code>customer-gateway</code> | <code>dhcp-options</code> | <code>elastic-ip-allocation</code> | <code>elastic-ip-association</code> | <code>export-task</code> | <code>flow-log</code> | <code>image</code> | <code>import-task</code> | <code>instance</code> | <code>internet-gateway</code> | <code>network-acl</code> | <code>network-acl-association</code> | <code>network-interface</code> | <code>network-interface-attachment</code> | <code>prefix-list</code> | <code>reservation</code> | <code>route-table</code> | <code>route-table-association</code> | <code>security-group</code> | <code>snapshot</code> | <code>subnet</code> | <code>subnet-cidr-block-association</code> | <code>volume</code> | <code>vpc</code> | <code>vpc-cidr-block-association</code> | <code>vpc-endpoint</code> | <code>vpc-peering-connection</code> | <code>vpn-connection</code> | <code>vpn-gateway</code> </p>
+    pub resources: Option<Vec<String>>,
+}
+
+/// Serialize `DescribePrincipalIdFormatRequest` contents to a `SignedRequest`.
+struct DescribePrincipalIdFormatRequestSerializer;
+impl DescribePrincipalIdFormatRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DescribePrincipalIdFormatRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.dry_run {
+            params.put(
+                &format!("{}{}", prefix, "DryRun"),
+                &field_value.to_string().replace("+", "%2B"),
+            );
+        }
+        if let Some(ref field_value) = obj.max_results {
+            params.put(
+                &format!("{}{}", prefix, "MaxResults"),
+                &field_value.to_string().replace("+", "%2B"),
+            );
+        }
+        if let Some(ref field_value) = obj.next_token {
+            params.put(
+                &format!("{}{}", prefix, "NextToken"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
+        if let Some(ref field_value) = obj.resources {
+            ResourceListSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "Resource"),
+                field_value,
+            );
+        }
+    }
+}
+
+#[derive(Default, Debug, Clone)]
+pub struct DescribePrincipalIdFormatResult {
+    /// <p>The token to use to retrieve the next page of results. This value is null when there are no more results to return.</p>
+    pub next_token: Option<String>,
+    /// <p>Information about the ID format settings for the ARN.</p>
+    pub principals: Option<Vec<PrincipalIdFormat>>,
+}
+
+struct DescribePrincipalIdFormatResultDeserializer;
+impl DescribePrincipalIdFormatResultDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DescribePrincipalIdFormatResult, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = DescribePrincipalIdFormatResult::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "nextToken" => {
+                        obj.next_token =
+                            Some(try!(StringDeserializer::deserialize("nextToken", stack)));
+                    }
+                    "principalSet" => {
+                        obj.principals = Some(try!(
+                            PrincipalIdFormatListDeserializer::deserialize("principalSet", stack)
+                        ));
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
 /// <p>Contains the parameters for DescribeRegions.</p>
 #[derive(Default, Debug, Clone)]
 pub struct DescribeRegionsRequest {
@@ -15171,12 +15368,11 @@ impl DescribeReservedInstancesListingsResultDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "reservedInstancesListingsSet" => {
-                        obj.reserved_instances_listings = Some(try!(
-                            ReservedInstancesListingListDeserializer::deserialize(
+                        obj.reserved_instances_listings =
+                            Some(try!(ReservedInstancesListingListDeserializer::deserialize(
                                 "reservedInstancesListingsSet",
                                 stack
-                            )
-                        ));
+                            )));
                     }
                     _ => skip_tree(stack),
                 },
@@ -16045,7 +16241,7 @@ pub struct DescribeSecurityGroupsRequest {
     pub group_ids: Option<Vec<String>>,
     /// <p>[EC2-Classic and default VPC only] One or more security group names. You can specify either the security group name or the security group ID. For security groups in a nondefault VPC, use the <code>group-name</code> filter to describe security groups by name.</p> <p>Default: Describes all your security groups.</p>
     pub group_names: Option<Vec<String>>,
-    /// <p>The maximum number of results to return in a single call. To retrieve the remaining results, make another request with the returned <code>NextToken</code> value. This value can be between 5 and 1000.</p>
+    /// <p>The maximum number of results to return in a single call. To retrieve the remaining results, make another request with the returned <code>NextToken</code> value. This value can be between 5 and 1000. If this parameter is not specified, then all results are returned.</p>
     pub max_results: Option<i64>,
     /// <p>The token to request the next page of results.</p>
     pub next_token: Option<String>,
@@ -17002,7 +17198,7 @@ impl DescribeSpotPriceHistoryRequestSerializer {
 /// <p>Contains the output of DescribeSpotPriceHistory.</p>
 #[derive(Default, Debug, Clone)]
 pub struct DescribeSpotPriceHistoryResult {
-    /// <p>The token required to retrieve the next set of results. This value is <code>null</code> when there are no more results to return.</p>
+    /// <p>The token required to retrieve the next set of results. This value is null or an empty string when there are no more results to return.</p>
     pub next_token: Option<String>,
     /// <p>The historical Spot prices.</p>
     pub spot_price_history: Option<Vec<SpotPrice>>,
@@ -17253,7 +17449,7 @@ impl DescribeSubnetsResultDeserializer {
 pub struct DescribeTagsRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
-    /// <p><p>One or more filters.</p> <ul> <li> <p> <code>key</code> - The tag key.</p> </li> <li> <p> <code>resource-id</code> - The resource ID.</p> </li> <li> <p> <code>resource-type</code> - The resource type (<code>customer-gateway</code> | <code>dhcp-options</code> | <code>image</code> | <code>instance</code> | <code>internet-gateway</code> | <code>network-acl</code> | <code>network-interface</code> | <code>reserved-instances</code> | <code>route-table</code> | <code>security-group</code> | <code>snapshot</code> | <code>spot-instances-request</code> | <code>subnet</code> | <code>volume</code> | <code>vpc</code> | <code>vpn-connection</code> | <code>vpn-gateway</code>).</p> </li> <li> <p> <code>value</code> - The tag value.</p> </li> </ul></p>
+    /// <p><p>One or more filters.</p> <ul> <li> <p> <code>key</code> - The tag key.</p> </li> <li> <p> <code>resource-id</code> - The resource ID.</p> </li> <li> <p> <code>resource-type</code> - The resource type (<code>customer-gateway</code> | <code>dhcp-options</code> | <code>elastic-ip</code> | <code>fpga-image</code> | <code>image</code> | <code>instance</code> | <code>internet-gateway</code> | <code>launch-template</code> | <code>natgateway</code> | <code>network-acl</code> | <code>network-interface</code> | <code>reserved-instances</code> | <code>route-table</code> | <code>security-group</code> | <code>snapshot</code> | <code>spot-instances-request</code> | <code>subnet</code> | <code>volume</code> | <code>vpc</code> | <code>vpc-peering-connection</code> | <code>vpn-connection</code> | <code>vpn-gateway</code>).</p> </li> <li> <p> <code>value</code> - The tag value.</p> </li> </ul></p>
     pub filters: Option<Vec<Filter>>,
     /// <p>The maximum number of results to return in a single call. This value can be between 5 and 1000. To retrieve the remaining results, make another call with the returned <code>NextToken</code> value.</p>
     pub max_results: Option<i64>,
@@ -20484,7 +20680,7 @@ pub struct EbsBlockDevice {
     pub encrypted: Option<bool>,
     /// <p>The number of I/O operations per second (IOPS) that the volume supports. For <code>io1</code>, this represents the number of IOPS that are provisioned for the volume. For <code>gp2</code>, this represents the baseline performance of the volume and the rate at which the volume accumulates I/O credits for bursting. For more information about General Purpose SSD baseline performance, I/O credits, and bursting, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSVolumeTypes.html">Amazon EBS Volume Types</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <p>Constraint: Range is 100-20000 IOPS for <code>io1</code> volumes and 100-10000 IOPS for <code>gp2</code> volumes.</p> <p>Condition: This parameter is required for requests to create <code>io1</code> volumes; it is not used in requests to create <code>gp2</code>, <code>st1</code>, <code>sc1</code>, or <code>standard</code> volumes.</p>
     pub iops: Option<i64>,
-    /// <p>ID for a user-managed CMK under which the EBS volume is encrypted.</p> <p>Note: This parameter is only supported on <code>BlockDeviceMapping</code> objects called by <a href="http://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_RunInstances.html">RunInstances</a>, <a href="http://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_RequestSpotFleet.html">RequestSpotFleet</a>, and <a href="http://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_RequestSpotInstances.html">RequestSpotInstances</a>.</p>
+    /// <p>Identifier (key ID, key alias, ID ARN, or alias ARN) for a user-managed CMK under which the EBS volume is encrypted.</p> <p>Note: This parameter is only supported on <code>BlockDeviceMapping</code> objects called by <a href="http://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_RunInstances.html">RunInstances</a>, <a href="http://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_RequestSpotFleet.html">RequestSpotFleet</a>, and <a href="http://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_RequestSpotInstances.html">RequestSpotInstances</a>.</p>
     pub kms_key_id: Option<String>,
     /// <p>The ID of the snapshot.</p>
     pub snapshot_id: Option<String>,
@@ -24649,9 +24845,10 @@ impl ImageDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "architecture" => {
-                        obj.architecture = Some(try!(
-                            ArchitectureValuesDeserializer::deserialize("architecture", stack)
-                        ));
+                        obj.architecture = Some(try!(ArchitectureValuesDeserializer::deserialize(
+                            "architecture",
+                            stack
+                        )));
                     }
                     "blockDeviceMapping" => {
                         obj.block_device_mappings =
@@ -24896,7 +25093,7 @@ pub struct ImageDiskContainer {
     pub description: Option<String>,
     /// <p>The block device mapping for the disk.</p>
     pub device_name: Option<String>,
-    /// <p>The format of the disk image being imported.</p> <p>Valid values: <code>RAW</code> | <code>VHD</code> | <code>VMDK</code> | <code>OVA</code> </p>
+    /// <p>The format of the disk image being imported.</p> <p>Valid values: <code>VHD</code> | <code>VMDK</code> | <code>OVA</code> </p>
     pub format: Option<String>,
     /// <p>The ID of the EBS snapshot to be used for importing the snapshot.</p>
     pub snapshot_id: Option<String>,
@@ -25418,7 +25615,7 @@ pub struct ImportInstanceLaunchSpecification {
     pub group_names: Option<Vec<String>>,
     /// <p>Indicates whether an instance stops or terminates when you initiate shutdown from the instance (using the operating system command for system shutdown).</p>
     pub instance_initiated_shutdown_behavior: Option<String>,
-    /// <p>The instance type. For more information about the instance types that you can import, see <a href="http://docs.aws.amazon.com/vm-import/latest/userguide/vmimport-image-import.html#vmimport-instance-types">Instance Types</a> in the VM Import/Export User Guide.</p>
+    /// <p>The instance type. For more information about the instance types that you can import, see <a href="http://docs.aws.amazon.com/vm-import/latest/userguide/vmie_prereqs.html#vmimport-instance-types">Instance Types</a> in the VM Import/Export User Guide.</p>
     pub instance_type: Option<String>,
     /// <p>Indicates whether monitoring is enabled.</p>
     pub monitoring: Option<bool>,
@@ -25428,7 +25625,7 @@ pub struct ImportInstanceLaunchSpecification {
     pub private_ip_address: Option<String>,
     /// <p>[EC2-VPC] The ID of the subnet in which to launch the instance.</p>
     pub subnet_id: Option<String>,
-    /// <p>The user data to make available to the instance. If you are using an AWS SDK or command line tool, Base64-encoding is performed for you, and you can load the text from a file. Otherwise, you must provide Base64-encoded text.</p>
+    /// <p>The Base64-encoded user data to make available to the instance.</p>
     pub user_data: Option<UserData>,
 }
 
@@ -25670,11 +25867,10 @@ impl ImportInstanceTaskDetailsDeserializer {
                         )));
                     }
                     "volumes" => {
-                        obj.volumes =
-                            try!(ImportInstanceVolumeDetailSetDeserializer::deserialize(
-                                "volumes",
-                                stack
-                            ));
+                        obj.volumes = try!(ImportInstanceVolumeDetailSetDeserializer::deserialize(
+                            "volumes",
+                            stack
+                        ));
                     }
                     _ => skip_tree(stack),
                 },
@@ -26441,9 +26637,10 @@ impl InstanceDeserializer {
                         )));
                     }
                     "architecture" => {
-                        obj.architecture = Some(try!(
-                            ArchitectureValuesDeserializer::deserialize("architecture", stack)
-                        ));
+                        obj.architecture = Some(try!(ArchitectureValuesDeserializer::deserialize(
+                            "architecture",
+                            stack
+                        )));
                     }
                     "blockDeviceMapping" => {
                         obj.block_device_mappings = Some(try!(
@@ -26527,12 +26724,11 @@ impl InstanceDeserializer {
                         )));
                     }
                     "networkInterfaceSet" => {
-                        obj.network_interfaces = Some(try!(
-                            InstanceNetworkInterfaceListDeserializer::deserialize(
+                        obj.network_interfaces =
+                            Some(try!(InstanceNetworkInterfaceListDeserializer::deserialize(
                                 "networkInterfaceSet",
                                 stack
-                            )
-                        ));
+                            )));
                     }
                     "placement" => {
                         obj.placement =
@@ -26598,9 +26794,10 @@ impl InstanceDeserializer {
                         )));
                     }
                     "spotInstanceRequestId" => {
-                        obj.spot_instance_request_id = Some(try!(
-                            StringDeserializer::deserialize("spotInstanceRequestId", stack)
-                        ));
+                        obj.spot_instance_request_id = Some(try!(StringDeserializer::deserialize(
+                            "spotInstanceRequestId",
+                            stack
+                        )));
                     }
                     "sriovNetSupport" => {
                         obj.sriov_net_support = Some(try!(StringDeserializer::deserialize(
@@ -26779,9 +26976,10 @@ impl InstanceAttributeDeserializer {
                         )));
                     }
                     "rootDeviceName" => {
-                        obj.root_device_name = Some(try!(
-                            AttributeValueDeserializer::deserialize("rootDeviceName", stack)
-                        ));
+                        obj.root_device_name = Some(try!(AttributeValueDeserializer::deserialize(
+                            "rootDeviceName",
+                            stack
+                        )));
                     }
                     "sourceDestCheck" => {
                         obj.source_dest_check =
@@ -27871,12 +28069,11 @@ impl InstanceNetworkInterfaceDeserializer {
                         )));
                     }
                     "privateIpAddressesSet" => {
-                        obj.private_ip_addresses = Some(try!(
-                            InstancePrivateIpAddressListDeserializer::deserialize(
+                        obj.private_ip_addresses =
+                            Some(try!(InstancePrivateIpAddressListDeserializer::deserialize(
                                 "privateIpAddressesSet",
                                 stack
-                            )
-                        ));
+                            )));
                     }
                     "sourceDestCheck" => {
                         obj.source_dest_check = Some(try!(BooleanDeserializer::deserialize(
@@ -28140,78 +28337,79 @@ impl InstanceNetworkInterfaceSpecificationDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "associatePublicIpAddress" => {
-                            obj.associate_public_ip_address = Some(try!(
-                                BooleanDeserializer::deserialize("associatePublicIpAddress", stack)
-                            ));
-                        }
-                        "deleteOnTermination" => {
-                            obj.delete_on_termination = Some(try!(
-                                BooleanDeserializer::deserialize("deleteOnTermination", stack)
-                            ));
-                        }
-                        "description" => {
-                            obj.description =
-                                Some(try!(StringDeserializer::deserialize("description", stack)));
-                        }
-                        "deviceIndex" => {
-                            obj.device_index =
-                                Some(try!(IntegerDeserializer::deserialize("deviceIndex", stack)));
-                        }
-                        "SecurityGroupId" => {
-                            obj.groups =
-                                Some(try!(SecurityGroupIdStringListDeserializer::deserialize(
-                                    "SecurityGroupId",
-                                    stack
-                                )));
-                        }
-                        "ipv6AddressCount" => {
-                            obj.ipv_6_address_count = Some(try!(
-                                IntegerDeserializer::deserialize("ipv6AddressCount", stack)
-                            ));
-                        }
-                        "ipv6AddressesSet" => {
-                            obj.ipv_6_addresses =
-                                Some(try!(InstanceIpv6AddressListDeserializer::deserialize(
-                                    "ipv6AddressesSet",
-                                    stack
-                                )));
-                        }
-                        "networkInterfaceId" => {
-                            obj.network_interface_id = Some(try!(
-                                StringDeserializer::deserialize("networkInterfaceId", stack)
-                            ));
-                        }
-                        "privateIpAddress" => {
-                            obj.private_ip_address = Some(try!(StringDeserializer::deserialize(
-                                "privateIpAddress",
+                DeserializerNext::Element(name) => match &name[..] {
+                    "associatePublicIpAddress" => {
+                        obj.associate_public_ip_address = Some(try!(
+                            BooleanDeserializer::deserialize("associatePublicIpAddress", stack)
+                        ));
+                    }
+                    "deleteOnTermination" => {
+                        obj.delete_on_termination = Some(try!(BooleanDeserializer::deserialize(
+                            "deleteOnTermination",
+                            stack
+                        )));
+                    }
+                    "description" => {
+                        obj.description =
+                            Some(try!(StringDeserializer::deserialize("description", stack)));
+                    }
+                    "deviceIndex" => {
+                        obj.device_index =
+                            Some(try!(IntegerDeserializer::deserialize("deviceIndex", stack)));
+                    }
+                    "SecurityGroupId" => {
+                        obj.groups =
+                            Some(try!(SecurityGroupIdStringListDeserializer::deserialize(
+                                "SecurityGroupId",
                                 stack
                             )));
-                        }
-                        "privateIpAddressesSet" => {
-                            obj.private_ip_addresses = Some(try!(
-                                PrivateIpAddressSpecificationListDeserializer::deserialize(
-                                    "privateIpAddressesSet",
-                                    stack
-                                )
-                            ));
-                        }
-                        "secondaryPrivateIpAddressCount" => {
-                            obj.secondary_private_ip_address_count =
-                                Some(try!(IntegerDeserializer::deserialize(
-                                    "secondaryPrivateIpAddressCount",
-                                    stack
-                                )));
-                        }
-                        "subnetId" => {
-                            obj.subnet_id =
-                                Some(try!(StringDeserializer::deserialize("subnetId", stack)));
-                        }
-                        _ => skip_tree(stack),
                     }
-                }
+                    "ipv6AddressCount" => {
+                        obj.ipv_6_address_count = Some(try!(IntegerDeserializer::deserialize(
+                            "ipv6AddressCount",
+                            stack
+                        )));
+                    }
+                    "ipv6AddressesSet" => {
+                        obj.ipv_6_addresses =
+                            Some(try!(InstanceIpv6AddressListDeserializer::deserialize(
+                                "ipv6AddressesSet",
+                                stack
+                            )));
+                    }
+                    "networkInterfaceId" => {
+                        obj.network_interface_id = Some(try!(StringDeserializer::deserialize(
+                            "networkInterfaceId",
+                            stack
+                        )));
+                    }
+                    "privateIpAddress" => {
+                        obj.private_ip_address = Some(try!(StringDeserializer::deserialize(
+                            "privateIpAddress",
+                            stack
+                        )));
+                    }
+                    "privateIpAddressesSet" => {
+                        obj.private_ip_addresses = Some(try!(
+                            PrivateIpAddressSpecificationListDeserializer::deserialize(
+                                "privateIpAddressesSet",
+                                stack
+                            )
+                        ));
+                    }
+                    "secondaryPrivateIpAddressCount" => {
+                        obj.secondary_private_ip_address_count =
+                            Some(try!(IntegerDeserializer::deserialize(
+                                "secondaryPrivateIpAddressCount",
+                                stack
+                            )));
+                    }
+                    "subnetId" => {
+                        obj.subnet_id =
+                            Some(try!(StringDeserializer::deserialize("subnetId", stack)));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -28575,25 +28773,25 @@ impl InstanceStateChangeDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "currentState" => {
-                            obj.current_state = Some(try!(
-                                InstanceStateDeserializer::deserialize("currentState", stack)
-                            ));
-                        }
-                        "instanceId" => {
-                            obj.instance_id =
-                                Some(try!(StringDeserializer::deserialize("instanceId", stack)));
-                        }
-                        "previousState" => {
-                            obj.previous_state = Some(try!(
-                                InstanceStateDeserializer::deserialize("previousState", stack)
-                            ));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "currentState" => {
+                        obj.current_state = Some(try!(InstanceStateDeserializer::deserialize(
+                            "currentState",
+                            stack
+                        )));
                     }
-                }
+                    "instanceId" => {
+                        obj.instance_id =
+                            Some(try!(StringDeserializer::deserialize("instanceId", stack)));
+                    }
+                    "previousState" => {
+                        obj.previous_state = Some(try!(InstanceStateDeserializer::deserialize(
+                            "previousState",
+                            stack
+                        )));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -29175,7 +29373,7 @@ impl InternetGatewayDeserializer {
 /// <p>Describes the attachment of a VPC to an Internet gateway or an egress-only Internet gateway.</p>
 #[derive(Default, Debug, Clone)]
 pub struct InternetGatewayAttachment {
-    /// <p>The current state of the attachment.</p>
+    /// <p>The current state of the attachment. For an Internet gateway, the state is <code>available</code> when attached to a VPC; otherwise, this value is not returned.</p>
     pub state: Option<String>,
     /// <p>The ID of the VPC.</p>
     pub vpc_id: Option<String>,
@@ -30317,7 +30515,7 @@ pub struct LaunchSpecification {
     pub security_groups: Option<Vec<GroupIdentifier>>,
     /// <p>The ID of the subnet in which to launch the instance.</p>
     pub subnet_id: Option<String>,
-    /// <p>The user data to make available to the instances. If you are using an AWS SDK or command line tool, Base64-encoding is performed for you, and you can load the text from a file. Otherwise, you must provide Base64-encoded text.</p>
+    /// <p>The Base64-encoded user data for the instance.</p>
     pub user_data: Option<String>,
 }
 
@@ -30342,90 +30540,93 @@ impl LaunchSpecificationDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "addressingType" => {
-                            obj.addressing_type = Some(try!(StringDeserializer::deserialize(
-                                "addressingType",
-                                stack
-                            )));
-                        }
-                        "blockDeviceMapping" => {
-                            obj.block_device_mappings =
-                                Some(try!(BlockDeviceMappingListDeserializer::deserialize(
-                                    "blockDeviceMapping",
-                                    stack
-                                )));
-                        }
-                        "ebsOptimized" => {
-                            obj.ebs_optimized = Some(try!(BooleanDeserializer::deserialize(
-                                "ebsOptimized",
-                                stack
-                            )));
-                        }
-                        "iamInstanceProfile" => {
-                            obj.iam_instance_profile = Some(try!(
-                                IamInstanceProfileSpecificationDeserializer::deserialize(
-                                    "iamInstanceProfile",
-                                    stack
-                                )
-                            ));
-                        }
-                        "imageId" => {
-                            obj.image_id =
-                                Some(try!(StringDeserializer::deserialize("imageId", stack)));
-                        }
-                        "instanceType" => {
-                            obj.instance_type = Some(try!(InstanceTypeDeserializer::deserialize(
-                                "instanceType",
-                                stack
-                            )));
-                        }
-                        "kernelId" => {
-                            obj.kernel_id =
-                                Some(try!(StringDeserializer::deserialize("kernelId", stack)));
-                        }
-                        "keyName" => {
-                            obj.key_name =
-                                Some(try!(StringDeserializer::deserialize("keyName", stack)));
-                        }
-                        "monitoring" => {
-                            obj.monitoring = Some(try!(
-                                RunInstancesMonitoringEnabledDeserializer::deserialize(
-                                    "monitoring",
-                                    stack
-                                )
-                            ));
-                        }
-                        "networkInterfaceSet" => {
-                            obj.network_interfaces = Some(try!(InstanceNetworkInterfaceSpecificationListDeserializer::deserialize("networkInterfaceSet", stack)));
-                        }
-                        "placement" => {
-                            obj.placement = Some(try!(SpotPlacementDeserializer::deserialize(
-                                "placement",
-                                stack
-                            )));
-                        }
-                        "ramdiskId" => {
-                            obj.ramdisk_id =
-                                Some(try!(StringDeserializer::deserialize("ramdiskId", stack)));
-                        }
-                        "groupSet" => {
-                            obj.security_groups = Some(try!(
-                                GroupIdentifierListDeserializer::deserialize("groupSet", stack)
-                            ));
-                        }
-                        "subnetId" => {
-                            obj.subnet_id =
-                                Some(try!(StringDeserializer::deserialize("subnetId", stack)));
-                        }
-                        "userData" => {
-                            obj.user_data =
-                                Some(try!(StringDeserializer::deserialize("userData", stack)));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "addressingType" => {
+                        obj.addressing_type = Some(try!(StringDeserializer::deserialize(
+                            "addressingType",
+                            stack
+                        )));
                     }
-                }
+                    "blockDeviceMapping" => {
+                        obj.block_device_mappings =
+                            Some(try!(BlockDeviceMappingListDeserializer::deserialize(
+                                "blockDeviceMapping",
+                                stack
+                            )));
+                    }
+                    "ebsOptimized" => {
+                        obj.ebs_optimized = Some(try!(BooleanDeserializer::deserialize(
+                            "ebsOptimized",
+                            stack
+                        )));
+                    }
+                    "iamInstanceProfile" => {
+                        obj.iam_instance_profile = Some(try!(
+                            IamInstanceProfileSpecificationDeserializer::deserialize(
+                                "iamInstanceProfile",
+                                stack
+                            )
+                        ));
+                    }
+                    "imageId" => {
+                        obj.image_id =
+                            Some(try!(StringDeserializer::deserialize("imageId", stack)));
+                    }
+                    "instanceType" => {
+                        obj.instance_type = Some(try!(InstanceTypeDeserializer::deserialize(
+                            "instanceType",
+                            stack
+                        )));
+                    }
+                    "kernelId" => {
+                        obj.kernel_id =
+                            Some(try!(StringDeserializer::deserialize("kernelId", stack)));
+                    }
+                    "keyName" => {
+                        obj.key_name =
+                            Some(try!(StringDeserializer::deserialize("keyName", stack)));
+                    }
+                    "monitoring" => {
+                        obj.monitoring = Some(try!(
+                            RunInstancesMonitoringEnabledDeserializer::deserialize(
+                                "monitoring",
+                                stack
+                            )
+                        ));
+                    }
+                    "networkInterfaceSet" => {
+                        obj.network_interfaces = Some(try!(
+                            InstanceNetworkInterfaceSpecificationListDeserializer::deserialize(
+                                "networkInterfaceSet",
+                                stack
+                            )
+                        ));
+                    }
+                    "placement" => {
+                        obj.placement = Some(try!(SpotPlacementDeserializer::deserialize(
+                            "placement",
+                            stack
+                        )));
+                    }
+                    "ramdiskId" => {
+                        obj.ramdisk_id =
+                            Some(try!(StringDeserializer::deserialize("ramdiskId", stack)));
+                    }
+                    "groupSet" => {
+                        obj.security_groups = Some(try!(
+                            GroupIdentifierListDeserializer::deserialize("groupSet", stack)
+                        ));
+                    }
+                    "subnetId" => {
+                        obj.subnet_id =
+                            Some(try!(StringDeserializer::deserialize("subnetId", stack)));
+                    }
+                    "userData" => {
+                        obj.user_data =
+                            Some(try!(StringDeserializer::deserialize("userData", stack)));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -30460,9 +30661,10 @@ impl LaunchSpecsListDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => {
                     if name == "item" {
-                        obj.push(try!(
-                            SpotFleetLaunchSpecificationDeserializer::deserialize("item", stack)
-                        ));
+                        obj.push(try!(SpotFleetLaunchSpecificationDeserializer::deserialize(
+                            "item",
+                            stack
+                        )));
                     } else {
                         skip_tree(stack);
                     }
@@ -31309,77 +31511,78 @@ impl LaunchTemplateInstanceNetworkInterfaceSpecificationDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "associatePublicIpAddress" => {
-                            obj.associate_public_ip_address = Some(try!(
-                                BooleanDeserializer::deserialize("associatePublicIpAddress", stack)
-                            ));
-                        }
-                        "deleteOnTermination" => {
-                            obj.delete_on_termination = Some(try!(
-                                BooleanDeserializer::deserialize("deleteOnTermination", stack)
-                            ));
-                        }
-                        "description" => {
-                            obj.description =
-                                Some(try!(StringDeserializer::deserialize("description", stack)));
-                        }
-                        "deviceIndex" => {
-                            obj.device_index =
-                                Some(try!(IntegerDeserializer::deserialize("deviceIndex", stack)));
-                        }
-                        "groupSet" => {
-                            obj.groups = Some(try!(GroupIdStringListDeserializer::deserialize(
-                                "groupSet",
-                                stack
-                            )));
-                        }
-                        "ipv6AddressCount" => {
-                            obj.ipv_6_address_count = Some(try!(
-                                IntegerDeserializer::deserialize("ipv6AddressCount", stack)
-                            ));
-                        }
-                        "ipv6AddressesSet" => {
-                            obj.ipv_6_addresses =
-                                Some(try!(InstanceIpv6AddressListDeserializer::deserialize(
-                                    "ipv6AddressesSet",
-                                    stack
-                                )));
-                        }
-                        "networkInterfaceId" => {
-                            obj.network_interface_id = Some(try!(
-                                StringDeserializer::deserialize("networkInterfaceId", stack)
-                            ));
-                        }
-                        "privateIpAddress" => {
-                            obj.private_ip_address = Some(try!(StringDeserializer::deserialize(
-                                "privateIpAddress",
-                                stack
-                            )));
-                        }
-                        "privateIpAddressesSet" => {
-                            obj.private_ip_addresses = Some(try!(
-                                PrivateIpAddressSpecificationListDeserializer::deserialize(
-                                    "privateIpAddressesSet",
-                                    stack
-                                )
-                            ));
-                        }
-                        "secondaryPrivateIpAddressCount" => {
-                            obj.secondary_private_ip_address_count =
-                                Some(try!(IntegerDeserializer::deserialize(
-                                    "secondaryPrivateIpAddressCount",
-                                    stack
-                                )));
-                        }
-                        "subnetId" => {
-                            obj.subnet_id =
-                                Some(try!(StringDeserializer::deserialize("subnetId", stack)));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "associatePublicIpAddress" => {
+                        obj.associate_public_ip_address = Some(try!(
+                            BooleanDeserializer::deserialize("associatePublicIpAddress", stack)
+                        ));
                     }
-                }
+                    "deleteOnTermination" => {
+                        obj.delete_on_termination = Some(try!(BooleanDeserializer::deserialize(
+                            "deleteOnTermination",
+                            stack
+                        )));
+                    }
+                    "description" => {
+                        obj.description =
+                            Some(try!(StringDeserializer::deserialize("description", stack)));
+                    }
+                    "deviceIndex" => {
+                        obj.device_index =
+                            Some(try!(IntegerDeserializer::deserialize("deviceIndex", stack)));
+                    }
+                    "groupSet" => {
+                        obj.groups = Some(try!(GroupIdStringListDeserializer::deserialize(
+                            "groupSet",
+                            stack
+                        )));
+                    }
+                    "ipv6AddressCount" => {
+                        obj.ipv_6_address_count = Some(try!(IntegerDeserializer::deserialize(
+                            "ipv6AddressCount",
+                            stack
+                        )));
+                    }
+                    "ipv6AddressesSet" => {
+                        obj.ipv_6_addresses =
+                            Some(try!(InstanceIpv6AddressListDeserializer::deserialize(
+                                "ipv6AddressesSet",
+                                stack
+                            )));
+                    }
+                    "networkInterfaceId" => {
+                        obj.network_interface_id = Some(try!(StringDeserializer::deserialize(
+                            "networkInterfaceId",
+                            stack
+                        )));
+                    }
+                    "privateIpAddress" => {
+                        obj.private_ip_address = Some(try!(StringDeserializer::deserialize(
+                            "privateIpAddress",
+                            stack
+                        )));
+                    }
+                    "privateIpAddressesSet" => {
+                        obj.private_ip_addresses = Some(try!(
+                            PrivateIpAddressSpecificationListDeserializer::deserialize(
+                                "privateIpAddressesSet",
+                                stack
+                            )
+                        ));
+                    }
+                    "secondaryPrivateIpAddressCount" => {
+                        obj.secondary_private_ip_address_count =
+                            Some(try!(IntegerDeserializer::deserialize(
+                                "secondaryPrivateIpAddressCount",
+                                stack
+                            )));
+                    }
+                    "subnetId" => {
+                        obj.subnet_id =
+                            Some(try!(StringDeserializer::deserialize("subnetId", stack)));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -32040,12 +32243,11 @@ impl LaunchTemplateSpotMarketOptionsDeserializer {
                         )));
                     }
                     "instanceInterruptionBehavior" => {
-                        obj.instance_interruption_behavior = Some(try!(
-                            InstanceInterruptionBehaviorDeserializer::deserialize(
+                        obj.instance_interruption_behavior =
+                            Some(try!(InstanceInterruptionBehaviorDeserializer::deserialize(
                                 "instanceInterruptionBehavior",
                                 stack
-                            )
-                        ));
+                            )));
                     }
                     "maxPrice" => {
                         obj.max_price =
@@ -33041,7 +33243,7 @@ impl ModifyHostsResultDeserializer {
 /// <p>Contains the parameters of ModifyIdFormat.</p>
 #[derive(Default, Debug, Clone)]
 pub struct ModifyIdFormatRequest {
-    /// <p>The type of resource: <code>instance</code> | <code>reservation</code> | <code>snapshot</code> | <code>volume</code> </p>
+    /// <p>The type of resource: <code>bundle</code> | <code>conversion-task</code> | <code>customer-gateway</code> | <code>dhcp-options</code> | <code>elastic-ip-allocation</code> | <code>elastic-ip-association</code> | <code>export-task</code> | <code>flow-log</code> | <code>image</code> | <code>import-task</code> | <code>internet-gateway</code> | <code>network-acl</code> | <code>network-acl-association</code> | <code>network-interface</code> | <code>network-interface-attachment</code> | <code>prefix-list</code> | <code>route-table</code> | <code>route-table-association</code> | <code>security-group</code> | <code>subnet</code> | <code>subnet-cidr-block-association</code> | <code>vpc</code> | <code>vpc-cidr-block-association</code> | <code>vpc-endpoint</code> | <code>vpc-peering-connection</code> | <code>vpn-connection</code> | <code>vpn-gateway</code>.</p> <p>Alternatively, use the <code>all-current</code> option to include all resource types that are currently within their opt-in period for longer IDs.</p>
     pub resource: String,
     /// <p>Indicate whether the resource should use longer IDs (17-character IDs).</p>
     pub use_long_ids: bool,
@@ -33072,7 +33274,7 @@ impl ModifyIdFormatRequestSerializer {
 pub struct ModifyIdentityIdFormatRequest {
     /// <p>The ARN of the principal, which can be an IAM user, IAM role, or the root user. Specify <code>all</code> to modify the ID format for all IAM users, IAM roles, and the root user of the account.</p>
     pub principal_arn: String,
-    /// <p>The type of resource: <code>instance</code> | <code>reservation</code> | <code>snapshot</code> | <code>volume</code> </p>
+    /// <p>The type of resource: <code>bundle</code> | <code>conversion-task</code> | <code>customer-gateway</code> | <code>dhcp-options</code> | <code>elastic-ip-allocation</code> | <code>elastic-ip-association</code> | <code>export-task</code> | <code>flow-log</code> | <code>image</code> | <code>import-task</code> | <code>internet-gateway</code> | <code>network-acl</code> | <code>network-acl-association</code> | <code>network-interface</code> | <code>network-interface-attachment</code> | <code>prefix-list</code> | <code>route-table</code> | <code>route-table-association</code> | <code>security-group</code> | <code>subnet</code> | <code>subnet-cidr-block-association</code> | <code>vpc</code> | <code>vpc-cidr-block-association</code> | <code>vpc-endpoint</code> | <code>vpc-peering-connection</code> | <code>vpn-connection</code> | <code>vpn-gateway</code>.</p> <p>Alternatively, use the <code>all-current</code> option to include all resource types that are currently within their opt-in period for longer IDs.</p>
     pub resource: String,
     /// <p>Indicates whether the resource should use longer IDs (17-character IDs)</p>
     pub use_long_ids: bool,
@@ -33427,22 +33629,25 @@ impl ModifyInstanceCreditSpecificationResultDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "successfulInstanceCreditSpecificationSet" => {
-                            obj.successful_instance_credit_specifications = Some(try!(
-                                SuccessfulInstanceCreditSpecificationSetDeserializer::deserialize(
-                                    "successfulInstanceCreditSpecificationSet",
-                                    stack
-                                )
-                            ));
-                        }
-                        "unsuccessfulInstanceCreditSpecificationSet" => {
-                            obj.unsuccessful_instance_credit_specifications = Some(try!(UnsuccessfulInstanceCreditSpecificationSetDeserializer::deserialize("unsuccessfulInstanceCreditSpecificationSet", stack)));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "successfulInstanceCreditSpecificationSet" => {
+                        obj.successful_instance_credit_specifications = Some(try!(
+                            SuccessfulInstanceCreditSpecificationSetDeserializer::deserialize(
+                                "successfulInstanceCreditSpecificationSet",
+                                stack
+                            )
+                        ));
                     }
-                }
+                    "unsuccessfulInstanceCreditSpecificationSet" => {
+                        obj.unsuccessful_instance_credit_specifications = Some(try!(
+                            UnsuccessfulInstanceCreditSpecificationSetDeserializer::deserialize(
+                                "unsuccessfulInstanceCreditSpecificationSet",
+                                stack
+                            )
+                        ));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -33458,13 +33663,15 @@ impl ModifyInstanceCreditSpecificationResultDeserializer {
 /// <p>Contains the parameters for ModifyInstancePlacement.</p>
 #[derive(Default, Debug, Clone)]
 pub struct ModifyInstancePlacementRequest {
-    /// <p>The new affinity setting for the instance.</p>
+    /// <p>The affinity setting for the instance.</p>
     pub affinity: Option<String>,
-    /// <p>The ID of the Dedicated Host that the instance will have affinity with.</p>
+    /// <p>The name of the placement group in which to place the instance. For spread placement groups, the instance must have a tenancy of <code>default</code>. For cluster placement groups, the instance must have a tenancy of <code>default</code> or <code>dedicated</code>.</p> <p>To remove an instance from a placement group, specify an empty string ("").</p>
+    pub group_name: Option<String>,
+    /// <p>The ID of the Dedicated Host with which to associate the instance.</p>
     pub host_id: Option<String>,
     /// <p>The ID of the instance that you are modifying.</p>
     pub instance_id: String,
-    /// <p>The tenancy of the instance that you are modifying.</p>
+    /// <p>The tenancy for the instance.</p>
     pub tenancy: Option<String>,
 }
 
@@ -33480,6 +33687,12 @@ impl ModifyInstancePlacementRequestSerializer {
         if let Some(ref field_value) = obj.affinity {
             params.put(
                 &format!("{}{}", prefix, "Affinity"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
+        if let Some(ref field_value) = obj.group_name {
+            params.put(
+                &format!("{}{}", prefix, "GroupName"),
                 &field_value.replace("+", "%2B"),
             );
         }
@@ -34056,6 +34269,7 @@ pub struct ModifyVolumeRequest {
     pub iops: Option<i64>,
     /// <p>Target size in GiB of the volume to be modified. Target volume size must be greater than or equal to than the existing size of the volume. For information about available EBS volume sizes, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSVolumeTypes.html">http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSVolumeTypes.html</a>.</p> <p>Default: If no size is specified, the existing size is retained. </p>
     pub size: Option<i64>,
+    /// <p>The ID of the volume.</p>
     pub volume_id: String,
     /// <p>Target EBS volume type of the volume to be modified</p> <p> The API does not support modifications for volume type <code>standard</code>. You also cannot change the type of a volume to <code>standard</code>. </p> <p>Default: If no type is specified, the existing type is retained. </p>
     pub volume_type: Option<String>,
@@ -36933,7 +37147,7 @@ impl PciIdDeserializer {
 /// <p>Describes the VPC peering connection options.</p>
 #[derive(Default, Debug, Clone)]
 pub struct PeeringConnectionOptions {
-    /// <p>If true, enables a local VPC to resolve public DNS hostnames to private IP addresses when queried from instances in the peer VPC.</p>
+    /// <p>If true, the public DNS hostnames of instances in the specified VPC resolve to private IP addresses when queried from instances in the peer VPC.</p>
     pub allow_dns_resolution_from_remote_vpc: Option<bool>,
     /// <p>If true, enables outbound communication from an EC2-Classic instance that's linked to a local VPC via ClassicLink to instances in a peer VPC.</p>
     pub allow_egress_from_local_classic_link_to_remote_vpc: Option<bool>,
@@ -37915,6 +38129,103 @@ impl PricingDetailsListDeserializer {
                 DeserializerNext::Element(name) => {
                     if name == "item" {
                         obj.push(try!(PricingDetailDeserializer::deserialize("item", stack)));
+                    } else {
+                        skip_tree(stack);
+                    }
+                }
+                DeserializerNext::Close => {
+                    try!(end_element(tag_name, stack));
+                    break;
+                }
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        Ok(obj)
+    }
+}
+/// <p>PrincipalIdFormat description</p>
+#[derive(Default, Debug, Clone)]
+pub struct PrincipalIdFormat {
+    /// <p>PrincipalIdFormatARN description</p>
+    pub arn: Option<String>,
+    /// <p>PrincipalIdFormatStatuses description</p>
+    pub statuses: Option<Vec<IdFormat>>,
+}
+
+struct PrincipalIdFormatDeserializer;
+impl PrincipalIdFormatDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<PrincipalIdFormat, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = PrincipalIdFormat::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "arn" => {
+                        obj.arn = Some(try!(StringDeserializer::deserialize("arn", stack)));
+                    }
+                    "statusSet" => {
+                        obj.statuses = Some(try!(IdFormatListDeserializer::deserialize(
+                            "statusSet",
+                            stack
+                        )));
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+struct PrincipalIdFormatListDeserializer;
+impl PrincipalIdFormatListDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<PrincipalIdFormat>, XmlParseError> {
+        let mut obj = vec![];
+        try!(start_element(tag_name, stack));
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => {
+                    if name == "item" {
+                        obj.push(try!(PrincipalIdFormatDeserializer::deserialize(
+                            "item",
+                            stack
+                        )));
                     } else {
                         skip_tree(stack);
                     }
@@ -40241,7 +40552,7 @@ pub struct RequestLaunchTemplateData {
     pub security_groups: Option<Vec<String>>,
     /// <p>The tags to apply to the resources during launch. You can tag instances and volumes. The specified tags are applied to all instances or volumes that are created during launch.</p>
     pub tag_specifications: Option<Vec<LaunchTemplateTagSpecificationRequest>>,
-    /// <p>The user data to make available to the instance. For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/user-data.html">Running Commands on Your Linux Instance at Launch</a> (Linux) and <a href="http://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/ec2-instance-metadata.html#instancedata-add-user-data">Adding User Data</a> (Windows). If you are using a command line tool, base64-encoding is performed for you and you can load the text from a file. Otherwise, you must provide base64-encoded text.</p>
+    /// <p>The Base64-encoded user data to make available to the instance. For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/user-data.html">Running Commands on Your Linux Instance at Launch</a> (Linux) and <a href="http://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/ec2-instance-metadata.html#instancedata-add-user-data">Adding User Data</a> (Windows).</p>
     pub user_data: Option<String>,
 }
 
@@ -40664,7 +40975,7 @@ pub struct RequestSpotLaunchSpecification {
     pub security_groups: Option<Vec<String>>,
     /// <p>The ID of the subnet in which to launch the instance.</p>
     pub subnet_id: Option<String>,
-    /// <p>The user data to make available to the instances. If you are using an AWS SDK or command line tool, Base64-encoding is performed for you, and you can load the text from a file. Otherwise, you must provide Base64-encoded text.</p>
+    /// <p>The Base64-encoded user data for the instance.</p>
     pub user_data: Option<String>,
 }
 
@@ -42442,6 +42753,17 @@ impl ResourceIdListSerializer {
     }
 }
 
+/// Serialize `ResourceList` contents to a `SignedRequest`.
+struct ResourceListSerializer;
+impl ResourceListSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
+        for (index, obj) in obj.iter().enumerate() {
+            let key = format!("{}.{}", name, index + 1);
+            params.put(&key, &obj);
+        }
+    }
+}
+
 struct ResourceTypeDeserializer;
 impl ResourceTypeDeserializer {
     #[allow(unused_variables)]
@@ -42673,9 +42995,10 @@ impl ResponseLaunchTemplateDataDeserializer {
                             )));
                     }
                     "disableApiTermination" => {
-                        obj.disable_api_termination = Some(try!(
-                            BooleanDeserializer::deserialize("disableApiTermination", stack)
-                        ));
+                        obj.disable_api_termination = Some(try!(BooleanDeserializer::deserialize(
+                            "disableApiTermination",
+                            stack
+                        )));
                     }
                     "ebsOptimized" => {
                         obj.ebs_optimized = Some(try!(BooleanDeserializer::deserialize(
@@ -42692,7 +43015,12 @@ impl ResponseLaunchTemplateDataDeserializer {
                         ));
                     }
                     "iamInstanceProfile" => {
-                        obj.iam_instance_profile = Some(try!(LaunchTemplateIamInstanceProfileSpecificationDeserializer::deserialize("iamInstanceProfile", stack)));
+                        obj.iam_instance_profile = Some(try!(
+                            LaunchTemplateIamInstanceProfileSpecificationDeserializer::deserialize(
+                                "iamInstanceProfile",
+                                stack
+                            )
+                        ));
                     }
                     "imageId" => {
                         obj.image_id =
@@ -42750,9 +43078,10 @@ impl ResponseLaunchTemplateDataDeserializer {
                         ));
                     }
                     "securityGroupSet" => {
-                        obj.security_groups = Some(try!(
-                            ValueStringListDeserializer::deserialize("securityGroupSet", stack)
-                        ));
+                        obj.security_groups = Some(try!(ValueStringListDeserializer::deserialize(
+                            "securityGroupSet",
+                            stack
+                        )));
                     }
                     "tagSpecificationSet" => {
                         obj.tag_specifications = Some(try!(
@@ -43576,7 +43905,7 @@ pub struct RunInstancesRequest {
     pub elastic_gpu_specification: Option<Vec<ElasticGpuSpecification>>,
     /// <p>The IAM instance profile.</p>
     pub iam_instance_profile: Option<IamInstanceProfileSpecification>,
-    /// <p>The ID of the AMI, which you can get by calling <a>DescribeImages</a>.</p>
+    /// <p>The ID of the AMI, which you can get by calling <a>DescribeImages</a>. An AMI is required to launch an instance and must be specified here or in a launch template.</p>
     pub image_id: Option<String>,
     /// <p>Indicates whether an instance stops or terminates when you initiate shutdown from the instance (using the operating system command for system shutdown).</p> <p>Default: <code>stop</code> </p>
     pub instance_initiated_shutdown_behavior: Option<String>,
@@ -44098,90 +44427,91 @@ impl ScheduledInstanceDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "availabilityZone" => {
-                        obj.availability_zone = Some(try!(StringDeserializer::deserialize(
-                            "availabilityZone",
-                            stack
-                        )));
-                    }
-                    "createDate" => {
-                        obj.create_date =
-                            Some(try!(DateTimeDeserializer::deserialize("createDate", stack)));
-                    }
-                    "hourlyPrice" => {
-                        obj.hourly_price =
-                            Some(try!(StringDeserializer::deserialize("hourlyPrice", stack)));
-                    }
-                    "instanceCount" => {
-                        obj.instance_count = Some(try!(IntegerDeserializer::deserialize(
-                            "instanceCount",
-                            stack
-                        )));
-                    }
-                    "instanceType" => {
-                        obj.instance_type =
-                            Some(try!(StringDeserializer::deserialize("instanceType", stack)));
-                    }
-                    "networkPlatform" => {
-                        obj.network_platform = Some(try!(StringDeserializer::deserialize(
-                            "networkPlatform",
-                            stack
-                        )));
-                    }
-                    "nextSlotStartTime" => {
-                        obj.next_slot_start_time = Some(try!(DateTimeDeserializer::deserialize(
-                            "nextSlotStartTime",
-                            stack
-                        )));
-                    }
-                    "platform" => {
-                        obj.platform =
-                            Some(try!(StringDeserializer::deserialize("platform", stack)));
-                    }
-                    "previousSlotEndTime" => {
-                        obj.previous_slot_end_time = Some(try!(
-                            DateTimeDeserializer::deserialize("previousSlotEndTime", stack)
-                        ));
-                    }
-                    "recurrence" => {
-                        obj.recurrence =
-                            Some(try!(ScheduledInstanceRecurrenceDeserializer::deserialize(
-                                "recurrence",
+                DeserializerNext::Element(name) => {
+                    match &name[..] {
+                        "availabilityZone" => {
+                            obj.availability_zone = Some(try!(StringDeserializer::deserialize(
+                                "availabilityZone",
                                 stack
                             )));
+                        }
+                        "createDate" => {
+                            obj.create_date =
+                                Some(try!(DateTimeDeserializer::deserialize("createDate", stack)));
+                        }
+                        "hourlyPrice" => {
+                            obj.hourly_price =
+                                Some(try!(StringDeserializer::deserialize("hourlyPrice", stack)));
+                        }
+                        "instanceCount" => {
+                            obj.instance_count = Some(try!(IntegerDeserializer::deserialize(
+                                "instanceCount",
+                                stack
+                            )));
+                        }
+                        "instanceType" => {
+                            obj.instance_type =
+                                Some(try!(StringDeserializer::deserialize("instanceType", stack)));
+                        }
+                        "networkPlatform" => {
+                            obj.network_platform = Some(try!(StringDeserializer::deserialize(
+                                "networkPlatform",
+                                stack
+                            )));
+                        }
+                        "nextSlotStartTime" => {
+                            obj.next_slot_start_time = Some(try!(
+                                DateTimeDeserializer::deserialize("nextSlotStartTime", stack)
+                            ));
+                        }
+                        "platform" => {
+                            obj.platform =
+                                Some(try!(StringDeserializer::deserialize("platform", stack)));
+                        }
+                        "previousSlotEndTime" => {
+                            obj.previous_slot_end_time = Some(try!(
+                                DateTimeDeserializer::deserialize("previousSlotEndTime", stack)
+                            ));
+                        }
+                        "recurrence" => {
+                            obj.recurrence =
+                                Some(try!(ScheduledInstanceRecurrenceDeserializer::deserialize(
+                                    "recurrence",
+                                    stack
+                                )));
+                        }
+                        "scheduledInstanceId" => {
+                            obj.scheduled_instance_id = Some(try!(
+                                StringDeserializer::deserialize("scheduledInstanceId", stack)
+                            ));
+                        }
+                        "slotDurationInHours" => {
+                            obj.slot_duration_in_hours = Some(try!(
+                                IntegerDeserializer::deserialize("slotDurationInHours", stack)
+                            ));
+                        }
+                        "termEndDate" => {
+                            obj.term_end_date = Some(try!(DateTimeDeserializer::deserialize(
+                                "termEndDate",
+                                stack
+                            )));
+                        }
+                        "termStartDate" => {
+                            obj.term_start_date = Some(try!(DateTimeDeserializer::deserialize(
+                                "termStartDate",
+                                stack
+                            )));
+                        }
+                        "totalScheduledInstanceHours" => {
+                            obj.total_scheduled_instance_hours =
+                                Some(try!(IntegerDeserializer::deserialize(
+                                    "totalScheduledInstanceHours",
+                                    stack
+                                )));
+                        }
+                        _ => skip_tree(stack),
                     }
-                    "scheduledInstanceId" => {
-                        obj.scheduled_instance_id = Some(try!(StringDeserializer::deserialize(
-                            "scheduledInstanceId",
-                            stack
-                        )));
-                    }
-                    "slotDurationInHours" => {
-                        obj.slot_duration_in_hours = Some(try!(IntegerDeserializer::deserialize(
-                            "slotDurationInHours",
-                            stack
-                        )));
-                    }
-                    "termEndDate" => {
-                        obj.term_end_date = Some(try!(DateTimeDeserializer::deserialize(
-                            "termEndDate",
-                            stack
-                        )));
-                    }
-                    "termStartDate" => {
-                        obj.term_start_date = Some(try!(DateTimeDeserializer::deserialize(
-                            "termStartDate",
-                            stack
-                        )));
-                    }
-                    "totalScheduledInstanceHours" => {
-                        obj.total_scheduled_instance_hours = Some(try!(
-                            IntegerDeserializer::deserialize("totalScheduledInstanceHours", stack)
-                        ));
-                    }
-                    _ => skip_tree(stack),
-                },
+                }
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -45189,9 +45519,10 @@ impl SecurityGroupDeserializer {
                             Some(try!(StringDeserializer::deserialize("groupName", stack)));
                     }
                     "ipPermissions" => {
-                        obj.ip_permissions = Some(try!(
-                            IpPermissionListDeserializer::deserialize("ipPermissions", stack)
-                        ));
+                        obj.ip_permissions = Some(try!(IpPermissionListDeserializer::deserialize(
+                            "ipPermissions",
+                            stack
+                        )));
                     }
                     "ipPermissionsEgress" => {
                         obj.ip_permissions_egress = Some(try!(
@@ -46249,7 +46580,7 @@ impl SnapshotDetailListDeserializer {
 pub struct SnapshotDiskContainer {
     /// <p>The description of the disk image being imported.</p>
     pub description: Option<String>,
-    /// <p>The format of the disk image being imported.</p> <p>Valid values: <code>RAW</code> | <code>VHD</code> | <code>VMDK</code> | <code>OVA</code> </p>
+    /// <p>The format of the disk image being imported.</p> <p>Valid values: <code>VHD</code> | <code>VMDK</code> | <code>OVA</code> </p>
     pub format: Option<String>,
     /// <p>The URL to the Amazon S3-based disk image being imported. It can either be a https URL (https://..) or an Amazon S3 URL (s3://..).</p>
     pub url: Option<String>,
@@ -46511,9 +46842,10 @@ impl SpotDatafeedSubscriptionDeserializer {
                         obj.prefix = Some(try!(StringDeserializer::deserialize("prefix", stack)));
                     }
                     "state" => {
-                        obj.state = Some(try!(
-                            DatafeedSubscriptionStateDeserializer::deserialize("state", stack)
-                        ));
+                        obj.state = Some(try!(DatafeedSubscriptionStateDeserializer::deserialize(
+                            "state",
+                            stack
+                        )));
                     }
                     _ => skip_tree(stack),
                 },
@@ -46564,7 +46896,7 @@ pub struct SpotFleetLaunchSpecification {
     pub subnet_id: Option<String>,
     /// <p>The tags to apply during creation.</p>
     pub tag_specifications: Option<Vec<SpotFleetTagSpecification>>,
-    /// <p>The user data to make available to the instances. If you are using an AWS SDK or command line tool, Base64-encoding is performed for you, and you can load the text from a file. Otherwise, you must provide Base64-encoded text.</p>
+    /// <p>The Base64-encoded user data to make available to the instances.</p>
     pub user_data: Option<String>,
     /// <p>The number of units provided by the specified instance type. These are the same units that you chose to set the target capacity in terms (instances or a performance characteristic such as vCPUs, memory, or I/O).</p> <p>If the target capacity divided by this value is not a whole number, we round the number of instances to the next whole number. If this value is not specified, the default is 1.</p>
     pub weighted_capacity: Option<f64>,
@@ -46591,105 +46923,109 @@ impl SpotFleetLaunchSpecificationDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "addressingType" => {
-                            obj.addressing_type = Some(try!(StringDeserializer::deserialize(
-                                "addressingType",
-                                stack
-                            )));
-                        }
-                        "blockDeviceMapping" => {
-                            obj.block_device_mappings =
-                                Some(try!(BlockDeviceMappingListDeserializer::deserialize(
-                                    "blockDeviceMapping",
-                                    stack
-                                )));
-                        }
-                        "ebsOptimized" => {
-                            obj.ebs_optimized = Some(try!(BooleanDeserializer::deserialize(
-                                "ebsOptimized",
-                                stack
-                            )));
-                        }
-                        "iamInstanceProfile" => {
-                            obj.iam_instance_profile = Some(try!(
-                                IamInstanceProfileSpecificationDeserializer::deserialize(
-                                    "iamInstanceProfile",
-                                    stack
-                                )
-                            ));
-                        }
-                        "imageId" => {
-                            obj.image_id =
-                                Some(try!(StringDeserializer::deserialize("imageId", stack)));
-                        }
-                        "instanceType" => {
-                            obj.instance_type = Some(try!(InstanceTypeDeserializer::deserialize(
-                                "instanceType",
-                                stack
-                            )));
-                        }
-                        "kernelId" => {
-                            obj.kernel_id =
-                                Some(try!(StringDeserializer::deserialize("kernelId", stack)));
-                        }
-                        "keyName" => {
-                            obj.key_name =
-                                Some(try!(StringDeserializer::deserialize("keyName", stack)));
-                        }
-                        "monitoring" => {
-                            obj.monitoring = Some(try!(
-                                SpotFleetMonitoringDeserializer::deserialize("monitoring", stack)
-                            ));
-                        }
-                        "networkInterfaceSet" => {
-                            obj.network_interfaces = Some(try!(InstanceNetworkInterfaceSpecificationListDeserializer::deserialize("networkInterfaceSet", stack)));
-                        }
-                        "placement" => {
-                            obj.placement = Some(try!(SpotPlacementDeserializer::deserialize(
-                                "placement",
-                                stack
-                            )));
-                        }
-                        "ramdiskId" => {
-                            obj.ramdisk_id =
-                                Some(try!(StringDeserializer::deserialize("ramdiskId", stack)));
-                        }
-                        "groupSet" => {
-                            obj.security_groups = Some(try!(
-                                GroupIdentifierListDeserializer::deserialize("groupSet", stack)
-                            ));
-                        }
-                        "spotPrice" => {
-                            obj.spot_price =
-                                Some(try!(StringDeserializer::deserialize("spotPrice", stack)));
-                        }
-                        "subnetId" => {
-                            obj.subnet_id =
-                                Some(try!(StringDeserializer::deserialize("subnetId", stack)));
-                        }
-                        "tagSpecificationSet" => {
-                            obj.tag_specifications = Some(try!(
-                                SpotFleetTagSpecificationListDeserializer::deserialize(
-                                    "tagSpecificationSet",
-                                    stack
-                                )
-                            ));
-                        }
-                        "userData" => {
-                            obj.user_data =
-                                Some(try!(StringDeserializer::deserialize("userData", stack)));
-                        }
-                        "weightedCapacity" => {
-                            obj.weighted_capacity = Some(try!(DoubleDeserializer::deserialize(
-                                "weightedCapacity",
-                                stack
-                            )));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "addressingType" => {
+                        obj.addressing_type = Some(try!(StringDeserializer::deserialize(
+                            "addressingType",
+                            stack
+                        )));
                     }
-                }
+                    "blockDeviceMapping" => {
+                        obj.block_device_mappings =
+                            Some(try!(BlockDeviceMappingListDeserializer::deserialize(
+                                "blockDeviceMapping",
+                                stack
+                            )));
+                    }
+                    "ebsOptimized" => {
+                        obj.ebs_optimized = Some(try!(BooleanDeserializer::deserialize(
+                            "ebsOptimized",
+                            stack
+                        )));
+                    }
+                    "iamInstanceProfile" => {
+                        obj.iam_instance_profile = Some(try!(
+                            IamInstanceProfileSpecificationDeserializer::deserialize(
+                                "iamInstanceProfile",
+                                stack
+                            )
+                        ));
+                    }
+                    "imageId" => {
+                        obj.image_id =
+                            Some(try!(StringDeserializer::deserialize("imageId", stack)));
+                    }
+                    "instanceType" => {
+                        obj.instance_type = Some(try!(InstanceTypeDeserializer::deserialize(
+                            "instanceType",
+                            stack
+                        )));
+                    }
+                    "kernelId" => {
+                        obj.kernel_id =
+                            Some(try!(StringDeserializer::deserialize("kernelId", stack)));
+                    }
+                    "keyName" => {
+                        obj.key_name =
+                            Some(try!(StringDeserializer::deserialize("keyName", stack)));
+                    }
+                    "monitoring" => {
+                        obj.monitoring = Some(try!(SpotFleetMonitoringDeserializer::deserialize(
+                            "monitoring",
+                            stack
+                        )));
+                    }
+                    "networkInterfaceSet" => {
+                        obj.network_interfaces = Some(try!(
+                            InstanceNetworkInterfaceSpecificationListDeserializer::deserialize(
+                                "networkInterfaceSet",
+                                stack
+                            )
+                        ));
+                    }
+                    "placement" => {
+                        obj.placement = Some(try!(SpotPlacementDeserializer::deserialize(
+                            "placement",
+                            stack
+                        )));
+                    }
+                    "ramdiskId" => {
+                        obj.ramdisk_id =
+                            Some(try!(StringDeserializer::deserialize("ramdiskId", stack)));
+                    }
+                    "groupSet" => {
+                        obj.security_groups = Some(try!(
+                            GroupIdentifierListDeserializer::deserialize("groupSet", stack)
+                        ));
+                    }
+                    "spotPrice" => {
+                        obj.spot_price =
+                            Some(try!(StringDeserializer::deserialize("spotPrice", stack)));
+                    }
+                    "subnetId" => {
+                        obj.subnet_id =
+                            Some(try!(StringDeserializer::deserialize("subnetId", stack)));
+                    }
+                    "tagSpecificationSet" => {
+                        obj.tag_specifications = Some(try!(
+                            SpotFleetTagSpecificationListDeserializer::deserialize(
+                                "tagSpecificationSet",
+                                stack
+                            )
+                        ));
+                    }
+                    "userData" => {
+                        obj.user_data =
+                            Some(try!(StringDeserializer::deserialize("userData", stack)));
+                    }
+                    "weightedCapacity" => {
+                        obj.weighted_capacity = Some(try!(DoubleDeserializer::deserialize(
+                            "weightedCapacity",
+                            stack
+                        )));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -47063,12 +47399,11 @@ impl SpotFleetRequestConfigDataDeserializer {
                             try!(StringDeserializer::deserialize("iamFleetRole", stack));
                     }
                     "instanceInterruptionBehavior" => {
-                        obj.instance_interruption_behavior = Some(try!(
-                            InstanceInterruptionBehaviorDeserializer::deserialize(
+                        obj.instance_interruption_behavior =
+                            Some(try!(InstanceInterruptionBehaviorDeserializer::deserialize(
                                 "instanceInterruptionBehavior",
                                 stack
-                            )
-                        ));
+                            )));
                     }
                     "launchSpecifications" => {
                         obj.launch_specifications = Some(try!(
@@ -47511,12 +47846,11 @@ impl SpotInstanceRequestDeserializer {
                                 Some(try!(StringDeserializer::deserialize("instanceId", stack)));
                         }
                         "instanceInterruptionBehavior" => {
-                            obj.instance_interruption_behavior = Some(try!(
-                                InstanceInterruptionBehaviorDeserializer::deserialize(
+                            obj.instance_interruption_behavior =
+                                Some(try!(InstanceInterruptionBehaviorDeserializer::deserialize(
                                     "instanceInterruptionBehavior",
                                     stack
-                                )
-                            ));
+                                )));
                         }
                         "launchGroup" => {
                             obj.launch_group =
@@ -48105,9 +48439,10 @@ impl StaleIpPermissionDeserializer {
                             Some(try!(IpRangesDeserializer::deserialize("ipRanges", stack)));
                     }
                     "prefixListIds" => {
-                        obj.prefix_list_ids = Some(try!(
-                            PrefixListIdSetDeserializer::deserialize("prefixListIds", stack)
-                        ));
+                        obj.prefix_list_ids = Some(try!(PrefixListIdSetDeserializer::deserialize(
+                            "prefixListIds",
+                            stack
+                        )));
                     }
                     "toPort" => {
                         obj.to_port = Some(try!(IntegerDeserializer::deserialize("toPort", stack)));
@@ -48774,9 +49109,10 @@ impl SubnetDeserializer {
                         ));
                     }
                     "mapPublicIpOnLaunch" => {
-                        obj.map_public_ip_on_launch = Some(try!(
-                            BooleanDeserializer::deserialize("mapPublicIpOnLaunch", stack)
-                        ));
+                        obj.map_public_ip_on_launch = Some(try!(BooleanDeserializer::deserialize(
+                            "mapPublicIpOnLaunch",
+                            stack
+                        )));
                     }
                     "state" => {
                         obj.state =
@@ -50816,11 +51152,11 @@ pub struct UserIdGroupPair {
     pub description: Option<String>,
     /// <p>The ID of the security group.</p>
     pub group_id: Option<String>,
-    /// <p>The name of the security group. In a request, use this parameter for a security group in EC2-Classic or a default VPC only. For a security group in a nondefault VPC, use the security group ID.</p>
+    /// <p>The name of the security group. In a request, use this parameter for a security group in EC2-Classic or a default VPC only. For a security group in a nondefault VPC, use the security group ID. </p> <p>For a referenced security group in another VPC, this value is not returned if the referenced security group is deleted.</p>
     pub group_name: Option<String>,
     /// <p>The status of a VPC peering connection, if applicable.</p>
     pub peering_status: Option<String>,
-    /// <p>The ID of an AWS account. For a referenced security group in another VPC, the account ID of the referenced security group is returned.</p> <p>[EC2-Classic] Required when adding or removing rules that reference a security group in another AWS account.</p>
+    /// <p>The ID of an AWS account.</p> <p>For a referenced security group in another VPC, the account ID of the referenced security group is returned in the response. If the referenced security group is deleted, this value is not returned.</p> <p>[EC2-Classic] Required when adding or removing rules that reference a security group in another AWS account.</p>
     pub user_id: Option<String>,
     /// <p>The ID of the VPC for the referenced security group, if applicable.</p>
     pub vpc_id: Option<String>,
@@ -51172,39 +51508,39 @@ impl VgwTelemetryDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "acceptedRouteCount" => {
-                            obj.accepted_route_count = Some(try!(
-                                IntegerDeserializer::deserialize("acceptedRouteCount", stack)
-                            ));
-                        }
-                        "lastStatusChange" => {
-                            obj.last_status_change = Some(try!(
-                                DateTimeDeserializer::deserialize("lastStatusChange", stack)
-                            ));
-                        }
-                        "outsideIpAddress" => {
-                            obj.outside_ip_address = Some(try!(StringDeserializer::deserialize(
-                                "outsideIpAddress",
-                                stack
-                            )));
-                        }
-                        "status" => {
-                            obj.status = Some(try!(TelemetryStatusDeserializer::deserialize(
-                                "status",
-                                stack
-                            )));
-                        }
-                        "statusMessage" => {
-                            obj.status_message = Some(try!(StringDeserializer::deserialize(
-                                "statusMessage",
-                                stack
-                            )));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "acceptedRouteCount" => {
+                        obj.accepted_route_count = Some(try!(IntegerDeserializer::deserialize(
+                            "acceptedRouteCount",
+                            stack
+                        )));
                     }
-                }
+                    "lastStatusChange" => {
+                        obj.last_status_change = Some(try!(DateTimeDeserializer::deserialize(
+                            "lastStatusChange",
+                            stack
+                        )));
+                    }
+                    "outsideIpAddress" => {
+                        obj.outside_ip_address = Some(try!(StringDeserializer::deserialize(
+                            "outsideIpAddress",
+                            stack
+                        )));
+                    }
+                    "status" => {
+                        obj.status = Some(try!(TelemetryStatusDeserializer::deserialize(
+                            "status",
+                            stack
+                        )));
+                    }
+                    "statusMessage" => {
+                        obj.status_message = Some(try!(StringDeserializer::deserialize(
+                            "statusMessage",
+                            stack
+                        )));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -51672,9 +52008,10 @@ impl VolumeModificationDeserializer {
                         )));
                     }
                     "originalVolumeType" => {
-                        obj.original_volume_type = Some(try!(
-                            VolumeTypeDeserializer::deserialize("originalVolumeType", stack)
-                        ));
+                        obj.original_volume_type = Some(try!(VolumeTypeDeserializer::deserialize(
+                            "originalVolumeType",
+                            stack
+                        )));
                     }
                     "progress" => {
                         obj.progress = Some(try!(LongDeserializer::deserialize("progress", stack)));
@@ -52140,20 +52477,21 @@ impl VolumeStatusInfoDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "details" => {
-                        obj.details = Some(try!(
-                            VolumeStatusDetailsListDeserializer::deserialize("details", stack)
-                        ));
+                DeserializerNext::Element(name) => {
+                    match &name[..] {
+                        "details" => {
+                            obj.details = Some(try!(
+                                VolumeStatusDetailsListDeserializer::deserialize("details", stack)
+                            ));
+                        }
+                        "status" => {
+                            obj.status = Some(try!(
+                                VolumeStatusInfoStatusDeserializer::deserialize("status", stack)
+                            ));
+                        }
+                        _ => skip_tree(stack),
                     }
-                    "status" => {
-                        obj.status = Some(try!(VolumeStatusInfoStatusDeserializer::deserialize(
-                            "status",
-                            stack
-                        )));
-                    }
-                    _ => skip_tree(stack),
-                },
+                }
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -52218,9 +52556,10 @@ impl VolumeStatusItemDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
                     "actionsSet" => {
-                        obj.actions = Some(try!(
-                            VolumeStatusActionsListDeserializer::deserialize("actionsSet", stack)
-                        ));
+                        obj.actions = Some(try!(VolumeStatusActionsListDeserializer::deserialize(
+                            "actionsSet",
+                            stack
+                        )));
                     }
                     "availabilityZone" => {
                         obj.availability_zone = Some(try!(StringDeserializer::deserialize(
@@ -52904,9 +53243,10 @@ impl VpcEndpointDeserializer {
                         )));
                     }
                     "routeTableIdSet" => {
-                        obj.route_table_ids = Some(try!(
-                            ValueStringListDeserializer::deserialize("routeTableIdSet", stack)
-                        ));
+                        obj.route_table_ids = Some(try!(ValueStringListDeserializer::deserialize(
+                            "routeTableIdSet",
+                            stack
+                        )));
                     }
                     "serviceName" => {
                         obj.service_name =
@@ -53875,7 +54215,7 @@ impl VpnConnectionOptionsDeserializer {
 /// <p>Describes VPN connection options.</p>
 #[derive(Default, Debug, Clone)]
 pub struct VpnConnectionOptionsSpecification {
-    /// <p>Indicate whether the VPN connection uses static routes only. If you are creating a VPN connection for a device that does not support BGP, you must specify <code>true</code>.</p> <p>Default: <code>false</code> </p>
+    /// <p>Indicate whether the VPN connection uses static routes only. If you are creating a VPN connection for a device that does not support BGP, you must specify <code>true</code>. Use <a>CreateVpnConnectionRoute</a> to create a static route.</p> <p>Default: <code>false</code> </p>
     pub static_routes_only: Option<bool>,
     /// <p>The tunnel options for the VPN connection.</p>
     pub tunnel_options: Option<Vec<VpnTunnelOptionsSpecification>>,
@@ -61683,6 +62023,80 @@ impl Error for DescribeAddressesError {
         }
     }
 }
+/// Errors returned by DescribeAggregateIdFormat
+#[derive(Debug, PartialEq)]
+pub enum DescribeAggregateIdFormatError {
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl DescribeAggregateIdFormatError {
+    pub fn from_body(body: &str) -> DescribeAggregateIdFormatError {
+        let reader = EventReader::new(body.as_bytes());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        find_start_element(&mut stack);
+        match Self::deserialize(&mut stack) {
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                _ => DescribeAggregateIdFormatError::Unknown(String::from(body)),
+            },
+            Err(_) => DescribeAggregateIdFormatError::Unknown(body.to_string()),
+        }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+
+impl From<XmlParseError> for DescribeAggregateIdFormatError {
+    fn from(err: XmlParseError) -> DescribeAggregateIdFormatError {
+        let XmlParseError(message) = err;
+        DescribeAggregateIdFormatError::Unknown(message.to_string())
+    }
+}
+impl From<CredentialsError> for DescribeAggregateIdFormatError {
+    fn from(err: CredentialsError) -> DescribeAggregateIdFormatError {
+        DescribeAggregateIdFormatError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DescribeAggregateIdFormatError {
+    fn from(err: HttpDispatchError) -> DescribeAggregateIdFormatError {
+        DescribeAggregateIdFormatError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeAggregateIdFormatError {
+    fn from(err: io::Error) -> DescribeAggregateIdFormatError {
+        DescribeAggregateIdFormatError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DescribeAggregateIdFormatError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeAggregateIdFormatError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeAggregateIdFormatError::Validation(ref cause) => cause,
+            DescribeAggregateIdFormatError::Credentials(ref err) => err.description(),
+            DescribeAggregateIdFormatError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DescribeAggregateIdFormatError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by DescribeAvailabilityZones
 #[derive(Debug, PartialEq)]
 pub enum DescribeAvailabilityZonesError {
@@ -64482,6 +64896,80 @@ impl Error for DescribePrefixListsError {
                 dispatch_error.description()
             }
             DescribePrefixListsError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DescribePrincipalIdFormat
+#[derive(Debug, PartialEq)]
+pub enum DescribePrincipalIdFormatError {
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl DescribePrincipalIdFormatError {
+    pub fn from_body(body: &str) -> DescribePrincipalIdFormatError {
+        let reader = EventReader::new(body.as_bytes());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        find_start_element(&mut stack);
+        match Self::deserialize(&mut stack) {
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                _ => DescribePrincipalIdFormatError::Unknown(String::from(body)),
+            },
+            Err(_) => DescribePrincipalIdFormatError::Unknown(body.to_string()),
+        }
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+
+impl From<XmlParseError> for DescribePrincipalIdFormatError {
+    fn from(err: XmlParseError) -> DescribePrincipalIdFormatError {
+        let XmlParseError(message) = err;
+        DescribePrincipalIdFormatError::Unknown(message.to_string())
+    }
+}
+impl From<CredentialsError> for DescribePrincipalIdFormatError {
+    fn from(err: CredentialsError) -> DescribePrincipalIdFormatError {
+        DescribePrincipalIdFormatError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DescribePrincipalIdFormatError {
+    fn from(err: HttpDispatchError) -> DescribePrincipalIdFormatError {
+        DescribePrincipalIdFormatError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribePrincipalIdFormatError {
+    fn from(err: io::Error) -> DescribePrincipalIdFormatError {
+        DescribePrincipalIdFormatError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DescribePrincipalIdFormatError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribePrincipalIdFormatError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribePrincipalIdFormatError::Validation(ref cause) => cause,
+            DescribePrincipalIdFormatError::Credentials(ref err) => err.description(),
+            DescribePrincipalIdFormatError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DescribePrincipalIdFormatError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -73982,7 +74470,7 @@ pub trait Ec2 {
         input: &CreateEgressOnlyInternetGatewayRequest,
     ) -> RusotoFuture<CreateEgressOnlyInternetGatewayResult, CreateEgressOnlyInternetGatewayError>;
 
-    /// <p>Creates one or more flow logs to capture IP traffic for a specific network interface, subnet, or VPC. Flow logs are delivered to a specified log group in Amazon CloudWatch Logs. If you specify a VPC or subnet in the request, a log stream is created in CloudWatch Logs for each network interface in the subnet or VPC. Log streams can include information about accepted and rejected traffic to a network interface. You can view the data in your log streams using Amazon CloudWatch Logs.</p> <p>In your request, you must also specify an IAM role that has permission to publish logs to CloudWatch Logs.</p>
+    /// <p>Creates one or more flow logs to capture IP traffic for a specific network interface, subnet, or VPC. Flow logs are delivered to a specified log group in Amazon CloudWatch Logs. If you specify a VPC or subnet in the request, a log stream is created in CloudWatch Logs for each network interface in the subnet or VPC. Log streams can include information about accepted and rejected traffic to a network interface. You can view the data in your log streams using Amazon CloudWatch Logs.</p> <p>In your request, you must also specify an IAM role that has permission to publish logs to CloudWatch Logs.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/flow-logs.html">VPC Flow Logs</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
     fn create_flow_logs(
         &self,
         input: &CreateFlowLogsRequest,
@@ -74090,7 +74578,7 @@ pub trait Ec2 {
         input: &CreateSecurityGroupRequest,
     ) -> RusotoFuture<CreateSecurityGroupResult, CreateSecurityGroupError>;
 
-    /// <p>Creates a snapshot of an EBS volume and stores it in Amazon S3. You can use snapshots for backups, to make copies of EBS volumes, and to save data before shutting down an instance.</p> <p>When a snapshot is created, any AWS Marketplace product codes that are associated with the source volume are propagated to the snapshot.</p> <p>You can take a snapshot of an attached volume that is in use. However, snapshots only capture data that has been written to your EBS volume at the time the snapshot command is issued; this may exclude any data that has been cached by any applications or the operating system. If you can pause any file systems on the volume long enough to take a snapshot, your snapshot should be complete. However, if you cannot pause all file writes to the volume, you should unmount the volume from within the instance, issue the snapshot command, and then remount the volume to ensure a consistent and complete snapshot. You may remount and use your volume while the snapshot status is <code>pending</code>.</p> <p>To create a snapshot for EBS volumes that serve as root devices, you should stop the instance before taking the snapshot.</p> <p>Snapshots that are taken from encrypted volumes are automatically encrypted. Volumes that are created from encrypted snapshots are also automatically encrypted. Your encrypted volumes and any associated snapshots always remain protected.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/AmazonEBS.html">Amazon Elastic Block Store</a> and <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSEncryption.html">Amazon EBS Encryption</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
+    /// <p>Creates a snapshot of an EBS volume and stores it in Amazon S3. You can use snapshots for backups, to make copies of EBS volumes, and to save data before shutting down an instance.</p> <p>When a snapshot is created, any AWS Marketplace product codes that are associated with the source volume are propagated to the snapshot.</p> <p>You can take a snapshot of an attached volume that is in use. However, snapshots only capture data that has been written to your EBS volume at the time the snapshot command is issued; this may exclude any data that has been cached by any applications or the operating system. If you can pause any file systems on the volume long enough to take a snapshot, your snapshot should be complete. However, if you cannot pause all file writes to the volume, you should unmount the volume from within the instance, issue the snapshot command, and then remount the volume to ensure a consistent and complete snapshot. You may remount and use your volume while the snapshot status is <code>pending</code>.</p> <p>To create a snapshot for EBS volumes that serve as root devices, you should stop the instance before taking the snapshot.</p> <p>Snapshots that are taken from encrypted volumes are automatically encrypted. Volumes that are created from encrypted snapshots are also automatically encrypted. Your encrypted volumes and any associated snapshots always remain protected.</p> <p>You can tag your snapshots during creation. For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Using_Tags.html">Tagging Your Amazon EC2 Resources</a>.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/AmazonEBS.html">Amazon Elastic Block Store</a> and <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSEncryption.html">Amazon EBS Encryption</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
     fn create_snapshot(
         &self,
         input: &CreateSnapshotRequest,
@@ -74143,7 +74631,7 @@ pub trait Ec2 {
         CreateVpcEndpointServiceConfigurationError,
     >;
 
-    /// <p>Requests a VPC peering connection between two VPCs: a requester VPC that you own and an accepter VPC with which to create the connection. The accepter VPC can belong to another AWS account and can be in a different region to the requester VPC. The requester VPC and accepter VPC cannot have overlapping CIDR blocks.</p> <p>The owner of the accepter VPC must accept the peering request to activate the peering connection. The VPC peering connection request expires after 7 days, after which it cannot be accepted or rejected.</p> <p>If you create a VPC peering connection request between VPCs with overlapping CIDR blocks, the VPC peering connection has a status of <code>failed</code>.</p>
+    /// <p>Requests a VPC peering connection between two VPCs: a requester VPC that you own and an accepter VPC with which to create the connection. The accepter VPC can belong to another AWS account and can be in a different region to the requester VPC. The requester VPC and accepter VPC cannot have overlapping CIDR blocks.</p> <note> <p>Limitations and rules apply to a VPC peering connection. For more information, see the <a href="http://docs.aws.amazon.com/AmazonVPC/latest/PeeringGuide/vpc-peering-basics.html#vpc-peering-limitations">limitations</a> section in the <i>VPC Peering Guide</i>.</p> </note> <p>The owner of the accepter VPC must accept the peering request to activate the peering connection. The VPC peering connection request expires after 7 days, after which it cannot be accepted or rejected.</p> <p>If you create a VPC peering connection request between VPCs with overlapping CIDR blocks, the VPC peering connection has a status of <code>failed</code>.</p>
     fn create_vpc_peering_connection(
         &self,
         input: &CreateVpcPeeringConnectionRequest,
@@ -74318,7 +74806,7 @@ pub trait Ec2 {
         input: &DeleteVpcEndpointsRequest,
     ) -> RusotoFuture<DeleteVpcEndpointsResult, DeleteVpcEndpointsError>;
 
-    /// <p>Deletes a VPC peering connection. Either the owner of the requester VPC or the owner of the accepter VPC can delete the VPC peering connection if it's in the <code>active</code> state. The owner of the requester VPC can delete a VPC peering connection in the <code>pending-acceptance</code> state. </p>
+    /// <p>Deletes a VPC peering connection. Either the owner of the requester VPC or the owner of the accepter VPC can delete the VPC peering connection if it's in the <code>active</code> state. The owner of the requester VPC can delete a VPC peering connection in the <code>pending-acceptance</code> state. You cannot delete a VPC peering connection that's in the <code>failed</code> state.</p>
     fn delete_vpc_peering_connection(
         &self,
         input: &DeleteVpcPeeringConnectionRequest,
@@ -74348,7 +74836,7 @@ pub trait Ec2 {
         input: &DeregisterImageRequest,
     ) -> RusotoFuture<(), DeregisterImageError>;
 
-    /// <p><p>Describes attributes of your AWS account. The following are the supported account attributes:</p> <ul> <li> <p> <code>supported-platforms</code>: Indicates whether your account can launch instances into EC2-Classic and EC2-VPC, or only into EC2-VPC.</p> </li> <li> <p> <code>default-vpc</code>: The ID of the default VPC for your account, or <code>none</code>.</p> </li> <li> <p> <code>max-instances</code>: The maximum number of On-Demand instances that you can run.</p> </li> <li> <p> <code>vpc-max-security-groups-per-interface</code>: The maximum number of security groups that you can assign to a network interface.</p> </li> <li> <p> <code>max-elastic-ips</code>: The maximum number of Elastic IP addresses that you can allocate for use with EC2-Classic. </p> </li> <li> <p> <code>vpc-max-elastic-ips</code>: The maximum number of Elastic IP addresses that you can allocate for use with EC2-VPC.</p> </li> </ul></p>
+    /// <p><p>Describes attributes of your AWS account. The following are the supported account attributes:</p> <ul> <li> <p> <code>supported-platforms</code>: Indicates whether your account can launch instances into EC2-Classic and EC2-VPC, or only into EC2-VPC.</p> </li> <li> <p> <code>default-vpc</code>: The ID of the default VPC for your account, or <code>none</code>.</p> </li> <li> <p> <code>max-instances</code>: The maximum number of On-Demand Instances that you can run.</p> </li> <li> <p> <code>vpc-max-security-groups-per-interface</code>: The maximum number of security groups that you can assign to a network interface.</p> </li> <li> <p> <code>max-elastic-ips</code>: The maximum number of Elastic IP addresses that you can allocate for use with EC2-Classic. </p> </li> <li> <p> <code>vpc-max-elastic-ips</code>: The maximum number of Elastic IP addresses that you can allocate for use with EC2-VPC.</p> </li> </ul></p>
     fn describe_account_attributes(
         &self,
         input: &DescribeAccountAttributesRequest,
@@ -74359,6 +74847,12 @@ pub trait Ec2 {
         &self,
         input: &DescribeAddressesRequest,
     ) -> RusotoFuture<DescribeAddressesResult, DescribeAddressesError>;
+
+    /// <p>Describes the longer ID format settings for all resource types in a specific region. This request is useful for performing a quick audit to determine whether a specific region is fully opted in for longer IDs (17-character IDs).</p> <p>This request only returns information about resource types that support longer IDs.</p> <p>The following resource types support longer IDs: <code>bundle</code> | <code>conversion-task</code> | <code>customer-gateway</code> | <code>dhcp-options</code> | <code>elastic-ip-allocation</code> | <code>elastic-ip-association</code> | <code>export-task</code> | <code>flow-log</code> | <code>image</code> | <code>import-task</code> | <code>instance</code> | <code>internet-gateway</code> | <code>network-acl</code> | <code>network-acl-association</code> | <code>network-interface</code> | <code>network-interface-attachment</code> | <code>prefix-list</code> | <code>reservation</code> | <code>route-table</code> | <code>route-table-association</code> | <code>security-group</code> | <code>snapshot</code> | <code>subnet</code> | <code>subnet-cidr-block-association</code> | <code>volume</code> | <code>vpc</code> | <code>vpc-cidr-block-association</code> | <code>vpc-endpoint</code> | <code>vpc-peering-connection</code> | <code>vpn-connection</code> | <code>vpn-gateway</code>.</p>
+    fn describe_aggregate_id_format(
+        &self,
+        input: &DescribeAggregateIdFormatRequest,
+    ) -> RusotoFuture<DescribeAggregateIdFormatResult, DescribeAggregateIdFormatError>;
 
     /// <p>Describes one or more of the Availability Zones that are available to you. The results include zones only for the region you're currently using. If there is an event impacting an Availability Zone, you can use this request to view the state and any provided message for that Availability Zone.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-regions-availability-zones.html">Regions and Availability Zones</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
     fn describe_availability_zones(
@@ -74462,13 +74956,13 @@ pub trait Ec2 {
         DescribeIamInstanceProfileAssociationsError,
     >;
 
-    /// <p>Describes the ID format settings for your resources on a per-region basis, for example, to view which resource types are enabled for longer IDs. This request only returns information about resource types whose ID formats can be modified; it does not return information about other resource types.</p> <p>The following resource types support longer IDs: <code>instance</code> | <code>reservation</code> | <code>snapshot</code> | <code>volume</code>. </p> <p>These settings apply to the IAM user who makes the request; they do not apply to the entire AWS account. By default, an IAM user defaults to the same settings as the root user, unless they explicitly override the settings by running the <a>ModifyIdFormat</a> command. Resources created with longer IDs are visible to all IAM users, regardless of these settings and provided that they have permission to use the relevant <code>Describe</code> command for the resource type.</p>
+    /// <p>Describes the ID format settings for your resources on a per-region basis, for example, to view which resource types are enabled for longer IDs. This request only returns information about resource types whose ID formats can be modified; it does not return information about other resource types.</p> <p>The following resource types support longer IDs: <code>bundle</code> | <code>conversion-task</code> | <code>customer-gateway</code> | <code>dhcp-options</code> | <code>elastic-ip-allocation</code> | <code>elastic-ip-association</code> | <code>export-task</code> | <code>flow-log</code> | <code>image</code> | <code>import-task</code> | <code>instance</code> | <code>internet-gateway</code> | <code>network-acl</code> | <code>network-acl-association</code> | <code>network-interface</code> | <code>network-interface-attachment</code> | <code>prefix-list</code> | <code>reservation</code> | <code>route-table</code> | <code>route-table-association</code> | <code>security-group</code> | <code>snapshot</code> | <code>subnet</code> | <code>subnet-cidr-block-association</code> | <code>volume</code> | <code>vpc</code> | <code>vpc-cidr-block-association</code> | <code>vpc-endpoint</code> | <code>vpc-peering-connection</code> | <code>vpn-connection</code> | <code>vpn-gateway</code>. </p> <p>These settings apply to the IAM user who makes the request; they do not apply to the entire AWS account. By default, an IAM user defaults to the same settings as the root user, unless they explicitly override the settings by running the <a>ModifyIdFormat</a> command. Resources created with longer IDs are visible to all IAM users, regardless of these settings and provided that they have permission to use the relevant <code>Describe</code> command for the resource type.</p>
     fn describe_id_format(
         &self,
         input: &DescribeIdFormatRequest,
     ) -> RusotoFuture<DescribeIdFormatResult, DescribeIdFormatError>;
 
-    /// <p>Describes the ID format settings for resources for the specified IAM user, IAM role, or root user. For example, you can view the resource types that are enabled for longer IDs. This request only returns information about resource types whose ID formats can be modified; it does not return information about other resource types. For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/resource-ids.html">Resource IDs</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>. </p> <p>The following resource types support longer IDs: <code>instance</code> | <code>reservation</code> | <code>snapshot</code> | <code>volume</code>. </p> <p>These settings apply to the principal specified in the request. They do not apply to the principal that makes the request.</p>
+    /// <p>Describes the ID format settings for resources for the specified IAM user, IAM role, or root user. For example, you can view the resource types that are enabled for longer IDs. This request only returns information about resource types whose ID formats can be modified; it does not return information about other resource types. For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/resource-ids.html">Resource IDs</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>. </p> <p>The following resource types support longer IDs: <code>bundle</code> | <code>conversion-task</code> | <code>customer-gateway</code> | <code>dhcp-options</code> | <code>elastic-ip-allocation</code> | <code>elastic-ip-association</code> | <code>export-task</code> | <code>flow-log</code> | <code>image</code> | <code>import-task</code> | <code>instance</code> | <code>internet-gateway</code> | <code>network-acl</code> | <code>network-acl-association</code> | <code>network-interface</code> | <code>network-interface-attachment</code> | <code>prefix-list</code> | <code>reservation</code> | <code>route-table</code> | <code>route-table-association</code> | <code>security-group</code> | <code>snapshot</code> | <code>subnet</code> | <code>subnet-cidr-block-association</code> | <code>volume</code> | <code>vpc</code> | <code>vpc-cidr-block-association</code> | <code>vpc-endpoint</code> | <code>vpc-peering-connection</code> | <code>vpn-connection</code> | <code>vpn-gateway</code>. </p> <p>These settings apply to the principal specified in the request. They do not apply to the principal that makes the request.</p>
     fn describe_identity_id_format(
         &self,
         input: &DescribeIdentityIdFormatRequest,
@@ -74599,6 +75093,12 @@ pub trait Ec2 {
         &self,
         input: &DescribePrefixListsRequest,
     ) -> RusotoFuture<DescribePrefixListsResult, DescribePrefixListsError>;
+
+    /// <p>Describes the ID format settings for the root user and all IAM roles and IAM users that have explicitly specified a longer ID (17-character ID) preference. </p> <p>By default, all IAM roles and IAM users default to the same ID settings as the root user, unless they explicitly override the settings. This request is useful for identifying those IAM users and IAM roles that have overridden the default ID settings.</p> <p>The following resource types support longer IDs: <code>bundle</code> | <code>conversion-task</code> | <code>customer-gateway</code> | <code>dhcp-options</code> | <code>elastic-ip-allocation</code> | <code>elastic-ip-association</code> | <code>export-task</code> | <code>flow-log</code> | <code>image</code> | <code>import-task</code> | <code>instance</code> | <code>internet-gateway</code> | <code>network-acl</code> | <code>network-acl-association</code> | <code>network-interface</code> | <code>network-interface-attachment</code> | <code>prefix-list</code> | <code>reservation</code> | <code>route-table</code> | <code>route-table-association</code> | <code>security-group</code> | <code>snapshot</code> | <code>subnet</code> | <code>subnet-cidr-block-association</code> | <code>volume</code> | <code>vpc</code> | <code>vpc-cidr-block-association</code> | <code>vpc-endpoint</code> | <code>vpc-peering-connection</code> | <code>vpn-connection</code> | <code>vpn-gateway</code>. </p>
+    fn describe_principal_id_format(
+        &self,
+        input: &DescribePrincipalIdFormatRequest,
+    ) -> RusotoFuture<DescribePrincipalIdFormatResult, DescribePrincipalIdFormatError>;
 
     /// <p>Describes one or more regions that are currently available to you.</p> <p>For a list of the regions supported by Amazon EC2, see <a href="http://docs.aws.amazon.com/general/latest/gr/rande.html#ec2_region">Regions and Endpoints</a>.</p>
     fn describe_regions(
@@ -75026,13 +75526,13 @@ pub trait Ec2 {
         input: &ModifyHostsRequest,
     ) -> RusotoFuture<ModifyHostsResult, ModifyHostsError>;
 
-    /// <p>Modifies the ID format for the specified resource on a per-region basis. You can specify that resources should receive longer IDs (17-character IDs) when they are created. The following resource types support longer IDs: <code>instance</code> | <code>reservation</code> | <code>snapshot</code> | <code>volume</code>.</p> <p>This setting applies to the IAM user who makes the request; it does not apply to the entire AWS account. By default, an IAM user defaults to the same settings as the root user. If you're using this action as the root user, then these settings apply to the entire account, unless an IAM user explicitly overrides these settings for themselves. For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/resource-ids.html">Resource IDs</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>. </p> <p>Resources created with longer IDs are visible to all IAM roles and users, regardless of these settings and provided that they have permission to use the relevant <code>Describe</code> command for the resource type.</p>
+    /// <p>Modifies the ID format for the specified resource on a per-region basis. You can specify that resources should receive longer IDs (17-character IDs) when they are created.</p> <p>This request can only be used to modify longer ID settings for resource types that are within the opt-in period. Resources currently in their opt-in period include: <code>bundle</code> | <code>conversion-task</code> | <code>customer-gateway</code> | <code>dhcp-options</code> | <code>elastic-ip-allocation</code> | <code>elastic-ip-association</code> | <code>export-task</code> | <code>flow-log</code> | <code>image</code> | <code>import-task</code> | <code>internet-gateway</code> | <code>network-acl</code> | <code>network-acl-association</code> | <code>network-interface</code> | <code>network-interface-attachment</code> | <code>prefix-list</code> | <code>route-table</code> | <code>route-table-association</code> | <code>security-group</code> | <code>subnet</code> | <code>subnet-cidr-block-association</code> | <code>vpc</code> | <code>vpc-cidr-block-association</code> | <code>vpc-endpoint</code> | <code>vpc-peering-connection</code> | <code>vpn-connection</code> | <code>vpn-gateway</code>.</p> <p>This setting applies to the IAM user who makes the request; it does not apply to the entire AWS account. By default, an IAM user defaults to the same settings as the root user. If you're using this action as the root user, then these settings apply to the entire account, unless an IAM user explicitly overrides these settings for themselves. For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/resource-ids.html">Resource IDs</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>. </p> <p>Resources created with longer IDs are visible to all IAM roles and users, regardless of these settings and provided that they have permission to use the relevant <code>Describe</code> command for the resource type.</p>
     fn modify_id_format(
         &self,
         input: &ModifyIdFormatRequest,
     ) -> RusotoFuture<(), ModifyIdFormatError>;
 
-    /// <p>Modifies the ID format of a resource for a specified IAM user, IAM role, or the root user for an account; or all IAM users, IAM roles, and the root user for an account. You can specify that resources should receive longer IDs (17-character IDs) when they are created. </p> <p>The following resource types support longer IDs: <code>instance</code> | <code>reservation</code> | <code>snapshot</code> | <code>volume</code>. For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/resource-ids.html">Resource IDs</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>. </p> <p>This setting applies to the principal specified in the request; it does not apply to the principal that makes the request. </p> <p>Resources created with longer IDs are visible to all IAM roles and users, regardless of these settings and provided that they have permission to use the relevant <code>Describe</code> command for the resource type.</p>
+    /// <p>Modifies the ID format of a resource for a specified IAM user, IAM role, or the root user for an account; or all IAM users, IAM roles, and the root user for an account. You can specify that resources should receive longer IDs (17-character IDs) when they are created. </p> <p>This request can only be used to modify longer ID settings for resource types that are within the opt-in period. Resources currently in their opt-in period include: <code>bundle</code> | <code>conversion-task</code> | <code>customer-gateway</code> | <code>dhcp-options</code> | <code>elastic-ip-allocation</code> | <code>elastic-ip-association</code> | <code>export-task</code> | <code>flow-log</code> | <code>image</code> | <code>import-task</code> | <code>internet-gateway</code> | <code>network-acl</code> | <code>network-acl-association</code> | <code>network-interface</code> | <code>network-interface-attachment</code> | <code>prefix-list</code> | <code>route-table</code> | <code>route-table-association</code> | <code>security-group</code> | <code>subnet</code> | <code>subnet-cidr-block-association</code> | <code>vpc</code> | <code>vpc-cidr-block-association</code> | <code>vpc-endpoint</code> | <code>vpc-peering-connection</code> | <code>vpn-connection</code> | <code>vpn-gateway</code>. </p> <p>For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/resource-ids.html">Resource IDs</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>. </p> <p>This setting applies to the principal specified in the request; it does not apply to the principal that makes the request. </p> <p>Resources created with longer IDs are visible to all IAM roles and users, regardless of these settings and provided that they have permission to use the relevant <code>Describe</code> command for the resource type.</p>
     fn modify_identity_id_format(
         &self,
         input: &ModifyIdentityIdFormatRequest,
@@ -75056,7 +75556,7 @@ pub trait Ec2 {
         input: &ModifyInstanceCreditSpecificationRequest,
     ) -> RusotoFuture<ModifyInstanceCreditSpecificationResult, ModifyInstanceCreditSpecificationError>;
 
-    /// <p>Set the instance affinity value for a specific stopped instance and modify the instance tenancy setting.</p> <p>Instance affinity is disabled by default. When instance affinity is <code>host</code> and it is not associated with a specific Dedicated Host, the next time it is launched it will automatically be associated with the host it lands on. This relationship will persist if the instance is stopped/started, or rebooted.</p> <p>You can modify the host ID associated with a stopped instance. If a stopped instance has a new host ID association, the instance will target that host when restarted.</p> <p>You can modify the tenancy of a stopped instance with a tenancy of <code>host</code> or <code>dedicated</code>.</p> <p>Affinity, hostID, and tenancy are not required parameters, but at least one of them must be specified in the request. Affinity and tenancy can be modified in the same request, but tenancy can only be modified on instances that are stopped.</p>
+    /// <p>Modifies the placement attributes for a specified instance. You can do the following:</p> <ul> <li> <p>Modify the affinity between an instance and a <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/dedicated-hosts-overview.html">Dedicated Host</a>. When affinity is set to <code>host</code> and the instance is not associated with a specific Dedicated Host, the next time the instance is launched, it is automatically associated with the host on which it lands. If the instance is restarted or rebooted, this relationship persists.</p> </li> <li> <p>Change the Dedicated Host with which an instance is associated.</p> </li> <li> <p>Change the instance tenancy of an instance from <code>host</code> to <code>dedicated</code>, or from <code>dedicated</code> to <code>host</code>.</p> </li> <li> <p>Move an instance to or from a <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/placement-groups.html">placement group</a>.</p> </li> </ul> <p>At least one attribute for affinity, host ID, tenancy, or placement group name must be specified in the request. Affinity and tenancy can be modified in the same request.</p> <p>To modify the host ID, tenancy, or placement group for an instance, the instance must be in the <code>stopped</code> state.</p>
     fn modify_instance_placement(
         &self,
         input: &ModifyInstancePlacementRequest,
@@ -75140,7 +75640,7 @@ pub trait Ec2 {
         ModifyVpcEndpointServiceConfigurationError,
     >;
 
-    /// <p>Modifies the permissions for your VPC endpoint service. You can add or remove permissions for service consumers (IAM users, IAM roles, and AWS accounts) to discover your endpoint service.</p>
+    /// <p>Modifies the permissions for your <a href="http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/endpoint-service.html">VPC endpoint service</a>. You can add or remove permissions for service consumers (IAM users, IAM roles, and AWS accounts) to connect to your endpoint service.</p>
     fn modify_vpc_endpoint_service_permissions(
         &self,
         input: &ModifyVpcEndpointServicePermissionsRequest,
@@ -75149,7 +75649,7 @@ pub trait Ec2 {
         ModifyVpcEndpointServicePermissionsError,
     >;
 
-    /// <p>Modifies the VPC peering connection options on one side of a VPC peering connection. You can do the following:</p> <ul> <li> <p>Enable/disable communication over the peering connection between an EC2-Classic instance that's linked to your VPC (using ClassicLink) and instances in the peer VPC.</p> </li> <li> <p>Enable/disable communication over the peering connection between instances in your VPC and an EC2-Classic instance that's linked to the peer VPC.</p> </li> <li> <p>Enable/disable a local VPC to resolve public DNS hostnames to private IP addresses when queried from instances in the peer VPC.</p> </li> </ul> <p>If the peered VPCs are in different accounts, each owner must initiate a separate request to modify the peering connection options, depending on whether their VPC was the requester or accepter for the VPC peering connection. If the peered VPCs are in the same account, you can modify the requester and accepter options in the same request. To confirm which VPC is the accepter and requester for a VPC peering connection, use the <a>DescribeVpcPeeringConnections</a> command.</p>
+    /// <p>Modifies the VPC peering connection options on one side of a VPC peering connection. You can do the following:</p> <ul> <li> <p>Enable/disable communication over the peering connection between an EC2-Classic instance that's linked to your VPC (using ClassicLink) and instances in the peer VPC.</p> </li> <li> <p>Enable/disable communication over the peering connection between instances in your VPC and an EC2-Classic instance that's linked to the peer VPC.</p> </li> <li> <p>Enable/disable the ability to resolve public DNS hostnames to private IP addresses when queried from instances in the peer VPC.</p> </li> </ul> <p>If the peered VPCs are in different accounts, each owner must initiate a separate request to modify the peering connection options, depending on whether their VPC was the requester or accepter for the VPC peering connection. If the peered VPCs are in the same account, you can modify the requester and accepter options in the same request. To confirm which VPC is the accepter and requester for a VPC peering connection, use the <a>DescribeVpcPeeringConnections</a> command.</p>
     fn modify_vpc_peering_connection_options(
         &self,
         input: &ModifyVpcPeeringConnectionOptionsRequest,
@@ -75520,12 +76020,10 @@ where
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(
-                        AcceptVpcEndpointConnectionsResultDeserializer::deserialize(
-                            &actual_tag_name,
-                            &mut stack
-                        )
-                    );
+                    result = try!(AcceptVpcEndpointConnectionsResultDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack
+                    ));
                 }
 
                 Ok(result)
@@ -77081,7 +77579,7 @@ where
         RusotoFuture::new(future)
     }
 
-    /// <p>Creates one or more flow logs to capture IP traffic for a specific network interface, subnet, or VPC. Flow logs are delivered to a specified log group in Amazon CloudWatch Logs. If you specify a VPC or subnet in the request, a log stream is created in CloudWatch Logs for each network interface in the subnet or VPC. Log streams can include information about accepted and rejected traffic to a network interface. You can view the data in your log streams using Amazon CloudWatch Logs.</p> <p>In your request, you must also specify an IAM role that has permission to publish logs to CloudWatch Logs.</p>
+    /// <p>Creates one or more flow logs to capture IP traffic for a specific network interface, subnet, or VPC. Flow logs are delivered to a specified log group in Amazon CloudWatch Logs. If you specify a VPC or subnet in the request, a log stream is created in CloudWatch Logs for each network interface in the subnet or VPC. Log streams can include information about accepted and rejected traffic to a network interface. You can view the data in your log streams using Amazon CloudWatch Logs.</p> <p>In your request, you must also specify an IAM role that has permission to publish logs to CloudWatch Logs.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/flow-logs.html">VPC Flow Logs</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
     fn create_flow_logs(
         &self,
         input: &CreateFlowLogsRequest,
@@ -77911,7 +78409,7 @@ where
         RusotoFuture::new(future)
     }
 
-    /// <p>Creates a snapshot of an EBS volume and stores it in Amazon S3. You can use snapshots for backups, to make copies of EBS volumes, and to save data before shutting down an instance.</p> <p>When a snapshot is created, any AWS Marketplace product codes that are associated with the source volume are propagated to the snapshot.</p> <p>You can take a snapshot of an attached volume that is in use. However, snapshots only capture data that has been written to your EBS volume at the time the snapshot command is issued; this may exclude any data that has been cached by any applications or the operating system. If you can pause any file systems on the volume long enough to take a snapshot, your snapshot should be complete. However, if you cannot pause all file writes to the volume, you should unmount the volume from within the instance, issue the snapshot command, and then remount the volume to ensure a consistent and complete snapshot. You may remount and use your volume while the snapshot status is <code>pending</code>.</p> <p>To create a snapshot for EBS volumes that serve as root devices, you should stop the instance before taking the snapshot.</p> <p>Snapshots that are taken from encrypted volumes are automatically encrypted. Volumes that are created from encrypted snapshots are also automatically encrypted. Your encrypted volumes and any associated snapshots always remain protected.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/AmazonEBS.html">Amazon Elastic Block Store</a> and <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSEncryption.html">Amazon EBS Encryption</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
+    /// <p>Creates a snapshot of an EBS volume and stores it in Amazon S3. You can use snapshots for backups, to make copies of EBS volumes, and to save data before shutting down an instance.</p> <p>When a snapshot is created, any AWS Marketplace product codes that are associated with the source volume are propagated to the snapshot.</p> <p>You can take a snapshot of an attached volume that is in use. However, snapshots only capture data that has been written to your EBS volume at the time the snapshot command is issued; this may exclude any data that has been cached by any applications or the operating system. If you can pause any file systems on the volume long enough to take a snapshot, your snapshot should be complete. However, if you cannot pause all file writes to the volume, you should unmount the volume from within the instance, issue the snapshot command, and then remount the volume to ensure a consistent and complete snapshot. You may remount and use your volume while the snapshot status is <code>pending</code>.</p> <p>To create a snapshot for EBS volumes that serve as root devices, you should stop the instance before taking the snapshot.</p> <p>Snapshots that are taken from encrypted volumes are automatically encrypted. Volumes that are created from encrypted snapshots are also automatically encrypted. Your encrypted volumes and any associated snapshots always remain protected.</p> <p>You can tag your snapshots during creation. For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Using_Tags.html">Tagging Your Amazon EC2 Resources</a>.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/AmazonEBS.html">Amazon Elastic Block Store</a> and <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSEncryption.html">Amazon EBS Encryption</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
     fn create_snapshot(
         &self,
         input: &CreateSnapshotRequest,
@@ -78337,7 +78835,7 @@ where
         RusotoFuture::new(future)
     }
 
-    /// <p>Requests a VPC peering connection between two VPCs: a requester VPC that you own and an accepter VPC with which to create the connection. The accepter VPC can belong to another AWS account and can be in a different region to the requester VPC. The requester VPC and accepter VPC cannot have overlapping CIDR blocks.</p> <p>The owner of the accepter VPC must accept the peering request to activate the peering connection. The VPC peering connection request expires after 7 days, after which it cannot be accepted or rejected.</p> <p>If you create a VPC peering connection request between VPCs with overlapping CIDR blocks, the VPC peering connection has a status of <code>failed</code>.</p>
+    /// <p>Requests a VPC peering connection between two VPCs: a requester VPC that you own and an accepter VPC with which to create the connection. The accepter VPC can belong to another AWS account and can be in a different region to the requester VPC. The requester VPC and accepter VPC cannot have overlapping CIDR blocks.</p> <note> <p>Limitations and rules apply to a VPC peering connection. For more information, see the <a href="http://docs.aws.amazon.com/AmazonVPC/latest/PeeringGuide/vpc-peering-basics.html#vpc-peering-limitations">limitations</a> section in the <i>VPC Peering Guide</i>.</p> </note> <p>The owner of the accepter VPC must accept the peering request to activate the peering connection. The VPC peering connection request expires after 7 days, after which it cannot be accepted or rejected.</p> <p>If you create a VPC peering connection request between VPCs with overlapping CIDR blocks, the VPC peering connection has a status of <code>failed</code>.</p>
     fn create_vpc_peering_connection(
         &self,
         input: &CreateVpcPeeringConnectionRequest,
@@ -78851,12 +79349,10 @@ where
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(
-                        DeleteLaunchTemplateVersionsResultDeserializer::deserialize(
-                            &actual_tag_name,
-                            &mut stack
-                        )
-                    );
+                    result = try!(DeleteLaunchTemplateVersionsResultDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack
+                    ));
                 }
 
                 Ok(result)
@@ -79472,7 +79968,7 @@ where
         RusotoFuture::new(future)
     }
 
-    /// <p>Deletes a VPC peering connection. Either the owner of the requester VPC or the owner of the accepter VPC can delete the VPC peering connection if it's in the <code>active</code> state. The owner of the requester VPC can delete a VPC peering connection in the <code>pending-acceptance</code> state. </p>
+    /// <p>Deletes a VPC peering connection. Either the owner of the requester VPC or the owner of the accepter VPC can delete the VPC peering connection if it's in the <code>active</code> state. The owner of the requester VPC can delete a VPC peering connection in the <code>pending-acceptance</code> state. You cannot delete a VPC peering connection that's in the <code>failed</code> state.</p>
     fn delete_vpc_peering_connection(
         &self,
         input: &DeleteVpcPeeringConnectionRequest,
@@ -79632,7 +80128,7 @@ where
         RusotoFuture::new(future)
     }
 
-    /// <p><p>Describes attributes of your AWS account. The following are the supported account attributes:</p> <ul> <li> <p> <code>supported-platforms</code>: Indicates whether your account can launch instances into EC2-Classic and EC2-VPC, or only into EC2-VPC.</p> </li> <li> <p> <code>default-vpc</code>: The ID of the default VPC for your account, or <code>none</code>.</p> </li> <li> <p> <code>max-instances</code>: The maximum number of On-Demand instances that you can run.</p> </li> <li> <p> <code>vpc-max-security-groups-per-interface</code>: The maximum number of security groups that you can assign to a network interface.</p> </li> <li> <p> <code>max-elastic-ips</code>: The maximum number of Elastic IP addresses that you can allocate for use with EC2-Classic. </p> </li> <li> <p> <code>vpc-max-elastic-ips</code>: The maximum number of Elastic IP addresses that you can allocate for use with EC2-VPC.</p> </li> </ul></p>
+    /// <p><p>Describes attributes of your AWS account. The following are the supported account attributes:</p> <ul> <li> <p> <code>supported-platforms</code>: Indicates whether your account can launch instances into EC2-Classic and EC2-VPC, or only into EC2-VPC.</p> </li> <li> <p> <code>default-vpc</code>: The ID of the default VPC for your account, or <code>none</code>.</p> </li> <li> <p> <code>max-instances</code>: The maximum number of On-Demand Instances that you can run.</p> </li> <li> <p> <code>vpc-max-security-groups-per-interface</code>: The maximum number of security groups that you can assign to a network interface.</p> </li> <li> <p> <code>max-elastic-ips</code>: The maximum number of Elastic IP addresses that you can allocate for use with EC2-Classic. </p> </li> <li> <p> <code>vpc-max-elastic-ips</code>: The maximum number of Elastic IP addresses that you can allocate for use with EC2-VPC.</p> </li> </ul></p>
     fn describe_account_attributes(
         &self,
         input: &DescribeAccountAttributesRequest,
@@ -79716,6 +80212,54 @@ where
                     let _start_document = stack.next();
                     let actual_tag_name = try!(peek_at_name(&mut stack));
                     result = try!(DescribeAddressesResultDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack
+                    ));
+                }
+
+                Ok(result)
+            }))
+        });
+
+        RusotoFuture::new(future)
+    }
+
+    /// <p>Describes the longer ID format settings for all resource types in a specific region. This request is useful for performing a quick audit to determine whether a specific region is fully opted in for longer IDs (17-character IDs).</p> <p>This request only returns information about resource types that support longer IDs.</p> <p>The following resource types support longer IDs: <code>bundle</code> | <code>conversion-task</code> | <code>customer-gateway</code> | <code>dhcp-options</code> | <code>elastic-ip-allocation</code> | <code>elastic-ip-association</code> | <code>export-task</code> | <code>flow-log</code> | <code>image</code> | <code>import-task</code> | <code>instance</code> | <code>internet-gateway</code> | <code>network-acl</code> | <code>network-acl-association</code> | <code>network-interface</code> | <code>network-interface-attachment</code> | <code>prefix-list</code> | <code>reservation</code> | <code>route-table</code> | <code>route-table-association</code> | <code>security-group</code> | <code>snapshot</code> | <code>subnet</code> | <code>subnet-cidr-block-association</code> | <code>volume</code> | <code>vpc</code> | <code>vpc-cidr-block-association</code> | <code>vpc-endpoint</code> | <code>vpc-peering-connection</code> | <code>vpn-connection</code> | <code>vpn-gateway</code>.</p>
+    fn describe_aggregate_id_format(
+        &self,
+        input: &DescribeAggregateIdFormatRequest,
+    ) -> RusotoFuture<DescribeAggregateIdFormatResult, DescribeAggregateIdFormatError> {
+        let mut request = SignedRequest::new("POST", "ec2", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "DescribeAggregateIdFormat");
+        params.put("Version", "2016-11-15");
+        DescribeAggregateIdFormatRequestSerializer::serialize(&mut params, "", &input);
+        request.set_params(params);
+
+        let future = self.inner.sign_and_dispatch(request, |response| {
+            if response.status != StatusCode::Ok {
+                return future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeAggregateIdFormatError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
+            }
+
+            future::Either::A(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = DescribeAggregateIdFormatResult::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = try!(peek_at_name(&mut stack));
+                    result = try!(DescribeAggregateIdFormatResultDeserializer::deserialize(
                         &actual_tag_name,
                         &mut stack
                     ));
@@ -79859,12 +80403,10 @@ where
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(
-                        DescribeClassicLinkInstancesResultDeserializer::deserialize(
-                            &actual_tag_name,
-                            &mut stack
-                        )
-                    );
+                    result = try!(DescribeClassicLinkInstancesResultDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack
+                    ));
                 }
 
                 Ok(result)
@@ -80511,7 +81053,7 @@ where
         RusotoFuture::new(future)
     }
 
-    /// <p>Describes the ID format settings for your resources on a per-region basis, for example, to view which resource types are enabled for longer IDs. This request only returns information about resource types whose ID formats can be modified; it does not return information about other resource types.</p> <p>The following resource types support longer IDs: <code>instance</code> | <code>reservation</code> | <code>snapshot</code> | <code>volume</code>. </p> <p>These settings apply to the IAM user who makes the request; they do not apply to the entire AWS account. By default, an IAM user defaults to the same settings as the root user, unless they explicitly override the settings by running the <a>ModifyIdFormat</a> command. Resources created with longer IDs are visible to all IAM users, regardless of these settings and provided that they have permission to use the relevant <code>Describe</code> command for the resource type.</p>
+    /// <p>Describes the ID format settings for your resources on a per-region basis, for example, to view which resource types are enabled for longer IDs. This request only returns information about resource types whose ID formats can be modified; it does not return information about other resource types.</p> <p>The following resource types support longer IDs: <code>bundle</code> | <code>conversion-task</code> | <code>customer-gateway</code> | <code>dhcp-options</code> | <code>elastic-ip-allocation</code> | <code>elastic-ip-association</code> | <code>export-task</code> | <code>flow-log</code> | <code>image</code> | <code>import-task</code> | <code>instance</code> | <code>internet-gateway</code> | <code>network-acl</code> | <code>network-acl-association</code> | <code>network-interface</code> | <code>network-interface-attachment</code> | <code>prefix-list</code> | <code>reservation</code> | <code>route-table</code> | <code>route-table-association</code> | <code>security-group</code> | <code>snapshot</code> | <code>subnet</code> | <code>subnet-cidr-block-association</code> | <code>volume</code> | <code>vpc</code> | <code>vpc-cidr-block-association</code> | <code>vpc-endpoint</code> | <code>vpc-peering-connection</code> | <code>vpn-connection</code> | <code>vpn-gateway</code>. </p> <p>These settings apply to the IAM user who makes the request; they do not apply to the entire AWS account. By default, an IAM user defaults to the same settings as the root user, unless they explicitly override the settings by running the <a>ModifyIdFormat</a> command. Resources created with longer IDs are visible to all IAM users, regardless of these settings and provided that they have permission to use the relevant <code>Describe</code> command for the resource type.</p>
     fn describe_id_format(
         &self,
         input: &DescribeIdFormatRequest,
@@ -80559,7 +81101,7 @@ where
         RusotoFuture::new(future)
     }
 
-    /// <p>Describes the ID format settings for resources for the specified IAM user, IAM role, or root user. For example, you can view the resource types that are enabled for longer IDs. This request only returns information about resource types whose ID formats can be modified; it does not return information about other resource types. For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/resource-ids.html">Resource IDs</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>. </p> <p>The following resource types support longer IDs: <code>instance</code> | <code>reservation</code> | <code>snapshot</code> | <code>volume</code>. </p> <p>These settings apply to the principal specified in the request. They do not apply to the principal that makes the request.</p>
+    /// <p>Describes the ID format settings for resources for the specified IAM user, IAM role, or root user. For example, you can view the resource types that are enabled for longer IDs. This request only returns information about resource types whose ID formats can be modified; it does not return information about other resource types. For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/resource-ids.html">Resource IDs</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>. </p> <p>The following resource types support longer IDs: <code>bundle</code> | <code>conversion-task</code> | <code>customer-gateway</code> | <code>dhcp-options</code> | <code>elastic-ip-allocation</code> | <code>elastic-ip-association</code> | <code>export-task</code> | <code>flow-log</code> | <code>image</code> | <code>import-task</code> | <code>instance</code> | <code>internet-gateway</code> | <code>network-acl</code> | <code>network-acl-association</code> | <code>network-interface</code> | <code>network-interface-attachment</code> | <code>prefix-list</code> | <code>reservation</code> | <code>route-table</code> | <code>route-table-association</code> | <code>security-group</code> | <code>snapshot</code> | <code>subnet</code> | <code>subnet-cidr-block-association</code> | <code>volume</code> | <code>vpc</code> | <code>vpc-cidr-block-association</code> | <code>vpc-endpoint</code> | <code>vpc-peering-connection</code> | <code>vpn-connection</code> | <code>vpn-gateway</code>. </p> <p>These settings apply to the principal specified in the request. They do not apply to the principal that makes the request.</p>
     fn describe_identity_id_format(
         &self,
         input: &DescribeIdentityIdFormatRequest,
@@ -81583,6 +82125,54 @@ where
         RusotoFuture::new(future)
     }
 
+    /// <p>Describes the ID format settings for the root user and all IAM roles and IAM users that have explicitly specified a longer ID (17-character ID) preference. </p> <p>By default, all IAM roles and IAM users default to the same ID settings as the root user, unless they explicitly override the settings. This request is useful for identifying those IAM users and IAM roles that have overridden the default ID settings.</p> <p>The following resource types support longer IDs: <code>bundle</code> | <code>conversion-task</code> | <code>customer-gateway</code> | <code>dhcp-options</code> | <code>elastic-ip-allocation</code> | <code>elastic-ip-association</code> | <code>export-task</code> | <code>flow-log</code> | <code>image</code> | <code>import-task</code> | <code>instance</code> | <code>internet-gateway</code> | <code>network-acl</code> | <code>network-acl-association</code> | <code>network-interface</code> | <code>network-interface-attachment</code> | <code>prefix-list</code> | <code>reservation</code> | <code>route-table</code> | <code>route-table-association</code> | <code>security-group</code> | <code>snapshot</code> | <code>subnet</code> | <code>subnet-cidr-block-association</code> | <code>volume</code> | <code>vpc</code> | <code>vpc-cidr-block-association</code> | <code>vpc-endpoint</code> | <code>vpc-peering-connection</code> | <code>vpn-connection</code> | <code>vpn-gateway</code>. </p>
+    fn describe_principal_id_format(
+        &self,
+        input: &DescribePrincipalIdFormatRequest,
+    ) -> RusotoFuture<DescribePrincipalIdFormatResult, DescribePrincipalIdFormatError> {
+        let mut request = SignedRequest::new("POST", "ec2", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "DescribePrincipalIdFormat");
+        params.put("Version", "2016-11-15");
+        DescribePrincipalIdFormatRequestSerializer::serialize(&mut params, "", &input);
+        request.set_params(params);
+
+        let future = self.inner.sign_and_dispatch(request, |response| {
+            if response.status != StatusCode::Ok {
+                return future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DescribePrincipalIdFormatError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
+            }
+
+            future::Either::A(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = DescribePrincipalIdFormatResult::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = try!(peek_at_name(&mut stack));
+                    result = try!(DescribePrincipalIdFormatResultDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack
+                    ));
+                }
+
+                Ok(result)
+            }))
+        });
+
+        RusotoFuture::new(future)
+    }
+
     /// <p>Describes one or more regions that are currently available to you.</p> <p>For a list of the regions supported by Amazon EC2, see <a href="http://docs.aws.amazon.com/general/latest/gr/rande.html#ec2_region">Regions and Endpoints</a>.</p>
     fn describe_regions(
         &self,
@@ -82266,12 +82856,10 @@ where
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(
-                        DescribeSpotFleetInstancesResponseDeserializer::deserialize(
-                            &actual_tag_name,
-                            &mut stack
-                        )
-                    );
+                    result = try!(DescribeSpotFleetInstancesResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack
+                    ));
                 }
 
                 Ok(result)
@@ -82415,12 +83003,10 @@ where
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(
-                        DescribeSpotInstanceRequestsResultDeserializer::deserialize(
-                            &actual_tag_name,
-                            &mut stack
-                        )
-                    );
+                    result = try!(DescribeSpotInstanceRequestsResultDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack
+                    ));
                 }
 
                 Ok(result)
@@ -82801,12 +83387,10 @@ where
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(
-                        DescribeVolumesModificationsResultDeserializer::deserialize(
-                            &actual_tag_name,
-                            &mut stack
-                        )
-                    );
+                    result = try!(DescribeVolumesModificationsResultDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack
+                    ));
                 }
 
                 Ok(result)
@@ -84766,7 +85350,7 @@ where
         RusotoFuture::new(future)
     }
 
-    /// <p>Modifies the ID format for the specified resource on a per-region basis. You can specify that resources should receive longer IDs (17-character IDs) when they are created. The following resource types support longer IDs: <code>instance</code> | <code>reservation</code> | <code>snapshot</code> | <code>volume</code>.</p> <p>This setting applies to the IAM user who makes the request; it does not apply to the entire AWS account. By default, an IAM user defaults to the same settings as the root user. If you're using this action as the root user, then these settings apply to the entire account, unless an IAM user explicitly overrides these settings for themselves. For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/resource-ids.html">Resource IDs</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>. </p> <p>Resources created with longer IDs are visible to all IAM roles and users, regardless of these settings and provided that they have permission to use the relevant <code>Describe</code> command for the resource type.</p>
+    /// <p>Modifies the ID format for the specified resource on a per-region basis. You can specify that resources should receive longer IDs (17-character IDs) when they are created.</p> <p>This request can only be used to modify longer ID settings for resource types that are within the opt-in period. Resources currently in their opt-in period include: <code>bundle</code> | <code>conversion-task</code> | <code>customer-gateway</code> | <code>dhcp-options</code> | <code>elastic-ip-allocation</code> | <code>elastic-ip-association</code> | <code>export-task</code> | <code>flow-log</code> | <code>image</code> | <code>import-task</code> | <code>internet-gateway</code> | <code>network-acl</code> | <code>network-acl-association</code> | <code>network-interface</code> | <code>network-interface-attachment</code> | <code>prefix-list</code> | <code>route-table</code> | <code>route-table-association</code> | <code>security-group</code> | <code>subnet</code> | <code>subnet-cidr-block-association</code> | <code>vpc</code> | <code>vpc-cidr-block-association</code> | <code>vpc-endpoint</code> | <code>vpc-peering-connection</code> | <code>vpn-connection</code> | <code>vpn-gateway</code>.</p> <p>This setting applies to the IAM user who makes the request; it does not apply to the entire AWS account. By default, an IAM user defaults to the same settings as the root user. If you're using this action as the root user, then these settings apply to the entire account, unless an IAM user explicitly overrides these settings for themselves. For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/resource-ids.html">Resource IDs</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>. </p> <p>Resources created with longer IDs are visible to all IAM roles and users, regardless of these settings and provided that they have permission to use the relevant <code>Describe</code> command for the resource type.</p>
     fn modify_id_format(
         &self,
         input: &ModifyIdFormatRequest,
@@ -84794,7 +85378,7 @@ where
         RusotoFuture::new(future)
     }
 
-    /// <p>Modifies the ID format of a resource for a specified IAM user, IAM role, or the root user for an account; or all IAM users, IAM roles, and the root user for an account. You can specify that resources should receive longer IDs (17-character IDs) when they are created. </p> <p>The following resource types support longer IDs: <code>instance</code> | <code>reservation</code> | <code>snapshot</code> | <code>volume</code>. For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/resource-ids.html">Resource IDs</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>. </p> <p>This setting applies to the principal specified in the request; it does not apply to the principal that makes the request. </p> <p>Resources created with longer IDs are visible to all IAM roles and users, regardless of these settings and provided that they have permission to use the relevant <code>Describe</code> command for the resource type.</p>
+    /// <p>Modifies the ID format of a resource for a specified IAM user, IAM role, or the root user for an account; or all IAM users, IAM roles, and the root user for an account. You can specify that resources should receive longer IDs (17-character IDs) when they are created. </p> <p>This request can only be used to modify longer ID settings for resource types that are within the opt-in period. Resources currently in their opt-in period include: <code>bundle</code> | <code>conversion-task</code> | <code>customer-gateway</code> | <code>dhcp-options</code> | <code>elastic-ip-allocation</code> | <code>elastic-ip-association</code> | <code>export-task</code> | <code>flow-log</code> | <code>image</code> | <code>import-task</code> | <code>internet-gateway</code> | <code>network-acl</code> | <code>network-acl-association</code> | <code>network-interface</code> | <code>network-interface-attachment</code> | <code>prefix-list</code> | <code>route-table</code> | <code>route-table-association</code> | <code>security-group</code> | <code>subnet</code> | <code>subnet-cidr-block-association</code> | <code>vpc</code> | <code>vpc-cidr-block-association</code> | <code>vpc-endpoint</code> | <code>vpc-peering-connection</code> | <code>vpn-connection</code> | <code>vpn-gateway</code>. </p> <p>For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/resource-ids.html">Resource IDs</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>. </p> <p>This setting applies to the principal specified in the request; it does not apply to the principal that makes the request. </p> <p>Resources created with longer IDs are visible to all IAM roles and users, regardless of these settings and provided that they have permission to use the relevant <code>Describe</code> command for the resource type.</p>
     fn modify_identity_id_format(
         &self,
         input: &ModifyIdentityIdFormatRequest,
@@ -84929,7 +85513,7 @@ where
         RusotoFuture::new(future)
     }
 
-    /// <p>Set the instance affinity value for a specific stopped instance and modify the instance tenancy setting.</p> <p>Instance affinity is disabled by default. When instance affinity is <code>host</code> and it is not associated with a specific Dedicated Host, the next time it is launched it will automatically be associated with the host it lands on. This relationship will persist if the instance is stopped/started, or rebooted.</p> <p>You can modify the host ID associated with a stopped instance. If a stopped instance has a new host ID association, the instance will target that host when restarted.</p> <p>You can modify the tenancy of a stopped instance with a tenancy of <code>host</code> or <code>dedicated</code>.</p> <p>Affinity, hostID, and tenancy are not required parameters, but at least one of them must be specified in the request. Affinity and tenancy can be modified in the same request, but tenancy can only be modified on instances that are stopped.</p>
+    /// <p>Modifies the placement attributes for a specified instance. You can do the following:</p> <ul> <li> <p>Modify the affinity between an instance and a <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/dedicated-hosts-overview.html">Dedicated Host</a>. When affinity is set to <code>host</code> and the instance is not associated with a specific Dedicated Host, the next time the instance is launched, it is automatically associated with the host on which it lands. If the instance is restarted or rebooted, this relationship persists.</p> </li> <li> <p>Change the Dedicated Host with which an instance is associated.</p> </li> <li> <p>Change the instance tenancy of an instance from <code>host</code> to <code>dedicated</code>, or from <code>dedicated</code> to <code>host</code>.</p> </li> <li> <p>Move an instance to or from a <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/placement-groups.html">placement group</a>.</p> </li> </ul> <p>At least one attribute for affinity, host ID, tenancy, or placement group name must be specified in the request. Affinity and tenancy can be modified in the same request.</p> <p>To modify the host ID, tenancy, or placement group for an instance, the instance must be in the <code>stopped</code> state.</p>
     fn modify_instance_placement(
         &self,
         input: &ModifyInstancePlacementRequest,
@@ -85467,7 +86051,7 @@ where
         RusotoFuture::new(future)
     }
 
-    /// <p>Modifies the permissions for your VPC endpoint service. You can add or remove permissions for service consumers (IAM users, IAM roles, and AWS accounts) to discover your endpoint service.</p>
+    /// <p>Modifies the permissions for your <a href="http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/endpoint-service.html">VPC endpoint service</a>. You can add or remove permissions for service consumers (IAM users, IAM roles, and AWS accounts) to connect to your endpoint service.</p>
     fn modify_vpc_endpoint_service_permissions(
         &self,
         input: &ModifyVpcEndpointServicePermissionsRequest,
@@ -85520,7 +86104,7 @@ where
         RusotoFuture::new(future)
     }
 
-    /// <p>Modifies the VPC peering connection options on one side of a VPC peering connection. You can do the following:</p> <ul> <li> <p>Enable/disable communication over the peering connection between an EC2-Classic instance that's linked to your VPC (using ClassicLink) and instances in the peer VPC.</p> </li> <li> <p>Enable/disable communication over the peering connection between instances in your VPC and an EC2-Classic instance that's linked to the peer VPC.</p> </li> <li> <p>Enable/disable a local VPC to resolve public DNS hostnames to private IP addresses when queried from instances in the peer VPC.</p> </li> </ul> <p>If the peered VPCs are in different accounts, each owner must initiate a separate request to modify the peering connection options, depending on whether their VPC was the requester or accepter for the VPC peering connection. If the peered VPCs are in the same account, you can modify the requester and accepter options in the same request. To confirm which VPC is the accepter and requester for a VPC peering connection, use the <a>DescribeVpcPeeringConnections</a> command.</p>
+    /// <p>Modifies the VPC peering connection options on one side of a VPC peering connection. You can do the following:</p> <ul> <li> <p>Enable/disable communication over the peering connection between an EC2-Classic instance that's linked to your VPC (using ClassicLink) and instances in the peer VPC.</p> </li> <li> <p>Enable/disable communication over the peering connection between instances in your VPC and an EC2-Classic instance that's linked to the peer VPC.</p> </li> <li> <p>Enable/disable the ability to resolve public DNS hostnames to private IP addresses when queried from instances in the peer VPC.</p> </li> </ul> <p>If the peered VPCs are in different accounts, each owner must initiate a separate request to modify the peering connection options, depending on whether their VPC was the requester or accepter for the VPC peering connection. If the peered VPCs are in the same account, you can modify the requester and accepter options in the same request. To confirm which VPC is the accepter and requester for a VPC peering connection, use the <a>DescribeVpcPeeringConnections</a> command.</p>
     fn modify_vpc_peering_connection_options(
         &self,
         input: &ModifyVpcPeeringConnectionOptionsRequest,
@@ -85973,12 +86557,10 @@ where
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(
-                        RejectVpcEndpointConnectionsResultDeserializer::deserialize(
-                            &actual_tag_name,
-                            &mut stack
-                        )
-                    );
+                    result = try!(RejectVpcEndpointConnectionsResultDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack
+                    ));
                 }
 
                 Ok(result)
@@ -86200,12 +86782,10 @@ where
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(
-                        ReplaceNetworkAclAssociationResultDeserializer::deserialize(
-                            &actual_tag_name,
-                            &mut stack
-                        )
-                    );
+                    result = try!(ReplaceNetworkAclAssociationResultDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack
+                    ));
                 }
 
                 Ok(result)
@@ -86303,12 +86883,10 @@ where
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = try!(peek_at_name(&mut stack));
-                    result = try!(
-                        ReplaceRouteTableAssociationResultDeserializer::deserialize(
-                            &actual_tag_name,
-                            &mut stack
-                        )
-                    );
+                    result = try!(ReplaceRouteTableAssociationResultDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack
+                    ));
                 }
 
                 Ok(result)

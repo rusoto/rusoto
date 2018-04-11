@@ -1187,11 +1187,9 @@ impl CreateSubnetGroupError {
                             error_message,
                         ))
                     }
-                    "SubnetQuotaExceededFault" => {
-                        CreateSubnetGroupError::SubnetQuotaExceededFault(String::from(
-                            error_message,
-                        ))
-                    }
+                    "SubnetQuotaExceededFault" => CreateSubnetGroupError::SubnetQuotaExceededFault(
+                        String::from(error_message),
+                    ),
                     "ValidationException" => {
                         CreateSubnetGroupError::Validation(error_message.to_string())
                     }
@@ -1280,11 +1278,9 @@ impl DecreaseReplicationFactorError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "ClusterNotFoundFault" => {
-                        DecreaseReplicationFactorError::ClusterNotFoundFault(String::from(
-                            error_message,
-                        ))
-                    }
+                    "ClusterNotFoundFault" => DecreaseReplicationFactorError::ClusterNotFoundFault(
+                        String::from(error_message),
+                    ),
                     "InvalidClusterStateFault" => {
                         DecreaseReplicationFactorError::InvalidClusterStateFault(String::from(
                             error_message,
@@ -1591,11 +1587,9 @@ impl DeleteSubnetGroupError {
                     "SubnetGroupInUseFault" => {
                         DeleteSubnetGroupError::SubnetGroupInUseFault(String::from(error_message))
                     }
-                    "SubnetGroupNotFoundFault" => {
-                        DeleteSubnetGroupError::SubnetGroupNotFoundFault(String::from(
-                            error_message,
-                        ))
-                    }
+                    "SubnetGroupNotFoundFault" => DeleteSubnetGroupError::SubnetGroupNotFoundFault(
+                        String::from(error_message),
+                    ),
                     "ValidationException" => {
                         DeleteSubnetGroupError::Validation(error_message.to_string())
                     }
@@ -2232,11 +2226,9 @@ impl IncreaseReplicationFactorError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "ClusterNotFoundFault" => {
-                        IncreaseReplicationFactorError::ClusterNotFoundFault(String::from(
-                            error_message,
-                        ))
-                    }
+                    "ClusterNotFoundFault" => IncreaseReplicationFactorError::ClusterNotFoundFault(
+                        String::from(error_message),
+                    ),
                     "InsufficientClusterCapacityFault" => {
                         IncreaseReplicationFactorError::InsufficientClusterCapacityFault(
                             String::from(error_message),
@@ -2997,19 +2989,15 @@ impl UpdateSubnetGroupError {
                     "InvalidSubnet" => {
                         UpdateSubnetGroupError::InvalidSubnet(String::from(error_message))
                     }
-                    "SubnetGroupNotFoundFault" => {
-                        UpdateSubnetGroupError::SubnetGroupNotFoundFault(String::from(
-                            error_message,
-                        ))
-                    }
+                    "SubnetGroupNotFoundFault" => UpdateSubnetGroupError::SubnetGroupNotFoundFault(
+                        String::from(error_message),
+                    ),
                     "SubnetInUse" => {
                         UpdateSubnetGroupError::SubnetInUse(String::from(error_message))
                     }
-                    "SubnetQuotaExceededFault" => {
-                        UpdateSubnetGroupError::SubnetQuotaExceededFault(String::from(
-                            error_message,
-                        ))
-                    }
+                    "SubnetQuotaExceededFault" => UpdateSubnetGroupError::SubnetQuotaExceededFault(
+                        String::from(error_message),
+                    ),
                     "ValidationException" => {
                         UpdateSubnetGroupError::Validation(error_message.to_string())
                     }

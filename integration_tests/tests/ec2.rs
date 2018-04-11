@@ -28,19 +28,21 @@ fn main() {
 
 // Issue 383
 #[test]
+#[ignore]
 #[should_panic(expected="<Message>Request would have succeeded, but DryRun flag is set.</Message>")]
 fn dry_run() {
     let ec2 = Ec2Client::simple(Region::UsEast1);
     let req = CreateSnapshotRequest {
         volume_id: "v-00000001".into(),
-        description: None,
         dry_run: Some(true),
+        ..Default::default()
     };
     let _ = ec2.create_snapshot(&req).sync().unwrap();
 }
 
 // Issue 387
 #[test]
+#[ignore]
 #[should_panic(expected="<Code>InvalidID</Code>")]
 fn query_serialization_name() {
     let ec2 = Ec2Client::simple(Region::UsEast1);

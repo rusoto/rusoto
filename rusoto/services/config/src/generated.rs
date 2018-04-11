@@ -30,6 +30,223 @@ use rusoto_core::signature::SignedRequest;
 use serde_json::Value as SerdeJsonValue;
 use serde_json::from_str;
 use hyper::StatusCode;
+/// <p>A collection of accounts and regions.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+pub struct AccountAggregationSource {
+    /// <p>The 12-digit account ID of the account being aggregated. </p>
+    #[serde(rename = "AccountIds")]
+    pub account_ids: Vec<String>,
+    /// <p>If true, aggreagate existing AWS Config regions and future regions.</p>
+    #[serde(rename = "AllAwsRegions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub all_aws_regions: Option<bool>,
+    /// <p>The source regions being aggregated.</p>
+    #[serde(rename = "AwsRegions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub aws_regions: Option<Vec<String>>,
+}
+
+/// <p>Indicates whether an AWS Config rule is compliant based on account ID, region, compliance, and rule name.</p> <p>A rule is compliant if all of the resources that the rule evaluated comply with it. It is noncompliant if any of these resources do not comply.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct AggregateComplianceByConfigRule {
+    /// <p>The 12-digit account ID of the source account.</p>
+    #[serde(rename = "AccountId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub account_id: Option<String>,
+    /// <p>The source region from where the data is aggregated.</p>
+    #[serde(rename = "AwsRegion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub aws_region: Option<String>,
+    /// <p>Indicates whether an AWS resource or AWS Config rule is compliant and provides the number of contributors that affect the compliance.</p>
+    #[serde(rename = "Compliance")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub compliance: Option<Compliance>,
+    /// <p>The name of the AWS Config rule.</p>
+    #[serde(rename = "ConfigRuleName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub config_rule_name: Option<String>,
+}
+
+/// <p>Returns the number of compliant and noncompliant rules for one or more accounts and regions in an aggregator.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct AggregateComplianceCount {
+    /// <p>The number of compliant and noncompliant AWS Config rules.</p>
+    #[serde(rename = "ComplianceSummary")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub compliance_summary: Option<ComplianceSummary>,
+    /// <p>The 12-digit account ID or region based on the GroupByKey value.</p>
+    #[serde(rename = "GroupName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub group_name: Option<String>,
+}
+
+/// <p>The details of an AWS Config evaluation for an account ID and region in an aggregator. Provides the AWS resource that was evaluated, the compliance of the resource, related time stamps, and supplementary information. </p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct AggregateEvaluationResult {
+    /// <p>The 12-digit account ID of the source account.</p>
+    #[serde(rename = "AccountId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub account_id: Option<String>,
+    /// <p>Supplementary information about how the agrregate evaluation determined the compliance.</p>
+    #[serde(rename = "Annotation")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub annotation: Option<String>,
+    /// <p>The source region from where the data is aggregated.</p>
+    #[serde(rename = "AwsRegion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub aws_region: Option<String>,
+    /// <p>The resource compliance status.</p> <p>For the <code>AggregationEvaluationResult</code> data type, AWS Config supports only the <code>COMPLIANT</code> and <code>NON_COMPLIANT</code>. AWS Config does not support the <code>NOT_APPLICABLE</code> and <code>INSUFFICIENT_DATA</code> value.</p>
+    #[serde(rename = "ComplianceType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub compliance_type: Option<String>,
+    /// <p>The time when the AWS Config rule evaluated the AWS resource.</p>
+    #[serde(rename = "ConfigRuleInvokedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub config_rule_invoked_time: Option<f64>,
+    /// <p>Uniquely identifies the evaluation result.</p>
+    #[serde(rename = "EvaluationResultIdentifier")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub evaluation_result_identifier: Option<EvaluationResultIdentifier>,
+    /// <p>The time when AWS Config recorded the aggregate evaluation result.</p>
+    #[serde(rename = "ResultRecordedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub result_recorded_time: Option<f64>,
+}
+
+/// <p>The current sync status between the source and the aggregator account.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct AggregatedSourceStatus {
+    /// <p>The region authorized to collect aggregated data.</p>
+    #[serde(rename = "AwsRegion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub aws_region: Option<String>,
+    /// <p>The error code that AWS Config returned when the source account aggregation last failed.</p>
+    #[serde(rename = "LastErrorCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_error_code: Option<String>,
+    /// <p>The message indicating that the source account aggregation failed due to an error.</p>
+    #[serde(rename = "LastErrorMessage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_error_message: Option<String>,
+    /// <p><p>Filters the last updated status type.</p> <ul> <li> <p>Valid value FAILED indicates errors while moving data.</p> </li> <li> <p>Valid value SUCCEEDED indicates the data was successfully moved.</p> </li> <li> <p>Valid value OUTDATED indicates the data is not the most recent.</p> </li> </ul></p>
+    #[serde(rename = "LastUpdateStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_update_status: Option<String>,
+    /// <p>The time of the last update.</p>
+    #[serde(rename = "LastUpdateTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_update_time: Option<f64>,
+    /// <p>The source account ID or an organization.</p>
+    #[serde(rename = "SourceId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source_id: Option<String>,
+    /// <p>The source account or an organization.</p>
+    #[serde(rename = "SourceType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source_type: Option<String>,
+}
+
+/// <p>An object that represents the authorizations granted to aggregator accounts and regions.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct AggregationAuthorization {
+    /// <p>The Amazon Resource Name (ARN) of the aggregation object.</p>
+    #[serde(rename = "AggregationAuthorizationArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub aggregation_authorization_arn: Option<String>,
+    /// <p>The 12-digit account ID of the account authorized to aggregate data.</p>
+    #[serde(rename = "AuthorizedAccountId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub authorized_account_id: Option<String>,
+    /// <p>The region authorized to collect aggregated data.</p>
+    #[serde(rename = "AuthorizedAwsRegion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub authorized_aws_region: Option<String>,
+    /// <p>The time stamp when the aggregation authorization was created.</p>
+    #[serde(rename = "CreationTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_time: Option<f64>,
+}
+
+/// <p>The detailed configuration of a specified resource.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct BaseConfigurationItem {
+    /// <p>The 12 digit AWS account ID associated with the resource.</p>
+    #[serde(rename = "accountId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub account_id: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) of the resource.</p>
+    #[serde(rename = "arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
+    /// <p>The Availability Zone associated with the resource.</p>
+    #[serde(rename = "availabilityZone")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub availability_zone: Option<String>,
+    /// <p>The region where the resource resides.</p>
+    #[serde(rename = "awsRegion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub aws_region: Option<String>,
+    /// <p>The description of the resource configuration.</p>
+    #[serde(rename = "configuration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub configuration: Option<String>,
+    /// <p>The time when the configuration recording was initiated.</p>
+    #[serde(rename = "configurationItemCaptureTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub configuration_item_capture_time: Option<f64>,
+    /// <p>The configuration item status.</p>
+    #[serde(rename = "configurationItemStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub configuration_item_status: Option<String>,
+    /// <p>An identifier that indicates the ordering of the configuration items of a resource.</p>
+    #[serde(rename = "configurationStateId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub configuration_state_id: Option<String>,
+    /// <p>The time stamp when the resource was created.</p>
+    #[serde(rename = "resourceCreationTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_creation_time: Option<f64>,
+    /// <p>The ID of the resource (for example., sg-xxxxxx).</p>
+    #[serde(rename = "resourceId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_id: Option<String>,
+    /// <p>The custom name of the resource, if available.</p>
+    #[serde(rename = "resourceName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_name: Option<String>,
+    /// <p>The type of AWS resource.</p>
+    #[serde(rename = "resourceType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_type: Option<String>,
+    /// <p>Configuration attributes that AWS Config returns for certain resource types to supplement the information returned for the configuration parameter.</p>
+    #[serde(rename = "supplementaryConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub supplementary_configuration: Option<::std::collections::HashMap<String, String>>,
+    /// <p>The version number of the resource configuration.</p>
+    #[serde(rename = "version")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub version: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct BatchGetResourceConfigRequest {
+    /// <p>A list of resource keys to be processed with the current request. Each element in the list consists of the resource type and resource ID.</p>
+    #[serde(rename = "resourceKeys")]
+    pub resource_keys: Vec<ResourceKey>,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct BatchGetResourceConfigResponse {
+    /// <p>A list that contains the current configuration of one or more resources.</p>
+    #[serde(rename = "baseConfigurationItems")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub base_configuration_items: Option<Vec<BaseConfigurationItem>>,
+    /// <p>A list of resource keys that were not processed with the current response. The unprocessesResourceKeys value is in the same form as ResourceKeys, so the value can be directly provided to a subsequent BatchGetResourceConfig operation. If there are no unprocessed resource keys, the response contains an empty unprocessedResourceKeys list. </p>
+    #[serde(rename = "unprocessedResourceKeys")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub unprocessed_resource_keys: Option<Vec<ResourceKey>>,
+}
+
 /// <p>Indicates whether an AWS resource or AWS Config rule is compliant and provides the number of contributors that affect the compliance.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct Compliance {
@@ -37,13 +254,13 @@ pub struct Compliance {
     #[serde(rename = "ComplianceContributorCount")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub compliance_contributor_count: Option<ComplianceContributorCount>,
-    /// <p>Indicates whether an AWS resource or AWS Config rule is compliant.</p> <p>A resource is compliant if it complies with all of the AWS Config rules that evaluate it, and it is noncompliant if it does not comply with one or more of these rules.</p> <p>A rule is compliant if all of the resources that the rule evaluates comply with it, and it is noncompliant if any of these resources do not comply.</p> <p>AWS Config returns the <code>INSUFFICIENT_DATA</code> value when no evaluation results are available for the AWS resource or Config rule.</p> <p>For the <code>Compliance</code> data type, AWS Config supports only <code>COMPLIANT</code>, <code>NON_COMPLIANT</code>, and <code>INSUFFICIENT_DATA</code> values. AWS Config does not support the <code>NOT_APPLICABLE</code> value for the <code>Compliance</code> data type.</p>
+    /// <p>Indicates whether an AWS resource or AWS Config rule is compliant.</p> <p>A resource is compliant if it complies with all of the AWS Config rules that evaluate it. A resource is noncompliant if it does not comply with one or more of these rules.</p> <p>A rule is compliant if all of the resources that the rule evaluates comply with it. A rule is noncompliant if any of these resources do not comply.</p> <p>AWS Config returns the <code>INSUFFICIENT_DATA</code> value when no evaluation results are available for the AWS resource or AWS Config rule.</p> <p>For the <code>Compliance</code> data type, AWS Config supports only <code>COMPLIANT</code>, <code>NON_COMPLIANT</code>, and <code>INSUFFICIENT_DATA</code> values. AWS Config does not support the <code>NOT_APPLICABLE</code> value for the <code>Compliance</code> data type.</p>
     #[serde(rename = "ComplianceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub compliance_type: Option<String>,
 }
 
-/// <p>Indicates whether an AWS Config rule is compliant. A rule is compliant if all of the resources that the rule evaluated comply with it, and it is noncompliant if any of these resources do not comply.</p>
+/// <p>Indicates whether an AWS Config rule is compliant. A rule is compliant if all of the resources that the rule evaluated comply with it. A rule is noncompliant if any of these resources do not comply.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct ComplianceByConfigRule {
     /// <p>Indicates whether the AWS Config rule is compliant.</p>
@@ -56,7 +273,7 @@ pub struct ComplianceByConfigRule {
     pub config_rule_name: Option<String>,
 }
 
-/// <p>Indicates whether an AWS resource that is evaluated according to one or more AWS Config rules is compliant. A resource is compliant if it complies with all of the rules that evaluate it, and it is noncompliant if it does not comply with one or more of these rules.</p>
+/// <p>Indicates whether an AWS resource that is evaluated according to one or more AWS Config rules is compliant. A resource is compliant if it complies with all of the rules that evaluate it. A resource is noncompliant if it does not comply with one or more of these rules.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct ComplianceByResource {
     /// <p>Indicates whether the AWS resource complies with all of the AWS Config rules that evaluated it.</p>
@@ -103,10 +320,10 @@ pub struct ComplianceSummary {
     pub non_compliant_resource_count: Option<ComplianceContributorCount>,
 }
 
-/// <p>The number of AWS resources of a specific type that are compliant or noncompliant, up to a maximum of 100 for each compliance.</p>
+/// <p>The number of AWS resources of a specific type that are compliant or noncompliant, up to a maximum of 100 for each.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct ComplianceSummaryByResourceType {
-    /// <p>The number of AWS resources that are compliant or noncompliant, up to a maximum of 100 for each compliance.</p>
+    /// <p>The number of AWS resources that are compliant or noncompliant, up to a maximum of 100 for each.</p>
     #[serde(rename = "ComplianceSummary")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub compliance_summary: Option<ComplianceSummary>,
@@ -160,7 +377,7 @@ pub struct ConfigRule {
     #[serde(rename = "ConfigRuleName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub config_rule_name: Option<String>,
-    /// <p>Indicates whether the AWS Config rule is active or is currently being deleted by AWS Config. It can also indicate the evaluation status for the Config rule.</p> <p>AWS Config sets the state of the rule to <code>EVALUATING</code> temporarily after you use the <code>StartConfigRulesEvaluation</code> request to evaluate your resources against the Config rule.</p> <p>AWS Config sets the state of the rule to <code>DELETING_RESULTS</code> temporarily after you use the <code>DeleteEvaluationResults</code> request to delete the current evaluation results for the Config rule.</p> <p>AWS Config sets the state of a rule to <code>DELETING</code> temporarily after you use the <code>DeleteConfigRule</code> request to delete the rule. After AWS Config deletes the rule, the rule and all of its evaluations are erased and are no longer available.</p>
+    /// <p>Indicates whether the AWS Config rule is active or is currently being deleted by AWS Config. It can also indicate the evaluation status for the AWS Config rule.</p> <p>AWS Config sets the state of the rule to <code>EVALUATING</code> temporarily after you use the <code>StartConfigRulesEvaluation</code> request to evaluate your resources against the AWS Config rule.</p> <p>AWS Config sets the state of the rule to <code>DELETING_RESULTS</code> temporarily after you use the <code>DeleteEvaluationResults</code> request to delete the current evaluation results for the AWS Config rule.</p> <p>AWS Config temporarily sets the state of a rule to <code>DELETING</code> after you use the <code>DeleteConfigRule</code> request to delete the rule. After AWS Config deletes the rule, the rule and all of its evaluations are erased and are no longer available.</p>
     #[serde(rename = "ConfigRuleState")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub config_rule_state: Option<String>,
@@ -168,7 +385,7 @@ pub struct ConfigRule {
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p>A string in JSON format that is passed to the AWS Config rule Lambda function.</p>
+    /// <p>A string, in JSON format, that is passed to the AWS Config rule Lambda function.</p>
     #[serde(rename = "InputParameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub input_parameters: Option<String>,
@@ -185,7 +402,41 @@ pub struct ConfigRule {
     pub source: Source,
 }
 
-/// <p>Status information for your AWS managed Config rules. The status includes information such as the last time the rule ran, the last time it failed, and the related error for the last failure.</p> <p>This action does not return status information about custom Config rules.</p>
+/// <p>Filters the compliance results based on account ID, region, compliance type, and rule name.</p>
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct ConfigRuleComplianceFilters {
+    /// <p>The 12-digit account ID of the source account. </p>
+    #[serde(rename = "AccountId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub account_id: Option<String>,
+    /// <p>The source region where the data is aggregated. </p>
+    #[serde(rename = "AwsRegion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub aws_region: Option<String>,
+    /// <p>The rule compliance status.</p> <p>For the <code>ConfigRuleComplianceFilters</code> data type, AWS Config supports only <code>COMPLIANT</code> and <code>NON_COMPLIANT</code>. AWS Config does not support the <code>NOT_APPLICABLE</code> and the <code>INSUFFICIENT_DATA</code> values.</p>
+    #[serde(rename = "ComplianceType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub compliance_type: Option<String>,
+    /// <p>The name of the AWS Config rule.</p>
+    #[serde(rename = "ConfigRuleName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub config_rule_name: Option<String>,
+}
+
+/// <p>Filters the results based on the account IDs and regions.</p>
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct ConfigRuleComplianceSummaryFilters {
+    /// <p>The 12-digit account ID of the source account.</p>
+    #[serde(rename = "AccountId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub account_id: Option<String>,
+    /// <p>The source region where the data is aggregated.</p>
+    #[serde(rename = "AwsRegion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub aws_region: Option<String>,
+}
+
+/// <p>Status information for your AWS managed Config rules. The status includes information such as the last time the rule ran, the last time it failed, and the related error for the last failure.</p> <p>This action does not return status information about custom AWS Config rules.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct ConfigRuleEvaluationStatus {
     /// <p>The Amazon Resource Name (ARN) of the AWS Config rule.</p>
@@ -234,7 +485,7 @@ pub struct ConfigRuleEvaluationStatus {
     pub last_successful_invocation_time: Option<f64>,
 }
 
-/// <p>Provides options for how often AWS Config delivers configuration snapshots to the Amazon S3 bucket in your delivery channel.</p> <note> <p>If you want to create a rule that triggers evaluations for your resources when AWS Config delivers the configuration snapshot, see the following:</p> </note> <p>The frequency for a rule that triggers evaluations for your resources when AWS Config delivers the configuration snapshot is set by one of two values, depending on which is less frequent:</p> <ul> <li> <p>The value for the <code>deliveryFrequency</code> parameter within the delivery channel configuration, which sets how often AWS Config delivers configuration snapshots. This value also sets how often AWS Config invokes evaluations for Config rules.</p> </li> <li> <p>The value for the <code>MaximumExecutionFrequency</code> parameter, which sets the maximum frequency with which AWS Config invokes evaluations for the rule. For more information, see <a>ConfigRule</a>.</p> </li> </ul> <p>If the <code>deliveryFrequency</code> value is less frequent than the <code>MaximumExecutionFrequency</code> value for a rule, AWS Config invokes the rule only as often as the <code>deliveryFrequency</code> value.</p> <ol> <li> <p>For example, you want your rule to run evaluations when AWS Config delivers the configuration snapshot.</p> </li> <li> <p>You specify the <code>MaximumExecutionFrequency</code> value for <code>Six_Hours</code>. </p> </li> <li> <p>You then specify the delivery channel <code>deliveryFrequency</code> value for <code>TwentyFour_Hours</code>.</p> </li> <li> <p>Because the value for <code>deliveryFrequency</code> is less frequent than <code>MaximumExecutionFrequency</code>, AWS Config invokes evaluations for the rule every 24 hours. </p> </li> </ol> <p>You should set the <code>MaximumExecutionFrequency</code> value to be at least as frequent as the <code>deliveryFrequency</code> value. You can view the <code>deliveryFrequency</code> value by using the <code>DescribeDeliveryChannnels</code> action.</p> <p>To update the <code>deliveryFrequency</code> with which AWS Config delivers your configuration snapshots, use the <code>PutDeliveryChannel</code> action.</p>
+/// <p>Provides options for how often AWS Config delivers configuration snapshots to the Amazon S3 bucket in your delivery channel.</p> <note> <p>If you want to create a rule that triggers evaluations for your resources when AWS Config delivers the configuration snapshot, see the following:</p> </note> <p>The frequency for a rule that triggers evaluations for your resources when AWS Config delivers the configuration snapshot is set by one of two values, depending on which is less frequent:</p> <ul> <li> <p>The value for the <code>deliveryFrequency</code> parameter within the delivery channel configuration, which sets how often AWS Config delivers configuration snapshots. This value also sets how often AWS Config invokes evaluations for AWS Config rules.</p> </li> <li> <p>The value for the <code>MaximumExecutionFrequency</code> parameter, which sets the maximum frequency with which AWS Config invokes evaluations for the rule. For more information, see <a>ConfigRule</a>.</p> </li> </ul> <p>If the <code>deliveryFrequency</code> value is less frequent than the <code>MaximumExecutionFrequency</code> value for a rule, AWS Config invokes the rule only as often as the <code>deliveryFrequency</code> value.</p> <ol> <li> <p>For example, you want your rule to run evaluations when AWS Config delivers the configuration snapshot.</p> </li> <li> <p>You specify the <code>MaximumExecutionFrequency</code> value for <code>Six_Hours</code>. </p> </li> <li> <p>You then specify the delivery channel <code>deliveryFrequency</code> value for <code>TwentyFour_Hours</code>.</p> </li> <li> <p>Because the value for <code>deliveryFrequency</code> is less frequent than <code>MaximumExecutionFrequency</code>, AWS Config invokes evaluations for the rule every 24 hours. </p> </li> </ol> <p>You should set the <code>MaximumExecutionFrequency</code> value to be at least as frequent as the <code>deliveryFrequency</code> value. You can view the <code>deliveryFrequency</code> value by using the <code>DescribeDeliveryChannnels</code> action.</p> <p>To update the <code>deliveryFrequency</code> with which AWS Config delivers your configuration snapshots, use the <code>PutDeliveryChannel</code> action.</p>
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct ConfigSnapshotDeliveryProperties {
     /// <p>The frequency with which AWS Config delivers configuration snapshots.</p>
@@ -264,10 +515,39 @@ pub struct ConfigStreamDeliveryInfo {
     pub last_status_change_time: Option<f64>,
 }
 
+/// <p>The details about the configuration aggregator, including information about source accounts, regions, and metadata of the aggregator. </p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct ConfigurationAggregator {
+    /// <p>Provides a list of source accounts and regions to be aggregated.</p>
+    #[serde(rename = "AccountAggregationSources")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub account_aggregation_sources: Option<Vec<AccountAggregationSource>>,
+    /// <p>The Amazon Resource Name (ARN) of the aggregator.</p>
+    #[serde(rename = "ConfigurationAggregatorArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub configuration_aggregator_arn: Option<String>,
+    /// <p>The name of the aggregator.</p>
+    #[serde(rename = "ConfigurationAggregatorName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub configuration_aggregator_name: Option<String>,
+    /// <p>The time stamp when the configuration aggregator was created.</p>
+    #[serde(rename = "CreationTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_time: Option<f64>,
+    /// <p>The time of the last update.</p>
+    #[serde(rename = "LastUpdatedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_updated_time: Option<f64>,
+    /// <p>Provides an organization and list of regions to be aggregated.</p>
+    #[serde(rename = "OrganizationAggregationSource")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub organization_aggregation_source: Option<OrganizationAggregationSource>,
+}
+
 /// <p>A list that contains detailed configurations of a specified resource.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct ConfigurationItem {
-    /// <p>The 12 digit AWS account ID associated with the resource.</p>
+    /// <p>The 12-digit AWS account ID associated with the resource.</p>
     #[serde(rename = "accountId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub account_id: Option<String>,
@@ -303,7 +583,7 @@ pub struct ConfigurationItem {
     #[serde(rename = "configurationStateId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub configuration_state_id: Option<String>,
-    /// <p>A list of CloudTrail event IDs.</p> <p>A populated field indicates that the current configuration was initiated by the events recorded in the CloudTrail log. For more information about CloudTrail, see <a href="http://docs.aws.amazon.com/awscloudtrail/latest/userguide/what_is_cloud_trail_top_level.html">What is AWS CloudTrail?</a>.</p> <p>An empty field indicates that the current configuration was not initiated by any event.</p>
+    /// <p>A list of CloudTrail event IDs.</p> <p>A populated field indicates that the current configuration was initiated by the events recorded in the CloudTrail log. For more information about CloudTrail, see <a href="http://docs.aws.amazon.com/awscloudtrail/latest/userguide/what_is_cloud_trail_top_level.html">What Is AWS CloudTrail</a>.</p> <p>An empty field indicates that the current configuration was not initiated by any event.</p>
     #[serde(rename = "relatedEvents")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub related_events: Option<Vec<String>>,
@@ -315,7 +595,7 @@ pub struct ConfigurationItem {
     #[serde(rename = "resourceCreationTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_creation_time: Option<f64>,
-    /// <p>The ID of the resource (for example., <code>sg-xxxxxx</code>).</p>
+    /// <p>The ID of the resource (for example, <code>sg-xxxxxx</code>).</p>
     #[serde(rename = "resourceId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_id: Option<String>,
@@ -348,7 +628,7 @@ pub struct ConfigurationRecorder {
     #[serde(rename = "name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p>Specifies the types of AWS resource for which AWS Config records configuration changes.</p>
+    /// <p>Specifies the types of AWS resources for which AWS Config records configuration changes.</p>
     #[serde(rename = "recordingGroup")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub recording_group: Option<RecordingGroup>,
@@ -389,10 +669,20 @@ pub struct ConfigurationRecorderStatus {
     #[serde(rename = "name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p>Specifies whether the recorder is currently recording or not.</p>
+    /// <p>Specifies whether or not the recorder is currently recording.</p>
     #[serde(rename = "recording")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub recording: Option<bool>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct DeleteAggregationAuthorizationRequest {
+    /// <p>The 12-digit account ID of the account authorized to aggregate data.</p>
+    #[serde(rename = "AuthorizedAccountId")]
+    pub authorized_account_id: String,
+    /// <p>The region authorized to collect aggregated data.</p>
+    #[serde(rename = "AuthorizedAwsRegion")]
+    pub authorized_aws_region: String,
 }
 
 /// <p><p/></p>
@@ -403,6 +693,13 @@ pub struct DeleteConfigRuleRequest {
     pub config_rule_name: String,
 }
 
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct DeleteConfigurationAggregatorRequest {
+    /// <p>The name of the configuration aggregator.</p>
+    #[serde(rename = "ConfigurationAggregatorName")]
+    pub configuration_aggregator_name: String,
+}
+
 /// <p>The request object for the <code>DeleteConfigurationRecorder</code> action.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteConfigurationRecorderRequest {
@@ -411,7 +708,7 @@ pub struct DeleteConfigurationRecorderRequest {
     pub configuration_recorder_name: String,
 }
 
-/// <p>The input for the <a>DeleteDeliveryChannel</a> action. The action accepts the following data in JSON format. </p>
+/// <p>The input for the <a>DeleteDeliveryChannel</a> action. The action accepts the following data, in JSON format. </p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteDeliveryChannelRequest {
     /// <p>The name of the delivery channel to delete.</p>
@@ -422,14 +719,24 @@ pub struct DeleteDeliveryChannelRequest {
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteEvaluationResultsRequest {
-    /// <p>The name of the Config rule for which you want to delete the evaluation results.</p>
+    /// <p>The name of the AWS Config rule for which you want to delete the evaluation results.</p>
     #[serde(rename = "ConfigRuleName")]
     pub config_rule_name: String,
 }
 
-/// <p>The output when you delete the evaluation results for the specified Config rule.</p>
+/// <p>The output when you delete the evaluation results for the specified AWS Config rule.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct DeleteEvaluationResultsResponse {}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct DeletePendingAggregationRequestRequest {
+    /// <p>The 12-digit account ID of the account requesting to aggregate data.</p>
+    #[serde(rename = "RequesterAccountId")]
+    pub requester_account_id: String,
+    /// <p>The region requesting to aggregate data.</p>
+    #[serde(rename = "RequesterAwsRegion")]
+    pub requester_aws_region: String,
+}
 
 /// <p>The input for the <a>DeliverConfigSnapshot</a> action.</p>
 #[derive(Default, Debug, Clone, Serialize)]
@@ -439,7 +746,7 @@ pub struct DeliverConfigSnapshotRequest {
     pub delivery_channel_name: String,
 }
 
-/// <p>The output for the <a>DeliverConfigSnapshot</a> action in JSON format.</p>
+/// <p>The output for the <a>DeliverConfigSnapshot</a> action, in JSON format.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct DeliverConfigSnapshotResponse {
     /// <p>The ID of the snapshot that is being created.</p>
@@ -494,6 +801,61 @@ pub struct DeliveryChannelStatus {
     pub name: Option<String>,
 }
 
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct DescribeAggregateComplianceByConfigRulesRequest {
+    /// <p>The name of the configuration aggregator.</p>
+    #[serde(rename = "ConfigurationAggregatorName")]
+    pub configuration_aggregator_name: String,
+    /// <p>Filters the results by ConfigRuleComplianceFilters object. </p>
+    #[serde(rename = "Filters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub filters: Option<ConfigRuleComplianceFilters>,
+    /// <p>The maximum number of evaluation results returned on each page. The default is maximum. If you specify 0, AWS Config uses the default.</p>
+    #[serde(rename = "Limit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub limit: Option<i64>,
+    /// <p>The nextToken string returned on a previous page that you use to get the next page of results in a paginated response.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct DescribeAggregateComplianceByConfigRulesResponse {
+    /// <p>Returns a list of AggregateComplianceByConfigRule object.</p>
+    #[serde(rename = "AggregateComplianceByConfigRules")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub aggregate_compliance_by_config_rules: Option<Vec<AggregateComplianceByConfigRule>>,
+    /// <p>The nextToken string returned on a previous page that you use to get the next page of results in a paginated response.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct DescribeAggregationAuthorizationsRequest {
+    /// <p>The maximum number of AggregationAuthorizations returned on each page. The default is maximum. If you specify 0, AWS Config uses the default.</p>
+    #[serde(rename = "Limit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub limit: Option<i64>,
+    /// <p>The nextToken string returned on a previous page that you use to get the next page of results in a paginated response.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct DescribeAggregationAuthorizationsResponse {
+    /// <p>Returns a list of authorizations granted to various aggregator accounts and regions.</p>
+    #[serde(rename = "AggregationAuthorizations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub aggregation_authorizations: Option<Vec<AggregationAuthorization>>,
+    /// <p>The nextToken string returned on a previous page that you use to get the next page of results in a paginated response.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeComplianceByConfigRuleRequest {
@@ -505,7 +867,7 @@ pub struct DescribeComplianceByConfigRuleRequest {
     #[serde(rename = "ConfigRuleNames")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub config_rule_names: Option<Vec<String>>,
-    /// <p>The <code>NextToken</code> string returned on a previous page that you use to get the next page of results in a paginated response.</p>
+    /// <p>The <code>nextToken</code> string returned on a previous page that you use to get the next page of results in a paginated response.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -527,15 +889,15 @@ pub struct DescribeComplianceByConfigRuleResponse {
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeComplianceByResourceRequest {
-    /// <p>Filters the results by compliance.</p> <p>The allowed values are <code>COMPLIANT</code>, <code>NON_COMPLIANT</code>, and <code>INSUFFICIENT_DATA</code>.</p>
+    /// <p>Filters the results by compliance.</p> <p>The allowed values are <code>COMPLIANT</code> and <code>NON_COMPLIANT</code>.</p>
     #[serde(rename = "ComplianceTypes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub compliance_types: Option<Vec<String>>,
-    /// <p>The maximum number of evaluation results returned on each page. The default is 10. You cannot specify a limit greater than 100. If you specify 0, AWS Config uses the default.</p>
+    /// <p>The maximum number of evaluation results returned on each page. The default is 10. You cannot specify a number greater than 100. If you specify 0, AWS Config uses the default.</p>
     #[serde(rename = "Limit")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub limit: Option<i64>,
-    /// <p>The <code>NextToken</code> string returned on a previous page that you use to get the next page of results in a paginated response.</p>
+    /// <p>The <code>nextToken</code> string returned on a previous page that you use to get the next page of results in a paginated response.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -543,7 +905,7 @@ pub struct DescribeComplianceByResourceRequest {
     #[serde(rename = "ResourceId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_id: Option<String>,
-    /// <p>The types of AWS resources for which you want compliance information; for example, <code>AWS::EC2::Instance</code>. For this action, you can specify that the resource type is an AWS account by specifying <code>AWS::::Account</code>.</p>
+    /// <p>The types of AWS resources for which you want compliance information (for example, <code>AWS::EC2::Instance</code>). For this action, you can specify that the resource type is an AWS account by specifying <code>AWS::::Account</code>.</p>
     #[serde(rename = "ResourceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_type: Option<String>,
@@ -569,11 +931,11 @@ pub struct DescribeConfigRuleEvaluationStatusRequest {
     #[serde(rename = "ConfigRuleNames")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub config_rule_names: Option<Vec<String>>,
-    /// <p>The number of rule evaluation results that you want returned.</p> <p>This parameter is required if the rule limit for your account is more than the default of 50 rules.</p> <p>For more information about requesting a rule limit increase, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_config">AWS Config Limits</a> in the <i>AWS General Reference Guide</i>.</p>
+    /// <p>The number of rule evaluation results that you want returned.</p> <p>This parameter is required if the rule limit for your account is more than the default of 50 rules.</p> <p>For information about requesting a rule limit increase, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_config">AWS Config Limits</a> in the <i>AWS General Reference Guide</i>.</p>
     #[serde(rename = "Limit")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub limit: Option<i64>,
-    /// <p>The <code>NextToken</code> string returned on a previous page that you use to get the next page of results in a paginated response.</p>
+    /// <p>The <code>nextToken</code> string returned on a previous page that you use to get the next page of results in a paginated response.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -599,7 +961,7 @@ pub struct DescribeConfigRulesRequest {
     #[serde(rename = "ConfigRuleNames")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub config_rule_names: Option<Vec<String>>,
-    /// <p>The <code>NextToken</code> string returned on a previous page that you use to get the next page of results in a paginated response.</p>
+    /// <p>The <code>nextToken</code> string returned on a previous page that you use to get the next page of results in a paginated response.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -618,6 +980,65 @@ pub struct DescribeConfigRulesResponse {
     pub next_token: Option<String>,
 }
 
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct DescribeConfigurationAggregatorSourcesStatusRequest {
+    /// <p>The name of the configuration aggregator.</p>
+    #[serde(rename = "ConfigurationAggregatorName")]
+    pub configuration_aggregator_name: String,
+    /// <p>The maximum number of AggregatorSourceStatus returned on each page. The default is maximum. If you specify 0, AWS Config uses the default.</p>
+    #[serde(rename = "Limit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub limit: Option<i64>,
+    /// <p>The nextToken string returned on a previous page that you use to get the next page of results in a paginated response.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p><p>Filters the status type.</p> <ul> <li> <p>Valid value FAILED indicates errors while moving data.</p> </li> <li> <p>Valid value SUCCEEDED indicates the data was successfully moved.</p> </li> <li> <p>Valid value OUTDATED indicates the data is not the most recent.</p> </li> </ul></p>
+    #[serde(rename = "UpdateStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub update_status: Option<Vec<String>>,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct DescribeConfigurationAggregatorSourcesStatusResponse {
+    /// <p>Retuns an AggregatedSourceStatus object. </p>
+    #[serde(rename = "AggregatedSourceStatusList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub aggregated_source_status_list: Option<Vec<AggregatedSourceStatus>>,
+    /// <p>The nextToken string returned on a previous page that you use to get the next page of results in a paginated response.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct DescribeConfigurationAggregatorsRequest {
+    /// <p>The name of the configuration aggregators.</p>
+    #[serde(rename = "ConfigurationAggregatorNames")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub configuration_aggregator_names: Option<Vec<String>>,
+    /// <p>The maximum number of configuration aggregators returned on each page. The default is maximum. If you specify 0, AWS Config uses the default.</p>
+    #[serde(rename = "Limit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub limit: Option<i64>,
+    /// <p>The nextToken string returned on a previous page that you use to get the next page of results in a paginated response.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct DescribeConfigurationAggregatorsResponse {
+    /// <p>Returns a ConfigurationAggregators object.</p>
+    #[serde(rename = "ConfigurationAggregators")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub configuration_aggregators: Option<Vec<ConfigurationAggregator>>,
+    /// <p>The nextToken string returned on a previous page that you use to get the next page of results in a paginated response.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
 /// <p>The input for the <a>DescribeConfigurationRecorderStatus</a> action.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeConfigurationRecorderStatusRequest {
@@ -627,7 +1048,7 @@ pub struct DescribeConfigurationRecorderStatusRequest {
     pub configuration_recorder_names: Option<Vec<String>>,
 }
 
-/// <p>The output for the <a>DescribeConfigurationRecorderStatus</a> action in JSON format.</p>
+/// <p>The output for the <a>DescribeConfigurationRecorderStatus</a> action, in JSON format.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeConfigurationRecorderStatusResponse {
     /// <p>A list that contains status of the specified recorders.</p>
@@ -690,6 +1111,30 @@ pub struct DescribeDeliveryChannelsResponse {
     pub delivery_channels: Option<Vec<DeliveryChannel>>,
 }
 
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct DescribePendingAggregationRequestsRequest {
+    /// <p>The maximum number of evaluation results returned on each page. The default is maximum. If you specify 0, AWS Config uses the default.</p>
+    #[serde(rename = "Limit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub limit: Option<i64>,
+    /// <p>The nextToken string returned on a previous page that you use to get the next page of results in a paginated response.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct DescribePendingAggregationRequestsResponse {
+    /// <p>The nextToken string returned on a previous page that you use to get the next page of results in a paginated response.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>Returns a PendingAggregationRequests object.</p>
+    #[serde(rename = "PendingAggregationRequests")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pending_aggregation_requests: Option<Vec<PendingAggregationRequest>>,
+}
+
 /// <p>Identifies an AWS resource and indicates whether it complies with the AWS Config rule that it was evaluated against.</p>
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct Evaluation {
@@ -703,7 +1148,7 @@ pub struct Evaluation {
     /// <p>The type of AWS resource that was evaluated.</p>
     #[serde(rename = "ComplianceResourceType")]
     pub compliance_resource_type: String,
-    /// <p>Indicates whether the AWS resource complies with the AWS Config rule that it was evaluated against.</p> <p>For the <code>Evaluation</code> data type, AWS Config supports only the <code>COMPLIANT</code>, <code>NON_COMPLIANT</code>, and <code>NOT_APPLICABLE</code> values. AWS Config does not support the <code>INSUFFICIENT_DATA</code> value for this data type.</p> <p>Similarly, AWS Config does not accept <code>INSUFFICIENT_DATA</code> as the value for <code>ComplianceType</code> from a <code>PutEvaluations</code> request. For example, an AWS Lambda function for a custom Config rule cannot pass an <code>INSUFFICIENT_DATA</code> value to AWS Config.</p>
+    /// <p>Indicates whether the AWS resource complies with the AWS Config rule that it was evaluated against.</p> <p>For the <code>Evaluation</code> data type, AWS Config supports only the <code>COMPLIANT</code>, <code>NON_COMPLIANT</code>, and <code>NOT_APPLICABLE</code> values. AWS Config does not support the <code>INSUFFICIENT_DATA</code> value for this data type.</p> <p>Similarly, AWS Config does not accept <code>INSUFFICIENT_DATA</code> as the value for <code>ComplianceType</code> from a <code>PutEvaluations</code> request. For example, an AWS Lambda function for a custom AWS Config rule cannot pass an <code>INSUFFICIENT_DATA</code> value to AWS Config.</p>
     #[serde(rename = "ComplianceType")]
     pub compliance_type: String,
     /// <p>The time of the event in AWS Config that triggered the evaluation. For event-based evaluations, the time indicates when AWS Config created the configuration item that triggered the evaluation. For periodic evaluations, the time indicates when AWS Config triggered the evaluation at the frequency that you specified (for example, every 24 hours).</p>
@@ -711,7 +1156,7 @@ pub struct Evaluation {
     pub ordering_timestamp: f64,
 }
 
-/// <p>The details of an AWS Config evaluation. Provides the AWS resource that was evaluated, the compliance of the resource, related timestamps, and supplementary information.</p>
+/// <p>The details of an AWS Config evaluation. Provides the AWS resource that was evaluated, the compliance of the resource, related time stamps, and supplementary information.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct EvaluationResult {
     /// <p>Supplementary information about how the evaluation determined the compliance.</p>
@@ -770,6 +1215,85 @@ pub struct EvaluationResultQualifier {
     pub resource_type: Option<String>,
 }
 
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct GetAggregateComplianceDetailsByConfigRuleRequest {
+    /// <p>The 12-digit account ID of the source account.</p>
+    #[serde(rename = "AccountId")]
+    pub account_id: String,
+    /// <p>The source region from where the data is aggregated.</p>
+    #[serde(rename = "AwsRegion")]
+    pub aws_region: String,
+    /// <p><p>The resource compliance status.</p> <note> <p>For the <code>GetAggregateComplianceDetailsByConfigRuleRequest</code> data type, AWS Config supports only the <code>COMPLIANT</code> and <code>NON<em>COMPLIANT</code>. AWS Config does not support the <code>NOT</em>APPLICABLE</code> and <code>INSUFFICIENT_DATA</code> values.</p> </note></p>
+    #[serde(rename = "ComplianceType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub compliance_type: Option<String>,
+    /// <p>The name of the AWS Config rule for which you want compliance information.</p>
+    #[serde(rename = "ConfigRuleName")]
+    pub config_rule_name: String,
+    /// <p>The name of the configuration aggregator.</p>
+    #[serde(rename = "ConfigurationAggregatorName")]
+    pub configuration_aggregator_name: String,
+    /// <p>The maximum number of evaluation results returned on each page. The default is 50. You cannot specify a number greater than 100. If you specify 0, AWS Config uses the default.</p>
+    #[serde(rename = "Limit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub limit: Option<i64>,
+    /// <p>The nextToken string returned on a previous page that you use to get the next page of results in a paginated response.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct GetAggregateComplianceDetailsByConfigRuleResponse {
+    /// <p>Returns an AggregateEvaluationResults object.</p>
+    #[serde(rename = "AggregateEvaluationResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub aggregate_evaluation_results: Option<Vec<AggregateEvaluationResult>>,
+    /// <p>The nextToken string returned on a previous page that you use to get the next page of results in a paginated response.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct GetAggregateConfigRuleComplianceSummaryRequest {
+    /// <p>The name of the configuration aggregator.</p>
+    #[serde(rename = "ConfigurationAggregatorName")]
+    pub configuration_aggregator_name: String,
+    /// <p>Filters the results based on the ConfigRuleComplianceSummaryFilters object.</p>
+    #[serde(rename = "Filters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub filters: Option<ConfigRuleComplianceSummaryFilters>,
+    /// <p>Groups the result based on ACCOUNT_ID or AWS_REGION.</p>
+    #[serde(rename = "GroupByKey")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub group_by_key: Option<String>,
+    /// <p>The maximum number of evaluation results returned on each page. The default is 1000. You cannot specify a number greater than 1000. If you specify 0, AWS Config uses the default.</p>
+    #[serde(rename = "Limit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub limit: Option<i64>,
+    /// <p>The nextToken string returned on a previous page that you use to get the next page of results in a paginated response.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct GetAggregateConfigRuleComplianceSummaryResponse {
+    /// <p>Returns a list of AggregateComplianceCounts object.</p>
+    #[serde(rename = "AggregateComplianceCounts")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub aggregate_compliance_counts: Option<Vec<AggregateComplianceCount>>,
+    /// <p>Groups the result based on ACCOUNT_ID or AWS_REGION.</p>
+    #[serde(rename = "GroupByKey")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub group_by_key: Option<String>,
+    /// <p>The nextToken string returned on a previous page that you use to get the next page of results in a paginated response.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct GetComplianceDetailsByConfigRuleRequest {
@@ -780,11 +1304,11 @@ pub struct GetComplianceDetailsByConfigRuleRequest {
     /// <p>The name of the AWS Config rule for which you want compliance information.</p>
     #[serde(rename = "ConfigRuleName")]
     pub config_rule_name: String,
-    /// <p>The maximum number of evaluation results returned on each page. The default is 10. You cannot specify a limit greater than 100. If you specify 0, AWS Config uses the default.</p>
+    /// <p>The maximum number of evaluation results returned on each page. The default is 10. You cannot specify a number greater than 100. If you specify 0, AWS Config uses the default.</p>
     #[serde(rename = "Limit")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub limit: Option<i64>,
-    /// <p>The <code>NextToken</code> string returned on a previous page that you use to get the next page of results in a paginated response.</p>
+    /// <p>The <code>nextToken</code> string returned on a previous page that you use to get the next page of results in a paginated response.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -810,7 +1334,7 @@ pub struct GetComplianceDetailsByResourceRequest {
     #[serde(rename = "ComplianceTypes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub compliance_types: Option<Vec<String>>,
-    /// <p>The <code>NextToken</code> string returned on a previous page that you use to get the next page of results in a paginated response.</p>
+    /// <p>The <code>nextToken</code> string returned on a previous page that you use to get the next page of results in a paginated response.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -847,7 +1371,7 @@ pub struct GetComplianceSummaryByConfigRuleResponse {
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct GetComplianceSummaryByResourceTypeRequest {
-    /// <p>Specify one or more resource types to get the number of resources that are compliant and the number that are noncompliant for each resource type.</p> <p>For this request, you can specify an AWS resource type such as <code>AWS::EC2::Instance</code>, and you can specify that the resource type is an AWS account by specifying <code>AWS::::Account</code>.</p>
+    /// <p>Specify one or more resource types to get the number of resources that are compliant and the number that are noncompliant for each resource type.</p> <p>For this request, you can specify an AWS resource type such as <code>AWS::EC2::Instance</code>. You can specify that the resource type is an AWS account by specifying <code>AWS::::Account</code>.</p>
     #[serde(rename = "ResourceTypes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_types: Option<Vec<String>>,
@@ -864,7 +1388,7 @@ pub struct GetComplianceSummaryByResourceTypeResponse {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct GetDiscoveredResourceCountsRequest {
-    /// <p>The maximum number of <a>ResourceCount</a> objects returned on each page. The default is 100. You cannot specify a limit greater than 100. If you specify 0, AWS Config uses the default.</p>
+    /// <p>The maximum number of <a>ResourceCount</a> objects returned on each page. The default is 100. You cannot specify a number greater than 100. If you specify 0, AWS Config uses the default.</p>
     #[serde(rename = "limit")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub limit: Option<i64>,
@@ -872,7 +1396,7 @@ pub struct GetDiscoveredResourceCountsRequest {
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p><p>The comma-separated list that specifies the resource types that you want the AWS Config to return. For example, (<code>&quot;AWS::EC2::Instance&quot;</code>, <code>&quot;AWS::IAM::User&quot;</code>).</p> <p>If a value for <code>resourceTypes</code> is not specified, AWS Config returns all resource types that AWS Config is recording in the region for your account.</p> <note> <p>If the configuration recorder is turned off, AWS Config returns an empty list of <a>ResourceCount</a> objects. If the configuration recorder is not recording a specific resource type (for example, S3 buckets), that resource type is not returned in the list of <a>ResourceCount</a> objects.</p> </note></p>
+    /// <p><p>The comma-separated list that specifies the resource types that you want AWS Config to return (for example, <code>&quot;AWS::EC2::Instance&quot;</code>, <code>&quot;AWS::IAM::User&quot;</code>).</p> <p>If a value for <code>resourceTypes</code> is not specified, AWS Config returns all resource types that AWS Config is recording in the region for your account.</p> <note> <p>If the configuration recorder is turned off, AWS Config returns an empty list of <a>ResourceCount</a> objects. If the configuration recorder is not recording a specific resource type (for example, S3 buckets), that resource type is not returned in the list of <a>ResourceCount</a> objects.</p> </note></p>
     #[serde(rename = "resourceTypes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_types: Option<Vec<String>>,
@@ -888,7 +1412,7 @@ pub struct GetDiscoveredResourceCountsResponse {
     #[serde(rename = "resourceCounts")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_counts: Option<Vec<ResourceCount>>,
-    /// <p><p>The total number of resources that AWS Config is recording in the region for your account. If you specify resource types in the request, AWS Config returns only the total number of resources for those resource types.</p> <p class="title"> <b>Example</b> </p> <ol> <li> <p>AWS Config is recording three resource types in the US East (Ohio) Region for your account: 25 EC2 instances, 20 IAM users, and 15 S3 buckets, for a total of 60 resources.</p> </li> <li> <p>You make a call to the <code>GetDiscoveredResourceCounts</code> action and specify the resource type, <code>&quot;AWS::EC2::Instances&quot;</code> in the request.</p> </li> <li> <p>AWS Config returns 25 for <code>totalDiscoveredResources</code>.</p> </li> </ol></p>
+    /// <p><p>The total number of resources that AWS Config is recording in the region for your account. If you specify resource types in the request, AWS Config returns only the total number of resources for those resource types.</p> <p class="title"> <b>Example</b> </p> <ol> <li> <p>AWS Config is recording three resource types in the US East (Ohio) Region for your account: 25 EC2 instances, 20 IAM users, and 15 S3 buckets, for a total of 60 resources.</p> </li> <li> <p>You make a call to the <code>GetDiscoveredResourceCounts</code> action and specify the resource type, <code>&quot;AWS::EC2::Instances&quot;</code>, in the request.</p> </li> <li> <p>AWS Config returns 25 for <code>totalDiscoveredResources</code>.</p> </li> </ol></p>
     #[serde(rename = "totalDiscoveredResources")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub total_discovered_resources: Option<i64>,
@@ -897,11 +1421,11 @@ pub struct GetDiscoveredResourceCountsResponse {
 /// <p>The input for the <a>GetResourceConfigHistory</a> action.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct GetResourceConfigHistoryRequest {
-    /// <p>The chronological order for configuration items listed. By default the results are listed in reverse chronological order.</p>
+    /// <p>The chronological order for configuration items listed. By default, the results are listed in reverse chronological order.</p>
     #[serde(rename = "chronologicalOrder")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub chronological_order: Option<String>,
-    /// <p>The time stamp that indicates an earlier time. If not specified, the action returns paginated results that contain configuration items that start from when the first configuration item was recorded.</p>
+    /// <p>The time stamp that indicates an earlier time. If not specified, the action returns paginated results that contain configuration items that start when the first configuration item was recorded.</p>
     #[serde(rename = "earlierTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub earlier_time: Option<f64>,
@@ -909,7 +1433,7 @@ pub struct GetResourceConfigHistoryRequest {
     #[serde(rename = "laterTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub later_time: Option<f64>,
-    /// <p>The maximum number of configuration items returned on each page. The default is 10. You cannot specify a limit greater than 100. If you specify 0, AWS Config uses the default.</p>
+    /// <p>The maximum number of configuration items returned on each page. The default is 10. You cannot specify a number greater than 100. If you specify 0, AWS Config uses the default.</p>
     #[serde(rename = "limit")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub limit: Option<i64>,
@@ -945,7 +1469,7 @@ pub struct ListDiscoveredResourcesRequest {
     #[serde(rename = "includeDeletedResources")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub include_deleted_resources: Option<bool>,
-    /// <p>The maximum number of resource identifiers returned on each page. The default is 100. You cannot specify a limit greater than 100. If you specify 0, AWS Config uses the default.</p>
+    /// <p>The maximum number of resource identifiers returned on each page. The default is 100. You cannot specify a number greater than 100. If you specify 0, AWS Config uses the default.</p>
     #[serde(rename = "limit")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub limit: Option<i64>,
@@ -979,11 +1503,81 @@ pub struct ListDiscoveredResourcesResponse {
     pub resource_identifiers: Option<Vec<ResourceIdentifier>>,
 }
 
+/// <p>This object contains regions to setup the aggregator and an IAM role to retrieve organization details.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+pub struct OrganizationAggregationSource {
+    /// <p>If true, aggreagate existing AWS Config regions and future regions.</p>
+    #[serde(rename = "AllAwsRegions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub all_aws_regions: Option<bool>,
+    /// <p>The source regions being aggregated.</p>
+    #[serde(rename = "AwsRegions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub aws_regions: Option<Vec<String>>,
+    /// <p>ARN of the IAM role used to retreive AWS Organization details associated with the aggregator account.</p>
+    #[serde(rename = "RoleArn")]
+    pub role_arn: String,
+}
+
+/// <p>An object that represents the account ID and region of an aggregator account that is requesting authorization but is not yet authorized.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct PendingAggregationRequest {
+    /// <p>The 12-digit account ID of the account requesting to aggregate data.</p>
+    #[serde(rename = "RequesterAccountId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub requester_account_id: Option<String>,
+    /// <p>The region requesting to aggregate data. </p>
+    #[serde(rename = "RequesterAwsRegion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub requester_aws_region: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct PutAggregationAuthorizationRequest {
+    /// <p>The 12-digit account ID of the account authorized to aggregate data.</p>
+    #[serde(rename = "AuthorizedAccountId")]
+    pub authorized_account_id: String,
+    /// <p>The region authorized to collect aggregated data.</p>
+    #[serde(rename = "AuthorizedAwsRegion")]
+    pub authorized_aws_region: String,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct PutAggregationAuthorizationResponse {
+    /// <p>Returns an AggregationAuthorization object. </p>
+    #[serde(rename = "AggregationAuthorization")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub aggregation_authorization: Option<AggregationAuthorization>,
+}
+
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct PutConfigRuleRequest {
     /// <p>The rule that you want to add to your account.</p>
     #[serde(rename = "ConfigRule")]
     pub config_rule: ConfigRule,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct PutConfigurationAggregatorRequest {
+    /// <p>A list of AccountAggregationSource object. </p>
+    #[serde(rename = "AccountAggregationSources")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub account_aggregation_sources: Option<Vec<AccountAggregationSource>>,
+    /// <p>The name of the configuration aggregator.</p>
+    #[serde(rename = "ConfigurationAggregatorName")]
+    pub configuration_aggregator_name: String,
+    /// <p>An OrganizationAggregationSource object.</p>
+    #[serde(rename = "OrganizationAggregationSource")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub organization_aggregation_source: Option<OrganizationAggregationSource>,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct PutConfigurationAggregatorResponse {
+    /// <p>Returns a ConfigurationAggregator object.</p>
+    #[serde(rename = "ConfigurationAggregator")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub configuration_aggregator: Option<ConfigurationAggregator>,
 }
 
 /// <p>The input for the <a>PutConfigurationRecorder</a> action.</p>
@@ -997,7 +1591,7 @@ pub struct PutConfigurationRecorderRequest {
 /// <p>The input for the <a>PutDeliveryChannel</a> action.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct PutDeliveryChannelRequest {
-    /// <p>The configuration delivery channel object that delivers the configuration information to an Amazon S3 bucket, and to an Amazon SNS topic.</p>
+    /// <p>The configuration delivery channel object that delivers the configuration information to an Amazon S3 bucket and to an Amazon SNS topic.</p>
     #[serde(rename = "DeliveryChannel")]
     pub delivery_channel: DeliveryChannel,
 }
@@ -1009,7 +1603,7 @@ pub struct PutEvaluationsRequest {
     #[serde(rename = "Evaluations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub evaluations: Option<Vec<Evaluation>>,
-    /// <p>An encrypted token that associates an evaluation with an AWS Config rule. Identifies the rule and the event that triggered the evaluation</p>
+    /// <p>An encrypted token that associates an evaluation with an AWS Config rule. Identifies the rule and the event that triggered the evaluation.</p>
     #[serde(rename = "ResultToken")]
     pub result_token: String,
     /// <p><p>Use this parameter to specify a test run for <code>PutEvaluations</code>. You can verify whether your AWS Lambda function will deliver evaluation results to AWS Config. No updates occur to your existing evaluations, and evaluation results are not sent to AWS Config.</p> <note> <p>When <code>TestMode</code> is <code>true</code>, <code>PutEvaluations</code> doesn&#39;t require a valid value for the <code>ResultToken</code> parameter, but the value cannot be null.</p> </note></p>
@@ -1027,14 +1621,14 @@ pub struct PutEvaluationsResponse {
     pub failed_evaluations: Option<Vec<Evaluation>>,
 }
 
-/// <p>Specifies the types of AWS resource for which AWS Config records configuration changes.</p> <p>In the recording group, you specify whether all supported types or specific types of resources are recorded.</p> <p>By default, AWS Config records configuration changes for all supported types of regional resources that AWS Config discovers in the region in which it is running. Regional resources are tied to a region and can be used only in that region. Examples of regional resources are EC2 instances and EBS volumes.</p> <p>You can also have AWS Config record configuration changes for supported types of global resources (for example, IAM resources). Global resources are not tied to an individual region and can be used in all regions.</p> <important> <p>The configuration details for any global resource are the same in all regions. If you customize AWS Config in multiple regions to record global resources, it will create multiple configuration items each time a global resource changes: one configuration item for each region. These configuration items will contain identical data. To prevent duplicate configuration items, you should consider customizing AWS Config in only one region to record global resources, unless you want the configuration items to be available in multiple regions.</p> </important> <p>If you don't want AWS Config to record all resources, you can specify which types of resources it will record with the <code>resourceTypes</code> parameter.</p> <p>For a list of supported resource types, see <a href="http://docs.aws.amazon.com/config/latest/developerguide/resource-config-reference.html#supported-resources">Supported resource types</a>.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/config/latest/developerguide/select-resources.html">Selecting Which Resources AWS Config Records</a>.</p>
+/// <p>Specifies the types of AWS resource for which AWS Config records configuration changes.</p> <p>In the recording group, you specify whether all supported types or specific types of resources are recorded.</p> <p>By default, AWS Config records configuration changes for all supported types of regional resources that AWS Config discovers in the region in which it is running. Regional resources are tied to a region and can be used only in that region. Examples of regional resources are EC2 instances and EBS volumes.</p> <p>You can also have AWS Config record configuration changes for supported types of global resources (for example, IAM resources). Global resources are not tied to an individual region and can be used in all regions.</p> <important> <p>The configuration details for any global resource are the same in all regions. If you customize AWS Config in multiple regions to record global resources, it will create multiple configuration items each time a global resource changes: one configuration item for each region. These configuration items will contain identical data. To prevent duplicate configuration items, you should consider customizing AWS Config in only one region to record global resources, unless you want the configuration items to be available in multiple regions.</p> </important> <p>If you don't want AWS Config to record all resources, you can specify which types of resources it will record with the <code>resourceTypes</code> parameter.</p> <p>For a list of supported resource types, see <a href="http://docs.aws.amazon.com/config/latest/developerguide/resource-config-reference.html#supported-resources">Supported Resource Types</a>.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/config/latest/developerguide/select-resources.html">Selecting Which Resources AWS Config Records</a>.</p>
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct RecordingGroup {
-    /// <p>Specifies whether AWS Config records configuration changes for every supported type of regional resource.</p> <p>If you set this option to <code>true</code>, when AWS Config adds support for a new type of regional resource, it automatically starts recording resources of that type.</p> <p>If you set this option to <code>true</code>, you cannot enumerate a list of <code>resourceTypes</code>.</p>
+    /// <p>Specifies whether AWS Config records configuration changes for every supported type of regional resource.</p> <p>If you set this option to <code>true</code>, when AWS Config adds support for a new type of regional resource, it starts recording resources of that type automatically.</p> <p>If you set this option to <code>true</code>, you cannot enumerate a list of <code>resourceTypes</code>.</p>
     #[serde(rename = "allSupported")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub all_supported: Option<bool>,
-    /// <p>Specifies whether AWS Config includes all supported types of global resources (for example, IAM resources) with the resources that it records.</p> <p>Before you can set this option to <code>true</code>, you must set the <code>allSupported</code> option to <code>true</code>.</p> <p>If you set this option to <code>true</code>, when AWS Config adds support for a new type of global resource, it automatically starts recording resources of that type.</p> <p>The configuration details for any global resource are the same in all regions. To prevent duplicate configuration items, you should consider customizing AWS Config in only one region to record global resources.</p>
+    /// <p>Specifies whether AWS Config includes all supported types of global resources (for example, IAM resources) with the resources that it records.</p> <p>Before you can set this option to <code>true</code>, you must set the <code>allSupported</code> option to <code>true</code>.</p> <p>If you set this option to <code>true</code>, when AWS Config adds support for a new type of global resource, it starts recording resources of that type automatically.</p> <p>The configuration details for any global resource are the same in all regions. To prevent duplicate configuration items, you should consider customizing AWS Config in only one region to record global resources.</p>
     #[serde(rename = "includeGlobalResourceTypes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub include_global_resource_types: Option<bool>,
@@ -1072,7 +1666,7 @@ pub struct ResourceCount {
     #[serde(rename = "count")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub count: Option<i64>,
-    /// <p>The resource type, for example <code>"AWS::EC2::Instance"</code>.</p>
+    /// <p>The resource type (for example, <code>"AWS::EC2::Instance"</code>).</p>
     #[serde(rename = "resourceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_type: Option<String>,
@@ -1085,7 +1679,7 @@ pub struct ResourceIdentifier {
     #[serde(rename = "resourceDeletionTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_deletion_time: Option<f64>,
-    /// <p>The ID of the resource (for example., <code>sg-xxxxxx</code>).</p>
+    /// <p>The ID of the resource (for example, <code>sg-xxxxxx</code>).</p>
     #[serde(rename = "resourceId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_id: Option<String>,
@@ -1099,10 +1693,21 @@ pub struct ResourceIdentifier {
     pub resource_type: Option<String>,
 }
 
+/// <p>The details that identify a resource within AWS Config, including the resource type and resource ID.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+pub struct ResourceKey {
+    /// <p>The ID of the resource (for example., sg-xxxxxx). </p>
+    #[serde(rename = "resourceId")]
+    pub resource_id: String,
+    /// <p>The resource type.</p>
+    #[serde(rename = "resourceType")]
+    pub resource_type: String,
+}
+
 /// <p>Defines which resources trigger an evaluation for an AWS Config rule. The scope can include one or more resource types, a combination of a tag key and value, or a combination of one resource type and one resource ID. Specify a scope to constrain which resources trigger an evaluation for a rule. Otherwise, evaluations for the rule are triggered when any resource in your recording group changes in configuration.</p>
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct Scope {
-    /// <p>The IDs of the only AWS resource that you want to trigger an evaluation for the rule. If you specify a resource ID, you must specify one resource type for <code>ComplianceResourceTypes</code>.</p>
+    /// <p>The ID of the only AWS resource that you want to trigger an evaluation for the rule. If you specify a resource ID, you must specify one resource type for <code>ComplianceResourceTypes</code>.</p>
     #[serde(rename = "ComplianceResourceId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub compliance_resource_id: Option<String>,
@@ -1142,7 +1747,7 @@ pub struct SourceDetail {
     #[serde(rename = "EventSource")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub event_source: Option<String>,
-    /// <p><p>The frequency that you want AWS Config to run evaluations for a custom rule with a periodic trigger. If you specify a value for <code>MaximumExecutionFrequency</code>, then <code>MessageType</code> must use the <code>ScheduledNotification</code> value.</p> <note> <p>By default, rules with a periodic trigger are evaluated every 24 hours. To change the frequency, specify a valid value for the <code>MaximumExecutionFrequency</code> parameter.</p> </note></p>
+    /// <p><p>The frequency at which you want AWS Config to run evaluations for a custom rule with a periodic trigger. If you specify a value for <code>MaximumExecutionFrequency</code>, then <code>MessageType</code> must use the <code>ScheduledNotification</code> value.</p> <note> <p>By default, rules with a periodic trigger are evaluated every 24 hours. To change the frequency, specify a valid value for the <code>MaximumExecutionFrequency</code> parameter.</p> <p>Based on the valid value you choose, AWS Config runs evaluations once for each valid value. For example, if you choose <code>Three<em>Hours</code>, AWS Config runs evaluations once every three hours. In this case, <code>Three</em>Hours</code> is the frequency of this rule. </p> </note></p>
     #[serde(rename = "MaximumExecutionFrequency")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub maximum_execution_frequency: Option<String>,
@@ -1155,13 +1760,13 @@ pub struct SourceDetail {
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct StartConfigRulesEvaluationRequest {
-    /// <p>The list of names of Config rules that you want to run evaluations for.</p>
+    /// <p>The list of names of AWS Config rules that you want to run evaluations for.</p>
     #[serde(rename = "ConfigRuleNames")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub config_rule_names: Option<Vec<String>>,
 }
 
-/// <p>The output when you start the evaluation for the specified Config rule.</p>
+/// <p>The output when you start the evaluation for the specified AWS Config rule.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct StartConfigRulesEvaluationResponse {}
 
@@ -1181,6 +1786,170 @@ pub struct StopConfigurationRecorderRequest {
     pub configuration_recorder_name: String,
 }
 
+/// Errors returned by BatchGetResourceConfig
+#[derive(Debug, PartialEq)]
+pub enum BatchGetResourceConfigError {
+    /// <p>There are no configuration recorders available to provide the role needed to describe your resources. Create a configuration recorder.</p>
+    NoAvailableConfigurationRecorder(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl BatchGetResourceConfigError {
+    pub fn from_body(body: &str) -> BatchGetResourceConfigError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "NoAvailableConfigurationRecorderException" => {
+                        BatchGetResourceConfigError::NoAvailableConfigurationRecorder(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ValidationException" => {
+                        BatchGetResourceConfigError::Validation(error_message.to_string())
+                    }
+                    _ => BatchGetResourceConfigError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => BatchGetResourceConfigError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for BatchGetResourceConfigError {
+    fn from(err: serde_json::error::Error) -> BatchGetResourceConfigError {
+        BatchGetResourceConfigError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for BatchGetResourceConfigError {
+    fn from(err: CredentialsError) -> BatchGetResourceConfigError {
+        BatchGetResourceConfigError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for BatchGetResourceConfigError {
+    fn from(err: HttpDispatchError) -> BatchGetResourceConfigError {
+        BatchGetResourceConfigError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for BatchGetResourceConfigError {
+    fn from(err: io::Error) -> BatchGetResourceConfigError {
+        BatchGetResourceConfigError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for BatchGetResourceConfigError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for BatchGetResourceConfigError {
+    fn description(&self) -> &str {
+        match *self {
+            BatchGetResourceConfigError::NoAvailableConfigurationRecorder(ref cause) => cause,
+            BatchGetResourceConfigError::Validation(ref cause) => cause,
+            BatchGetResourceConfigError::Credentials(ref err) => err.description(),
+            BatchGetResourceConfigError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            BatchGetResourceConfigError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DeleteAggregationAuthorization
+#[derive(Debug, PartialEq)]
+pub enum DeleteAggregationAuthorizationError {
+    /// <p>One or more of the specified parameters are invalid. Verify that your parameters are valid and try again.</p>
+    InvalidParameterValue(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl DeleteAggregationAuthorizationError {
+    pub fn from_body(body: &str) -> DeleteAggregationAuthorizationError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InvalidParameterValueException" => {
+                        DeleteAggregationAuthorizationError::InvalidParameterValue(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ValidationException" => {
+                        DeleteAggregationAuthorizationError::Validation(error_message.to_string())
+                    }
+                    _ => DeleteAggregationAuthorizationError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => DeleteAggregationAuthorizationError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for DeleteAggregationAuthorizationError {
+    fn from(err: serde_json::error::Error) -> DeleteAggregationAuthorizationError {
+        DeleteAggregationAuthorizationError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DeleteAggregationAuthorizationError {
+    fn from(err: CredentialsError) -> DeleteAggregationAuthorizationError {
+        DeleteAggregationAuthorizationError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DeleteAggregationAuthorizationError {
+    fn from(err: HttpDispatchError) -> DeleteAggregationAuthorizationError {
+        DeleteAggregationAuthorizationError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteAggregationAuthorizationError {
+    fn from(err: io::Error) -> DeleteAggregationAuthorizationError {
+        DeleteAggregationAuthorizationError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DeleteAggregationAuthorizationError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeleteAggregationAuthorizationError {
+    fn description(&self) -> &str {
+        match *self {
+            DeleteAggregationAuthorizationError::InvalidParameterValue(ref cause) => cause,
+            DeleteAggregationAuthorizationError::Validation(ref cause) => cause,
+            DeleteAggregationAuthorizationError::Credentials(ref err) => err.description(),
+            DeleteAggregationAuthorizationError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DeleteAggregationAuthorizationError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by DeleteConfigRule
 #[derive(Debug, PartialEq)]
 pub enum DeleteConfigRuleError {
@@ -1265,6 +2034,88 @@ impl Error for DeleteConfigRuleError {
         }
     }
 }
+/// Errors returned by DeleteConfigurationAggregator
+#[derive(Debug, PartialEq)]
+pub enum DeleteConfigurationAggregatorError {
+    /// <p>You have specified a configuration aggregator that does not exist.</p>
+    NoSuchConfigurationAggregator(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl DeleteConfigurationAggregatorError {
+    pub fn from_body(body: &str) -> DeleteConfigurationAggregatorError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "NoSuchConfigurationAggregatorException" => {
+                        DeleteConfigurationAggregatorError::NoSuchConfigurationAggregator(
+                            String::from(error_message),
+                        )
+                    }
+                    "ValidationException" => {
+                        DeleteConfigurationAggregatorError::Validation(error_message.to_string())
+                    }
+                    _ => DeleteConfigurationAggregatorError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => DeleteConfigurationAggregatorError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for DeleteConfigurationAggregatorError {
+    fn from(err: serde_json::error::Error) -> DeleteConfigurationAggregatorError {
+        DeleteConfigurationAggregatorError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DeleteConfigurationAggregatorError {
+    fn from(err: CredentialsError) -> DeleteConfigurationAggregatorError {
+        DeleteConfigurationAggregatorError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DeleteConfigurationAggregatorError {
+    fn from(err: HttpDispatchError) -> DeleteConfigurationAggregatorError {
+        DeleteConfigurationAggregatorError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteConfigurationAggregatorError {
+    fn from(err: io::Error) -> DeleteConfigurationAggregatorError {
+        DeleteConfigurationAggregatorError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DeleteConfigurationAggregatorError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeleteConfigurationAggregatorError {
+    fn description(&self) -> &str {
+        match *self {
+            DeleteConfigurationAggregatorError::NoSuchConfigurationAggregator(ref cause) => cause,
+            DeleteConfigurationAggregatorError::Validation(ref cause) => cause,
+            DeleteConfigurationAggregatorError::Credentials(ref err) => err.description(),
+            DeleteConfigurationAggregatorError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DeleteConfigurationAggregatorError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by DeleteConfigurationRecorder
 #[derive(Debug, PartialEq)]
 pub enum DeleteConfigurationRecorderError {
@@ -1294,9 +2145,9 @@ impl DeleteConfigurationRecorderError {
 
                 match *error_type {
                     "NoSuchConfigurationRecorderException" => {
-                        DeleteConfigurationRecorderError::NoSuchConfigurationRecorder(
-                            String::from(error_message),
-                        )
+                        DeleteConfigurationRecorderError::NoSuchConfigurationRecorder(String::from(
+                            error_message,
+                        ))
                     }
                     "ValidationException" => {
                         DeleteConfigurationRecorderError::Validation(error_message.to_string())
@@ -1523,6 +2374,88 @@ impl Error for DeleteEvaluationResultsError {
         }
     }
 }
+/// Errors returned by DeletePendingAggregationRequest
+#[derive(Debug, PartialEq)]
+pub enum DeletePendingAggregationRequestError {
+    /// <p>One or more of the specified parameters are invalid. Verify that your parameters are valid and try again.</p>
+    InvalidParameterValue(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl DeletePendingAggregationRequestError {
+    pub fn from_body(body: &str) -> DeletePendingAggregationRequestError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InvalidParameterValueException" => {
+                        DeletePendingAggregationRequestError::InvalidParameterValue(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ValidationException" => {
+                        DeletePendingAggregationRequestError::Validation(error_message.to_string())
+                    }
+                    _ => DeletePendingAggregationRequestError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => DeletePendingAggregationRequestError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for DeletePendingAggregationRequestError {
+    fn from(err: serde_json::error::Error) -> DeletePendingAggregationRequestError {
+        DeletePendingAggregationRequestError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DeletePendingAggregationRequestError {
+    fn from(err: CredentialsError) -> DeletePendingAggregationRequestError {
+        DeletePendingAggregationRequestError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DeletePendingAggregationRequestError {
+    fn from(err: HttpDispatchError) -> DeletePendingAggregationRequestError {
+        DeletePendingAggregationRequestError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeletePendingAggregationRequestError {
+    fn from(err: io::Error) -> DeletePendingAggregationRequestError {
+        DeletePendingAggregationRequestError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DeletePendingAggregationRequestError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeletePendingAggregationRequestError {
+    fn description(&self) -> &str {
+        match *self {
+            DeletePendingAggregationRequestError::InvalidParameterValue(ref cause) => cause,
+            DeletePendingAggregationRequestError::Validation(ref cause) => cause,
+            DeletePendingAggregationRequestError::Credentials(ref err) => err.description(),
+            DeletePendingAggregationRequestError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DeletePendingAggregationRequestError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by DeliverConfigSnapshot
 #[derive(Debug, PartialEq)]
 pub enum DeliverConfigSnapshotError {
@@ -1621,10 +2554,212 @@ impl Error for DeliverConfigSnapshotError {
         }
     }
 }
+/// Errors returned by DescribeAggregateComplianceByConfigRules
+#[derive(Debug, PartialEq)]
+pub enum DescribeAggregateComplianceByConfigRulesError {
+    /// <p>The specified limit is outside the allowable range.</p>
+    InvalidLimit(String),
+    /// <p>The specified next token is invalid. Specify the <code>nextToken</code> string that was returned in the previous response to get the next page of results.</p>
+    InvalidNextToken(String),
+    /// <p>You have specified a configuration aggregator that does not exist.</p>
+    NoSuchConfigurationAggregator(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl DescribeAggregateComplianceByConfigRulesError {
+    pub fn from_body(body: &str) -> DescribeAggregateComplianceByConfigRulesError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InvalidLimitException" => {
+                        DescribeAggregateComplianceByConfigRulesError::InvalidLimit(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidNextTokenException" => {
+                        DescribeAggregateComplianceByConfigRulesError::InvalidNextToken(
+                            String::from(error_message),
+                        )
+                    }
+                    "NoSuchConfigurationAggregatorException" => {
+                        DescribeAggregateComplianceByConfigRulesError::NoSuchConfigurationAggregator(
+                            String::from(error_message),
+                        )
+                    }
+                    "ValidationException" => {
+                        DescribeAggregateComplianceByConfigRulesError::Validation(
+                            error_message.to_string(),
+                        )
+                    }
+                    _ => DescribeAggregateComplianceByConfigRulesError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => DescribeAggregateComplianceByConfigRulesError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for DescribeAggregateComplianceByConfigRulesError {
+    fn from(err: serde_json::error::Error) -> DescribeAggregateComplianceByConfigRulesError {
+        DescribeAggregateComplianceByConfigRulesError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DescribeAggregateComplianceByConfigRulesError {
+    fn from(err: CredentialsError) -> DescribeAggregateComplianceByConfigRulesError {
+        DescribeAggregateComplianceByConfigRulesError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DescribeAggregateComplianceByConfigRulesError {
+    fn from(err: HttpDispatchError) -> DescribeAggregateComplianceByConfigRulesError {
+        DescribeAggregateComplianceByConfigRulesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeAggregateComplianceByConfigRulesError {
+    fn from(err: io::Error) -> DescribeAggregateComplianceByConfigRulesError {
+        DescribeAggregateComplianceByConfigRulesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DescribeAggregateComplianceByConfigRulesError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeAggregateComplianceByConfigRulesError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeAggregateComplianceByConfigRulesError::InvalidLimit(ref cause) => cause,
+            DescribeAggregateComplianceByConfigRulesError::InvalidNextToken(ref cause) => cause,
+            DescribeAggregateComplianceByConfigRulesError::NoSuchConfigurationAggregator(
+                ref cause,
+            ) => cause,
+            DescribeAggregateComplianceByConfigRulesError::Validation(ref cause) => cause,
+            DescribeAggregateComplianceByConfigRulesError::Credentials(ref err) => {
+                err.description()
+            }
+            DescribeAggregateComplianceByConfigRulesError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DescribeAggregateComplianceByConfigRulesError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DescribeAggregationAuthorizations
+#[derive(Debug, PartialEq)]
+pub enum DescribeAggregationAuthorizationsError {
+    /// <p>The specified limit is outside the allowable range.</p>
+    InvalidLimit(String),
+    /// <p>The specified next token is invalid. Specify the <code>nextToken</code> string that was returned in the previous response to get the next page of results.</p>
+    InvalidNextToken(String),
+    /// <p>One or more of the specified parameters are invalid. Verify that your parameters are valid and try again.</p>
+    InvalidParameterValue(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl DescribeAggregationAuthorizationsError {
+    pub fn from_body(body: &str) -> DescribeAggregationAuthorizationsError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InvalidLimitException" => {
+                        DescribeAggregationAuthorizationsError::InvalidLimit(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidNextTokenException" => {
+                        DescribeAggregationAuthorizationsError::InvalidNextToken(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidParameterValueException" => {
+                        DescribeAggregationAuthorizationsError::InvalidParameterValue(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ValidationException" => DescribeAggregationAuthorizationsError::Validation(
+                        error_message.to_string(),
+                    ),
+                    _ => DescribeAggregationAuthorizationsError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => DescribeAggregationAuthorizationsError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for DescribeAggregationAuthorizationsError {
+    fn from(err: serde_json::error::Error) -> DescribeAggregationAuthorizationsError {
+        DescribeAggregationAuthorizationsError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DescribeAggregationAuthorizationsError {
+    fn from(err: CredentialsError) -> DescribeAggregationAuthorizationsError {
+        DescribeAggregationAuthorizationsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DescribeAggregationAuthorizationsError {
+    fn from(err: HttpDispatchError) -> DescribeAggregationAuthorizationsError {
+        DescribeAggregationAuthorizationsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeAggregationAuthorizationsError {
+    fn from(err: io::Error) -> DescribeAggregationAuthorizationsError {
+        DescribeAggregationAuthorizationsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DescribeAggregationAuthorizationsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeAggregationAuthorizationsError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeAggregationAuthorizationsError::InvalidLimit(ref cause) => cause,
+            DescribeAggregationAuthorizationsError::InvalidNextToken(ref cause) => cause,
+            DescribeAggregationAuthorizationsError::InvalidParameterValue(ref cause) => cause,
+            DescribeAggregationAuthorizationsError::Validation(ref cause) => cause,
+            DescribeAggregationAuthorizationsError::Credentials(ref err) => err.description(),
+            DescribeAggregationAuthorizationsError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DescribeAggregationAuthorizationsError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by DescribeComplianceByConfigRule
 #[derive(Debug, PartialEq)]
 pub enum DescribeComplianceByConfigRuleError {
-    /// <p>The specified next token is invalid. Specify the <code>NextToken</code> string that was returned in the previous response to get the next page of results.</p>
+    /// <p>The specified next token is invalid. Specify the <code>nextToken</code> string that was returned in the previous response to get the next page of results.</p>
     InvalidNextToken(String),
     /// <p>One or more of the specified parameters are invalid. Verify that your parameters are valid and try again.</p>
     InvalidParameterValue(String),
@@ -1722,7 +2857,7 @@ impl Error for DescribeComplianceByConfigRuleError {
 /// Errors returned by DescribeComplianceByResource
 #[derive(Debug, PartialEq)]
 pub enum DescribeComplianceByResourceError {
-    /// <p>The specified next token is invalid. Specify the <code>NextToken</code> string that was returned in the previous response to get the next page of results.</p>
+    /// <p>The specified next token is invalid. Specify the <code>nextToken</code> string that was returned in the previous response to get the next page of results.</p>
     InvalidNextToken(String),
     /// <p>One or more of the specified parameters are invalid. Verify that your parameters are valid and try again.</p>
     InvalidParameterValue(String),
@@ -1812,7 +2947,7 @@ impl Error for DescribeComplianceByResourceError {
 /// Errors returned by DescribeConfigRuleEvaluationStatus
 #[derive(Debug, PartialEq)]
 pub enum DescribeConfigRuleEvaluationStatusError {
-    /// <p>The specified next token is invalid. Specify the <code>NextToken</code> string that was returned in the previous response to get the next page of results.</p>
+    /// <p>The specified next token is invalid. Specify the <code>nextToken</code> string that was returned in the previous response to get the next page of results.</p>
     InvalidNextToken(String),
     /// <p>One or more of the specified parameters are invalid. Verify that your parameters are valid and try again.</p>
     InvalidParameterValue(String),
@@ -1910,7 +3045,7 @@ impl Error for DescribeConfigRuleEvaluationStatusError {
 /// Errors returned by DescribeConfigRules
 #[derive(Debug, PartialEq)]
 pub enum DescribeConfigRulesError {
-    /// <p>The specified next token is invalid. Specify the <code>NextToken</code> string that was returned in the previous response to get the next page of results.</p>
+    /// <p>The specified next token is invalid. Specify the <code>nextToken</code> string that was returned in the previous response to get the next page of results.</p>
     InvalidNextToken(String),
     /// <p>One or more AWS Config rules in the request are invalid. Verify that the rule names are correct and try again.</p>
     NoSuchConfigRule(String),
@@ -1990,6 +3125,210 @@ impl Error for DescribeConfigRulesError {
                 dispatch_error.description()
             }
             DescribeConfigRulesError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DescribeConfigurationAggregatorSourcesStatus
+#[derive(Debug, PartialEq)]
+pub enum DescribeConfigurationAggregatorSourcesStatusError {
+    /// <p>The specified limit is outside the allowable range.</p>
+    InvalidLimit(String),
+    /// <p>The specified next token is invalid. Specify the <code>nextToken</code> string that was returned in the previous response to get the next page of results.</p>
+    InvalidNextToken(String),
+    /// <p>One or more of the specified parameters are invalid. Verify that your parameters are valid and try again.</p>
+    InvalidParameterValue(String),
+    /// <p>You have specified a configuration aggregator that does not exist.</p>
+    NoSuchConfigurationAggregator(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl DescribeConfigurationAggregatorSourcesStatusError {
+    pub fn from_body(body: &str) -> DescribeConfigurationAggregatorSourcesStatusError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                                    "InvalidLimitException" => DescribeConfigurationAggregatorSourcesStatusError::InvalidLimit(String::from(error_message)),
+"InvalidNextTokenException" => DescribeConfigurationAggregatorSourcesStatusError::InvalidNextToken(String::from(error_message)),
+"InvalidParameterValueException" => DescribeConfigurationAggregatorSourcesStatusError::InvalidParameterValue(String::from(error_message)),
+"NoSuchConfigurationAggregatorException" => DescribeConfigurationAggregatorSourcesStatusError::NoSuchConfigurationAggregator(String::from(error_message)),
+"ValidationException" => DescribeConfigurationAggregatorSourcesStatusError::Validation(error_message.to_string()),
+_ => DescribeConfigurationAggregatorSourcesStatusError::Unknown(String::from(body))
+                                }
+            }
+            Err(_) => {
+                DescribeConfigurationAggregatorSourcesStatusError::Unknown(String::from(body))
+            }
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for DescribeConfigurationAggregatorSourcesStatusError {
+    fn from(err: serde_json::error::Error) -> DescribeConfigurationAggregatorSourcesStatusError {
+        DescribeConfigurationAggregatorSourcesStatusError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DescribeConfigurationAggregatorSourcesStatusError {
+    fn from(err: CredentialsError) -> DescribeConfigurationAggregatorSourcesStatusError {
+        DescribeConfigurationAggregatorSourcesStatusError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DescribeConfigurationAggregatorSourcesStatusError {
+    fn from(err: HttpDispatchError) -> DescribeConfigurationAggregatorSourcesStatusError {
+        DescribeConfigurationAggregatorSourcesStatusError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeConfigurationAggregatorSourcesStatusError {
+    fn from(err: io::Error) -> DescribeConfigurationAggregatorSourcesStatusError {
+        DescribeConfigurationAggregatorSourcesStatusError::HttpDispatch(HttpDispatchError::from(
+            err,
+        ))
+    }
+}
+impl fmt::Display for DescribeConfigurationAggregatorSourcesStatusError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeConfigurationAggregatorSourcesStatusError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeConfigurationAggregatorSourcesStatusError::InvalidLimit(ref cause) => cause,
+            DescribeConfigurationAggregatorSourcesStatusError::InvalidNextToken(ref cause) => cause,
+            DescribeConfigurationAggregatorSourcesStatusError::InvalidParameterValue(ref cause) => {
+                cause
+            }
+            DescribeConfigurationAggregatorSourcesStatusError::NoSuchConfigurationAggregator(
+                ref cause,
+            ) => cause,
+            DescribeConfigurationAggregatorSourcesStatusError::Validation(ref cause) => cause,
+            DescribeConfigurationAggregatorSourcesStatusError::Credentials(ref err) => {
+                err.description()
+            }
+            DescribeConfigurationAggregatorSourcesStatusError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DescribeConfigurationAggregatorSourcesStatusError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DescribeConfigurationAggregators
+#[derive(Debug, PartialEq)]
+pub enum DescribeConfigurationAggregatorsError {
+    /// <p>The specified limit is outside the allowable range.</p>
+    InvalidLimit(String),
+    /// <p>The specified next token is invalid. Specify the <code>nextToken</code> string that was returned in the previous response to get the next page of results.</p>
+    InvalidNextToken(String),
+    /// <p>One or more of the specified parameters are invalid. Verify that your parameters are valid and try again.</p>
+    InvalidParameterValue(String),
+    /// <p>You have specified a configuration aggregator that does not exist.</p>
+    NoSuchConfigurationAggregator(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl DescribeConfigurationAggregatorsError {
+    pub fn from_body(body: &str) -> DescribeConfigurationAggregatorsError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InvalidLimitException" => DescribeConfigurationAggregatorsError::InvalidLimit(
+                        String::from(error_message),
+                    ),
+                    "InvalidNextTokenException" => {
+                        DescribeConfigurationAggregatorsError::InvalidNextToken(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidParameterValueException" => {
+                        DescribeConfigurationAggregatorsError::InvalidParameterValue(String::from(
+                            error_message,
+                        ))
+                    }
+                    "NoSuchConfigurationAggregatorException" => {
+                        DescribeConfigurationAggregatorsError::NoSuchConfigurationAggregator(
+                            String::from(error_message),
+                        )
+                    }
+                    "ValidationException" => {
+                        DescribeConfigurationAggregatorsError::Validation(error_message.to_string())
+                    }
+                    _ => DescribeConfigurationAggregatorsError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => DescribeConfigurationAggregatorsError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for DescribeConfigurationAggregatorsError {
+    fn from(err: serde_json::error::Error) -> DescribeConfigurationAggregatorsError {
+        DescribeConfigurationAggregatorsError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DescribeConfigurationAggregatorsError {
+    fn from(err: CredentialsError) -> DescribeConfigurationAggregatorsError {
+        DescribeConfigurationAggregatorsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DescribeConfigurationAggregatorsError {
+    fn from(err: HttpDispatchError) -> DescribeConfigurationAggregatorsError {
+        DescribeConfigurationAggregatorsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeConfigurationAggregatorsError {
+    fn from(err: io::Error) -> DescribeConfigurationAggregatorsError {
+        DescribeConfigurationAggregatorsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DescribeConfigurationAggregatorsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeConfigurationAggregatorsError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeConfigurationAggregatorsError::InvalidLimit(ref cause) => cause,
+            DescribeConfigurationAggregatorsError::InvalidNextToken(ref cause) => cause,
+            DescribeConfigurationAggregatorsError::InvalidParameterValue(ref cause) => cause,
+            DescribeConfigurationAggregatorsError::NoSuchConfigurationAggregator(ref cause) => {
+                cause
+            }
+            DescribeConfigurationAggregatorsError::Validation(ref cause) => cause,
+            DescribeConfigurationAggregatorsError::Credentials(ref err) => err.description(),
+            DescribeConfigurationAggregatorsError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DescribeConfigurationAggregatorsError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -2323,10 +3662,298 @@ impl Error for DescribeDeliveryChannelsError {
         }
     }
 }
+/// Errors returned by DescribePendingAggregationRequests
+#[derive(Debug, PartialEq)]
+pub enum DescribePendingAggregationRequestsError {
+    /// <p>The specified limit is outside the allowable range.</p>
+    InvalidLimit(String),
+    /// <p>The specified next token is invalid. Specify the <code>nextToken</code> string that was returned in the previous response to get the next page of results.</p>
+    InvalidNextToken(String),
+    /// <p>One or more of the specified parameters are invalid. Verify that your parameters are valid and try again.</p>
+    InvalidParameterValue(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl DescribePendingAggregationRequestsError {
+    pub fn from_body(body: &str) -> DescribePendingAggregationRequestsError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InvalidLimitException" => {
+                        DescribePendingAggregationRequestsError::InvalidLimit(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidNextTokenException" => {
+                        DescribePendingAggregationRequestsError::InvalidNextToken(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidParameterValueException" => {
+                        DescribePendingAggregationRequestsError::InvalidParameterValue(
+                            String::from(error_message),
+                        )
+                    }
+                    "ValidationException" => DescribePendingAggregationRequestsError::Validation(
+                        error_message.to_string(),
+                    ),
+                    _ => DescribePendingAggregationRequestsError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => DescribePendingAggregationRequestsError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for DescribePendingAggregationRequestsError {
+    fn from(err: serde_json::error::Error) -> DescribePendingAggregationRequestsError {
+        DescribePendingAggregationRequestsError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DescribePendingAggregationRequestsError {
+    fn from(err: CredentialsError) -> DescribePendingAggregationRequestsError {
+        DescribePendingAggregationRequestsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DescribePendingAggregationRequestsError {
+    fn from(err: HttpDispatchError) -> DescribePendingAggregationRequestsError {
+        DescribePendingAggregationRequestsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribePendingAggregationRequestsError {
+    fn from(err: io::Error) -> DescribePendingAggregationRequestsError {
+        DescribePendingAggregationRequestsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DescribePendingAggregationRequestsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribePendingAggregationRequestsError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribePendingAggregationRequestsError::InvalidLimit(ref cause) => cause,
+            DescribePendingAggregationRequestsError::InvalidNextToken(ref cause) => cause,
+            DescribePendingAggregationRequestsError::InvalidParameterValue(ref cause) => cause,
+            DescribePendingAggregationRequestsError::Validation(ref cause) => cause,
+            DescribePendingAggregationRequestsError::Credentials(ref err) => err.description(),
+            DescribePendingAggregationRequestsError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DescribePendingAggregationRequestsError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by GetAggregateComplianceDetailsByConfigRule
+#[derive(Debug, PartialEq)]
+pub enum GetAggregateComplianceDetailsByConfigRuleError {
+    /// <p>The specified limit is outside the allowable range.</p>
+    InvalidLimit(String),
+    /// <p>The specified next token is invalid. Specify the <code>nextToken</code> string that was returned in the previous response to get the next page of results.</p>
+    InvalidNextToken(String),
+    /// <p>You have specified a configuration aggregator that does not exist.</p>
+    NoSuchConfigurationAggregator(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl GetAggregateComplianceDetailsByConfigRuleError {
+    pub fn from_body(body: &str) -> GetAggregateComplianceDetailsByConfigRuleError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                                    "InvalidLimitException" => GetAggregateComplianceDetailsByConfigRuleError::InvalidLimit(String::from(error_message)),
+"InvalidNextTokenException" => GetAggregateComplianceDetailsByConfigRuleError::InvalidNextToken(String::from(error_message)),
+"NoSuchConfigurationAggregatorException" => GetAggregateComplianceDetailsByConfigRuleError::NoSuchConfigurationAggregator(String::from(error_message)),
+"ValidationException" => GetAggregateComplianceDetailsByConfigRuleError::Validation(error_message.to_string()),
+_ => GetAggregateComplianceDetailsByConfigRuleError::Unknown(String::from(body))
+                                }
+            }
+            Err(_) => GetAggregateComplianceDetailsByConfigRuleError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for GetAggregateComplianceDetailsByConfigRuleError {
+    fn from(err: serde_json::error::Error) -> GetAggregateComplianceDetailsByConfigRuleError {
+        GetAggregateComplianceDetailsByConfigRuleError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for GetAggregateComplianceDetailsByConfigRuleError {
+    fn from(err: CredentialsError) -> GetAggregateComplianceDetailsByConfigRuleError {
+        GetAggregateComplianceDetailsByConfigRuleError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for GetAggregateComplianceDetailsByConfigRuleError {
+    fn from(err: HttpDispatchError) -> GetAggregateComplianceDetailsByConfigRuleError {
+        GetAggregateComplianceDetailsByConfigRuleError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetAggregateComplianceDetailsByConfigRuleError {
+    fn from(err: io::Error) -> GetAggregateComplianceDetailsByConfigRuleError {
+        GetAggregateComplianceDetailsByConfigRuleError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for GetAggregateComplianceDetailsByConfigRuleError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetAggregateComplianceDetailsByConfigRuleError {
+    fn description(&self) -> &str {
+        match *self {
+            GetAggregateComplianceDetailsByConfigRuleError::InvalidLimit(ref cause) => cause,
+            GetAggregateComplianceDetailsByConfigRuleError::InvalidNextToken(ref cause) => cause,
+            GetAggregateComplianceDetailsByConfigRuleError::NoSuchConfigurationAggregator(
+                ref cause,
+            ) => cause,
+            GetAggregateComplianceDetailsByConfigRuleError::Validation(ref cause) => cause,
+            GetAggregateComplianceDetailsByConfigRuleError::Credentials(ref err) => {
+                err.description()
+            }
+            GetAggregateComplianceDetailsByConfigRuleError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            GetAggregateComplianceDetailsByConfigRuleError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by GetAggregateConfigRuleComplianceSummary
+#[derive(Debug, PartialEq)]
+pub enum GetAggregateConfigRuleComplianceSummaryError {
+    /// <p>The specified limit is outside the allowable range.</p>
+    InvalidLimit(String),
+    /// <p>The specified next token is invalid. Specify the <code>nextToken</code> string that was returned in the previous response to get the next page of results.</p>
+    InvalidNextToken(String),
+    /// <p>You have specified a configuration aggregator that does not exist.</p>
+    NoSuchConfigurationAggregator(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl GetAggregateConfigRuleComplianceSummaryError {
+    pub fn from_body(body: &str) -> GetAggregateConfigRuleComplianceSummaryError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InvalidLimitException" => {
+                        GetAggregateConfigRuleComplianceSummaryError::InvalidLimit(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidNextTokenException" => {
+                        GetAggregateConfigRuleComplianceSummaryError::InvalidNextToken(
+                            String::from(error_message),
+                        )
+                    }
+                    "NoSuchConfigurationAggregatorException" => {
+                        GetAggregateConfigRuleComplianceSummaryError::NoSuchConfigurationAggregator(
+                            String::from(error_message),
+                        )
+                    }
+                    "ValidationException" => {
+                        GetAggregateConfigRuleComplianceSummaryError::Validation(
+                            error_message.to_string(),
+                        )
+                    }
+                    _ => GetAggregateConfigRuleComplianceSummaryError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => GetAggregateConfigRuleComplianceSummaryError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for GetAggregateConfigRuleComplianceSummaryError {
+    fn from(err: serde_json::error::Error) -> GetAggregateConfigRuleComplianceSummaryError {
+        GetAggregateConfigRuleComplianceSummaryError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for GetAggregateConfigRuleComplianceSummaryError {
+    fn from(err: CredentialsError) -> GetAggregateConfigRuleComplianceSummaryError {
+        GetAggregateConfigRuleComplianceSummaryError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for GetAggregateConfigRuleComplianceSummaryError {
+    fn from(err: HttpDispatchError) -> GetAggregateConfigRuleComplianceSummaryError {
+        GetAggregateConfigRuleComplianceSummaryError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetAggregateConfigRuleComplianceSummaryError {
+    fn from(err: io::Error) -> GetAggregateConfigRuleComplianceSummaryError {
+        GetAggregateConfigRuleComplianceSummaryError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for GetAggregateConfigRuleComplianceSummaryError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetAggregateConfigRuleComplianceSummaryError {
+    fn description(&self) -> &str {
+        match *self {
+            GetAggregateConfigRuleComplianceSummaryError::InvalidLimit(ref cause) => cause,
+            GetAggregateConfigRuleComplianceSummaryError::InvalidNextToken(ref cause) => cause,
+            GetAggregateConfigRuleComplianceSummaryError::NoSuchConfigurationAggregator(
+                ref cause,
+            ) => cause,
+            GetAggregateConfigRuleComplianceSummaryError::Validation(ref cause) => cause,
+            GetAggregateConfigRuleComplianceSummaryError::Credentials(ref err) => err.description(),
+            GetAggregateConfigRuleComplianceSummaryError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            GetAggregateConfigRuleComplianceSummaryError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by GetComplianceDetailsByConfigRule
 #[derive(Debug, PartialEq)]
 pub enum GetComplianceDetailsByConfigRuleError {
-    /// <p>The specified next token is invalid. Specify the <code>NextToken</code> string that was returned in the previous response to get the next page of results.</p>
+    /// <p>The specified next token is invalid. Specify the <code>nextToken</code> string that was returned in the previous response to get the next page of results.</p>
     InvalidNextToken(String),
     /// <p>One or more of the specified parameters are invalid. Verify that your parameters are valid and try again.</p>
     InvalidParameterValue(String),
@@ -2664,7 +4291,7 @@ impl Error for GetComplianceSummaryByResourceTypeError {
 pub enum GetDiscoveredResourceCountsError {
     /// <p>The specified limit is outside the allowable range.</p>
     InvalidLimit(String),
-    /// <p>The specified next token is invalid. Specify the <code>NextToken</code> string that was returned in the previous response to get the next page of results.</p>
+    /// <p>The specified next token is invalid. Specify the <code>nextToken</code> string that was returned in the previous response to get the next page of results.</p>
     InvalidNextToken(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2752,7 +4379,7 @@ impl Error for GetDiscoveredResourceCountsError {
 pub enum GetResourceConfigHistoryError {
     /// <p>The specified limit is outside the allowable range.</p>
     InvalidLimit(String),
-    /// <p>The specified next token is invalid. Specify the <code>NextToken</code> string that was returned in the previous response to get the next page of results.</p>
+    /// <p>The specified next token is invalid. Specify the <code>nextToken</code> string that was returned in the previous response to get the next page of results.</p>
     InvalidNextToken(String),
     /// <p>The specified time range is not valid. The earlier time is not chronologically before the later time.</p>
     InvalidTimeRange(String),
@@ -2860,7 +4487,7 @@ impl Error for GetResourceConfigHistoryError {
 pub enum ListDiscoveredResourcesError {
     /// <p>The specified limit is outside the allowable range.</p>
     InvalidLimit(String),
-    /// <p>The specified next token is invalid. Specify the <code>NextToken</code> string that was returned in the previous response to get the next page of results.</p>
+    /// <p>The specified next token is invalid. Specify the <code>nextToken</code> string that was returned in the previous response to get the next page of results.</p>
     InvalidNextToken(String),
     /// <p>There are no configuration recorders available to provide the role needed to describe your resources. Create a configuration recorder.</p>
     NoAvailableConfigurationRecorder(String),
@@ -2949,6 +4576,88 @@ impl Error for ListDiscoveredResourcesError {
         }
     }
 }
+/// Errors returned by PutAggregationAuthorization
+#[derive(Debug, PartialEq)]
+pub enum PutAggregationAuthorizationError {
+    /// <p>One or more of the specified parameters are invalid. Verify that your parameters are valid and try again.</p>
+    InvalidParameterValue(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl PutAggregationAuthorizationError {
+    pub fn from_body(body: &str) -> PutAggregationAuthorizationError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InvalidParameterValueException" => {
+                        PutAggregationAuthorizationError::InvalidParameterValue(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ValidationException" => {
+                        PutAggregationAuthorizationError::Validation(error_message.to_string())
+                    }
+                    _ => PutAggregationAuthorizationError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => PutAggregationAuthorizationError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for PutAggregationAuthorizationError {
+    fn from(err: serde_json::error::Error) -> PutAggregationAuthorizationError {
+        PutAggregationAuthorizationError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for PutAggregationAuthorizationError {
+    fn from(err: CredentialsError) -> PutAggregationAuthorizationError {
+        PutAggregationAuthorizationError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for PutAggregationAuthorizationError {
+    fn from(err: HttpDispatchError) -> PutAggregationAuthorizationError {
+        PutAggregationAuthorizationError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for PutAggregationAuthorizationError {
+    fn from(err: io::Error) -> PutAggregationAuthorizationError {
+        PutAggregationAuthorizationError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for PutAggregationAuthorizationError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for PutAggregationAuthorizationError {
+    fn description(&self) -> &str {
+        match *self {
+            PutAggregationAuthorizationError::InvalidParameterValue(ref cause) => cause,
+            PutAggregationAuthorizationError::Validation(ref cause) => cause,
+            PutAggregationAuthorizationError::Credentials(ref err) => err.description(),
+            PutAggregationAuthorizationError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            PutAggregationAuthorizationError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by PutConfigRule
 #[derive(Debug, PartialEq)]
 pub enum PutConfigRuleError {
@@ -2956,7 +4665,7 @@ pub enum PutConfigRuleError {
     InsufficientPermissions(String),
     /// <p>One or more of the specified parameters are invalid. Verify that your parameters are valid and try again.</p>
     InvalidParameterValue(String),
-    /// <p>Failed to add the AWS Config rule because the account already contains the maximum number of 50 rules. Consider deleting any deactivated rules before adding new rules.</p>
+    /// <p>Failed to add the AWS Config rule because the account already contains the maximum number of 50 rules. Consider deleting any deactivated rules before you add new rules.</p>
     MaxNumberOfConfigRulesExceeded(String),
     /// <p>There are no configuration recorders available to provide the role needed to describe your resources. Create a configuration recorder.</p>
     NoAvailableConfigurationRecorder(String),
@@ -3055,16 +4764,134 @@ impl Error for PutConfigRuleError {
         }
     }
 }
+/// Errors returned by PutConfigurationAggregator
+#[derive(Debug, PartialEq)]
+pub enum PutConfigurationAggregatorError {
+    /// <p>One or more of the specified parameters are invalid. Verify that your parameters are valid and try again.</p>
+    InvalidParameterValue(String),
+    /// <p>You have provided a null or empty role ARN.</p>
+    InvalidRole(String),
+    /// <p>This exception is thrown if an evaluation is in progress or if you call the <a>StartConfigRulesEvaluation</a> API more than once per minute.</p>
+    LimitExceeded(String),
+    /// <p>Organization does is no longer available.</p>
+    NoAvailableOrganization(String),
+    /// <p>No permission to call the EnableAWSServiceAccess API.</p>
+    OrganizationAccessDenied(String),
+    /// <p>The configuration aggregator cannot be created because organization does not have all features enabled.</p>
+    OrganizationAllFeaturesNotEnabled(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl PutConfigurationAggregatorError {
+    pub fn from_body(body: &str) -> PutConfigurationAggregatorError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InvalidParameterValueException" => {
+                        PutConfigurationAggregatorError::InvalidParameterValue(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidRoleException" => {
+                        PutConfigurationAggregatorError::InvalidRole(String::from(error_message))
+                    }
+                    "LimitExceededException" => {
+                        PutConfigurationAggregatorError::LimitExceeded(String::from(error_message))
+                    }
+                    "NoAvailableOrganizationException" => {
+                        PutConfigurationAggregatorError::NoAvailableOrganization(String::from(
+                            error_message,
+                        ))
+                    }
+                    "OrganizationAccessDeniedException" => {
+                        PutConfigurationAggregatorError::OrganizationAccessDenied(String::from(
+                            error_message,
+                        ))
+                    }
+                    "OrganizationAllFeaturesNotEnabledException" => {
+                        PutConfigurationAggregatorError::OrganizationAllFeaturesNotEnabled(
+                            String::from(error_message),
+                        )
+                    }
+                    "ValidationException" => {
+                        PutConfigurationAggregatorError::Validation(error_message.to_string())
+                    }
+                    _ => PutConfigurationAggregatorError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => PutConfigurationAggregatorError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for PutConfigurationAggregatorError {
+    fn from(err: serde_json::error::Error) -> PutConfigurationAggregatorError {
+        PutConfigurationAggregatorError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for PutConfigurationAggregatorError {
+    fn from(err: CredentialsError) -> PutConfigurationAggregatorError {
+        PutConfigurationAggregatorError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for PutConfigurationAggregatorError {
+    fn from(err: HttpDispatchError) -> PutConfigurationAggregatorError {
+        PutConfigurationAggregatorError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for PutConfigurationAggregatorError {
+    fn from(err: io::Error) -> PutConfigurationAggregatorError {
+        PutConfigurationAggregatorError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for PutConfigurationAggregatorError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for PutConfigurationAggregatorError {
+    fn description(&self) -> &str {
+        match *self {
+            PutConfigurationAggregatorError::InvalidParameterValue(ref cause) => cause,
+            PutConfigurationAggregatorError::InvalidRole(ref cause) => cause,
+            PutConfigurationAggregatorError::LimitExceeded(ref cause) => cause,
+            PutConfigurationAggregatorError::NoAvailableOrganization(ref cause) => cause,
+            PutConfigurationAggregatorError::OrganizationAccessDenied(ref cause) => cause,
+            PutConfigurationAggregatorError::OrganizationAllFeaturesNotEnabled(ref cause) => cause,
+            PutConfigurationAggregatorError::Validation(ref cause) => cause,
+            PutConfigurationAggregatorError::Credentials(ref err) => err.description(),
+            PutConfigurationAggregatorError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            PutConfigurationAggregatorError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by PutConfigurationRecorder
 #[derive(Debug, PartialEq)]
 pub enum PutConfigurationRecorderError {
     /// <p>You have provided a configuration recorder name that is not valid.</p>
     InvalidConfigurationRecorderName(String),
-    /// <p>AWS Config throws an exception if the recording group does not contain a valid list of resource types. Invalid values could also be incorrectly formatted.</p>
+    /// <p>AWS Config throws an exception if the recording group does not contain a valid list of resource types. Invalid values might also be incorrectly formatted.</p>
     InvalidRecordingGroup(String),
     /// <p>You have provided a null or empty role ARN.</p>
     InvalidRole(String),
-    /// <p>You have reached the limit on the number of recorders you can create.</p>
+    /// <p>You have reached the limit of the number of recorders you can create.</p>
     MaxNumberOfConfigurationRecordersExceeded(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3172,7 +4999,7 @@ pub enum PutDeliveryChannelError {
     InvalidS3KeyPrefix(String),
     /// <p>The specified Amazon SNS topic does not exist.</p>
     InvalidSNSTopicARN(String),
-    /// <p>You have reached the limit on the number of delivery channels you can create.</p>
+    /// <p>You have reached the limit of the number of delivery channels you can create.</p>
     MaxNumberOfDeliveryChannelsExceeded(String),
     /// <p>There are no configuration recorders available to provide the role needed to describe your resources. Create a configuration recorder.</p>
     NoAvailableConfigurationRecorder(String),
@@ -3651,11 +5478,29 @@ impl Error for StopConfigurationRecorderError {
 }
 /// Trait representing the capabilities of the Config Service API. Config Service clients implement this trait.
 pub trait ConfigService {
+    /// <p><p>Returns the current configuration for one or more requested resources. The operation also returns a list of resources that are not processed in the current request. If there are no unprocessed resources, the operation returns an empty unprocessedResourceKeys list. </p> <note> <ul> <li> <p>The API does not return results for deleted resources.</p> </li> <li> <p> The API does not return any tags for the requested resources. This information is filtered out of the supplementaryConfiguration section of the API response.</p> </li> </ul> </note></p>
+    fn batch_get_resource_config(
+        &self,
+        input: &BatchGetResourceConfigRequest,
+    ) -> RusotoFuture<BatchGetResourceConfigResponse, BatchGetResourceConfigError>;
+
+    /// <p>Deletes the authorization granted to the specified configuration aggregator account in a specified region.</p>
+    fn delete_aggregation_authorization(
+        &self,
+        input: &DeleteAggregationAuthorizationRequest,
+    ) -> RusotoFuture<(), DeleteAggregationAuthorizationError>;
+
     /// <p>Deletes the specified AWS Config rule and all of its evaluation results.</p> <p>AWS Config sets the state of a rule to <code>DELETING</code> until the deletion is complete. You cannot update a rule while it is in this state. If you make a <code>PutConfigRule</code> or <code>DeleteConfigRule</code> request for the rule, you will receive a <code>ResourceInUseException</code>.</p> <p>You can check the state of a rule by using the <code>DescribeConfigRules</code> request.</p>
     fn delete_config_rule(
         &self,
         input: &DeleteConfigRuleRequest,
     ) -> RusotoFuture<(), DeleteConfigRuleError>;
+
+    /// <p>Deletes the specified configuration aggregator and the aggregated data associated with the aggregator.</p>
+    fn delete_configuration_aggregator(
+        &self,
+        input: &DeleteConfigurationAggregatorRequest,
+    ) -> RusotoFuture<(), DeleteConfigurationAggregatorError>;
 
     /// <p>Deletes the configuration recorder.</p> <p>After the configuration recorder is deleted, AWS Config will not record resource configuration changes until you create a new configuration recorder.</p> <p>This action does not delete the configuration information that was previously recorded. You will be able to access the previously recorded information by using the <code>GetResourceConfigHistory</code> action, but you will not be able to access this information in the AWS Config console until you create a new configuration recorder.</p>
     fn delete_configuration_recorder(
@@ -3669,19 +5514,43 @@ pub trait ConfigService {
         input: &DeleteDeliveryChannelRequest,
     ) -> RusotoFuture<(), DeleteDeliveryChannelError>;
 
-    /// <p>Deletes the evaluation results for the specified Config rule. You can specify one Config rule per request. After you delete the evaluation results, you can call the <a>StartConfigRulesEvaluation</a> API to start evaluating your AWS resources against the rule.</p>
+    /// <p>Deletes the evaluation results for the specified AWS Config rule. You can specify one AWS Config rule per request. After you delete the evaluation results, you can call the <a>StartConfigRulesEvaluation</a> API to start evaluating your AWS resources against the rule.</p>
     fn delete_evaluation_results(
         &self,
         input: &DeleteEvaluationResultsRequest,
     ) -> RusotoFuture<DeleteEvaluationResultsResponse, DeleteEvaluationResultsError>;
 
-    /// <p><p>Schedules delivery of a configuration snapshot to the Amazon S3 bucket in the specified delivery channel. After the delivery has started, AWS Config sends following notifications using an Amazon SNS topic that you have specified.</p> <ul> <li> <p>Notification of starting the delivery.</p> </li> <li> <p>Notification of delivery completed, if the delivery was successfully completed.</p> </li> <li> <p>Notification of delivery failure, if the delivery failed to complete.</p> </li> </ul></p>
+    /// <p>Deletes pending authorization requests for a specified aggregator account in a specified region.</p>
+    fn delete_pending_aggregation_request(
+        &self,
+        input: &DeletePendingAggregationRequestRequest,
+    ) -> RusotoFuture<(), DeletePendingAggregationRequestError>;
+
+    /// <p><p>Schedules delivery of a configuration snapshot to the Amazon S3 bucket in the specified delivery channel. After the delivery has started, AWS Config sends the following notifications using an Amazon SNS topic that you have specified.</p> <ul> <li> <p>Notification of the start of the delivery.</p> </li> <li> <p>Notification of the completion of the delivery, if the delivery was successfully completed.</p> </li> <li> <p>Notification of delivery failure, if the delivery failed.</p> </li> </ul></p>
     fn deliver_config_snapshot(
         &self,
         input: &DeliverConfigSnapshotRequest,
     ) -> RusotoFuture<DeliverConfigSnapshotResponse, DeliverConfigSnapshotError>;
 
-    /// <p><p>Indicates whether the specified AWS Config rules are compliant. If a rule is noncompliant, this action returns the number of AWS resources that do not comply with the rule.</p> <p>A rule is compliant if all of the evaluated resources comply with it, and it is noncompliant if any of these resources do not comply.</p> <p>If AWS Config has no current evaluation results for the rule, it returns <code>INSUFFICIENT<em>DATA</code>. This result might indicate one of the following conditions:</p> <ul> <li> <p>AWS Config has never invoked an evaluation for the rule. To check whether it has, use the <code>DescribeConfigRuleEvaluationStatus</code> action to get the <code>LastSuccessfulInvocationTime</code> and <code>LastFailedInvocationTime</code>.</p> </li> <li> <p>The rule&#39;s AWS Lambda function is failing to send evaluation results to AWS Config. Verify that the role that you assigned to your configuration recorder includes the <code>config:PutEvaluations</code> permission. If the rule is a custom rule, verify that the AWS Lambda execution role includes the <code>config:PutEvaluations</code> permission.</p> </li> <li> <p>The rule&#39;s AWS Lambda function has returned <code>NOT</em>APPLICABLE</code> for all evaluation results. This can occur if the resources were deleted or removed from the rule&#39;s scope.</p> </li> </ul></p>
+    /// <p><p>Returns a list of compliant and noncompliant rules with the number of resources for compliant and noncompliant rules. </p> <note> <p>The results can return an empty result page, but if you have a nextToken, the results are displayed on the next page.</p> </note></p>
+    fn describe_aggregate_compliance_by_config_rules(
+        &self,
+        input: &DescribeAggregateComplianceByConfigRulesRequest,
+    ) -> RusotoFuture<
+        DescribeAggregateComplianceByConfigRulesResponse,
+        DescribeAggregateComplianceByConfigRulesError,
+    >;
+
+    /// <p>Returns a list of authorizations granted to various aggregator accounts and regions.</p>
+    fn describe_aggregation_authorizations(
+        &self,
+        input: &DescribeAggregationAuthorizationsRequest,
+    ) -> RusotoFuture<
+        DescribeAggregationAuthorizationsResponse,
+        DescribeAggregationAuthorizationsError,
+    >;
+
+    /// <p><p>Indicates whether the specified AWS Config rules are compliant. If a rule is noncompliant, this action returns the number of AWS resources that do not comply with the rule.</p> <p>A rule is compliant if all of the evaluated resources comply with it. It is noncompliant if any of these resources do not comply.</p> <p>If AWS Config has no current evaluation results for the rule, it returns <code>INSUFFICIENT<em>DATA</code>. This result might indicate one of the following conditions:</p> <ul> <li> <p>AWS Config has never invoked an evaluation for the rule. To check whether it has, use the <code>DescribeConfigRuleEvaluationStatus</code> action to get the <code>LastSuccessfulInvocationTime</code> and <code>LastFailedInvocationTime</code>.</p> </li> <li> <p>The rule&#39;s AWS Lambda function is failing to send evaluation results to AWS Config. Verify that the role you assigned to your configuration recorder includes the <code>config:PutEvaluations</code> permission. If the rule is a custom rule, verify that the AWS Lambda execution role includes the <code>config:PutEvaluations</code> permission.</p> </li> <li> <p>The rule&#39;s AWS Lambda function has returned <code>NOT</em>APPLICABLE</code> for all evaluation results. This can occur if the resources were deleted or removed from the rule&#39;s scope.</p> </li> </ul></p>
     fn describe_compliance_by_config_rule(
         &self,
         input: &DescribeComplianceByConfigRuleRequest,
@@ -3708,7 +5577,22 @@ pub trait ConfigService {
         input: &DescribeConfigRulesRequest,
     ) -> RusotoFuture<DescribeConfigRulesResponse, DescribeConfigRulesError>;
 
-    /// <p><p>Returns the current status of the specified configuration recorder. If a configuration recorder is not specified, this action returns the status of all configuration recorder associated with the account.</p> <note> <p>Currently, you can specify only one configuration recorder per region in your account.</p> </note></p>
+    /// <p>Returns status information for sources within an aggregator. The status includes information about the last time AWS Config aggregated data from source accounts or AWS Config failed to aggregate data from source accounts with the related error code or message. </p>
+    fn describe_configuration_aggregator_sources_status(
+        &self,
+        input: &DescribeConfigurationAggregatorSourcesStatusRequest,
+    ) -> RusotoFuture<
+        DescribeConfigurationAggregatorSourcesStatusResponse,
+        DescribeConfigurationAggregatorSourcesStatusError,
+    >;
+
+    /// <p>Returns the details of one or more configuration aggregators. If the configuration aggregator is not specified, this action returns the details for all the configuration aggregators associated with the account. </p>
+    fn describe_configuration_aggregators(
+        &self,
+        input: &DescribeConfigurationAggregatorsRequest,
+    ) -> RusotoFuture<DescribeConfigurationAggregatorsResponse, DescribeConfigurationAggregatorsError>;
+
+    /// <p><p>Returns the current status of the specified configuration recorder. If a configuration recorder is not specified, this action returns the status of all configuration recorders associated with the account.</p> <note> <p>Currently, you can specify only one configuration recorder per region in your account.</p> </note></p>
     fn describe_configuration_recorder_status(
         &self,
         input: &DescribeConfigurationRecorderStatusRequest,
@@ -3734,6 +5618,33 @@ pub trait ConfigService {
         &self,
         input: &DescribeDeliveryChannelsRequest,
     ) -> RusotoFuture<DescribeDeliveryChannelsResponse, DescribeDeliveryChannelsError>;
+
+    /// <p>Returns a list of all pending aggregation requests.</p>
+    fn describe_pending_aggregation_requests(
+        &self,
+        input: &DescribePendingAggregationRequestsRequest,
+    ) -> RusotoFuture<
+        DescribePendingAggregationRequestsResponse,
+        DescribePendingAggregationRequestsError,
+    >;
+
+    /// <p><p>Returns the evaluation results for the specified AWS Config rule for a specific resource in a rule. The results indicate which AWS resources were evaluated by the rule, when each resource was last evaluated, and whether each resource complies with the rule. </p> <note> <p>The results can return an empty result page. But if you have a nextToken, the results are displayed on the next page.</p> </note></p>
+    fn get_aggregate_compliance_details_by_config_rule(
+        &self,
+        input: &GetAggregateComplianceDetailsByConfigRuleRequest,
+    ) -> RusotoFuture<
+        GetAggregateComplianceDetailsByConfigRuleResponse,
+        GetAggregateComplianceDetailsByConfigRuleError,
+    >;
+
+    /// <p><p>Returns the number of compliant and noncompliant rules for one or more accounts and regions in an aggregator.</p> <note> <p>The results can return an empty result page, but if you have a nextToken, the results are displayed on the next page.</p> </note></p>
+    fn get_aggregate_config_rule_compliance_summary(
+        &self,
+        input: &GetAggregateConfigRuleComplianceSummaryRequest,
+    ) -> RusotoFuture<
+        GetAggregateConfigRuleComplianceSummaryResponse,
+        GetAggregateConfigRuleComplianceSummaryError,
+    >;
 
     /// <p>Returns the evaluation results for the specified AWS Config rule. The results indicate which AWS resources were evaluated by the rule, when each resource was last evaluated, and whether each resource complies with the rule.</p>
     fn get_compliance_details_by_config_rule(
@@ -3761,7 +5672,7 @@ pub trait ConfigService {
         GetComplianceSummaryByResourceTypeError,
     >;
 
-    /// <p><p>Returns the resource types, the number of each resource type, and the total number of resources that AWS Config is recording in this region for your AWS account. </p> <p class="title"> <b>Example</b> </p> <ol> <li> <p>AWS Config is recording three resource types in the US East (Ohio) Region for your account: 25 EC2 instances, 20 IAM users, and 15 S3 buckets.</p> </li> <li> <p>You make a call to the <code>GetDiscoveredResourceCounts</code> action and specify that you want all resource types. </p> </li> <li> <p>AWS Config returns the following:</p> <ul> <li> <p>The resource types (EC2 instances, IAM users, and S3 buckets)</p> </li> <li> <p>The number of each resource type (25, 20, and 15)</p> </li> <li> <p>The total number of all resources (60)</p> </li> </ul> </li> </ol> <p>The response is paginated. By default, AWS Config lists 100 <a>ResourceCount</a> objects on each page. You can customize this number with the <code>limit</code> parameter. The response includes a <code>nextToken</code> string. To get the next page of results, run the request again and specify the string for the <code>nextToken</code> parameter.</p> <note> <p>If you make a call to the <a>GetDiscoveredResourceCounts</a> action, you may not immediately receive resource counts in the following situations:</p> <ul> <li> <p>You are a new AWS Config customer</p> </li> <li> <p>You just enabled resource recording</p> </li> </ul> <p>It may take a few minutes for AWS Config to record and count your resources. Wait a few minutes and then retry the <a>GetDiscoveredResourceCounts</a> action. </p> </note></p>
+    /// <p><p>Returns the resource types, the number of each resource type, and the total number of resources that AWS Config is recording in this region for your AWS account. </p> <p class="title"> <b>Example</b> </p> <ol> <li> <p>AWS Config is recording three resource types in the US East (Ohio) Region for your account: 25 EC2 instances, 20 IAM users, and 15 S3 buckets.</p> </li> <li> <p>You make a call to the <code>GetDiscoveredResourceCounts</code> action and specify that you want all resource types. </p> </li> <li> <p>AWS Config returns the following:</p> <ul> <li> <p>The resource types (EC2 instances, IAM users, and S3 buckets).</p> </li> <li> <p>The number of each resource type (25, 20, and 15).</p> </li> <li> <p>The total number of all resources (60).</p> </li> </ul> </li> </ol> <p>The response is paginated. By default, AWS Config lists 100 <a>ResourceCount</a> objects on each page. You can customize this number with the <code>limit</code> parameter. The response includes a <code>nextToken</code> string. To get the next page of results, run the request again and specify the string for the <code>nextToken</code> parameter.</p> <note> <p>If you make a call to the <a>GetDiscoveredResourceCounts</a> action, you might not immediately receive resource counts in the following situations:</p> <ul> <li> <p>You are a new AWS Config customer.</p> </li> <li> <p>You just enabled resource recording.</p> </li> </ul> <p>It might take a few minutes for AWS Config to record and count your resources. Wait a few minutes and then retry the <a>GetDiscoveredResourceCounts</a> action. </p> </note></p>
     fn get_discovered_resource_counts(
         &self,
         input: &GetDiscoveredResourceCountsRequest,
@@ -3773,17 +5684,29 @@ pub trait ConfigService {
         input: &GetResourceConfigHistoryRequest,
     ) -> RusotoFuture<GetResourceConfigHistoryResponse, GetResourceConfigHistoryError>;
 
-    /// <p>Accepts a resource type and returns a list of resource identifiers for the resources of that type. A resource identifier includes the resource type, ID, and (if available) the custom resource name. The results consist of resources that AWS Config has discovered, including those that AWS Config is not currently recording. You can narrow the results to include only resources that have specific resource IDs or a resource name.</p> <note> <p>You can specify either resource IDs or a resource name but not both in the same request.</p> </note> <p>The response is paginated. By default, AWS Config lists 100 resource identifiers on each page. You can customize this number with the <code>limit</code> parameter. The response includes a <code>nextToken</code> string. To get the next page of results, run the request again and specify the string for the <code>nextToken</code> parameter.</p>
+    /// <p>Accepts a resource type and returns a list of resource identifiers for the resources of that type. A resource identifier includes the resource type, ID, and (if available) the custom resource name. The results consist of resources that AWS Config has discovered, including those that AWS Config is not currently recording. You can narrow the results to include only resources that have specific resource IDs or a resource name.</p> <note> <p>You can specify either resource IDs or a resource name, but not both, in the same request.</p> </note> <p>The response is paginated. By default, AWS Config lists 100 resource identifiers on each page. You can customize this number with the <code>limit</code> parameter. The response includes a <code>nextToken</code> string. To get the next page of results, run the request again and specify the string for the <code>nextToken</code> parameter.</p>
     fn list_discovered_resources(
         &self,
         input: &ListDiscoveredResourcesRequest,
     ) -> RusotoFuture<ListDiscoveredResourcesResponse, ListDiscoveredResourcesError>;
 
-    /// <p>Adds or updates an AWS Config rule for evaluating whether your AWS resources comply with your desired configurations.</p> <p>You can use this action for custom Config rules and AWS managed Config rules. A custom Config rule is a rule that you develop and maintain. An AWS managed Config rule is a customizable, predefined rule that AWS Config provides.</p> <p>If you are adding a new custom Config rule, you must first create the AWS Lambda function that the rule invokes to evaluate your resources. When you use the <code>PutConfigRule</code> action to add the rule to AWS Config, you must specify the Amazon Resource Name (ARN) that AWS Lambda assigns to the function. Specify the ARN for the <code>SourceIdentifier</code> key. This key is part of the <code>Source</code> object, which is part of the <code>ConfigRule</code> object. </p> <p>If you are adding an AWS managed Config rule, specify the rule's identifier for the <code>SourceIdentifier</code> key. To reference AWS managed Config rule identifiers, see <a href="http://docs.aws.amazon.com/config/latest/developerguide/evaluate-config_use-managed-rules.html">About AWS Managed Config Rules</a>.</p> <p>For any new rule that you add, specify the <code>ConfigRuleName</code> in the <code>ConfigRule</code> object. Do not specify the <code>ConfigRuleArn</code> or the <code>ConfigRuleId</code>. These values are generated by AWS Config for new rules.</p> <p>If you are updating a rule that you added previously, you can specify the rule by <code>ConfigRuleName</code>, <code>ConfigRuleId</code>, or <code>ConfigRuleArn</code> in the <code>ConfigRule</code> data type that you use in this request.</p> <p>The maximum number of rules that AWS Config supports is 50.</p> <p>For more information about requesting a rule limit increase, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_config">AWS Config Limits</a> in the <i>AWS General Reference Guide</i>.</p> <p>For more information about developing and using AWS Config rules, see <a href="http://docs.aws.amazon.com/config/latest/developerguide/evaluate-config.html">Evaluating AWS Resource Configurations with AWS Config</a> in the <i>AWS Config Developer Guide</i>.</p>
+    /// <p>Authorizes the aggregator account and region to collect data from the source account and region. </p>
+    fn put_aggregation_authorization(
+        &self,
+        input: &PutAggregationAuthorizationRequest,
+    ) -> RusotoFuture<PutAggregationAuthorizationResponse, PutAggregationAuthorizationError>;
+
+    /// <p>Adds or updates an AWS Config rule for evaluating whether your AWS resources comply with your desired configurations.</p> <p>You can use this action for custom AWS Config rules and AWS managed Config rules. A custom AWS Config rule is a rule that you develop and maintain. An AWS managed Config rule is a customizable, predefined rule that AWS Config provides.</p> <p>If you are adding a new custom AWS Config rule, you must first create the AWS Lambda function that the rule invokes to evaluate your resources. When you use the <code>PutConfigRule</code> action to add the rule to AWS Config, you must specify the Amazon Resource Name (ARN) that AWS Lambda assigns to the function. Specify the ARN for the <code>SourceIdentifier</code> key. This key is part of the <code>Source</code> object, which is part of the <code>ConfigRule</code> object. </p> <p>If you are adding an AWS managed Config rule, specify the rule's identifier for the <code>SourceIdentifier</code> key. To reference AWS managed Config rule identifiers, see <a href="http://docs.aws.amazon.com/config/latest/developerguide/evaluate-config_use-managed-rules.html">About AWS Managed Config Rules</a>.</p> <p>For any new rule that you add, specify the <code>ConfigRuleName</code> in the <code>ConfigRule</code> object. Do not specify the <code>ConfigRuleArn</code> or the <code>ConfigRuleId</code>. These values are generated by AWS Config for new rules.</p> <p>If you are updating a rule that you added previously, you can specify the rule by <code>ConfigRuleName</code>, <code>ConfigRuleId</code>, or <code>ConfigRuleArn</code> in the <code>ConfigRule</code> data type that you use in this request.</p> <p>The maximum number of rules that AWS Config supports is 50.</p> <p>For information about requesting a rule limit increase, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_config">AWS Config Limits</a> in the <i>AWS General Reference Guide</i>.</p> <p>For more information about developing and using AWS Config rules, see <a href="http://docs.aws.amazon.com/config/latest/developerguide/evaluate-config.html">Evaluating AWS Resource Configurations with AWS Config</a> in the <i>AWS Config Developer Guide</i>.</p>
     fn put_config_rule(&self, input: &PutConfigRuleRequest)
         -> RusotoFuture<(), PutConfigRuleError>;
 
-    /// <p><p>Creates a new configuration recorder to record the selected resource configurations.</p> <p>You can use this action to change the role <code>roleARN</code> and/or the <code>recordingGroup</code> of an existing recorder. To change the role, call the action on the existing configuration recorder and specify a role.</p> <note> <p>Currently, you can specify only one configuration recorder per region in your account.</p> <p>If <code>ConfigurationRecorder</code> does not have the <b>recordingGroup</b> parameter specified, the default is to record all supported resource types.</p> </note></p>
+    /// <p><p>Creates and updates the configuration aggregator with the selected source accounts and regions.</p> <note> <p>AWS Config should be enabled in accounts and regions you want to aggreagate.</p> </note></p>
+    fn put_configuration_aggregator(
+        &self,
+        input: &PutConfigurationAggregatorRequest,
+    ) -> RusotoFuture<PutConfigurationAggregatorResponse, PutConfigurationAggregatorError>;
+
+    /// <p><p>Creates a new configuration recorder to record the selected resource configurations.</p> <p>You can use this action to change the role <code>roleARN</code> or the <code>recordingGroup</code> of an existing recorder. To change the role, call the action on the existing configuration recorder and specify a role.</p> <note> <p>Currently, you can specify only one configuration recorder per region in your account.</p> <p>If <code>ConfigurationRecorder</code> does not have the <b>recordingGroup</b> parameter specified, the default is to record all supported resource types.</p> </note></p>
     fn put_configuration_recorder(
         &self,
         input: &PutConfigurationRecorderRequest,
@@ -3801,7 +5724,7 @@ pub trait ConfigService {
         input: &PutEvaluationsRequest,
     ) -> RusotoFuture<PutEvaluationsResponse, PutEvaluationsError>;
 
-    /// <p><p>Runs an on-demand evaluation for the specified Config rules against the last known configuration state of the resources. Use <code>StartConfigRulesEvaluation</code> when you want to test a rule that you updated is working as expected. <code>StartConfigRulesEvaluation</code> does not re-record the latest configuration state for your resources; it re-runs an evaluation against the last known state of your resources. </p> <p>You can specify up to 25 Config rules per request. </p> <p>An existing <code>StartConfigRulesEvaluation</code> call must complete for the specified rules before you can call the API again. If you chose to have AWS Config stream to an Amazon SNS topic, you will receive a <code>ConfigRuleEvaluationStarted</code> notification when the evaluation starts.</p> <note> <p>You don&#39;t need to call the <code>StartConfigRulesEvaluation</code> API to run an evaluation for a new rule. When you create a new rule, AWS Config automatically evaluates your resources against the rule. </p> </note> <p>The <code>StartConfigRulesEvaluation</code> API is useful if you want to run on-demand evaluations, such as the following example:</p> <ol> <li> <p>You have a custom rule that evaluates your IAM resources every 24 hours.</p> </li> <li> <p>You update your Lambda function to add additional conditions to your rule.</p> </li> <li> <p>Instead of waiting for the next periodic evaluation, you call the <code>StartConfigRulesEvaluation</code> API.</p> </li> <li> <p>AWS Config invokes your Lambda function and evaluates your IAM resources.</p> </li> <li> <p>Your custom rule will still run periodic evaluations every 24 hours.</p> </li> </ol></p>
+    /// <p><p>Runs an on-demand evaluation for the specified AWS Config rules against the last known configuration state of the resources. Use <code>StartConfigRulesEvaluation</code> when you want to test that a rule you updated is working as expected. <code>StartConfigRulesEvaluation</code> does not re-record the latest configuration state for your resources. It re-runs an evaluation against the last known state of your resources. </p> <p>You can specify up to 25 AWS Config rules per request. </p> <p>An existing <code>StartConfigRulesEvaluation</code> call for the specified rules must complete before you can call the API again. If you chose to have AWS Config stream to an Amazon SNS topic, you will receive a <code>ConfigRuleEvaluationStarted</code> notification when the evaluation starts.</p> <note> <p>You don&#39;t need to call the <code>StartConfigRulesEvaluation</code> API to run an evaluation for a new rule. When you create a rule, AWS Config evaluates your resources against the rule automatically. </p> </note> <p>The <code>StartConfigRulesEvaluation</code> API is useful if you want to run on-demand evaluations, such as the following example:</p> <ol> <li> <p>You have a custom rule that evaluates your IAM resources every 24 hours.</p> </li> <li> <p>You update your Lambda function to add additional conditions to your rule.</p> </li> <li> <p>Instead of waiting for the next periodic evaluation, you call the <code>StartConfigRulesEvaluation</code> API.</p> </li> <li> <p>AWS Config invokes your Lambda function and evaluates your IAM resources.</p> </li> <li> <p>Your custom rule will still run periodic evaluations every 24 hours.</p> </li> </ol></p>
     fn start_config_rules_evaluation(
         &self,
         input: &StartConfigRulesEvaluationRequest,
@@ -3862,6 +5785,73 @@ where
     P: ProvideAwsCredentials + 'static,
     D: DispatchSignedRequest + 'static,
 {
+    /// <p><p>Returns the current configuration for one or more requested resources. The operation also returns a list of resources that are not processed in the current request. If there are no unprocessed resources, the operation returns an empty unprocessedResourceKeys list. </p> <note> <ul> <li> <p>The API does not return results for deleted resources.</p> </li> <li> <p> The API does not return any tags for the requested resources. This information is filtered out of the supplementaryConfiguration section of the API response.</p> </li> </ul> </note></p>
+    fn batch_get_resource_config(
+        &self,
+        input: &BatchGetResourceConfigRequest,
+    ) -> RusotoFuture<BatchGetResourceConfigResponse, BatchGetResourceConfigError> {
+        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "StarlingDoveService.BatchGetResourceConfig");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        let future = self.inner.sign_and_dispatch(request, |response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<BatchGetResourceConfigResponse>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(BatchGetResourceConfigError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        });
+
+        RusotoFuture::new(future)
+    }
+
+    /// <p>Deletes the authorization granted to the specified configuration aggregator account in a specified region.</p>
+    fn delete_aggregation_authorization(
+        &self,
+        input: &DeleteAggregationAuthorizationRequest,
+    ) -> RusotoFuture<(), DeleteAggregationAuthorizationError> {
+        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "StarlingDoveService.DeleteAggregationAuthorization",
+        );
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        let future = self.inner.sign_and_dispatch(request, |response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(future::ok(::std::mem::drop(response)))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DeleteAggregationAuthorizationError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        });
+
+        RusotoFuture::new(future)
+    }
+
     /// <p>Deletes the specified AWS Config rule and all of its evaluation results.</p> <p>AWS Config sets the state of a rule to <code>DELETING</code> until the deletion is complete. You cannot update a rule while it is in this state. If you make a <code>PutConfigRule</code> or <code>DeleteConfigRule</code> request for the rule, you will receive a <code>ResourceInUseException</code>.</p> <p>You can check the state of a rule by using the <code>DescribeConfigRules</code> request.</p>
     fn delete_config_rule(
         &self,
@@ -3880,6 +5870,36 @@ where
             } else {
                 future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DeleteConfigRuleError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        });
+
+        RusotoFuture::new(future)
+    }
+
+    /// <p>Deletes the specified configuration aggregator and the aggregated data associated with the aggregator.</p>
+    fn delete_configuration_aggregator(
+        &self,
+        input: &DeleteConfigurationAggregatorRequest,
+    ) -> RusotoFuture<(), DeleteConfigurationAggregatorError> {
+        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "StarlingDoveService.DeleteConfigurationAggregator",
+        );
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        let future = self.inner.sign_and_dispatch(request, |response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(future::ok(::std::mem::drop(response)))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DeleteConfigurationAggregatorError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
@@ -3946,7 +5966,7 @@ where
         RusotoFuture::new(future)
     }
 
-    /// <p>Deletes the evaluation results for the specified Config rule. You can specify one Config rule per request. After you delete the evaluation results, you can call the <a>StartConfigRulesEvaluation</a> API to start evaluating your AWS resources against the rule.</p>
+    /// <p>Deletes the evaluation results for the specified AWS Config rule. You can specify one AWS Config rule per request. After you delete the evaluation results, you can call the <a>StartConfigRulesEvaluation</a> API to start evaluating your AWS resources against the rule.</p>
     fn delete_evaluation_results(
         &self,
         input: &DeleteEvaluationResultsRequest,
@@ -3986,7 +6006,37 @@ where
         RusotoFuture::new(future)
     }
 
-    /// <p><p>Schedules delivery of a configuration snapshot to the Amazon S3 bucket in the specified delivery channel. After the delivery has started, AWS Config sends following notifications using an Amazon SNS topic that you have specified.</p> <ul> <li> <p>Notification of starting the delivery.</p> </li> <li> <p>Notification of delivery completed, if the delivery was successfully completed.</p> </li> <li> <p>Notification of delivery failure, if the delivery failed to complete.</p> </li> </ul></p>
+    /// <p>Deletes pending authorization requests for a specified aggregator account in a specified region.</p>
+    fn delete_pending_aggregation_request(
+        &self,
+        input: &DeletePendingAggregationRequestRequest,
+    ) -> RusotoFuture<(), DeletePendingAggregationRequestError> {
+        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "StarlingDoveService.DeletePendingAggregationRequest",
+        );
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        let future = self.inner.sign_and_dispatch(request, |response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(future::ok(::std::mem::drop(response)))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DeletePendingAggregationRequestError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        });
+
+        RusotoFuture::new(future)
+    }
+
+    /// <p><p>Schedules delivery of a configuration snapshot to the Amazon S3 bucket in the specified delivery channel. After the delivery has started, AWS Config sends the following notifications using an Amazon SNS topic that you have specified.</p> <ul> <li> <p>Notification of the start of the delivery.</p> </li> <li> <p>Notification of the completion of the delivery, if the delivery was successfully completed.</p> </li> <li> <p>Notification of delivery failure, if the delivery failed.</p> </li> </ul></p>
     fn deliver_config_snapshot(
         &self,
         input: &DeliverConfigSnapshotRequest,
@@ -4023,7 +6073,93 @@ where
         RusotoFuture::new(future)
     }
 
-    /// <p><p>Indicates whether the specified AWS Config rules are compliant. If a rule is noncompliant, this action returns the number of AWS resources that do not comply with the rule.</p> <p>A rule is compliant if all of the evaluated resources comply with it, and it is noncompliant if any of these resources do not comply.</p> <p>If AWS Config has no current evaluation results for the rule, it returns <code>INSUFFICIENT<em>DATA</code>. This result might indicate one of the following conditions:</p> <ul> <li> <p>AWS Config has never invoked an evaluation for the rule. To check whether it has, use the <code>DescribeConfigRuleEvaluationStatus</code> action to get the <code>LastSuccessfulInvocationTime</code> and <code>LastFailedInvocationTime</code>.</p> </li> <li> <p>The rule&#39;s AWS Lambda function is failing to send evaluation results to AWS Config. Verify that the role that you assigned to your configuration recorder includes the <code>config:PutEvaluations</code> permission. If the rule is a custom rule, verify that the AWS Lambda execution role includes the <code>config:PutEvaluations</code> permission.</p> </li> <li> <p>The rule&#39;s AWS Lambda function has returned <code>NOT</em>APPLICABLE</code> for all evaluation results. This can occur if the resources were deleted or removed from the rule&#39;s scope.</p> </li> </ul></p>
+    /// <p><p>Returns a list of compliant and noncompliant rules with the number of resources for compliant and noncompliant rules. </p> <note> <p>The results can return an empty result page, but if you have a nextToken, the results are displayed on the next page.</p> </note></p>
+    fn describe_aggregate_compliance_by_config_rules(
+        &self,
+        input: &DescribeAggregateComplianceByConfigRulesRequest,
+    ) -> RusotoFuture<
+        DescribeAggregateComplianceByConfigRulesResponse,
+        DescribeAggregateComplianceByConfigRulesError,
+    > {
+        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "StarlingDoveService.DescribeAggregateComplianceByConfigRules",
+        );
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        let future = self.inner.sign_and_dispatch(request, |response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<DescribeAggregateComplianceByConfigRulesResponse>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeAggregateComplianceByConfigRulesError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        });
+
+        RusotoFuture::new(future)
+    }
+
+    /// <p>Returns a list of authorizations granted to various aggregator accounts and regions.</p>
+    fn describe_aggregation_authorizations(
+        &self,
+        input: &DescribeAggregationAuthorizationsRequest,
+    ) -> RusotoFuture<
+        DescribeAggregationAuthorizationsResponse,
+        DescribeAggregationAuthorizationsError,
+    > {
+        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "StarlingDoveService.DescribeAggregationAuthorizations",
+        );
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        let future = self.inner.sign_and_dispatch(request, |response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<DescribeAggregationAuthorizationsResponse>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeAggregationAuthorizationsError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        });
+
+        RusotoFuture::new(future)
+    }
+
+    /// <p><p>Indicates whether the specified AWS Config rules are compliant. If a rule is noncompliant, this action returns the number of AWS resources that do not comply with the rule.</p> <p>A rule is compliant if all of the evaluated resources comply with it. It is noncompliant if any of these resources do not comply.</p> <p>If AWS Config has no current evaluation results for the rule, it returns <code>INSUFFICIENT<em>DATA</code>. This result might indicate one of the following conditions:</p> <ul> <li> <p>AWS Config has never invoked an evaluation for the rule. To check whether it has, use the <code>DescribeConfigRuleEvaluationStatus</code> action to get the <code>LastSuccessfulInvocationTime</code> and <code>LastFailedInvocationTime</code>.</p> </li> <li> <p>The rule&#39;s AWS Lambda function is failing to send evaluation results to AWS Config. Verify that the role you assigned to your configuration recorder includes the <code>config:PutEvaluations</code> permission. If the rule is a custom rule, verify that the AWS Lambda execution role includes the <code>config:PutEvaluations</code> permission.</p> </li> <li> <p>The rule&#39;s AWS Lambda function has returned <code>NOT</em>APPLICABLE</code> for all evaluation results. This can occur if the resources were deleted or removed from the rule&#39;s scope.</p> </li> </ul></p>
     fn describe_compliance_by_config_rule(
         &self,
         input: &DescribeComplianceByConfigRuleRequest,
@@ -4184,7 +6320,93 @@ where
         RusotoFuture::new(future)
     }
 
-    /// <p><p>Returns the current status of the specified configuration recorder. If a configuration recorder is not specified, this action returns the status of all configuration recorder associated with the account.</p> <note> <p>Currently, you can specify only one configuration recorder per region in your account.</p> </note></p>
+    /// <p>Returns status information for sources within an aggregator. The status includes information about the last time AWS Config aggregated data from source accounts or AWS Config failed to aggregate data from source accounts with the related error code or message. </p>
+    fn describe_configuration_aggregator_sources_status(
+        &self,
+        input: &DescribeConfigurationAggregatorSourcesStatusRequest,
+    ) -> RusotoFuture<
+        DescribeConfigurationAggregatorSourcesStatusResponse,
+        DescribeConfigurationAggregatorSourcesStatusError,
+    > {
+        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "StarlingDoveService.DescribeConfigurationAggregatorSourcesStatus",
+        );
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        let future = self.inner.sign_and_dispatch(request, |response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<DescribeConfigurationAggregatorSourcesStatusResponse>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(
+                        DescribeConfigurationAggregatorSourcesStatusError::from_body(
+                            String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                        ),
+                    )
+                }))
+            }
+        });
+
+        RusotoFuture::new(future)
+    }
+
+    /// <p>Returns the details of one or more configuration aggregators. If the configuration aggregator is not specified, this action returns the details for all the configuration aggregators associated with the account. </p>
+    fn describe_configuration_aggregators(
+        &self,
+        input: &DescribeConfigurationAggregatorsRequest,
+    ) -> RusotoFuture<DescribeConfigurationAggregatorsResponse, DescribeConfigurationAggregatorsError>
+    {
+        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "StarlingDoveService.DescribeConfigurationAggregators",
+        );
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        let future = self.inner.sign_and_dispatch(request, |response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<DescribeConfigurationAggregatorsResponse>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeConfigurationAggregatorsError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        });
+
+        RusotoFuture::new(future)
+    }
+
+    /// <p><p>Returns the current status of the specified configuration recorder. If a configuration recorder is not specified, this action returns the status of all configuration recorders associated with the account.</p> <note> <p>Currently, you can specify only one configuration recorder per region in your account.</p> </note></p>
     fn describe_configuration_recorder_status(
         &self,
         input: &DescribeConfigurationRecorderStatusRequest,
@@ -4340,6 +6562,135 @@ where
             } else {
                 future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(DescribeDeliveryChannelsError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        });
+
+        RusotoFuture::new(future)
+    }
+
+    /// <p>Returns a list of all pending aggregation requests.</p>
+    fn describe_pending_aggregation_requests(
+        &self,
+        input: &DescribePendingAggregationRequestsRequest,
+    ) -> RusotoFuture<
+        DescribePendingAggregationRequestsResponse,
+        DescribePendingAggregationRequestsError,
+    > {
+        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "StarlingDoveService.DescribePendingAggregationRequests",
+        );
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        let future = self.inner.sign_and_dispatch(request, |response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<DescribePendingAggregationRequestsResponse>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DescribePendingAggregationRequestsError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        });
+
+        RusotoFuture::new(future)
+    }
+
+    /// <p><p>Returns the evaluation results for the specified AWS Config rule for a specific resource in a rule. The results indicate which AWS resources were evaluated by the rule, when each resource was last evaluated, and whether each resource complies with the rule. </p> <note> <p>The results can return an empty result page. But if you have a nextToken, the results are displayed on the next page.</p> </note></p>
+    fn get_aggregate_compliance_details_by_config_rule(
+        &self,
+        input: &GetAggregateComplianceDetailsByConfigRuleRequest,
+    ) -> RusotoFuture<
+        GetAggregateComplianceDetailsByConfigRuleResponse,
+        GetAggregateComplianceDetailsByConfigRuleError,
+    > {
+        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "StarlingDoveService.GetAggregateComplianceDetailsByConfigRule",
+        );
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        let future = self.inner.sign_and_dispatch(request, |response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<GetAggregateComplianceDetailsByConfigRuleResponse>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(GetAggregateComplianceDetailsByConfigRuleError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        });
+
+        RusotoFuture::new(future)
+    }
+
+    /// <p><p>Returns the number of compliant and noncompliant rules for one or more accounts and regions in an aggregator.</p> <note> <p>The results can return an empty result page, but if you have a nextToken, the results are displayed on the next page.</p> </note></p>
+    fn get_aggregate_config_rule_compliance_summary(
+        &self,
+        input: &GetAggregateConfigRuleComplianceSummaryRequest,
+    ) -> RusotoFuture<
+        GetAggregateConfigRuleComplianceSummaryResponse,
+        GetAggregateConfigRuleComplianceSummaryError,
+    > {
+        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "StarlingDoveService.GetAggregateConfigRuleComplianceSummary",
+        );
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        let future = self.inner.sign_and_dispatch(request, |response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<GetAggregateConfigRuleComplianceSummaryResponse>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(GetAggregateConfigRuleComplianceSummaryError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
@@ -4513,7 +6864,7 @@ where
         RusotoFuture::new(future)
     }
 
-    /// <p><p>Returns the resource types, the number of each resource type, and the total number of resources that AWS Config is recording in this region for your AWS account. </p> <p class="title"> <b>Example</b> </p> <ol> <li> <p>AWS Config is recording three resource types in the US East (Ohio) Region for your account: 25 EC2 instances, 20 IAM users, and 15 S3 buckets.</p> </li> <li> <p>You make a call to the <code>GetDiscoveredResourceCounts</code> action and specify that you want all resource types. </p> </li> <li> <p>AWS Config returns the following:</p> <ul> <li> <p>The resource types (EC2 instances, IAM users, and S3 buckets)</p> </li> <li> <p>The number of each resource type (25, 20, and 15)</p> </li> <li> <p>The total number of all resources (60)</p> </li> </ul> </li> </ol> <p>The response is paginated. By default, AWS Config lists 100 <a>ResourceCount</a> objects on each page. You can customize this number with the <code>limit</code> parameter. The response includes a <code>nextToken</code> string. To get the next page of results, run the request again and specify the string for the <code>nextToken</code> parameter.</p> <note> <p>If you make a call to the <a>GetDiscoveredResourceCounts</a> action, you may not immediately receive resource counts in the following situations:</p> <ul> <li> <p>You are a new AWS Config customer</p> </li> <li> <p>You just enabled resource recording</p> </li> </ul> <p>It may take a few minutes for AWS Config to record and count your resources. Wait a few minutes and then retry the <a>GetDiscoveredResourceCounts</a> action. </p> </note></p>
+    /// <p><p>Returns the resource types, the number of each resource type, and the total number of resources that AWS Config is recording in this region for your AWS account. </p> <p class="title"> <b>Example</b> </p> <ol> <li> <p>AWS Config is recording three resource types in the US East (Ohio) Region for your account: 25 EC2 instances, 20 IAM users, and 15 S3 buckets.</p> </li> <li> <p>You make a call to the <code>GetDiscoveredResourceCounts</code> action and specify that you want all resource types. </p> </li> <li> <p>AWS Config returns the following:</p> <ul> <li> <p>The resource types (EC2 instances, IAM users, and S3 buckets).</p> </li> <li> <p>The number of each resource type (25, 20, and 15).</p> </li> <li> <p>The total number of all resources (60).</p> </li> </ul> </li> </ol> <p>The response is paginated. By default, AWS Config lists 100 <a>ResourceCount</a> objects on each page. You can customize this number with the <code>limit</code> parameter. The response includes a <code>nextToken</code> string. To get the next page of results, run the request again and specify the string for the <code>nextToken</code> parameter.</p> <note> <p>If you make a call to the <a>GetDiscoveredResourceCounts</a> action, you might not immediately receive resource counts in the following situations:</p> <ul> <li> <p>You are a new AWS Config customer.</p> </li> <li> <p>You just enabled resource recording.</p> </li> </ul> <p>It might take a few minutes for AWS Config to record and count your resources. Wait a few minutes and then retry the <a>GetDiscoveredResourceCounts</a> action. </p> </note></p>
     fn get_discovered_resource_counts(
         &self,
         input: &GetDiscoveredResourceCountsRequest,
@@ -4593,7 +6944,7 @@ where
         RusotoFuture::new(future)
     }
 
-    /// <p>Accepts a resource type and returns a list of resource identifiers for the resources of that type. A resource identifier includes the resource type, ID, and (if available) the custom resource name. The results consist of resources that AWS Config has discovered, including those that AWS Config is not currently recording. You can narrow the results to include only resources that have specific resource IDs or a resource name.</p> <note> <p>You can specify either resource IDs or a resource name but not both in the same request.</p> </note> <p>The response is paginated. By default, AWS Config lists 100 resource identifiers on each page. You can customize this number with the <code>limit</code> parameter. The response includes a <code>nextToken</code> string. To get the next page of results, run the request again and specify the string for the <code>nextToken</code> parameter.</p>
+    /// <p>Accepts a resource type and returns a list of resource identifiers for the resources of that type. A resource identifier includes the resource type, ID, and (if available) the custom resource name. The results consist of resources that AWS Config has discovered, including those that AWS Config is not currently recording. You can narrow the results to include only resources that have specific resource IDs or a resource name.</p> <note> <p>You can specify either resource IDs or a resource name, but not both, in the same request.</p> </note> <p>The response is paginated. By default, AWS Config lists 100 resource identifiers on each page. You can customize this number with the <code>limit</code> parameter. The response includes a <code>nextToken</code> string. To get the next page of results, run the request again and specify the string for the <code>nextToken</code> parameter.</p>
     fn list_discovered_resources(
         &self,
         input: &ListDiscoveredResourcesRequest,
@@ -4633,7 +6984,47 @@ where
         RusotoFuture::new(future)
     }
 
-    /// <p>Adds or updates an AWS Config rule for evaluating whether your AWS resources comply with your desired configurations.</p> <p>You can use this action for custom Config rules and AWS managed Config rules. A custom Config rule is a rule that you develop and maintain. An AWS managed Config rule is a customizable, predefined rule that AWS Config provides.</p> <p>If you are adding a new custom Config rule, you must first create the AWS Lambda function that the rule invokes to evaluate your resources. When you use the <code>PutConfigRule</code> action to add the rule to AWS Config, you must specify the Amazon Resource Name (ARN) that AWS Lambda assigns to the function. Specify the ARN for the <code>SourceIdentifier</code> key. This key is part of the <code>Source</code> object, which is part of the <code>ConfigRule</code> object. </p> <p>If you are adding an AWS managed Config rule, specify the rule's identifier for the <code>SourceIdentifier</code> key. To reference AWS managed Config rule identifiers, see <a href="http://docs.aws.amazon.com/config/latest/developerguide/evaluate-config_use-managed-rules.html">About AWS Managed Config Rules</a>.</p> <p>For any new rule that you add, specify the <code>ConfigRuleName</code> in the <code>ConfigRule</code> object. Do not specify the <code>ConfigRuleArn</code> or the <code>ConfigRuleId</code>. These values are generated by AWS Config for new rules.</p> <p>If you are updating a rule that you added previously, you can specify the rule by <code>ConfigRuleName</code>, <code>ConfigRuleId</code>, or <code>ConfigRuleArn</code> in the <code>ConfigRule</code> data type that you use in this request.</p> <p>The maximum number of rules that AWS Config supports is 50.</p> <p>For more information about requesting a rule limit increase, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_config">AWS Config Limits</a> in the <i>AWS General Reference Guide</i>.</p> <p>For more information about developing and using AWS Config rules, see <a href="http://docs.aws.amazon.com/config/latest/developerguide/evaluate-config.html">Evaluating AWS Resource Configurations with AWS Config</a> in the <i>AWS Config Developer Guide</i>.</p>
+    /// <p>Authorizes the aggregator account and region to collect data from the source account and region. </p>
+    fn put_aggregation_authorization(
+        &self,
+        input: &PutAggregationAuthorizationRequest,
+    ) -> RusotoFuture<PutAggregationAuthorizationResponse, PutAggregationAuthorizationError> {
+        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "StarlingDoveService.PutAggregationAuthorization",
+        );
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        let future = self.inner.sign_and_dispatch(request, |response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<PutAggregationAuthorizationResponse>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(PutAggregationAuthorizationError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        });
+
+        RusotoFuture::new(future)
+    }
+
+    /// <p>Adds or updates an AWS Config rule for evaluating whether your AWS resources comply with your desired configurations.</p> <p>You can use this action for custom AWS Config rules and AWS managed Config rules. A custom AWS Config rule is a rule that you develop and maintain. An AWS managed Config rule is a customizable, predefined rule that AWS Config provides.</p> <p>If you are adding a new custom AWS Config rule, you must first create the AWS Lambda function that the rule invokes to evaluate your resources. When you use the <code>PutConfigRule</code> action to add the rule to AWS Config, you must specify the Amazon Resource Name (ARN) that AWS Lambda assigns to the function. Specify the ARN for the <code>SourceIdentifier</code> key. This key is part of the <code>Source</code> object, which is part of the <code>ConfigRule</code> object. </p> <p>If you are adding an AWS managed Config rule, specify the rule's identifier for the <code>SourceIdentifier</code> key. To reference AWS managed Config rule identifiers, see <a href="http://docs.aws.amazon.com/config/latest/developerguide/evaluate-config_use-managed-rules.html">About AWS Managed Config Rules</a>.</p> <p>For any new rule that you add, specify the <code>ConfigRuleName</code> in the <code>ConfigRule</code> object. Do not specify the <code>ConfigRuleArn</code> or the <code>ConfigRuleId</code>. These values are generated by AWS Config for new rules.</p> <p>If you are updating a rule that you added previously, you can specify the rule by <code>ConfigRuleName</code>, <code>ConfigRuleId</code>, or <code>ConfigRuleArn</code> in the <code>ConfigRule</code> data type that you use in this request.</p> <p>The maximum number of rules that AWS Config supports is 50.</p> <p>For information about requesting a rule limit increase, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_config">AWS Config Limits</a> in the <i>AWS General Reference Guide</i>.</p> <p>For more information about developing and using AWS Config rules, see <a href="http://docs.aws.amazon.com/config/latest/developerguide/evaluate-config.html">Evaluating AWS Resource Configurations with AWS Config</a> in the <i>AWS Config Developer Guide</i>.</p>
     fn put_config_rule(
         &self,
         input: &PutConfigRuleRequest,
@@ -4660,7 +7051,47 @@ where
         RusotoFuture::new(future)
     }
 
-    /// <p><p>Creates a new configuration recorder to record the selected resource configurations.</p> <p>You can use this action to change the role <code>roleARN</code> and/or the <code>recordingGroup</code> of an existing recorder. To change the role, call the action on the existing configuration recorder and specify a role.</p> <note> <p>Currently, you can specify only one configuration recorder per region in your account.</p> <p>If <code>ConfigurationRecorder</code> does not have the <b>recordingGroup</b> parameter specified, the default is to record all supported resource types.</p> </note></p>
+    /// <p><p>Creates and updates the configuration aggregator with the selected source accounts and regions.</p> <note> <p>AWS Config should be enabled in accounts and regions you want to aggreagate.</p> </note></p>
+    fn put_configuration_aggregator(
+        &self,
+        input: &PutConfigurationAggregatorRequest,
+    ) -> RusotoFuture<PutConfigurationAggregatorResponse, PutConfigurationAggregatorError> {
+        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "StarlingDoveService.PutConfigurationAggregator",
+        );
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        let future = self.inner.sign_and_dispatch(request, |response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<PutConfigurationAggregatorResponse>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(PutConfigurationAggregatorError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        });
+
+        RusotoFuture::new(future)
+    }
+
+    /// <p><p>Creates a new configuration recorder to record the selected resource configurations.</p> <p>You can use this action to change the role <code>roleARN</code> or the <code>recordingGroup</code> of an existing recorder. To change the role, call the action on the existing configuration recorder and specify a role.</p> <note> <p>Currently, you can specify only one configuration recorder per region in your account.</p> <p>If <code>ConfigurationRecorder</code> does not have the <b>recordingGroup</b> parameter specified, the default is to record all supported resource types.</p> </note></p>
     fn put_configuration_recorder(
         &self,
         input: &PutConfigurationRecorderRequest,
@@ -4754,7 +7185,7 @@ where
         RusotoFuture::new(future)
     }
 
-    /// <p><p>Runs an on-demand evaluation for the specified Config rules against the last known configuration state of the resources. Use <code>StartConfigRulesEvaluation</code> when you want to test a rule that you updated is working as expected. <code>StartConfigRulesEvaluation</code> does not re-record the latest configuration state for your resources; it re-runs an evaluation against the last known state of your resources. </p> <p>You can specify up to 25 Config rules per request. </p> <p>An existing <code>StartConfigRulesEvaluation</code> call must complete for the specified rules before you can call the API again. If you chose to have AWS Config stream to an Amazon SNS topic, you will receive a <code>ConfigRuleEvaluationStarted</code> notification when the evaluation starts.</p> <note> <p>You don&#39;t need to call the <code>StartConfigRulesEvaluation</code> API to run an evaluation for a new rule. When you create a new rule, AWS Config automatically evaluates your resources against the rule. </p> </note> <p>The <code>StartConfigRulesEvaluation</code> API is useful if you want to run on-demand evaluations, such as the following example:</p> <ol> <li> <p>You have a custom rule that evaluates your IAM resources every 24 hours.</p> </li> <li> <p>You update your Lambda function to add additional conditions to your rule.</p> </li> <li> <p>Instead of waiting for the next periodic evaluation, you call the <code>StartConfigRulesEvaluation</code> API.</p> </li> <li> <p>AWS Config invokes your Lambda function and evaluates your IAM resources.</p> </li> <li> <p>Your custom rule will still run periodic evaluations every 24 hours.</p> </li> </ol></p>
+    /// <p><p>Runs an on-demand evaluation for the specified AWS Config rules against the last known configuration state of the resources. Use <code>StartConfigRulesEvaluation</code> when you want to test that a rule you updated is working as expected. <code>StartConfigRulesEvaluation</code> does not re-record the latest configuration state for your resources. It re-runs an evaluation against the last known state of your resources. </p> <p>You can specify up to 25 AWS Config rules per request. </p> <p>An existing <code>StartConfigRulesEvaluation</code> call for the specified rules must complete before you can call the API again. If you chose to have AWS Config stream to an Amazon SNS topic, you will receive a <code>ConfigRuleEvaluationStarted</code> notification when the evaluation starts.</p> <note> <p>You don&#39;t need to call the <code>StartConfigRulesEvaluation</code> API to run an evaluation for a new rule. When you create a rule, AWS Config evaluates your resources against the rule automatically. </p> </note> <p>The <code>StartConfigRulesEvaluation</code> API is useful if you want to run on-demand evaluations, such as the following example:</p> <ol> <li> <p>You have a custom rule that evaluates your IAM resources every 24 hours.</p> </li> <li> <p>You update your Lambda function to add additional conditions to your rule.</p> </li> <li> <p>Instead of waiting for the next periodic evaluation, you call the <code>StartConfigRulesEvaluation</code> API.</p> </li> <li> <p>AWS Config invokes your Lambda function and evaluates your IAM resources.</p> </li> <li> <p>Your custom rule will still run periodic evaluations every 24 hours.</p> </li> </ol></p>
     fn start_config_rules_evaluation(
         &self,
         input: &StartConfigRulesEvaluationRequest,

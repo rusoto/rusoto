@@ -116,6 +116,7 @@ impl ProfileProvider {
     }
 }
 
+/// Provides AWS credentials from a profile in a credentials file as a Future.
 pub struct ProfileProviderFuture {
     inner: FutureResult<AwsCredentials, CredentialsError>
 }

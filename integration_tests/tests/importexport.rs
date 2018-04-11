@@ -7,6 +7,7 @@ use rusoto_importexport::{ImportExport, ImportExportClient, ListJobsInput};
 use rusoto_core::Region;
 
 #[test]
+#[ignore]
 fn should_list_jobs() {
     let _ = env_logger::try_init();
     let client = ImportExportClient::simple(Region::UsEast1);

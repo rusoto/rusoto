@@ -49,7 +49,7 @@ pub struct AccountLimit {
     #[serde(rename = "TotalCodeSize")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub total_code_size: Option<i64>,
-    /// <p>The number of concurrent executions available to functions that do not have concurrency limits set.</p>
+    /// <p>The number of concurrent executions available to functions that do not have concurrency limits set. For more information, see <a>concurrent-executions</a>.</p>
     #[serde(rename = "UnreservedConcurrentExecutions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub unreserved_concurrent_executions: Option<i64>,
@@ -88,6 +88,10 @@ pub struct AddPermissionRequest {
     #[serde(rename = "Qualifier")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub qualifier: Option<String>,
+    /// <p>An optional value you can use to ensure you are updating the latest update of the function version or alias. If the <code>RevisionID</code> you pass doesn't match the latest <code>RevisionId</code> of the function or alias, it will fail with an error message, advising you to retrieve the latest function version or alias <code>RevisionID</code> using either or .</p>
+    #[serde(rename = "RevisionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub revision_id: Option<String>,
     /// <p>This parameter is used for S3 and SES. The AWS account ID (without a hyphen) of the source owner. For example, if the <code>SourceArn</code> identifies a bucket, then this is the bucket owner's account ID. You can use this additional condition to ensure the bucket you specify is owned by a specific account (it is possible the bucket owner deleted the bucket and some other AWS account created the bucket). You can also use this condition to specify all sources (that is, you don't specify the <code>SourceArn</code>) owned by a specific account. </p>
     #[serde(rename = "SourceAccount")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -129,6 +133,10 @@ pub struct AliasConfiguration {
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
+    /// <p>Represents the latest updated revision of the function or alias.</p>
+    #[serde(rename = "RevisionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub revision_id: Option<String>,
     /// <p>Specifies an additional function versions the alias points to, allowing you to dictate what percentage of traffic will invoke each version. For more information, see <a>lambda-traffic-shifting-using-aliases</a>.</p>
     #[serde(rename = "RoutingConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -138,7 +146,7 @@ pub struct AliasConfiguration {
 /// <p>The parent object that implements what percentage of traffic will invoke each function version. For more information, see <a>lambda-traffic-shifting-using-aliases</a>.</p>
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct AliasRoutingConfiguration {
-    /// <p>Set this property value to dictate what percentage of traffic will invoke the updated function version. If set to an empty string, 100 percent of traffic will invoke <code>function-version</code>.</p>
+    /// <p>Set this value to dictate what percentage of traffic will invoke the updated function version. If set to an empty string, 100 percent of traffic will invoke <code>function-version</code>. For more information, see <a>lambda-traffic-shifting-using-aliases</a>.</p>
     #[serde(rename = "AdditionalVersionWeights")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub additional_version_weights: Option<::std::collections::HashMap<String, f64>>,
@@ -146,7 +154,7 @@ pub struct AliasRoutingConfiguration {
 
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct Concurrency {
-    /// <p>The number of concurrent executions reserved for this function.</p>
+    /// <p>The number of concurrent executions reserved for this function. For more information, see <a>concurrent-executions</a>.</p>
     #[serde(rename = "ReservedConcurrentExecutions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub reserved_concurrent_executions: Option<i64>,
@@ -190,10 +198,10 @@ pub struct CreateEventSourceMappingRequest {
     /// <p>The Lambda function to invoke when AWS Lambda detects an event on the stream.</p> <p> You can specify the function name (for example, <code>Thumbnail</code>) or you can specify Amazon Resource Name (ARN) of the function (for example, <code>arn:aws:lambda:us-west-2:account-id:function:ThumbNail</code>). </p> <p> If you are using versioning, you can also provide a qualified function ARN (ARN that is qualified with function version or alias name as suffix). For more information about versioning, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html">AWS Lambda Function Versioning and Aliases</a> </p> <p>AWS Lambda also allows you to specify only the function name with the account ID qualifier (for example, <code>account-id:Thumbnail</code>). </p> <p>Note that the length constraint applies only to the ARN. If you specify only the function name, it is limited to 64 characters in length.</p>
     #[serde(rename = "FunctionName")]
     pub function_name: String,
-    /// <p>The position in the stream where AWS Lambda should start reading. Valid only for Kinesis streams. For more information, see <a href="http://docs.aws.amazon.com/kinesis/latest/APIReference/API_GetShardIterator.html#Kinesis-GetShardIterator-request-ShardIteratorType">ShardIteratorType</a> in the <i>Amazon Kinesis API Reference</i>. </p>
+    /// <p>The position in the DynamoDB or Kinesis stream where AWS Lambda should start reading. For more information, see <a href="http://docs.aws.amazon.com/kinesis/latest/APIReference/API_GetShardIterator.html#Kinesis-GetShardIterator-request-ShardIteratorType">GetShardIterator</a> in the <i>Amazon Kinesis API Reference Guide</i> or <a href="http://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_streams_GetShardIterator.html">GetShardIterator</a> in the <i>Amazon DynamoDB API Reference Guide</i>. The <code>AT_TIMESTAMP</code> value is supported only for <a href="http://docs.aws.amazon.com/streams/latest/dev/amazon-kinesis-streams.html">Kinesis streams</a>. </p>
     #[serde(rename = "StartingPosition")]
     pub starting_position: String,
-    /// <p>The timestamp of the data record from which to start reading. Used with <a href="http://docs.aws.amazon.com/kinesis/latest/APIReference/API_GetShardIterator.html#Kinesis-GetShardIterator-request-ShardIteratorType">shard iterator type</a> AT_TIMESTAMP. If a record with this exact timestamp does not exist, the iterator returned is for the next (later) record. If the timestamp is older than the current trim horizon, the iterator returned is for the oldest untrimmed data record (TRIM_HORIZON). Valid only for Kinesis streams. </p>
+    /// <p>The timestamp of the data record from which to start reading. Used with <a href="http://docs.aws.amazon.com/kinesis/latest/APIReference/API_GetShardIterator.html#Kinesis-GetShardIterator-request-ShardIteratorType">shard iterator type</a> AT_TIMESTAMP. If a record with this exact timestamp does not exist, the iterator returned is for the next (later) record. If the timestamp is older than the current trim horizon, the iterator returned is for the oldest untrimmed data record (TRIM_HORIZON). Valid only for <a href="http://docs.aws.amazon.com/streams/latest/dev/amazon-kinesis-streams.html">Kinesis streams</a>. </p>
     #[serde(rename = "StartingPositionTimestamp")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub starting_position_timestamp: Option<f64>,
@@ -205,7 +213,7 @@ pub struct CreateFunctionRequest {
     /// <p>The code for the Lambda function.</p>
     #[serde(rename = "Code")]
     pub code: FunctionCode,
-    /// <p>The parent object that contains the target ARN (Amazon Resource Name) of an Amazon SQS queue or Amazon SNS topic. </p>
+    /// <p>The parent object that contains the target ARN (Amazon Resource Name) of an Amazon SQS queue or Amazon SNS topic. For more information, see <a>dlq</a>. </p>
     #[serde(rename = "DeadLetterConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub dead_letter_config: Option<DeadLetterConfig>,
@@ -237,10 +245,10 @@ pub struct CreateFunctionRequest {
     /// <p>The Amazon Resource Name (ARN) of the IAM role that Lambda assumes when it executes your function to access any other Amazon Web Services (AWS) resources. For more information, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/lambda-introduction.html">AWS Lambda: How it Works</a>. </p>
     #[serde(rename = "Role")]
     pub role: String,
-    /// <p><p>The runtime environment for the Lambda function you are uploading.</p> <p>To use the Python runtime v3.6, set the value to &quot;python3.6&quot;. To use the Python runtime v2.7, set the value to &quot;python2.7&quot;. To use the Node.js runtime v6.10, set the value to &quot;nodejs6.10&quot;. To use the Node.js runtime v4.3, set the value to &quot;nodejs4.3&quot;.</p> <note> <p>Node v0.10.42 is currently marked as deprecated. You must migrate existing functions to the newer Node.js runtime versions available on AWS Lambda (nodejs4.3 or nodejs6.10) as soon as possible. Failure to do so will result in an invalid parmaeter error being returned. Note that you will have to follow this procedure for each region that contains functions written in the Node v0.10.42 runtime.</p> </note></p>
+    /// <p><p>The runtime environment for the Lambda function you are uploading.</p> <p>To use the Python runtime v3.6, set the value to &quot;python3.6&quot;. To use the Python runtime v2.7, set the value to &quot;python2.7&quot;. To use the Node.js runtime v6.10, set the value to &quot;nodejs6.10&quot;. To use the Node.js runtime v4.3, set the value to &quot;nodejs4.3&quot;. To use the .NET Core runtime v1.0, set the value to &quot;dotnetcore1.0&quot;. To use the .NET Core runtime v2.0, set the value to &quot;dotnetcore2.0&quot;.</p> <note> <p>Node v0.10.42 is currently marked as deprecated. You must migrate existing functions to the newer Node.js runtime versions available on AWS Lambda (nodejs4.3 or nodejs6.10) as soon as possible. Failure to do so will result in an invalid parameter error being returned. Note that you will have to follow this procedure for each region that contains functions written in the Node v0.10.42 runtime.</p> </note></p>
     #[serde(rename = "Runtime")]
     pub runtime: String,
-    /// <p>The list of tags (key-value pairs) assigned to the new function.</p>
+    /// <p>The list of tags (key-value pairs) assigned to the new function. For more information, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/tagging.html">Tagging Lambda Functions</a> in the <b>AWS Lambda Developer Guide</b>.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<::std::collections::HashMap<String, String>>,
@@ -258,10 +266,10 @@ pub struct CreateFunctionRequest {
     pub vpc_config: Option<VpcConfig>,
 }
 
-/// <p>The parent object that contains the target ARN (Amazon Resource Name) of an Amazon SQS queue or Amazon SNS topic.</p>
+/// <p>The Amazon Resource Name (ARN) of an Amazon SQS queue or Amazon SNS topic you specify as your Dead Letter Queue (DLQ). For more information, see <a>dlq</a>. </p>
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct DeadLetterConfig {
-    /// <p>The Amazon Resource Name (ARN) of an Amazon SQS queue or Amazon SNS topic you specify as your Dead Letter Queue (DLQ).</p>
+    /// <p>The Amazon Resource Name (ARN) of an Amazon SQS queue or Amazon SNS topic you specify as your Dead Letter Queue (DLQ). <a>dlq</a>. For more information, see <a>dlq</a>. </p>
     #[serde(rename = "TargetArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub target_arn: Option<String>,
@@ -287,7 +295,7 @@ pub struct DeleteEventSourceMappingRequest {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteFunctionConcurrencyRequest {
-    /// <p>The name of the function you are removing concurrent execution limits from.</p>
+    /// <p>The name of the function you are removing concurrent execution limits from. For more information, see <a>concurrent-executions</a>.</p>
     #[serde(rename = "FunctionName")]
     pub function_name: String,
 }
@@ -389,7 +397,7 @@ pub struct FunctionCode {
     #[serde(rename = "S3ObjectVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub s3_object_version: Option<String>,
-    /// <p>The contents of your zip file containing your deployment package. If you are using the web API directly, the contents of the zip file must be base64-encoded. If you are using the AWS SDKs or the AWS CLI, the SDKs or CLI will do the encoding for you. For more information about creating a .zip file, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/intro-permission-model.html#lambda-intro-execution-role.html">Execution Permissions</a> in the <i>AWS Lambda Developer Guide</i>. </p>
+    /// <p>The contents of your zip file containing your deployment package. If you are using the web API directly, the contents of the zip file must be base64-encoded. If you are using the AWS SDKs or the AWS CLI, the SDKs or CLI will do the encoding for you. For more information about creating a .zip file, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/intro-permission-model.html#lambda-intro-execution-role.html">Execution Permissions</a> in the <b>AWS Lambda Developer Guide</b>. </p>
     #[serde(rename = "ZipFile")]
     #[serde(deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
             serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob", default)]
@@ -420,7 +428,7 @@ pub struct FunctionConfiguration {
     #[serde(rename = "CodeSize")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub code_size: Option<i64>,
-    /// <p>The parent object that contains the target ARN (Amazon Resource Name) of an Amazon SQS queue or Amazon SNS topic.</p>
+    /// <p>The parent object that contains the target ARN (Amazon Resource Name) of an Amazon SQS queue or Amazon SNS topic. For more information, see <a>dlq</a>. </p>
     #[serde(rename = "DeadLetterConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub dead_letter_config: Option<DeadLetterConfig>,
@@ -460,6 +468,10 @@ pub struct FunctionConfiguration {
     #[serde(rename = "MemorySize")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub memory_size: Option<i64>,
+    /// <p>Represents the latest updated revision of the function or alias.</p>
+    #[serde(rename = "RevisionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub revision_id: Option<String>,
     /// <p>The Amazon Resource Name (ARN) of the IAM role that Lambda assumes when it executes your function to access any other Amazon Web Services (AWS) resources.</p>
     #[serde(rename = "Role")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -547,14 +559,14 @@ pub struct GetFunctionResponse {
     #[serde(rename = "Code")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub code: Option<FunctionCodeLocation>,
-    /// <p>The concurrent execution limit set for this function.</p>
+    /// <p>The concurrent execution limit set for this function. For more information, see <a>concurrent-executions</a>.</p>
     #[serde(rename = "Concurrency")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub concurrency: Option<Concurrency>,
     #[serde(rename = "Configuration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub configuration: Option<FunctionConfiguration>,
-    /// <p>Returns the list of tags associated with the function.</p>
+    /// <p>Returns the list of tags associated with the function. For more information, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/tagging.html">Tagging Lambda Functions</a> in the <b>AWS Lambda Developer Guide</b>.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<::std::collections::HashMap<String, String>>,
@@ -579,6 +591,10 @@ pub struct GetPolicyResponse {
     #[serde(rename = "Policy")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub policy: Option<String>,
+    /// <p>Represents the latest updated revision of the function or alias.</p>
+    #[serde(rename = "RevisionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub revision_id: Option<String>,
 }
 
 /// <p><p/></p>
@@ -613,7 +629,7 @@ pub struct InvocationRequest {
 /// <p>Upon success, returns an empty response. Otherwise, throws an exception.</p>
 #[derive(Default, Debug, Clone)]
 pub struct InvocationResponse {
-    /// <p>The function version that has been executed. This value is returned only if the invocation type is <code>RequestResponse</code>.</p>
+    /// <p>The function version that has been executed. This value is returned only if the invocation type is <code>RequestResponse</code>. For more information, see <a>lambda-traffic-shifting-using-aliases</a>.</p>
     pub executed_version: Option<String>,
     /// <p>Indicates whether an error occurred while executing the Lambda function. If an error occurred this field will have one of two values; <code>Handled</code> or <code>Unhandled</code>. <code>Handled</code> errors are errors that are reported by the function while the <code>Unhandled</code> errors are those detected and reported by AWS Lambda. Unhandled errors include out of memory errors and function timeouts. For information about how to report an <code>Handled</code> error, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/programming-model.html">Programming Model</a>. </p>
     pub function_error: Option<String>,
@@ -748,14 +764,14 @@ pub struct ListFunctionsResponse {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct ListTagsRequest {
-    /// <p>The ARN (Amazon Resource Name) of the function.</p>
+    /// <p>The ARN (Amazon Resource Name) of the function. For more information, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/tagging.html">Tagging Lambda Functions</a> in the <b>AWS Lambda Developer Guide</b>.</p>
     #[serde(rename = "Resource")]
     pub resource: String,
 }
 
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListTagsResponse {
-    /// <p>The list of tags assigned to the function.</p>
+    /// <p>The list of tags assigned to the function. For more information, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/tagging.html">Tagging Lambda Functions</a> in the <b>AWS Lambda Developer Guide</b>.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<::std::collections::HashMap<String, String>>,
@@ -804,14 +820,18 @@ pub struct PublishVersionRequest {
     /// <p>The Lambda function name. You can specify a function name (for example, <code>Thumbnail</code>) or you can specify Amazon Resource Name (ARN) of the function (for example, <code>arn:aws:lambda:us-west-2:account-id:function:ThumbNail</code>). AWS Lambda also allows you to specify a partial ARN (for example, <code>account-id:Thumbnail</code>). Note that the length constraint applies only to the ARN. If you specify only the function name, it is limited to 64 characters in length. </p>
     #[serde(rename = "FunctionName")]
     pub function_name: String,
+    /// <p>An optional value you can use to ensure you are updating the latest update of the function version or alias. If the <code>RevisionID</code> you pass doesn't match the latest <code>RevisionId</code> of the function or alias, it will fail with an error message, advising you to retrieve the latest function version or alias <code>RevisionID</code> using either or .</p>
+    #[serde(rename = "RevisionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub revision_id: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct PutFunctionConcurrencyRequest {
-    /// <p>The name of the function you are setting concurrent execution limits on.</p>
+    /// <p>The name of the function you are setting concurrent execution limits on. For more information, see <a>concurrent-executions</a>.</p>
     #[serde(rename = "FunctionName")]
     pub function_name: String,
-    /// <p>The concurrent execution limit reserved for this function.</p>
+    /// <p>The concurrent execution limit reserved for this function. For more information, see <a>concurrent-executions</a>.</p>
     #[serde(rename = "ReservedConcurrentExecutions")]
     pub reserved_concurrent_executions: i64,
 }
@@ -826,6 +846,10 @@ pub struct RemovePermissionRequest {
     #[serde(rename = "Qualifier")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub qualifier: Option<String>,
+    /// <p>An optional value you can use to ensure you are updating the latest update of the function version or alias. If the <code>RevisionID</code> you pass doesn't match the latest <code>RevisionId</code> of the function or alias, it will fail with an error message, advising you to retrieve the latest function version or alias <code>RevisionID</code> using either or .</p>
+    #[serde(rename = "RevisionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub revision_id: Option<String>,
     /// <p>Statement ID of the permission to remove.</p>
     #[serde(rename = "StatementId")]
     pub statement_id: String,
@@ -833,10 +857,10 @@ pub struct RemovePermissionRequest {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct TagResourceRequest {
-    /// <p>The ARN (Amazon Resource Name) of the Lambda function.</p>
+    /// <p>The ARN (Amazon Resource Name) of the Lambda function. For more information, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/tagging.html">Tagging Lambda Functions</a> in the <b>AWS Lambda Developer Guide</b>.</p>
     #[serde(rename = "Resource")]
     pub resource: String,
-    /// <p>The list of tags (key-value pairs) you are assigning to the Lambda function.</p>
+    /// <p>The list of tags (key-value pairs) you are assigning to the Lambda function. For more information, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/tagging.html">Tagging Lambda Functions</a> in the <b>AWS Lambda Developer Guide</b>.</p>
     #[serde(rename = "Tags")]
     pub tags: ::std::collections::HashMap<String, String>,
 }
@@ -861,10 +885,10 @@ pub struct TracingConfigResponse {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct UntagResourceRequest {
-    /// <p>The ARN (Amazon Resource Name) of the function.</p>
+    /// <p>The ARN (Amazon Resource Name) of the function. For more information, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/tagging.html">Tagging Lambda Functions</a> in the <b>AWS Lambda Developer Guide</b>.</p>
     #[serde(rename = "Resource")]
     pub resource: String,
-    /// <p>The list of tag keys to be deleted from the function.</p>
+    /// <p>The list of tag keys to be deleted from the function. For more information, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/tagging.html">Tagging Lambda Functions</a> in the <b>AWS Lambda Developer Guide</b>.</p>
     #[serde(rename = "TagKeys")]
     pub tag_keys: Vec<String>,
 }
@@ -885,6 +909,10 @@ pub struct UpdateAliasRequest {
     /// <p>The alias name.</p>
     #[serde(rename = "Name")]
     pub name: String,
+    /// <p>An optional value you can use to ensure you are updating the latest update of the function version or alias. If the <code>RevisionID</code> you pass doesn't match the latest <code>RevisionId</code> of the function or alias, it will fail with an error message, advising you to retrieve the latest function version or alias <code>RevisionID</code> using either or .</p>
+    #[serde(rename = "RevisionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub revision_id: Option<String>,
     /// <p>Specifies an additional version your alias can point to, allowing you to dictate what percentage of traffic will invoke each version. For more information, see <a>lambda-traffic-shifting-using-aliases</a>.</p>
     #[serde(rename = "RoutingConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -925,6 +953,10 @@ pub struct UpdateFunctionCodeRequest {
     #[serde(rename = "Publish")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub publish: Option<bool>,
+    /// <p>An optional value you can use to ensure you are updating the latest update of the function version or alias. If the <code>RevisionID</code> you pass doesn't match the latest <code>RevisionId</code> of the function or alias, it will fail with an error message, advising you to retrieve the latest function version or alias <code>RevisionID</code> using either or .</p>
+    #[serde(rename = "RevisionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub revision_id: Option<String>,
     /// <p>Amazon S3 bucket name where the .zip file containing your deployment package is stored. This bucket must reside in the same AWS Region where you are creating the Lambda function.</p>
     #[serde(rename = "S3Bucket")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -937,7 +969,7 @@ pub struct UpdateFunctionCodeRequest {
     #[serde(rename = "S3ObjectVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub s3_object_version: Option<String>,
-    /// <p>The contents of your zip file containing your deployment package. If you are using the web API directly, the contents of the zip file must be base64-encoded. If you are using the AWS SDKs or the AWS CLI, the SDKs or CLI will do the encoding for you. For more information about creating a .zip file, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/intro-permission-model.html#lambda-intro-execution-role.html">Execution Permissions</a> in the <i>AWS Lambda Developer Guide</i>. </p>
+    /// <p>The contents of your zip file containing your deployment package. If you are using the web API directly, the contents of the zip file must be base64-encoded. If you are using the AWS SDKs or the AWS CLI, the SDKs or CLI will do the encoding for you. For more information about creating a .zip file, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/intro-permission-model.html#lambda-intro-execution-role.html">Execution Permissions</a>. </p>
     #[serde(rename = "ZipFile")]
     #[serde(deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
             serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob", default)]
@@ -947,7 +979,7 @@ pub struct UpdateFunctionCodeRequest {
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct UpdateFunctionConfigurationRequest {
-    /// <p>The parent object that contains the target ARN (Amazon Resource Name) of an Amazon SQS queue or Amazon SNS topic.</p>
+    /// <p>The parent object that contains the target ARN (Amazon Resource Name) of an Amazon SQS queue or Amazon SNS topic. For more information, see <a>dlq</a>. </p>
     #[serde(rename = "DeadLetterConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub dead_letter_config: Option<DeadLetterConfig>,
@@ -974,11 +1006,15 @@ pub struct UpdateFunctionConfigurationRequest {
     #[serde(rename = "MemorySize")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub memory_size: Option<i64>,
+    /// <p>An optional value you can use to ensure you are updating the latest update of the function version or alias. If the <code>RevisionID</code> you pass doesn't match the latest <code>RevisionId</code> of the function or alias, it will fail with an error message, advising you to retrieve the latest function version or alias <code>RevisionID</code> using either or .</p>
+    #[serde(rename = "RevisionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub revision_id: Option<String>,
     /// <p>The Amazon Resource Name (ARN) of the IAM role that Lambda will assume when it executes your function.</p>
     #[serde(rename = "Role")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub role: Option<String>,
-    /// <p><p>The runtime environment for the Lambda function.</p> <p>To use the Python runtime v3.6, set the value to &quot;python3.6&quot;. To use the Python runtime v2.7, set the value to &quot;python2.7&quot;. To use the Node.js runtime v6.10, set the value to &quot;nodejs6.10&quot;. To use the Node.js runtime v4.3, set the value to &quot;nodejs4.3&quot;. To use the Python runtime v3.6, set the value to &quot;python3.6&quot;.</p> <note> <p>Node v0.10.42 is currently marked as deprecated. You must migrate existing functions to the newer Node.js runtime versions available on AWS Lambda (nodejs4.3 or nodejs6.10) as soon as possible. Failure to do so will result in an invalid parameter error being returned. Note that you will have to follow this procedure for each region that contains functions written in the Node v0.10.42 runtime.</p> </note></p>
+    /// <p><p>The runtime environment for the Lambda function.</p> <p>To use the Python runtime v3.6, set the value to &quot;python3.6&quot;. To use the Python runtime v2.7, set the value to &quot;python2.7&quot;. To use the Node.js runtime v6.10, set the value to &quot;nodejs6.10&quot;. To use the Node.js runtime v4.3, set the value to &quot;nodejs4.3&quot;. To use the .NET Core runtime v1.0, set the value to &quot;dotnetcore1.0&quot;. To use the .NET Core runtime v2.0, set the value to &quot;dotnetcore2.0&quot;.</p> <note> <p>Node v0.10.42 is currently marked as deprecated. You must migrate existing functions to the newer Node.js runtime versions available on AWS Lambda (nodejs4.3 or nodejs6.10) as soon as possible. Failure to do so will result in an invalid parameter error being returned. Note that you will have to follow this procedure for each region that contains functions written in the Node v0.10.42 runtime.</p> </note></p>
     #[serde(rename = "Runtime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub runtime: Option<String>,
@@ -1032,13 +1068,15 @@ pub enum AddPermissionError {
     InvalidParameterValue(String),
     /// <p>Lambda function access policy is limited to 20 KB.</p>
     PolicyLengthExceeded(String),
+    /// <p>The RevisionId provided does not match the latest RevisionId for the Lambda function or alias. Call the <code>GetFunction</code> or the <code>GetAlias</code> API to retrieve the latest RevisionId for your resource.</p>
+    PreconditionFailed(String),
     /// <p>The resource already exists.</p>
     ResourceConflict(String),
     /// <p>The resource (for example, a Lambda function or access policy statement) specified in the request does not exist.</p>
     ResourceNotFound(String),
     /// <p>The AWS Lambda service encountered an internal error.</p>
     Service(String),
-    /// <p>You will get this exception for the following reasons. <code>ConcurrentInvocationLimitExceeded</code> is returned if you have no functions with reserved-concurrency and have exceeded your account concurrent limit or if a function without reserved concurrency exceeds the account's unreserved concurrency limit. <code>ReservedFunctionConcurrentInvocationLimitExceeded</code> is returned when a function with reserved concurrency exceeds its configured concurrent limit. <code>CallerRateLimitExceeded</code> is returned when your account limit is exceeded and you have not reserved concurrency on any function. For more information, see <a>concurrent-executions</a> </p>
+    /// <p> </p>
     TooManyRequests(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1068,6 +1106,9 @@ impl AddPermissionError {
                     }
                     "PolicyLengthExceededException" => {
                         AddPermissionError::PolicyLengthExceeded(String::from(error_message))
+                    }
+                    "PreconditionFailedException" => {
+                        AddPermissionError::PreconditionFailed(String::from(error_message))
                     }
                     "ResourceConflictException" => {
                         AddPermissionError::ResourceConflict(String::from(error_message))
@@ -1120,6 +1161,7 @@ impl Error for AddPermissionError {
         match *self {
             AddPermissionError::InvalidParameterValue(ref cause) => cause,
             AddPermissionError::PolicyLengthExceeded(ref cause) => cause,
+            AddPermissionError::PreconditionFailed(ref cause) => cause,
             AddPermissionError::ResourceConflict(ref cause) => cause,
             AddPermissionError::ResourceNotFound(ref cause) => cause,
             AddPermissionError::Service(ref cause) => cause,
@@ -1142,7 +1184,7 @@ pub enum CreateAliasError {
     ResourceNotFound(String),
     /// <p>The AWS Lambda service encountered an internal error.</p>
     Service(String),
-    /// <p>You will get this exception for the following reasons. <code>ConcurrentInvocationLimitExceeded</code> is returned if you have no functions with reserved-concurrency and have exceeded your account concurrent limit or if a function without reserved concurrency exceeds the account's unreserved concurrency limit. <code>ReservedFunctionConcurrentInvocationLimitExceeded</code> is returned when a function with reserved concurrency exceeds its configured concurrent limit. <code>CallerRateLimitExceeded</code> is returned when your account limit is exceeded and you have not reserved concurrency on any function. For more information, see <a>concurrent-executions</a> </p>
+    /// <p> </p>
     TooManyRequests(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1242,7 +1284,7 @@ pub enum CreateEventSourceMappingError {
     ResourceNotFound(String),
     /// <p>The AWS Lambda service encountered an internal error.</p>
     Service(String),
-    /// <p>You will get this exception for the following reasons. <code>ConcurrentInvocationLimitExceeded</code> is returned if you have no functions with reserved-concurrency and have exceeded your account concurrent limit or if a function without reserved concurrency exceeds the account's unreserved concurrency limit. <code>ReservedFunctionConcurrentInvocationLimitExceeded</code> is returned when a function with reserved concurrency exceeds its configured concurrent limit. <code>CallerRateLimitExceeded</code> is returned when your account limit is exceeded and you have not reserved concurrency on any function. For more information, see <a>concurrent-executions</a> </p>
+    /// <p> </p>
     TooManyRequests(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1350,7 +1392,7 @@ pub enum CreateFunctionError {
     ResourceNotFound(String),
     /// <p>The AWS Lambda service encountered an internal error.</p>
     Service(String),
-    /// <p>You will get this exception for the following reasons. <code>ConcurrentInvocationLimitExceeded</code> is returned if you have no functions with reserved-concurrency and have exceeded your account concurrent limit or if a function without reserved concurrency exceeds the account's unreserved concurrency limit. <code>ReservedFunctionConcurrentInvocationLimitExceeded</code> is returned when a function with reserved concurrency exceeds its configured concurrent limit. <code>CallerRateLimitExceeded</code> is returned when your account limit is exceeded and you have not reserved concurrency on any function. For more information, see <a>concurrent-executions</a> </p>
+    /// <p> </p>
     TooManyRequests(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1450,7 +1492,7 @@ pub enum DeleteAliasError {
     InvalidParameterValue(String),
     /// <p>The AWS Lambda service encountered an internal error.</p>
     Service(String),
-    /// <p>You will get this exception for the following reasons. <code>ConcurrentInvocationLimitExceeded</code> is returned if you have no functions with reserved-concurrency and have exceeded your account concurrent limit or if a function without reserved concurrency exceeds the account's unreserved concurrency limit. <code>ReservedFunctionConcurrentInvocationLimitExceeded</code> is returned when a function with reserved concurrency exceeds its configured concurrent limit. <code>CallerRateLimitExceeded</code> is returned when your account limit is exceeded and you have not reserved concurrency on any function. For more information, see <a>concurrent-executions</a> </p>
+    /// <p> </p>
     TooManyRequests(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1540,7 +1582,7 @@ pub enum DeleteEventSourceMappingError {
     ResourceNotFound(String),
     /// <p>The AWS Lambda service encountered an internal error.</p>
     Service(String),
-    /// <p>You will get this exception for the following reasons. <code>ConcurrentInvocationLimitExceeded</code> is returned if you have no functions with reserved-concurrency and have exceeded your account concurrent limit or if a function without reserved concurrency exceeds the account's unreserved concurrency limit. <code>ReservedFunctionConcurrentInvocationLimitExceeded</code> is returned when a function with reserved concurrency exceeds its configured concurrent limit. <code>CallerRateLimitExceeded</code> is returned when your account limit is exceeded and you have not reserved concurrency on any function. For more information, see <a>concurrent-executions</a> </p>
+    /// <p> </p>
     TooManyRequests(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1642,7 +1684,7 @@ pub enum DeleteFunctionError {
     ResourceNotFound(String),
     /// <p>The AWS Lambda service encountered an internal error.</p>
     Service(String),
-    /// <p>You will get this exception for the following reasons. <code>ConcurrentInvocationLimitExceeded</code> is returned if you have no functions with reserved-concurrency and have exceeded your account concurrent limit or if a function without reserved concurrency exceeds the account's unreserved concurrency limit. <code>ReservedFunctionConcurrentInvocationLimitExceeded</code> is returned when a function with reserved concurrency exceeds its configured concurrent limit. <code>CallerRateLimitExceeded</code> is returned when your account limit is exceeded and you have not reserved concurrency on any function. For more information, see <a>concurrent-executions</a> </p>
+    /// <p> </p>
     TooManyRequests(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1740,7 +1782,7 @@ pub enum DeleteFunctionConcurrencyError {
     ResourceNotFound(String),
     /// <p>The AWS Lambda service encountered an internal error.</p>
     Service(String),
-    /// <p>You will get this exception for the following reasons. <code>ConcurrentInvocationLimitExceeded</code> is returned if you have no functions with reserved-concurrency and have exceeded your account concurrent limit or if a function without reserved concurrency exceeds the account's unreserved concurrency limit. <code>ReservedFunctionConcurrentInvocationLimitExceeded</code> is returned when a function with reserved concurrency exceeds its configured concurrent limit. <code>CallerRateLimitExceeded</code> is returned when your account limit is exceeded and you have not reserved concurrency on any function. For more information, see <a>concurrent-executions</a> </p>
+    /// <p> </p>
     TooManyRequests(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1838,7 +1880,7 @@ impl Error for DeleteFunctionConcurrencyError {
 pub enum GetAccountSettingsError {
     /// <p>The AWS Lambda service encountered an internal error.</p>
     Service(String),
-    /// <p>You will get this exception for the following reasons. <code>ConcurrentInvocationLimitExceeded</code> is returned if you have no functions with reserved-concurrency and have exceeded your account concurrent limit or if a function without reserved concurrency exceeds the account's unreserved concurrency limit. <code>ReservedFunctionConcurrentInvocationLimitExceeded</code> is returned when a function with reserved concurrency exceeds its configured concurrent limit. <code>CallerRateLimitExceeded</code> is returned when your account limit is exceeded and you have not reserved concurrency on any function. For more information, see <a>concurrent-executions</a> </p>
+    /// <p> </p>
     TooManyRequests(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1928,7 +1970,7 @@ pub enum GetAliasError {
     ResourceNotFound(String),
     /// <p>The AWS Lambda service encountered an internal error.</p>
     Service(String),
-    /// <p>You will get this exception for the following reasons. <code>ConcurrentInvocationLimitExceeded</code> is returned if you have no functions with reserved-concurrency and have exceeded your account concurrent limit or if a function without reserved concurrency exceeds the account's unreserved concurrency limit. <code>ReservedFunctionConcurrentInvocationLimitExceeded</code> is returned when a function with reserved concurrency exceeds its configured concurrent limit. <code>CallerRateLimitExceeded</code> is returned when your account limit is exceeded and you have not reserved concurrency on any function. For more information, see <a>concurrent-executions</a> </p>
+    /// <p> </p>
     TooManyRequests(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2020,7 +2062,7 @@ pub enum GetEventSourceMappingError {
     ResourceNotFound(String),
     /// <p>The AWS Lambda service encountered an internal error.</p>
     Service(String),
-    /// <p>You will get this exception for the following reasons. <code>ConcurrentInvocationLimitExceeded</code> is returned if you have no functions with reserved-concurrency and have exceeded your account concurrent limit or if a function without reserved concurrency exceeds the account's unreserved concurrency limit. <code>ReservedFunctionConcurrentInvocationLimitExceeded</code> is returned when a function with reserved concurrency exceeds its configured concurrent limit. <code>CallerRateLimitExceeded</code> is returned when your account limit is exceeded and you have not reserved concurrency on any function. For more information, see <a>concurrent-executions</a> </p>
+    /// <p> </p>
     TooManyRequests(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2120,7 +2162,7 @@ pub enum GetFunctionError {
     ResourceNotFound(String),
     /// <p>The AWS Lambda service encountered an internal error.</p>
     Service(String),
-    /// <p>You will get this exception for the following reasons. <code>ConcurrentInvocationLimitExceeded</code> is returned if you have no functions with reserved-concurrency and have exceeded your account concurrent limit or if a function without reserved concurrency exceeds the account's unreserved concurrency limit. <code>ReservedFunctionConcurrentInvocationLimitExceeded</code> is returned when a function with reserved concurrency exceeds its configured concurrent limit. <code>CallerRateLimitExceeded</code> is returned when your account limit is exceeded and you have not reserved concurrency on any function. For more information, see <a>concurrent-executions</a> </p>
+    /// <p> </p>
     TooManyRequests(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2214,7 +2256,7 @@ pub enum GetFunctionConfigurationError {
     ResourceNotFound(String),
     /// <p>The AWS Lambda service encountered an internal error.</p>
     Service(String),
-    /// <p>You will get this exception for the following reasons. <code>ConcurrentInvocationLimitExceeded</code> is returned if you have no functions with reserved-concurrency and have exceeded your account concurrent limit or if a function without reserved concurrency exceeds the account's unreserved concurrency limit. <code>ReservedFunctionConcurrentInvocationLimitExceeded</code> is returned when a function with reserved concurrency exceeds its configured concurrent limit. <code>CallerRateLimitExceeded</code> is returned when your account limit is exceeded and you have not reserved concurrency on any function. For more information, see <a>concurrent-executions</a> </p>
+    /// <p> </p>
     TooManyRequests(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2314,7 +2356,7 @@ pub enum GetPolicyError {
     ResourceNotFound(String),
     /// <p>The AWS Lambda service encountered an internal error.</p>
     Service(String),
-    /// <p>You will get this exception for the following reasons. <code>ConcurrentInvocationLimitExceeded</code> is returned if you have no functions with reserved-concurrency and have exceeded your account concurrent limit or if a function without reserved concurrency exceeds the account's unreserved concurrency limit. <code>ReservedFunctionConcurrentInvocationLimitExceeded</code> is returned when a function with reserved concurrency exceeds its configured concurrent limit. <code>CallerRateLimitExceeded</code> is returned when your account limit is exceeded and you have not reserved concurrency on any function. For more information, see <a>concurrent-executions</a> </p>
+    /// <p> </p>
     TooManyRequests(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2436,7 +2478,7 @@ pub enum InvokeError {
     Service(String),
     /// <p>AWS Lambda was not able to set up VPC access for the Lambda function because one or more configured subnets has no available IP addresses.</p>
     SubnetIPAddressLimitReached(String),
-    /// <p>You will get this exception for the following reasons. <code>ConcurrentInvocationLimitExceeded</code> is returned if you have no functions with reserved-concurrency and have exceeded your account concurrent limit or if a function without reserved concurrency exceeds the account's unreserved concurrency limit. <code>ReservedFunctionConcurrentInvocationLimitExceeded</code> is returned when a function with reserved concurrency exceeds its configured concurrent limit. <code>CallerRateLimitExceeded</code> is returned when your account limit is exceeded and you have not reserved concurrency on any function. For more information, see <a>concurrent-executions</a> </p>
+    /// <p> </p>
     TooManyRequests(String),
     /// <p>The content type of the <code>Invoke</code> request body is not JSON.</p>
     UnsupportedMediaType(String),
@@ -2684,7 +2726,7 @@ pub enum ListAliasesError {
     ResourceNotFound(String),
     /// <p>The AWS Lambda service encountered an internal error.</p>
     Service(String),
-    /// <p>You will get this exception for the following reasons. <code>ConcurrentInvocationLimitExceeded</code> is returned if you have no functions with reserved-concurrency and have exceeded your account concurrent limit or if a function without reserved concurrency exceeds the account's unreserved concurrency limit. <code>ReservedFunctionConcurrentInvocationLimitExceeded</code> is returned when a function with reserved concurrency exceeds its configured concurrent limit. <code>CallerRateLimitExceeded</code> is returned when your account limit is exceeded and you have not reserved concurrency on any function. For more information, see <a>concurrent-executions</a> </p>
+    /// <p> </p>
     TooManyRequests(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2778,7 +2820,7 @@ pub enum ListEventSourceMappingsError {
     ResourceNotFound(String),
     /// <p>The AWS Lambda service encountered an internal error.</p>
     Service(String),
-    /// <p>You will get this exception for the following reasons. <code>ConcurrentInvocationLimitExceeded</code> is returned if you have no functions with reserved-concurrency and have exceeded your account concurrent limit or if a function without reserved concurrency exceeds the account's unreserved concurrency limit. <code>ReservedFunctionConcurrentInvocationLimitExceeded</code> is returned when a function with reserved concurrency exceeds its configured concurrent limit. <code>CallerRateLimitExceeded</code> is returned when your account limit is exceeded and you have not reserved concurrency on any function. For more information, see <a>concurrent-executions</a> </p>
+    /// <p> </p>
     TooManyRequests(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2876,7 +2918,7 @@ pub enum ListFunctionsError {
     InvalidParameterValue(String),
     /// <p>The AWS Lambda service encountered an internal error.</p>
     Service(String),
-    /// <p>You will get this exception for the following reasons. <code>ConcurrentInvocationLimitExceeded</code> is returned if you have no functions with reserved-concurrency and have exceeded your account concurrent limit or if a function without reserved concurrency exceeds the account's unreserved concurrency limit. <code>ReservedFunctionConcurrentInvocationLimitExceeded</code> is returned when a function with reserved concurrency exceeds its configured concurrent limit. <code>CallerRateLimitExceeded</code> is returned when your account limit is exceeded and you have not reserved concurrency on any function. For more information, see <a>concurrent-executions</a> </p>
+    /// <p> </p>
     TooManyRequests(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2966,7 +3008,7 @@ pub enum ListTagsError {
     ResourceNotFound(String),
     /// <p>The AWS Lambda service encountered an internal error.</p>
     Service(String),
-    /// <p>You will get this exception for the following reasons. <code>ConcurrentInvocationLimitExceeded</code> is returned if you have no functions with reserved-concurrency and have exceeded your account concurrent limit or if a function without reserved concurrency exceeds the account's unreserved concurrency limit. <code>ReservedFunctionConcurrentInvocationLimitExceeded</code> is returned when a function with reserved concurrency exceeds its configured concurrent limit. <code>CallerRateLimitExceeded</code> is returned when your account limit is exceeded and you have not reserved concurrency on any function. For more information, see <a>concurrent-executions</a> </p>
+    /// <p> </p>
     TooManyRequests(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3058,7 +3100,7 @@ pub enum ListVersionsByFunctionError {
     ResourceNotFound(String),
     /// <p>The AWS Lambda service encountered an internal error.</p>
     Service(String),
-    /// <p>You will get this exception for the following reasons. <code>ConcurrentInvocationLimitExceeded</code> is returned if you have no functions with reserved-concurrency and have exceeded your account concurrent limit or if a function without reserved concurrency exceeds the account's unreserved concurrency limit. <code>ReservedFunctionConcurrentInvocationLimitExceeded</code> is returned when a function with reserved concurrency exceeds its configured concurrent limit. <code>CallerRateLimitExceeded</code> is returned when your account limit is exceeded and you have not reserved concurrency on any function. For more information, see <a>concurrent-executions</a> </p>
+    /// <p> </p>
     TooManyRequests(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3156,11 +3198,13 @@ pub enum PublishVersionError {
     CodeStorageExceeded(String),
     /// <p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception.</p>
     InvalidParameterValue(String),
+    /// <p>The RevisionId provided does not match the latest RevisionId for the Lambda function or alias. Call the <code>GetFunction</code> or the <code>GetAlias</code> API to retrieve the latest RevisionId for your resource.</p>
+    PreconditionFailed(String),
     /// <p>The resource (for example, a Lambda function or access policy statement) specified in the request does not exist.</p>
     ResourceNotFound(String),
     /// <p>The AWS Lambda service encountered an internal error.</p>
     Service(String),
-    /// <p>You will get this exception for the following reasons. <code>ConcurrentInvocationLimitExceeded</code> is returned if you have no functions with reserved-concurrency and have exceeded your account concurrent limit or if a function without reserved concurrency exceeds the account's unreserved concurrency limit. <code>ReservedFunctionConcurrentInvocationLimitExceeded</code> is returned when a function with reserved concurrency exceeds its configured concurrent limit. <code>CallerRateLimitExceeded</code> is returned when your account limit is exceeded and you have not reserved concurrency on any function. For more information, see <a>concurrent-executions</a> </p>
+    /// <p> </p>
     TooManyRequests(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3190,6 +3234,9 @@ impl PublishVersionError {
                     }
                     "InvalidParameterValueException" => {
                         PublishVersionError::InvalidParameterValue(String::from(error_message))
+                    }
+                    "PreconditionFailedException" => {
+                        PublishVersionError::PreconditionFailed(String::from(error_message))
                     }
                     "ResourceNotFoundException" => {
                         PublishVersionError::ResourceNotFound(String::from(error_message))
@@ -3239,6 +3286,7 @@ impl Error for PublishVersionError {
         match *self {
             PublishVersionError::CodeStorageExceeded(ref cause) => cause,
             PublishVersionError::InvalidParameterValue(ref cause) => cause,
+            PublishVersionError::PreconditionFailed(ref cause) => cause,
             PublishVersionError::ResourceNotFound(ref cause) => cause,
             PublishVersionError::Service(ref cause) => cause,
             PublishVersionError::TooManyRequests(ref cause) => cause,
@@ -3258,7 +3306,7 @@ pub enum PutFunctionConcurrencyError {
     ResourceNotFound(String),
     /// <p>The AWS Lambda service encountered an internal error.</p>
     Service(String),
-    /// <p>You will get this exception for the following reasons. <code>ConcurrentInvocationLimitExceeded</code> is returned if you have no functions with reserved-concurrency and have exceeded your account concurrent limit or if a function without reserved concurrency exceeds the account's unreserved concurrency limit. <code>ReservedFunctionConcurrentInvocationLimitExceeded</code> is returned when a function with reserved concurrency exceeds its configured concurrent limit. <code>CallerRateLimitExceeded</code> is returned when your account limit is exceeded and you have not reserved concurrency on any function. For more information, see <a>concurrent-executions</a> </p>
+    /// <p> </p>
     TooManyRequests(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3354,11 +3402,13 @@ impl Error for PutFunctionConcurrencyError {
 pub enum RemovePermissionError {
     /// <p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception.</p>
     InvalidParameterValue(String),
+    /// <p>The RevisionId provided does not match the latest RevisionId for the Lambda function or alias. Call the <code>GetFunction</code> or the <code>GetAlias</code> API to retrieve the latest RevisionId for your resource.</p>
+    PreconditionFailed(String),
     /// <p>The resource (for example, a Lambda function or access policy statement) specified in the request does not exist.</p>
     ResourceNotFound(String),
     /// <p>The AWS Lambda service encountered an internal error.</p>
     Service(String),
-    /// <p>You will get this exception for the following reasons. <code>ConcurrentInvocationLimitExceeded</code> is returned if you have no functions with reserved-concurrency and have exceeded your account concurrent limit or if a function without reserved concurrency exceeds the account's unreserved concurrency limit. <code>ReservedFunctionConcurrentInvocationLimitExceeded</code> is returned when a function with reserved concurrency exceeds its configured concurrent limit. <code>CallerRateLimitExceeded</code> is returned when your account limit is exceeded and you have not reserved concurrency on any function. For more information, see <a>concurrent-executions</a> </p>
+    /// <p> </p>
     TooManyRequests(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3385,6 +3435,9 @@ impl RemovePermissionError {
                 match *error_type {
                     "InvalidParameterValueException" => {
                         RemovePermissionError::InvalidParameterValue(String::from(error_message))
+                    }
+                    "PreconditionFailedException" => {
+                        RemovePermissionError::PreconditionFailed(String::from(error_message))
                     }
                     "ResourceNotFoundException" => {
                         RemovePermissionError::ResourceNotFound(String::from(error_message))
@@ -3435,6 +3488,7 @@ impl Error for RemovePermissionError {
     fn description(&self) -> &str {
         match *self {
             RemovePermissionError::InvalidParameterValue(ref cause) => cause,
+            RemovePermissionError::PreconditionFailed(ref cause) => cause,
             RemovePermissionError::ResourceNotFound(ref cause) => cause,
             RemovePermissionError::Service(ref cause) => cause,
             RemovePermissionError::TooManyRequests(ref cause) => cause,
@@ -3454,7 +3508,7 @@ pub enum TagResourceError {
     ResourceNotFound(String),
     /// <p>The AWS Lambda service encountered an internal error.</p>
     Service(String),
-    /// <p>You will get this exception for the following reasons. <code>ConcurrentInvocationLimitExceeded</code> is returned if you have no functions with reserved-concurrency and have exceeded your account concurrent limit or if a function without reserved concurrency exceeds the account's unreserved concurrency limit. <code>ReservedFunctionConcurrentInvocationLimitExceeded</code> is returned when a function with reserved concurrency exceeds its configured concurrent limit. <code>CallerRateLimitExceeded</code> is returned when your account limit is exceeded and you have not reserved concurrency on any function. For more information, see <a>concurrent-executions</a> </p>
+    /// <p> </p>
     TooManyRequests(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3548,7 +3602,7 @@ pub enum UntagResourceError {
     ResourceNotFound(String),
     /// <p>The AWS Lambda service encountered an internal error.</p>
     Service(String),
-    /// <p>You will get this exception for the following reasons. <code>ConcurrentInvocationLimitExceeded</code> is returned if you have no functions with reserved-concurrency and have exceeded your account concurrent limit or if a function without reserved concurrency exceeds the account's unreserved concurrency limit. <code>ReservedFunctionConcurrentInvocationLimitExceeded</code> is returned when a function with reserved concurrency exceeds its configured concurrent limit. <code>CallerRateLimitExceeded</code> is returned when your account limit is exceeded and you have not reserved concurrency on any function. For more information, see <a>concurrent-executions</a> </p>
+    /// <p> </p>
     TooManyRequests(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3638,11 +3692,13 @@ impl Error for UntagResourceError {
 pub enum UpdateAliasError {
     /// <p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception.</p>
     InvalidParameterValue(String),
+    /// <p>The RevisionId provided does not match the latest RevisionId for the Lambda function or alias. Call the <code>GetFunction</code> or the <code>GetAlias</code> API to retrieve the latest RevisionId for your resource.</p>
+    PreconditionFailed(String),
     /// <p>The resource (for example, a Lambda function or access policy statement) specified in the request does not exist.</p>
     ResourceNotFound(String),
     /// <p>The AWS Lambda service encountered an internal error.</p>
     Service(String),
-    /// <p>You will get this exception for the following reasons. <code>ConcurrentInvocationLimitExceeded</code> is returned if you have no functions with reserved-concurrency and have exceeded your account concurrent limit or if a function without reserved concurrency exceeds the account's unreserved concurrency limit. <code>ReservedFunctionConcurrentInvocationLimitExceeded</code> is returned when a function with reserved concurrency exceeds its configured concurrent limit. <code>CallerRateLimitExceeded</code> is returned when your account limit is exceeded and you have not reserved concurrency on any function. For more information, see <a>concurrent-executions</a> </p>
+    /// <p> </p>
     TooManyRequests(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3669,6 +3725,9 @@ impl UpdateAliasError {
                 match *error_type {
                     "InvalidParameterValueException" => {
                         UpdateAliasError::InvalidParameterValue(String::from(error_message))
+                    }
+                    "PreconditionFailedException" => {
+                        UpdateAliasError::PreconditionFailed(String::from(error_message))
                     }
                     "ResourceNotFoundException" => {
                         UpdateAliasError::ResourceNotFound(String::from(error_message))
@@ -3717,6 +3776,7 @@ impl Error for UpdateAliasError {
     fn description(&self) -> &str {
         match *self {
             UpdateAliasError::InvalidParameterValue(ref cause) => cause,
+            UpdateAliasError::PreconditionFailed(ref cause) => cause,
             UpdateAliasError::ResourceNotFound(ref cause) => cause,
             UpdateAliasError::Service(ref cause) => cause,
             UpdateAliasError::TooManyRequests(ref cause) => cause,
@@ -3738,7 +3798,7 @@ pub enum UpdateEventSourceMappingError {
     ResourceNotFound(String),
     /// <p>The AWS Lambda service encountered an internal error.</p>
     Service(String),
-    /// <p>You will get this exception for the following reasons. <code>ConcurrentInvocationLimitExceeded</code> is returned if you have no functions with reserved-concurrency and have exceeded your account concurrent limit or if a function without reserved concurrency exceeds the account's unreserved concurrency limit. <code>ReservedFunctionConcurrentInvocationLimitExceeded</code> is returned when a function with reserved concurrency exceeds its configured concurrent limit. <code>CallerRateLimitExceeded</code> is returned when your account limit is exceeded and you have not reserved concurrency on any function. For more information, see <a>concurrent-executions</a> </p>
+    /// <p> </p>
     TooManyRequests(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3840,11 +3900,13 @@ pub enum UpdateFunctionCodeError {
     CodeStorageExceeded(String),
     /// <p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception.</p>
     InvalidParameterValue(String),
+    /// <p>The RevisionId provided does not match the latest RevisionId for the Lambda function or alias. Call the <code>GetFunction</code> or the <code>GetAlias</code> API to retrieve the latest RevisionId for your resource.</p>
+    PreconditionFailed(String),
     /// <p>The resource (for example, a Lambda function or access policy statement) specified in the request does not exist.</p>
     ResourceNotFound(String),
     /// <p>The AWS Lambda service encountered an internal error.</p>
     Service(String),
-    /// <p>You will get this exception for the following reasons. <code>ConcurrentInvocationLimitExceeded</code> is returned if you have no functions with reserved-concurrency and have exceeded your account concurrent limit or if a function without reserved concurrency exceeds the account's unreserved concurrency limit. <code>ReservedFunctionConcurrentInvocationLimitExceeded</code> is returned when a function with reserved concurrency exceeds its configured concurrent limit. <code>CallerRateLimitExceeded</code> is returned when your account limit is exceeded and you have not reserved concurrency on any function. For more information, see <a>concurrent-executions</a> </p>
+    /// <p> </p>
     TooManyRequests(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3874,6 +3936,9 @@ impl UpdateFunctionCodeError {
                     }
                     "InvalidParameterValueException" => {
                         UpdateFunctionCodeError::InvalidParameterValue(String::from(error_message))
+                    }
+                    "PreconditionFailedException" => {
+                        UpdateFunctionCodeError::PreconditionFailed(String::from(error_message))
                     }
                     "ResourceNotFoundException" => {
                         UpdateFunctionCodeError::ResourceNotFound(String::from(error_message))
@@ -3925,6 +3990,7 @@ impl Error for UpdateFunctionCodeError {
         match *self {
             UpdateFunctionCodeError::CodeStorageExceeded(ref cause) => cause,
             UpdateFunctionCodeError::InvalidParameterValue(ref cause) => cause,
+            UpdateFunctionCodeError::PreconditionFailed(ref cause) => cause,
             UpdateFunctionCodeError::ResourceNotFound(ref cause) => cause,
             UpdateFunctionCodeError::Service(ref cause) => cause,
             UpdateFunctionCodeError::TooManyRequests(ref cause) => cause,
@@ -3942,13 +4008,15 @@ impl Error for UpdateFunctionCodeError {
 pub enum UpdateFunctionConfigurationError {
     /// <p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception.</p>
     InvalidParameterValue(String),
+    /// <p>The RevisionId provided does not match the latest RevisionId for the Lambda function or alias. Call the <code>GetFunction</code> or the <code>GetAlias</code> API to retrieve the latest RevisionId for your resource.</p>
+    PreconditionFailed(String),
     /// <p>The resource already exists.</p>
     ResourceConflict(String),
     /// <p>The resource (for example, a Lambda function or access policy statement) specified in the request does not exist.</p>
     ResourceNotFound(String),
     /// <p>The AWS Lambda service encountered an internal error.</p>
     Service(String),
-    /// <p>You will get this exception for the following reasons. <code>ConcurrentInvocationLimitExceeded</code> is returned if you have no functions with reserved-concurrency and have exceeded your account concurrent limit or if a function without reserved concurrency exceeds the account's unreserved concurrency limit. <code>ReservedFunctionConcurrentInvocationLimitExceeded</code> is returned when a function with reserved concurrency exceeds its configured concurrent limit. <code>CallerRateLimitExceeded</code> is returned when your account limit is exceeded and you have not reserved concurrency on any function. For more information, see <a>concurrent-executions</a> </p>
+    /// <p> </p>
     TooManyRequests(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3975,6 +4043,11 @@ impl UpdateFunctionConfigurationError {
                 match *error_type {
                     "InvalidParameterValueException" => {
                         UpdateFunctionConfigurationError::InvalidParameterValue(String::from(
+                            error_message,
+                        ))
+                    }
+                    "PreconditionFailedException" => {
+                        UpdateFunctionConfigurationError::PreconditionFailed(String::from(
                             error_message,
                         ))
                     }
@@ -4036,6 +4109,7 @@ impl Error for UpdateFunctionConfigurationError {
     fn description(&self) -> &str {
         match *self {
             UpdateFunctionConfigurationError::InvalidParameterValue(ref cause) => cause,
+            UpdateFunctionConfigurationError::PreconditionFailed(ref cause) => cause,
             UpdateFunctionConfigurationError::ResourceConflict(ref cause) => cause,
             UpdateFunctionConfigurationError::ResourceNotFound(ref cause) => cause,
             UpdateFunctionConfigurationError::Service(ref cause) => cause,
@@ -4051,7 +4125,7 @@ impl Error for UpdateFunctionConfigurationError {
 }
 /// Trait representing the capabilities of the AWS Lambda API. AWS Lambda clients implement this trait.
 pub trait Lambda {
-    /// <p>Adds a permission to the resource policy associated with the specified AWS Lambda function. You use resource policies to grant permissions to event sources that use <i>push</i> model. In a <i>push</i> model, event sources (such as Amazon S3 and custom applications) invoke your Lambda function. Each permission you add to the resource policy allows an event source, permission to invoke the Lambda function. </p> <p>For information about the push model, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/lambda-introduction.html">AWS Lambda: How it Works</a>. </p> <p>If you are using versioning, the permissions you add are specific to the Lambda function version or alias you specify in the <code>AddPermission</code> request via the <code>Qualifier</code> parameter. For more information about versioning, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html">AWS Lambda Function Versioning and Aliases</a>. </p> <p>This operation requires permission for the <code>lambda:AddPermission</code> action.</p>
+    /// <p>Adds a permission to the resource policy associated with the specified AWS Lambda function. You use resource policies to grant permissions to event sources that use <i>push</i> model. In a <i>push</i> model, event sources (such as Amazon S3 and custom applications) invoke your Lambda function. Each permission you add to the resource policy allows an event source, permission to invoke the Lambda function. </p> <p>For information about the push model, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/lambda-introduction.html">Lambda Functions</a>. </p> <p>If you are using versioning, the permissions you add are specific to the Lambda function version or alias you specify in the <code>AddPermission</code> request via the <code>Qualifier</code> parameter. For more information about versioning, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html">AWS Lambda Function Versioning and Aliases</a>. </p> <p>This operation requires permission for the <code>lambda:AddPermission</code> action.</p>
     fn add_permission(
         &self,
         input: &AddPermissionRequest,
@@ -4063,7 +4137,7 @@ pub trait Lambda {
         input: &CreateAliasRequest,
     ) -> RusotoFuture<AliasConfiguration, CreateAliasError>;
 
-    /// <p>Identifies a stream as an event source for a Lambda function. It can be either an Amazon Kinesis stream or an Amazon DynamoDB stream. AWS Lambda invokes the specified function when records are posted to the stream.</p> <p>This association between a stream source and a Lambda function is called the event source mapping.</p> <important> <p>This event source mapping is relevant only in the AWS Lambda pull model, where AWS Lambda invokes the function. For more information, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/lambda-introduction.html">AWS Lambda: How it Works</a> in the <i>AWS Lambda Developer Guide</i>.</p> </important> <p>You provide mapping information (for example, which stream to read from and which Lambda function to invoke) in the request body.</p> <p>Each event source, such as an Amazon Kinesis or a DynamoDB stream, can be associated with multiple AWS Lambda function. A given Lambda function can be associated with multiple AWS event sources.</p> <p>If you are using versioning, you can specify a specific function version or an alias via the function name parameter. For more information about versioning, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html">AWS Lambda Function Versioning and Aliases</a>. </p> <p>This operation requires permission for the <code>lambda:CreateEventSourceMapping</code> action.</p>
+    /// <p>Identifies a stream as an event source for a Lambda function. It can be either an Amazon Kinesis stream or an Amazon DynamoDB stream. AWS Lambda invokes the specified function when records are posted to the stream.</p> <p>This association between a stream source and a Lambda function is called the event source mapping.</p> <p>You provide mapping information (for example, which stream to read from and which Lambda function to invoke) in the request body.</p> <p>Each event source, such as an Amazon Kinesis or a DynamoDB stream, can be associated with multiple AWS Lambda functions. A given Lambda function can be associated with multiple AWS event sources.</p> <p>If you are using versioning, you can specify a specific function version or an alias via the function name parameter. For more information about versioning, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html">AWS Lambda Function Versioning and Aliases</a>. </p> <p>This operation requires permission for the <code>lambda:CreateEventSourceMapping</code> action.</p>
     fn create_event_source_mapping(
         &self,
         input: &CreateEventSourceMappingRequest,
@@ -4090,7 +4164,7 @@ pub trait Lambda {
         input: &DeleteFunctionRequest,
     ) -> RusotoFuture<(), DeleteFunctionError>;
 
-    /// <p>Removes concurrent execution limits from this function.</p>
+    /// <p>Removes concurrent execution limits from this function. For more information, see <a>concurrent-executions</a>.</p>
     fn delete_function_concurrency(
         &self,
         input: &DeleteFunctionConcurrencyRequest,
@@ -4129,7 +4203,7 @@ pub trait Lambda {
         input: &GetPolicyRequest,
     ) -> RusotoFuture<GetPolicyResponse, GetPolicyError>;
 
-    /// <p>Invokes a specific Lambda function. For an example, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/with-dynamodb-create-function.html#with-dbb-invoke-manually">Create the Lambda Function and Test It Manually</a>. </p> <p>If you are using the versioning feature, you can invoke the specific function version by providing function version or alias name that is pointing to the function version using the <code>Qualifier</code> parameter in the request. If you don't provide the <code>Qualifier</code> parameter, the <code>$LATEST</code> version of the Lambda function is invoked. Invocations occur at least once in response to an event and functions must be idempotent to handle this. For information about the versioning feature, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html">AWS Lambda Function Versioning and Aliases</a>. </p> <p>This operation requires permission for the <code>lambda:InvokeFunction</code> action.</p>
+    /// <p><p>Invokes a specific Lambda function. For an example, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/with-dynamodb-create-function.html#with-dbb-invoke-manually">Create the Lambda Function and Test It Manually</a>. </p> <p>If you are using the versioning feature, you can invoke the specific function version by providing function version or alias name that is pointing to the function version using the <code>Qualifier</code> parameter in the request. If you don&#39;t provide the <code>Qualifier</code> parameter, the <code>$LATEST</code> version of the Lambda function is invoked. Invocations occur at least once in response to an event and functions must be idempotent to handle this. For information about the versioning feature, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html">AWS Lambda Function Versioning and Aliases</a>. </p> <p>This operation requires permission for the <code>lambda:InvokeFunction</code> action.</p> <note> <p>The <code>TooManyRequestsException</code> noted below will return the following: <code>ConcurrentInvocationLimitExceeded</code> will be returned if you have no functions with reserved concurrency and have exceeded your account concurrent limit or if a function without reserved concurrency exceeds the account&#39;s unreserved concurrency limit. <code>ReservedFunctionConcurrentInvocationLimitExceeded</code> will be returned when a function with reserved concurrency exceeds its configured concurrency limit. </p> </note></p>
     fn invoke(&self, input: &InvocationRequest) -> RusotoFuture<InvocationResponse, InvokeError>;
 
     /// <p><important> <p>This API is deprecated. We recommend you use <code>Invoke</code> API (see <a>Invoke</a>).</p> </important> <p>Submits an invocation request to AWS Lambda. Upon receiving the request, Lambda executes the specified function asynchronously. To see the logs generated by the Lambda function execution, see the CloudWatch Logs console.</p> <p>This operation requires permission for the <code>lambda:InvokeFunction</code> action.</p></p>
@@ -4156,7 +4230,7 @@ pub trait Lambda {
         input: &ListFunctionsRequest,
     ) -> RusotoFuture<ListFunctionsResponse, ListFunctionsError>;
 
-    /// <p>Returns a list of tags assigned to a function when supplied the function ARN (Amazon Resource Name).</p>
+    /// <p>Returns a list of tags assigned to a function when supplied the function ARN (Amazon Resource Name). For more information on Tagging, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/tagging.html">Tagging Lambda Functions</a> in the <b>AWS Lambda Developer Guide</b>.</p>
     fn list_tags(&self, input: &ListTagsRequest) -> RusotoFuture<ListTagsResponse, ListTagsError>;
 
     /// <p>List all versions of a function. For information about the versioning feature, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html">AWS Lambda Function Versioning and Aliases</a>. </p>
@@ -4171,7 +4245,7 @@ pub trait Lambda {
         input: &PublishVersionRequest,
     ) -> RusotoFuture<FunctionConfiguration, PublishVersionError>;
 
-    /// <p>Sets a limit on the number of concurrent executions available to this function. It is a subset of your account's total concurrent execution limit per region. Note that Lambda automatically reserves a buffer of 100 concurrent executions for functions without any reserved concurrency limit. This means if your account limit is 1000, you have a total of 900 available to allocate to individual functions.</p>
+    /// <p>Sets a limit on the number of concurrent executions available to this function. It is a subset of your account's total concurrent execution limit per region. Note that Lambda automatically reserves a buffer of 100 concurrent executions for functions without any reserved concurrency limit. This means if your account limit is 1000, you have a total of 900 available to allocate to individual functions. For more information, see <a>concurrent-executions</a>.</p>
     fn put_function_concurrency(
         &self,
         input: &PutFunctionConcurrencyRequest,
@@ -4183,10 +4257,10 @@ pub trait Lambda {
         input: &RemovePermissionRequest,
     ) -> RusotoFuture<(), RemovePermissionError>;
 
-    /// <p>Creates a list of tags (key-value pairs) on the Lambda function. Requires the Lambda function ARN (Amazon Resource Name). If a key is specified without a value, Lambda creates a tag with the specified key and a value of null. </p>
+    /// <p>Creates a list of tags (key-value pairs) on the Lambda function. Requires the Lambda function ARN (Amazon Resource Name). If a key is specified without a value, Lambda creates a tag with the specified key and a value of null. For more information, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/tagging.html">Tagging Lambda Functions</a> in the <b>AWS Lambda Developer Guide</b>. </p>
     fn tag_resource(&self, input: &TagResourceRequest) -> RusotoFuture<(), TagResourceError>;
 
-    /// <p>Removes tags from a Lambda function. Requires the function ARN (Amazon Resource Name). </p>
+    /// <p>Removes tags from a Lambda function. Requires the function ARN (Amazon Resource Name). For more information, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/tagging.html">Tagging Lambda Functions</a> in the <b>AWS Lambda Developer Guide</b>. </p>
     fn untag_resource(&self, input: &UntagResourceRequest) -> RusotoFuture<(), UntagResourceError>;
 
     /// <p>Using this API you can update the function version to which the alias points and the alias description. For more information, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/aliases-intro.html">Introduction to AWS Lambda Aliases</a>.</p> <p>This requires permission for the lambda:UpdateAlias action.</p>
@@ -4256,7 +4330,7 @@ where
     P: ProvideAwsCredentials + 'static,
     D: DispatchSignedRequest + 'static,
 {
-    /// <p>Adds a permission to the resource policy associated with the specified AWS Lambda function. You use resource policies to grant permissions to event sources that use <i>push</i> model. In a <i>push</i> model, event sources (such as Amazon S3 and custom applications) invoke your Lambda function. Each permission you add to the resource policy allows an event source, permission to invoke the Lambda function. </p> <p>For information about the push model, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/lambda-introduction.html">AWS Lambda: How it Works</a>. </p> <p>If you are using versioning, the permissions you add are specific to the Lambda function version or alias you specify in the <code>AddPermission</code> request via the <code>Qualifier</code> parameter. For more information about versioning, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html">AWS Lambda Function Versioning and Aliases</a>. </p> <p>This operation requires permission for the <code>lambda:AddPermission</code> action.</p>
+    /// <p>Adds a permission to the resource policy associated with the specified AWS Lambda function. You use resource policies to grant permissions to event sources that use <i>push</i> model. In a <i>push</i> model, event sources (such as Amazon S3 and custom applications) invoke your Lambda function. Each permission you add to the resource policy allows an event source, permission to invoke the Lambda function. </p> <p>For information about the push model, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/lambda-introduction.html">Lambda Functions</a>. </p> <p>If you are using versioning, the permissions you add are specific to the Lambda function version or alias you specify in the <code>AddPermission</code> request via the <code>Qualifier</code> parameter. For more information about versioning, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html">AWS Lambda Function Versioning and Aliases</a>. </p> <p>This operation requires permission for the <code>lambda:AddPermission</code> action.</p>
     fn add_permission(
         &self,
         input: &AddPermissionRequest,
@@ -4348,7 +4422,7 @@ where
         RusotoFuture::new(future)
     }
 
-    /// <p>Identifies a stream as an event source for a Lambda function. It can be either an Amazon Kinesis stream or an Amazon DynamoDB stream. AWS Lambda invokes the specified function when records are posted to the stream.</p> <p>This association between a stream source and a Lambda function is called the event source mapping.</p> <important> <p>This event source mapping is relevant only in the AWS Lambda pull model, where AWS Lambda invokes the function. For more information, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/lambda-introduction.html">AWS Lambda: How it Works</a> in the <i>AWS Lambda Developer Guide</i>.</p> </important> <p>You provide mapping information (for example, which stream to read from and which Lambda function to invoke) in the request body.</p> <p>Each event source, such as an Amazon Kinesis or a DynamoDB stream, can be associated with multiple AWS Lambda function. A given Lambda function can be associated with multiple AWS event sources.</p> <p>If you are using versioning, you can specify a specific function version or an alias via the function name parameter. For more information about versioning, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html">AWS Lambda Function Versioning and Aliases</a>. </p> <p>This operation requires permission for the <code>lambda:CreateEventSourceMapping</code> action.</p>
+    /// <p>Identifies a stream as an event source for a Lambda function. It can be either an Amazon Kinesis stream or an Amazon DynamoDB stream. AWS Lambda invokes the specified function when records are posted to the stream.</p> <p>This association between a stream source and a Lambda function is called the event source mapping.</p> <p>You provide mapping information (for example, which stream to read from and which Lambda function to invoke) in the request body.</p> <p>Each event source, such as an Amazon Kinesis or a DynamoDB stream, can be associated with multiple AWS Lambda functions. A given Lambda function can be associated with multiple AWS event sources.</p> <p>If you are using versioning, you can specify a specific function version or an alias via the function name parameter. For more information about versioning, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html">AWS Lambda Function Versioning and Aliases</a>. </p> <p>This operation requires permission for the <code>lambda:CreateEventSourceMapping</code> action.</p>
     fn create_event_source_mapping(
         &self,
         input: &CreateEventSourceMappingRequest,
@@ -4538,7 +4612,7 @@ where
         RusotoFuture::new(future)
     }
 
-    /// <p>Removes concurrent execution limits from this function.</p>
+    /// <p>Removes concurrent execution limits from this function. For more information, see <a>concurrent-executions</a>.</p>
     fn delete_function_concurrency(
         &self,
         input: &DeleteFunctionConcurrencyRequest,
@@ -4827,7 +4901,7 @@ where
         RusotoFuture::new(future)
     }
 
-    /// <p>Invokes a specific Lambda function. For an example, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/with-dynamodb-create-function.html#with-dbb-invoke-manually">Create the Lambda Function and Test It Manually</a>. </p> <p>If you are using the versioning feature, you can invoke the specific function version by providing function version or alias name that is pointing to the function version using the <code>Qualifier</code> parameter in the request. If you don't provide the <code>Qualifier</code> parameter, the <code>$LATEST</code> version of the Lambda function is invoked. Invocations occur at least once in response to an event and functions must be idempotent to handle this. For information about the versioning feature, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html">AWS Lambda Function Versioning and Aliases</a>. </p> <p>This operation requires permission for the <code>lambda:InvokeFunction</code> action.</p>
+    /// <p><p>Invokes a specific Lambda function. For an example, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/with-dynamodb-create-function.html#with-dbb-invoke-manually">Create the Lambda Function and Test It Manually</a>. </p> <p>If you are using the versioning feature, you can invoke the specific function version by providing function version or alias name that is pointing to the function version using the <code>Qualifier</code> parameter in the request. If you don&#39;t provide the <code>Qualifier</code> parameter, the <code>$LATEST</code> version of the Lambda function is invoked. Invocations occur at least once in response to an event and functions must be idempotent to handle this. For information about the versioning feature, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html">AWS Lambda Function Versioning and Aliases</a>. </p> <p>This operation requires permission for the <code>lambda:InvokeFunction</code> action.</p> <note> <p>The <code>TooManyRequestsException</code> noted below will return the following: <code>ConcurrentInvocationLimitExceeded</code> will be returned if you have no functions with reserved concurrency and have exceeded your account concurrent limit or if a function without reserved concurrency exceeds the account&#39;s unreserved concurrency limit. <code>ReservedFunctionConcurrentInvocationLimitExceeded</code> will be returned when a function with reserved concurrency exceeds its configured concurrency limit. </p> </note></p>
     fn invoke(&self, input: &InvocationRequest) -> RusotoFuture<InvocationResponse, InvokeError> {
         let request_uri = format!(
             "/2015-03-31/functions/{function_name}/invocations",
@@ -5095,7 +5169,7 @@ where
         RusotoFuture::new(future)
     }
 
-    /// <p>Returns a list of tags assigned to a function when supplied the function ARN (Amazon Resource Name).</p>
+    /// <p>Returns a list of tags assigned to a function when supplied the function ARN (Amazon Resource Name). For more information on Tagging, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/tagging.html">Tagging Lambda Functions</a> in the <b>AWS Lambda Developer Guide</b>.</p>
     fn list_tags(&self, input: &ListTagsRequest) -> RusotoFuture<ListTagsResponse, ListTagsError> {
         let request_uri = format!("/2017-03-31/tags/{arn}", arn = input.resource);
 
@@ -5222,7 +5296,7 @@ where
         RusotoFuture::new(future)
     }
 
-    /// <p>Sets a limit on the number of concurrent executions available to this function. It is a subset of your account's total concurrent execution limit per region. Note that Lambda automatically reserves a buffer of 100 concurrent executions for functions without any reserved concurrency limit. This means if your account limit is 1000, you have a total of 900 available to allocate to individual functions.</p>
+    /// <p>Sets a limit on the number of concurrent executions available to this function. It is a subset of your account's total concurrent execution limit per region. Note that Lambda automatically reserves a buffer of 100 concurrent executions for functions without any reserved concurrency limit. This means if your account limit is 1000, you have a total of 900 available to allocate to individual functions. For more information, see <a>concurrent-executions</a>.</p>
     fn put_function_concurrency(
         &self,
         input: &PutFunctionConcurrencyRequest,
@@ -5283,6 +5357,9 @@ where
         if let Some(ref x) = input.qualifier {
             params.put("Qualifier", x);
         }
+        if let Some(ref x) = input.revision_id {
+            params.put("RevisionId", x);
+        }
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -5304,7 +5381,7 @@ where
         RusotoFuture::new(future)
     }
 
-    /// <p>Creates a list of tags (key-value pairs) on the Lambda function. Requires the Lambda function ARN (Amazon Resource Name). If a key is specified without a value, Lambda creates a tag with the specified key and a value of null. </p>
+    /// <p>Creates a list of tags (key-value pairs) on the Lambda function. Requires the Lambda function ARN (Amazon Resource Name). If a key is specified without a value, Lambda creates a tag with the specified key and a value of null. For more information, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/tagging.html">Tagging Lambda Functions</a> in the <b>AWS Lambda Developer Guide</b>. </p>
     fn tag_resource(&self, input: &TagResourceRequest) -> RusotoFuture<(), TagResourceError> {
         let request_uri = format!("/2017-03-31/tags/{arn}", arn = input.resource);
 
@@ -5333,7 +5410,7 @@ where
         RusotoFuture::new(future)
     }
 
-    /// <p>Removes tags from a Lambda function. Requires the function ARN (Amazon Resource Name). </p>
+    /// <p>Removes tags from a Lambda function. Requires the function ARN (Amazon Resource Name). For more information, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/tagging.html">Tagging Lambda Functions</a> in the <b>AWS Lambda Developer Guide</b>. </p>
     fn untag_resource(&self, input: &UntagResourceRequest) -> RusotoFuture<(), UntagResourceError> {
         let request_uri = format!("/2017-03-31/tags/{arn}", arn = input.resource);
 
