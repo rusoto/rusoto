@@ -6534,9 +6534,9 @@ impl DescribeAnalysisSchemesError {
                 "InternalException" => {
                     DescribeAnalysisSchemesError::Internal(String::from(parsed_error.message))
                 }
-                "ResourceNotFound" => DescribeAnalysisSchemesError::ResourceNotFound(
-                    String::from(parsed_error.message),
-                ),
+                "ResourceNotFound" => DescribeAnalysisSchemesError::ResourceNotFound(String::from(
+                    parsed_error.message,
+                )),
                 _ => DescribeAnalysisSchemesError::Unknown(String::from(body)),
             },
             Err(_) => DescribeAnalysisSchemesError::Unknown(body.to_string()),
@@ -7551,9 +7551,9 @@ impl UpdateScalingParametersError {
                 "LimitExceeded" => {
                     UpdateScalingParametersError::LimitExceeded(String::from(parsed_error.message))
                 }
-                "ResourceNotFound" => UpdateScalingParametersError::ResourceNotFound(
-                    String::from(parsed_error.message),
-                ),
+                "ResourceNotFound" => UpdateScalingParametersError::ResourceNotFound(String::from(
+                    parsed_error.message,
+                )),
                 _ => UpdateScalingParametersError::Unknown(String::from(body)),
             },
             Err(_) => UpdateScalingParametersError::Unknown(body.to_string()),

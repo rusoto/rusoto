@@ -216,7 +216,7 @@ pub struct CreateHITRequest {
     #[serde(rename = "MaxAssignments")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_assignments: Option<i64>,
-    /// <p> A condition that a Worker's Qualifications must meet before the Worker is allowed to accept and complete the HIT. </p>
+    /// <p> Conditions that a Worker's Qualifications must meet in order to accept the HIT. A HIT can have between zero and ten Qualification requirements. All requirements must be met in order for a Worker to accept the HIT. Additionally, other actions can be restricted using the <code>ActionsGuarded</code> field on each <code>QualificationRequirement</code> structure. </p>
     #[serde(rename = "QualificationRequirements")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub qualification_requirements: Option<Vec<QualificationRequirement>>,
@@ -264,7 +264,7 @@ pub struct CreateHITTypeRequest {
     #[serde(rename = "Keywords")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub keywords: Option<String>,
-    /// <p> A condition that a Worker's Qualifications must meet before the Worker is allowed to accept and complete the HIT. </p>
+    /// <p> Conditions that a Worker's Qualifications must meet in order to accept the HIT. A HIT can have between zero and ten Qualification requirements. All requirements must be met in order for a Worker to accept the HIT. Additionally, other actions can be restricted using the <code>ActionsGuarded</code> field on each <code>QualificationRequirement</code> structure. </p>
     #[serde(rename = "QualificationRequirements")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub qualification_requirements: Option<Vec<QualificationRequirement>>,
@@ -612,7 +612,7 @@ pub struct HIT {
     #[serde(rename = "NumberOfAssignmentsPending")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub number_of_assignments_pending: Option<i64>,
-    /// <p> A condition that a Worker's Qualifications must meet in order to accept the HIT. A HIT can have between zero and ten Qualification requirements. All requirements must be met by a Worker's Qualifications for the Worker to accept the HIT.</p>
+    /// <p> Conditions that a Worker's Qualifications must meet in order to accept the HIT. A HIT can have between zero and ten Qualification requirements. All requirements must be met in order for a Worker to accept the HIT. Additionally, other actions can be restricted using the <code>ActionsGuarded</code> field on each <code>QualificationRequirement</code> structure. </p>
     #[serde(rename = "QualificationRequirements")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub qualification_requirements: Option<Vec<QualificationRequirement>>,
@@ -1137,9 +1137,13 @@ pub struct QualificationRequest {
     pub worker_id: Option<String>,
 }
 
-/// <p> The QualificationRequirement data structure describes a Qualification that a Worker must have before the Worker is allowed to accept a HIT. A requirement may optionally state that a Worker must have the Qualification in order to preview the HIT. </p>
+/// <p> The QualificationRequirement data structure describes a Qualification that a Worker must have before the Worker is allowed to accept a HIT. A requirement may optionally state that a Worker must have the Qualification in order to preview the HIT, or see the HIT in search results. </p>
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct QualificationRequirement {
+    /// <p> Setting this attribute prevents Workers whose Qualifications do not meet this QualificationRequirement from taking the specified action. Valid arguments include "Accept" (Worker cannot accept the HIT, but can preview the HIT and see it in their search results), "PreviewAndAccept" (Worker cannot accept or preview the HIT, but can see the HIT in their search results), and "DiscoverPreviewAndAccept" (Worker cannot accept, preview, or see the HIT in their search results). It's possible for you to create a HIT with multiple QualificationRequirements (which can have different values for the ActionGuarded attribute). In this case, the Worker is only permitted to perform an action when they have met all QualificationRequirements guarding the action. The actions in the order of least restrictive to most restrictive are Discover, Preview and Accept. For example, if a Worker meets all QualificationRequirements that are set to DiscoverPreviewAndAccept, but do not meet all requirements that are set with PreviewAndAccept, then the Worker will be able to Discover, i.e. see the HIT in their search result, but will not be able to Preview or Accept the HIT. ActionsGuarded should not be used in combination with the <code>RequiredToPreview</code> field. </p>
+    #[serde(rename = "ActionsGuarded")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub actions_guarded: Option<String>,
     /// <p>The kind of comparison to make against a Qualification's value. You can compare a Qualification's value to an IntegerValue to see if it is LessThan, LessThanOrEqualTo, GreaterThan, GreaterThanOrEqualTo, EqualTo, or NotEqualTo the IntegerValue. You can compare it to a LocaleValue to see if it is EqualTo, or NotEqualTo the LocaleValue. You can check to see if the value is In or NotIn a set of IntegerValue or LocaleValue values. Lastly, a Qualification requirement can also test if a Qualification Exists or DoesNotExist in the user's profile, regardless of its value. </p>
     #[serde(rename = "Comparator")]
     pub comparator: String,
@@ -1154,10 +1158,6 @@ pub struct QualificationRequirement {
     /// <p> The ID of the Qualification type for the requirement.</p>
     #[serde(rename = "QualificationTypeId")]
     pub qualification_type_id: String,
-    /// <p> If true, the question data for the HIT will not be shown when a Worker whose Qualifications do not meet this requirement tries to preview the HIT. That is, a Worker's Qualifications must meet all of the requirements for which RequiredToPreview is true in order to preview the HIT. If a Worker meets all of the requirements where RequiredToPreview is true (or if there are no such requirements), but does not meet all of the requirements for the HIT, the Worker will be allowed to preview the HIT's question data, but will not be allowed to accept and complete the HIT. The default is false. </p>
-    #[serde(rename = "RequiredToPreview")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub required_to_preview: Option<bool>,
 }
 
 /// <p> The QualificationType data structure represents a Qualification type, a description of a property of a Worker that must match the requirements of a HIT for the Worker to be able to accept the HIT. The type also describes how a Worker can obtain a Qualification of that type, such as through a Qualification test. </p>
@@ -4876,7 +4876,7 @@ pub trait MechanicalTurk {
         input: &GetAssignmentRequest,
     ) -> RusotoFuture<GetAssignmentResponse, GetAssignmentError>;
 
-    /// <p> The <code>GetFileUploadURL</code> operation generates and returns a temporary URL. You use the temporary URL to retrieve a file uploaded by a Worker as an answer to a FileUploadAnswer question for a HIT. The temporary URL is generated the instant the GetFileUploadURL operation is called, and is valid for 60 seconds. You can get a temporary file upload URL any time until the HIT is disposed. After the HIT is disposed, any uploaded files are deleted, and cannot be retrieved. </p>
+    /// <p> The <code>GetFileUploadURL</code> operation generates and returns a temporary URL. You use the temporary URL to retrieve a file uploaded by a Worker as an answer to a FileUploadAnswer question for a HIT. The temporary URL is generated the instant the GetFileUploadURL operation is called, and is valid for 60 seconds. You can get a temporary file upload URL any time until the HIT is disposed. After the HIT is disposed, any uploaded files are deleted, and cannot be retrieved. Pending Deprecation on December 12, 2017. The Answer Specification structure will no longer support the <code>FileUploadAnswer</code> element to be used for the QuestionForm data structure. Instead, we recommend that Requesters who want to create HITs asking Workers to upload files to use Amazon S3. </p>
     fn get_file_upload_url(
         &self,
         input: &GetFileUploadURLRequest,
@@ -4924,7 +4924,7 @@ pub trait MechanicalTurk {
         input: &ListQualificationRequestsRequest,
     ) -> RusotoFuture<ListQualificationRequestsResponse, ListQualificationRequestsError>;
 
-    /// <p> The <code>ListQualificationRequests</code> operation retrieves requests for Qualifications of a particular Qualification type. The owner of the Qualification type calls this operation to poll for pending requests, and accepts them using the AcceptQualification operation. </p>
+    /// <p> The <code>ListQualificationTypes</code> operation returns a list of Qualification types, filtered by an optional search term. </p>
     fn list_qualification_types(
         &self,
         input: &ListQualificationTypesRequest,
@@ -5656,7 +5656,7 @@ where
         RusotoFuture::new(future)
     }
 
-    /// <p> The <code>GetFileUploadURL</code> operation generates and returns a temporary URL. You use the temporary URL to retrieve a file uploaded by a Worker as an answer to a FileUploadAnswer question for a HIT. The temporary URL is generated the instant the GetFileUploadURL operation is called, and is valid for 60 seconds. You can get a temporary file upload URL any time until the HIT is disposed. After the HIT is disposed, any uploaded files are deleted, and cannot be retrieved. </p>
+    /// <p> The <code>GetFileUploadURL</code> operation generates and returns a temporary URL. You use the temporary URL to retrieve a file uploaded by a Worker as an answer to a FileUploadAnswer question for a HIT. The temporary URL is generated the instant the GetFileUploadURL operation is called, and is valid for 60 seconds. You can get a temporary file upload URL any time until the HIT is disposed. After the HIT is disposed, any uploaded files are deleted, and cannot be retrieved. Pending Deprecation on December 12, 2017. The Answer Specification structure will no longer support the <code>FileUploadAnswer</code> element to be used for the QuestionForm data structure. Instead, we recommend that Requesters who want to create HITs asking Workers to upload files to use Amazon S3. </p>
     fn get_file_upload_url(
         &self,
         input: &GetFileUploadURLRequest,
@@ -6004,7 +6004,7 @@ where
         RusotoFuture::new(future)
     }
 
-    /// <p> The <code>ListQualificationRequests</code> operation retrieves requests for Qualifications of a particular Qualification type. The owner of the Qualification type calls this operation to poll for pending requests, and accepts them using the AcceptQualification operation. </p>
+    /// <p> The <code>ListQualificationTypes</code> operation returns a list of Qualification types, filtered by an optional search term. </p>
     fn list_qualification_types(
         &self,
         input: &ListQualificationTypesRequest,

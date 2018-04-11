@@ -188,7 +188,7 @@ pub struct DeleteLifecyclePolicyRequest {
     #[serde(rename = "registryId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub registry_id: Option<String>,
-    /// <p>The name of the repository that is associated with the repository policy to&#8232; delete.</p>
+    /// <p>The name of the repository.</p>
     #[serde(rename = "repositoryName")]
     pub repository_name: String,
 }
@@ -199,7 +199,7 @@ pub struct DeleteLifecyclePolicyResponse {
     #[serde(rename = "lastEvaluatedAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_evaluated_at: Option<f64>,
-    /// <p>The JSON repository policy text.</p>
+    /// <p>The JSON lifecycle policy text.</p>
     #[serde(rename = "lifecyclePolicyText")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub lifecycle_policy_text: Option<String>,
@@ -282,11 +282,11 @@ pub struct DescribeImagesRequest {
     #[serde(rename = "imageIds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub image_ids: Option<Vec<ImageIdentifier>>,
-    /// <p>The maximum number of repository results returned by <code>DescribeImages</code> in paginated output. When this parameter is used, <code>DescribeImages</code> only returns <code>maxResults</code> results in a single page along with a <code>nextToken</code> response element. The remaining results of the initial request can be seen by sending another <code>DescribeImages</code> request with the returned <code>nextToken</code> value. This value can be between 1 and 100. If this parameter is not used, then <code>DescribeImages</code> returns up to 100 results and a <code>nextToken</code> value, if applicable.</p>
+    /// <p>The maximum number of repository results returned by <code>DescribeImages</code> in paginated output. When this parameter is used, <code>DescribeImages</code> only returns <code>maxResults</code> results in a single page along with a <code>nextToken</code> response element. The remaining results of the initial request can be seen by sending another <code>DescribeImages</code> request with the returned <code>nextToken</code> value. This value can be between 1 and 100. If this parameter is not used, then <code>DescribeImages</code> returns up to 100 results and a <code>nextToken</code> value, if applicable. This option cannot be used when you specify images with <code>imageIds</code>.</p>
     #[serde(rename = "maxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p>The <code>nextToken</code> value returned from a previous paginated <code>DescribeImages</code> request where <code>maxResults</code> was used and the results exceeded the value of that parameter. Pagination continues from the end of the previous results that returned the <code>nextToken</code> value. This value is <code>null</code> when there are no more results to return.</p>
+    /// <p>The <code>nextToken</code> value returned from a previous paginated <code>DescribeImages</code> request where <code>maxResults</code> was used and the results exceeded the value of that parameter. Pagination continues from the end of the previous results that returned the <code>nextToken</code> value. This value is <code>null</code> when there are no more results to return. This option cannot be used when you specify images with <code>imageIds</code>.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -313,11 +313,11 @@ pub struct DescribeImagesResponse {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeRepositoriesRequest {
-    /// <p>The maximum number of repository results returned by <code>DescribeRepositories</code> in paginated output. When this parameter is used, <code>DescribeRepositories</code> only returns <code>maxResults</code> results in a single page along with a <code>nextToken</code> response element. The remaining results of the initial request can be seen by sending another <code>DescribeRepositories</code> request with the returned <code>nextToken</code> value. This value can be between 1 and 100. If this parameter is not used, then <code>DescribeRepositories</code> returns up to 100 results and a <code>nextToken</code> value, if applicable.</p>
+    /// <p>The maximum number of repository results returned by <code>DescribeRepositories</code> in paginated output. When this parameter is used, <code>DescribeRepositories</code> only returns <code>maxResults</code> results in a single page along with a <code>nextToken</code> response element. The remaining results of the initial request can be seen by sending another <code>DescribeRepositories</code> request with the returned <code>nextToken</code> value. This value can be between 1 and 100. If this parameter is not used, then <code>DescribeRepositories</code> returns up to 100 results and a <code>nextToken</code> value, if applicable. This option cannot be used when you specify repositories with <code>repositoryNames</code>.</p>
     #[serde(rename = "maxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p><p>The <code>nextToken</code> value returned from a previous paginated <code>DescribeRepositories</code> request where <code>maxResults</code> was used and the results exceeded the value of that parameter. Pagination continues from the end of the previous results that returned the <code>nextToken</code> value. This value is <code>null</code> when there are no more results to return.</p> <note> <p>This token should be treated as an opaque identifier that is only used to retrieve the next items in a list and not for other programmatic purposes.</p> </note></p>
+    /// <p><p>The <code>nextToken</code> value returned from a previous paginated <code>DescribeRepositories</code> request where <code>maxResults</code> was used and the results exceeded the value of that parameter. Pagination continues from the end of the previous results that returned the <code>nextToken</code> value. This value is <code>null</code> when there are no more results to return. This option cannot be used when you specify repositories with <code>repositoryNames</code>.</p> <note> <p>This token should be treated as an opaque identifier that is only used to retrieve the next items in a list and not for other programmatic purposes.</p> </note></p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -395,11 +395,11 @@ pub struct GetLifecyclePolicyPreviewRequest {
     #[serde(rename = "imageIds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub image_ids: Option<Vec<ImageIdentifier>>,
-    /// <p>The maximum number of repository results returned by <code>GetLifecyclePolicyPreviewRequest</code> in&#8232; paginated output. When this parameter is used, <code>GetLifecyclePolicyPreviewRequest</code> only returns&#8232; <code>maxResults</code> results in a single page along with a <code>nextToken</code>&#8232; response element. The remaining results of the initial request can be seen by sending&#8232; another <code>GetLifecyclePolicyPreviewRequest</code> request with the returned <code>nextToken</code>&#8232; value. This value can be between 1 and 100. If this&#8232; parameter is not used, then <code>GetLifecyclePolicyPreviewRequest</code> returns up to&#8232; 100 results and a <code>nextToken</code> value, if&#8232; applicable.</p>
+    /// <p>The maximum number of repository results returned by <code>GetLifecyclePolicyPreviewRequest</code> in&#x2028; paginated output. When this parameter is used, <code>GetLifecyclePolicyPreviewRequest</code> only returns&#x2028; <code>maxResults</code> results in a single page along with a <code>nextToken</code>&#x2028; response element. The remaining results of the initial request can be seen by sending&#x2028; another <code>GetLifecyclePolicyPreviewRequest</code> request with the returned <code>nextToken</code>&#x2028; value. This value can be between 1 and 100. If this&#x2028; parameter is not used, then <code>GetLifecyclePolicyPreviewRequest</code> returns up to&#x2028; 100 results and a <code>nextToken</code> value, if&#x2028; applicable. This option cannot be used when you specify images with <code>imageIds</code>.</p>
     #[serde(rename = "maxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p>The <code>nextToken</code> value returned from a previous paginated&#8232; <code>GetLifecyclePolicyPreviewRequest</code> request where <code>maxResults</code> was used and the&#8232; results exceeded the value of that parameter. Pagination continues from the end of the&#8232; previous results that returned the <code>nextToken</code> value. This value is&#8232; <code>null</code> when there are no more results to return.</p>
+    /// <p>The <code>nextToken</code> value returned from a previous paginated&#x2028; <code>GetLifecyclePolicyPreviewRequest</code> request where <code>maxResults</code> was used and the&#x2028; results exceeded the value of that parameter. Pagination continues from the end of the&#x2028; previous results that returned the <code>nextToken</code> value. This value is&#x2028; <code>null</code> when there are no more results to return. This option cannot be used when you specify images with <code>imageIds</code>.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -407,14 +407,14 @@ pub struct GetLifecyclePolicyPreviewRequest {
     #[serde(rename = "registryId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub registry_id: Option<String>,
-    /// <p>The name of the repository with the policy to retrieve.</p>
+    /// <p>The name of the repository.</p>
     #[serde(rename = "repositoryName")]
     pub repository_name: String,
 }
 
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetLifecyclePolicyPreviewResponse {
-    /// <p>The JSON repository policy text.</p>
+    /// <p>The JSON lifecycle policy text.</p>
     #[serde(rename = "lifecyclePolicyText")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub lifecycle_policy_text: Option<String>,
@@ -450,7 +450,7 @@ pub struct GetLifecyclePolicyRequest {
     #[serde(rename = "registryId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub registry_id: Option<String>,
-    /// <p>The name of the repository with the policy to retrieve.</p>
+    /// <p>The name of the repository.</p>
     #[serde(rename = "repositoryName")]
     pub repository_name: String,
 }
@@ -461,7 +461,7 @@ pub struct GetLifecyclePolicyResponse {
     #[serde(rename = "lastEvaluatedAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_evaluated_at: Option<f64>,
-    /// <p>The JSON repository policy text.</p>
+    /// <p>The JSON lifecycle policy text.</p>
     #[serde(rename = "lifecyclePolicyText")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub lifecycle_policy_text: Option<String>,
@@ -770,7 +770,7 @@ pub struct PutLifecyclePolicyRequest {
     /// <p>The JSON repository policy text to apply to the repository.</p>
     #[serde(rename = "lifecyclePolicyText")]
     pub lifecycle_policy_text: String,
-    /// <p>The AWS account ID associated with the registry that contains the repository. If you do&#8232; not specify a registry, the default registry is assumed.</p>
+    /// <p>The AWS account ID associated with the registry that contains the repository. If you do&#x2028; not specify a registry, the default registry is assumed.</p>
     #[serde(rename = "registryId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub registry_id: Option<String>,
@@ -1333,7 +1333,7 @@ impl Error for CompleteLayerUploadError {
 pub enum CreateRepositoryError {
     /// <p>The specified parameter is invalid. Review the available parameters for the API request.</p>
     InvalidParameter(String),
-    /// <p>The operation did not succeed because it would have exceeded a service limit for your account. For more information, see <a href="http://docs.aws.amazon.com/AmazonECR/latest/userguide/service_limits.html">Amazon ECR Default Service Limits</a> in the Amazon EC2 Container Registry User Guide.</p>
+    /// <p>The operation did not succeed because it would have exceeded a service limit for your account. For more information, see <a href="http://docs.aws.amazon.com/AmazonECR/latest/userguide/service_limits.html">Amazon ECR Default Service Limits</a> in the Amazon Elastic Container Registry User Guide.</p>
     LimitExceeded(String),
     /// <p>The specified repository already exists in the specified registry.</p>
     RepositoryAlreadyExists(String),
@@ -2583,7 +2583,7 @@ pub enum PutImageError {
     InvalidParameter(String),
     /// <p>The specified layers could not be found, or the specified layer is not valid for this repository.</p>
     LayersNotFound(String),
-    /// <p>The operation did not succeed because it would have exceeded a service limit for your account. For more information, see <a href="http://docs.aws.amazon.com/AmazonECR/latest/userguide/service_limits.html">Amazon ECR Default Service Limits</a> in the Amazon EC2 Container Registry User Guide.</p>
+    /// <p>The operation did not succeed because it would have exceeded a service limit for your account. For more information, see <a href="http://docs.aws.amazon.com/AmazonECR/latest/userguide/service_limits.html">Amazon ECR Default Service Limits</a> in the Amazon Elastic Container Registry User Guide.</p>
     LimitExceeded(String),
     /// <p>The specified repository could not be found. Check the spelling of the specified repository and ensure that you are performing operations on the correct registry.</p>
     RepositoryNotFound(String),
@@ -2981,7 +2981,7 @@ pub enum UploadLayerPartError {
     InvalidLayerPart(String),
     /// <p>The specified parameter is invalid. Review the available parameters for the API request.</p>
     InvalidParameter(String),
-    /// <p>The operation did not succeed because it would have exceeded a service limit for your account. For more information, see <a href="http://docs.aws.amazon.com/AmazonECR/latest/userguide/service_limits.html">Amazon ECR Default Service Limits</a> in the Amazon EC2 Container Registry User Guide.</p>
+    /// <p>The operation did not succeed because it would have exceeded a service limit for your account. For more information, see <a href="http://docs.aws.amazon.com/AmazonECR/latest/userguide/service_limits.html">Amazon ECR Default Service Limits</a> in the Amazon Elastic Container Registry User Guide.</p>
     LimitExceeded(String),
     /// <p>The specified repository could not be found. Check the spelling of the specified repository and ensure that you are performing operations on the correct registry.</p>
     RepositoryNotFound(String),
@@ -3187,7 +3187,7 @@ pub trait Ecr {
     /// <p><p>Creates or updates the image manifest and tags associated with an image.</p> <note> <p>This operation is used by the Amazon ECR proxy, and it is not intended for general use by customers for pulling and pushing images. In most cases, you should use the <code>docker</code> CLI to pull, tag, and push images.</p> </note></p>
     fn put_image(&self, input: &PutImageRequest) -> RusotoFuture<PutImageResponse, PutImageError>;
 
-    /// <p>Creates or updates a lifecycle policy.</p>
+    /// <p>Creates or updates a lifecycle policy. For information about lifecycle policy syntax, see <a href="http://docs.aws.amazon.com/AmazonECR/latest/userguide/LifecyclePolicies.html">Lifecycle Policy Template</a>.</p>
     fn put_lifecycle_policy(
         &self,
         input: &PutLifecyclePolicyRequest,
@@ -3971,7 +3971,7 @@ where
         RusotoFuture::new(future)
     }
 
-    /// <p>Creates or updates a lifecycle policy.</p>
+    /// <p>Creates or updates a lifecycle policy. For information about lifecycle policy syntax, see <a href="http://docs.aws.amazon.com/AmazonECR/latest/userguide/LifecyclePolicies.html">Lifecycle Policy Template</a>.</p>
     fn put_lifecycle_policy(
         &self,
         input: &PutLifecyclePolicyRequest,

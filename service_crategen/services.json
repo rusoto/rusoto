@@ -508,6 +508,12 @@
     "protocolVersion": "2009-04-15",
     "baseTypeName": "SimpleDb"
   },
+  "secretsmanager": {
+    "version": "0.32.0",
+    "coreVersion": "0.32.0",
+    "protocolVersion": "2017-10-17",
+    "baseTypeName": "SecretsManager"
+  },
   "serverlessrepo": {
     "version": "0.32.0",
     "coreVersion": "0.32.0",

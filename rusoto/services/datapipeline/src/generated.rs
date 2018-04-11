@@ -2135,11 +2135,9 @@ impl ReportTaskRunnerHeartbeatError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
-                    "InternalServiceError" => {
-                        ReportTaskRunnerHeartbeatError::InternalServiceError(String::from(
-                            error_message,
-                        ))
-                    }
+                    "InternalServiceError" => ReportTaskRunnerHeartbeatError::InternalServiceError(
+                        String::from(error_message),
+                    ),
                     "InvalidRequestException" => {
                         ReportTaskRunnerHeartbeatError::InvalidRequest(String::from(error_message))
                     }
@@ -2431,11 +2429,9 @@ impl ValidatePipelineDefinitionError {
                     "InvalidRequestException" => {
                         ValidatePipelineDefinitionError::InvalidRequest(String::from(error_message))
                     }
-                    "PipelineDeletedException" => {
-                        ValidatePipelineDefinitionError::PipelineDeleted(String::from(
-                            error_message,
-                        ))
-                    }
+                    "PipelineDeletedException" => ValidatePipelineDefinitionError::PipelineDeleted(
+                        String::from(error_message),
+                    ),
                     "PipelineNotFoundException" => {
                         ValidatePipelineDefinitionError::PipelineNotFound(String::from(
                             error_message,

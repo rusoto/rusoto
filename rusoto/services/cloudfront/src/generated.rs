@@ -1035,33 +1035,34 @@ impl CloudFrontOriginAccessIdentityListDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "IsTruncated" => {
-                            obj.is_truncated =
-                                try!(BooleanDeserializer::deserialize("IsTruncated", stack));
-                        }
-                        "Items" => {
-                            obj.items = Some(try!(CloudFrontOriginAccessIdentitySummaryListDeserializer::deserialize("Items", stack)));
-                        }
-                        "Marker" => {
-                            obj.marker = try!(StringDeserializer::deserialize("Marker", stack));
-                        }
-                        "MaxItems" => {
-                            obj.max_items =
-                                try!(IntegerDeserializer::deserialize("MaxItems", stack));
-                        }
-                        "NextMarker" => {
-                            obj.next_marker =
-                                Some(try!(StringDeserializer::deserialize("NextMarker", stack)));
-                        }
-                        "Quantity" => {
-                            obj.quantity =
-                                try!(IntegerDeserializer::deserialize("Quantity", stack));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "IsTruncated" => {
+                        obj.is_truncated =
+                            try!(BooleanDeserializer::deserialize("IsTruncated", stack));
                     }
-                }
+                    "Items" => {
+                        obj.items = Some(try!(
+                            CloudFrontOriginAccessIdentitySummaryListDeserializer::deserialize(
+                                "Items",
+                                stack
+                            )
+                        ));
+                    }
+                    "Marker" => {
+                        obj.marker = try!(StringDeserializer::deserialize("Marker", stack));
+                    }
+                    "MaxItems" => {
+                        obj.max_items = try!(IntegerDeserializer::deserialize("MaxItems", stack));
+                    }
+                    "NextMarker" => {
+                        obj.next_marker =
+                            Some(try!(StringDeserializer::deserialize("NextMarker", stack)));
+                    }
+                    "Quantity" => {
+                        obj.quantity = try!(IntegerDeserializer::deserialize("Quantity", stack));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -5395,38 +5396,39 @@ impl OriginDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "CustomHeaders" => {
-                        obj.custom_headers = Some(try!(CustomHeadersDeserializer::deserialize(
-                            "CustomHeaders",
-                            stack
-                        )));
+                DeserializerNext::Element(name) => {
+                    match &name[..] {
+                        "CustomHeaders" => {
+                            obj.custom_headers = Some(try!(
+                                CustomHeadersDeserializer::deserialize("CustomHeaders", stack)
+                            ));
+                        }
+                        "CustomOriginConfig" => {
+                            obj.custom_origin_config =
+                                Some(try!(CustomOriginConfigDeserializer::deserialize(
+                                    "CustomOriginConfig",
+                                    stack
+                                )));
+                        }
+                        "DomainName" => {
+                            obj.domain_name =
+                                try!(StringDeserializer::deserialize("DomainName", stack));
+                        }
+                        "Id" => {
+                            obj.id = try!(StringDeserializer::deserialize("Id", stack));
+                        }
+                        "OriginPath" => {
+                            obj.origin_path =
+                                Some(try!(StringDeserializer::deserialize("OriginPath", stack)));
+                        }
+                        "S3OriginConfig" => {
+                            obj.s3_origin_config = Some(try!(
+                                S3OriginConfigDeserializer::deserialize("S3OriginConfig", stack)
+                            ));
+                        }
+                        _ => skip_tree(stack),
                     }
-                    "CustomOriginConfig" => {
-                        obj.custom_origin_config =
-                            Some(try!(CustomOriginConfigDeserializer::deserialize(
-                                "CustomOriginConfig",
-                                stack
-                            )));
-                    }
-                    "DomainName" => {
-                        obj.domain_name =
-                            try!(StringDeserializer::deserialize("DomainName", stack));
-                    }
-                    "Id" => {
-                        obj.id = try!(StringDeserializer::deserialize("Id", stack));
-                    }
-                    "OriginPath" => {
-                        obj.origin_path =
-                            Some(try!(StringDeserializer::deserialize("OriginPath", stack)));
-                    }
-                    "S3OriginConfig" => {
-                        obj.s3_origin_config = Some(try!(
-                            S3OriginConfigDeserializer::deserialize("S3OriginConfig", stack)
-                        ));
-                    }
-                    _ => skip_tree(stack),
-                },
+                }
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -7129,12 +7131,10 @@ impl StreamingDistributionSummaryListDeserializer {
             match next_event {
                 DeserializerNext::Element(name) => {
                     if name == "StreamingDistributionSummary" {
-                        obj.push(try!(
-                            StreamingDistributionSummaryDeserializer::deserialize(
-                                "StreamingDistributionSummary",
-                                stack
-                            )
-                        ));
+                        obj.push(try!(StreamingDistributionSummaryDeserializer::deserialize(
+                            "StreamingDistributionSummary",
+                            stack
+                        )));
                     } else {
                         skip_tree(stack);
                     }
@@ -8659,9 +8659,9 @@ impl CreateDistributionWithTagsError {
                     ))
                 }
                 "InvalidLambdaFunctionAssociation" => {
-                    CreateDistributionWithTagsError::InvalidLambdaFunctionAssociation(
-                        String::from(parsed_error.message),
-                    )
+                    CreateDistributionWithTagsError::InvalidLambdaFunctionAssociation(String::from(
+                        parsed_error.message,
+                    ))
                 }
                 "InvalidLocationCode" => CreateDistributionWithTagsError::InvalidLocationCode(
                     String::from(parsed_error.message),
@@ -9082,11 +9082,9 @@ impl CreateStreamingDistributionError {
                         parsed_error.message,
                     ))
                 }
-                "TooManyTrustedSigners" => {
-                    CreateStreamingDistributionError::TooManyTrustedSigners(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "TooManyTrustedSigners" => CreateStreamingDistributionError::TooManyTrustedSigners(
+                    String::from(parsed_error.message),
+                ),
                 "TrustedSignerDoesNotExist" => {
                     CreateStreamingDistributionError::TrustedSignerDoesNotExist(String::from(
                         parsed_error.message,
@@ -9365,13 +9363,34 @@ impl DeleteCloudFrontOriginAccessIdentityError {
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
-                            Ok(parsed_error) => {
-                                match &parsed_error.code[..] {
-                                    "AccessDenied" => DeleteCloudFrontOriginAccessIdentityError::AccessDenied(String::from(parsed_error.message)),"CloudFrontOriginAccessIdentityInUse" => DeleteCloudFrontOriginAccessIdentityError::CloudFrontOriginAccessIdentityInUse(String::from(parsed_error.message)),"InvalidIfMatchVersion" => DeleteCloudFrontOriginAccessIdentityError::InvalidIfMatchVersion(String::from(parsed_error.message)),"NoSuchCloudFrontOriginAccessIdentity" => DeleteCloudFrontOriginAccessIdentityError::NoSuchCloudFrontOriginAccessIdentity(String::from(parsed_error.message)),"PreconditionFailed" => DeleteCloudFrontOriginAccessIdentityError::PreconditionFailed(String::from(parsed_error.message)),_ => DeleteCloudFrontOriginAccessIdentityError::Unknown(String::from(body))
-                                }
-                           },
-                           Err(_) => DeleteCloudFrontOriginAccessIdentityError::Unknown(body.to_string())
-                       }
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                "AccessDenied" => DeleteCloudFrontOriginAccessIdentityError::AccessDenied(
+                    String::from(parsed_error.message),
+                ),
+                "CloudFrontOriginAccessIdentityInUse" => {
+                    DeleteCloudFrontOriginAccessIdentityError::CloudFrontOriginAccessIdentityInUse(
+                        String::from(parsed_error.message),
+                    )
+                }
+                "InvalidIfMatchVersion" => {
+                    DeleteCloudFrontOriginAccessIdentityError::InvalidIfMatchVersion(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                "NoSuchCloudFrontOriginAccessIdentity" => {
+                    DeleteCloudFrontOriginAccessIdentityError::NoSuchCloudFrontOriginAccessIdentity(
+                        String::from(parsed_error.message),
+                    )
+                }
+                "PreconditionFailed" => {
+                    DeleteCloudFrontOriginAccessIdentityError::PreconditionFailed(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                _ => DeleteCloudFrontOriginAccessIdentityError::Unknown(String::from(body)),
+            },
+            Err(_) => DeleteCloudFrontOriginAccessIdentityError::Unknown(body.to_string()),
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -9663,11 +9682,9 @@ impl DeleteStreamingDistributionError {
                 "AccessDenied" => DeleteStreamingDistributionError::AccessDenied(String::from(
                     parsed_error.message,
                 )),
-                "InvalidIfMatchVersion" => {
-                    DeleteStreamingDistributionError::InvalidIfMatchVersion(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "InvalidIfMatchVersion" => DeleteStreamingDistributionError::InvalidIfMatchVersion(
+                    String::from(parsed_error.message),
+                ),
                 "NoSuchStreamingDistribution" => {
                     DeleteStreamingDistributionError::NoSuchStreamingDistribution(String::from(
                         parsed_error.message,
@@ -9898,13 +9915,17 @@ impl fmt::Display for GetCloudFrontOriginAccessIdentityConfigError {
 impl Error for GetCloudFrontOriginAccessIdentityConfigError {
     fn description(&self) -> &str {
         match *self {
-                            GetCloudFrontOriginAccessIdentityConfigError::AccessDenied(ref cause) => cause,
-GetCloudFrontOriginAccessIdentityConfigError::NoSuchCloudFrontOriginAccessIdentity(ref cause) => cause,
-GetCloudFrontOriginAccessIdentityConfigError::Validation(ref cause) => cause,
-GetCloudFrontOriginAccessIdentityConfigError::Credentials(ref err) => err.description(),
-GetCloudFrontOriginAccessIdentityConfigError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-GetCloudFrontOriginAccessIdentityConfigError::Unknown(ref cause) => cause
-                        }
+            GetCloudFrontOriginAccessIdentityConfigError::AccessDenied(ref cause) => cause,
+            GetCloudFrontOriginAccessIdentityConfigError::NoSuchCloudFrontOriginAccessIdentity(
+                ref cause,
+            ) => cause,
+            GetCloudFrontOriginAccessIdentityConfigError::Validation(ref cause) => cause,
+            GetCloudFrontOriginAccessIdentityConfigError::Credentials(ref err) => err.description(),
+            GetCloudFrontOriginAccessIdentityConfigError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            GetCloudFrontOriginAccessIdentityConfigError::Unknown(ref cause) => cause,
+        }
     }
 }
 /// Errors returned by GetDistribution
@@ -11073,13 +11094,43 @@ impl UpdateCloudFrontOriginAccessIdentityError {
         let mut stack = XmlResponse::new(reader.into_iter().peekable());
         find_start_element(&mut stack);
         match Self::deserialize(&mut stack) {
-                            Ok(parsed_error) => {
-                                match &parsed_error.code[..] {
-                                    "AccessDenied" => UpdateCloudFrontOriginAccessIdentityError::AccessDenied(String::from(parsed_error.message)),"IllegalUpdate" => UpdateCloudFrontOriginAccessIdentityError::IllegalUpdate(String::from(parsed_error.message)),"InconsistentQuantities" => UpdateCloudFrontOriginAccessIdentityError::InconsistentQuantities(String::from(parsed_error.message)),"InvalidArgument" => UpdateCloudFrontOriginAccessIdentityError::InvalidArgument(String::from(parsed_error.message)),"InvalidIfMatchVersion" => UpdateCloudFrontOriginAccessIdentityError::InvalidIfMatchVersion(String::from(parsed_error.message)),"MissingBody" => UpdateCloudFrontOriginAccessIdentityError::MissingBody(String::from(parsed_error.message)),"NoSuchCloudFrontOriginAccessIdentity" => UpdateCloudFrontOriginAccessIdentityError::NoSuchCloudFrontOriginAccessIdentity(String::from(parsed_error.message)),"PreconditionFailed" => UpdateCloudFrontOriginAccessIdentityError::PreconditionFailed(String::from(parsed_error.message)),_ => UpdateCloudFrontOriginAccessIdentityError::Unknown(String::from(body))
-                                }
-                           },
-                           Err(_) => UpdateCloudFrontOriginAccessIdentityError::Unknown(body.to_string())
-                       }
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                "AccessDenied" => UpdateCloudFrontOriginAccessIdentityError::AccessDenied(
+                    String::from(parsed_error.message),
+                ),
+                "IllegalUpdate" => UpdateCloudFrontOriginAccessIdentityError::IllegalUpdate(
+                    String::from(parsed_error.message),
+                ),
+                "InconsistentQuantities" => {
+                    UpdateCloudFrontOriginAccessIdentityError::InconsistentQuantities(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                "InvalidArgument" => UpdateCloudFrontOriginAccessIdentityError::InvalidArgument(
+                    String::from(parsed_error.message),
+                ),
+                "InvalidIfMatchVersion" => {
+                    UpdateCloudFrontOriginAccessIdentityError::InvalidIfMatchVersion(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                "MissingBody" => UpdateCloudFrontOriginAccessIdentityError::MissingBody(
+                    String::from(parsed_error.message),
+                ),
+                "NoSuchCloudFrontOriginAccessIdentity" => {
+                    UpdateCloudFrontOriginAccessIdentityError::NoSuchCloudFrontOriginAccessIdentity(
+                        String::from(parsed_error.message),
+                    )
+                }
+                "PreconditionFailed" => {
+                    UpdateCloudFrontOriginAccessIdentityError::PreconditionFailed(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                _ => UpdateCloudFrontOriginAccessIdentityError::Unknown(String::from(body)),
+            },
+            Err(_) => UpdateCloudFrontOriginAccessIdentityError::Unknown(body.to_string()),
+        }
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -11539,11 +11590,9 @@ impl UpdateStreamingDistributionError {
                 "InvalidArgument" => UpdateStreamingDistributionError::InvalidArgument(
                     String::from(parsed_error.message),
                 ),
-                "InvalidIfMatchVersion" => {
-                    UpdateStreamingDistributionError::InvalidIfMatchVersion(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "InvalidIfMatchVersion" => UpdateStreamingDistributionError::InvalidIfMatchVersion(
+                    String::from(parsed_error.message),
+                ),
                 "InvalidOriginAccessIdentity" => {
                     UpdateStreamingDistributionError::InvalidOriginAccessIdentity(String::from(
                         parsed_error.message,
@@ -11565,11 +11614,9 @@ impl UpdateStreamingDistributionError {
                         String::from(parsed_error.message),
                     )
                 }
-                "TooManyTrustedSigners" => {
-                    UpdateStreamingDistributionError::TooManyTrustedSigners(String::from(
-                        parsed_error.message,
-                    ))
-                }
+                "TooManyTrustedSigners" => UpdateStreamingDistributionError::TooManyTrustedSigners(
+                    String::from(parsed_error.message),
+                ),
                 "TrustedSignerDoesNotExist" => {
                     UpdateStreamingDistributionError::TrustedSignerDoesNotExist(String::from(
                         parsed_error.message,

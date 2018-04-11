@@ -94,7 +94,7 @@ pub struct AttributeValueUpdate {
     #[serde(rename = "Action")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub action: Option<String>,
-    /// <p>Represents the data for an attribute.</p> <p>Each attribute value is described as a name-value pair. The name is the data type, and the value is the data itself.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.NamingRulesDataTypes.html#HowItWorks.DataTypes">Data TYpes</a> in the <i>Amazon DynamoDB Developer Guide</i>. </p>
+    /// <p>Represents the data for an attribute.</p> <p>Each attribute value is described as a name-value pair. The name is the data type, and the value is the data itself.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.NamingRulesDataTypes.html#HowItWorks.DataTypes">Data Types</a> in the <i>Amazon DynamoDB Developer Guide</i>. </p>
     #[serde(rename = "Value")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub value: Option<AttributeValue>,
@@ -287,12 +287,16 @@ pub struct ConsumedCapacity {
     pub table_name: Option<String>,
 }
 
-/// <p>Represents the backup and restore settings on the table when the backup was created.</p>
+/// <p>Represents the continuous backups and point in time recovery settings on the table.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct ContinuousBackupsDescription {
-    /// <p>ContinuousBackupsStatus can be one of the following states : ENABLED, DISABLED</p>
+    /// <p> <code>ContinuousBackupsStatus</code> can be one of the following states : ENABLED, DISABLED</p>
     #[serde(rename = "ContinuousBackupsStatus")]
     pub continuous_backups_status: String,
+    /// <p>The description of the point in time recovery settings applied to the table.</p>
+    #[serde(rename = "PointInTimeRecoveryDescription")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub point_in_time_recovery_description: Option<PointInTimeRecoveryDescription>,
 }
 
 #[derive(Default, Debug, Clone, Serialize)]
@@ -376,6 +380,10 @@ pub struct CreateTableInput {
     /// <p>Represents the provisioned throughput settings for a specified table or index. The settings can be modified using the <code>UpdateTable</code> operation.</p> <p>For current minimum and maximum provisioned throughput values, see <a href="http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Limits.html">Limits</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p>
     #[serde(rename = "ProvisionedThroughput")]
     pub provisioned_throughput: ProvisionedThroughput,
+    /// <p>Represents the settings used to enable server-side encryption.</p>
+    #[serde(rename = "SSESpecification")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sse_specification: Option<SSESpecification>,
     /// <p><p>The settings for DynamoDB Streams on the table. These settings consist of:</p> <ul> <li> <p> <code>StreamEnabled</code> - Indicates whether Streams is to be enabled (true) or disabled (false).</p> </li> <li> <p> <code>StreamViewType</code> - When an item in the table is modified, <code>StreamViewType</code> determines what information is written to the table&#39;s stream. Valid values for <code>StreamViewType</code> are:</p> <ul> <li> <p> <code>KEYS<em>ONLY</code> - Only the key attributes of the modified item are written to the stream.</p> </li> <li> <p> <code>NEW</em>IMAGE</code> - The entire item, as it appears after it was modified, is written to the stream.</p> </li> <li> <p> <code>OLD<em>IMAGE</code> - The entire item, as it appeared before it was modified, is written to the stream.</p> </li> <li> <p> <code>NEW</em>AND<em>OLD</em>IMAGES</code> - Both the new and the old item images of the item are written to the stream.</p> </li> </ul> </li> </ul></p>
     #[serde(rename = "StreamSpecification")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -526,7 +534,7 @@ pub struct DescribeBackupOutput {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeContinuousBackupsInput {
-    /// <p>Name of the table for which the customer wants to check the backup and restore settings.</p>
+    /// <p>Name of the table for which the customer wants to check the continuous backups and point in time recovery settings.</p>
     #[serde(rename = "TableName")]
     pub table_name: String,
 }
@@ -1030,6 +1038,31 @@ pub struct LocalSecondaryIndexInfo {
     pub projection: Option<Projection>,
 }
 
+/// <p>The description of the point in time settings applied to the table.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct PointInTimeRecoveryDescription {
+    /// <p>Specifies the earliest point in time you can restore your table to. It is equal to the maximum of point in time recovery enabled time and <code>CurrentTime</code> - <code>PointInTimeRecoveryPeriod</code>.</p>
+    #[serde(rename = "EarliestRestorableDateTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub earliest_restorable_date_time: Option<f64>,
+    /// <p> <code>LatestRestorableDateTime</code> is 5 minutes from now and there is a +/- 1 minute fuzziness on the restore times. </p>
+    #[serde(rename = "LatestRestorableDateTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub latest_restorable_date_time: Option<f64>,
+    /// <p><p>The current state of point in time recovery:</p> <ul> <li> <p> <code>ENABLING</code> - Point in time recovery is being enabled.</p> </li> <li> <p> <code>ENABLED</code> - Point in time recovery is enabled.</p> </li> <li> <p> <code>DISABLED</code> - Point in time recovery is disabled.</p> </li> </ul></p>
+    #[serde(rename = "PointInTimeRecoveryStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub point_in_time_recovery_status: Option<String>,
+}
+
+/// <p>Represents the settings used to enable point in time recovery.</p>
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct PointInTimeRecoverySpecification {
+    /// <p>Indicates whether point in time recovery is enabled (true) or disabled (false) on the table.</p>
+    #[serde(rename = "PointInTimeRecoveryEnabled")]
+    pub point_in_time_recovery_enabled: bool,
+}
+
 /// <p>Represents attributes that are copied (projected) from the table into an index. These are in addition to the primary key attributes and index key attributes, which are automatically projected.</p>
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct Projection {
@@ -1181,7 +1214,7 @@ pub struct QueryInput {
     #[serde(rename = "IndexName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub index_name: Option<String>,
-    /// <p>The condition that specifies the key value(s) for items to be retrieved by the <code>Query</code> action.</p> <p>The condition must perform an equality test on a single partition key value. The condition can also perform one of several comparison tests on a single sort key value. <code>Query</code> can use <code>KeyConditionExpression</code> to retrieve one item with a given partition key value and sort key value, or several items that have the same partition key value but different sort key values.</p> <p>The partition key equality test is required, and must be specified in the following format:</p> <p> <code>partitionKeyName</code> <i>=</i> <code>:partitionkeyval</code> </p> <p>If you also want to provide a condition for the sort key, it must be combined using <code>AND</code> with the condition for the sort key. Following is an example, using the <b>=</b> comparison operator for the sort key:</p> <p> <code>partitionKeyName</code> <code>=</code> <code>:partitionkeyval</code> <code>AND</code> <code>sortKeyName</code> <code>=</code> <code>:sortkeyval</code> </p> <p>Valid comparisons for the sort key condition are as follows:</p> <ul> <li> <p> <code>sortKeyName</code> <code>=</code> <code>:sortkeyval</code> - true if the sort key value is equal to <code>:sortkeyval</code>.</p> </li> <li> <p> <code>sortKeyName</code> <code>&lt;</code> <code>:sortkeyval</code> - true if the sort key value is less than <code>:sortkeyval</code>.</p> </li> <li> <p> <code>sortKeyName</code> <code>&lt;=</code> <code>:sortkeyval</code> - true if the sort key value is less than or equal to <code>:sortkeyval</code>.</p> </li> <li> <p> <code>sortKeyName</code> <code>&gt;</code> <code>:sortkeyval</code> - true if the sort key value is greater than <code>:sortkeyval</code>.</p> </li> <li> <p> <code>sortKeyName</code> <code>&gt;= </code> <code>:sortkeyval</code> - true if the sort key value is greater than or equal to <code>:sortkeyval</code>.</p> </li> <li> <p> <code>sortKeyName</code> <code>BETWEEN</code> <code>:sortkeyval1</code> <code>AND</code> <code>:sortkeyval2</code> - true if the sort key value is greater than or equal to <code>:sortkeyval1</code>, and less than or equal to <code>:sortkeyval2</code>.</p> </li> <li> <p> <code>begins_with (</code> <code>sortKeyName</code>, <code>:sortkeyval</code> <code>)</code> - true if the sort key value begins with a particular operand. (You cannot use this function with a sort key that is of type Number.) Note that the function name <code>begins_with</code> is case-sensitive.</p> </li> </ul> <p>Use the <code>ExpressionAttributeValues</code> parameter to replace tokens such as <code>:partitionval</code> and <code>:sortval</code> with actual values at runtime.</p> <p>You can optionally use the <code>ExpressionAttributeNames</code> parameter to replace the names of the partition key and sort key with placeholder tokens. This option might be necessary if an attribute name conflicts with a DynamoDB reserved word. For example, the following <code>KeyConditionExpression</code> parameter causes an error because <i>Size</i> is a reserved word:</p> <ul> <li> <p> <code>Size = :myval</code> </p> </li> </ul> <p>To work around this, define a placeholder (such a <code>#S</code>) to represent the attribute name <i>Size</i>. <code>KeyConditionExpression</code> then is as follows:</p> <ul> <li> <p> <code>#S = :myval</code> </p> </li> </ul> <p>For a list of reserved words, see <a href="http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/ReservedWords.html">Reserved Words</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p> <p>For more information on <code>ExpressionAttributeNames</code> and <code>ExpressionAttributeValues</code>, see <a href="http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/ExpressionPlaceholders.html">Using Placeholders for Attribute Names and Values</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p>
+    /// <p>The condition that specifies the key value(s) for items to be retrieved by the <code>Query</code> action.</p> <p>The condition must perform an equality test on a single partition key value.</p> <p>The condition can optionally perform one of several comparison tests on a single sort key value. This allows <code>Query</code> to retrieve one item with a given partition key value and sort key value, or several items that have the same partition key value but different sort key values.</p> <p>The partition key equality test is required, and must be specified in the following format:</p> <p> <code>partitionKeyName</code> <i>=</i> <code>:partitionkeyval</code> </p> <p>If you also want to provide a condition for the sort key, it must be combined using <code>AND</code> with the condition for the sort key. Following is an example, using the <b>=</b> comparison operator for the sort key:</p> <p> <code>partitionKeyName</code> <code>=</code> <code>:partitionkeyval</code> <code>AND</code> <code>sortKeyName</code> <code>=</code> <code>:sortkeyval</code> </p> <p>Valid comparisons for the sort key condition are as follows:</p> <ul> <li> <p> <code>sortKeyName</code> <code>=</code> <code>:sortkeyval</code> - true if the sort key value is equal to <code>:sortkeyval</code>.</p> </li> <li> <p> <code>sortKeyName</code> <code>&lt;</code> <code>:sortkeyval</code> - true if the sort key value is less than <code>:sortkeyval</code>.</p> </li> <li> <p> <code>sortKeyName</code> <code>&lt;=</code> <code>:sortkeyval</code> - true if the sort key value is less than or equal to <code>:sortkeyval</code>.</p> </li> <li> <p> <code>sortKeyName</code> <code>&gt;</code> <code>:sortkeyval</code> - true if the sort key value is greater than <code>:sortkeyval</code>.</p> </li> <li> <p> <code>sortKeyName</code> <code>&gt;= </code> <code>:sortkeyval</code> - true if the sort key value is greater than or equal to <code>:sortkeyval</code>.</p> </li> <li> <p> <code>sortKeyName</code> <code>BETWEEN</code> <code>:sortkeyval1</code> <code>AND</code> <code>:sortkeyval2</code> - true if the sort key value is greater than or equal to <code>:sortkeyval1</code>, and less than or equal to <code>:sortkeyval2</code>.</p> </li> <li> <p> <code>begins_with (</code> <code>sortKeyName</code>, <code>:sortkeyval</code> <code>)</code> - true if the sort key value begins with a particular operand. (You cannot use this function with a sort key that is of type Number.) Note that the function name <code>begins_with</code> is case-sensitive.</p> </li> </ul> <p>Use the <code>ExpressionAttributeValues</code> parameter to replace tokens such as <code>:partitionval</code> and <code>:sortval</code> with actual values at runtime.</p> <p>You can optionally use the <code>ExpressionAttributeNames</code> parameter to replace the names of the partition key and sort key with placeholder tokens. This option might be necessary if an attribute name conflicts with a DynamoDB reserved word. For example, the following <code>KeyConditionExpression</code> parameter causes an error because <i>Size</i> is a reserved word:</p> <ul> <li> <p> <code>Size = :myval</code> </p> </li> </ul> <p>To work around this, define a placeholder (such a <code>#S</code>) to represent the attribute name <i>Size</i>. <code>KeyConditionExpression</code> then is as follows:</p> <ul> <li> <p> <code>#S = :myval</code> </p> </li> </ul> <p>For a list of reserved words, see <a href="http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/ReservedWords.html">Reserved Words</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p> <p>For more information on <code>ExpressionAttributeNames</code> and <code>ExpressionAttributeValues</code>, see <a href="http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/ExpressionPlaceholders.html">Using Placeholders for Attribute Names and Values</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p>
     #[serde(rename = "KeyConditionExpression")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub key_condition_expression: Option<String>,
@@ -1204,7 +1237,7 @@ pub struct QueryInput {
     #[serde(rename = "ReturnConsumedCapacity")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub return_consumed_capacity: Option<String>,
-    /// <p>Specifies the order for index traversal: If <code>true</code> (default), the traversal is performed in ascending order; if <code>false</code>, the traversal is performed in descending order. </p> <p>Items with the same partition key value are stored in sorted order by sort key. If the sort key data type is Number, the results are stored in numeric order. For type String, the results are stored in order of ASCII character code values. For type Binary, DynamoDB treats each byte of the binary data as unsigned.</p> <p>If <code>ScanIndexForward</code> is <code>true</code>, DynamoDB returns the results in the order in which they are stored (by sort key value). This is the default behavior. If <code>ScanIndexForward</code> is <code>false</code>, DynamoDB reads the results in reverse order by sort key value, and then returns the results to the client.</p>
+    /// <p>Specifies the order for index traversal: If <code>true</code> (default), the traversal is performed in ascending order; if <code>false</code>, the traversal is performed in descending order. </p> <p>Items with the same partition key value are stored in sorted order by sort key. If the sort key data type is Number, the results are stored in numeric order. For type String, the results are stored in order of UTF-8 bytes. For type Binary, DynamoDB treats each byte of the binary data as unsigned.</p> <p>If <code>ScanIndexForward</code> is <code>true</code>, DynamoDB returns the results in the order in which they are stored (by sort key value). This is the default behavior. If <code>ScanIndexForward</code> is <code>false</code>, DynamoDB reads the results in reverse order by sort key value, and then returns the results to the client.</p>
     #[serde(rename = "ScanIndexForward")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub scan_index_forward: Option<bool>,
@@ -1308,6 +1341,49 @@ pub struct RestoreTableFromBackupOutput {
     #[serde(rename = "TableDescription")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub table_description: Option<TableDescription>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct RestoreTableToPointInTimeInput {
+    /// <p>Time in the past to restore the table to.</p>
+    #[serde(rename = "RestoreDateTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub restore_date_time: Option<f64>,
+    /// <p>Name of the source table that is being restored.</p>
+    #[serde(rename = "SourceTableName")]
+    pub source_table_name: String,
+    /// <p>The name of the new table to which it must be restored to.</p>
+    #[serde(rename = "TargetTableName")]
+    pub target_table_name: String,
+    /// <p>Restore the table to the latest possible time. <code>LatestRestorableDateTime</code> is typically 5 minutes before the current time. </p>
+    #[serde(rename = "UseLatestRestorableTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub use_latest_restorable_time: Option<bool>,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct RestoreTableToPointInTimeOutput {
+    /// <p>Represents the properties of a table.</p>
+    #[serde(rename = "TableDescription")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub table_description: Option<TableDescription>,
+}
+
+/// <p>The description of the server-side encryption status on the specified table.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct SSEDescription {
+    /// <p><p>The current state of server-side encryption:</p> <ul> <li> <p> <code>ENABLING</code> - Server-side encryption is being enabled.</p> </li> <li> <p> <code>ENABLED</code> - Server-side encryption is enabled.</p> </li> <li> <p> <code>DISABLING</code> - Server-side encryption is being disabled.</p> </li> <li> <p> <code>DISABLED</code> - Server-side encryption is disabled.</p> </li> </ul></p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+}
+
+/// <p>Represents the settings used to enable server-side encryption.</p>
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct SSESpecification {
+    /// <p>Indicates whether server-side encryption is enabled (true) or disabled (false) on the table.</p>
+    #[serde(rename = "Enabled")]
+    pub enabled: bool,
 }
 
 /// <p>Represents the input of a <code>Scan</code> operation.</p>
@@ -1445,6 +1521,10 @@ pub struct SourceTableFeatureDetails {
     #[serde(rename = "LocalSecondaryIndexes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub local_secondary_indexes: Option<Vec<LocalSecondaryIndexInfo>>,
+    /// <p>The description of the server-side encryption status on the table when the backup was created.</p>
+    #[serde(rename = "SSEDescription")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sse_description: Option<SSEDescription>,
     /// <p>Stream settings on the table when the backup was created.</p>
     #[serde(rename = "StreamDescription")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1511,6 +1591,10 @@ pub struct TableDescription {
     #[serde(rename = "RestoreSummary")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub restore_summary: Option<RestoreSummary>,
+    /// <p>The description of the server-side encryption status on the specified table.</p>
+    #[serde(rename = "SSEDescription")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sse_description: Option<SSEDescription>,
     /// <p>The current DynamoDB Streams configuration for the table.</p>
     #[serde(rename = "StreamSpecification")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1590,6 +1674,24 @@ pub struct UntagResourceInput {
     /// <p>A list of tag keys. Existing tags of the resource whose keys are members of this list will be removed from the Amazon DynamoDB resource.</p>
     #[serde(rename = "TagKeys")]
     pub tag_keys: Vec<String>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct UpdateContinuousBackupsInput {
+    /// <p>Represents the settings used to enable point in time recovery.</p>
+    #[serde(rename = "PointInTimeRecoverySpecification")]
+    pub point_in_time_recovery_specification: PointInTimeRecoverySpecification,
+    /// <p>The name of the table.</p>
+    #[serde(rename = "TableName")]
+    pub table_name: String,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct UpdateContinuousBackupsOutput {
+    /// <p>Represents the continuous backups and point in time recovery settings on the table.</p>
+    #[serde(rename = "ContinuousBackupsDescription")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub continuous_backups_description: Option<ContinuousBackupsDescription>,
 }
 
 /// <p>Represents the new provisioned throughput settings to be applied to a global secondary index.</p>
@@ -1954,11 +2056,11 @@ pub enum CreateBackupError {
     ContinuousBackupsUnavailable(String),
     /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
-    /// <p>The number of concurrent table requests (cumulative number of tables in the <code>CREATING</code>, <code>DELETING</code> or <code>UPDATING</code> state) exceeds the maximum allowed of 10.</p> <p>Also, for tables with secondary indexes, only one of those tables can be in the <code>CREATING</code> state at any point in time. Do not attempt to create more than one such table simultaneously.</p> <p>The total limit of tables in the <code>ACTIVE</code> state is 250.</p>
+    /// <p>Up to 50 <code>CreateBackup</code> operations are allowed per second, per account. There is no limit to the number of daily on-demand backups that can be taken. </p> <p>Up to 10 simultaneous table operations are allowed per account. These operations include <code>CreateTable</code>, <code>UpdateTable</code>, <code>DeleteTable</code>,<code>UpdateTimeToLive</code>, <code>RestoreTableFromBackup</code>, and <code>RestoreTableToPointInTime</code>. </p> <p>For tables with secondary indexes, only one of those tables can be in the <code>CREATING</code> state at any point in time. Do not attempt to create more than one such table simultaneously.</p> <p>The total limit of tables in the <code>ACTIVE</code> state is 250.</p>
     LimitExceeded(String),
-    /// <p>A table by that name is either being created or deleted. </p>
+    /// <p>A target table with the specified name is either being created or deleted. </p>
     TableInUse(String),
-    /// <p>A table with the name <code>TableName</code> does not currently exist within the subscriber's account.</p>
+    /// <p>A source table with the name <code>TableName</code> does not currently exist within the subscriber's account.</p>
     TableNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2060,9 +2162,9 @@ pub enum CreateGlobalTableError {
     GlobalTableAlreadyExists(String),
     /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
-    /// <p>The number of concurrent table requests (cumulative number of tables in the <code>CREATING</code>, <code>DELETING</code> or <code>UPDATING</code> state) exceeds the maximum allowed of 10.</p> <p>Also, for tables with secondary indexes, only one of those tables can be in the <code>CREATING</code> state at any point in time. Do not attempt to create more than one such table simultaneously.</p> <p>The total limit of tables in the <code>ACTIVE</code> state is 250.</p>
+    /// <p>Up to 50 <code>CreateBackup</code> operations are allowed per second, per account. There is no limit to the number of daily on-demand backups that can be taken. </p> <p>Up to 10 simultaneous table operations are allowed per account. These operations include <code>CreateTable</code>, <code>UpdateTable</code>, <code>DeleteTable</code>,<code>UpdateTimeToLive</code>, <code>RestoreTableFromBackup</code>, and <code>RestoreTableToPointInTime</code>. </p> <p>For tables with secondary indexes, only one of those tables can be in the <code>CREATING</code> state at any point in time. Do not attempt to create more than one such table simultaneously.</p> <p>The total limit of tables in the <code>ACTIVE</code> state is 250.</p>
     LimitExceeded(String),
-    /// <p>A table with the name <code>TableName</code> does not currently exist within the subscriber's account.</p>
+    /// <p>A source table with the name <code>TableName</code> does not currently exist within the subscriber's account.</p>
     TableNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2158,7 +2260,7 @@ impl Error for CreateGlobalTableError {
 pub enum CreateTableError {
     /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
-    /// <p>The number of concurrent table requests (cumulative number of tables in the <code>CREATING</code>, <code>DELETING</code> or <code>UPDATING</code> state) exceeds the maximum allowed of 10.</p> <p>Also, for tables with secondary indexes, only one of those tables can be in the <code>CREATING</code> state at any point in time. Do not attempt to create more than one such table simultaneously.</p> <p>The total limit of tables in the <code>ACTIVE</code> state is 250.</p>
+    /// <p>Up to 50 <code>CreateBackup</code> operations are allowed per second, per account. There is no limit to the number of daily on-demand backups that can be taken. </p> <p>Up to 10 simultaneous table operations are allowed per account. These operations include <code>CreateTable</code>, <code>UpdateTable</code>, <code>DeleteTable</code>,<code>UpdateTimeToLive</code>, <code>RestoreTableFromBackup</code>, and <code>RestoreTableToPointInTime</code>. </p> <p>For tables with secondary indexes, only one of those tables can be in the <code>CREATING</code> state at any point in time. Do not attempt to create more than one such table simultaneously.</p> <p>The total limit of tables in the <code>ACTIVE</code> state is 250.</p>
     LimitExceeded(String),
     /// <p>The operation conflicts with the resource's availability. For example, you attempted to recreate an existing table, or tried to delete a table currently in the <code>CREATING</code> state.</p>
     ResourceInUse(String),
@@ -2252,7 +2354,7 @@ pub enum DeleteBackupError {
     BackupNotFound(String),
     /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
-    /// <p>The number of concurrent table requests (cumulative number of tables in the <code>CREATING</code>, <code>DELETING</code> or <code>UPDATING</code> state) exceeds the maximum allowed of 10.</p> <p>Also, for tables with secondary indexes, only one of those tables can be in the <code>CREATING</code> state at any point in time. Do not attempt to create more than one such table simultaneously.</p> <p>The total limit of tables in the <code>ACTIVE</code> state is 250.</p>
+    /// <p>Up to 50 <code>CreateBackup</code> operations are allowed per second, per account. There is no limit to the number of daily on-demand backups that can be taken. </p> <p>Up to 10 simultaneous table operations are allowed per account. These operations include <code>CreateTable</code>, <code>UpdateTable</code>, <code>DeleteTable</code>,<code>UpdateTimeToLive</code>, <code>RestoreTableFromBackup</code>, and <code>RestoreTableToPointInTime</code>. </p> <p>For tables with secondary indexes, only one of those tables can be in the <code>CREATING</code> state at any point in time. Do not attempt to create more than one such table simultaneously.</p> <p>The total limit of tables in the <code>ACTIVE</code> state is 250.</p>
     LimitExceeded(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2446,7 +2548,7 @@ impl Error for DeleteItemError {
 pub enum DeleteTableError {
     /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
-    /// <p>The number of concurrent table requests (cumulative number of tables in the <code>CREATING</code>, <code>DELETING</code> or <code>UPDATING</code> state) exceeds the maximum allowed of 10.</p> <p>Also, for tables with secondary indexes, only one of those tables can be in the <code>CREATING</code> state at any point in time. Do not attempt to create more than one such table simultaneously.</p> <p>The total limit of tables in the <code>ACTIVE</code> state is 250.</p>
+    /// <p>Up to 50 <code>CreateBackup</code> operations are allowed per second, per account. There is no limit to the number of daily on-demand backups that can be taken. </p> <p>Up to 10 simultaneous table operations are allowed per account. These operations include <code>CreateTable</code>, <code>UpdateTable</code>, <code>DeleteTable</code>,<code>UpdateTimeToLive</code>, <code>RestoreTableFromBackup</code>, and <code>RestoreTableToPointInTime</code>. </p> <p>For tables with secondary indexes, only one of those tables can be in the <code>CREATING</code> state at any point in time. Do not attempt to create more than one such table simultaneously.</p> <p>The total limit of tables in the <code>ACTIVE</code> state is 250.</p>
     LimitExceeded(String),
     /// <p>The operation conflicts with the resource's availability. For example, you attempted to recreate an existing table, or tried to delete a table currently in the <code>CREATING</code> state.</p>
     ResourceInUse(String),
@@ -2626,7 +2728,7 @@ impl Error for DescribeBackupError {
 pub enum DescribeContinuousBackupsError {
     /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
-    /// <p>A table with the name <code>TableName</code> does not currently exist within the subscriber's account.</p>
+    /// <p>A source table with the name <code>TableName</code> does not currently exist within the subscriber's account.</p>
     TableNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3644,11 +3746,11 @@ pub enum RestoreTableFromBackupError {
     BackupNotFound(String),
     /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
-    /// <p>The number of concurrent table requests (cumulative number of tables in the <code>CREATING</code>, <code>DELETING</code> or <code>UPDATING</code> state) exceeds the maximum allowed of 10.</p> <p>Also, for tables with secondary indexes, only one of those tables can be in the <code>CREATING</code> state at any point in time. Do not attempt to create more than one such table simultaneously.</p> <p>The total limit of tables in the <code>ACTIVE</code> state is 250.</p>
+    /// <p>Up to 50 <code>CreateBackup</code> operations are allowed per second, per account. There is no limit to the number of daily on-demand backups that can be taken. </p> <p>Up to 10 simultaneous table operations are allowed per account. These operations include <code>CreateTable</code>, <code>UpdateTable</code>, <code>DeleteTable</code>,<code>UpdateTimeToLive</code>, <code>RestoreTableFromBackup</code>, and <code>RestoreTableToPointInTime</code>. </p> <p>For tables with secondary indexes, only one of those tables can be in the <code>CREATING</code> state at any point in time. Do not attempt to create more than one such table simultaneously.</p> <p>The total limit of tables in the <code>ACTIVE</code> state is 250.</p>
     LimitExceeded(String),
-    /// <p>A table with the name already exists. </p>
+    /// <p>A target table with the specified name already exists. </p>
     TableAlreadyExists(String),
-    /// <p>A table by that name is either being created or deleted. </p>
+    /// <p>A target table with the specified name is either being created or deleted. </p>
     TableInUse(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3745,6 +3847,128 @@ impl Error for RestoreTableFromBackupError {
         }
     }
 }
+/// Errors returned by RestoreTableToPointInTime
+#[derive(Debug, PartialEq)]
+pub enum RestoreTableToPointInTimeError {
+    /// <p>An error occurred on the server side.</p>
+    InternalServerError(String),
+    /// <p>An invalid restore time was specified. RestoreDateTime must be between EarliestRestorableDateTime and LatestRestorableDateTime.</p>
+    InvalidRestoreTime(String),
+    /// <p>Up to 50 <code>CreateBackup</code> operations are allowed per second, per account. There is no limit to the number of daily on-demand backups that can be taken. </p> <p>Up to 10 simultaneous table operations are allowed per account. These operations include <code>CreateTable</code>, <code>UpdateTable</code>, <code>DeleteTable</code>,<code>UpdateTimeToLive</code>, <code>RestoreTableFromBackup</code>, and <code>RestoreTableToPointInTime</code>. </p> <p>For tables with secondary indexes, only one of those tables can be in the <code>CREATING</code> state at any point in time. Do not attempt to create more than one such table simultaneously.</p> <p>The total limit of tables in the <code>ACTIVE</code> state is 250.</p>
+    LimitExceeded(String),
+    /// <p>Point in time recovery has not yet been enabled for this source table.</p>
+    PointInTimeRecoveryUnavailable(String),
+    /// <p>A target table with the specified name already exists. </p>
+    TableAlreadyExists(String),
+    /// <p>A target table with the specified name is either being created or deleted. </p>
+    TableInUse(String),
+    /// <p>A source table with the name <code>TableName</code> does not currently exist within the subscriber's account.</p>
+    TableNotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl RestoreTableToPointInTimeError {
+    pub fn from_body(body: &str) -> RestoreTableToPointInTimeError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InternalServerError" => RestoreTableToPointInTimeError::InternalServerError(
+                        String::from(error_message),
+                    ),
+                    "InvalidRestoreTimeException" => {
+                        RestoreTableToPointInTimeError::InvalidRestoreTime(String::from(
+                            error_message,
+                        ))
+                    }
+                    "LimitExceededException" => {
+                        RestoreTableToPointInTimeError::LimitExceeded(String::from(error_message))
+                    }
+                    "PointInTimeRecoveryUnavailableException" => {
+                        RestoreTableToPointInTimeError::PointInTimeRecoveryUnavailable(
+                            String::from(error_message),
+                        )
+                    }
+                    "TableAlreadyExistsException" => {
+                        RestoreTableToPointInTimeError::TableAlreadyExists(String::from(
+                            error_message,
+                        ))
+                    }
+                    "TableInUseException" => {
+                        RestoreTableToPointInTimeError::TableInUse(String::from(error_message))
+                    }
+                    "TableNotFoundException" => {
+                        RestoreTableToPointInTimeError::TableNotFound(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        RestoreTableToPointInTimeError::Validation(error_message.to_string())
+                    }
+                    _ => RestoreTableToPointInTimeError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => RestoreTableToPointInTimeError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for RestoreTableToPointInTimeError {
+    fn from(err: serde_json::error::Error) -> RestoreTableToPointInTimeError {
+        RestoreTableToPointInTimeError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for RestoreTableToPointInTimeError {
+    fn from(err: CredentialsError) -> RestoreTableToPointInTimeError {
+        RestoreTableToPointInTimeError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for RestoreTableToPointInTimeError {
+    fn from(err: HttpDispatchError) -> RestoreTableToPointInTimeError {
+        RestoreTableToPointInTimeError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for RestoreTableToPointInTimeError {
+    fn from(err: io::Error) -> RestoreTableToPointInTimeError {
+        RestoreTableToPointInTimeError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for RestoreTableToPointInTimeError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for RestoreTableToPointInTimeError {
+    fn description(&self) -> &str {
+        match *self {
+            RestoreTableToPointInTimeError::InternalServerError(ref cause) => cause,
+            RestoreTableToPointInTimeError::InvalidRestoreTime(ref cause) => cause,
+            RestoreTableToPointInTimeError::LimitExceeded(ref cause) => cause,
+            RestoreTableToPointInTimeError::PointInTimeRecoveryUnavailable(ref cause) => cause,
+            RestoreTableToPointInTimeError::TableAlreadyExists(ref cause) => cause,
+            RestoreTableToPointInTimeError::TableInUse(ref cause) => cause,
+            RestoreTableToPointInTimeError::TableNotFound(ref cause) => cause,
+            RestoreTableToPointInTimeError::Validation(ref cause) => cause,
+            RestoreTableToPointInTimeError::Credentials(ref err) => err.description(),
+            RestoreTableToPointInTimeError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            RestoreTableToPointInTimeError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by Scan
 #[derive(Debug, PartialEq)]
 pub enum ScanError {
@@ -3838,7 +4062,7 @@ impl Error for ScanError {
 pub enum TagResourceError {
     /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
-    /// <p>The number of concurrent table requests (cumulative number of tables in the <code>CREATING</code>, <code>DELETING</code> or <code>UPDATING</code> state) exceeds the maximum allowed of 10.</p> <p>Also, for tables with secondary indexes, only one of those tables can be in the <code>CREATING</code> state at any point in time. Do not attempt to create more than one such table simultaneously.</p> <p>The total limit of tables in the <code>ACTIVE</code> state is 250.</p>
+    /// <p>Up to 50 <code>CreateBackup</code> operations are allowed per second, per account. There is no limit to the number of daily on-demand backups that can be taken. </p> <p>Up to 10 simultaneous table operations are allowed per account. These operations include <code>CreateTable</code>, <code>UpdateTable</code>, <code>DeleteTable</code>,<code>UpdateTimeToLive</code>, <code>RestoreTableFromBackup</code>, and <code>RestoreTableToPointInTime</code>. </p> <p>For tables with secondary indexes, only one of those tables can be in the <code>CREATING</code> state at any point in time. Do not attempt to create more than one such table simultaneously.</p> <p>The total limit of tables in the <code>ACTIVE</code> state is 250.</p>
     LimitExceeded(String),
     /// <p>The operation conflicts with the resource's availability. For example, you attempted to recreate an existing table, or tried to delete a table currently in the <code>CREATING</code> state.</p>
     ResourceInUse(String),
@@ -3934,7 +4158,7 @@ impl Error for TagResourceError {
 pub enum UntagResourceError {
     /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
-    /// <p>The number of concurrent table requests (cumulative number of tables in the <code>CREATING</code>, <code>DELETING</code> or <code>UPDATING</code> state) exceeds the maximum allowed of 10.</p> <p>Also, for tables with secondary indexes, only one of those tables can be in the <code>CREATING</code> state at any point in time. Do not attempt to create more than one such table simultaneously.</p> <p>The total limit of tables in the <code>ACTIVE</code> state is 250.</p>
+    /// <p>Up to 50 <code>CreateBackup</code> operations are allowed per second, per account. There is no limit to the number of daily on-demand backups that can be taken. </p> <p>Up to 10 simultaneous table operations are allowed per account. These operations include <code>CreateTable</code>, <code>UpdateTable</code>, <code>DeleteTable</code>,<code>UpdateTimeToLive</code>, <code>RestoreTableFromBackup</code>, and <code>RestoreTableToPointInTime</code>. </p> <p>For tables with secondary indexes, only one of those tables can be in the <code>CREATING</code> state at any point in time. Do not attempt to create more than one such table simultaneously.</p> <p>The total limit of tables in the <code>ACTIVE</code> state is 250.</p>
     LimitExceeded(String),
     /// <p>The operation conflicts with the resource's availability. For example, you attempted to recreate an existing table, or tried to delete a table currently in the <code>CREATING</code> state.</p>
     ResourceInUse(String),
@@ -4025,6 +4249,100 @@ impl Error for UntagResourceError {
         }
     }
 }
+/// Errors returned by UpdateContinuousBackups
+#[derive(Debug, PartialEq)]
+pub enum UpdateContinuousBackupsError {
+    /// <p>Backups have not yet been enabled for this table.</p>
+    ContinuousBackupsUnavailable(String),
+    /// <p>An error occurred on the server side.</p>
+    InternalServerError(String),
+    /// <p>A source table with the name <code>TableName</code> does not currently exist within the subscriber's account.</p>
+    TableNotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl UpdateContinuousBackupsError {
+    pub fn from_body(body: &str) -> UpdateContinuousBackupsError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "ContinuousBackupsUnavailableException" => {
+                        UpdateContinuousBackupsError::ContinuousBackupsUnavailable(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InternalServerError" => UpdateContinuousBackupsError::InternalServerError(
+                        String::from(error_message),
+                    ),
+                    "TableNotFoundException" => {
+                        UpdateContinuousBackupsError::TableNotFound(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        UpdateContinuousBackupsError::Validation(error_message.to_string())
+                    }
+                    _ => UpdateContinuousBackupsError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => UpdateContinuousBackupsError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for UpdateContinuousBackupsError {
+    fn from(err: serde_json::error::Error) -> UpdateContinuousBackupsError {
+        UpdateContinuousBackupsError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for UpdateContinuousBackupsError {
+    fn from(err: CredentialsError) -> UpdateContinuousBackupsError {
+        UpdateContinuousBackupsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for UpdateContinuousBackupsError {
+    fn from(err: HttpDispatchError) -> UpdateContinuousBackupsError {
+        UpdateContinuousBackupsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateContinuousBackupsError {
+    fn from(err: io::Error) -> UpdateContinuousBackupsError {
+        UpdateContinuousBackupsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for UpdateContinuousBackupsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for UpdateContinuousBackupsError {
+    fn description(&self) -> &str {
+        match *self {
+            UpdateContinuousBackupsError::ContinuousBackupsUnavailable(ref cause) => cause,
+            UpdateContinuousBackupsError::InternalServerError(ref cause) => cause,
+            UpdateContinuousBackupsError::TableNotFound(ref cause) => cause,
+            UpdateContinuousBackupsError::Validation(ref cause) => cause,
+            UpdateContinuousBackupsError::Credentials(ref err) => err.description(),
+            UpdateContinuousBackupsError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            UpdateContinuousBackupsError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by UpdateGlobalTable
 #[derive(Debug, PartialEq)]
 pub enum UpdateGlobalTableError {
@@ -4036,7 +4354,7 @@ pub enum UpdateGlobalTableError {
     ReplicaAlreadyExists(String),
     /// <p>The specified replica is no longer part of the global table.</p>
     ReplicaNotFound(String),
-    /// <p>A table with the name <code>TableName</code> does not currently exist within the subscriber's account.</p>
+    /// <p>A source table with the name <code>TableName</code> does not currently exist within the subscriber's account.</p>
     TableNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4236,7 +4554,7 @@ impl Error for UpdateItemError {
 pub enum UpdateTableError {
     /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
-    /// <p>The number of concurrent table requests (cumulative number of tables in the <code>CREATING</code>, <code>DELETING</code> or <code>UPDATING</code> state) exceeds the maximum allowed of 10.</p> <p>Also, for tables with secondary indexes, only one of those tables can be in the <code>CREATING</code> state at any point in time. Do not attempt to create more than one such table simultaneously.</p> <p>The total limit of tables in the <code>ACTIVE</code> state is 250.</p>
+    /// <p>Up to 50 <code>CreateBackup</code> operations are allowed per second, per account. There is no limit to the number of daily on-demand backups that can be taken. </p> <p>Up to 10 simultaneous table operations are allowed per account. These operations include <code>CreateTable</code>, <code>UpdateTable</code>, <code>DeleteTable</code>,<code>UpdateTimeToLive</code>, <code>RestoreTableFromBackup</code>, and <code>RestoreTableToPointInTime</code>. </p> <p>For tables with secondary indexes, only one of those tables can be in the <code>CREATING</code> state at any point in time. Do not attempt to create more than one such table simultaneously.</p> <p>The total limit of tables in the <code>ACTIVE</code> state is 250.</p>
     LimitExceeded(String),
     /// <p>The operation conflicts with the resource's availability. For example, you attempted to recreate an existing table, or tried to delete a table currently in the <code>CREATING</code> state.</p>
     ResourceInUse(String),
@@ -4332,7 +4650,7 @@ impl Error for UpdateTableError {
 pub enum UpdateTimeToLiveError {
     /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
-    /// <p>The number of concurrent table requests (cumulative number of tables in the <code>CREATING</code>, <code>DELETING</code> or <code>UPDATING</code> state) exceeds the maximum allowed of 10.</p> <p>Also, for tables with secondary indexes, only one of those tables can be in the <code>CREATING</code> state at any point in time. Do not attempt to create more than one such table simultaneously.</p> <p>The total limit of tables in the <code>ACTIVE</code> state is 250.</p>
+    /// <p>Up to 50 <code>CreateBackup</code> operations are allowed per second, per account. There is no limit to the number of daily on-demand backups that can be taken. </p> <p>Up to 10 simultaneous table operations are allowed per account. These operations include <code>CreateTable</code>, <code>UpdateTable</code>, <code>DeleteTable</code>,<code>UpdateTimeToLive</code>, <code>RestoreTableFromBackup</code>, and <code>RestoreTableToPointInTime</code>. </p> <p>For tables with secondary indexes, only one of those tables can be in the <code>CREATING</code> state at any point in time. Do not attempt to create more than one such table simultaneously.</p> <p>The total limit of tables in the <code>ACTIVE</code> state is 250.</p>
     LimitExceeded(String),
     /// <p>The operation conflicts with the resource's availability. For example, you attempted to recreate an existing table, or tried to delete a table currently in the <code>CREATING</code> state.</p>
     ResourceInUse(String),
@@ -4431,13 +4749,13 @@ pub trait DynamoDb {
         input: &BatchGetItemInput,
     ) -> RusotoFuture<BatchGetItemOutput, BatchGetItemError>;
 
-    /// <p><p>The <code>BatchWriteItem</code> operation puts or deletes multiple items in one or more tables. A single call to <code>BatchWriteItem</code> can write up to 16 MB of data, which can comprise as many as 25 put or delete requests. Individual items to be written can be as large as 400 KB.</p> <note> <p> <code>BatchWriteItem</code> cannot update items. To update items, use the <code>UpdateItem</code> action.</p> </note> <p>The individual <code>PutItem</code> and <code>DeleteItem</code> operations specified in <code>BatchWriteItem</code> are atomic; however <code>BatchWriteItem</code> as a whole is not. If any requested operations fail because the table&#39;s provisioned throughput is exceeded or an internal processing failure occurs, the failed operations are returned in the <code>UnprocessedItems</code> response parameter. You can investigate and optionally resend the requests. Typically, you would call <code>BatchWriteItem</code> in a loop. Each iteration would check for unprocessed items and submit a new <code>BatchWriteItem</code> request with those unprocessed items until all items have been processed.</p> <p>Note that if <i>none</i> of the items can be processed due to insufficient provisioned throughput on all of the tables in the request, then <code>BatchWriteItem</code> will return a <code>ProvisionedThroughputExceededException</code>.</p> <important> <p>If DynamoDB returns any unprocessed items, you should retry the batch operation on those items. However, <i>we strongly recommend that you use an exponential backoff algorithm</i>. If you retry the batch operation immediately, the underlying read or write requests can still fail due to throttling on the individual tables. If you delay the batch operation using exponential backoff, the individual requests in the batch are much more likely to succeed.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/ErrorHandling.html#BatchOperations">Batch Operations and Error Handling</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p> </important> <p>With <code>BatchWriteItem</code>, you can efficiently write or delete large amounts of data, such as from Amazon Elastic MapReduce (EMR), or copy data from another database into DynamoDB. In order to improve performance with these large-scale operations, <code>BatchWriteItem</code> does not behave in the same way as individual <code>PutItem</code> and <code>DeleteItem</code> calls would. For example, you cannot specify conditions on individual put and delete requests, and <code>BatchWriteItem</code> does not return deleted items in the response.</p> <p>If you use a programming language that supports concurrency, you can use threads to write items in parallel. Your application must include the necessary logic to manage the threads. With languages that don&#39;t support threading, you must update or delete the specified items one at a time. In both situations, <code>BatchWriteItem</code> performs the specified put and delete operations in parallel, giving you the power of the thread pool approach without having to introduce complexity into your application.</p> <p>Parallel processing reduces latency, but each specified put and delete request consumes the same number of write capacity units whether it is processed in parallel or not. Delete operations on nonexistent items consume one write capacity unit.</p> <p>If one or more of the following is true, DynamoDB rejects the entire batch write operation:</p> <ul> <li> <p>One or more tables specified in the <code>BatchWriteItem</code> request does not exist.</p> </li> <li> <p>Primary key attributes specified on an item in the request do not match those in the corresponding table&#39;s primary key schema.</p> </li> <li> <p>You try to perform multiple operations on the same item in the same <code>BatchWriteItem</code> request. For example, you cannot put and delete the same item in the same <code>BatchWriteItem</code> request. </p> </li> <li> <p>There are more than 25 requests in the batch.</p> </li> <li> <p>Any individual item in a batch exceeds 400 KB.</p> </li> <li> <p>The total request size exceeds 16 MB.</p> </li> </ul></p>
+    /// <p><p>The <code>BatchWriteItem</code> operation puts or deletes multiple items in one or more tables. A single call to <code>BatchWriteItem</code> can write up to 16 MB of data, which can comprise as many as 25 put or delete requests. Individual items to be written can be as large as 400 KB.</p> <note> <p> <code>BatchWriteItem</code> cannot update items. To update items, use the <code>UpdateItem</code> action.</p> </note> <p>The individual <code>PutItem</code> and <code>DeleteItem</code> operations specified in <code>BatchWriteItem</code> are atomic; however <code>BatchWriteItem</code> as a whole is not. If any requested operations fail because the table&#39;s provisioned throughput is exceeded or an internal processing failure occurs, the failed operations are returned in the <code>UnprocessedItems</code> response parameter. You can investigate and optionally resend the requests. Typically, you would call <code>BatchWriteItem</code> in a loop. Each iteration would check for unprocessed items and submit a new <code>BatchWriteItem</code> request with those unprocessed items until all items have been processed.</p> <p>Note that if <i>none</i> of the items can be processed due to insufficient provisioned throughput on all of the tables in the request, then <code>BatchWriteItem</code> will return a <code>ProvisionedThroughputExceededException</code>.</p> <important> <p>If DynamoDB returns any unprocessed items, you should retry the batch operation on those items. However, <i>we strongly recommend that you use an exponential backoff algorithm</i>. If you retry the batch operation immediately, the underlying read or write requests can still fail due to throttling on the individual tables. If you delay the batch operation using exponential backoff, the individual requests in the batch are much more likely to succeed.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/ErrorHandling.html#BatchOperations">Batch Operations and Error Handling</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p> </important> <p>With <code>BatchWriteItem</code>, you can efficiently write or delete large amounts of data, such as from Amazon Elastic MapReduce (EMR), or copy data from another database into DynamoDB. In order to improve performance with these large-scale operations, <code>BatchWriteItem</code> does not behave in the same way as individual <code>PutItem</code> and <code>DeleteItem</code> calls would. For example, you cannot specify conditions on individual put and delete requests, and <code>BatchWriteItem</code> does not return deleted items in the response.</p> <p>If you use a programming language that supports concurrency, you can use threads to write items in parallel. Your application must include the necessary logic to manage the threads. With languages that don&#39;t support threading, you must update or delete the specified items one at a time. In both situations, <code>BatchWriteItem</code> performs the specified put and delete operations in parallel, giving you the power of the thread pool approach without having to introduce complexity into your application.</p> <p>Parallel processing reduces latency, but each specified put and delete request consumes the same number of write capacity units whether it is processed in parallel or not. Delete operations on nonexistent items consume one write capacity unit.</p> <p>If one or more of the following is true, DynamoDB rejects the entire batch write operation:</p> <ul> <li> <p>One or more tables specified in the <code>BatchWriteItem</code> request does not exist.</p> </li> <li> <p>Primary key attributes specified on an item in the request do not match those in the corresponding table&#39;s primary key schema.</p> </li> <li> <p>You try to perform multiple operations on the same item in the same <code>BatchWriteItem</code> request. For example, you cannot put and delete the same item in the same <code>BatchWriteItem</code> request. </p> </li> <li> <p> Your request contains at least two items with identical hash and range keys (which essentially is two put operations). </p> </li> <li> <p>There are more than 25 requests in the batch.</p> </li> <li> <p>Any individual item in a batch exceeds 400 KB.</p> </li> <li> <p>The total request size exceeds 16 MB.</p> </li> </ul></p>
     fn batch_write_item(
         &self,
         input: &BatchWriteItemInput,
     ) -> RusotoFuture<BatchWriteItemOutput, BatchWriteItemError>;
 
-    /// <p><p>Creates a backup for an existing table.</p> <p> Each time you create an On-Demand Backup, the entire table data is backed up. There is no limit to the number of on-demand backups that can be taken. </p> <p>You can call <code>CreateBackup</code> at a maximum rate of 50 times per second.</p> <p>All backups in DynamoDB work without consuming any provisioned throughput on the table. This results in a fast, low-cost, and scalable backup process. In general, the larger the table, the more time it takes to back up. The backup is stored in an S3 data store that is maintained and managed by DynamoDB.</p> <p>Backups incorporate all writes (delete, put, update) that were completed within the last minute before the backup request was initiated. Backups might include some writes (delete, put, update) that were completed before the backup request was finished.</p> <p> For example, if you submit the backup request on 2018-12-14 at 14:25:00, the backup is guaranteed to contain all data committed to the table up to 14:24:00, and data committed after 14:26:00 will not be. The backup may or may not contain data modifications made between 14:24:00 and 14:26:00. On-Demand Backup does not support causal consistency. </p> <p> Along with data, the following are also included on the backups: </p> <ul> <li> <p>Global secondary indexes (GSIs)</p> </li> <li> <p>Local secondary indexes (LSIs)</p> </li> <li> <p>Streams</p> </li> <li> <p>Provisioned read and write capacity</p> </li> </ul></p>
+    /// <p><p>Creates a backup for an existing table.</p> <p> Each time you create an On-Demand Backup, the entire table data is backed up. There is no limit to the number of on-demand backups that can be taken. </p> <p> When you create an On-Demand Backup, a time marker of the request is cataloged, and the backup is created asynchronously, by applying all changes until the time of the request to the last full table snapshot. Backup requests are processed instantaneously and become available for restore within minutes. </p> <p>You can call <code>CreateBackup</code> at a maximum rate of 50 times per second.</p> <p>All backups in DynamoDB work without consuming any provisioned throughput on the table.</p> <p> If you submit a backup request on 2018-12-14 at 14:25:00, the backup is guaranteed to contain all data committed to the table up to 14:24:00, and data committed after 14:26:00 will not be. The backup may or may not contain data modifications made between 14:24:00 and 14:26:00. On-Demand Backup does not support causal consistency. </p> <p> Along with data, the following are also included on the backups: </p> <ul> <li> <p>Global secondary indexes (GSIs)</p> </li> <li> <p>Local secondary indexes (LSIs)</p> </li> <li> <p>Streams</p> </li> <li> <p>Provisioned read and write capacity</p> </li> </ul></p>
     fn create_backup(
         &self,
         input: &CreateBackupInput,
@@ -4479,13 +4797,13 @@ pub trait DynamoDb {
         input: &DescribeBackupInput,
     ) -> RusotoFuture<DescribeBackupOutput, DescribeBackupError>;
 
-    /// <p>Checks the status of the backup restore settings on the specified table. If backups are enabled, <code>ContinuousBackupsStatus</code> will bet set to ENABLED.</p> <p>You can call <code>DescribeContinuousBackups</code> at a maximum rate of 10 times per second.</p>
+    /// <p>Checks the status of continuous backups and point in time recovery on the specified table. Continuous backups are <code>ENABLED</code> on all tables at table creation. If point in time recovery is enabled, <code>PointInTimeRecoveryStatus</code> will be set to ENABLED.</p> <p> Once continuous backups and point in time recovery are enabled, you can restore to any point in time within <code>EarliestRestorableDateTime</code> and <code>LatestRestorableDateTime</code>. </p> <p> <code>LatestRestorableDateTime</code> is typically 5 minutes before the current time. You can restore your table to any point in time during the last 35 days with a 1-minute granularity. </p> <p>You can call <code>DescribeContinuousBackups</code> at a maximum rate of 10 times per second.</p>
     fn describe_continuous_backups(
         &self,
         input: &DescribeContinuousBackupsInput,
     ) -> RusotoFuture<DescribeContinuousBackupsOutput, DescribeContinuousBackupsError>;
 
-    /// <p>Returns information about the global table.</p>
+    /// <p>Returns information about the specified global table.</p>
     fn describe_global_table(
         &self,
         input: &DescribeGlobalTableInput,
@@ -4515,7 +4833,7 @@ pub trait DynamoDb {
         input: &ListBackupsInput,
     ) -> RusotoFuture<ListBackupsOutput, ListBackupsError>;
 
-    /// <p>Lists all the global tables. Only those global tables that have replicas in the region specified as input are returned.</p>
+    /// <p>Lists all global tables that have a replica in the specified region.</p>
     fn list_global_tables(
         &self,
         input: &ListGlobalTablesInput,
@@ -4539,11 +4857,17 @@ pub trait DynamoDb {
     /// <p>The <code>Query</code> operation finds items based on primary key values. You can query any table or secondary index that has a composite primary key (a partition key and a sort key). </p> <p>Use the <code>KeyConditionExpression</code> parameter to provide a specific value for the partition key. The <code>Query</code> operation will return all of the items from the table or index with that partition key value. You can optionally narrow the scope of the <code>Query</code> operation by specifying a sort key value and a comparison operator in <code>KeyConditionExpression</code>. To further refine the <code>Query</code> results, you can optionally provide a <code>FilterExpression</code>. A <code>FilterExpression</code> determines which items within the results should be returned to you. All of the other results are discarded. </p> <p> A <code>Query</code> operation always returns a result set. If no matching items are found, the result set will be empty. Queries that do not return results consume the minimum number of read capacity units for that type of read operation. </p> <note> <p> DynamoDB calculates the number of read capacity units consumed based on item size, not on the amount of data that is returned to an application. The number of capacity units consumed will be the same whether you request all of the attributes (the default behavior) or just some of them (using a projection expression). The number will also be the same whether or not you use a <code>FilterExpression</code>. </p> </note> <p> <code>Query</code> results are always sorted by the sort key value. If the data type of the sort key is Number, the results are returned in numeric order; otherwise, the results are returned in order of UTF-8 bytes. By default, the sort order is ascending. To reverse the order, set the <code>ScanIndexForward</code> parameter to false. </p> <p> A single <code>Query</code> operation will read up to the maximum number of items set (if using the <code>Limit</code> parameter) or a maximum of 1 MB of data and then apply any filtering to the results using <code>FilterExpression</code>. If <code>LastEvaluatedKey</code> is present in the response, you will need to paginate the result set. For more information, see <a href="http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Query.html#Query.Pagination">Paginating the Results</a> in the <i>Amazon DynamoDB Developer Guide</i>. </p> <p> <code>FilterExpression</code> is applied after a <code>Query</code> finishes, but before the results are returned. A <code>FilterExpression</code> cannot contain partition key or sort key attributes. You need to specify those attributes in the <code>KeyConditionExpression</code>. </p> <note> <p> A <code>Query</code> operation can return an empty result set and a <code>LastEvaluatedKey</code> if all the items read for the page of results are filtered out. </p> </note> <p>You can query a table, a local secondary index, or a global secondary index. For a query on a table or on a local secondary index, you can set the <code>ConsistentRead</code> parameter to <code>true</code> and obtain a strongly consistent result. Global secondary indexes support eventually consistent reads only, so do not specify <code>ConsistentRead</code> when querying a global secondary index.</p>
     fn query(&self, input: &QueryInput) -> RusotoFuture<QueryOutput, QueryError>;
 
-    /// <p><p>Creates a new table from an existing backup. Any number of users can execute up to 10 concurrent restores in a given account. </p> <p>You can call <code>RestoreTableFromBackup</code> at a maximum rate of 10 times per second.</p> <p>You must manually set up the following on the restored table:</p> <ul> <li> <p>Auto scaling policies</p> </li> <li> <p>IAM policies</p> </li> <li> <p>Cloudwatch metrics and alarms</p> </li> <li> <p>Tags</p> </li> <li> <p>Time to Live (TTL) settings</p> </li> </ul></p>
+    /// <p><p>Creates a new table from an existing backup. Any number of users can execute up to 4 concurrent restores (any type of restore) in a given account. </p> <p>You can call <code>RestoreTableFromBackup</code> at a maximum rate of 10 times per second.</p> <p>You must manually set up the following on the restored table:</p> <ul> <li> <p>Auto scaling policies</p> </li> <li> <p>IAM policies</p> </li> <li> <p>Cloudwatch metrics and alarms</p> </li> <li> <p>Tags</p> </li> <li> <p>Stream settings</p> </li> <li> <p>Time to Live (TTL) settings</p> </li> </ul></p>
     fn restore_table_from_backup(
         &self,
         input: &RestoreTableFromBackupInput,
     ) -> RusotoFuture<RestoreTableFromBackupOutput, RestoreTableFromBackupError>;
+
+    /// <p><p>Restores the specified table to the specified point in time within <code>EarliestRestorableDateTime</code> and <code>LatestRestorableDateTime</code>. You can restore your table to any point in time during the last 35 days with a 1-minute granularity. Any number of users can execute up to 4 concurrent restores (any type of restore) in a given account. </p> <p>You must manually set up the following on the restored table:</p> <ul> <li> <p>Auto scaling policies</p> </li> <li> <p>IAM policies</p> </li> <li> <p>Cloudwatch metrics and alarms</p> </li> <li> <p>Tags</p> </li> <li> <p>Stream settings</p> </li> <li> <p>Time to Live (TTL) settings</p> </li> <li> <p>Point in time recovery settings</p> </li> </ul></p>
+    fn restore_table_to_point_in_time(
+        &self,
+        input: &RestoreTableToPointInTimeInput,
+    ) -> RusotoFuture<RestoreTableToPointInTimeOutput, RestoreTableToPointInTimeError>;
 
     /// <p>The <code>Scan</code> operation returns one or more items and item attributes by accessing every item in a table or a secondary index. To have DynamoDB return fewer items, you can provide a <code>FilterExpression</code> operation.</p> <p>If the total number of scanned items exceeds the maximum data set size limit of 1 MB, the scan stops and results are returned to the user as a <code>LastEvaluatedKey</code> value to continue the scan in a subsequent operation. The results also include the number of items exceeding the limit. A scan can result in no table data meeting the filter criteria. </p> <p>A single <code>Scan</code> operation will read up to the maximum number of items set (if using the <code>Limit</code> parameter) or a maximum of 1 MB of data and then apply any filtering to the results using <code>FilterExpression</code>. If <code>LastEvaluatedKey</code> is present in the response, you will need to paginate the result set. For more information, see <a href="http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Scan.html#Scan.Pagination">Paginating the Results</a> in the <i>Amazon DynamoDB Developer Guide</i>. </p> <p> <code>Scan</code> operations proceed sequentially; however, for faster performance on a large table or secondary index, applications can request a parallel <code>Scan</code> operation by providing the <code>Segment</code> and <code>TotalSegments</code> parameters. For more information, see <a href="http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Scan.html#Scan.ParallelScan">Parallel Scan</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p> <p> <code>Scan</code> uses eventually consistent reads when accessing the data in a table; therefore, the result set might not include the changes to data in the table immediately before the operation began. If you need a consistent copy of the data, as of the time that the <code>Scan</code> begins, you can set the <code>ConsistentRead</code> parameter to <code>true</code>.</p>
     fn scan(&self, input: &ScanInput) -> RusotoFuture<ScanOutput, ScanError>;
@@ -4554,7 +4878,13 @@ pub trait DynamoDb {
     /// <p>Removes the association of tags from an Amazon DynamoDB resource. You can call UntagResource up to 5 times per second, per account. </p> <p>For an overview on tagging DynamoDB resources, see <a href="http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Tagging.html">Tagging for DynamoDB</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p>
     fn untag_resource(&self, input: &UntagResourceInput) -> RusotoFuture<(), UntagResourceError>;
 
-    /// <p>Adds or removes replicas to the specified global table. The global table should already exist to be able to use this operation. Currently, the replica to be added should be empty. </p>
+    /// <p> <code>UpdateContinuousBackups</code> enables or disables point in time recovery for the specified table. A successful <code>UpdateContinuousBackups</code> call returns the current <code>ContinuousBackupsDescription</code>. Continuous backups are <code>ENABLED</code> on all tables at table creation. If point in time recovery is enabled, <code>PointInTimeRecoveryStatus</code> will be set to ENABLED.</p> <p> Once continuous backups and point in time recovery are enabled, you can restore to any point in time within <code>EarliestRestorableDateTime</code> and <code>LatestRestorableDateTime</code>. </p> <p> <code>LatestRestorableDateTime</code> is typically 5 minutes before the current time. You can restore your table to any point in time during the last 35 days with a 1-minute granularity. </p>
+    fn update_continuous_backups(
+        &self,
+        input: &UpdateContinuousBackupsInput,
+    ) -> RusotoFuture<UpdateContinuousBackupsOutput, UpdateContinuousBackupsError>;
+
+    /// <p><p>Adds or removes replicas in the specified global table. The global table must already exist to be able to use this operation. Any replica to be added must be empty, must have the same name as the global table, must have the same key schema, and must have DynamoDB Streams enabled.</p> <note> <p>Although you can use <code>UpdateGlobalTable</code> to add replicas and remove replicas in a single request, for simplicity we recommend that you issue separate requests for adding or removing replicas.</p> </note></p>
     fn update_global_table(
         &self,
         input: &UpdateGlobalTableInput,
@@ -4658,7 +4988,7 @@ where
         RusotoFuture::new(future)
     }
 
-    /// <p><p>The <code>BatchWriteItem</code> operation puts or deletes multiple items in one or more tables. A single call to <code>BatchWriteItem</code> can write up to 16 MB of data, which can comprise as many as 25 put or delete requests. Individual items to be written can be as large as 400 KB.</p> <note> <p> <code>BatchWriteItem</code> cannot update items. To update items, use the <code>UpdateItem</code> action.</p> </note> <p>The individual <code>PutItem</code> and <code>DeleteItem</code> operations specified in <code>BatchWriteItem</code> are atomic; however <code>BatchWriteItem</code> as a whole is not. If any requested operations fail because the table&#39;s provisioned throughput is exceeded or an internal processing failure occurs, the failed operations are returned in the <code>UnprocessedItems</code> response parameter. You can investigate and optionally resend the requests. Typically, you would call <code>BatchWriteItem</code> in a loop. Each iteration would check for unprocessed items and submit a new <code>BatchWriteItem</code> request with those unprocessed items until all items have been processed.</p> <p>Note that if <i>none</i> of the items can be processed due to insufficient provisioned throughput on all of the tables in the request, then <code>BatchWriteItem</code> will return a <code>ProvisionedThroughputExceededException</code>.</p> <important> <p>If DynamoDB returns any unprocessed items, you should retry the batch operation on those items. However, <i>we strongly recommend that you use an exponential backoff algorithm</i>. If you retry the batch operation immediately, the underlying read or write requests can still fail due to throttling on the individual tables. If you delay the batch operation using exponential backoff, the individual requests in the batch are much more likely to succeed.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/ErrorHandling.html#BatchOperations">Batch Operations and Error Handling</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p> </important> <p>With <code>BatchWriteItem</code>, you can efficiently write or delete large amounts of data, such as from Amazon Elastic MapReduce (EMR), or copy data from another database into DynamoDB. In order to improve performance with these large-scale operations, <code>BatchWriteItem</code> does not behave in the same way as individual <code>PutItem</code> and <code>DeleteItem</code> calls would. For example, you cannot specify conditions on individual put and delete requests, and <code>BatchWriteItem</code> does not return deleted items in the response.</p> <p>If you use a programming language that supports concurrency, you can use threads to write items in parallel. Your application must include the necessary logic to manage the threads. With languages that don&#39;t support threading, you must update or delete the specified items one at a time. In both situations, <code>BatchWriteItem</code> performs the specified put and delete operations in parallel, giving you the power of the thread pool approach without having to introduce complexity into your application.</p> <p>Parallel processing reduces latency, but each specified put and delete request consumes the same number of write capacity units whether it is processed in parallel or not. Delete operations on nonexistent items consume one write capacity unit.</p> <p>If one or more of the following is true, DynamoDB rejects the entire batch write operation:</p> <ul> <li> <p>One or more tables specified in the <code>BatchWriteItem</code> request does not exist.</p> </li> <li> <p>Primary key attributes specified on an item in the request do not match those in the corresponding table&#39;s primary key schema.</p> </li> <li> <p>You try to perform multiple operations on the same item in the same <code>BatchWriteItem</code> request. For example, you cannot put and delete the same item in the same <code>BatchWriteItem</code> request. </p> </li> <li> <p>There are more than 25 requests in the batch.</p> </li> <li> <p>Any individual item in a batch exceeds 400 KB.</p> </li> <li> <p>The total request size exceeds 16 MB.</p> </li> </ul></p>
+    /// <p><p>The <code>BatchWriteItem</code> operation puts or deletes multiple items in one or more tables. A single call to <code>BatchWriteItem</code> can write up to 16 MB of data, which can comprise as many as 25 put or delete requests. Individual items to be written can be as large as 400 KB.</p> <note> <p> <code>BatchWriteItem</code> cannot update items. To update items, use the <code>UpdateItem</code> action.</p> </note> <p>The individual <code>PutItem</code> and <code>DeleteItem</code> operations specified in <code>BatchWriteItem</code> are atomic; however <code>BatchWriteItem</code> as a whole is not. If any requested operations fail because the table&#39;s provisioned throughput is exceeded or an internal processing failure occurs, the failed operations are returned in the <code>UnprocessedItems</code> response parameter. You can investigate and optionally resend the requests. Typically, you would call <code>BatchWriteItem</code> in a loop. Each iteration would check for unprocessed items and submit a new <code>BatchWriteItem</code> request with those unprocessed items until all items have been processed.</p> <p>Note that if <i>none</i> of the items can be processed due to insufficient provisioned throughput on all of the tables in the request, then <code>BatchWriteItem</code> will return a <code>ProvisionedThroughputExceededException</code>.</p> <important> <p>If DynamoDB returns any unprocessed items, you should retry the batch operation on those items. However, <i>we strongly recommend that you use an exponential backoff algorithm</i>. If you retry the batch operation immediately, the underlying read or write requests can still fail due to throttling on the individual tables. If you delay the batch operation using exponential backoff, the individual requests in the batch are much more likely to succeed.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/ErrorHandling.html#BatchOperations">Batch Operations and Error Handling</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p> </important> <p>With <code>BatchWriteItem</code>, you can efficiently write or delete large amounts of data, such as from Amazon Elastic MapReduce (EMR), or copy data from another database into DynamoDB. In order to improve performance with these large-scale operations, <code>BatchWriteItem</code> does not behave in the same way as individual <code>PutItem</code> and <code>DeleteItem</code> calls would. For example, you cannot specify conditions on individual put and delete requests, and <code>BatchWriteItem</code> does not return deleted items in the response.</p> <p>If you use a programming language that supports concurrency, you can use threads to write items in parallel. Your application must include the necessary logic to manage the threads. With languages that don&#39;t support threading, you must update or delete the specified items one at a time. In both situations, <code>BatchWriteItem</code> performs the specified put and delete operations in parallel, giving you the power of the thread pool approach without having to introduce complexity into your application.</p> <p>Parallel processing reduces latency, but each specified put and delete request consumes the same number of write capacity units whether it is processed in parallel or not. Delete operations on nonexistent items consume one write capacity unit.</p> <p>If one or more of the following is true, DynamoDB rejects the entire batch write operation:</p> <ul> <li> <p>One or more tables specified in the <code>BatchWriteItem</code> request does not exist.</p> </li> <li> <p>Primary key attributes specified on an item in the request do not match those in the corresponding table&#39;s primary key schema.</p> </li> <li> <p>You try to perform multiple operations on the same item in the same <code>BatchWriteItem</code> request. For example, you cannot put and delete the same item in the same <code>BatchWriteItem</code> request. </p> </li> <li> <p> Your request contains at least two items with identical hash and range keys (which essentially is two put operations). </p> </li> <li> <p>There are more than 25 requests in the batch.</p> </li> <li> <p>Any individual item in a batch exceeds 400 KB.</p> </li> <li> <p>The total request size exceeds 16 MB.</p> </li> </ul></p>
     fn batch_write_item(
         &self,
         input: &BatchWriteItemInput,
@@ -4695,7 +5025,7 @@ where
         RusotoFuture::new(future)
     }
 
-    /// <p><p>Creates a backup for an existing table.</p> <p> Each time you create an On-Demand Backup, the entire table data is backed up. There is no limit to the number of on-demand backups that can be taken. </p> <p>You can call <code>CreateBackup</code> at a maximum rate of 50 times per second.</p> <p>All backups in DynamoDB work without consuming any provisioned throughput on the table. This results in a fast, low-cost, and scalable backup process. In general, the larger the table, the more time it takes to back up. The backup is stored in an S3 data store that is maintained and managed by DynamoDB.</p> <p>Backups incorporate all writes (delete, put, update) that were completed within the last minute before the backup request was initiated. Backups might include some writes (delete, put, update) that were completed before the backup request was finished.</p> <p> For example, if you submit the backup request on 2018-12-14 at 14:25:00, the backup is guaranteed to contain all data committed to the table up to 14:24:00, and data committed after 14:26:00 will not be. The backup may or may not contain data modifications made between 14:24:00 and 14:26:00. On-Demand Backup does not support causal consistency. </p> <p> Along with data, the following are also included on the backups: </p> <ul> <li> <p>Global secondary indexes (GSIs)</p> </li> <li> <p>Local secondary indexes (LSIs)</p> </li> <li> <p>Streams</p> </li> <li> <p>Provisioned read and write capacity</p> </li> </ul></p>
+    /// <p><p>Creates a backup for an existing table.</p> <p> Each time you create an On-Demand Backup, the entire table data is backed up. There is no limit to the number of on-demand backups that can be taken. </p> <p> When you create an On-Demand Backup, a time marker of the request is cataloged, and the backup is created asynchronously, by applying all changes until the time of the request to the last full table snapshot. Backup requests are processed instantaneously and become available for restore within minutes. </p> <p>You can call <code>CreateBackup</code> at a maximum rate of 50 times per second.</p> <p>All backups in DynamoDB work without consuming any provisioned throughput on the table.</p> <p> If you submit a backup request on 2018-12-14 at 14:25:00, the backup is guaranteed to contain all data committed to the table up to 14:24:00, and data committed after 14:26:00 will not be. The backup may or may not contain data modifications made between 14:24:00 and 14:26:00. On-Demand Backup does not support causal consistency. </p> <p> Along with data, the following are also included on the backups: </p> <ul> <li> <p>Global secondary indexes (GSIs)</p> </li> <li> <p>Local secondary indexes (LSIs)</p> </li> <li> <p>Streams</p> </li> <li> <p>Provisioned read and write capacity</p> </li> </ul></p>
     fn create_backup(
         &self,
         input: &CreateBackupInput,
@@ -4954,7 +5284,7 @@ where
         RusotoFuture::new(future)
     }
 
-    /// <p>Checks the status of the backup restore settings on the specified table. If backups are enabled, <code>ContinuousBackupsStatus</code> will bet set to ENABLED.</p> <p>You can call <code>DescribeContinuousBackups</code> at a maximum rate of 10 times per second.</p>
+    /// <p>Checks the status of continuous backups and point in time recovery on the specified table. Continuous backups are <code>ENABLED</code> on all tables at table creation. If point in time recovery is enabled, <code>PointInTimeRecoveryStatus</code> will be set to ENABLED.</p> <p> Once continuous backups and point in time recovery are enabled, you can restore to any point in time within <code>EarliestRestorableDateTime</code> and <code>LatestRestorableDateTime</code>. </p> <p> <code>LatestRestorableDateTime</code> is typically 5 minutes before the current time. You can restore your table to any point in time during the last 35 days with a 1-minute granularity. </p> <p>You can call <code>DescribeContinuousBackups</code> at a maximum rate of 10 times per second.</p>
     fn describe_continuous_backups(
         &self,
         input: &DescribeContinuousBackupsInput,
@@ -4994,7 +5324,7 @@ where
         RusotoFuture::new(future)
     }
 
-    /// <p>Returns information about the global table.</p>
+    /// <p>Returns information about the specified global table.</p>
     fn describe_global_table(
         &self,
         input: &DescribeGlobalTableInput,
@@ -5209,7 +5539,7 @@ where
         RusotoFuture::new(future)
     }
 
-    /// <p>Lists all the global tables. Only those global tables that have replicas in the region specified as input are returned.</p>
+    /// <p>Lists all global tables that have a replica in the specified region.</p>
     fn list_global_tables(
         &self,
         input: &ListGlobalTablesInput,
@@ -5388,7 +5718,7 @@ where
         RusotoFuture::new(future)
     }
 
-    /// <p><p>Creates a new table from an existing backup. Any number of users can execute up to 10 concurrent restores in a given account. </p> <p>You can call <code>RestoreTableFromBackup</code> at a maximum rate of 10 times per second.</p> <p>You must manually set up the following on the restored table:</p> <ul> <li> <p>Auto scaling policies</p> </li> <li> <p>IAM policies</p> </li> <li> <p>Cloudwatch metrics and alarms</p> </li> <li> <p>Tags</p> </li> <li> <p>Time to Live (TTL) settings</p> </li> </ul></p>
+    /// <p><p>Creates a new table from an existing backup. Any number of users can execute up to 4 concurrent restores (any type of restore) in a given account. </p> <p>You can call <code>RestoreTableFromBackup</code> at a maximum rate of 10 times per second.</p> <p>You must manually set up the following on the restored table:</p> <ul> <li> <p>Auto scaling policies</p> </li> <li> <p>IAM policies</p> </li> <li> <p>Cloudwatch metrics and alarms</p> </li> <li> <p>Tags</p> </li> <li> <p>Stream settings</p> </li> <li> <p>Time to Live (TTL) settings</p> </li> </ul></p>
     fn restore_table_from_backup(
         &self,
         input: &RestoreTableFromBackupInput,
@@ -5416,6 +5746,46 @@ where
             } else {
                 future::Either::B(response.buffer().from_err().and_then(|response| {
                     Err(RestoreTableFromBackupError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        });
+
+        RusotoFuture::new(future)
+    }
+
+    /// <p><p>Restores the specified table to the specified point in time within <code>EarliestRestorableDateTime</code> and <code>LatestRestorableDateTime</code>. You can restore your table to any point in time during the last 35 days with a 1-minute granularity. Any number of users can execute up to 4 concurrent restores (any type of restore) in a given account. </p> <p>You must manually set up the following on the restored table:</p> <ul> <li> <p>Auto scaling policies</p> </li> <li> <p>IAM policies</p> </li> <li> <p>Cloudwatch metrics and alarms</p> </li> <li> <p>Tags</p> </li> <li> <p>Stream settings</p> </li> <li> <p>Time to Live (TTL) settings</p> </li> <li> <p>Point in time recovery settings</p> </li> </ul></p>
+    fn restore_table_to_point_in_time(
+        &self,
+        input: &RestoreTableToPointInTimeInput,
+    ) -> RusotoFuture<RestoreTableToPointInTimeOutput, RestoreTableToPointInTimeError> {
+        let mut request = SignedRequest::new("POST", "dynamodb", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.0".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "DynamoDB_20120810.RestoreTableToPointInTime",
+        );
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        let future = self.inner.sign_and_dispatch(request, |response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<RestoreTableToPointInTimeOutput>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(RestoreTableToPointInTimeError::from_body(
                         String::from_utf8_lossy(response.body.as_ref()).as_ref(),
                     ))
                 }))
@@ -5507,7 +5877,44 @@ where
         RusotoFuture::new(future)
     }
 
-    /// <p>Adds or removes replicas to the specified global table. The global table should already exist to be able to use this operation. Currently, the replica to be added should be empty. </p>
+    /// <p> <code>UpdateContinuousBackups</code> enables or disables point in time recovery for the specified table. A successful <code>UpdateContinuousBackups</code> call returns the current <code>ContinuousBackupsDescription</code>. Continuous backups are <code>ENABLED</code> on all tables at table creation. If point in time recovery is enabled, <code>PointInTimeRecoveryStatus</code> will be set to ENABLED.</p> <p> Once continuous backups and point in time recovery are enabled, you can restore to any point in time within <code>EarliestRestorableDateTime</code> and <code>LatestRestorableDateTime</code>. </p> <p> <code>LatestRestorableDateTime</code> is typically 5 minutes before the current time. You can restore your table to any point in time during the last 35 days with a 1-minute granularity. </p>
+    fn update_continuous_backups(
+        &self,
+        input: &UpdateContinuousBackupsInput,
+    ) -> RusotoFuture<UpdateContinuousBackupsOutput, UpdateContinuousBackupsError> {
+        let mut request = SignedRequest::new("POST", "dynamodb", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.0".to_owned());
+        request.add_header("x-amz-target", "DynamoDB_20120810.UpdateContinuousBackups");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        let future = self.inner.sign_and_dispatch(request, |response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<UpdateContinuousBackupsOutput>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(UpdateContinuousBackupsError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        });
+
+        RusotoFuture::new(future)
+    }
+
+    /// <p><p>Adds or removes replicas in the specified global table. The global table must already exist to be able to use this operation. Any replica to be added must be empty, must have the same name as the global table, must have the same key schema, and must have DynamoDB Streams enabled.</p> <note> <p>Although you can use <code>UpdateGlobalTable</code> to add replicas and remove replicas in a single request, for simplicity we recommend that you issue separate requests for adding or removing replicas.</p> </note></p>
     fn update_global_table(
         &self,
         input: &UpdateGlobalTableInput,

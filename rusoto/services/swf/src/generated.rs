@@ -2957,11 +2957,9 @@ impl CountPendingActivityTasksError {
                             error_message,
                         ))
                     }
-                    "UnknownResourceFault" => {
-                        CountPendingActivityTasksError::UnknownResourceFault(String::from(
-                            error_message,
-                        ))
-                    }
+                    "UnknownResourceFault" => CountPendingActivityTasksError::UnknownResourceFault(
+                        String::from(error_message),
+                    ),
                     "ValidationException" => {
                         CountPendingActivityTasksError::Validation(error_message.to_string())
                     }
@@ -3047,11 +3045,9 @@ impl CountPendingDecisionTasksError {
                             error_message,
                         ))
                     }
-                    "UnknownResourceFault" => {
-                        CountPendingDecisionTasksError::UnknownResourceFault(String::from(
-                            error_message,
-                        ))
-                    }
+                    "UnknownResourceFault" => CountPendingDecisionTasksError::UnknownResourceFault(
+                        String::from(error_message),
+                    ),
                     "ValidationException" => {
                         CountPendingDecisionTasksError::Validation(error_message.to_string())
                     }
@@ -3589,11 +3585,9 @@ impl DescribeWorkflowExecutionError {
                             error_message,
                         ))
                     }
-                    "UnknownResourceFault" => {
-                        DescribeWorkflowExecutionError::UnknownResourceFault(String::from(
-                            error_message,
-                        ))
-                    }
+                    "UnknownResourceFault" => DescribeWorkflowExecutionError::UnknownResourceFault(
+                        String::from(error_message),
+                    ),
                     "ValidationException" => {
                         DescribeWorkflowExecutionError::Validation(error_message.to_string())
                     }
@@ -3941,9 +3935,9 @@ impl ListClosedWorkflowExecutionsError {
 
                 match *error_type {
                     "OperationNotPermittedFault" => {
-                        ListClosedWorkflowExecutionsError::OperationNotPermittedFault(
-                            String::from(error_message),
-                        )
+                        ListClosedWorkflowExecutionsError::OperationNotPermittedFault(String::from(
+                            error_message,
+                        ))
                     }
                     "UnknownResourceFault" => {
                         ListClosedWorkflowExecutionsError::UnknownResourceFault(String::from(
@@ -5035,9 +5029,9 @@ impl RespondActivityTaskCompletedError {
 
                 match *error_type {
                     "OperationNotPermittedFault" => {
-                        RespondActivityTaskCompletedError::OperationNotPermittedFault(
-                            String::from(error_message),
-                        )
+                        RespondActivityTaskCompletedError::OperationNotPermittedFault(String::from(
+                            error_message,
+                        ))
                     }
                     "UnknownResourceFault" => {
                         RespondActivityTaskCompletedError::UnknownResourceFault(String::from(
@@ -5129,11 +5123,9 @@ impl RespondActivityTaskFailedError {
                             error_message,
                         ))
                     }
-                    "UnknownResourceFault" => {
-                        RespondActivityTaskFailedError::UnknownResourceFault(String::from(
-                            error_message,
-                        ))
-                    }
+                    "UnknownResourceFault" => RespondActivityTaskFailedError::UnknownResourceFault(
+                        String::from(error_message),
+                    ),
                     "ValidationException" => {
                         RespondActivityTaskFailedError::Validation(error_message.to_string())
                     }
@@ -5215,9 +5207,9 @@ impl RespondDecisionTaskCompletedError {
 
                 match *error_type {
                     "OperationNotPermittedFault" => {
-                        RespondDecisionTaskCompletedError::OperationNotPermittedFault(
-                            String::from(error_message),
-                        )
+                        RespondDecisionTaskCompletedError::OperationNotPermittedFault(String::from(
+                            error_message,
+                        ))
                     }
                     "UnknownResourceFault" => {
                         RespondDecisionTaskCompletedError::UnknownResourceFault(String::from(
