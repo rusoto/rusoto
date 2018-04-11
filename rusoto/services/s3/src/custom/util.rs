@@ -3,7 +3,7 @@ use rusoto_core::signature::SignedRequest;
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::region::Region;
 use rusoto_core::credential::AwsCredentials;
-use generated::{GetObjectRequest, GetObjectError};
+use generated::{GetObjectRequest, PutObjectRequest, DeleteObjectRequest};
 
 /// URL encodes an S3 object key. This is necessary for `copy_object` and `upload_part_copy`,
 /// which require the `copy_source` field to be URL encoded.
@@ -25,108 +25,169 @@ pub fn encode_key<T: AsRef<str>>(key: T) -> String {
 }
 
 
+pub enum PresignedRequestMethod {
+    Get (GetObjectRequest),
+    Put (PutObjectRequest),
+    // Post (PostObjectRequest),
+    Delete (DeleteObjectRequest),
+}
+
 /// Generate a presigned url given arguments.
 /// 
-/// TODO: support another method like put, delete...
-/// 
-/// ```
-/// extern crate rusoto_core;
-/// extern crate rusoto_s3;
-/// 
-/// use rusoto_core::region::Region;
-/// use rusoto_core::credential::AwsCredentials;
-/// use rusoto_s3::util::generate_presigned_url;
-/// use rusoto_s3::{GetObjectRequest, GetObjectError};
-/// 
-/// fn main() {
-///     let region = Region::ApNortheast1;
-///     let creds = AwsCredentials::new(
-///         "xxx".to_string(),
-///         "xxx".to_string(),
-///         None,
-///         None,
-///     );
-///     let req = GetObjectRequest {
-///         bucket: "xxx".to_string(),
-///         key: "xxx.jpg".to_string(),
-///         ..Default::default()
-///     };
-///     let res = generate_presigned_url(&region, &creds, &req);
-///     match res {
-///       Ok(url) => { println!("{}", url); },
-///       Err(err) => { println!("{}", err); },
-///     }
-/// }
-/// ```
-pub fn generate_presigned_url(region: &Region, credentials: &AwsCredentials, input: &GetObjectRequest) -> Result<String, GetObjectError> {
-    let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
+pub fn generate_presigned_url(region: &Region, credentials: &AwsCredentials, input_request: &PresignedRequestMethod) -> String {
 
-    let mut request = SignedRequest::new("GET", "s3", &region, &request_uri);
-
-    if let Some(ref if_match) = input.if_match {
-        request.add_header("If-Match", &if_match.to_string());
+    macro_rules! add_headers {
+        (
+            $input:ident , $req:ident ; $p:ident , $e:expr ; $( $t:tt )*
+        ) => (
+            {
+                if let Some(ref $p) = $input.$p {
+                    $req.add_header($e, &$p.to_string());
+                }
+                add_headers! { $input, $req; $( $t )* }
+            }
+        );
+        (
+            $input:pat , $req:expr ;
+        ) => ({
+        });
     }
 
-    if let Some(ref if_modified_since) = input.if_modified_since {
-        request.add_header("If-Modified-Since", &if_modified_since.to_string());
+    macro_rules! add_params {
+        (
+            $input:ident , $params:ident ; $p:ident , $e:expr ; $( $t:tt )*
+        ) => (
+            {
+                if let Some(ref $p) = $input.$p {
+                    $params.put($e, &$p);
+                }
+                add_params! { $input, $params; $( $t )* }
+            }
+        );
+        (
+            $input:pat , $req:expr ;
+        ) => ({
+        });
     }
 
-    if let Some(ref if_none_match) = input.if_none_match {
-        request.add_header("If-None-Match", &if_none_match.to_string());
-    }
+    match input_request {
+        PresignedRequestMethod::Get(input) => {
+            let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
+            let mut request = SignedRequest::new("GET", "s3", &region, &request_uri);
+            let mut params = Params::new();
 
-    if let Some(ref if_unmodified_since) = input.if_unmodified_since {
-        request.add_header("If-Unmodified-Since", &if_unmodified_since.to_string());
-    }
+            // https://docs.aws.amazon.com/AmazonS3/latest/API/RESTObjectGET.html
 
-    if let Some(ref range) = input.range {
-        request.add_header("Range", &range.to_string());
-    }
+            add_headers!(
+                input, request;
+                range, "Range";
+                if_modified_since, "If-Modified-Since";
+                if_unmodified_since, "If-Unmodified-Since";
+                if_match, "If-Match";
+                if_none_match, "If-None-Match";
+                sse_customer_algorithm, "x-amz-server-side-encryption-customer-algorithm";
+                sse_customer_key, "x-amz-server-side-encryption-customer-key";
+                sse_customer_key_md5, "x-amz-server-side-encryption-customer-key-MD5";
+            );
 
-    if let Some(ref request_payer) = input.request_payer {
-        request.add_header("x-amz-request-payer", &request_payer.to_string());
-    }
+            add_params!(
+                input, params;
+                part_number, "partNumber";
+                response_content_type, "response-content-type";
+                response_content_language, "response-content-language";
+                response_expires, "response-expires";
+                response_cache_control, "response-cache-control";
+                response_content_disposition, "response-content-disposition";
+                response_content_encoding, "response-content-encoding";
+                version_id, "versionId";
+            );
 
-    if let Some(ref sse_customer_algorithm) = input.sse_customer_algorithm {
-        request.add_header("x-amz-server-side-encryption-customer-algorithm",
-                           &sse_customer_algorithm.to_string());
-    }
+            request.set_params(params);
+            request.generate_presigned_url(&credentials)
+        },
+        // PresignedRequestMethod::Post(input) => {
+        //     let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
+        //     let mut request = SignedRequest::new("POST", "s3", &region, &request_uri);
+        //     let mut params = Params::new();
 
-    if let Some(ref sse_customer_key) = input.sse_customer_key {
-        request.add_header("x-amz-server-side-encryption-customer-key",
-                           &sse_customer_key.to_string());
-    }
+        //     // https://docs.aws.amazon.com/AmazonS3/latest/API/RESTObjectPOST.html
 
-    if let Some(ref sse_customer_key_md5) = input.sse_customer_key_md5 {
-        request.add_header("x-amz-server-side-encryption-customer-key-MD5",
-                           &sse_customer_key_md5.to_string());
-    }
-    let mut params = Params::new();
-    if let Some(ref x) = input.part_number {
-        params.put("partNumber", x);
-    }
-    if let Some(ref x) = input.response_cache_control {
-        params.put("response-cache-control", x);
-    }
-    if let Some(ref x) = input.response_content_disposition {
-        params.put("response-content-disposition", x);
-    }
-    if let Some(ref x) = input.response_content_encoding {
-        params.put("response-content-encoding", x);
-    }
-    if let Some(ref x) = input.response_content_language {
-        params.put("response-content-language", x);
-    }
-    if let Some(ref x) = input.response_content_type {
-        params.put("response-content-type", x);
-    }
-    if let Some(ref x) = input.response_expires {
-        params.put("response-expires", x);
-    }
-    if let Some(ref x) = input.version_id {
-        params.put("versionId", x);
-    }
-    request.set_params(params);
+        //     add_headers!(
+        //         input, request;
+        //     );
+        //     add_params!(
+        //         input, params;
+        //     );
 
-    Ok(request.generate_presigned_url(&credentials))
+        //     request.set_params(params);
+        //     request.generate_presigned_url(&credentials)
+        // },
+        PresignedRequestMethod::Put(input) => {
+            let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
+            let mut request = SignedRequest::new("PUT", "s3", &region, &request_uri);
+            let mut params = Params::new();
+
+            // https://docs.aws.amazon.com/AmazonS3/latest/API/RESTObjectPUT.html
+
+            add_headers!(
+                input, request;
+                cache_control, "Cache-Control";
+                content_disposition, "Content-Disposition";
+                content_encoding, "Content-Encoding";
+                content_length, "Content-Length";
+                content_md5, "Content-MD5";
+                content_type, "Content-Type";
+                //expect, "Expect";
+                expires, "Expires";
+                storage_class, "x-amz-storage-class";
+                tagging, "x-amz-tagging";
+                website_redirect_location, "x-amz-website-redirect-location";
+                acl, "x-amz-acl";
+                grant_read, "x-amz-grant-read";
+                //grant_write, "x-amz-grant-write";
+                grant_read_acp, "x-amz-grant-read-acp";
+                grant_write_acp, "x-amz-grant-write-acp";
+                grant_full_control, "x-amz-grant-full-control";
+                server_side_encryption, "x-amz-server-side-encryption";
+                ssekms_key_id, "x-amz-server-side-encryption-aws-kms-key-id";
+                //kms_context, "x-amz-server-side-encryption-context";
+                sse_customer_algorithm, "x-amz-server-side-encryption-customer-algorithm";
+                sse_customer_key, "x-amz-server-side-encryption-customer-key";
+                sse_customer_key_md5, "x-amz-server-side-encryption-customer-key-MD5";
+            );
+
+            if let Some(ref metadata) = input.metadata {
+                for (key, val) in metadata.iter() {
+                    params.put(&format!("x-amz-meta-{}", key), val);
+                }
+            }
+
+            add_params!(
+                input, params;
+            );
+
+            request.set_params(params);
+            request.generate_presigned_url(&credentials)
+        },
+        PresignedRequestMethod::Delete(input) => {
+            let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
+            let mut request = SignedRequest::new("DELETE", "s3", &region, &request_uri);
+            let mut params = Params::new();
+            
+            // https://docs.aws.amazon.com/AmazonS3/latest/API/RESTObjectDELETE.html
+            
+            add_headers!(
+                input, request;
+                mfa, "x-amz-mfa";
+            );
+
+            add_params!(
+                input, params;
+                version_id, "versionId";
+            );
+
+            request.set_params(params);
+            request.generate_presigned_url(&credentials)
+        },
+    }
 }

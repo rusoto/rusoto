@@ -14,7 +14,9 @@ use time::get_time;
 
 use futures::{Future, Stream};
 use rusoto_core::Region;
+use rusoto_core::ProvideAwsCredentials;
 use rusoto_core::credential::AwsCredentials;
+use rusoto_core::reactor::CredentialsProvider;
 use rusoto_s3::{S3, S3Client, HeadObjectRequest, CopyObjectRequest, GetObjectError, GetObjectRequest,
                  PutObjectRequest, DeleteObjectRequest, PutBucketCorsRequest, CORSConfiguration,
                  CORSRule, CreateBucketRequest, DeleteBucketRequest, CreateMultipartUploadRequest,
@@ -37,9 +39,9 @@ fn test_all_the_things() {
     } else {
         Region::UsEast1
     };
-    let credentials = AwsCredentials::new("xxx".to_string(), "xxx".to_string(), None, None);
 
-    let client = S3Client::simple(region);
+    let client = S3Client::simple(region.clone());
+    let credentials = CredentialsProvider::default().credentials().wait().unwrap();
 
     let test_bucket = format!("rusoto-test-bucket-{}", get_time().sec);
     let filename = format!("test_file_{}", get_time().sec);
@@ -47,9 +49,6 @@ fn test_all_the_things() {
     let binary_filename = format!("test_file_b{}", get_time().sec);
     let multipart_filename = format!("test_multipart_file_{}", get_time().sec);
     let metadata_filename = format!("test_metadata_file_{}", get_time().sec);
-
-    // generate a presigned url
-    test_generate_presigned_url(&Region::UsEast1, &credentials, &test_bucket, &filename);
 
     // get a list of list_buckets
     test_list_buckets(&client);
@@ -81,6 +80,9 @@ fn test_all_the_things() {
     // GET the object
     test_get_object(&client, &test_bucket, &filename);
     test_get_object_range(&client, &test_bucket, &filename);
+    // generate a presigned url
+    test_generate_presigned_url(&region, &credentials, &test_bucket, &filename);
+
     // copy the object to change its settings
     test_copy_object(&client, &test_bucket, &filename);
 
@@ -468,13 +470,36 @@ fn test_get_object_with_metadata(client: &TestClient, bucket: &str, filename: &s
 }
 
 fn test_generate_presigned_url(region: &Region, credentials: &AwsCredentials, bucket: &str, filename: &str) {
-    let get_req = GetObjectRequest {
-        bucket: bucket.to_owned(),
-        key: filename.to_owned(),
-        ..Default::default()
-    };
-
-    let result = rusoto_s3::util::generate_presigned_url(region, credentials, &get_req).unwrap();
-    println!("get object result: {:#?}", result);
-    assert_eq!(result, "tomato");
+    use rusoto_s3::util::PresignedRequestMethod::*;
+    use rusoto_s3::util::generate_presigned_url;
+    {
+        let req = Get(GetObjectRequest {
+            bucket: bucket.to_owned(),
+            key: filename.to_owned(),
+            ..Default::default()
+        });
+        let presigned_url = generate_presigned_url(region, credentials, &req);
+        println!("get object presigned url: {:#?}", presigned_url);
+        assert!(presigned_url.len() > 0);
+    }
+    {
+        let req = Put(PutObjectRequest {
+            bucket: bucket.to_owned(),
+            key: filename.to_owned(),
+            ..Default::default()
+        });
+        let presigned_url = generate_presigned_url(region, credentials, &req);
+        println!("put object presigned url: {:#?}", presigned_url);
+        assert!(presigned_url.len() > 0);
+    }
+    {
+        let req = Delete(DeleteObjectRequest {
+            bucket: bucket.to_owned(),
+            key: filename.to_owned(),
+            ..Default::default()
+        });
+        let presigned_url = generate_presigned_url(region, credentials, &req);
+        println!("delete object presigned url: {:#?}", presigned_url);
+        assert!(presigned_url.len() > 0);
+    }
 }
