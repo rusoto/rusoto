@@ -87,6 +87,7 @@ members = [
     "rusoto/services/route53domains",
     "rusoto/services/s3",
     "rusoto/services/sdb",
+    "rusoto/services/secretsmanager",
     "rusoto/services/serverlessrepo",
     "rusoto/services/servicecatalog",
     "rusoto/services/ses",

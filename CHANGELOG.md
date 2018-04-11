@@ -10,6 +10,7 @@
 - Improve deserializer of XML error responses
 - Adds Serverless Repo service
 - Add Alexa for Business service
+- Add [Secrets Manager](https://docs.aws.amazon.com/secretsmanager/latest/userguide/intro.html) service
 
 ## [0.32.0] - 2018-03-03
 
