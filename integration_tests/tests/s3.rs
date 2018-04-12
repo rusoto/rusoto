@@ -5,6 +5,7 @@ extern crate rusoto_s3;
 extern crate time;
 extern crate env_logger;
 extern crate log;
+extern crate reqwest;
 
 use std::collections::HashMap;
 use std::env;
@@ -470,36 +471,47 @@ fn test_get_object_with_metadata(client: &TestClient, bucket: &str, filename: &s
 }
 
 fn test_generate_presigned_url(region: &Region, credentials: &AwsCredentials, bucket: &str, filename: &str) {
-    use rusoto_s3::util::PresignedRequestMethod::*;
-    use rusoto_s3::util::generate_presigned_url;
+    use reqwest::header::ContentLength;
+    use rusoto_s3::util::PreSignedRequest;
+    fn check(mut res: reqwest::Response){
+        assert!(&res.status().is_success());
+        let size = res.headers().get::<ContentLength>().map(|ct_len| **ct_len).unwrap_or(0);
+        assert!(size > 0);
+        let mut buf: Vec<u8> = vec![];
+        res.copy_to(&mut buf).unwrap();
+        assert!(buf.len() > 0);
+    }
     {
-        let req = Get(GetObjectRequest {
+        let req = GetObjectRequest {
             bucket: bucket.to_owned(),
             key: filename.to_owned(),
             ..Default::default()
-        });
-        let presigned_url = generate_presigned_url(region, credentials, &req);
+        };
+        let presigned_url = req.get_signed_url(region, credentials);
         println!("get object presigned url: {:#?}", presigned_url);
-        assert!(presigned_url.len() > 0);
+        let res = reqwest::get(&presigned_url).unwrap();
+        check(res);
     }
     {
-        let req = Put(PutObjectRequest {
+        let req = PutObjectRequest {
             bucket: bucket.to_owned(),
             key: filename.to_owned(),
             ..Default::default()
-        });
-        let presigned_url = generate_presigned_url(region, credentials, &req);
+        };
+        let presigned_url = req.get_signed_url(region, credentials);
         println!("put object presigned url: {:#?}", presigned_url);
-        assert!(presigned_url.len() > 0);
+        let res = reqwest::get(&presigned_url).unwrap();
+        check(res);
     }
     {
-        let req = Delete(DeleteObjectRequest {
+        let req = DeleteObjectRequest {
             bucket: bucket.to_owned(),
             key: filename.to_owned(),
             ..Default::default()
-        });
-        let presigned_url = generate_presigned_url(region, credentials, &req);
+        };
+        let presigned_url = req.get_signed_url(region, credentials);
         println!("delete object presigned url: {:#?}", presigned_url);
-        assert!(presigned_url.len() > 0);
+        let res = reqwest::get(&presigned_url).unwrap();
+        check(res);
     }
 }
