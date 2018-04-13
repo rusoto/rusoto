@@ -495,11 +495,6 @@
     "version": "0.32.0",
     "coreVersion": "0.32.0",
     "protocolVersion": "2006-03-01",
-    "customDependencies": {
-      "md5": "0.3.6",
-      "base64": "0.9",
-      "hex": "0.3"
-    },
     "baseTypeName": "S3"
   },
   "sdb": {

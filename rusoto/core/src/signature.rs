@@ -19,6 +19,8 @@ use time::Tm;
 use time::now_utc;
 use url::percent_encoding::{utf8_percent_encode, percent_decode, EncodeSet};
 use hex;
+use md5;
+use base64;
 
 use param::Params;
 use region::Region;
@@ -114,6 +116,22 @@ impl SignedRequest {
     /// Sets the new body (payload) as a stream
     pub fn set_payload_stream(&mut self, len: usize, stream: Box<Stream<Item=Vec<u8>, Error=io::Error> + Send>) {
         self.payload = Some(SignedRequestPayload::Stream(len, stream));
+    }
+
+    /// Computes and sets the Content-MD5 header based on the current payload.
+    ///
+    /// Has no effect if the payload is not set, or is not a buffer.
+    pub fn set_content_md5_header(&mut self) {
+        let digest;
+        if let Some(SignedRequestPayload::Buffer(ref payload)) = self.payload {
+            digest = Some(md5::compute(payload));
+        } else {
+            digest = None;
+        }
+        if let Some(digest) = digest {
+            // need to deref digest and then pass that reference:
+            self.add_header("Content-MD5", &base64::encode(&(*digest)));
+        }
     }
 
     /// Returns the current HTTP method

@@ -156,7 +156,7 @@ fn test_multipart_upload(client: &TestClient, bucket: &str, filename: &str) {
     // create 2 upload parts
     let create_upload_part = |body: Vec<u8>, part_number: i64| -> UploadPartRequest {
         UploadPartRequest {
-            body: Some(body),
+            body: Some(body.into()),
             bucket: bucket.to_owned(),
             key: filename.to_owned(),
             upload_id: upload_id.to_owned(),
@@ -225,7 +225,7 @@ fn test_put_object_with_filename(client: &TestClient,
             let req = PutObjectRequest {
                 bucket: bucket.to_owned(),
                 key: dest_filename.to_owned(),
-                body: Some(contents),
+                body: Some(contents.into()),
                 ..Default::default()
             };
             let result = client.put_object(req).sync().expect("Couldn't PUT object");
@@ -425,7 +425,7 @@ fn test_put_object_with_metadata(client: &TestClient,
             let req = PutObjectRequest {
                 bucket: bucket.to_owned(),
                 key: dest_filename.to_owned(),
-                body: Some(contents),
+                body: Some(contents.into()),
                 metadata: Some(metadata.clone()),
                 ..Default::default()
             };

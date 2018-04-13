@@ -260,12 +260,6 @@ fn is_streaming_shape(service: &Service, name: &str) -> bool {
            .any(|(_, shape)| streaming_members(shape).any(|member| member.shape == name))
 }
 
-fn is_input_shape(service: &Service, name: &str) -> bool {
-    service.operations()
-           .iter()
-           .any(|(_, op)| op.input.is_some() && op.input.as_ref().unwrap().shape == name)
-}
-
 // do any type name mutation needed to avoid collisions with Rust types
 fn mutate_type_name(service: &Service, type_name: &str) -> String {
     let capitalized = util::capitalize_first(type_name.to_owned());
@@ -338,28 +332,30 @@ fn generate_types<P>(writer: &mut FileWriter, service: &Service, protocol_genera
             // Add a second type for streaming blobs, which are the only streaming type we can have
             writeln!(writer,
                      "pub struct {streaming_name} {{
+                         len: Option<usize>,
                          inner: Box<::futures::Stream<Item=Vec<u8>, Error=::std::io::Error> + Send>
                      }}
 
                      impl {streaming_name} {{
-                         pub fn new<S>(stream: S) -> {streaming_name}
+                         pub fn new<S>(len: usize, stream: S) -> {streaming_name}
                              where S: ::futures::Stream<Item=Vec<u8>, Error=::std::io::Error> + Send + 'static
                          {{
                              {streaming_name} {{
+                                 len: Some(len),
                                  inner: Box::new(stream)
                              }}
                          }}
                      }}
 
                      impl From<Vec<u8>> for {streaming_name} {{
-                         fn from(buffer: Vec<u8>) -> {streaming_name} {{
-                             {streaming_name}::new(::futures::stream::once(Ok(buffer)))
+                         fn from(buf: Vec<u8>) -> {streaming_name} {{
+                             {streaming_name}::new(buf.len(), ::futures::stream::once(Ok(buf)))
                          }}
                      }}
 
                      impl fmt::Debug for {streaming_name} {{
                          fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {{
-                             write!(f, \"<{name}: streaming content>\")
+                             write!(f, \"<{name}: streaming content, len = {{:?}}>\", self.len)
                          }}
                      }}
 
@@ -452,7 +448,7 @@ fn generate_struct<P>(service: &Service,
 
 fn generate_struct_fields<P: GenerateProtocol>(service: &Service,
                                                shape: &Shape,
-                                               shape_name: &str,
+                                               _shape_name: &str,
                                                serde_attrs: bool,
                                                protocol_generator: &P)
                                                -> String {
@@ -489,7 +485,7 @@ fn generate_struct_fields<P: GenerateProtocol>(service: &Service,
         let rs_type = get_rust_type(service,
                                     &member.shape,
                                     member_shape,
-                                    member.streaming() && !is_input_shape(service, shape_name),
+                                    member.streaming(),
                                     protocol_generator.timestamp_type());
         let name = generate_field_name(member_name);
 

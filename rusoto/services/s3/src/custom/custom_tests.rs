@@ -137,7 +137,7 @@ fn list_multipart_upload_parts_happy_path() {
         .with_request_checker(|request: &SignedRequest| {
             assert_eq!(request.method, "GET");
             assert_eq!(request.path, "/rusoto1440826511/testfile.zip");
-            assert_eq!(request.payload, None);
+            assert!(request.payload.is_none());
         });
 
     let mut req = ListPartsRequest::default();
@@ -235,7 +235,7 @@ fn should_parse_sample_list_buckets_response() {
         .with_request_checker(|request: &SignedRequest| {
             assert_eq!(request.method, "GET");
             assert_eq!(request.path, "/");
-            assert_eq!(request.payload, None);
+            assert!(request.payload.is_none());
         });
 
     let client = S3Client::new(mock, MockCredentialsProvider, Region::UsEast1);
@@ -301,7 +301,7 @@ fn should_serialize_complicated_request() {
             assert_eq!(*request.params.get("response-content-type").unwrap(),
                         sstr("response_content_type"));
             assert!(request.headers.get("range").unwrap().contains(&Vec::from("range")));
-            assert_eq!(request.payload, None);
+            assert!(request.payload.is_none());
         });
 
     let client = S3Client::new(mock, MockCredentialsProvider, Region::UsEast1);
