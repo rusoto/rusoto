@@ -11,6 +11,6 @@ fn should_list_fleets() {
     let client = GameLiftClient::simple(Region::UsWest2);
     let request = ListFleetsInput::default();
 
-    let result = client.list_fleets(&request).sync().unwrap();
+    let result = client.list_fleets(request).sync().unwrap();
 	println!("{:#?}", result);
 }

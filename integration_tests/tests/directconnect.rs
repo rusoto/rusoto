@@ -12,7 +12,7 @@ fn should_describe_connections() {
     let client = DirectConnectClient::simple(Region::UsEast1);
     let request = DescribeConnectionsRequest::default();
 
-    client.describe_connections(&request).sync().unwrap();
+    client.describe_connections(request).sync().unwrap();
 }
 
 #[test]
@@ -21,7 +21,7 @@ fn should_fail_gracefully() {
 
     let request = DescribeConnectionsRequest { connection_id: Some("invalid".to_string()) };
 
-    match client.describe_connections(&request).sync() {
+    match client.describe_connections(request).sync() {
         Err(DescribeConnectionsError::DirectConnectClient(msg)) => {
             assert!(msg.contains("Connection ID"))
         }

@@ -18,7 +18,7 @@ fn should_describe_tags() {
     let client = DiscoveryClient::simple(Region::UsWest2);
     let request = DescribeTagsRequest::default();
 
-    match client.describe_tags(&request).sync() {
+    match client.describe_tags(request).sync() {
         Ok(response) => println!("Response: {:?}", response),
         Err(e) => {
             println!("Got expected error of {}", e);
@@ -37,7 +37,7 @@ fn should_list_configurations() {
         ..Default::default()
     };
 
-    match client.list_configurations(&request).sync() {
+    match client.list_configurations(request).sync() {
         Ok(response) => println!("Response: {:?}", response),
         Err(e) => assert!(format!("{}", e).contains("is not whitelisted to access")),
     }

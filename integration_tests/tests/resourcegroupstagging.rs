@@ -11,6 +11,6 @@ fn should_get_resources() {
     let client = ResourceGroupsTaggingApiClient::simple(Region::UsEast1);
     let request = GetResourcesInput::default();
 
-    let result = client.get_resources(&request).sync().unwrap();
+    let result = client.get_resources(request).sync().unwrap();
 	println!("{:#?}", result);
 }

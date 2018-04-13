@@ -58,7 +58,7 @@ fn should_serialize_map_parameters_in_query_string() {
     };
 
     let client = SqsClient::new(mock, MockCredentialsProvider, Region::UsEast1);
-    let _result = client.send_message(&request).sync().unwrap();
+    let _result = client.send_message(request).sync().unwrap();
 }
 
 #[test]
@@ -115,7 +115,7 @@ fn should_fix_issue_323() {
     };
 
     let client = SqsClient::new(mock, MockCredentialsProvider, Region::UsEast1);
-    let _result = client.receive_message(&request).sync().unwrap();
+    let _result = client.receive_message(request).sync().unwrap();
 }
 
 #[test]
@@ -138,7 +138,7 @@ fn test_parse_queue_does_not_exist_error() {
     };
 
     let client = SqsClient::new(mock, MockCredentialsProvider, Region::UsEast1);
-    let result = client.get_queue_url(&request).sync();
+    let result = client.get_queue_url(request).sync();
     assert!(result.is_err());
     let err = result.err().unwrap();
     assert_eq!(GetQueueUrlError::QueueDoesNotExist("The specified queue does not exist for this wsdl version.".to_owned()), err);

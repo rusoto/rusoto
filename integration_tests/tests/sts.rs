@@ -17,7 +17,7 @@ fn main() {
     let sts = StsClient::simple(Region::UsEast1);
 
     // http://docs.aws.amazon.com/STS/latest/APIReference/Welcome.html
-    match sts.assume_role(&AssumeRoleRequest{
+    match sts.assume_role(AssumeRoleRequest{
             role_arn: "bogus".to_owned(),
             role_session_name: "rusoto_test_session".to_owned(),
             ..Default::default()
@@ -29,7 +29,7 @@ fn main() {
     }
 
     match sts.get_session_token(
-        &GetSessionTokenRequest {
+        GetSessionTokenRequest {
             token_code: Some("123456".to_owned()),
             serial_number: Some("123456789".to_owned()),
             ..Default::default()

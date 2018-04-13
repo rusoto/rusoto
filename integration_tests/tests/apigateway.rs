@@ -11,6 +11,6 @@ fn should_get_rest_apis() {
     let client = ApiGatewayClient::simple(Region::UsEast1);
     let request = GetRestApisRequest::default();
 
-    client.get_rest_apis(&request).sync().unwrap();
+    client.get_rest_apis(request).sync().unwrap();
 
 }

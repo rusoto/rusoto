@@ -55,5 +55,5 @@ fn should_serialize_list_parameters_in_query_string() {
     let request = ListStacksInput { stack_status_filter: Some(filters), ..Default::default() };
 
     let client = CloudFormationClient::new(mock, MockCredentialsProvider, Region::UsEast1);
-    let _result = client.list_stacks(&request).sync().unwrap();
+    let _result = client.list_stacks(request).sync().unwrap();
 }

@@ -33,7 +33,7 @@ fn should_parse_invocation_response() {
     };
 
     let client = LambdaClient::new(mock, MockCredentialsProvider, Region::UsEast1);
-    let result = client.invoke(&request).sync().unwrap();
+    let result = client.invoke(request).sync().unwrap();
 
     assert_eq!(Some(r#"{"arbitrary":"json"}"#.to_owned().into_bytes()), result.payload);
     assert_eq!(Some("foo bar baz".to_owned()), result.log_result);

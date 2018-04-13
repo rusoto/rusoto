@@ -45,6 +45,6 @@ fn should_serialize_complex_metric_data_params() {
     };
 
     let client = CloudWatchClient::new(mock, MockCredentialsProvider, Region::UsEast1);
-    let response = client.put_metric_data(&request).sync().unwrap();
+    let response = client.put_metric_data(request).sync().unwrap();
     println!("{:#?}", response);
 }

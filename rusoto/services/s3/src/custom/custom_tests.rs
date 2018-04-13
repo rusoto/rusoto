@@ -12,7 +12,7 @@ fn initiate_multipart_upload_happy_path() {
     let mock = MockRequestDispatcher::with_status(200).with_body(&body);
 
     let client = S3Client::new(mock, MockCredentialsProvider, Region::UsEast1);
-    let result = client.create_multipart_upload(&CreateMultipartUploadRequest {
+    let result = client.create_multipart_upload(CreateMultipartUploadRequest {
         bucket: "example-bucket".to_owned(),
         key: "example-object".to_owned(),
         ..Default::default()
@@ -35,7 +35,7 @@ fn complete_multipart_upload_happy_path() {
     let mock = MockRequestDispatcher::with_status(200).with_body(&body);
     
     let client = S3Client::new(mock, MockCredentialsProvider, Region::UsEast1);
-    let result = client.complete_multipart_upload(&CompleteMultipartUploadRequest {
+    let result = client.complete_multipart_upload(CompleteMultipartUploadRequest {
         bucket: "example-bucket".to_owned(),
         key: "example-object".to_owned(),
         upload_id: "VXBsb2FkIElEIGZvciA2aWWpbmcncyBteS1tb3ZpZS5tMnRzIHVwbG9hZA".to_owned(),
@@ -58,7 +58,7 @@ fn list_multipart_upload_happy_path() {
     let mock = MockRequestDispatcher::with_status(200).with_body(&body);
     
     let client = S3Client::new(mock, MockCredentialsProvider, Region::UsEast1);
-    let result = client.list_multipart_uploads(&ListMultipartUploadsRequest {
+    let result = client.list_multipart_uploads(ListMultipartUploadsRequest {
         bucket: "example-bucket".to_owned(),
         ..Default::default()
     }).sync();
@@ -145,7 +145,7 @@ fn list_multipart_upload_parts_happy_path() {
     req.key = "testfile.zip".to_owned();
 
     let client = S3Client::new(mock, MockCredentialsProvider, Region::UsEast1);
-    let result = client.list_parts(&req).sync().unwrap();
+    let result = client.list_parts(req).sync().unwrap();
     assert_eq!(result.bucket, sstr("rusoto1440826511"));
     assert_eq!(result.upload_id,
                 sstr("PeePB_uORK5f2AURP_SWcQ4NO1P1oqnGNNNFK3nhFfzMeksdvG7x7nFfH1qk7a3HSossNYB7t8QhcN1Fg6ax7AXbwvAKIZ9DilB4tUcpM7qyUEgkszN4iDmMvSaImGFK"));
@@ -201,7 +201,7 @@ fn list_multipart_uploads_no_uploads() {
     req.bucket = "test-bucket".to_owned();
 
     let client = S3Client::new(mock, MockCredentialsProvider, Region::UsEast1);
-    let result = client.list_multipart_uploads(&req).sync().unwrap();
+    let result = client.list_multipart_uploads(req).sync().unwrap();
 
     assert_eq!(result.bucket, sstr("rusoto1440826568"));
     assert!(result.uploads.is_none());
@@ -263,7 +263,7 @@ fn should_parse_headers() {
 
     let client = S3Client::new(mock, MockCredentialsProvider, Region::UsEast1);
     let request = HeadObjectRequest::default();
-    let result = client.head_object(&request).sync().unwrap();
+    let result = client.head_object(request).sync().unwrap();
 
     assert_eq!(result.expiration, Some("foo".to_string()));
     assert_eq!(result.restore, Some("bar".to_string()));
@@ -305,7 +305,7 @@ fn should_serialize_complicated_request() {
         });
 
     let client = S3Client::new(mock, MockCredentialsProvider, Region::UsEast1);
-    let _ = client.get_object(&request).sync().unwrap();
+    let _ = client.get_object(request).sync().unwrap();
 }
 
 #[test]
@@ -314,7 +314,7 @@ fn should_parse_location_constraint() {
     let mock = MockRequestDispatcher::with_status(200).with_body(&body);
     
     let client = S3Client::new(mock, MockCredentialsProvider, Region::UsEast1);
-    let result = client.get_bucket_location(&GetBucketLocationRequest {
+    let result = client.get_bucket_location(GetBucketLocationRequest {
         bucket: "example-bucket".to_owned()
     }).sync();
 
@@ -367,7 +367,7 @@ fn test_parse_no_such_bucket_error() {
     };
 
     let client = S3Client::new(mock, MockCredentialsProvider, Region::UsEast1);
-    let result = client.list_objects_v2(&request).sync();
+    let result = client.list_objects_v2(request).sync();
     assert!(result.is_err());
     let err = result.err().unwrap();
     assert_eq!(ListObjectsV2Error::NoSuchBucket("The specified bucket does not exist".to_owned()), err);

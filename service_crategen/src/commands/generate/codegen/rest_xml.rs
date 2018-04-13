@@ -221,7 +221,7 @@ fn generate_payload_member_serialization(shape: &Shape) -> String {
 
     // if the member is 'streaming', it's a Vec<u8> that should just be delivered as the body
     if payload_member.streaming() {
-        format!("payload = input.{}.clone().unwrap();",
+        format!("payload = input.{}.unwrap();",
                 payload_field.to_snake_case())
     }
     // otherwise serialize the object to XML and use that as the payload
@@ -248,7 +248,7 @@ fn generate_payload_member_serialization(shape: &Shape) -> String {
 fn generate_method_signature(operation_name: &str, operation: &Operation, service: &Service) -> String {
     if operation.input.is_some() {
         format!(
-            "fn {operation_name}(&self, input: &{input_type}) -> RusotoFuture<{output_type}, {error_type}>",
+            "fn {operation_name}(&self, input: {input_type}) -> RusotoFuture<{output_type}, {error_type}>",
             input_type = operation.input.as_ref().unwrap().shape,
             operation_name = operation_name.to_snake_case(),
             output_type = &operation.output_shape_or("()"),
