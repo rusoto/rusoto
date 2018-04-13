@@ -351,6 +351,12 @@ fn generate_types<P>(writer: &mut FileWriter, service: &Service, protocol_genera
                          }}
                      }}
 
+                     impl From<Vec<u8>> for {streaming_name} {{
+                         fn from(buffer: Vec<u8>) -> {streaming_name} {{
+                             {streaming_name}::new(::futures::stream::once(Ok(buffer)))
+                         }}
+                     }}
+
                      impl fmt::Debug for {streaming_name} {{
                          fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {{
                              write!(f, \"<{name}: streaming content>\")
