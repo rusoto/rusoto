@@ -44,7 +44,7 @@ fn should_serialize_list_parameters_in_query_string() {
         .with_request_checker(|request: &SignedRequest| {
             assert_eq!("POST", request.method);
             assert_eq!("/", request.path);
-            assert_eq!(None, request.payload);
+            assert!(request.payload.is_none());
             assert_eq!(Some(&Some("CREATE_IN_PROGRESS".to_owned())),
                         request.params.get("StackStatusFilter.member.1"));
             assert_eq!(Some(&Some("DELETE_COMPLETE".to_owned())),

@@ -33,7 +33,7 @@ fn should_serialize_map_parameters_in_query_string() {
 
             assert_eq!("POST", request.method);
             assert_eq!("/", request.path);
-            assert_eq!(None, request.payload);
+            assert!(request.payload.is_none());
             assert_eq!(Some(&Some("test_attribute_name".to_owned())),
                         request.params.get("MessageAttribute.1.Name"));
             assert_eq!(Some(&Some("test_attribute_value".to_owned())),

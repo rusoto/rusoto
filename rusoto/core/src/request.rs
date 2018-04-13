@@ -27,7 +27,7 @@ use tokio_core::reactor::{Handle, Timeout};
 
 use log::Level::Debug;
 
-use signature::SignedRequest;
+use signature::{SignedRequest, SignedRequestPayload};
 
 // Pulls in the statically generated rustc version.
 include!(concat!(env!("OUT_DIR"), "/user_agent_vars.rs"));
@@ -218,9 +218,32 @@ impl Future for HttpClientFuture {
     }
 }
 
+struct HttpClientPayload {
+    inner: SignedRequestPayload
+}
+
+impl Stream for HttpClientPayload {
+    type Item = Vec<u8>;
+    type Error = HyperError;
+
+    fn poll(&mut self) -> Poll<Option<Self::Item>, Self::Error> {
+        match self.inner {
+            SignedRequestPayload::Buffer(ref mut buffer) => {
+                if buffer.len() == 0 {
+                    Ok(Async::Ready(None))
+                } else {
+                    Ok(Async::Ready(Some(buffer.split_off(0))))
+                }
+            },
+            SignedRequestPayload::Stream(_, ref mut stream) =>
+                Ok(stream.poll()?)
+        }
+    }
+}
+
 /// Http client for use with AWS services.
 pub struct HttpClient {
-    inner: HyperClient<HttpsConnector<HttpConnector>>,
+    inner: HyperClient<HttpsConnector<HttpConnector>, HttpClientPayload>,
     handle: Handle
 }
 
@@ -235,7 +258,7 @@ impl HttpClient {
                 })
             }
         };
-        let inner = HyperClient::configure().connector(connector).build(handle);
+        let inner = HyperClient::configure().body().connector(connector).build(handle);
         Ok(HttpClient {
             inner: inner,
             handle: handle.clone()
@@ -276,11 +299,13 @@ impl DispatchSignedRequest for HttpClient {
 
         if log_enabled!(Debug) {
             let payload = match request.payload {
-                Some(ref payload_bytes) => {
+                Some(SignedRequestPayload::Buffer(ref payload_bytes)) => {
                     String::from_utf8(payload_bytes.to_owned())
                         .unwrap_or_else(|_| String::from("<non-UTF-8 data>"))
-                }
-                _ => "".to_owned(),
+                },
+                Some(SignedRequestPayload::Stream(len, _)) =>
+                    format!("<stream len={}>", len),
+                None => "".to_owned(),
             };
 
             debug!("Full request: \n method: {}\n final_uri: {}\n payload: {}\nHeaders:\n",
@@ -296,7 +321,7 @@ impl DispatchSignedRequest for HttpClient {
         *hyper_request.headers_mut() = hyper_headers;
 
         if let Some(payload_contents) = request.payload {
-            hyper_request.set_body(payload_contents);
+            hyper_request.set_body(HttpClientPayload { inner: payload_contents });
         }
 
         let inner = match timeout {

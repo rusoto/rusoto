@@ -3,6 +3,7 @@ extern crate rusoto_mock;
 use ::{Lambda, LambdaClient, InvocationRequest};
 
 use rusoto_core::{Region, SignedRequest};
+use rusoto_core::signature::SignedRequestPayload;
 use self::rusoto_mock::*;
 
 /// Ensures that rest-json codegen handles the response body,
@@ -15,7 +16,11 @@ fn should_parse_invocation_response() {
         .with_header("X-Amz-Log-Result", "foo bar baz")
         .with_request_checker(|request: &SignedRequest| {
             assert_eq!("POST", request.method);
-            assert_eq!(Some("raw payload".to_owned().into_bytes()), request.payload);
+            if let Some(SignedRequestPayload::Buffer(ref buffer)) = request.payload {
+                assert_eq!(b"raw payload", buffer.as_slice());
+            } else {
+                panic!("request payload is not a buffer");
+            }
             assert_eq!("/2015-03-31/functions/foo/invocations", request.path);
 
         });
