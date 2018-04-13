@@ -18,18 +18,18 @@ use std::io;
 use futures::future;
 use futures::Future;
 use rusoto_core::reactor::{CredentialsProvider, RequestDispatcher};
-use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::region;
+use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::{ClientInner, RusotoFuture};
 
-use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
+use rusoto_core::request::HttpDispatchError;
 
-use serde_json;
-use rusoto_core::signature::SignedRequest;
-use serde_json::Value as SerdeJsonValue;
-use serde_json::from_str;
 use hyper::StatusCode;
+use rusoto_core::signature::SignedRequest;
+use serde_json;
+use serde_json::from_str;
+use serde_json::Value as SerdeJsonValue;
 /// <p>Contains information about an alias.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct AliasListEntry {
@@ -153,8 +153,11 @@ pub struct CreateKeyResponse {
 pub struct DecryptRequest {
     /// <p>Ciphertext to be decrypted. The blob includes metadata.</p>
     #[serde(rename = "CiphertextBlob")]
-    #[serde(deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
-            serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob", default)]
+    #[serde(
+        deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
+        serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
+        default
+    )]
     pub ciphertext_blob: Vec<u8>,
     /// <p>The encryption context. If this was specified in the <a>Encrypt</a> function, it must be specified here or the decryption operation will fail. For more information, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/encryption-context.html">Encryption Context</a>.</p>
     #[serde(rename = "EncryptionContext")]
@@ -174,8 +177,11 @@ pub struct DecryptResponse {
     pub key_id: Option<String>,
     /// <p>Decrypted plaintext data. When you use the HTTP API or the AWS CLI, the value is Base64-encoded. Otherwise, it is not encoded.</p>
     #[serde(rename = "Plaintext")]
-    #[serde(deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
-            serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob", default)]
+    #[serde(
+        deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
+        serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
+        default
+    )]
     pub plaintext: Option<Vec<u8>>,
 }
 
@@ -255,8 +261,11 @@ pub struct EncryptRequest {
     pub key_id: String,
     /// <p>Data to be encrypted.</p>
     #[serde(rename = "Plaintext")]
-    #[serde(deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
-            serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob", default)]
+    #[serde(
+        deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
+        serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
+        default
+    )]
     pub plaintext: Vec<u8>,
 }
 
@@ -264,8 +273,11 @@ pub struct EncryptRequest {
 pub struct EncryptResponse {
     /// <p>The encrypted plaintext. When you use the HTTP API or the AWS CLI, the value is Base64-encoded. Otherwise, it is not encoded.</p>
     #[serde(rename = "CiphertextBlob")]
-    #[serde(deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
-            serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob", default)]
+    #[serde(
+        deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
+        serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
+        default
+    )]
     pub ciphertext_blob: Option<Vec<u8>>,
     /// <p>The ID of the key used during encryption.</p>
     #[serde(rename = "KeyId")]
@@ -300,8 +312,11 @@ pub struct GenerateDataKeyRequest {
 pub struct GenerateDataKeyResponse {
     /// <p>The encrypted data encryption key. When you use the HTTP API or the AWS CLI, the value is Base64-encoded. Otherwise, it is not encoded.</p>
     #[serde(rename = "CiphertextBlob")]
-    #[serde(deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
-            serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob", default)]
+    #[serde(
+        deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
+        serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
+        default
+    )]
     pub ciphertext_blob: Option<Vec<u8>>,
     /// <p>The identifier of the CMK under which the data encryption key was generated and encrypted.</p>
     #[serde(rename = "KeyId")]
@@ -309,8 +324,11 @@ pub struct GenerateDataKeyResponse {
     pub key_id: Option<String>,
     /// <p>The data encryption key. When you use the HTTP API or the AWS CLI, the value is Base64-encoded. Otherwise, it is not encoded. Use this data key for local encryption and decryption, then remove it from memory as soon as possible.</p>
     #[serde(rename = "Plaintext")]
-    #[serde(deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
-            serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob", default)]
+    #[serde(
+        deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
+        serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
+        default
+    )]
     pub plaintext: Option<Vec<u8>>,
 }
 
@@ -341,8 +359,11 @@ pub struct GenerateDataKeyWithoutPlaintextRequest {
 pub struct GenerateDataKeyWithoutPlaintextResponse {
     /// <p>The encrypted data encryption key. When you use the HTTP API or the AWS CLI, the value is Base64-encoded. Otherwise, it is not encoded.</p>
     #[serde(rename = "CiphertextBlob")]
-    #[serde(deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
-            serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob", default)]
+    #[serde(
+        deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
+        serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
+        default
+    )]
     pub ciphertext_blob: Option<Vec<u8>>,
     /// <p>The identifier of the CMK under which the data encryption key was generated and encrypted.</p>
     #[serde(rename = "KeyId")]
@@ -362,8 +383,11 @@ pub struct GenerateRandomRequest {
 pub struct GenerateRandomResponse {
     /// <p>The random byte string. When you use the HTTP API or the AWS CLI, the value is Base64-encoded. Otherwise, it is not encoded.</p>
     #[serde(rename = "Plaintext")]
-    #[serde(deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
-            serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob", default)]
+    #[serde(
+        deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
+        serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
+        default
+    )]
     pub plaintext: Option<Vec<u8>>,
 }
 
@@ -417,8 +441,11 @@ pub struct GetParametersForImportRequest {
 pub struct GetParametersForImportResponse {
     /// <p>The import token to send in a subsequent <a>ImportKeyMaterial</a> request.</p>
     #[serde(rename = "ImportToken")]
-    #[serde(deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
-            serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob", default)]
+    #[serde(
+        deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
+        serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
+        default
+    )]
     pub import_token: Option<Vec<u8>>,
     /// <p>The identifier of the CMK to use in a subsequent <a>ImportKeyMaterial</a> request. This is the same CMK specified in the <code>GetParametersForImport</code> request.</p>
     #[serde(rename = "KeyId")]
@@ -430,8 +457,11 @@ pub struct GetParametersForImportResponse {
     pub parameters_valid_to: Option<f64>,
     /// <p>The public key to use to encrypt the key material before importing it with <a>ImportKeyMaterial</a>.</p>
     #[serde(rename = "PublicKey")]
-    #[serde(deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
-            serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob", default)]
+    #[serde(
+        deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
+        serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
+        default
+    )]
     pub public_key: Option<Vec<u8>>,
 }
 
@@ -493,8 +523,11 @@ pub struct GrantListEntry {
 pub struct ImportKeyMaterialRequest {
     /// <p>The encrypted key material to import. It must be encrypted with the public key that you received in the response to a previous <a>GetParametersForImport</a> request, using the wrapping algorithm that you specified in that request.</p>
     #[serde(rename = "EncryptedKeyMaterial")]
-    #[serde(deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
-            serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob", default)]
+    #[serde(
+        deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
+        serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
+        default
+    )]
     pub encrypted_key_material: Vec<u8>,
     /// <p>Specifies whether the key material expires. The default is <code>KEY_MATERIAL_EXPIRES</code>, in which case you must include the <code>ValidTo</code> parameter. When this parameter is set to <code>KEY_MATERIAL_DOES_NOT_EXPIRE</code>, you must omit the <code>ValidTo</code> parameter.</p>
     #[serde(rename = "ExpirationModel")]
@@ -502,8 +535,11 @@ pub struct ImportKeyMaterialRequest {
     pub expiration_model: Option<String>,
     /// <p>The import token that you received in the response to a previous <a>GetParametersForImport</a> request. It must be from the same response that contained the public key that you used to encrypt the key material.</p>
     #[serde(rename = "ImportToken")]
-    #[serde(deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
-            serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob", default)]
+    #[serde(
+        deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
+        serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
+        default
+    )]
     pub import_token: Vec<u8>,
     /// <p>The identifier of the CMK to import the key material into. The CMK's <code>Origin</code> must be <code>EXTERNAL</code>.</p> <p>Specify the key ID or the Amazon Resource Name (ARN) of the CMK.</p> <p>For example:</p> <ul> <li> <p>Key ID: <code>1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> <li> <p>Key ARN: <code>arn:aws:kms:us-east-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> </ul> <p>To get the key ID and key ARN for a CMK, use <a>ListKeys</a> or <a>DescribeKey</a>.</p>
     #[serde(rename = "KeyId")]
@@ -771,8 +807,11 @@ pub struct PutKeyPolicyRequest {
 pub struct ReEncryptRequest {
     /// <p>Ciphertext of the data to reencrypt.</p>
     #[serde(rename = "CiphertextBlob")]
-    #[serde(deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
-            serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob", default)]
+    #[serde(
+        deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
+        serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
+        default
+    )]
     pub ciphertext_blob: Vec<u8>,
     /// <p>Encryption context to use when the data is reencrypted.</p>
     #[serde(rename = "DestinationEncryptionContext")]
@@ -795,8 +834,11 @@ pub struct ReEncryptRequest {
 pub struct ReEncryptResponse {
     /// <p>The reencrypted data. When you use the HTTP API or the AWS CLI, the value is Base64-encoded. Otherwise, it is not encoded.</p>
     #[serde(rename = "CiphertextBlob")]
-    #[serde(deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
-            serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob", default)]
+    #[serde(
+        deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
+        serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
+        default
+    )]
     pub ciphertext_blob: Option<Vec<u8>>,
     /// <p>Unique identifier of the CMK used to reencrypt the data.</p>
     #[serde(rename = "KeyId")]
@@ -4657,172 +4699,172 @@ pub trait Kms {
     /// <p>Cancels the deletion of a customer master key (CMK). When this operation is successful, the CMK is set to the <code>Disabled</code> state. To enable a CMK, use <a>EnableKey</a>. You cannot perform this operation on a CMK in a different AWS account.</p> <p>For more information about scheduling and canceling deletion of a CMK, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/deleting-keys.html">Deleting Customer Master Keys</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
     fn cancel_key_deletion(
         &self,
-        input: &CancelKeyDeletionRequest,
+        input: CancelKeyDeletionRequest,
     ) -> RusotoFuture<CancelKeyDeletionResponse, CancelKeyDeletionError>;
 
     /// <p>Creates a display name for a customer master key (CMK). You can use an alias to identify a CMK in selected operations, such as <a>Encrypt</a> and <a>GenerateDataKey</a>. </p> <p>Each CMK can have multiple aliases, but each alias points to only one CMK. The alias name must be unique in the AWS account and region. To simplify code that runs in multiple regions, use the same alias name, but point it to a different CMK in each region. </p> <p>Because an alias is not a property of a CMK, you can delete and change the aliases of a CMK without affecting the CMK. Also, aliases do not appear in the response from the <a>DescribeKey</a> operation. To get the aliases of all CMKs, use the <a>ListAliases</a> operation.</p> <p>An alias must start with the word <code>alias</code> followed by a forward slash (<code>alias/</code>). The alias name can contain only alphanumeric characters, forward slashes (/), underscores (_), and dashes (-). Alias names cannot begin with <code>aws</code>; that alias name prefix is reserved by Amazon Web Services (AWS).</p> <p>The alias and the CMK it is mapped to must be in the same AWS account and the same region. You cannot perform this operation on an alias in a different AWS account.</p> <p>To map an existing alias to a different CMK, call <a>UpdateAlias</a>.</p>
-    fn create_alias(&self, input: &CreateAliasRequest) -> RusotoFuture<(), CreateAliasError>;
+    fn create_alias(&self, input: CreateAliasRequest) -> RusotoFuture<(), CreateAliasError>;
 
     /// <p>Adds a grant to a customer master key (CMK). The grant specifies who can use the CMK and under what conditions. When setting permissions, grants are an alternative to key policies. </p> <p>To perform this operation on a CMK in a different AWS account, specify the key ARN in the value of the KeyId parameter. For more information about grants, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/grants.html">Grants</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
     fn create_grant(
         &self,
-        input: &CreateGrantRequest,
+        input: CreateGrantRequest,
     ) -> RusotoFuture<CreateGrantResponse, CreateGrantError>;
 
     /// <p>Creates a customer master key (CMK) in the caller's AWS account.</p> <p>You can use a CMK to encrypt small amounts of data (4 KiB or less) directly, but CMKs are more commonly used to encrypt data encryption keys (DEKs), which are used to encrypt raw data. For more information about DEKs and the difference between CMKs and DEKs, see the following:</p> <ul> <li> <p>The <a>GenerateDataKey</a> operation</p> </li> <li> <p> <a href="http://docs.aws.amazon.com/kms/latest/developerguide/concepts.html">AWS Key Management Service Concepts</a> in the <i>AWS Key Management Service Developer Guide</i> </p> </li> </ul> <p>You cannot use this operation to create a CMK in a different AWS account.</p>
     fn create_key(
         &self,
-        input: &CreateKeyRequest,
+        input: CreateKeyRequest,
     ) -> RusotoFuture<CreateKeyResponse, CreateKeyError>;
 
     /// <p>Decrypts ciphertext. Ciphertext is plaintext that has been previously encrypted by using any of the following operations:</p> <ul> <li> <p> <a>GenerateDataKey</a> </p> </li> <li> <p> <a>GenerateDataKeyWithoutPlaintext</a> </p> </li> <li> <p> <a>Encrypt</a> </p> </li> </ul> <p>Note that if a caller has been granted access permissions to all keys (through, for example, IAM user policies that grant <code>Decrypt</code> permission on all resources), then ciphertext encrypted by using keys in other accounts where the key grants access to the caller can be decrypted. To remedy this, we recommend that you do not grant <code>Decrypt</code> access in an IAM user policy. Instead grant <code>Decrypt</code> access only in key policies. If you must grant <code>Decrypt</code> access in an IAM user policy, you should scope the resource to specific keys or to specific trusted accounts.</p>
-    fn decrypt(&self, input: &DecryptRequest) -> RusotoFuture<DecryptResponse, DecryptError>;
+    fn decrypt(&self, input: DecryptRequest) -> RusotoFuture<DecryptResponse, DecryptError>;
 
     /// <p>Deletes the specified alias. You cannot perform this operation on an alias in a different AWS account. </p> <p>Because an alias is not a property of a CMK, you can delete and change the aliases of a CMK without affecting the CMK. Also, aliases do not appear in the response from the <a>DescribeKey</a> operation. To get the aliases of all CMKs, use the <a>ListAliases</a> operation. </p> <p>Each CMK can have multiple aliases. To change the alias of a CMK, use <a>DeleteAlias</a> to delete the current alias and <a>CreateAlias</a> to create a new alias. To associate an existing alias with a different customer master key (CMK), call <a>UpdateAlias</a>.</p>
-    fn delete_alias(&self, input: &DeleteAliasRequest) -> RusotoFuture<(), DeleteAliasError>;
+    fn delete_alias(&self, input: DeleteAliasRequest) -> RusotoFuture<(), DeleteAliasError>;
 
     /// <p>Deletes key material that you previously imported. This operation makes the specified customer master key (CMK) unusable. For more information about importing key material into AWS KMS, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/importing-keys.html">Importing Key Material</a> in the <i>AWS Key Management Service Developer Guide</i>. You cannot perform this operation on a CMK in a different AWS account.</p> <p>When the specified CMK is in the <code>PendingDeletion</code> state, this operation does not change the CMK's state. Otherwise, it changes the CMK's state to <code>PendingImport</code>.</p> <p>After you delete key material, you can use <a>ImportKeyMaterial</a> to reimport the same key material into the CMK.</p>
     fn delete_imported_key_material(
         &self,
-        input: &DeleteImportedKeyMaterialRequest,
+        input: DeleteImportedKeyMaterialRequest,
     ) -> RusotoFuture<(), DeleteImportedKeyMaterialError>;
 
     /// <p>Provides detailed information about the specified customer master key (CMK).</p> <p>To perform this operation on a CMK in a different AWS account, specify the key ARN or alias ARN in the value of the KeyId parameter.</p>
     fn describe_key(
         &self,
-        input: &DescribeKeyRequest,
+        input: DescribeKeyRequest,
     ) -> RusotoFuture<DescribeKeyResponse, DescribeKeyError>;
 
     /// <p>Sets the state of a customer master key (CMK) to disabled, thereby preventing its use for cryptographic operations. You cannot perform this operation on a CMK in a different AWS account.</p> <p>For more information about how key state affects the use of a CMK, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects the Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
-    fn disable_key(&self, input: &DisableKeyRequest) -> RusotoFuture<(), DisableKeyError>;
+    fn disable_key(&self, input: DisableKeyRequest) -> RusotoFuture<(), DisableKeyError>;
 
     /// <p>Disables automatic rotation of the key material for the specified customer master key (CMK). You cannot perform this operation on a CMK in a different AWS account.</p>
     fn disable_key_rotation(
         &self,
-        input: &DisableKeyRotationRequest,
+        input: DisableKeyRotationRequest,
     ) -> RusotoFuture<(), DisableKeyRotationError>;
 
     /// <p>Sets the state of a customer master key (CMK) to enabled, thereby permitting its use for cryptographic operations. You cannot perform this operation on a CMK in a different AWS account.</p>
-    fn enable_key(&self, input: &EnableKeyRequest) -> RusotoFuture<(), EnableKeyError>;
+    fn enable_key(&self, input: EnableKeyRequest) -> RusotoFuture<(), EnableKeyError>;
 
     /// <p>Enables automatic rotation of the key material for the specified customer master key (CMK). You cannot perform this operation on a CMK in a different AWS account.</p>
     fn enable_key_rotation(
         &self,
-        input: &EnableKeyRotationRequest,
+        input: EnableKeyRotationRequest,
     ) -> RusotoFuture<(), EnableKeyRotationError>;
 
     /// <p>Encrypts plaintext into ciphertext by using a customer master key (CMK). The <code>Encrypt</code> operation has two primary use cases:</p> <ul> <li> <p>You can encrypt up to 4 kilobytes (4096 bytes) of arbitrary data such as an RSA key, a database password, or other sensitive information.</p> </li> <li> <p>To move encrypted data from one AWS region to another, you can use this operation to encrypt in the new region the plaintext data key that was used to encrypt the data in the original region. This provides you with an encrypted copy of the data key that can be decrypted in the new region and used there to decrypt the encrypted data.</p> </li> </ul> <p>To perform this operation on a CMK in a different AWS account, specify the key ARN or alias ARN in the value of the KeyId parameter.</p> <p>Unless you are moving encrypted data from one region to another, you don't use this operation to encrypt a generated data key within a region. To get data keys that are already encrypted, call the <a>GenerateDataKey</a> or <a>GenerateDataKeyWithoutPlaintext</a> operation. Data keys don't need to be encrypted again by calling <code>Encrypt</code>.</p> <p>To encrypt data locally in your application, use the <a>GenerateDataKey</a> operation to return a plaintext data encryption key and a copy of the key encrypted under the CMK of your choosing.</p>
-    fn encrypt(&self, input: &EncryptRequest) -> RusotoFuture<EncryptResponse, EncryptError>;
+    fn encrypt(&self, input: EncryptRequest) -> RusotoFuture<EncryptResponse, EncryptError>;
 
     /// <p>Returns a data encryption key that you can use in your application to encrypt data locally. </p> <p>You must specify the customer master key (CMK) under which to generate the data key. You must also specify the length of the data key using either the <code>KeySpec</code> or <code>NumberOfBytes</code> field. You must specify one field or the other, but not both. For common key lengths (128-bit and 256-bit symmetric keys), we recommend that you use <code>KeySpec</code>. To perform this operation on a CMK in a different AWS account, specify the key ARN or alias ARN in the value of the KeyId parameter.</p> <p>This operation returns a plaintext copy of the data key in the <code>Plaintext</code> field of the response, and an encrypted copy of the data key in the <code>CiphertextBlob</code> field. The data key is encrypted under the CMK specified in the <code>KeyId</code> field of the request. </p> <p>We recommend that you use the following pattern to encrypt data locally in your application:</p> <ol> <li> <p>Use this operation (<code>GenerateDataKey</code>) to get a data encryption key.</p> </li> <li> <p>Use the plaintext data encryption key (returned in the <code>Plaintext</code> field of the response) to encrypt data locally, then erase the plaintext data key from memory.</p> </li> <li> <p>Store the encrypted data key (returned in the <code>CiphertextBlob</code> field of the response) alongside the locally encrypted data.</p> </li> </ol> <p>To decrypt data locally:</p> <ol> <li> <p>Use the <a>Decrypt</a> operation to decrypt the encrypted data key into a plaintext copy of the data key.</p> </li> <li> <p>Use the plaintext data key to decrypt data locally, then erase the plaintext data key from memory.</p> </li> </ol> <p>To return only an encrypted copy of the data key, use <a>GenerateDataKeyWithoutPlaintext</a>. To return a random byte string that is cryptographically secure, use <a>GenerateRandom</a>.</p> <p>If you use the optional <code>EncryptionContext</code> field, you must store at least enough information to be able to reconstruct the full encryption context when you later send the ciphertext to the <a>Decrypt</a> operation. It is a good practice to choose an encryption context that you can reconstruct on the fly to better secure the ciphertext. For more information, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/encryption-context.html">Encryption Context</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
     fn generate_data_key(
         &self,
-        input: &GenerateDataKeyRequest,
+        input: GenerateDataKeyRequest,
     ) -> RusotoFuture<GenerateDataKeyResponse, GenerateDataKeyError>;
 
     /// <p>Returns a data encryption key encrypted under a customer master key (CMK). This operation is identical to <a>GenerateDataKey</a> but returns only the encrypted copy of the data key. </p> <p>To perform this operation on a CMK in a different AWS account, specify the key ARN or alias ARN in the value of the KeyId parameter.</p> <p>This operation is useful in a system that has multiple components with different degrees of trust. For example, consider a system that stores encrypted data in containers. Each container stores the encrypted data and an encrypted copy of the data key. One component of the system, called the <i>control plane</i>, creates new containers. When it creates a new container, it uses this operation (<code>GenerateDataKeyWithoutPlaintext</code>) to get an encrypted data key and then stores it in the container. Later, a different component of the system, called the <i>data plane</i>, puts encrypted data into the containers. To do this, it passes the encrypted data key to the <a>Decrypt</a> operation, then uses the returned plaintext data key to encrypt data, and finally stores the encrypted data in the container. In this system, the control plane never sees the plaintext data key.</p>
     fn generate_data_key_without_plaintext(
         &self,
-        input: &GenerateDataKeyWithoutPlaintextRequest,
+        input: GenerateDataKeyWithoutPlaintextRequest,
     ) -> RusotoFuture<GenerateDataKeyWithoutPlaintextResponse, GenerateDataKeyWithoutPlaintextError>;
 
     /// <p>Returns a random byte string that is cryptographically secure.</p> <p>For more information about entropy and random number generation, see the <a href="https://d0.awsstatic.com/whitepapers/KMS-Cryptographic-Details.pdf">AWS Key Management Service Cryptographic Details</a> whitepaper.</p>
     fn generate_random(
         &self,
-        input: &GenerateRandomRequest,
+        input: GenerateRandomRequest,
     ) -> RusotoFuture<GenerateRandomResponse, GenerateRandomError>;
 
     /// <p>Gets a key policy attached to the specified customer master key (CMK). You cannot perform this operation on a CMK in a different AWS account.</p>
     fn get_key_policy(
         &self,
-        input: &GetKeyPolicyRequest,
+        input: GetKeyPolicyRequest,
     ) -> RusotoFuture<GetKeyPolicyResponse, GetKeyPolicyError>;
 
     /// <p>Gets a Boolean value that indicates whether automatic rotation of the key material is enabled for the specified customer master key (CMK).</p> <p>To perform this operation on a CMK in a different AWS account, specify the key ARN in the value of the KeyId parameter.</p>
     fn get_key_rotation_status(
         &self,
-        input: &GetKeyRotationStatusRequest,
+        input: GetKeyRotationStatusRequest,
     ) -> RusotoFuture<GetKeyRotationStatusResponse, GetKeyRotationStatusError>;
 
     /// <p>Returns the items you need in order to import key material into AWS KMS from your existing key management infrastructure. For more information about importing key material into AWS KMS, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/importing-keys.html">Importing Key Material</a> in the <i>AWS Key Management Service Developer Guide</i>.</p> <p>You must specify the key ID of the customer master key (CMK) into which you will import key material. This CMK's <code>Origin</code> must be <code>EXTERNAL</code>. You must also specify the wrapping algorithm and type of wrapping key (public key) that you will use to encrypt the key material. You cannot perform this operation on a CMK in a different AWS account.</p> <p>This operation returns a public key and an import token. Use the public key to encrypt the key material. Store the import token to send with a subsequent <a>ImportKeyMaterial</a> request. The public key and import token from the same response must be used together. These items are valid for 24 hours. When they expire, they cannot be used for a subsequent <a>ImportKeyMaterial</a> request. To get new ones, send another <code>GetParametersForImport</code> request.</p>
     fn get_parameters_for_import(
         &self,
-        input: &GetParametersForImportRequest,
+        input: GetParametersForImportRequest,
     ) -> RusotoFuture<GetParametersForImportResponse, GetParametersForImportError>;
 
     /// <p>Imports key material into an existing AWS KMS customer master key (CMK) that was created without key material. You cannot perform this operation on a CMK in a different AWS account. For more information about creating CMKs with no key material and then importing key material, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/importing-keys.html">Importing Key Material</a> in the <i>AWS Key Management Service Developer Guide</i>.</p> <p>Before using this operation, call <a>GetParametersForImport</a>. Its response includes a public key and an import token. Use the public key to encrypt the key material. Then, submit the import token from the same <code>GetParametersForImport</code> response.</p> <p>When calling this operation, you must specify the following values:</p> <ul> <li> <p>The key ID or key ARN of a CMK with no key material. Its <code>Origin</code> must be <code>EXTERNAL</code>.</p> <p>To create a CMK with no key material, call <a>CreateKey</a> and set the value of its <code>Origin</code> parameter to <code>EXTERNAL</code>. To get the <code>Origin</code> of a CMK, call <a>DescribeKey</a>.)</p> </li> <li> <p>The encrypted key material. To get the public key to encrypt the key material, call <a>GetParametersForImport</a>.</p> </li> <li> <p>The import token that <a>GetParametersForImport</a> returned. This token and the public key used to encrypt the key material must have come from the same response.</p> </li> <li> <p>Whether the key material expires and if so, when. If you set an expiration date, you can change it only by reimporting the same key material and specifying a new expiration date. If the key material expires, AWS KMS deletes the key material and the CMK becomes unusable. To use the CMK again, you must reimport the same key material.</p> </li> </ul> <p>When this operation is successful, the CMK's key state changes from <code>PendingImport</code> to <code>Enabled</code>, and you can use the CMK. After you successfully import key material into a CMK, you can reimport the same key material into that CMK, but you cannot import different key material.</p>
     fn import_key_material(
         &self,
-        input: &ImportKeyMaterialRequest,
+        input: ImportKeyMaterialRequest,
     ) -> RusotoFuture<ImportKeyMaterialResponse, ImportKeyMaterialError>;
 
     /// <p>Gets a list of all aliases in the caller's AWS account and region. You cannot list aliases in other accounts. For more information about aliases, see <a>CreateAlias</a>.</p> <p>The response might include several aliases that do not have a <code>TargetKeyId</code> field because they are not associated with a CMK. These are predefined aliases that are reserved for CMKs managed by AWS services. If an alias is not associated with a CMK, the alias does not count against the <a href="http://docs.aws.amazon.com/kms/latest/developerguide/limits.html#aliases-limit">alias limit</a> for your account.</p>
     fn list_aliases(
         &self,
-        input: &ListAliasesRequest,
+        input: ListAliasesRequest,
     ) -> RusotoFuture<ListAliasesResponse, ListAliasesError>;
 
     /// <p>Gets a list of all grants for the specified customer master key (CMK).</p> <p>To perform this operation on a CMK in a different AWS account, specify the key ARN in the value of the KeyId parameter.</p>
     fn list_grants(
         &self,
-        input: &ListGrantsRequest,
+        input: ListGrantsRequest,
     ) -> RusotoFuture<ListGrantsResponse, ListGrantsError>;
 
     /// <p>Gets the names of the key policies that are attached to a customer master key (CMK). This operation is designed to get policy names that you can use in a <a>GetKeyPolicy</a> operation. However, the only valid policy name is <code>default</code>. You cannot perform this operation on a CMK in a different AWS account.</p>
     fn list_key_policies(
         &self,
-        input: &ListKeyPoliciesRequest,
+        input: ListKeyPoliciesRequest,
     ) -> RusotoFuture<ListKeyPoliciesResponse, ListKeyPoliciesError>;
 
     /// <p>Gets a list of all customer master keys (CMKs) in the caller's AWS account and region.</p>
-    fn list_keys(&self, input: &ListKeysRequest) -> RusotoFuture<ListKeysResponse, ListKeysError>;
+    fn list_keys(&self, input: ListKeysRequest) -> RusotoFuture<ListKeysResponse, ListKeysError>;
 
     /// <p>Returns a list of all tags for the specified customer master key (CMK).</p> <p>You cannot perform this operation on a CMK in a different AWS account.</p>
     fn list_resource_tags(
         &self,
-        input: &ListResourceTagsRequest,
+        input: ListResourceTagsRequest,
     ) -> RusotoFuture<ListResourceTagsResponse, ListResourceTagsError>;
 
     /// <p>Returns a list of all grants for which the grant's <code>RetiringPrincipal</code> matches the one specified.</p> <p>A typical use is to list all grants that you are able to retire. To retire a grant, use <a>RetireGrant</a>.</p>
     fn list_retirable_grants(
         &self,
-        input: &ListRetirableGrantsRequest,
+        input: ListRetirableGrantsRequest,
     ) -> RusotoFuture<ListGrantsResponse, ListRetirableGrantsError>;
 
     /// <p>Attaches a key policy to the specified customer master key (CMK). You cannot perform this operation on a CMK in a different AWS account.</p> <p>For more information about key policies, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-policies.html">Key Policies</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
-    fn put_key_policy(&self, input: &PutKeyPolicyRequest) -> RusotoFuture<(), PutKeyPolicyError>;
+    fn put_key_policy(&self, input: PutKeyPolicyRequest) -> RusotoFuture<(), PutKeyPolicyError>;
 
     /// <p>Encrypts data on the server side with a new customer master key (CMK) without exposing the plaintext of the data on the client side. The data is first decrypted and then reencrypted. You can also use this operation to change the encryption context of a ciphertext. </p> <p>You can reencrypt data using CMKs in different AWS accounts.</p> <p>Unlike other operations, <code>ReEncrypt</code> is authorized twice, once as <code>ReEncryptFrom</code> on the source CMK and once as <code>ReEncryptTo</code> on the destination CMK. We recommend that you include the <code>"kms:ReEncrypt*"</code> permission in your <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-policies.html">key policies</a> to permit reencryption from or to the CMK. This permission is automatically included in the key policy when you create a CMK through the console, but you must include it manually when you create a CMK programmatically or when you set a key policy with the <a>PutKeyPolicy</a> operation.</p>
     fn re_encrypt(
         &self,
-        input: &ReEncryptRequest,
+        input: ReEncryptRequest,
     ) -> RusotoFuture<ReEncryptResponse, ReEncryptError>;
 
     /// <p>Retires a grant. To clean up, you can retire a grant when you're done using it. You should revoke a grant when you intend to actively deny operations that depend on it. The following are permitted to call this API:</p> <ul> <li> <p>The AWS account (root user) under which the grant was created</p> </li> <li> <p>The <code>RetiringPrincipal</code>, if present in the grant</p> </li> <li> <p>The <code>GranteePrincipal</code>, if <code>RetireGrant</code> is an operation specified in the grant</p> </li> </ul> <p>You must identify the grant to retire by its grant token or by a combination of the grant ID and the Amazon Resource Name (ARN) of the customer master key (CMK). A grant token is a unique variable-length base64-encoded string. A grant ID is a 64 character unique identifier of a grant. The <a>CreateGrant</a> operation returns both.</p>
-    fn retire_grant(&self, input: &RetireGrantRequest) -> RusotoFuture<(), RetireGrantError>;
+    fn retire_grant(&self, input: RetireGrantRequest) -> RusotoFuture<(), RetireGrantError>;
 
     /// <p>Revokes the specified grant for the specified customer master key (CMK). You can revoke a grant to actively deny operations that depend on it.</p> <p>To perform this operation on a CMK in a different AWS account, specify the key ARN in the value of the KeyId parameter.</p>
-    fn revoke_grant(&self, input: &RevokeGrantRequest) -> RusotoFuture<(), RevokeGrantError>;
+    fn revoke_grant(&self, input: RevokeGrantRequest) -> RusotoFuture<(), RevokeGrantError>;
 
     /// <p>Schedules the deletion of a customer master key (CMK). You may provide a waiting period, specified in days, before deletion occurs. If you do not provide a waiting period, the default period of 30 days is used. When this operation is successful, the state of the CMK changes to <code>PendingDeletion</code>. Before the waiting period ends, you can use <a>CancelKeyDeletion</a> to cancel the deletion of the CMK. After the waiting period ends, AWS KMS deletes the CMK and all AWS KMS data associated with it, including all aliases that refer to it.</p> <p>You cannot perform this operation on a CMK in a different AWS account.</p> <important> <p>Deleting a CMK is a destructive and potentially dangerous operation. When a CMK is deleted, all data that was encrypted under the CMK is rendered unrecoverable. To restrict the use of a CMK without deleting it, use <a>DisableKey</a>.</p> </important> <p>For more information about scheduling a CMK for deletion, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/deleting-keys.html">Deleting Customer Master Keys</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
     fn schedule_key_deletion(
         &self,
-        input: &ScheduleKeyDeletionRequest,
+        input: ScheduleKeyDeletionRequest,
     ) -> RusotoFuture<ScheduleKeyDeletionResponse, ScheduleKeyDeletionError>;
 
     /// <p>Adds or overwrites one or more tags for the specified customer master key (CMK). You cannot perform this operation on a CMK in a different AWS account.</p> <p>Each tag consists of a tag key and a tag value. Tag keys and tag values are both required, but tag values can be empty (null) strings.</p> <p>You cannot use the same tag key more than once per CMK. For example, consider a CMK with one tag whose tag key is <code>Purpose</code> and tag value is <code>Test</code>. If you send a <code>TagResource</code> request for this CMK with a tag key of <code>Purpose</code> and a tag value of <code>Prod</code>, it does not create a second tag. Instead, the original tag is overwritten with the new tag value.</p> <p>For information about the rules that apply to tag keys and tag values, see <a href="http://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/allocation-tag-restrictions.html">User-Defined Tag Restrictions</a> in the <i>AWS Billing and Cost Management User Guide</i>.</p>
-    fn tag_resource(&self, input: &TagResourceRequest) -> RusotoFuture<(), TagResourceError>;
+    fn tag_resource(&self, input: TagResourceRequest) -> RusotoFuture<(), TagResourceError>;
 
     /// <p>Removes the specified tag or tags from the specified customer master key (CMK). You cannot perform this operation on a CMK in a different AWS account.</p> <p>To remove a tag, you specify the tag key for each tag to remove. You do not specify the tag value. To overwrite the tag value for an existing tag, use <a>TagResource</a>.</p>
-    fn untag_resource(&self, input: &UntagResourceRequest) -> RusotoFuture<(), UntagResourceError>;
+    fn untag_resource(&self, input: UntagResourceRequest) -> RusotoFuture<(), UntagResourceError>;
 
     /// <p>Associates an existing alias with a different customer master key (CMK). Each CMK can have multiple aliases, but the aliases must be unique within the account and region. You cannot perform this operation on an alias in a different AWS account.</p> <p>This operation works only on existing aliases. To change the alias of a CMK to a new value, use <a>CreateAlias</a> to create a new alias and <a>DeleteAlias</a> to delete the old alias.</p> <p>Because an alias is not a property of a CMK, you can create, update, and delete the aliases of a CMK without affecting the CMK. Also, aliases do not appear in the response from the <a>DescribeKey</a> operation. To get the aliases of all CMKs in the account, use the <a>ListAliases</a> operation. </p> <p>An alias name can contain only alphanumeric characters, forward slashes (/), underscores (_), and dashes (-). An alias must start with the word <code>alias</code> followed by a forward slash (<code>alias/</code>). The alias name can contain only alphanumeric characters, forward slashes (/), underscores (_), and dashes (-). Alias names cannot begin with <code>aws</code>; that alias name prefix is reserved by Amazon Web Services (AWS).</p>
-    fn update_alias(&self, input: &UpdateAliasRequest) -> RusotoFuture<(), UpdateAliasError>;
+    fn update_alias(&self, input: UpdateAliasRequest) -> RusotoFuture<(), UpdateAliasError>;
 
     /// <p>Updates the description of a customer master key (CMK). To see the decription of a CMK, use <a>DescribeKey</a>. </p> <p>You cannot perform this operation on a CMK in a different AWS account.</p>
     fn update_key_description(
         &self,
-        input: &UpdateKeyDescriptionRequest,
+        input: UpdateKeyDescriptionRequest,
     ) -> RusotoFuture<(), UpdateKeyDescriptionError>;
 }
 /// A client for the KMS API.
@@ -4871,13 +4913,13 @@ where
     /// <p>Cancels the deletion of a customer master key (CMK). When this operation is successful, the CMK is set to the <code>Disabled</code> state. To enable a CMK, use <a>EnableKey</a>. You cannot perform this operation on a CMK in a different AWS account.</p> <p>For more information about scheduling and canceling deletion of a CMK, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/deleting-keys.html">Deleting Customer Master Keys</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
     fn cancel_key_deletion(
         &self,
-        input: &CancelKeyDeletionRequest,
+        input: CancelKeyDeletionRequest,
     ) -> RusotoFuture<CancelKeyDeletionResponse, CancelKeyDeletionError> {
         let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "TrentService.CancelKeyDeletion");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -4906,12 +4948,12 @@ where
     }
 
     /// <p>Creates a display name for a customer master key (CMK). You can use an alias to identify a CMK in selected operations, such as <a>Encrypt</a> and <a>GenerateDataKey</a>. </p> <p>Each CMK can have multiple aliases, but each alias points to only one CMK. The alias name must be unique in the AWS account and region. To simplify code that runs in multiple regions, use the same alias name, but point it to a different CMK in each region. </p> <p>Because an alias is not a property of a CMK, you can delete and change the aliases of a CMK without affecting the CMK. Also, aliases do not appear in the response from the <a>DescribeKey</a> operation. To get the aliases of all CMKs, use the <a>ListAliases</a> operation.</p> <p>An alias must start with the word <code>alias</code> followed by a forward slash (<code>alias/</code>). The alias name can contain only alphanumeric characters, forward slashes (/), underscores (_), and dashes (-). Alias names cannot begin with <code>aws</code>; that alias name prefix is reserved by Amazon Web Services (AWS).</p> <p>The alias and the CMK it is mapped to must be in the same AWS account and the same region. You cannot perform this operation on an alias in a different AWS account.</p> <p>To map an existing alias to a different CMK, call <a>UpdateAlias</a>.</p>
-    fn create_alias(&self, input: &CreateAliasRequest) -> RusotoFuture<(), CreateAliasError> {
+    fn create_alias(&self, input: CreateAliasRequest) -> RusotoFuture<(), CreateAliasError> {
         let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "TrentService.CreateAlias");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -4932,13 +4974,13 @@ where
     /// <p>Adds a grant to a customer master key (CMK). The grant specifies who can use the CMK and under what conditions. When setting permissions, grants are an alternative to key policies. </p> <p>To perform this operation on a CMK in a different AWS account, specify the key ARN in the value of the KeyId parameter. For more information about grants, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/grants.html">Grants</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
     fn create_grant(
         &self,
-        input: &CreateGrantRequest,
+        input: CreateGrantRequest,
     ) -> RusotoFuture<CreateGrantResponse, CreateGrantError> {
         let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "TrentService.CreateGrant");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -4969,13 +5011,13 @@ where
     /// <p>Creates a customer master key (CMK) in the caller's AWS account.</p> <p>You can use a CMK to encrypt small amounts of data (4 KiB or less) directly, but CMKs are more commonly used to encrypt data encryption keys (DEKs), which are used to encrypt raw data. For more information about DEKs and the difference between CMKs and DEKs, see the following:</p> <ul> <li> <p>The <a>GenerateDataKey</a> operation</p> </li> <li> <p> <a href="http://docs.aws.amazon.com/kms/latest/developerguide/concepts.html">AWS Key Management Service Concepts</a> in the <i>AWS Key Management Service Developer Guide</i> </p> </li> </ul> <p>You cannot use this operation to create a CMK in a different AWS account.</p>
     fn create_key(
         &self,
-        input: &CreateKeyRequest,
+        input: CreateKeyRequest,
     ) -> RusotoFuture<CreateKeyResponse, CreateKeyError> {
         let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "TrentService.CreateKey");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -5004,12 +5046,12 @@ where
     }
 
     /// <p>Decrypts ciphertext. Ciphertext is plaintext that has been previously encrypted by using any of the following operations:</p> <ul> <li> <p> <a>GenerateDataKey</a> </p> </li> <li> <p> <a>GenerateDataKeyWithoutPlaintext</a> </p> </li> <li> <p> <a>Encrypt</a> </p> </li> </ul> <p>Note that if a caller has been granted access permissions to all keys (through, for example, IAM user policies that grant <code>Decrypt</code> permission on all resources), then ciphertext encrypted by using keys in other accounts where the key grants access to the caller can be decrypted. To remedy this, we recommend that you do not grant <code>Decrypt</code> access in an IAM user policy. Instead grant <code>Decrypt</code> access only in key policies. If you must grant <code>Decrypt</code> access in an IAM user policy, you should scope the resource to specific keys or to specific trusted accounts.</p>
-    fn decrypt(&self, input: &DecryptRequest) -> RusotoFuture<DecryptResponse, DecryptError> {
+    fn decrypt(&self, input: DecryptRequest) -> RusotoFuture<DecryptResponse, DecryptError> {
         let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "TrentService.Decrypt");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -5038,12 +5080,12 @@ where
     }
 
     /// <p>Deletes the specified alias. You cannot perform this operation on an alias in a different AWS account. </p> <p>Because an alias is not a property of a CMK, you can delete and change the aliases of a CMK without affecting the CMK. Also, aliases do not appear in the response from the <a>DescribeKey</a> operation. To get the aliases of all CMKs, use the <a>ListAliases</a> operation. </p> <p>Each CMK can have multiple aliases. To change the alias of a CMK, use <a>DeleteAlias</a> to delete the current alias and <a>CreateAlias</a> to create a new alias. To associate an existing alias with a different customer master key (CMK), call <a>UpdateAlias</a>.</p>
-    fn delete_alias(&self, input: &DeleteAliasRequest) -> RusotoFuture<(), DeleteAliasError> {
+    fn delete_alias(&self, input: DeleteAliasRequest) -> RusotoFuture<(), DeleteAliasError> {
         let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "TrentService.DeleteAlias");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -5064,13 +5106,13 @@ where
     /// <p>Deletes key material that you previously imported. This operation makes the specified customer master key (CMK) unusable. For more information about importing key material into AWS KMS, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/importing-keys.html">Importing Key Material</a> in the <i>AWS Key Management Service Developer Guide</i>. You cannot perform this operation on a CMK in a different AWS account.</p> <p>When the specified CMK is in the <code>PendingDeletion</code> state, this operation does not change the CMK's state. Otherwise, it changes the CMK's state to <code>PendingImport</code>.</p> <p>After you delete key material, you can use <a>ImportKeyMaterial</a> to reimport the same key material into the CMK.</p>
     fn delete_imported_key_material(
         &self,
-        input: &DeleteImportedKeyMaterialRequest,
+        input: DeleteImportedKeyMaterialRequest,
     ) -> RusotoFuture<(), DeleteImportedKeyMaterialError> {
         let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "TrentService.DeleteImportedKeyMaterial");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -5091,13 +5133,13 @@ where
     /// <p>Provides detailed information about the specified customer master key (CMK).</p> <p>To perform this operation on a CMK in a different AWS account, specify the key ARN or alias ARN in the value of the KeyId parameter.</p>
     fn describe_key(
         &self,
-        input: &DescribeKeyRequest,
+        input: DescribeKeyRequest,
     ) -> RusotoFuture<DescribeKeyResponse, DescribeKeyError> {
         let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "TrentService.DescribeKey");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -5126,12 +5168,12 @@ where
     }
 
     /// <p>Sets the state of a customer master key (CMK) to disabled, thereby preventing its use for cryptographic operations. You cannot perform this operation on a CMK in a different AWS account.</p> <p>For more information about how key state affects the use of a CMK, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects the Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
-    fn disable_key(&self, input: &DisableKeyRequest) -> RusotoFuture<(), DisableKeyError> {
+    fn disable_key(&self, input: DisableKeyRequest) -> RusotoFuture<(), DisableKeyError> {
         let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "TrentService.DisableKey");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -5152,13 +5194,13 @@ where
     /// <p>Disables automatic rotation of the key material for the specified customer master key (CMK). You cannot perform this operation on a CMK in a different AWS account.</p>
     fn disable_key_rotation(
         &self,
-        input: &DisableKeyRotationRequest,
+        input: DisableKeyRotationRequest,
     ) -> RusotoFuture<(), DisableKeyRotationError> {
         let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "TrentService.DisableKeyRotation");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -5177,12 +5219,12 @@ where
     }
 
     /// <p>Sets the state of a customer master key (CMK) to enabled, thereby permitting its use for cryptographic operations. You cannot perform this operation on a CMK in a different AWS account.</p>
-    fn enable_key(&self, input: &EnableKeyRequest) -> RusotoFuture<(), EnableKeyError> {
+    fn enable_key(&self, input: EnableKeyRequest) -> RusotoFuture<(), EnableKeyError> {
         let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "TrentService.EnableKey");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -5203,13 +5245,13 @@ where
     /// <p>Enables automatic rotation of the key material for the specified customer master key (CMK). You cannot perform this operation on a CMK in a different AWS account.</p>
     fn enable_key_rotation(
         &self,
-        input: &EnableKeyRotationRequest,
+        input: EnableKeyRotationRequest,
     ) -> RusotoFuture<(), EnableKeyRotationError> {
         let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "TrentService.EnableKeyRotation");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -5228,12 +5270,12 @@ where
     }
 
     /// <p>Encrypts plaintext into ciphertext by using a customer master key (CMK). The <code>Encrypt</code> operation has two primary use cases:</p> <ul> <li> <p>You can encrypt up to 4 kilobytes (4096 bytes) of arbitrary data such as an RSA key, a database password, or other sensitive information.</p> </li> <li> <p>To move encrypted data from one AWS region to another, you can use this operation to encrypt in the new region the plaintext data key that was used to encrypt the data in the original region. This provides you with an encrypted copy of the data key that can be decrypted in the new region and used there to decrypt the encrypted data.</p> </li> </ul> <p>To perform this operation on a CMK in a different AWS account, specify the key ARN or alias ARN in the value of the KeyId parameter.</p> <p>Unless you are moving encrypted data from one region to another, you don't use this operation to encrypt a generated data key within a region. To get data keys that are already encrypted, call the <a>GenerateDataKey</a> or <a>GenerateDataKeyWithoutPlaintext</a> operation. Data keys don't need to be encrypted again by calling <code>Encrypt</code>.</p> <p>To encrypt data locally in your application, use the <a>GenerateDataKey</a> operation to return a plaintext data encryption key and a copy of the key encrypted under the CMK of your choosing.</p>
-    fn encrypt(&self, input: &EncryptRequest) -> RusotoFuture<EncryptResponse, EncryptError> {
+    fn encrypt(&self, input: EncryptRequest) -> RusotoFuture<EncryptResponse, EncryptError> {
         let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "TrentService.Encrypt");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -5264,13 +5306,13 @@ where
     /// <p>Returns a data encryption key that you can use in your application to encrypt data locally. </p> <p>You must specify the customer master key (CMK) under which to generate the data key. You must also specify the length of the data key using either the <code>KeySpec</code> or <code>NumberOfBytes</code> field. You must specify one field or the other, but not both. For common key lengths (128-bit and 256-bit symmetric keys), we recommend that you use <code>KeySpec</code>. To perform this operation on a CMK in a different AWS account, specify the key ARN or alias ARN in the value of the KeyId parameter.</p> <p>This operation returns a plaintext copy of the data key in the <code>Plaintext</code> field of the response, and an encrypted copy of the data key in the <code>CiphertextBlob</code> field. The data key is encrypted under the CMK specified in the <code>KeyId</code> field of the request. </p> <p>We recommend that you use the following pattern to encrypt data locally in your application:</p> <ol> <li> <p>Use this operation (<code>GenerateDataKey</code>) to get a data encryption key.</p> </li> <li> <p>Use the plaintext data encryption key (returned in the <code>Plaintext</code> field of the response) to encrypt data locally, then erase the plaintext data key from memory.</p> </li> <li> <p>Store the encrypted data key (returned in the <code>CiphertextBlob</code> field of the response) alongside the locally encrypted data.</p> </li> </ol> <p>To decrypt data locally:</p> <ol> <li> <p>Use the <a>Decrypt</a> operation to decrypt the encrypted data key into a plaintext copy of the data key.</p> </li> <li> <p>Use the plaintext data key to decrypt data locally, then erase the plaintext data key from memory.</p> </li> </ol> <p>To return only an encrypted copy of the data key, use <a>GenerateDataKeyWithoutPlaintext</a>. To return a random byte string that is cryptographically secure, use <a>GenerateRandom</a>.</p> <p>If you use the optional <code>EncryptionContext</code> field, you must store at least enough information to be able to reconstruct the full encryption context when you later send the ciphertext to the <a>Decrypt</a> operation. It is a good practice to choose an encryption context that you can reconstruct on the fly to better secure the ciphertext. For more information, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/encryption-context.html">Encryption Context</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
     fn generate_data_key(
         &self,
-        input: &GenerateDataKeyRequest,
+        input: GenerateDataKeyRequest,
     ) -> RusotoFuture<GenerateDataKeyResponse, GenerateDataKeyError> {
         let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "TrentService.GenerateDataKey");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -5301,7 +5343,7 @@ where
     /// <p>Returns a data encryption key encrypted under a customer master key (CMK). This operation is identical to <a>GenerateDataKey</a> but returns only the encrypted copy of the data key. </p> <p>To perform this operation on a CMK in a different AWS account, specify the key ARN or alias ARN in the value of the KeyId parameter.</p> <p>This operation is useful in a system that has multiple components with different degrees of trust. For example, consider a system that stores encrypted data in containers. Each container stores the encrypted data and an encrypted copy of the data key. One component of the system, called the <i>control plane</i>, creates new containers. When it creates a new container, it uses this operation (<code>GenerateDataKeyWithoutPlaintext</code>) to get an encrypted data key and then stores it in the container. Later, a different component of the system, called the <i>data plane</i>, puts encrypted data into the containers. To do this, it passes the encrypted data key to the <a>Decrypt</a> operation, then uses the returned plaintext data key to encrypt data, and finally stores the encrypted data in the container. In this system, the control plane never sees the plaintext data key.</p>
     fn generate_data_key_without_plaintext(
         &self,
-        input: &GenerateDataKeyWithoutPlaintextRequest,
+        input: GenerateDataKeyWithoutPlaintextRequest,
     ) -> RusotoFuture<GenerateDataKeyWithoutPlaintextResponse, GenerateDataKeyWithoutPlaintextError>
     {
         let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
@@ -5311,7 +5353,7 @@ where
             "x-amz-target",
             "TrentService.GenerateDataKeyWithoutPlaintext",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -5342,13 +5384,13 @@ where
     /// <p>Returns a random byte string that is cryptographically secure.</p> <p>For more information about entropy and random number generation, see the <a href="https://d0.awsstatic.com/whitepapers/KMS-Cryptographic-Details.pdf">AWS Key Management Service Cryptographic Details</a> whitepaper.</p>
     fn generate_random(
         &self,
-        input: &GenerateRandomRequest,
+        input: GenerateRandomRequest,
     ) -> RusotoFuture<GenerateRandomResponse, GenerateRandomError> {
         let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "TrentService.GenerateRandom");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -5379,13 +5421,13 @@ where
     /// <p>Gets a key policy attached to the specified customer master key (CMK). You cannot perform this operation on a CMK in a different AWS account.</p>
     fn get_key_policy(
         &self,
-        input: &GetKeyPolicyRequest,
+        input: GetKeyPolicyRequest,
     ) -> RusotoFuture<GetKeyPolicyResponse, GetKeyPolicyError> {
         let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "TrentService.GetKeyPolicy");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -5416,13 +5458,13 @@ where
     /// <p>Gets a Boolean value that indicates whether automatic rotation of the key material is enabled for the specified customer master key (CMK).</p> <p>To perform this operation on a CMK in a different AWS account, specify the key ARN in the value of the KeyId parameter.</p>
     fn get_key_rotation_status(
         &self,
-        input: &GetKeyRotationStatusRequest,
+        input: GetKeyRotationStatusRequest,
     ) -> RusotoFuture<GetKeyRotationStatusResponse, GetKeyRotationStatusError> {
         let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "TrentService.GetKeyRotationStatus");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -5453,13 +5495,13 @@ where
     /// <p>Returns the items you need in order to import key material into AWS KMS from your existing key management infrastructure. For more information about importing key material into AWS KMS, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/importing-keys.html">Importing Key Material</a> in the <i>AWS Key Management Service Developer Guide</i>.</p> <p>You must specify the key ID of the customer master key (CMK) into which you will import key material. This CMK's <code>Origin</code> must be <code>EXTERNAL</code>. You must also specify the wrapping algorithm and type of wrapping key (public key) that you will use to encrypt the key material. You cannot perform this operation on a CMK in a different AWS account.</p> <p>This operation returns a public key and an import token. Use the public key to encrypt the key material. Store the import token to send with a subsequent <a>ImportKeyMaterial</a> request. The public key and import token from the same response must be used together. These items are valid for 24 hours. When they expire, they cannot be used for a subsequent <a>ImportKeyMaterial</a> request. To get new ones, send another <code>GetParametersForImport</code> request.</p>
     fn get_parameters_for_import(
         &self,
-        input: &GetParametersForImportRequest,
+        input: GetParametersForImportRequest,
     ) -> RusotoFuture<GetParametersForImportResponse, GetParametersForImportError> {
         let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "TrentService.GetParametersForImport");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -5490,13 +5532,13 @@ where
     /// <p>Imports key material into an existing AWS KMS customer master key (CMK) that was created without key material. You cannot perform this operation on a CMK in a different AWS account. For more information about creating CMKs with no key material and then importing key material, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/importing-keys.html">Importing Key Material</a> in the <i>AWS Key Management Service Developer Guide</i>.</p> <p>Before using this operation, call <a>GetParametersForImport</a>. Its response includes a public key and an import token. Use the public key to encrypt the key material. Then, submit the import token from the same <code>GetParametersForImport</code> response.</p> <p>When calling this operation, you must specify the following values:</p> <ul> <li> <p>The key ID or key ARN of a CMK with no key material. Its <code>Origin</code> must be <code>EXTERNAL</code>.</p> <p>To create a CMK with no key material, call <a>CreateKey</a> and set the value of its <code>Origin</code> parameter to <code>EXTERNAL</code>. To get the <code>Origin</code> of a CMK, call <a>DescribeKey</a>.)</p> </li> <li> <p>The encrypted key material. To get the public key to encrypt the key material, call <a>GetParametersForImport</a>.</p> </li> <li> <p>The import token that <a>GetParametersForImport</a> returned. This token and the public key used to encrypt the key material must have come from the same response.</p> </li> <li> <p>Whether the key material expires and if so, when. If you set an expiration date, you can change it only by reimporting the same key material and specifying a new expiration date. If the key material expires, AWS KMS deletes the key material and the CMK becomes unusable. To use the CMK again, you must reimport the same key material.</p> </li> </ul> <p>When this operation is successful, the CMK's key state changes from <code>PendingImport</code> to <code>Enabled</code>, and you can use the CMK. After you successfully import key material into a CMK, you can reimport the same key material into that CMK, but you cannot import different key material.</p>
     fn import_key_material(
         &self,
-        input: &ImportKeyMaterialRequest,
+        input: ImportKeyMaterialRequest,
     ) -> RusotoFuture<ImportKeyMaterialResponse, ImportKeyMaterialError> {
         let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "TrentService.ImportKeyMaterial");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -5527,13 +5569,13 @@ where
     /// <p>Gets a list of all aliases in the caller's AWS account and region. You cannot list aliases in other accounts. For more information about aliases, see <a>CreateAlias</a>.</p> <p>The response might include several aliases that do not have a <code>TargetKeyId</code> field because they are not associated with a CMK. These are predefined aliases that are reserved for CMKs managed by AWS services. If an alias is not associated with a CMK, the alias does not count against the <a href="http://docs.aws.amazon.com/kms/latest/developerguide/limits.html#aliases-limit">alias limit</a> for your account.</p>
     fn list_aliases(
         &self,
-        input: &ListAliasesRequest,
+        input: ListAliasesRequest,
     ) -> RusotoFuture<ListAliasesResponse, ListAliasesError> {
         let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "TrentService.ListAliases");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -5564,13 +5606,13 @@ where
     /// <p>Gets a list of all grants for the specified customer master key (CMK).</p> <p>To perform this operation on a CMK in a different AWS account, specify the key ARN in the value of the KeyId parameter.</p>
     fn list_grants(
         &self,
-        input: &ListGrantsRequest,
+        input: ListGrantsRequest,
     ) -> RusotoFuture<ListGrantsResponse, ListGrantsError> {
         let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "TrentService.ListGrants");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -5601,13 +5643,13 @@ where
     /// <p>Gets the names of the key policies that are attached to a customer master key (CMK). This operation is designed to get policy names that you can use in a <a>GetKeyPolicy</a> operation. However, the only valid policy name is <code>default</code>. You cannot perform this operation on a CMK in a different AWS account.</p>
     fn list_key_policies(
         &self,
-        input: &ListKeyPoliciesRequest,
+        input: ListKeyPoliciesRequest,
     ) -> RusotoFuture<ListKeyPoliciesResponse, ListKeyPoliciesError> {
         let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "TrentService.ListKeyPolicies");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -5636,12 +5678,12 @@ where
     }
 
     /// <p>Gets a list of all customer master keys (CMKs) in the caller's AWS account and region.</p>
-    fn list_keys(&self, input: &ListKeysRequest) -> RusotoFuture<ListKeysResponse, ListKeysError> {
+    fn list_keys(&self, input: ListKeysRequest) -> RusotoFuture<ListKeysResponse, ListKeysError> {
         let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "TrentService.ListKeys");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -5672,13 +5714,13 @@ where
     /// <p>Returns a list of all tags for the specified customer master key (CMK).</p> <p>You cannot perform this operation on a CMK in a different AWS account.</p>
     fn list_resource_tags(
         &self,
-        input: &ListResourceTagsRequest,
+        input: ListResourceTagsRequest,
     ) -> RusotoFuture<ListResourceTagsResponse, ListResourceTagsError> {
         let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "TrentService.ListResourceTags");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -5709,13 +5751,13 @@ where
     /// <p>Returns a list of all grants for which the grant's <code>RetiringPrincipal</code> matches the one specified.</p> <p>A typical use is to list all grants that you are able to retire. To retire a grant, use <a>RetireGrant</a>.</p>
     fn list_retirable_grants(
         &self,
-        input: &ListRetirableGrantsRequest,
+        input: ListRetirableGrantsRequest,
     ) -> RusotoFuture<ListGrantsResponse, ListRetirableGrantsError> {
         let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "TrentService.ListRetirableGrants");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -5744,12 +5786,12 @@ where
     }
 
     /// <p>Attaches a key policy to the specified customer master key (CMK). You cannot perform this operation on a CMK in a different AWS account.</p> <p>For more information about key policies, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-policies.html">Key Policies</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
-    fn put_key_policy(&self, input: &PutKeyPolicyRequest) -> RusotoFuture<(), PutKeyPolicyError> {
+    fn put_key_policy(&self, input: PutKeyPolicyRequest) -> RusotoFuture<(), PutKeyPolicyError> {
         let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "TrentService.PutKeyPolicy");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -5770,13 +5812,13 @@ where
     /// <p>Encrypts data on the server side with a new customer master key (CMK) without exposing the plaintext of the data on the client side. The data is first decrypted and then reencrypted. You can also use this operation to change the encryption context of a ciphertext. </p> <p>You can reencrypt data using CMKs in different AWS accounts.</p> <p>Unlike other operations, <code>ReEncrypt</code> is authorized twice, once as <code>ReEncryptFrom</code> on the source CMK and once as <code>ReEncryptTo</code> on the destination CMK. We recommend that you include the <code>"kms:ReEncrypt*"</code> permission in your <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-policies.html">key policies</a> to permit reencryption from or to the CMK. This permission is automatically included in the key policy when you create a CMK through the console, but you must include it manually when you create a CMK programmatically or when you set a key policy with the <a>PutKeyPolicy</a> operation.</p>
     fn re_encrypt(
         &self,
-        input: &ReEncryptRequest,
+        input: ReEncryptRequest,
     ) -> RusotoFuture<ReEncryptResponse, ReEncryptError> {
         let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "TrentService.ReEncrypt");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -5805,12 +5847,12 @@ where
     }
 
     /// <p>Retires a grant. To clean up, you can retire a grant when you're done using it. You should revoke a grant when you intend to actively deny operations that depend on it. The following are permitted to call this API:</p> <ul> <li> <p>The AWS account (root user) under which the grant was created</p> </li> <li> <p>The <code>RetiringPrincipal</code>, if present in the grant</p> </li> <li> <p>The <code>GranteePrincipal</code>, if <code>RetireGrant</code> is an operation specified in the grant</p> </li> </ul> <p>You must identify the grant to retire by its grant token or by a combination of the grant ID and the Amazon Resource Name (ARN) of the customer master key (CMK). A grant token is a unique variable-length base64-encoded string. A grant ID is a 64 character unique identifier of a grant. The <a>CreateGrant</a> operation returns both.</p>
-    fn retire_grant(&self, input: &RetireGrantRequest) -> RusotoFuture<(), RetireGrantError> {
+    fn retire_grant(&self, input: RetireGrantRequest) -> RusotoFuture<(), RetireGrantError> {
         let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "TrentService.RetireGrant");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -5829,12 +5871,12 @@ where
     }
 
     /// <p>Revokes the specified grant for the specified customer master key (CMK). You can revoke a grant to actively deny operations that depend on it.</p> <p>To perform this operation on a CMK in a different AWS account, specify the key ARN in the value of the KeyId parameter.</p>
-    fn revoke_grant(&self, input: &RevokeGrantRequest) -> RusotoFuture<(), RevokeGrantError> {
+    fn revoke_grant(&self, input: RevokeGrantRequest) -> RusotoFuture<(), RevokeGrantError> {
         let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "TrentService.RevokeGrant");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -5855,13 +5897,13 @@ where
     /// <p>Schedules the deletion of a customer master key (CMK). You may provide a waiting period, specified in days, before deletion occurs. If you do not provide a waiting period, the default period of 30 days is used. When this operation is successful, the state of the CMK changes to <code>PendingDeletion</code>. Before the waiting period ends, you can use <a>CancelKeyDeletion</a> to cancel the deletion of the CMK. After the waiting period ends, AWS KMS deletes the CMK and all AWS KMS data associated with it, including all aliases that refer to it.</p> <p>You cannot perform this operation on a CMK in a different AWS account.</p> <important> <p>Deleting a CMK is a destructive and potentially dangerous operation. When a CMK is deleted, all data that was encrypted under the CMK is rendered unrecoverable. To restrict the use of a CMK without deleting it, use <a>DisableKey</a>.</p> </important> <p>For more information about scheduling a CMK for deletion, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/deleting-keys.html">Deleting Customer Master Keys</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
     fn schedule_key_deletion(
         &self,
-        input: &ScheduleKeyDeletionRequest,
+        input: ScheduleKeyDeletionRequest,
     ) -> RusotoFuture<ScheduleKeyDeletionResponse, ScheduleKeyDeletionError> {
         let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "TrentService.ScheduleKeyDeletion");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -5890,12 +5932,12 @@ where
     }
 
     /// <p>Adds or overwrites one or more tags for the specified customer master key (CMK). You cannot perform this operation on a CMK in a different AWS account.</p> <p>Each tag consists of a tag key and a tag value. Tag keys and tag values are both required, but tag values can be empty (null) strings.</p> <p>You cannot use the same tag key more than once per CMK. For example, consider a CMK with one tag whose tag key is <code>Purpose</code> and tag value is <code>Test</code>. If you send a <code>TagResource</code> request for this CMK with a tag key of <code>Purpose</code> and a tag value of <code>Prod</code>, it does not create a second tag. Instead, the original tag is overwritten with the new tag value.</p> <p>For information about the rules that apply to tag keys and tag values, see <a href="http://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/allocation-tag-restrictions.html">User-Defined Tag Restrictions</a> in the <i>AWS Billing and Cost Management User Guide</i>.</p>
-    fn tag_resource(&self, input: &TagResourceRequest) -> RusotoFuture<(), TagResourceError> {
+    fn tag_resource(&self, input: TagResourceRequest) -> RusotoFuture<(), TagResourceError> {
         let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "TrentService.TagResource");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -5914,12 +5956,12 @@ where
     }
 
     /// <p>Removes the specified tag or tags from the specified customer master key (CMK). You cannot perform this operation on a CMK in a different AWS account.</p> <p>To remove a tag, you specify the tag key for each tag to remove. You do not specify the tag value. To overwrite the tag value for an existing tag, use <a>TagResource</a>.</p>
-    fn untag_resource(&self, input: &UntagResourceRequest) -> RusotoFuture<(), UntagResourceError> {
+    fn untag_resource(&self, input: UntagResourceRequest) -> RusotoFuture<(), UntagResourceError> {
         let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "TrentService.UntagResource");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -5938,12 +5980,12 @@ where
     }
 
     /// <p>Associates an existing alias with a different customer master key (CMK). Each CMK can have multiple aliases, but the aliases must be unique within the account and region. You cannot perform this operation on an alias in a different AWS account.</p> <p>This operation works only on existing aliases. To change the alias of a CMK to a new value, use <a>CreateAlias</a> to create a new alias and <a>DeleteAlias</a> to delete the old alias.</p> <p>Because an alias is not a property of a CMK, you can create, update, and delete the aliases of a CMK without affecting the CMK. Also, aliases do not appear in the response from the <a>DescribeKey</a> operation. To get the aliases of all CMKs in the account, use the <a>ListAliases</a> operation. </p> <p>An alias name can contain only alphanumeric characters, forward slashes (/), underscores (_), and dashes (-). An alias must start with the word <code>alias</code> followed by a forward slash (<code>alias/</code>). The alias name can contain only alphanumeric characters, forward slashes (/), underscores (_), and dashes (-). Alias names cannot begin with <code>aws</code>; that alias name prefix is reserved by Amazon Web Services (AWS).</p>
-    fn update_alias(&self, input: &UpdateAliasRequest) -> RusotoFuture<(), UpdateAliasError> {
+    fn update_alias(&self, input: UpdateAliasRequest) -> RusotoFuture<(), UpdateAliasError> {
         let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "TrentService.UpdateAlias");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -5964,13 +6006,13 @@ where
     /// <p>Updates the description of a customer master key (CMK). To see the decription of a CMK, use <a>DescribeKey</a>. </p> <p>You cannot perform this operation on a CMK in a different AWS account.</p>
     fn update_key_description(
         &self,
-        input: &UpdateKeyDescriptionRequest,
+        input: UpdateKeyDescriptionRequest,
     ) -> RusotoFuture<(), UpdateKeyDescriptionError> {
         let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "TrentService.UpdateKeyDescription");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {

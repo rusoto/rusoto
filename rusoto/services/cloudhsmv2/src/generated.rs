@@ -18,18 +18,18 @@ use std::io;
 use futures::future;
 use futures::Future;
 use rusoto_core::reactor::{CredentialsProvider, RequestDispatcher};
-use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::region;
+use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::{ClientInner, RusotoFuture};
 
-use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
+use rusoto_core::request::HttpDispatchError;
 
-use serde_json;
-use rusoto_core::signature::SignedRequest;
-use serde_json::Value as SerdeJsonValue;
-use serde_json::from_str;
 use hyper::StatusCode;
+use rusoto_core::signature::SignedRequest;
+use serde_json;
+use serde_json::from_str;
+use serde_json::Value as SerdeJsonValue;
 /// <p>Contains information about a backup of an AWS CloudHSM cluster.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct Backup {
@@ -1415,58 +1415,58 @@ pub trait CloudHsmv2 {
     /// <p>Creates a new AWS CloudHSM cluster.</p>
     fn create_cluster(
         &self,
-        input: &CreateClusterRequest,
+        input: CreateClusterRequest,
     ) -> RusotoFuture<CreateClusterResponse, CreateClusterError>;
 
     /// <p>Creates a new hardware security module (HSM) in the specified AWS CloudHSM cluster.</p>
     fn create_hsm(
         &self,
-        input: &CreateHsmRequest,
+        input: CreateHsmRequest,
     ) -> RusotoFuture<CreateHsmResponse, CreateHsmError>;
 
     /// <p>Deletes the specified AWS CloudHSM cluster. Before you can delete a cluster, you must delete all HSMs in the cluster. To see if the cluster contains any HSMs, use <a>DescribeClusters</a>. To delete an HSM, use <a>DeleteHsm</a>.</p>
     fn delete_cluster(
         &self,
-        input: &DeleteClusterRequest,
+        input: DeleteClusterRequest,
     ) -> RusotoFuture<DeleteClusterResponse, DeleteClusterError>;
 
     /// <p>Deletes the specified HSM. To specify an HSM, you can use its identifier (ID), the IP address of the HSM's elastic network interface (ENI), or the ID of the HSM's ENI. You need to specify only one of these values. To find these values, use <a>DescribeClusters</a>.</p>
     fn delete_hsm(
         &self,
-        input: &DeleteHsmRequest,
+        input: DeleteHsmRequest,
     ) -> RusotoFuture<DeleteHsmResponse, DeleteHsmError>;
 
     /// <p>Gets information about backups of AWS CloudHSM clusters.</p> <p>This is a paginated operation, which means that each response might contain only a subset of all the backups. When the response contains only a subset of backups, it includes a <code>NextToken</code> value. Use this value in a subsequent <code>DescribeBackups</code> request to get more backups. When you receive a response with no <code>NextToken</code> (or an empty or null value), that means there are no more backups to get.</p>
     fn describe_backups(
         &self,
-        input: &DescribeBackupsRequest,
+        input: DescribeBackupsRequest,
     ) -> RusotoFuture<DescribeBackupsResponse, DescribeBackupsError>;
 
     /// <p>Gets information about AWS CloudHSM clusters.</p> <p>This is a paginated operation, which means that each response might contain only a subset of all the clusters. When the response contains only a subset of clusters, it includes a <code>NextToken</code> value. Use this value in a subsequent <code>DescribeClusters</code> request to get more clusters. When you receive a response with no <code>NextToken</code> (or an empty or null value), that means there are no more clusters to get.</p>
     fn describe_clusters(
         &self,
-        input: &DescribeClustersRequest,
+        input: DescribeClustersRequest,
     ) -> RusotoFuture<DescribeClustersResponse, DescribeClustersError>;
 
     /// <p>Claims an AWS CloudHSM cluster by submitting the cluster certificate issued by your issuing certificate authority (CA) and the CA's root certificate. Before you can claim a cluster, you must sign the cluster's certificate signing request (CSR) with your issuing CA. To get the cluster's CSR, use <a>DescribeClusters</a>.</p>
     fn initialize_cluster(
         &self,
-        input: &InitializeClusterRequest,
+        input: InitializeClusterRequest,
     ) -> RusotoFuture<InitializeClusterResponse, InitializeClusterError>;
 
     /// <p>Gets a list of tags for the specified AWS CloudHSM cluster.</p> <p>This is a paginated operation, which means that each response might contain only a subset of all the tags. When the response contains only a subset of tags, it includes a <code>NextToken</code> value. Use this value in a subsequent <code>ListTags</code> request to get more tags. When you receive a response with no <code>NextToken</code> (or an empty or null value), that means there are no more tags to get.</p>
-    fn list_tags(&self, input: &ListTagsRequest) -> RusotoFuture<ListTagsResponse, ListTagsError>;
+    fn list_tags(&self, input: ListTagsRequest) -> RusotoFuture<ListTagsResponse, ListTagsError>;
 
     /// <p>Adds or overwrites one or more tags for the specified AWS CloudHSM cluster.</p>
     fn tag_resource(
         &self,
-        input: &TagResourceRequest,
+        input: TagResourceRequest,
     ) -> RusotoFuture<TagResourceResponse, TagResourceError>;
 
     /// <p>Removes the specified tag or tags from the specified AWS CloudHSM cluster.</p>
     fn untag_resource(
         &self,
-        input: &UntagResourceRequest,
+        input: UntagResourceRequest,
     ) -> RusotoFuture<UntagResourceResponse, UntagResourceError>;
 }
 /// A client for the CloudHSM V2 API.
@@ -1515,13 +1515,13 @@ where
     /// <p>Creates a new AWS CloudHSM cluster.</p>
     fn create_cluster(
         &self,
-        input: &CreateClusterRequest,
+        input: CreateClusterRequest,
     ) -> RusotoFuture<CreateClusterResponse, CreateClusterError> {
         let mut request = SignedRequest::new("POST", "cloudhsm", &self.region, "/");
         request.set_endpoint_prefix("cloudhsmv2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "BaldrApiService.CreateCluster");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -1552,13 +1552,13 @@ where
     /// <p>Creates a new hardware security module (HSM) in the specified AWS CloudHSM cluster.</p>
     fn create_hsm(
         &self,
-        input: &CreateHsmRequest,
+        input: CreateHsmRequest,
     ) -> RusotoFuture<CreateHsmResponse, CreateHsmError> {
         let mut request = SignedRequest::new("POST", "cloudhsm", &self.region, "/");
         request.set_endpoint_prefix("cloudhsmv2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "BaldrApiService.CreateHsm");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -1589,13 +1589,13 @@ where
     /// <p>Deletes the specified AWS CloudHSM cluster. Before you can delete a cluster, you must delete all HSMs in the cluster. To see if the cluster contains any HSMs, use <a>DescribeClusters</a>. To delete an HSM, use <a>DeleteHsm</a>.</p>
     fn delete_cluster(
         &self,
-        input: &DeleteClusterRequest,
+        input: DeleteClusterRequest,
     ) -> RusotoFuture<DeleteClusterResponse, DeleteClusterError> {
         let mut request = SignedRequest::new("POST", "cloudhsm", &self.region, "/");
         request.set_endpoint_prefix("cloudhsmv2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "BaldrApiService.DeleteCluster");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -1626,13 +1626,13 @@ where
     /// <p>Deletes the specified HSM. To specify an HSM, you can use its identifier (ID), the IP address of the HSM's elastic network interface (ENI), or the ID of the HSM's ENI. You need to specify only one of these values. To find these values, use <a>DescribeClusters</a>.</p>
     fn delete_hsm(
         &self,
-        input: &DeleteHsmRequest,
+        input: DeleteHsmRequest,
     ) -> RusotoFuture<DeleteHsmResponse, DeleteHsmError> {
         let mut request = SignedRequest::new("POST", "cloudhsm", &self.region, "/");
         request.set_endpoint_prefix("cloudhsmv2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "BaldrApiService.DeleteHsm");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -1663,13 +1663,13 @@ where
     /// <p>Gets information about backups of AWS CloudHSM clusters.</p> <p>This is a paginated operation, which means that each response might contain only a subset of all the backups. When the response contains only a subset of backups, it includes a <code>NextToken</code> value. Use this value in a subsequent <code>DescribeBackups</code> request to get more backups. When you receive a response with no <code>NextToken</code> (or an empty or null value), that means there are no more backups to get.</p>
     fn describe_backups(
         &self,
-        input: &DescribeBackupsRequest,
+        input: DescribeBackupsRequest,
     ) -> RusotoFuture<DescribeBackupsResponse, DescribeBackupsError> {
         let mut request = SignedRequest::new("POST", "cloudhsm", &self.region, "/");
         request.set_endpoint_prefix("cloudhsmv2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "BaldrApiService.DescribeBackups");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -1700,13 +1700,13 @@ where
     /// <p>Gets information about AWS CloudHSM clusters.</p> <p>This is a paginated operation, which means that each response might contain only a subset of all the clusters. When the response contains only a subset of clusters, it includes a <code>NextToken</code> value. Use this value in a subsequent <code>DescribeClusters</code> request to get more clusters. When you receive a response with no <code>NextToken</code> (or an empty or null value), that means there are no more clusters to get.</p>
     fn describe_clusters(
         &self,
-        input: &DescribeClustersRequest,
+        input: DescribeClustersRequest,
     ) -> RusotoFuture<DescribeClustersResponse, DescribeClustersError> {
         let mut request = SignedRequest::new("POST", "cloudhsm", &self.region, "/");
         request.set_endpoint_prefix("cloudhsmv2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "BaldrApiService.DescribeClusters");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -1737,13 +1737,13 @@ where
     /// <p>Claims an AWS CloudHSM cluster by submitting the cluster certificate issued by your issuing certificate authority (CA) and the CA's root certificate. Before you can claim a cluster, you must sign the cluster's certificate signing request (CSR) with your issuing CA. To get the cluster's CSR, use <a>DescribeClusters</a>.</p>
     fn initialize_cluster(
         &self,
-        input: &InitializeClusterRequest,
+        input: InitializeClusterRequest,
     ) -> RusotoFuture<InitializeClusterResponse, InitializeClusterError> {
         let mut request = SignedRequest::new("POST", "cloudhsm", &self.region, "/");
         request.set_endpoint_prefix("cloudhsmv2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "BaldrApiService.InitializeCluster");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -1772,12 +1772,12 @@ where
     }
 
     /// <p>Gets a list of tags for the specified AWS CloudHSM cluster.</p> <p>This is a paginated operation, which means that each response might contain only a subset of all the tags. When the response contains only a subset of tags, it includes a <code>NextToken</code> value. Use this value in a subsequent <code>ListTags</code> request to get more tags. When you receive a response with no <code>NextToken</code> (or an empty or null value), that means there are no more tags to get.</p>
-    fn list_tags(&self, input: &ListTagsRequest) -> RusotoFuture<ListTagsResponse, ListTagsError> {
+    fn list_tags(&self, input: ListTagsRequest) -> RusotoFuture<ListTagsResponse, ListTagsError> {
         let mut request = SignedRequest::new("POST", "cloudhsm", &self.region, "/");
         request.set_endpoint_prefix("cloudhsmv2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "BaldrApiService.ListTags");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -1808,13 +1808,13 @@ where
     /// <p>Adds or overwrites one or more tags for the specified AWS CloudHSM cluster.</p>
     fn tag_resource(
         &self,
-        input: &TagResourceRequest,
+        input: TagResourceRequest,
     ) -> RusotoFuture<TagResourceResponse, TagResourceError> {
         let mut request = SignedRequest::new("POST", "cloudhsm", &self.region, "/");
         request.set_endpoint_prefix("cloudhsmv2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "BaldrApiService.TagResource");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -1845,13 +1845,13 @@ where
     /// <p>Removes the specified tag or tags from the specified AWS CloudHSM cluster.</p>
     fn untag_resource(
         &self,
-        input: &UntagResourceRequest,
+        input: UntagResourceRequest,
     ) -> RusotoFuture<UntagResourceResponse, UntagResourceError> {
         let mut request = SignedRequest::new("POST", "cloudhsm", &self.region, "/");
         request.set_endpoint_prefix("cloudhsmv2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "BaldrApiService.UntagResource");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {

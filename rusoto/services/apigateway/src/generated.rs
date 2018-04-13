@@ -18,16 +18,16 @@ use std::io;
 use futures::future;
 use futures::Future;
 use rusoto_core::reactor::{CredentialsProvider, RequestDispatcher};
-use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::region;
+use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::{ClientInner, RusotoFuture};
 
-use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
+use rusoto_core::request::HttpDispatchError;
 
-use serde_json;
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::signature::SignedRequest;
+use serde_json;
 use serde_json::from_str;
 use serde_json::Value as SerdeJsonValue;
 /// <p>Access log settings, including the access log format and access log destination ARN.</p>
@@ -1872,8 +1872,11 @@ pub struct GetVpcLinksRequest {
 pub struct ImportApiKeysRequest {
     /// <p>The payload of the POST request to import API keys. For the payload format, see <a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/api-key-file-format.html">API Key File Format</a>.</p>
     #[serde(rename = "body")]
-    #[serde(deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
-            serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob", default)]
+    #[serde(
+        deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
+        serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
+        default
+    )]
     pub body: Vec<u8>,
     /// <p>A query parameter to indicate whether to rollback <a>ApiKey</a> importation (<code>true</code>) or not (<code>false</code>) when error is encountered.</p>
     #[serde(rename = "failOnWarnings")]
@@ -1889,8 +1892,11 @@ pub struct ImportApiKeysRequest {
 pub struct ImportDocumentationPartsRequest {
     /// <p>[Required] Raw byte array representing the to-be-imported documentation parts. To import from a Swagger file, this is a JSON object.</p>
     #[serde(rename = "body")]
-    #[serde(deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
-            serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob", default)]
+    #[serde(
+        deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
+        serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
+        default
+    )]
     pub body: Vec<u8>,
     /// <p>A query parameter to specify whether to rollback the documentation importation (<code>true</code>) or not (<code>false</code>) when a warning is encountered. The default value is <code>false</code>.</p>
     #[serde(rename = "failOnWarnings")]
@@ -1910,8 +1916,11 @@ pub struct ImportDocumentationPartsRequest {
 pub struct ImportRestApiRequest {
     /// <p>[Required] The POST request body containing external API definitions. Currently, only Swagger definition JSON files are supported. The maximum size of the API definition file is 2MB.</p>
     #[serde(rename = "body")]
-    #[serde(deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
-            serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob", default)]
+    #[serde(
+        deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
+        serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
+        default
+    )]
     pub body: Vec<u8>,
     /// <p>A query parameter to indicate whether to rollback the API creation (<code>true</code>) or not (<code>false</code>) when a warning is encountered. The default value is <code>false</code>.</p>
     #[serde(rename = "failOnWarnings")]
@@ -2387,8 +2396,11 @@ pub struct PutMethodResponseRequest {
 pub struct PutRestApiRequest {
     /// <p>[Required] The PUT request body containing external API definitions. Currently, only Swagger definition JSON files are supported. The maximum size of the API definition file is 2MB.</p>
     #[serde(rename = "body")]
-    #[serde(deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
-            serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob", default)]
+    #[serde(
+        deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
+        serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
+        default
+    )]
     pub body: Vec<u8>,
     /// <p>A query parameter to indicate whether to rollback the API update (<code>true</code>) or not (<code>false</code>) when a warning is encountered. The default value is <code>false</code>.</p>
     #[serde(rename = "failOnWarnings")]
@@ -15068,611 +15080,601 @@ impl Error for UpdateVpcLinkError {
 /// Trait representing the capabilities of the Amazon API Gateway API. Amazon API Gateway clients implement this trait.
 pub trait ApiGateway {
     /// <p><p>Create an <a>ApiKey</a> resource. </p> <div class="seeAlso"><a href="http://docs.aws.amazon.com/cli/latest/reference/apigateway/create-api-key.html">AWS CLI</a></div></p>
-    fn create_api_key(
-        &self,
-        input: &CreateApiKeyRequest,
-    ) -> RusotoFuture<ApiKey, CreateApiKeyError>;
+    fn create_api_key(&self, input: CreateApiKeyRequest)
+        -> RusotoFuture<ApiKey, CreateApiKeyError>;
 
     /// <p><p>Adds a new <a>Authorizer</a> resource to an existing <a>RestApi</a> resource.</p> <div class="seeAlso"><a href="http://docs.aws.amazon.com/cli/latest/reference/apigateway/create-authorizer.html">AWS CLI</a></div></p>
     fn create_authorizer(
         &self,
-        input: &CreateAuthorizerRequest,
+        input: CreateAuthorizerRequest,
     ) -> RusotoFuture<Authorizer, CreateAuthorizerError>;
 
     /// <p>Creates a new <a>BasePathMapping</a> resource.</p>
     fn create_base_path_mapping(
         &self,
-        input: &CreateBasePathMappingRequest,
+        input: CreateBasePathMappingRequest,
     ) -> RusotoFuture<BasePathMapping, CreateBasePathMappingError>;
 
     /// <p>Creates a <a>Deployment</a> resource, which makes a specified <a>RestApi</a> callable over the internet.</p>
     fn create_deployment(
         &self,
-        input: &CreateDeploymentRequest,
+        input: CreateDeploymentRequest,
     ) -> RusotoFuture<Deployment, CreateDeploymentError>;
 
     fn create_documentation_part(
         &self,
-        input: &CreateDocumentationPartRequest,
+        input: CreateDocumentationPartRequest,
     ) -> RusotoFuture<DocumentationPart, CreateDocumentationPartError>;
 
     fn create_documentation_version(
         &self,
-        input: &CreateDocumentationVersionRequest,
+        input: CreateDocumentationVersionRequest,
     ) -> RusotoFuture<DocumentationVersion, CreateDocumentationVersionError>;
 
     /// <p>Creates a new domain name.</p>
     fn create_domain_name(
         &self,
-        input: &CreateDomainNameRequest,
+        input: CreateDomainNameRequest,
     ) -> RusotoFuture<DomainName, CreateDomainNameError>;
 
     /// <p>Adds a new <a>Model</a> resource to an existing <a>RestApi</a> resource.</p>
-    fn create_model(&self, input: &CreateModelRequest) -> RusotoFuture<Model, CreateModelError>;
+    fn create_model(&self, input: CreateModelRequest) -> RusotoFuture<Model, CreateModelError>;
 
     /// <p>Creates a <a>ReqeustValidator</a> of a given <a>RestApi</a>.</p>
     fn create_request_validator(
         &self,
-        input: &CreateRequestValidatorRequest,
+        input: CreateRequestValidatorRequest,
     ) -> RusotoFuture<RequestValidator, CreateRequestValidatorError>;
 
     /// <p>Creates a <a>Resource</a> resource.</p>
     fn create_resource(
         &self,
-        input: &CreateResourceRequest,
+        input: CreateResourceRequest,
     ) -> RusotoFuture<Resource, CreateResourceError>;
 
     /// <p>Creates a new <a>RestApi</a> resource.</p>
     fn create_rest_api(
         &self,
-        input: &CreateRestApiRequest,
+        input: CreateRestApiRequest,
     ) -> RusotoFuture<RestApi, CreateRestApiError>;
 
     /// <p>Creates a new <a>Stage</a> resource that references a pre-existing <a>Deployment</a> for the API. </p>
-    fn create_stage(&self, input: &CreateStageRequest) -> RusotoFuture<Stage, CreateStageError>;
+    fn create_stage(&self, input: CreateStageRequest) -> RusotoFuture<Stage, CreateStageError>;
 
     /// <p>Creates a usage plan with the throttle and quota limits, as well as the associated API stages, specified in the payload. </p>
     fn create_usage_plan(
         &self,
-        input: &CreateUsagePlanRequest,
+        input: CreateUsagePlanRequest,
     ) -> RusotoFuture<UsagePlan, CreateUsagePlanError>;
 
     /// <p>Creates a usage plan key for adding an existing API key to a usage plan.</p>
     fn create_usage_plan_key(
         &self,
-        input: &CreateUsagePlanKeyRequest,
+        input: CreateUsagePlanKeyRequest,
     ) -> RusotoFuture<UsagePlanKey, CreateUsagePlanKeyError>;
 
     /// <p>Creates a VPC link, under the caller's account in a selected region, in an asynchronous operation that typically takes 2-4 minutes to complete and become operational. The caller must have permissions to create and update VPC Endpoint services.</p>
     fn create_vpc_link(
         &self,
-        input: &CreateVpcLinkRequest,
+        input: CreateVpcLinkRequest,
     ) -> RusotoFuture<VpcLink, CreateVpcLinkError>;
 
     /// <p>Deletes the <a>ApiKey</a> resource.</p>
-    fn delete_api_key(&self, input: &DeleteApiKeyRequest) -> RusotoFuture<(), DeleteApiKeyError>;
+    fn delete_api_key(&self, input: DeleteApiKeyRequest) -> RusotoFuture<(), DeleteApiKeyError>;
 
     /// <p><p>Deletes an existing <a>Authorizer</a> resource.</p> <div class="seeAlso"><a href="http://docs.aws.amazon.com/cli/latest/reference/apigateway/delete-authorizer.html">AWS CLI</a></div></p>
     fn delete_authorizer(
         &self,
-        input: &DeleteAuthorizerRequest,
+        input: DeleteAuthorizerRequest,
     ) -> RusotoFuture<(), DeleteAuthorizerError>;
 
     /// <p>Deletes the <a>BasePathMapping</a> resource.</p>
     fn delete_base_path_mapping(
         &self,
-        input: &DeleteBasePathMappingRequest,
+        input: DeleteBasePathMappingRequest,
     ) -> RusotoFuture<(), DeleteBasePathMappingError>;
 
     /// <p>Deletes the <a>ClientCertificate</a> resource.</p>
     fn delete_client_certificate(
         &self,
-        input: &DeleteClientCertificateRequest,
+        input: DeleteClientCertificateRequest,
     ) -> RusotoFuture<(), DeleteClientCertificateError>;
 
     /// <p>Deletes a <a>Deployment</a> resource. Deleting a deployment will only succeed if there are no <a>Stage</a> resources associated with it.</p>
     fn delete_deployment(
         &self,
-        input: &DeleteDeploymentRequest,
+        input: DeleteDeploymentRequest,
     ) -> RusotoFuture<(), DeleteDeploymentError>;
 
     fn delete_documentation_part(
         &self,
-        input: &DeleteDocumentationPartRequest,
+        input: DeleteDocumentationPartRequest,
     ) -> RusotoFuture<(), DeleteDocumentationPartError>;
 
     fn delete_documentation_version(
         &self,
-        input: &DeleteDocumentationVersionRequest,
+        input: DeleteDocumentationVersionRequest,
     ) -> RusotoFuture<(), DeleteDocumentationVersionError>;
 
     /// <p>Deletes the <a>DomainName</a> resource.</p>
     fn delete_domain_name(
         &self,
-        input: &DeleteDomainNameRequest,
+        input: DeleteDomainNameRequest,
     ) -> RusotoFuture<(), DeleteDomainNameError>;
 
     /// <p>Clears any customization of a <a>GatewayResponse</a> of a specified response type on the given <a>RestApi</a> and resets it with the default settings.</p>
     fn delete_gateway_response(
         &self,
-        input: &DeleteGatewayResponseRequest,
+        input: DeleteGatewayResponseRequest,
     ) -> RusotoFuture<(), DeleteGatewayResponseError>;
 
     /// <p>Represents a delete integration.</p>
     fn delete_integration(
         &self,
-        input: &DeleteIntegrationRequest,
+        input: DeleteIntegrationRequest,
     ) -> RusotoFuture<(), DeleteIntegrationError>;
 
     /// <p>Represents a delete integration response.</p>
     fn delete_integration_response(
         &self,
-        input: &DeleteIntegrationResponseRequest,
+        input: DeleteIntegrationResponseRequest,
     ) -> RusotoFuture<(), DeleteIntegrationResponseError>;
 
     /// <p>Deletes an existing <a>Method</a> resource.</p>
-    fn delete_method(&self, input: &DeleteMethodRequest) -> RusotoFuture<(), DeleteMethodError>;
+    fn delete_method(&self, input: DeleteMethodRequest) -> RusotoFuture<(), DeleteMethodError>;
 
     /// <p>Deletes an existing <a>MethodResponse</a> resource.</p>
     fn delete_method_response(
         &self,
-        input: &DeleteMethodResponseRequest,
+        input: DeleteMethodResponseRequest,
     ) -> RusotoFuture<(), DeleteMethodResponseError>;
 
     /// <p>Deletes a model.</p>
-    fn delete_model(&self, input: &DeleteModelRequest) -> RusotoFuture<(), DeleteModelError>;
+    fn delete_model(&self, input: DeleteModelRequest) -> RusotoFuture<(), DeleteModelError>;
 
     /// <p>Deletes a <a>RequestValidator</a> of a given <a>RestApi</a>.</p>
     fn delete_request_validator(
         &self,
-        input: &DeleteRequestValidatorRequest,
+        input: DeleteRequestValidatorRequest,
     ) -> RusotoFuture<(), DeleteRequestValidatorError>;
 
     /// <p>Deletes a <a>Resource</a> resource.</p>
     fn delete_resource(
         &self,
-        input: &DeleteResourceRequest,
+        input: DeleteResourceRequest,
     ) -> RusotoFuture<(), DeleteResourceError>;
 
     /// <p>Deletes the specified API.</p>
-    fn delete_rest_api(&self, input: &DeleteRestApiRequest)
-        -> RusotoFuture<(), DeleteRestApiError>;
+    fn delete_rest_api(&self, input: DeleteRestApiRequest) -> RusotoFuture<(), DeleteRestApiError>;
 
     /// <p>Deletes a <a>Stage</a> resource.</p>
-    fn delete_stage(&self, input: &DeleteStageRequest) -> RusotoFuture<(), DeleteStageError>;
+    fn delete_stage(&self, input: DeleteStageRequest) -> RusotoFuture<(), DeleteStageError>;
 
     /// <p>Deletes a usage plan of a given plan Id.</p>
     fn delete_usage_plan(
         &self,
-        input: &DeleteUsagePlanRequest,
+        input: DeleteUsagePlanRequest,
     ) -> RusotoFuture<(), DeleteUsagePlanError>;
 
     /// <p>Deletes a usage plan key and remove the underlying API key from the associated usage plan.</p>
     fn delete_usage_plan_key(
         &self,
-        input: &DeleteUsagePlanKeyRequest,
+        input: DeleteUsagePlanKeyRequest,
     ) -> RusotoFuture<(), DeleteUsagePlanKeyError>;
 
     /// <p>Deletes an existing <a>VpcLink</a> of a specified identifier.</p>
-    fn delete_vpc_link(&self, input: &DeleteVpcLinkRequest)
-        -> RusotoFuture<(), DeleteVpcLinkError>;
+    fn delete_vpc_link(&self, input: DeleteVpcLinkRequest) -> RusotoFuture<(), DeleteVpcLinkError>;
 
     /// <p>Flushes all authorizer cache entries on a stage.</p>
     fn flush_stage_authorizers_cache(
         &self,
-        input: &FlushStageAuthorizersCacheRequest,
+        input: FlushStageAuthorizersCacheRequest,
     ) -> RusotoFuture<(), FlushStageAuthorizersCacheError>;
 
     /// <p>Flushes a stage's cache.</p>
     fn flush_stage_cache(
         &self,
-        input: &FlushStageCacheRequest,
+        input: FlushStageCacheRequest,
     ) -> RusotoFuture<(), FlushStageCacheError>;
 
     /// <p>Generates a <a>ClientCertificate</a> resource.</p>
     fn generate_client_certificate(
         &self,
-        input: &GenerateClientCertificateRequest,
+        input: GenerateClientCertificateRequest,
     ) -> RusotoFuture<ClientCertificate, GenerateClientCertificateError>;
 
     /// <p>Gets information about the current <a>Account</a> resource.</p>
     fn get_account(&self) -> RusotoFuture<Account, GetAccountError>;
 
     /// <p>Gets information about the current <a>ApiKey</a> resource.</p>
-    fn get_api_key(&self, input: &GetApiKeyRequest) -> RusotoFuture<ApiKey, GetApiKeyError>;
+    fn get_api_key(&self, input: GetApiKeyRequest) -> RusotoFuture<ApiKey, GetApiKeyError>;
 
     /// <p>Gets information about the current <a>ApiKeys</a> resource.</p>
-    fn get_api_keys(&self, input: &GetApiKeysRequest) -> RusotoFuture<ApiKeys, GetApiKeysError>;
+    fn get_api_keys(&self, input: GetApiKeysRequest) -> RusotoFuture<ApiKeys, GetApiKeysError>;
 
     /// <p><p>Describe an existing <a>Authorizer</a> resource.</p> <div class="seeAlso"><a href="http://docs.aws.amazon.com/cli/latest/reference/apigateway/get-authorizer.html">AWS CLI</a></div></p>
     fn get_authorizer(
         &self,
-        input: &GetAuthorizerRequest,
+        input: GetAuthorizerRequest,
     ) -> RusotoFuture<Authorizer, GetAuthorizerError>;
 
     /// <p><p>Describe an existing <a>Authorizers</a> resource.</p> <div class="seeAlso"><a href="http://docs.aws.amazon.com/cli/latest/reference/apigateway/get-authorizers.html">AWS CLI</a></div></p>
     fn get_authorizers(
         &self,
-        input: &GetAuthorizersRequest,
+        input: GetAuthorizersRequest,
     ) -> RusotoFuture<Authorizers, GetAuthorizersError>;
 
     /// <p>Describe a <a>BasePathMapping</a> resource.</p>
     fn get_base_path_mapping(
         &self,
-        input: &GetBasePathMappingRequest,
+        input: GetBasePathMappingRequest,
     ) -> RusotoFuture<BasePathMapping, GetBasePathMappingError>;
 
     /// <p>Represents a collection of <a>BasePathMapping</a> resources.</p>
     fn get_base_path_mappings(
         &self,
-        input: &GetBasePathMappingsRequest,
+        input: GetBasePathMappingsRequest,
     ) -> RusotoFuture<BasePathMappings, GetBasePathMappingsError>;
 
     /// <p>Gets information about the current <a>ClientCertificate</a> resource.</p>
     fn get_client_certificate(
         &self,
-        input: &GetClientCertificateRequest,
+        input: GetClientCertificateRequest,
     ) -> RusotoFuture<ClientCertificate, GetClientCertificateError>;
 
     /// <p>Gets a collection of <a>ClientCertificate</a> resources.</p>
     fn get_client_certificates(
         &self,
-        input: &GetClientCertificatesRequest,
+        input: GetClientCertificatesRequest,
     ) -> RusotoFuture<ClientCertificates, GetClientCertificatesError>;
 
     /// <p>Gets information about a <a>Deployment</a> resource.</p>
     fn get_deployment(
         &self,
-        input: &GetDeploymentRequest,
+        input: GetDeploymentRequest,
     ) -> RusotoFuture<Deployment, GetDeploymentError>;
 
     /// <p>Gets information about a <a>Deployments</a> collection.</p>
     fn get_deployments(
         &self,
-        input: &GetDeploymentsRequest,
+        input: GetDeploymentsRequest,
     ) -> RusotoFuture<Deployments, GetDeploymentsError>;
 
     fn get_documentation_part(
         &self,
-        input: &GetDocumentationPartRequest,
+        input: GetDocumentationPartRequest,
     ) -> RusotoFuture<DocumentationPart, GetDocumentationPartError>;
 
     fn get_documentation_parts(
         &self,
-        input: &GetDocumentationPartsRequest,
+        input: GetDocumentationPartsRequest,
     ) -> RusotoFuture<DocumentationParts, GetDocumentationPartsError>;
 
     fn get_documentation_version(
         &self,
-        input: &GetDocumentationVersionRequest,
+        input: GetDocumentationVersionRequest,
     ) -> RusotoFuture<DocumentationVersion, GetDocumentationVersionError>;
 
     fn get_documentation_versions(
         &self,
-        input: &GetDocumentationVersionsRequest,
+        input: GetDocumentationVersionsRequest,
     ) -> RusotoFuture<DocumentationVersions, GetDocumentationVersionsError>;
 
     /// <p>Represents a domain name that is contained in a simpler, more intuitive URL that can be called.</p>
     fn get_domain_name(
         &self,
-        input: &GetDomainNameRequest,
+        input: GetDomainNameRequest,
     ) -> RusotoFuture<DomainName, GetDomainNameError>;
 
     /// <p>Represents a collection of <a>DomainName</a> resources.</p>
     fn get_domain_names(
         &self,
-        input: &GetDomainNamesRequest,
+        input: GetDomainNamesRequest,
     ) -> RusotoFuture<DomainNames, GetDomainNamesError>;
 
     /// <p>Exports a deployed version of a <a>RestApi</a> in a specified format.</p>
-    fn get_export(&self, input: &GetExportRequest) -> RusotoFuture<ExportResponse, GetExportError>;
+    fn get_export(&self, input: GetExportRequest) -> RusotoFuture<ExportResponse, GetExportError>;
 
     /// <p>Gets a <a>GatewayResponse</a> of a specified response type on the given <a>RestApi</a>.</p>
     fn get_gateway_response(
         &self,
-        input: &GetGatewayResponseRequest,
+        input: GetGatewayResponseRequest,
     ) -> RusotoFuture<GatewayResponse, GetGatewayResponseError>;
 
     /// <p>Gets the <a>GatewayResponses</a> collection on the given <a>RestApi</a>. If an API developer has not added any definitions for gateway responses, the result will be the API Gateway-generated default <a>GatewayResponses</a> collection for the supported response types.</p>
     fn get_gateway_responses(
         &self,
-        input: &GetGatewayResponsesRequest,
+        input: GetGatewayResponsesRequest,
     ) -> RusotoFuture<GatewayResponses, GetGatewayResponsesError>;
 
     /// <p>Get the integration settings.</p>
     fn get_integration(
         &self,
-        input: &GetIntegrationRequest,
+        input: GetIntegrationRequest,
     ) -> RusotoFuture<Integration, GetIntegrationError>;
 
     /// <p>Represents a get integration response.</p>
     fn get_integration_response(
         &self,
-        input: &GetIntegrationResponseRequest,
+        input: GetIntegrationResponseRequest,
     ) -> RusotoFuture<IntegrationResponse, GetIntegrationResponseError>;
 
     /// <p>Describe an existing <a>Method</a> resource.</p>
-    fn get_method(&self, input: &GetMethodRequest) -> RusotoFuture<Method, GetMethodError>;
+    fn get_method(&self, input: GetMethodRequest) -> RusotoFuture<Method, GetMethodError>;
 
     /// <p>Describes a <a>MethodResponse</a> resource.</p>
     fn get_method_response(
         &self,
-        input: &GetMethodResponseRequest,
+        input: GetMethodResponseRequest,
     ) -> RusotoFuture<MethodResponse, GetMethodResponseError>;
 
     /// <p>Describes an existing model defined for a <a>RestApi</a> resource.</p>
-    fn get_model(&self, input: &GetModelRequest) -> RusotoFuture<Model, GetModelError>;
+    fn get_model(&self, input: GetModelRequest) -> RusotoFuture<Model, GetModelError>;
 
     /// <p>Generates a sample mapping template that can be used to transform a payload into the structure of a model.</p>
     fn get_model_template(
         &self,
-        input: &GetModelTemplateRequest,
+        input: GetModelTemplateRequest,
     ) -> RusotoFuture<Template, GetModelTemplateError>;
 
     /// <p>Describes existing <a>Models</a> defined for a <a>RestApi</a> resource.</p>
-    fn get_models(&self, input: &GetModelsRequest) -> RusotoFuture<Models, GetModelsError>;
+    fn get_models(&self, input: GetModelsRequest) -> RusotoFuture<Models, GetModelsError>;
 
     /// <p>Gets a <a>RequestValidator</a> of a given <a>RestApi</a>.</p>
     fn get_request_validator(
         &self,
-        input: &GetRequestValidatorRequest,
+        input: GetRequestValidatorRequest,
     ) -> RusotoFuture<RequestValidator, GetRequestValidatorError>;
 
     /// <p>Gets the <a>RequestValidators</a> collection of a given <a>RestApi</a>.</p>
     fn get_request_validators(
         &self,
-        input: &GetRequestValidatorsRequest,
+        input: GetRequestValidatorsRequest,
     ) -> RusotoFuture<RequestValidators, GetRequestValidatorsError>;
 
     /// <p>Lists information about a resource.</p>
-    fn get_resource(&self, input: &GetResourceRequest) -> RusotoFuture<Resource, GetResourceError>;
+    fn get_resource(&self, input: GetResourceRequest) -> RusotoFuture<Resource, GetResourceError>;
 
     /// <p>Lists information about a collection of <a>Resource</a> resources.</p>
     fn get_resources(
         &self,
-        input: &GetResourcesRequest,
+        input: GetResourcesRequest,
     ) -> RusotoFuture<Resources, GetResourcesError>;
 
     /// <p>Lists the <a>RestApi</a> resource in the collection.</p>
-    fn get_rest_api(&self, input: &GetRestApiRequest) -> RusotoFuture<RestApi, GetRestApiError>;
+    fn get_rest_api(&self, input: GetRestApiRequest) -> RusotoFuture<RestApi, GetRestApiError>;
 
     /// <p>Lists the <a>RestApis</a> resources for your collection.</p>
-    fn get_rest_apis(&self, input: &GetRestApisRequest)
-        -> RusotoFuture<RestApis, GetRestApisError>;
+    fn get_rest_apis(&self, input: GetRestApisRequest) -> RusotoFuture<RestApis, GetRestApisError>;
 
     /// <p>Generates a client SDK for a <a>RestApi</a> and <a>Stage</a>.</p>
-    fn get_sdk(&self, input: &GetSdkRequest) -> RusotoFuture<SdkResponse, GetSdkError>;
+    fn get_sdk(&self, input: GetSdkRequest) -> RusotoFuture<SdkResponse, GetSdkError>;
 
-    fn get_sdk_type(&self, input: &GetSdkTypeRequest) -> RusotoFuture<SdkType, GetSdkTypeError>;
+    fn get_sdk_type(&self, input: GetSdkTypeRequest) -> RusotoFuture<SdkType, GetSdkTypeError>;
 
-    fn get_sdk_types(&self, input: &GetSdkTypesRequest)
-        -> RusotoFuture<SdkTypes, GetSdkTypesError>;
+    fn get_sdk_types(&self, input: GetSdkTypesRequest) -> RusotoFuture<SdkTypes, GetSdkTypesError>;
 
     /// <p>Gets information about a <a>Stage</a> resource.</p>
-    fn get_stage(&self, input: &GetStageRequest) -> RusotoFuture<Stage, GetStageError>;
+    fn get_stage(&self, input: GetStageRequest) -> RusotoFuture<Stage, GetStageError>;
 
     /// <p>Gets information about one or more <a>Stage</a> resources.</p>
-    fn get_stages(&self, input: &GetStagesRequest) -> RusotoFuture<Stages, GetStagesError>;
+    fn get_stages(&self, input: GetStagesRequest) -> RusotoFuture<Stages, GetStagesError>;
 
     /// <p>Gets the <a>Tags</a> collection for a given resource.</p>
-    fn get_tags(&self, input: &GetTagsRequest) -> RusotoFuture<Tags, GetTagsError>;
+    fn get_tags(&self, input: GetTagsRequest) -> RusotoFuture<Tags, GetTagsError>;
 
     /// <p>Gets the usage data of a usage plan in a specified time interval.</p>
-    fn get_usage(&self, input: &GetUsageRequest) -> RusotoFuture<Usage, GetUsageError>;
+    fn get_usage(&self, input: GetUsageRequest) -> RusotoFuture<Usage, GetUsageError>;
 
     /// <p>Gets a usage plan of a given plan identifier.</p>
     fn get_usage_plan(
         &self,
-        input: &GetUsagePlanRequest,
+        input: GetUsagePlanRequest,
     ) -> RusotoFuture<UsagePlan, GetUsagePlanError>;
 
     /// <p>Gets a usage plan key of a given key identifier.</p>
     fn get_usage_plan_key(
         &self,
-        input: &GetUsagePlanKeyRequest,
+        input: GetUsagePlanKeyRequest,
     ) -> RusotoFuture<UsagePlanKey, GetUsagePlanKeyError>;
 
     /// <p>Gets all the usage plan keys representing the API keys added to a specified usage plan.</p>
     fn get_usage_plan_keys(
         &self,
-        input: &GetUsagePlanKeysRequest,
+        input: GetUsagePlanKeysRequest,
     ) -> RusotoFuture<UsagePlanKeys, GetUsagePlanKeysError>;
 
     /// <p>Gets all the usage plans of the caller's account.</p>
     fn get_usage_plans(
         &self,
-        input: &GetUsagePlansRequest,
+        input: GetUsagePlansRequest,
     ) -> RusotoFuture<UsagePlans, GetUsagePlansError>;
 
     /// <p>Gets a specified VPC link under the caller's account in a region.</p>
-    fn get_vpc_link(&self, input: &GetVpcLinkRequest) -> RusotoFuture<VpcLink, GetVpcLinkError>;
+    fn get_vpc_link(&self, input: GetVpcLinkRequest) -> RusotoFuture<VpcLink, GetVpcLinkError>;
 
     /// <p>Gets the <a>VpcLinks</a> collection under the caller's account in a selected region.</p>
-    fn get_vpc_links(&self, input: &GetVpcLinksRequest)
-        -> RusotoFuture<VpcLinks, GetVpcLinksError>;
+    fn get_vpc_links(&self, input: GetVpcLinksRequest) -> RusotoFuture<VpcLinks, GetVpcLinksError>;
 
     /// <p>Import API keys from an external source, such as a CSV-formatted file.</p>
     fn import_api_keys(
         &self,
-        input: &ImportApiKeysRequest,
+        input: ImportApiKeysRequest,
     ) -> RusotoFuture<ApiKeyIds, ImportApiKeysError>;
 
     fn import_documentation_parts(
         &self,
-        input: &ImportDocumentationPartsRequest,
+        input: ImportDocumentationPartsRequest,
     ) -> RusotoFuture<DocumentationPartIds, ImportDocumentationPartsError>;
 
     /// <p>A feature of the API Gateway control service for creating a new API from an external API definition file.</p>
     fn import_rest_api(
         &self,
-        input: &ImportRestApiRequest,
+        input: ImportRestApiRequest,
     ) -> RusotoFuture<RestApi, ImportRestApiError>;
 
     /// <p>Creates a customization of a <a>GatewayResponse</a> of a specified response type and status code on the given <a>RestApi</a>.</p>
     fn put_gateway_response(
         &self,
-        input: &PutGatewayResponseRequest,
+        input: PutGatewayResponseRequest,
     ) -> RusotoFuture<GatewayResponse, PutGatewayResponseError>;
 
     /// <p>Sets up a method's integration.</p>
     fn put_integration(
         &self,
-        input: &PutIntegrationRequest,
+        input: PutIntegrationRequest,
     ) -> RusotoFuture<Integration, PutIntegrationError>;
 
     /// <p>Represents a put integration.</p>
     fn put_integration_response(
         &self,
-        input: &PutIntegrationResponseRequest,
+        input: PutIntegrationResponseRequest,
     ) -> RusotoFuture<IntegrationResponse, PutIntegrationResponseError>;
 
     /// <p>Add a method to an existing <a>Resource</a> resource.</p>
-    fn put_method(&self, input: &PutMethodRequest) -> RusotoFuture<Method, PutMethodError>;
+    fn put_method(&self, input: PutMethodRequest) -> RusotoFuture<Method, PutMethodError>;
 
     /// <p>Adds a <a>MethodResponse</a> to an existing <a>Method</a> resource.</p>
     fn put_method_response(
         &self,
-        input: &PutMethodResponseRequest,
+        input: PutMethodResponseRequest,
     ) -> RusotoFuture<MethodResponse, PutMethodResponseError>;
 
     /// <p>A feature of the API Gateway control service for updating an existing API with an input of external API definitions. The update can take the form of merging the supplied definition into the existing API or overwriting the existing API.</p>
-    fn put_rest_api(&self, input: &PutRestApiRequest) -> RusotoFuture<RestApi, PutRestApiError>;
+    fn put_rest_api(&self, input: PutRestApiRequest) -> RusotoFuture<RestApi, PutRestApiError>;
 
     /// <p>Adds or updates a tag on a given resource.</p>
-    fn tag_resource(&self, input: &TagResourceRequest) -> RusotoFuture<(), TagResourceError>;
+    fn tag_resource(&self, input: TagResourceRequest) -> RusotoFuture<(), TagResourceError>;
 
     /// <p><p>Simulate the execution of an <a>Authorizer</a> in your <a>RestApi</a> with headers, parameters, and an incoming request body.</p> <div class="seeAlso"> <a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/use-custom-authorizer.html">Enable custom authorizers</a> </div></p>
     fn test_invoke_authorizer(
         &self,
-        input: &TestInvokeAuthorizerRequest,
+        input: TestInvokeAuthorizerRequest,
     ) -> RusotoFuture<TestInvokeAuthorizerResponse, TestInvokeAuthorizerError>;
 
     /// <p>Simulate the execution of a <a>Method</a> in your <a>RestApi</a> with headers, parameters, and an incoming request body.</p>
     fn test_invoke_method(
         &self,
-        input: &TestInvokeMethodRequest,
+        input: TestInvokeMethodRequest,
     ) -> RusotoFuture<TestInvokeMethodResponse, TestInvokeMethodError>;
 
     /// <p>Removes a tag from a given resource.</p>
-    fn untag_resource(&self, input: &UntagResourceRequest) -> RusotoFuture<(), UntagResourceError>;
+    fn untag_resource(&self, input: UntagResourceRequest) -> RusotoFuture<(), UntagResourceError>;
 
     /// <p>Changes information about the current <a>Account</a> resource.</p>
     fn update_account(
         &self,
-        input: &UpdateAccountRequest,
+        input: UpdateAccountRequest,
     ) -> RusotoFuture<Account, UpdateAccountError>;
 
     /// <p>Changes information about an <a>ApiKey</a> resource.</p>
-    fn update_api_key(
-        &self,
-        input: &UpdateApiKeyRequest,
-    ) -> RusotoFuture<ApiKey, UpdateApiKeyError>;
+    fn update_api_key(&self, input: UpdateApiKeyRequest)
+        -> RusotoFuture<ApiKey, UpdateApiKeyError>;
 
     /// <p><p>Updates an existing <a>Authorizer</a> resource.</p> <div class="seeAlso"><a href="http://docs.aws.amazon.com/cli/latest/reference/apigateway/update-authorizer.html">AWS CLI</a></div></p>
     fn update_authorizer(
         &self,
-        input: &UpdateAuthorizerRequest,
+        input: UpdateAuthorizerRequest,
     ) -> RusotoFuture<Authorizer, UpdateAuthorizerError>;
 
     /// <p>Changes information about the <a>BasePathMapping</a> resource.</p>
     fn update_base_path_mapping(
         &self,
-        input: &UpdateBasePathMappingRequest,
+        input: UpdateBasePathMappingRequest,
     ) -> RusotoFuture<BasePathMapping, UpdateBasePathMappingError>;
 
     /// <p>Changes information about an <a>ClientCertificate</a> resource.</p>
     fn update_client_certificate(
         &self,
-        input: &UpdateClientCertificateRequest,
+        input: UpdateClientCertificateRequest,
     ) -> RusotoFuture<ClientCertificate, UpdateClientCertificateError>;
 
     /// <p>Changes information about a <a>Deployment</a> resource.</p>
     fn update_deployment(
         &self,
-        input: &UpdateDeploymentRequest,
+        input: UpdateDeploymentRequest,
     ) -> RusotoFuture<Deployment, UpdateDeploymentError>;
 
     fn update_documentation_part(
         &self,
-        input: &UpdateDocumentationPartRequest,
+        input: UpdateDocumentationPartRequest,
     ) -> RusotoFuture<DocumentationPart, UpdateDocumentationPartError>;
 
     fn update_documentation_version(
         &self,
-        input: &UpdateDocumentationVersionRequest,
+        input: UpdateDocumentationVersionRequest,
     ) -> RusotoFuture<DocumentationVersion, UpdateDocumentationVersionError>;
 
     /// <p>Changes information about the <a>DomainName</a> resource.</p>
     fn update_domain_name(
         &self,
-        input: &UpdateDomainNameRequest,
+        input: UpdateDomainNameRequest,
     ) -> RusotoFuture<DomainName, UpdateDomainNameError>;
 
     /// <p>Updates a <a>GatewayResponse</a> of a specified response type on the given <a>RestApi</a>.</p>
     fn update_gateway_response(
         &self,
-        input: &UpdateGatewayResponseRequest,
+        input: UpdateGatewayResponseRequest,
     ) -> RusotoFuture<GatewayResponse, UpdateGatewayResponseError>;
 
     /// <p>Represents an update integration.</p>
     fn update_integration(
         &self,
-        input: &UpdateIntegrationRequest,
+        input: UpdateIntegrationRequest,
     ) -> RusotoFuture<Integration, UpdateIntegrationError>;
 
     /// <p>Represents an update integration response.</p>
     fn update_integration_response(
         &self,
-        input: &UpdateIntegrationResponseRequest,
+        input: UpdateIntegrationResponseRequest,
     ) -> RusotoFuture<IntegrationResponse, UpdateIntegrationResponseError>;
 
     /// <p>Updates an existing <a>Method</a> resource.</p>
-    fn update_method(&self, input: &UpdateMethodRequest)
-        -> RusotoFuture<Method, UpdateMethodError>;
+    fn update_method(&self, input: UpdateMethodRequest) -> RusotoFuture<Method, UpdateMethodError>;
 
     /// <p>Updates an existing <a>MethodResponse</a> resource.</p>
     fn update_method_response(
         &self,
-        input: &UpdateMethodResponseRequest,
+        input: UpdateMethodResponseRequest,
     ) -> RusotoFuture<MethodResponse, UpdateMethodResponseError>;
 
     /// <p>Changes information about a model.</p>
-    fn update_model(&self, input: &UpdateModelRequest) -> RusotoFuture<Model, UpdateModelError>;
+    fn update_model(&self, input: UpdateModelRequest) -> RusotoFuture<Model, UpdateModelError>;
 
     /// <p>Updates a <a>RequestValidator</a> of a given <a>RestApi</a>.</p>
     fn update_request_validator(
         &self,
-        input: &UpdateRequestValidatorRequest,
+        input: UpdateRequestValidatorRequest,
     ) -> RusotoFuture<RequestValidator, UpdateRequestValidatorError>;
 
     /// <p>Changes information about a <a>Resource</a> resource.</p>
     fn update_resource(
         &self,
-        input: &UpdateResourceRequest,
+        input: UpdateResourceRequest,
     ) -> RusotoFuture<Resource, UpdateResourceError>;
 
     /// <p>Changes information about the specified API.</p>
     fn update_rest_api(
         &self,
-        input: &UpdateRestApiRequest,
+        input: UpdateRestApiRequest,
     ) -> RusotoFuture<RestApi, UpdateRestApiError>;
 
     /// <p>Changes information about a <a>Stage</a> resource.</p>
-    fn update_stage(&self, input: &UpdateStageRequest) -> RusotoFuture<Stage, UpdateStageError>;
+    fn update_stage(&self, input: UpdateStageRequest) -> RusotoFuture<Stage, UpdateStageError>;
 
     /// <p>Grants a temporary extension to the remaining quota of a usage plan associated with a specified API key.</p>
-    fn update_usage(&self, input: &UpdateUsageRequest) -> RusotoFuture<Usage, UpdateUsageError>;
+    fn update_usage(&self, input: UpdateUsageRequest) -> RusotoFuture<Usage, UpdateUsageError>;
 
     /// <p>Updates a usage plan of a given plan Id.</p>
     fn update_usage_plan(
         &self,
-        input: &UpdateUsagePlanRequest,
+        input: UpdateUsagePlanRequest,
     ) -> RusotoFuture<UsagePlan, UpdateUsagePlanError>;
 
     /// <p>Updates an existing <a>VpcLink</a> of a specified identifier.</p>
     fn update_vpc_link(
         &self,
-        input: &UpdateVpcLinkRequest,
+        input: UpdateVpcLinkRequest,
     ) -> RusotoFuture<VpcLink, UpdateVpcLinkError>;
 }
 /// A client for the Amazon API Gateway API.
@@ -15721,14 +15723,14 @@ where
     /// <p><p>Create an <a>ApiKey</a> resource. </p> <div class="seeAlso"><a href="http://docs.aws.amazon.com/cli/latest/reference/apigateway/create-api-key.html">AWS CLI</a></div></p>
     fn create_api_key(
         &self,
-        input: &CreateApiKeyRequest,
+        input: CreateApiKeyRequest,
     ) -> RusotoFuture<ApiKey, CreateApiKeyError> {
         let request_uri = "/apikeys";
 
         let mut request = SignedRequest::new("POST", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(input).unwrap());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -15761,7 +15763,7 @@ where
     /// <p><p>Adds a new <a>Authorizer</a> resource to an existing <a>RestApi</a> resource.</p> <div class="seeAlso"><a href="http://docs.aws.amazon.com/cli/latest/reference/apigateway/create-authorizer.html">AWS CLI</a></div></p>
     fn create_authorizer(
         &self,
-        input: &CreateAuthorizerRequest,
+        input: CreateAuthorizerRequest,
     ) -> RusotoFuture<Authorizer, CreateAuthorizerError> {
         let request_uri = format!(
             "/restapis/{restapi_id}/authorizers",
@@ -15771,7 +15773,7 @@ where
         let mut request = SignedRequest::new("POST", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(input).unwrap());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -15804,7 +15806,7 @@ where
     /// <p>Creates a new <a>BasePathMapping</a> resource.</p>
     fn create_base_path_mapping(
         &self,
-        input: &CreateBasePathMappingRequest,
+        input: CreateBasePathMappingRequest,
     ) -> RusotoFuture<BasePathMapping, CreateBasePathMappingError> {
         let request_uri = format!(
             "/domainnames/{domain_name}/basepathmappings",
@@ -15814,7 +15816,7 @@ where
         let mut request = SignedRequest::new("POST", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(input).unwrap());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -15847,7 +15849,7 @@ where
     /// <p>Creates a <a>Deployment</a> resource, which makes a specified <a>RestApi</a> callable over the internet.</p>
     fn create_deployment(
         &self,
-        input: &CreateDeploymentRequest,
+        input: CreateDeploymentRequest,
     ) -> RusotoFuture<Deployment, CreateDeploymentError> {
         let request_uri = format!(
             "/restapis/{restapi_id}/deployments",
@@ -15857,7 +15859,7 @@ where
         let mut request = SignedRequest::new("POST", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(input).unwrap());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -15889,7 +15891,7 @@ where
 
     fn create_documentation_part(
         &self,
-        input: &CreateDocumentationPartRequest,
+        input: CreateDocumentationPartRequest,
     ) -> RusotoFuture<DocumentationPart, CreateDocumentationPartError> {
         let request_uri = format!(
             "/restapis/{restapi_id}/documentation/parts",
@@ -15899,7 +15901,7 @@ where
         let mut request = SignedRequest::new("POST", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(input).unwrap());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -15931,7 +15933,7 @@ where
 
     fn create_documentation_version(
         &self,
-        input: &CreateDocumentationVersionRequest,
+        input: CreateDocumentationVersionRequest,
     ) -> RusotoFuture<DocumentationVersion, CreateDocumentationVersionError> {
         let request_uri = format!(
             "/restapis/{restapi_id}/documentation/versions",
@@ -15941,7 +15943,7 @@ where
         let mut request = SignedRequest::new("POST", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(input).unwrap());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -15974,14 +15976,14 @@ where
     /// <p>Creates a new domain name.</p>
     fn create_domain_name(
         &self,
-        input: &CreateDomainNameRequest,
+        input: CreateDomainNameRequest,
     ) -> RusotoFuture<DomainName, CreateDomainNameError> {
         let request_uri = "/domainnames";
 
         let mut request = SignedRequest::new("POST", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(input).unwrap());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -16012,7 +16014,7 @@ where
     }
 
     /// <p>Adds a new <a>Model</a> resource to an existing <a>RestApi</a> resource.</p>
-    fn create_model(&self, input: &CreateModelRequest) -> RusotoFuture<Model, CreateModelError> {
+    fn create_model(&self, input: CreateModelRequest) -> RusotoFuture<Model, CreateModelError> {
         let request_uri = format!(
             "/restapis/{restapi_id}/models",
             restapi_id = input.rest_api_id
@@ -16021,7 +16023,7 @@ where
         let mut request = SignedRequest::new("POST", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(input).unwrap());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -16054,7 +16056,7 @@ where
     /// <p>Creates a <a>ReqeustValidator</a> of a given <a>RestApi</a>.</p>
     fn create_request_validator(
         &self,
-        input: &CreateRequestValidatorRequest,
+        input: CreateRequestValidatorRequest,
     ) -> RusotoFuture<RequestValidator, CreateRequestValidatorError> {
         let request_uri = format!(
             "/restapis/{restapi_id}/requestvalidators",
@@ -16064,7 +16066,7 @@ where
         let mut request = SignedRequest::new("POST", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(input).unwrap());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -16097,7 +16099,7 @@ where
     /// <p>Creates a <a>Resource</a> resource.</p>
     fn create_resource(
         &self,
-        input: &CreateResourceRequest,
+        input: CreateResourceRequest,
     ) -> RusotoFuture<Resource, CreateResourceError> {
         let request_uri = format!(
             "/restapis/{restapi_id}/resources/{parent_id}",
@@ -16108,7 +16110,7 @@ where
         let mut request = SignedRequest::new("POST", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(input).unwrap());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -16141,14 +16143,14 @@ where
     /// <p>Creates a new <a>RestApi</a> resource.</p>
     fn create_rest_api(
         &self,
-        input: &CreateRestApiRequest,
+        input: CreateRestApiRequest,
     ) -> RusotoFuture<RestApi, CreateRestApiError> {
         let request_uri = "/restapis";
 
         let mut request = SignedRequest::new("POST", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(input).unwrap());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -16179,7 +16181,7 @@ where
     }
 
     /// <p>Creates a new <a>Stage</a> resource that references a pre-existing <a>Deployment</a> for the API. </p>
-    fn create_stage(&self, input: &CreateStageRequest) -> RusotoFuture<Stage, CreateStageError> {
+    fn create_stage(&self, input: CreateStageRequest) -> RusotoFuture<Stage, CreateStageError> {
         let request_uri = format!(
             "/restapis/{restapi_id}/stages",
             restapi_id = input.rest_api_id
@@ -16188,7 +16190,7 @@ where
         let mut request = SignedRequest::new("POST", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(input).unwrap());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -16221,14 +16223,14 @@ where
     /// <p>Creates a usage plan with the throttle and quota limits, as well as the associated API stages, specified in the payload. </p>
     fn create_usage_plan(
         &self,
-        input: &CreateUsagePlanRequest,
+        input: CreateUsagePlanRequest,
     ) -> RusotoFuture<UsagePlan, CreateUsagePlanError> {
         let request_uri = "/usageplans";
 
         let mut request = SignedRequest::new("POST", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(input).unwrap());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -16261,7 +16263,7 @@ where
     /// <p>Creates a usage plan key for adding an existing API key to a usage plan.</p>
     fn create_usage_plan_key(
         &self,
-        input: &CreateUsagePlanKeyRequest,
+        input: CreateUsagePlanKeyRequest,
     ) -> RusotoFuture<UsagePlanKey, CreateUsagePlanKeyError> {
         let request_uri = format!(
             "/usageplans/{usageplan_id}/keys",
@@ -16271,7 +16273,7 @@ where
         let mut request = SignedRequest::new("POST", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(input).unwrap());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -16304,14 +16306,14 @@ where
     /// <p>Creates a VPC link, under the caller's account in a selected region, in an asynchronous operation that typically takes 2-4 minutes to complete and become operational. The caller must have permissions to create and update VPC Endpoint services.</p>
     fn create_vpc_link(
         &self,
-        input: &CreateVpcLinkRequest,
+        input: CreateVpcLinkRequest,
     ) -> RusotoFuture<VpcLink, CreateVpcLinkError> {
         let request_uri = "/vpclinks";
 
         let mut request = SignedRequest::new("POST", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(input).unwrap());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -16342,7 +16344,7 @@ where
     }
 
     /// <p>Deletes the <a>ApiKey</a> resource.</p>
-    fn delete_api_key(&self, input: &DeleteApiKeyRequest) -> RusotoFuture<(), DeleteApiKeyError> {
+    fn delete_api_key(&self, input: DeleteApiKeyRequest) -> RusotoFuture<(), DeleteApiKeyError> {
         let request_uri = format!("/apikeys/{api_key}", api_key = input.api_key);
 
         let mut request = SignedRequest::new("DELETE", "apigateway", &self.region, &request_uri);
@@ -16370,7 +16372,7 @@ where
     /// <p><p>Deletes an existing <a>Authorizer</a> resource.</p> <div class="seeAlso"><a href="http://docs.aws.amazon.com/cli/latest/reference/apigateway/delete-authorizer.html">AWS CLI</a></div></p>
     fn delete_authorizer(
         &self,
-        input: &DeleteAuthorizerRequest,
+        input: DeleteAuthorizerRequest,
     ) -> RusotoFuture<(), DeleteAuthorizerError> {
         let request_uri = format!(
             "/restapis/{restapi_id}/authorizers/{authorizer_id}",
@@ -16403,7 +16405,7 @@ where
     /// <p>Deletes the <a>BasePathMapping</a> resource.</p>
     fn delete_base_path_mapping(
         &self,
-        input: &DeleteBasePathMappingRequest,
+        input: DeleteBasePathMappingRequest,
     ) -> RusotoFuture<(), DeleteBasePathMappingError> {
         let request_uri = format!(
             "/domainnames/{domain_name}/basepathmappings/{base_path}",
@@ -16436,7 +16438,7 @@ where
     /// <p>Deletes the <a>ClientCertificate</a> resource.</p>
     fn delete_client_certificate(
         &self,
-        input: &DeleteClientCertificateRequest,
+        input: DeleteClientCertificateRequest,
     ) -> RusotoFuture<(), DeleteClientCertificateError> {
         let request_uri = format!(
             "/clientcertificates/{clientcertificate_id}",
@@ -16468,7 +16470,7 @@ where
     /// <p>Deletes a <a>Deployment</a> resource. Deleting a deployment will only succeed if there are no <a>Stage</a> resources associated with it.</p>
     fn delete_deployment(
         &self,
-        input: &DeleteDeploymentRequest,
+        input: DeleteDeploymentRequest,
     ) -> RusotoFuture<(), DeleteDeploymentError> {
         let request_uri = format!(
             "/restapis/{restapi_id}/deployments/{deployment_id}",
@@ -16500,7 +16502,7 @@ where
 
     fn delete_documentation_part(
         &self,
-        input: &DeleteDocumentationPartRequest,
+        input: DeleteDocumentationPartRequest,
     ) -> RusotoFuture<(), DeleteDocumentationPartError> {
         let request_uri = format!(
             "/restapis/{restapi_id}/documentation/parts/{part_id}",
@@ -16532,7 +16534,7 @@ where
 
     fn delete_documentation_version(
         &self,
-        input: &DeleteDocumentationVersionRequest,
+        input: DeleteDocumentationVersionRequest,
     ) -> RusotoFuture<(), DeleteDocumentationVersionError> {
         let request_uri = format!(
             "/restapis/{restapi_id}/documentation/versions/{doc_version}",
@@ -16565,7 +16567,7 @@ where
     /// <p>Deletes the <a>DomainName</a> resource.</p>
     fn delete_domain_name(
         &self,
-        input: &DeleteDomainNameRequest,
+        input: DeleteDomainNameRequest,
     ) -> RusotoFuture<(), DeleteDomainNameError> {
         let request_uri = format!(
             "/domainnames/{domain_name}",
@@ -16597,7 +16599,7 @@ where
     /// <p>Clears any customization of a <a>GatewayResponse</a> of a specified response type on the given <a>RestApi</a> and resets it with the default settings.</p>
     fn delete_gateway_response(
         &self,
-        input: &DeleteGatewayResponseRequest,
+        input: DeleteGatewayResponseRequest,
     ) -> RusotoFuture<(), DeleteGatewayResponseError> {
         let request_uri = format!(
             "/restapis/{restapi_id}/gatewayresponses/{response_type}",
@@ -16630,7 +16632,7 @@ where
     /// <p>Represents a delete integration.</p>
     fn delete_integration(
         &self,
-        input: &DeleteIntegrationRequest,
+        input: DeleteIntegrationRequest,
     ) -> RusotoFuture<(), DeleteIntegrationError> {
         let request_uri = format!(
             "/restapis/{restapi_id}/resources/{resource_id}/methods/{http_method}/integration",
@@ -16664,7 +16666,7 @@ where
     /// <p>Represents a delete integration response.</p>
     fn delete_integration_response(
         &self,
-        input: &DeleteIntegrationResponseRequest,
+        input: DeleteIntegrationResponseRequest,
     ) -> RusotoFuture<(), DeleteIntegrationResponseError> {
         let request_uri = format!("/restapis/{restapi_id}/resources/{resource_id}/methods/{http_method}/integration/responses/{status_code}", http_method = input.http_method, resource_id = input.resource_id, restapi_id = input.rest_api_id, status_code = input.status_code);
 
@@ -16691,7 +16693,7 @@ where
     }
 
     /// <p>Deletes an existing <a>Method</a> resource.</p>
-    fn delete_method(&self, input: &DeleteMethodRequest) -> RusotoFuture<(), DeleteMethodError> {
+    fn delete_method(&self, input: DeleteMethodRequest) -> RusotoFuture<(), DeleteMethodError> {
         let request_uri = format!(
             "/restapis/{restapi_id}/resources/{resource_id}/methods/{http_method}",
             http_method = input.http_method,
@@ -16724,7 +16726,7 @@ where
     /// <p>Deletes an existing <a>MethodResponse</a> resource.</p>
     fn delete_method_response(
         &self,
-        input: &DeleteMethodResponseRequest,
+        input: DeleteMethodResponseRequest,
     ) -> RusotoFuture<(), DeleteMethodResponseError> {
         let request_uri = format!("/restapis/{restapi_id}/resources/{resource_id}/methods/{http_method}/responses/{status_code}", http_method = input.http_method, resource_id = input.resource_id, restapi_id = input.rest_api_id, status_code = input.status_code);
 
@@ -16751,7 +16753,7 @@ where
     }
 
     /// <p>Deletes a model.</p>
-    fn delete_model(&self, input: &DeleteModelRequest) -> RusotoFuture<(), DeleteModelError> {
+    fn delete_model(&self, input: DeleteModelRequest) -> RusotoFuture<(), DeleteModelError> {
         let request_uri = format!(
             "/restapis/{restapi_id}/models/{model_name}",
             model_name = input.model_name,
@@ -16783,7 +16785,7 @@ where
     /// <p>Deletes a <a>RequestValidator</a> of a given <a>RestApi</a>.</p>
     fn delete_request_validator(
         &self,
-        input: &DeleteRequestValidatorRequest,
+        input: DeleteRequestValidatorRequest,
     ) -> RusotoFuture<(), DeleteRequestValidatorError> {
         let request_uri = format!(
             "/restapis/{restapi_id}/requestvalidators/{requestvalidator_id}",
@@ -16816,7 +16818,7 @@ where
     /// <p>Deletes a <a>Resource</a> resource.</p>
     fn delete_resource(
         &self,
-        input: &DeleteResourceRequest,
+        input: DeleteResourceRequest,
     ) -> RusotoFuture<(), DeleteResourceError> {
         let request_uri = format!(
             "/restapis/{restapi_id}/resources/{resource_id}",
@@ -16847,10 +16849,7 @@ where
     }
 
     /// <p>Deletes the specified API.</p>
-    fn delete_rest_api(
-        &self,
-        input: &DeleteRestApiRequest,
-    ) -> RusotoFuture<(), DeleteRestApiError> {
+    fn delete_rest_api(&self, input: DeleteRestApiRequest) -> RusotoFuture<(), DeleteRestApiError> {
         let request_uri = format!("/restapis/{restapi_id}", restapi_id = input.rest_api_id);
 
         let mut request = SignedRequest::new("DELETE", "apigateway", &self.region, &request_uri);
@@ -16876,7 +16875,7 @@ where
     }
 
     /// <p>Deletes a <a>Stage</a> resource.</p>
-    fn delete_stage(&self, input: &DeleteStageRequest) -> RusotoFuture<(), DeleteStageError> {
+    fn delete_stage(&self, input: DeleteStageRequest) -> RusotoFuture<(), DeleteStageError> {
         let request_uri = format!(
             "/restapis/{restapi_id}/stages/{stage_name}",
             restapi_id = input.rest_api_id,
@@ -16908,7 +16907,7 @@ where
     /// <p>Deletes a usage plan of a given plan Id.</p>
     fn delete_usage_plan(
         &self,
-        input: &DeleteUsagePlanRequest,
+        input: DeleteUsagePlanRequest,
     ) -> RusotoFuture<(), DeleteUsagePlanError> {
         let request_uri = format!(
             "/usageplans/{usageplan_id}",
@@ -16940,7 +16939,7 @@ where
     /// <p>Deletes a usage plan key and remove the underlying API key from the associated usage plan.</p>
     fn delete_usage_plan_key(
         &self,
-        input: &DeleteUsagePlanKeyRequest,
+        input: DeleteUsagePlanKeyRequest,
     ) -> RusotoFuture<(), DeleteUsagePlanKeyError> {
         let request_uri = format!(
             "/usageplans/{usageplan_id}/keys/{key_id}",
@@ -16971,10 +16970,7 @@ where
     }
 
     /// <p>Deletes an existing <a>VpcLink</a> of a specified identifier.</p>
-    fn delete_vpc_link(
-        &self,
-        input: &DeleteVpcLinkRequest,
-    ) -> RusotoFuture<(), DeleteVpcLinkError> {
+    fn delete_vpc_link(&self, input: DeleteVpcLinkRequest) -> RusotoFuture<(), DeleteVpcLinkError> {
         let request_uri = format!("/vpclinks/{vpclink_id}", vpclink_id = input.vpc_link_id);
 
         let mut request = SignedRequest::new("DELETE", "apigateway", &self.region, &request_uri);
@@ -17002,7 +16998,7 @@ where
     /// <p>Flushes all authorizer cache entries on a stage.</p>
     fn flush_stage_authorizers_cache(
         &self,
-        input: &FlushStageAuthorizersCacheRequest,
+        input: FlushStageAuthorizersCacheRequest,
     ) -> RusotoFuture<(), FlushStageAuthorizersCacheError> {
         let request_uri = format!(
             "/restapis/{restapi_id}/stages/{stage_name}/cache/authorizers",
@@ -17035,7 +17031,7 @@ where
     /// <p>Flushes a stage's cache.</p>
     fn flush_stage_cache(
         &self,
-        input: &FlushStageCacheRequest,
+        input: FlushStageCacheRequest,
     ) -> RusotoFuture<(), FlushStageCacheError> {
         let request_uri = format!(
             "/restapis/{restapi_id}/stages/{stage_name}/cache/data",
@@ -17068,14 +17064,14 @@ where
     /// <p>Generates a <a>ClientCertificate</a> resource.</p>
     fn generate_client_certificate(
         &self,
-        input: &GenerateClientCertificateRequest,
+        input: GenerateClientCertificateRequest,
     ) -> RusotoFuture<ClientCertificate, GenerateClientCertificateError> {
         let request_uri = "/clientcertificates";
 
         let mut request = SignedRequest::new("POST", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(input).unwrap());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -17140,7 +17136,7 @@ where
     }
 
     /// <p>Gets information about the current <a>ApiKey</a> resource.</p>
-    fn get_api_key(&self, input: &GetApiKeyRequest) -> RusotoFuture<ApiKey, GetApiKeyError> {
+    fn get_api_key(&self, input: GetApiKeyRequest) -> RusotoFuture<ApiKey, GetApiKeyError> {
         let request_uri = format!("/apikeys/{api_key}", api_key = input.api_key);
 
         let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
@@ -17180,7 +17176,7 @@ where
     }
 
     /// <p>Gets information about the current <a>ApiKeys</a> resource.</p>
-    fn get_api_keys(&self, input: &GetApiKeysRequest) -> RusotoFuture<ApiKeys, GetApiKeysError> {
+    fn get_api_keys(&self, input: GetApiKeysRequest) -> RusotoFuture<ApiKeys, GetApiKeysError> {
         let request_uri = "/apikeys";
 
         let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
@@ -17234,7 +17230,7 @@ where
     /// <p><p>Describe an existing <a>Authorizer</a> resource.</p> <div class="seeAlso"><a href="http://docs.aws.amazon.com/cli/latest/reference/apigateway/get-authorizer.html">AWS CLI</a></div></p>
     fn get_authorizer(
         &self,
-        input: &GetAuthorizerRequest,
+        input: GetAuthorizerRequest,
     ) -> RusotoFuture<Authorizer, GetAuthorizerError> {
         let request_uri = format!(
             "/restapis/{restapi_id}/authorizers/{authorizer_id}",
@@ -17275,7 +17271,7 @@ where
     /// <p><p>Describe an existing <a>Authorizers</a> resource.</p> <div class="seeAlso"><a href="http://docs.aws.amazon.com/cli/latest/reference/apigateway/get-authorizers.html">AWS CLI</a></div></p>
     fn get_authorizers(
         &self,
-        input: &GetAuthorizersRequest,
+        input: GetAuthorizersRequest,
     ) -> RusotoFuture<Authorizers, GetAuthorizersError> {
         let request_uri = format!(
             "/restapis/{restapi_id}/authorizers",
@@ -17324,7 +17320,7 @@ where
     /// <p>Describe a <a>BasePathMapping</a> resource.</p>
     fn get_base_path_mapping(
         &self,
-        input: &GetBasePathMappingRequest,
+        input: GetBasePathMappingRequest,
     ) -> RusotoFuture<BasePathMapping, GetBasePathMappingError> {
         let request_uri = format!(
             "/domainnames/{domain_name}/basepathmappings/{base_path}",
@@ -17365,7 +17361,7 @@ where
     /// <p>Represents a collection of <a>BasePathMapping</a> resources.</p>
     fn get_base_path_mappings(
         &self,
-        input: &GetBasePathMappingsRequest,
+        input: GetBasePathMappingsRequest,
     ) -> RusotoFuture<BasePathMappings, GetBasePathMappingsError> {
         let request_uri = format!(
             "/domainnames/{domain_name}/basepathmappings",
@@ -17414,7 +17410,7 @@ where
     /// <p>Gets information about the current <a>ClientCertificate</a> resource.</p>
     fn get_client_certificate(
         &self,
-        input: &GetClientCertificateRequest,
+        input: GetClientCertificateRequest,
     ) -> RusotoFuture<ClientCertificate, GetClientCertificateError> {
         let request_uri = format!(
             "/clientcertificates/{clientcertificate_id}",
@@ -17454,7 +17450,7 @@ where
     /// <p>Gets a collection of <a>ClientCertificate</a> resources.</p>
     fn get_client_certificates(
         &self,
-        input: &GetClientCertificatesRequest,
+        input: GetClientCertificatesRequest,
     ) -> RusotoFuture<ClientCertificates, GetClientCertificatesError> {
         let request_uri = "/clientcertificates";
 
@@ -17500,7 +17496,7 @@ where
     /// <p>Gets information about a <a>Deployment</a> resource.</p>
     fn get_deployment(
         &self,
-        input: &GetDeploymentRequest,
+        input: GetDeploymentRequest,
     ) -> RusotoFuture<Deployment, GetDeploymentError> {
         let request_uri = format!(
             "/restapis/{restapi_id}/deployments/{deployment_id}",
@@ -17549,7 +17545,7 @@ where
     /// <p>Gets information about a <a>Deployments</a> collection.</p>
     fn get_deployments(
         &self,
-        input: &GetDeploymentsRequest,
+        input: GetDeploymentsRequest,
     ) -> RusotoFuture<Deployments, GetDeploymentsError> {
         let request_uri = format!(
             "/restapis/{restapi_id}/deployments",
@@ -17597,7 +17593,7 @@ where
 
     fn get_documentation_part(
         &self,
-        input: &GetDocumentationPartRequest,
+        input: GetDocumentationPartRequest,
     ) -> RusotoFuture<DocumentationPart, GetDocumentationPartError> {
         let request_uri = format!(
             "/restapis/{restapi_id}/documentation/parts/{part_id}",
@@ -17637,7 +17633,7 @@ where
 
     fn get_documentation_parts(
         &self,
-        input: &GetDocumentationPartsRequest,
+        input: GetDocumentationPartsRequest,
     ) -> RusotoFuture<DocumentationParts, GetDocumentationPartsError> {
         let request_uri = format!(
             "/restapis/{restapi_id}/documentation/parts",
@@ -17697,7 +17693,7 @@ where
 
     fn get_documentation_version(
         &self,
-        input: &GetDocumentationVersionRequest,
+        input: GetDocumentationVersionRequest,
     ) -> RusotoFuture<DocumentationVersion, GetDocumentationVersionError> {
         let request_uri = format!(
             "/restapis/{restapi_id}/documentation/versions/{doc_version}",
@@ -17737,7 +17733,7 @@ where
 
     fn get_documentation_versions(
         &self,
-        input: &GetDocumentationVersionsRequest,
+        input: GetDocumentationVersionsRequest,
     ) -> RusotoFuture<DocumentationVersions, GetDocumentationVersionsError> {
         let request_uri = format!(
             "/restapis/{restapi_id}/documentation/versions",
@@ -17786,7 +17782,7 @@ where
     /// <p>Represents a domain name that is contained in a simpler, more intuitive URL that can be called.</p>
     fn get_domain_name(
         &self,
-        input: &GetDomainNameRequest,
+        input: GetDomainNameRequest,
     ) -> RusotoFuture<DomainName, GetDomainNameError> {
         let request_uri = format!(
             "/domainnames/{domain_name}",
@@ -17826,7 +17822,7 @@ where
     /// <p>Represents a collection of <a>DomainName</a> resources.</p>
     fn get_domain_names(
         &self,
-        input: &GetDomainNamesRequest,
+        input: GetDomainNamesRequest,
     ) -> RusotoFuture<DomainNames, GetDomainNamesError> {
         let request_uri = "/domainnames";
 
@@ -17870,7 +17866,7 @@ where
     }
 
     /// <p>Exports a deployed version of a <a>RestApi</a> in a specified format.</p>
-    fn get_export(&self, input: &GetExportRequest) -> RusotoFuture<ExportResponse, GetExportError> {
+    fn get_export(&self, input: GetExportRequest) -> RusotoFuture<ExportResponse, GetExportError> {
         let request_uri = format!(
             "/restapis/{restapi_id}/stages/{stage_name}/exports/{export_type}",
             export_type = input.export_type,
@@ -17924,7 +17920,7 @@ where
     /// <p>Gets a <a>GatewayResponse</a> of a specified response type on the given <a>RestApi</a>.</p>
     fn get_gateway_response(
         &self,
-        input: &GetGatewayResponseRequest,
+        input: GetGatewayResponseRequest,
     ) -> RusotoFuture<GatewayResponse, GetGatewayResponseError> {
         let request_uri = format!(
             "/restapis/{restapi_id}/gatewayresponses/{response_type}",
@@ -17965,7 +17961,7 @@ where
     /// <p>Gets the <a>GatewayResponses</a> collection on the given <a>RestApi</a>. If an API developer has not added any definitions for gateway responses, the result will be the API Gateway-generated default <a>GatewayResponses</a> collection for the supported response types.</p>
     fn get_gateway_responses(
         &self,
-        input: &GetGatewayResponsesRequest,
+        input: GetGatewayResponsesRequest,
     ) -> RusotoFuture<GatewayResponses, GetGatewayResponsesError> {
         let request_uri = format!(
             "/restapis/{restapi_id}/gatewayresponses",
@@ -18014,7 +18010,7 @@ where
     /// <p>Get the integration settings.</p>
     fn get_integration(
         &self,
-        input: &GetIntegrationRequest,
+        input: GetIntegrationRequest,
     ) -> RusotoFuture<Integration, GetIntegrationError> {
         let request_uri = format!(
             "/restapis/{restapi_id}/resources/{resource_id}/methods/{http_method}/integration",
@@ -18056,7 +18052,7 @@ where
     /// <p>Represents a get integration response.</p>
     fn get_integration_response(
         &self,
-        input: &GetIntegrationResponseRequest,
+        input: GetIntegrationResponseRequest,
     ) -> RusotoFuture<IntegrationResponse, GetIntegrationResponseError> {
         let request_uri = format!("/restapis/{restapi_id}/resources/{resource_id}/methods/{http_method}/integration/responses/{status_code}", http_method = input.http_method, resource_id = input.resource_id, restapi_id = input.rest_api_id, status_code = input.status_code);
 
@@ -18091,7 +18087,7 @@ where
     }
 
     /// <p>Describe an existing <a>Method</a> resource.</p>
-    fn get_method(&self, input: &GetMethodRequest) -> RusotoFuture<Method, GetMethodError> {
+    fn get_method(&self, input: GetMethodRequest) -> RusotoFuture<Method, GetMethodError> {
         let request_uri = format!(
             "/restapis/{restapi_id}/resources/{resource_id}/methods/{http_method}",
             http_method = input.http_method,
@@ -18132,7 +18128,7 @@ where
     /// <p>Describes a <a>MethodResponse</a> resource.</p>
     fn get_method_response(
         &self,
-        input: &GetMethodResponseRequest,
+        input: GetMethodResponseRequest,
     ) -> RusotoFuture<MethodResponse, GetMethodResponseError> {
         let request_uri = format!("/restapis/{restapi_id}/resources/{resource_id}/methods/{http_method}/responses/{status_code}", http_method = input.http_method, resource_id = input.resource_id, restapi_id = input.rest_api_id, status_code = input.status_code);
 
@@ -18167,7 +18163,7 @@ where
     }
 
     /// <p>Describes an existing model defined for a <a>RestApi</a> resource.</p>
-    fn get_model(&self, input: &GetModelRequest) -> RusotoFuture<Model, GetModelError> {
+    fn get_model(&self, input: GetModelRequest) -> RusotoFuture<Model, GetModelError> {
         let request_uri = format!(
             "/restapis/{restapi_id}/models/{model_name}",
             model_name = input.model_name,
@@ -18213,7 +18209,7 @@ where
     /// <p>Generates a sample mapping template that can be used to transform a payload into the structure of a model.</p>
     fn get_model_template(
         &self,
-        input: &GetModelTemplateRequest,
+        input: GetModelTemplateRequest,
     ) -> RusotoFuture<Template, GetModelTemplateError> {
         let request_uri = format!(
             "/restapis/{restapi_id}/models/{model_name}/default_template",
@@ -18252,7 +18248,7 @@ where
     }
 
     /// <p>Describes existing <a>Models</a> defined for a <a>RestApi</a> resource.</p>
-    fn get_models(&self, input: &GetModelsRequest) -> RusotoFuture<Models, GetModelsError> {
+    fn get_models(&self, input: GetModelsRequest) -> RusotoFuture<Models, GetModelsError> {
         let request_uri = format!(
             "/restapis/{restapi_id}/models",
             restapi_id = input.rest_api_id
@@ -18300,7 +18296,7 @@ where
     /// <p>Gets a <a>RequestValidator</a> of a given <a>RestApi</a>.</p>
     fn get_request_validator(
         &self,
-        input: &GetRequestValidatorRequest,
+        input: GetRequestValidatorRequest,
     ) -> RusotoFuture<RequestValidator, GetRequestValidatorError> {
         let request_uri = format!(
             "/restapis/{restapi_id}/requestvalidators/{requestvalidator_id}",
@@ -18341,7 +18337,7 @@ where
     /// <p>Gets the <a>RequestValidators</a> collection of a given <a>RestApi</a>.</p>
     fn get_request_validators(
         &self,
-        input: &GetRequestValidatorsRequest,
+        input: GetRequestValidatorsRequest,
     ) -> RusotoFuture<RequestValidators, GetRequestValidatorsError> {
         let request_uri = format!(
             "/restapis/{restapi_id}/requestvalidators",
@@ -18388,7 +18384,7 @@ where
     }
 
     /// <p>Lists information about a resource.</p>
-    fn get_resource(&self, input: &GetResourceRequest) -> RusotoFuture<Resource, GetResourceError> {
+    fn get_resource(&self, input: GetResourceRequest) -> RusotoFuture<Resource, GetResourceError> {
         let request_uri = format!(
             "/restapis/{restapi_id}/resources/{resource_id}",
             resource_id = input.resource_id,
@@ -18436,7 +18432,7 @@ where
     /// <p>Lists information about a collection of <a>Resource</a> resources.</p>
     fn get_resources(
         &self,
-        input: &GetResourcesRequest,
+        input: GetResourcesRequest,
     ) -> RusotoFuture<Resources, GetResourcesError> {
         let request_uri = format!(
             "/restapis/{restapi_id}/resources",
@@ -18488,7 +18484,7 @@ where
     }
 
     /// <p>Lists the <a>RestApi</a> resource in the collection.</p>
-    fn get_rest_api(&self, input: &GetRestApiRequest) -> RusotoFuture<RestApi, GetRestApiError> {
+    fn get_rest_api(&self, input: GetRestApiRequest) -> RusotoFuture<RestApi, GetRestApiError> {
         let request_uri = format!("/restapis/{restapi_id}", restapi_id = input.rest_api_id);
 
         let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
@@ -18522,10 +18518,7 @@ where
     }
 
     /// <p>Lists the <a>RestApis</a> resources for your collection.</p>
-    fn get_rest_apis(
-        &self,
-        input: &GetRestApisRequest,
-    ) -> RusotoFuture<RestApis, GetRestApisError> {
+    fn get_rest_apis(&self, input: GetRestApisRequest) -> RusotoFuture<RestApis, GetRestApisError> {
         let request_uri = "/restapis";
 
         let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
@@ -18568,7 +18561,7 @@ where
     }
 
     /// <p>Generates a client SDK for a <a>RestApi</a> and <a>Stage</a>.</p>
-    fn get_sdk(&self, input: &GetSdkRequest) -> RusotoFuture<SdkResponse, GetSdkError> {
+    fn get_sdk(&self, input: GetSdkRequest) -> RusotoFuture<SdkResponse, GetSdkError> {
         let request_uri = format!(
             "/restapis/{restapi_id}/stages/{stage_name}/sdks/{sdk_type}",
             restapi_id = input.rest_api_id,
@@ -18616,7 +18609,7 @@ where
         RusotoFuture::new(future)
     }
 
-    fn get_sdk_type(&self, input: &GetSdkTypeRequest) -> RusotoFuture<SdkType, GetSdkTypeError> {
+    fn get_sdk_type(&self, input: GetSdkTypeRequest) -> RusotoFuture<SdkType, GetSdkTypeError> {
         let request_uri = format!("/sdktypes/{sdktype_id}", sdktype_id = input.id);
 
         let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
@@ -18649,10 +18642,7 @@ where
         RusotoFuture::new(future)
     }
 
-    fn get_sdk_types(
-        &self,
-        input: &GetSdkTypesRequest,
-    ) -> RusotoFuture<SdkTypes, GetSdkTypesError> {
+    fn get_sdk_types(&self, input: GetSdkTypesRequest) -> RusotoFuture<SdkTypes, GetSdkTypesError> {
         let request_uri = "/sdktypes";
 
         let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
@@ -18695,7 +18685,7 @@ where
     }
 
     /// <p>Gets information about a <a>Stage</a> resource.</p>
-    fn get_stage(&self, input: &GetStageRequest) -> RusotoFuture<Stage, GetStageError> {
+    fn get_stage(&self, input: GetStageRequest) -> RusotoFuture<Stage, GetStageError> {
         let request_uri = format!(
             "/restapis/{restapi_id}/stages/{stage_name}",
             restapi_id = input.rest_api_id,
@@ -18733,7 +18723,7 @@ where
     }
 
     /// <p>Gets information about one or more <a>Stage</a> resources.</p>
-    fn get_stages(&self, input: &GetStagesRequest) -> RusotoFuture<Stages, GetStagesError> {
+    fn get_stages(&self, input: GetStagesRequest) -> RusotoFuture<Stages, GetStagesError> {
         let request_uri = format!(
             "/restapis/{restapi_id}/stages",
             restapi_id = input.rest_api_id
@@ -18776,7 +18766,7 @@ where
     }
 
     /// <p>Gets the <a>Tags</a> collection for a given resource.</p>
-    fn get_tags(&self, input: &GetTagsRequest) -> RusotoFuture<Tags, GetTagsError> {
+    fn get_tags(&self, input: GetTagsRequest) -> RusotoFuture<Tags, GetTagsError> {
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
@@ -18819,7 +18809,7 @@ where
     }
 
     /// <p>Gets the usage data of a usage plan in a specified time interval.</p>
-    fn get_usage(&self, input: &GetUsageRequest) -> RusotoFuture<Usage, GetUsageError> {
+    fn get_usage(&self, input: GetUsageRequest) -> RusotoFuture<Usage, GetUsageError> {
         let request_uri = format!(
             "/usageplans/{usageplan_id}/usage",
             usageplan_id = input.usage_plan_id
@@ -18872,7 +18862,7 @@ where
     /// <p>Gets a usage plan of a given plan identifier.</p>
     fn get_usage_plan(
         &self,
-        input: &GetUsagePlanRequest,
+        input: GetUsagePlanRequest,
     ) -> RusotoFuture<UsagePlan, GetUsagePlanError> {
         let request_uri = format!(
             "/usageplans/{usageplan_id}",
@@ -18912,7 +18902,7 @@ where
     /// <p>Gets a usage plan key of a given key identifier.</p>
     fn get_usage_plan_key(
         &self,
-        input: &GetUsagePlanKeyRequest,
+        input: GetUsagePlanKeyRequest,
     ) -> RusotoFuture<UsagePlanKey, GetUsagePlanKeyError> {
         let request_uri = format!(
             "/usageplans/{usageplan_id}/keys/{key_id}",
@@ -18953,7 +18943,7 @@ where
     /// <p>Gets all the usage plan keys representing the API keys added to a specified usage plan.</p>
     fn get_usage_plan_keys(
         &self,
-        input: &GetUsagePlanKeysRequest,
+        input: GetUsagePlanKeysRequest,
     ) -> RusotoFuture<UsagePlanKeys, GetUsagePlanKeysError> {
         let request_uri = format!(
             "/usageplans/{usageplan_id}/keys",
@@ -19005,7 +18995,7 @@ where
     /// <p>Gets all the usage plans of the caller's account.</p>
     fn get_usage_plans(
         &self,
-        input: &GetUsagePlansRequest,
+        input: GetUsagePlansRequest,
     ) -> RusotoFuture<UsagePlans, GetUsagePlansError> {
         let request_uri = "/usageplans";
 
@@ -19052,7 +19042,7 @@ where
     }
 
     /// <p>Gets a specified VPC link under the caller's account in a region.</p>
-    fn get_vpc_link(&self, input: &GetVpcLinkRequest) -> RusotoFuture<VpcLink, GetVpcLinkError> {
+    fn get_vpc_link(&self, input: GetVpcLinkRequest) -> RusotoFuture<VpcLink, GetVpcLinkError> {
         let request_uri = format!("/vpclinks/{vpclink_id}", vpclink_id = input.vpc_link_id);
 
         let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
@@ -19086,10 +19076,7 @@ where
     }
 
     /// <p>Gets the <a>VpcLinks</a> collection under the caller's account in a selected region.</p>
-    fn get_vpc_links(
-        &self,
-        input: &GetVpcLinksRequest,
-    ) -> RusotoFuture<VpcLinks, GetVpcLinksError> {
+    fn get_vpc_links(&self, input: GetVpcLinksRequest) -> RusotoFuture<VpcLinks, GetVpcLinksError> {
         let request_uri = "/vpclinks";
 
         let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
@@ -19134,7 +19121,7 @@ where
     /// <p>Import API keys from an external source, such as a CSV-formatted file.</p>
     fn import_api_keys(
         &self,
-        input: &ImportApiKeysRequest,
+        input: ImportApiKeysRequest,
     ) -> RusotoFuture<ApiKeyIds, ImportApiKeysError> {
         let request_uri = "/apikeys";
 
@@ -19181,7 +19168,7 @@ where
 
     fn import_documentation_parts(
         &self,
-        input: &ImportDocumentationPartsRequest,
+        input: ImportDocumentationPartsRequest,
     ) -> RusotoFuture<DocumentationPartIds, ImportDocumentationPartsError> {
         let request_uri = format!(
             "/restapis/{restapi_id}/documentation/parts",
@@ -19233,7 +19220,7 @@ where
     /// <p>A feature of the API Gateway control service for creating a new API from an external API definition file.</p>
     fn import_rest_api(
         &self,
-        input: &ImportRestApiRequest,
+        input: ImportRestApiRequest,
     ) -> RusotoFuture<RestApi, ImportRestApiError> {
         let request_uri = "/restapis";
 
@@ -19285,7 +19272,7 @@ where
     /// <p>Creates a customization of a <a>GatewayResponse</a> of a specified response type and status code on the given <a>RestApi</a>.</p>
     fn put_gateway_response(
         &self,
-        input: &PutGatewayResponseRequest,
+        input: PutGatewayResponseRequest,
     ) -> RusotoFuture<GatewayResponse, PutGatewayResponseError> {
         let request_uri = format!(
             "/restapis/{restapi_id}/gatewayresponses/{response_type}",
@@ -19296,7 +19283,7 @@ where
         let mut request = SignedRequest::new("PUT", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(input).unwrap());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -19329,7 +19316,7 @@ where
     /// <p>Sets up a method's integration.</p>
     fn put_integration(
         &self,
-        input: &PutIntegrationRequest,
+        input: PutIntegrationRequest,
     ) -> RusotoFuture<Integration, PutIntegrationError> {
         let request_uri = format!(
             "/restapis/{restapi_id}/resources/{resource_id}/methods/{http_method}/integration",
@@ -19341,7 +19328,7 @@ where
         let mut request = SignedRequest::new("PUT", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(input).unwrap());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -19374,14 +19361,14 @@ where
     /// <p>Represents a put integration.</p>
     fn put_integration_response(
         &self,
-        input: &PutIntegrationResponseRequest,
+        input: PutIntegrationResponseRequest,
     ) -> RusotoFuture<IntegrationResponse, PutIntegrationResponseError> {
         let request_uri = format!("/restapis/{restapi_id}/resources/{resource_id}/methods/{http_method}/integration/responses/{status_code}", http_method = input.http_method, resource_id = input.resource_id, restapi_id = input.rest_api_id, status_code = input.status_code);
 
         let mut request = SignedRequest::new("PUT", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(input).unwrap());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -19412,7 +19399,7 @@ where
     }
 
     /// <p>Add a method to an existing <a>Resource</a> resource.</p>
-    fn put_method(&self, input: &PutMethodRequest) -> RusotoFuture<Method, PutMethodError> {
+    fn put_method(&self, input: PutMethodRequest) -> RusotoFuture<Method, PutMethodError> {
         let request_uri = format!(
             "/restapis/{restapi_id}/resources/{resource_id}/methods/{http_method}",
             http_method = input.http_method,
@@ -19423,7 +19410,7 @@ where
         let mut request = SignedRequest::new("PUT", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(input).unwrap());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -19456,14 +19443,14 @@ where
     /// <p>Adds a <a>MethodResponse</a> to an existing <a>Method</a> resource.</p>
     fn put_method_response(
         &self,
-        input: &PutMethodResponseRequest,
+        input: PutMethodResponseRequest,
     ) -> RusotoFuture<MethodResponse, PutMethodResponseError> {
         let request_uri = format!("/restapis/{restapi_id}/resources/{resource_id}/methods/{http_method}/responses/{status_code}", http_method = input.http_method, resource_id = input.resource_id, restapi_id = input.rest_api_id, status_code = input.status_code);
 
         let mut request = SignedRequest::new("PUT", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(input).unwrap());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -19494,7 +19481,7 @@ where
     }
 
     /// <p>A feature of the API Gateway control service for updating an existing API with an input of external API definitions. The update can take the form of merging the supplied definition into the existing API or overwriting the existing API.</p>
-    fn put_rest_api(&self, input: &PutRestApiRequest) -> RusotoFuture<RestApi, PutRestApiError> {
+    fn put_rest_api(&self, input: PutRestApiRequest) -> RusotoFuture<RestApi, PutRestApiError> {
         let request_uri = format!("/restapis/{restapi_id}", restapi_id = input.rest_api_id);
 
         let mut request = SignedRequest::new("PUT", "apigateway", &self.region, &request_uri);
@@ -19545,13 +19532,13 @@ where
     }
 
     /// <p>Adds or updates a tag on a given resource.</p>
-    fn tag_resource(&self, input: &TagResourceRequest) -> RusotoFuture<(), TagResourceError> {
+    fn tag_resource(&self, input: TagResourceRequest) -> RusotoFuture<(), TagResourceError> {
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("PUT", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(input).unwrap());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -19576,7 +19563,7 @@ where
     /// <p><p>Simulate the execution of an <a>Authorizer</a> in your <a>RestApi</a> with headers, parameters, and an incoming request body.</p> <div class="seeAlso"> <a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/use-custom-authorizer.html">Enable custom authorizers</a> </div></p>
     fn test_invoke_authorizer(
         &self,
-        input: &TestInvokeAuthorizerRequest,
+        input: TestInvokeAuthorizerRequest,
     ) -> RusotoFuture<TestInvokeAuthorizerResponse, TestInvokeAuthorizerError> {
         let request_uri = format!(
             "/restapis/{restapi_id}/authorizers/{authorizer_id}",
@@ -19587,7 +19574,7 @@ where
         let mut request = SignedRequest::new("POST", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(input).unwrap());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -19621,7 +19608,7 @@ where
     /// <p>Simulate the execution of a <a>Method</a> in your <a>RestApi</a> with headers, parameters, and an incoming request body.</p>
     fn test_invoke_method(
         &self,
-        input: &TestInvokeMethodRequest,
+        input: TestInvokeMethodRequest,
     ) -> RusotoFuture<TestInvokeMethodResponse, TestInvokeMethodError> {
         let request_uri = format!(
             "/restapis/{restapi_id}/resources/{resource_id}/methods/{http_method}",
@@ -19633,7 +19620,7 @@ where
         let mut request = SignedRequest::new("POST", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(input).unwrap());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -19664,7 +19651,7 @@ where
     }
 
     /// <p>Removes a tag from a given resource.</p>
-    fn untag_resource(&self, input: &UntagResourceRequest) -> RusotoFuture<(), UntagResourceError> {
+    fn untag_resource(&self, input: UntagResourceRequest) -> RusotoFuture<(), UntagResourceError> {
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("DELETE", "apigateway", &self.region, &request_uri);
@@ -19698,14 +19685,14 @@ where
     /// <p>Changes information about the current <a>Account</a> resource.</p>
     fn update_account(
         &self,
-        input: &UpdateAccountRequest,
+        input: UpdateAccountRequest,
     ) -> RusotoFuture<Account, UpdateAccountError> {
         let request_uri = "/account";
 
         let mut request = SignedRequest::new("PATCH", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(input).unwrap());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -19738,14 +19725,14 @@ where
     /// <p>Changes information about an <a>ApiKey</a> resource.</p>
     fn update_api_key(
         &self,
-        input: &UpdateApiKeyRequest,
+        input: UpdateApiKeyRequest,
     ) -> RusotoFuture<ApiKey, UpdateApiKeyError> {
         let request_uri = format!("/apikeys/{api_key}", api_key = input.api_key);
 
         let mut request = SignedRequest::new("PATCH", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(input).unwrap());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -19778,7 +19765,7 @@ where
     /// <p><p>Updates an existing <a>Authorizer</a> resource.</p> <div class="seeAlso"><a href="http://docs.aws.amazon.com/cli/latest/reference/apigateway/update-authorizer.html">AWS CLI</a></div></p>
     fn update_authorizer(
         &self,
-        input: &UpdateAuthorizerRequest,
+        input: UpdateAuthorizerRequest,
     ) -> RusotoFuture<Authorizer, UpdateAuthorizerError> {
         let request_uri = format!(
             "/restapis/{restapi_id}/authorizers/{authorizer_id}",
@@ -19789,7 +19776,7 @@ where
         let mut request = SignedRequest::new("PATCH", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(input).unwrap());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -19822,7 +19809,7 @@ where
     /// <p>Changes information about the <a>BasePathMapping</a> resource.</p>
     fn update_base_path_mapping(
         &self,
-        input: &UpdateBasePathMappingRequest,
+        input: UpdateBasePathMappingRequest,
     ) -> RusotoFuture<BasePathMapping, UpdateBasePathMappingError> {
         let request_uri = format!(
             "/domainnames/{domain_name}/basepathmappings/{base_path}",
@@ -19833,7 +19820,7 @@ where
         let mut request = SignedRequest::new("PATCH", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(input).unwrap());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -19866,7 +19853,7 @@ where
     /// <p>Changes information about an <a>ClientCertificate</a> resource.</p>
     fn update_client_certificate(
         &self,
-        input: &UpdateClientCertificateRequest,
+        input: UpdateClientCertificateRequest,
     ) -> RusotoFuture<ClientCertificate, UpdateClientCertificateError> {
         let request_uri = format!(
             "/clientcertificates/{clientcertificate_id}",
@@ -19876,7 +19863,7 @@ where
         let mut request = SignedRequest::new("PATCH", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(input).unwrap());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -19909,7 +19896,7 @@ where
     /// <p>Changes information about a <a>Deployment</a> resource.</p>
     fn update_deployment(
         &self,
-        input: &UpdateDeploymentRequest,
+        input: UpdateDeploymentRequest,
     ) -> RusotoFuture<Deployment, UpdateDeploymentError> {
         let request_uri = format!(
             "/restapis/{restapi_id}/deployments/{deployment_id}",
@@ -19920,7 +19907,7 @@ where
         let mut request = SignedRequest::new("PATCH", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(input).unwrap());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -19952,7 +19939,7 @@ where
 
     fn update_documentation_part(
         &self,
-        input: &UpdateDocumentationPartRequest,
+        input: UpdateDocumentationPartRequest,
     ) -> RusotoFuture<DocumentationPart, UpdateDocumentationPartError> {
         let request_uri = format!(
             "/restapis/{restapi_id}/documentation/parts/{part_id}",
@@ -19963,7 +19950,7 @@ where
         let mut request = SignedRequest::new("PATCH", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(input).unwrap());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -19995,7 +19982,7 @@ where
 
     fn update_documentation_version(
         &self,
-        input: &UpdateDocumentationVersionRequest,
+        input: UpdateDocumentationVersionRequest,
     ) -> RusotoFuture<DocumentationVersion, UpdateDocumentationVersionError> {
         let request_uri = format!(
             "/restapis/{restapi_id}/documentation/versions/{doc_version}",
@@ -20006,7 +19993,7 @@ where
         let mut request = SignedRequest::new("PATCH", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(input).unwrap());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -20039,7 +20026,7 @@ where
     /// <p>Changes information about the <a>DomainName</a> resource.</p>
     fn update_domain_name(
         &self,
-        input: &UpdateDomainNameRequest,
+        input: UpdateDomainNameRequest,
     ) -> RusotoFuture<DomainName, UpdateDomainNameError> {
         let request_uri = format!(
             "/domainnames/{domain_name}",
@@ -20049,7 +20036,7 @@ where
         let mut request = SignedRequest::new("PATCH", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(input).unwrap());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -20082,7 +20069,7 @@ where
     /// <p>Updates a <a>GatewayResponse</a> of a specified response type on the given <a>RestApi</a>.</p>
     fn update_gateway_response(
         &self,
-        input: &UpdateGatewayResponseRequest,
+        input: UpdateGatewayResponseRequest,
     ) -> RusotoFuture<GatewayResponse, UpdateGatewayResponseError> {
         let request_uri = format!(
             "/restapis/{restapi_id}/gatewayresponses/{response_type}",
@@ -20093,7 +20080,7 @@ where
         let mut request = SignedRequest::new("PATCH", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(input).unwrap());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -20126,7 +20113,7 @@ where
     /// <p>Represents an update integration.</p>
     fn update_integration(
         &self,
-        input: &UpdateIntegrationRequest,
+        input: UpdateIntegrationRequest,
     ) -> RusotoFuture<Integration, UpdateIntegrationError> {
         let request_uri = format!(
             "/restapis/{restapi_id}/resources/{resource_id}/methods/{http_method}/integration",
@@ -20138,7 +20125,7 @@ where
         let mut request = SignedRequest::new("PATCH", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(input).unwrap());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -20171,14 +20158,14 @@ where
     /// <p>Represents an update integration response.</p>
     fn update_integration_response(
         &self,
-        input: &UpdateIntegrationResponseRequest,
+        input: UpdateIntegrationResponseRequest,
     ) -> RusotoFuture<IntegrationResponse, UpdateIntegrationResponseError> {
         let request_uri = format!("/restapis/{restapi_id}/resources/{resource_id}/methods/{http_method}/integration/responses/{status_code}", http_method = input.http_method, resource_id = input.resource_id, restapi_id = input.rest_api_id, status_code = input.status_code);
 
         let mut request = SignedRequest::new("PATCH", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(input).unwrap());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -20209,10 +20196,7 @@ where
     }
 
     /// <p>Updates an existing <a>Method</a> resource.</p>
-    fn update_method(
-        &self,
-        input: &UpdateMethodRequest,
-    ) -> RusotoFuture<Method, UpdateMethodError> {
+    fn update_method(&self, input: UpdateMethodRequest) -> RusotoFuture<Method, UpdateMethodError> {
         let request_uri = format!(
             "/restapis/{restapi_id}/resources/{resource_id}/methods/{http_method}",
             http_method = input.http_method,
@@ -20223,7 +20207,7 @@ where
         let mut request = SignedRequest::new("PATCH", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(input).unwrap());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -20256,14 +20240,14 @@ where
     /// <p>Updates an existing <a>MethodResponse</a> resource.</p>
     fn update_method_response(
         &self,
-        input: &UpdateMethodResponseRequest,
+        input: UpdateMethodResponseRequest,
     ) -> RusotoFuture<MethodResponse, UpdateMethodResponseError> {
         let request_uri = format!("/restapis/{restapi_id}/resources/{resource_id}/methods/{http_method}/responses/{status_code}", http_method = input.http_method, resource_id = input.resource_id, restapi_id = input.rest_api_id, status_code = input.status_code);
 
         let mut request = SignedRequest::new("PATCH", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(input).unwrap());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -20294,7 +20278,7 @@ where
     }
 
     /// <p>Changes information about a model.</p>
-    fn update_model(&self, input: &UpdateModelRequest) -> RusotoFuture<Model, UpdateModelError> {
+    fn update_model(&self, input: UpdateModelRequest) -> RusotoFuture<Model, UpdateModelError> {
         let request_uri = format!(
             "/restapis/{restapi_id}/models/{model_name}",
             model_name = input.model_name,
@@ -20304,7 +20288,7 @@ where
         let mut request = SignedRequest::new("PATCH", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(input).unwrap());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -20337,7 +20321,7 @@ where
     /// <p>Updates a <a>RequestValidator</a> of a given <a>RestApi</a>.</p>
     fn update_request_validator(
         &self,
-        input: &UpdateRequestValidatorRequest,
+        input: UpdateRequestValidatorRequest,
     ) -> RusotoFuture<RequestValidator, UpdateRequestValidatorError> {
         let request_uri = format!(
             "/restapis/{restapi_id}/requestvalidators/{requestvalidator_id}",
@@ -20348,7 +20332,7 @@ where
         let mut request = SignedRequest::new("PATCH", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(input).unwrap());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -20381,7 +20365,7 @@ where
     /// <p>Changes information about a <a>Resource</a> resource.</p>
     fn update_resource(
         &self,
-        input: &UpdateResourceRequest,
+        input: UpdateResourceRequest,
     ) -> RusotoFuture<Resource, UpdateResourceError> {
         let request_uri = format!(
             "/restapis/{restapi_id}/resources/{resource_id}",
@@ -20392,7 +20376,7 @@ where
         let mut request = SignedRequest::new("PATCH", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(input).unwrap());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -20425,14 +20409,14 @@ where
     /// <p>Changes information about the specified API.</p>
     fn update_rest_api(
         &self,
-        input: &UpdateRestApiRequest,
+        input: UpdateRestApiRequest,
     ) -> RusotoFuture<RestApi, UpdateRestApiError> {
         let request_uri = format!("/restapis/{restapi_id}", restapi_id = input.rest_api_id);
 
         let mut request = SignedRequest::new("PATCH", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(input).unwrap());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -20463,7 +20447,7 @@ where
     }
 
     /// <p>Changes information about a <a>Stage</a> resource.</p>
-    fn update_stage(&self, input: &UpdateStageRequest) -> RusotoFuture<Stage, UpdateStageError> {
+    fn update_stage(&self, input: UpdateStageRequest) -> RusotoFuture<Stage, UpdateStageError> {
         let request_uri = format!(
             "/restapis/{restapi_id}/stages/{stage_name}",
             restapi_id = input.rest_api_id,
@@ -20473,7 +20457,7 @@ where
         let mut request = SignedRequest::new("PATCH", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(input).unwrap());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -20504,7 +20488,7 @@ where
     }
 
     /// <p>Grants a temporary extension to the remaining quota of a usage plan associated with a specified API key.</p>
-    fn update_usage(&self, input: &UpdateUsageRequest) -> RusotoFuture<Usage, UpdateUsageError> {
+    fn update_usage(&self, input: UpdateUsageRequest) -> RusotoFuture<Usage, UpdateUsageError> {
         let request_uri = format!(
             "/usageplans/{usageplan_id}/keys/{key_id}/usage",
             key_id = input.key_id,
@@ -20514,7 +20498,7 @@ where
         let mut request = SignedRequest::new("PATCH", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(input).unwrap());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -20547,7 +20531,7 @@ where
     /// <p>Updates a usage plan of a given plan Id.</p>
     fn update_usage_plan(
         &self,
-        input: &UpdateUsagePlanRequest,
+        input: UpdateUsagePlanRequest,
     ) -> RusotoFuture<UsagePlan, UpdateUsagePlanError> {
         let request_uri = format!(
             "/usageplans/{usageplan_id}",
@@ -20557,7 +20541,7 @@ where
         let mut request = SignedRequest::new("PATCH", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(input).unwrap());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -20590,14 +20574,14 @@ where
     /// <p>Updates an existing <a>VpcLink</a> of a specified identifier.</p>
     fn update_vpc_link(
         &self,
-        input: &UpdateVpcLinkRequest,
+        input: UpdateVpcLinkRequest,
     ) -> RusotoFuture<VpcLink, UpdateVpcLinkError> {
         let request_uri = format!("/vpclinks/{vpclink_id}", vpclink_id = input.vpc_link_id);
 
         let mut request = SignedRequest::new("PATCH", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(input).unwrap());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
         let future = self.inner.sign_and_dispatch(request, |response| {

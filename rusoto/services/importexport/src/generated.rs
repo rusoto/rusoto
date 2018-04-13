@@ -18,24 +18,24 @@ use std::io;
 use futures::future;
 use futures::Future;
 use rusoto_core::reactor::{CredentialsProvider, RequestDispatcher};
-use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::region;
+use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::{ClientInner, RusotoFuture};
 
-use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
+use rusoto_core::request::HttpDispatchError;
 
-use std::str::FromStr;
-use xml::EventReader;
-use xml::reader::ParserConfig;
+use hyper::StatusCode;
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::signature::SignedRequest;
-use xml::reader::XmlEvent;
-use rusoto_core::xmlutil::{Next, Peek, XmlParseError, XmlResponse};
+use rusoto_core::xmlerror::*;
 use rusoto_core::xmlutil::{characters, end_element, find_start_element, peek_at_name, skip_tree,
                            start_element};
-use rusoto_core::xmlerror::*;
-use hyper::StatusCode;
+use rusoto_core::xmlutil::{Next, Peek, XmlParseError, XmlResponse};
+use std::str::FromStr;
+use xml::reader::ParserConfig;
+use xml::reader::XmlEvent;
+use xml::EventReader;
 
 enum DeserializerNext {
     Close,
@@ -546,8 +546,7 @@ impl GetShippingLabelOutputDeserializer {
                     }
                     "Warning" => {
                         obj.warning = Some(try!(GenericStringDeserializer::deserialize(
-                            "Warning",
-                            stack
+                            "Warning", stack
                         )));
                     }
                     _ => skip_tree(stack),
@@ -2021,25 +2020,25 @@ impl Error for UpdateJobError {
 /// Trait representing the capabilities of the AWS Import/Export API. AWS Import/Export clients implement this trait.
 pub trait ImportExport {
     /// <p>This operation cancels a specified job. Only the job owner can cancel it. The operation fails if the job has already started or is complete.</p>
-    fn cancel_job(&self, input: &CancelJobInput) -> RusotoFuture<CancelJobOutput, CancelJobError>;
+    fn cancel_job(&self, input: CancelJobInput) -> RusotoFuture<CancelJobOutput, CancelJobError>;
 
     /// <p>This operation initiates the process of scheduling an upload or download of your data. You include in the request a manifest that describes the data transfer specifics. The response to the request includes a job ID, which you can use in other operations, a signature that you use to identify your storage device, and the address where you should ship your storage device.</p>
-    fn create_job(&self, input: &CreateJobInput) -> RusotoFuture<CreateJobOutput, CreateJobError>;
+    fn create_job(&self, input: CreateJobInput) -> RusotoFuture<CreateJobOutput, CreateJobError>;
 
     /// <p>This operation generates a pre-paid UPS shipping label that you will use to ship your device to AWS for processing.</p>
     fn get_shipping_label(
         &self,
-        input: &GetShippingLabelInput,
+        input: GetShippingLabelInput,
     ) -> RusotoFuture<GetShippingLabelOutput, GetShippingLabelError>;
 
     /// <p>This operation returns information about a job, including where the job is in the processing pipeline, the status of the results, and the signature value associated with the job. You can only return information about jobs you own.</p>
-    fn get_status(&self, input: &GetStatusInput) -> RusotoFuture<GetStatusOutput, GetStatusError>;
+    fn get_status(&self, input: GetStatusInput) -> RusotoFuture<GetStatusOutput, GetStatusError>;
 
     /// <p>This operation returns the jobs associated with the requester. AWS Import/Export lists the jobs in reverse chronological order based on the date of creation. For example if Job Test1 was created 2009Dec30 and Test2 was created 2010Feb05, the ListJobs operation would return Test2 followed by Test1.</p>
-    fn list_jobs(&self, input: &ListJobsInput) -> RusotoFuture<ListJobsOutput, ListJobsError>;
+    fn list_jobs(&self, input: ListJobsInput) -> RusotoFuture<ListJobsOutput, ListJobsError>;
 
     /// <p>You use this operation to change the parameters specified in the original manifest file by supplying a new manifest file. The manifest file attached to this request replaces the original manifest file. You can only use the operation after a CreateJob request but before the data transfer starts and you can only use it on jobs you own.</p>
-    fn update_job(&self, input: &UpdateJobInput) -> RusotoFuture<UpdateJobOutput, UpdateJobError>;
+    fn update_job(&self, input: UpdateJobInput) -> RusotoFuture<UpdateJobOutput, UpdateJobError>;
 }
 /// A client for the AWS Import/Export API.
 pub struct ImportExportClient<P = CredentialsProvider, D = RequestDispatcher>
@@ -2085,7 +2084,7 @@ where
     D: DispatchSignedRequest + 'static,
 {
     /// <p>This operation cancels a specified job. Only the job owner can cancel it. The operation fails if the job has already started or is complete.</p>
-    fn cancel_job(&self, input: &CancelJobInput) -> RusotoFuture<CancelJobOutput, CancelJobError> {
+    fn cancel_job(&self, input: CancelJobInput) -> RusotoFuture<CancelJobOutput, CancelJobError> {
         let mut request = SignedRequest::new(
             "POST",
             "importexport",
@@ -2138,7 +2137,7 @@ where
     }
 
     /// <p>This operation initiates the process of scheduling an upload or download of your data. You include in the request a manifest that describes the data transfer specifics. The response to the request includes a job ID, which you can use in other operations, a signature that you use to identify your storage device, and the address where you should ship your storage device.</p>
-    fn create_job(&self, input: &CreateJobInput) -> RusotoFuture<CreateJobOutput, CreateJobError> {
+    fn create_job(&self, input: CreateJobInput) -> RusotoFuture<CreateJobOutput, CreateJobError> {
         let mut request = SignedRequest::new(
             "POST",
             "importexport",
@@ -2193,7 +2192,7 @@ where
     /// <p>This operation generates a pre-paid UPS shipping label that you will use to ship your device to AWS for processing.</p>
     fn get_shipping_label(
         &self,
-        input: &GetShippingLabelInput,
+        input: GetShippingLabelInput,
     ) -> RusotoFuture<GetShippingLabelOutput, GetShippingLabelError> {
         let mut request = SignedRequest::new(
             "POST",
@@ -2247,7 +2246,7 @@ where
     }
 
     /// <p>This operation returns information about a job, including where the job is in the processing pipeline, the status of the results, and the signature value associated with the job. You can only return information about jobs you own.</p>
-    fn get_status(&self, input: &GetStatusInput) -> RusotoFuture<GetStatusOutput, GetStatusError> {
+    fn get_status(&self, input: GetStatusInput) -> RusotoFuture<GetStatusOutput, GetStatusError> {
         let mut request = SignedRequest::new(
             "POST",
             "importexport",
@@ -2300,7 +2299,7 @@ where
     }
 
     /// <p>This operation returns the jobs associated with the requester. AWS Import/Export lists the jobs in reverse chronological order based on the date of creation. For example if Job Test1 was created 2009Dec30 and Test2 was created 2010Feb05, the ListJobs operation would return Test2 followed by Test1.</p>
-    fn list_jobs(&self, input: &ListJobsInput) -> RusotoFuture<ListJobsOutput, ListJobsError> {
+    fn list_jobs(&self, input: ListJobsInput) -> RusotoFuture<ListJobsOutput, ListJobsError> {
         let mut request =
             SignedRequest::new("POST", "importexport", &self.region, "/?Operation=ListJobs");
         let mut params = Params::new();
@@ -2349,7 +2348,7 @@ where
     }
 
     /// <p>You use this operation to change the parameters specified in the original manifest file by supplying a new manifest file. The manifest file attached to this request replaces the original manifest file. You can only use the operation after a CreateJob request but before the data transfer starts and you can only use it on jobs you own.</p>
-    fn update_job(&self, input: &UpdateJobInput) -> RusotoFuture<UpdateJobOutput, UpdateJobError> {
+    fn update_job(&self, input: UpdateJobInput) -> RusotoFuture<UpdateJobOutput, UpdateJobError> {
         let mut request = SignedRequest::new(
             "POST",
             "importexport",
@@ -2407,8 +2406,8 @@ mod protocol_tests {
 
     extern crate rusoto_mock;
 
-    use super::*;
     use self::rusoto_mock::*;
+    use super::*;
     use rusoto_core::Region as rusoto_region;
 
     #[test]
@@ -2420,7 +2419,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(400).with_body(&mock_response);
         let client = ImportExportClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = GetStatusInput::default();
-        let result = client.get_status(&request).sync();
+        let result = client.get_status(request).sync();
         assert!(!result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -2433,7 +2432,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = ImportExportClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = ListJobsInput::default();
-        let result = client.list_jobs(&request).sync();
+        let result = client.list_jobs(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 }

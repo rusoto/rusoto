@@ -18,18 +18,18 @@ use std::io;
 use futures::future;
 use futures::Future;
 use rusoto_core::reactor::{CredentialsProvider, RequestDispatcher};
-use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::region;
+use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::{ClientInner, RusotoFuture};
 
-use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
+use rusoto_core::request::HttpDispatchError;
 
-use serde_json;
-use rusoto_core::signature::SignedRequest;
-use serde_json::Value as SerdeJsonValue;
-use serde_json::from_str;
 use hyper::StatusCode;
+use rusoto_core::signature::SignedRequest;
+use serde_json;
+use serde_json::from_str;
+use serde_json::Value as SerdeJsonValue;
 /// <p>The details of a DDoS attack.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct AttackDetail {
@@ -1300,7 +1300,7 @@ pub trait Shield {
     /// <p>Enables AWS Shield Advanced for a specific AWS resource. The resource can be an Amazon CloudFront distribution, Elastic Load Balancing load balancer, Elastic IP Address, or an Amazon Route 53 hosted zone.</p>
     fn create_protection(
         &self,
-        input: &CreateProtectionRequest,
+        input: CreateProtectionRequest,
     ) -> RusotoFuture<CreateProtectionResponse, CreateProtectionError>;
 
     /// <p>Activates AWS Shield Advanced for an account.</p>
@@ -1311,7 +1311,7 @@ pub trait Shield {
     /// <p>Deletes an AWS Shield Advanced <a>Protection</a>.</p>
     fn delete_protection(
         &self,
-        input: &DeleteProtectionRequest,
+        input: DeleteProtectionRequest,
     ) -> RusotoFuture<DeleteProtectionResponse, DeleteProtectionError>;
 
     /// <p>Removes AWS Shield Advanced from an account. AWS Shield Advanced requires a 1-year subscription commitment. You cannot delete a subscription prior to the completion of that commitment. </p>
@@ -1322,13 +1322,13 @@ pub trait Shield {
     /// <p>Describes the details of a DDoS attack. </p>
     fn describe_attack(
         &self,
-        input: &DescribeAttackRequest,
+        input: DescribeAttackRequest,
     ) -> RusotoFuture<DescribeAttackResponse, DescribeAttackError>;
 
     /// <p>Lists the details of a <a>Protection</a> object.</p>
     fn describe_protection(
         &self,
-        input: &DescribeProtectionRequest,
+        input: DescribeProtectionRequest,
     ) -> RusotoFuture<DescribeProtectionResponse, DescribeProtectionError>;
 
     /// <p>Provides details about the AWS Shield Advanced subscription for an account.</p>
@@ -1344,13 +1344,13 @@ pub trait Shield {
     /// <p>Returns all ongoing DDoS attacks or all DDoS attacks during a specified time period.</p>
     fn list_attacks(
         &self,
-        input: &ListAttacksRequest,
+        input: ListAttacksRequest,
     ) -> RusotoFuture<ListAttacksResponse, ListAttacksError>;
 
     /// <p>Lists all <a>Protection</a> objects for the account.</p>
     fn list_protections(
         &self,
-        input: &ListProtectionsRequest,
+        input: ListProtectionsRequest,
     ) -> RusotoFuture<ListProtectionsResponse, ListProtectionsError>;
 }
 /// A client for the AWS Shield API.
@@ -1399,13 +1399,13 @@ where
     /// <p>Enables AWS Shield Advanced for a specific AWS resource. The resource can be an Amazon CloudFront distribution, Elastic Load Balancing load balancer, Elastic IP Address, or an Amazon Route 53 hosted zone.</p>
     fn create_protection(
         &self,
-        input: &CreateProtectionRequest,
+        input: CreateProtectionRequest,
     ) -> RusotoFuture<CreateProtectionResponse, CreateProtectionError> {
         let mut request = SignedRequest::new("POST", "shield", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSShield_20160616.CreateProtection");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -1471,13 +1471,13 @@ where
     /// <p>Deletes an AWS Shield Advanced <a>Protection</a>.</p>
     fn delete_protection(
         &self,
-        input: &DeleteProtectionRequest,
+        input: DeleteProtectionRequest,
     ) -> RusotoFuture<DeleteProtectionResponse, DeleteProtectionError> {
         let mut request = SignedRequest::new("POST", "shield", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSShield_20160616.DeleteProtection");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -1543,13 +1543,13 @@ where
     /// <p>Describes the details of a DDoS attack. </p>
     fn describe_attack(
         &self,
-        input: &DescribeAttackRequest,
+        input: DescribeAttackRequest,
     ) -> RusotoFuture<DescribeAttackResponse, DescribeAttackError> {
         let mut request = SignedRequest::new("POST", "shield", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSShield_20160616.DescribeAttack");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -1580,13 +1580,13 @@ where
     /// <p>Lists the details of a <a>Protection</a> object.</p>
     fn describe_protection(
         &self,
-        input: &DescribeProtectionRequest,
+        input: DescribeProtectionRequest,
     ) -> RusotoFuture<DescribeProtectionResponse, DescribeProtectionError> {
         let mut request = SignedRequest::new("POST", "shield", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSShield_20160616.DescribeProtection");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -1687,13 +1687,13 @@ where
     /// <p>Returns all ongoing DDoS attacks or all DDoS attacks during a specified time period.</p>
     fn list_attacks(
         &self,
-        input: &ListAttacksRequest,
+        input: ListAttacksRequest,
     ) -> RusotoFuture<ListAttacksResponse, ListAttacksError> {
         let mut request = SignedRequest::new("POST", "shield", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSShield_20160616.ListAttacks");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -1724,13 +1724,13 @@ where
     /// <p>Lists all <a>Protection</a> objects for the account.</p>
     fn list_protections(
         &self,
-        input: &ListProtectionsRequest,
+        input: ListProtectionsRequest,
     ) -> RusotoFuture<ListProtectionsResponse, ListProtectionsError> {
         let mut request = SignedRequest::new("POST", "shield", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSShield_20160616.ListProtections");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {

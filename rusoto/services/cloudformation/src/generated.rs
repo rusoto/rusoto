@@ -18,24 +18,24 @@ use std::io;
 use futures::future;
 use futures::Future;
 use rusoto_core::reactor::{CredentialsProvider, RequestDispatcher};
-use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::region;
+use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::{ClientInner, RusotoFuture};
 
-use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
+use rusoto_core::request::HttpDispatchError;
 
-use std::str::FromStr;
-use xml::EventReader;
-use xml::reader::ParserConfig;
+use hyper::StatusCode;
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::signature::SignedRequest;
-use xml::reader::XmlEvent;
-use rusoto_core::xmlutil::{Next, Peek, XmlParseError, XmlResponse};
+use rusoto_core::xmlerror::*;
 use rusoto_core::xmlutil::{characters, end_element, find_start_element, peek_at_name, skip_tree,
                            start_element};
-use rusoto_core::xmlerror::*;
-use hyper::StatusCode;
+use rusoto_core::xmlutil::{Next, Peek, XmlParseError, XmlResponse};
+use std::str::FromStr;
+use xml::reader::ParserConfig;
+use xml::reader::XmlEvent;
+use xml::EventReader;
 
 enum DeserializerNext {
     Close,
@@ -89,8 +89,7 @@ impl AccountGateResultDeserializer {
                 DeserializerNext::Element(name) => match &name[..] {
                     "Status" => {
                         obj.status = Some(try!(AccountGateStatusDeserializer::deserialize(
-                            "Status",
-                            stack
+                            "Status", stack
                         )));
                     }
                     "StatusReason" => {
@@ -583,8 +582,7 @@ impl ChangeSetSummariesDeserializer {
                 DeserializerNext::Element(name) => {
                     if name == "member" {
                         obj.push(try!(ChangeSetSummaryDeserializer::deserialize(
-                            "member",
-                            stack
+                            "member", stack
                         )));
                     } else {
                         skip_tree(stack);
@@ -687,8 +685,7 @@ impl ChangeSetSummaryDeserializer {
                     }
                     "Status" => {
                         obj.status = Some(try!(ChangeSetStatusDeserializer::deserialize(
-                            "Status",
-                            stack
+                            "Status", stack
                         )));
                     }
                     "StatusReason" => {
@@ -2006,8 +2003,7 @@ impl DescribeChangeSetOutputDeserializer {
                     }
                     "Status" => {
                         obj.status = Some(try!(ChangeSetStatusDeserializer::deserialize(
-                            "Status",
-                            stack
+                            "Status", stack
                         )));
                     }
                     "StatusReason" => {
@@ -4333,8 +4329,7 @@ impl NotificationARNsDeserializer {
                 DeserializerNext::Element(name) => {
                     if name == "member" {
                         obj.push(try!(NotificationARNDeserializer::deserialize(
-                            "member",
-                            stack
+                            "member", stack
                         )));
                     } else {
                         skip_tree(stack);
@@ -4772,8 +4767,7 @@ impl ParameterDeclarationsDeserializer {
                 DeserializerNext::Element(name) => {
                     if name == "member" {
                         obj.push(try!(ParameterDeclarationDeserializer::deserialize(
-                            "member",
-                            stack
+                            "member", stack
                         )));
                     } else {
                         skip_tree(stack);
@@ -5083,8 +5077,7 @@ impl ResourceChangeDeserializer {
                     }
                     "Details" => {
                         obj.details = Some(try!(ResourceChangeDetailsDeserializer::deserialize(
-                            "Details",
-                            stack
+                            "Details", stack
                         )));
                     }
                     "LogicalResourceId" => {
@@ -5162,33 +5155,32 @@ impl ResourceChangeDetailDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "CausingEntity" => {
-                            obj.causing_entity = Some(try!(
-                                CausingEntityDeserializer::deserialize("CausingEntity", stack)
-                            ));
-                        }
-                        "ChangeSource" => {
-                            obj.change_source = Some(try!(ChangeSourceDeserializer::deserialize(
-                                "ChangeSource",
-                                stack
-                            )));
-                        }
-                        "Evaluation" => {
-                            obj.evaluation = Some(try!(EvaluationTypeDeserializer::deserialize(
-                                "Evaluation",
-                                stack
-                            )));
-                        }
-                        "Target" => {
-                            obj.target = Some(try!(
-                                ResourceTargetDefinitionDeserializer::deserialize("Target", stack)
-                            ));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "CausingEntity" => {
+                        obj.causing_entity = Some(try!(CausingEntityDeserializer::deserialize(
+                            "CausingEntity",
+                            stack
+                        )));
                     }
-                }
+                    "ChangeSource" => {
+                        obj.change_source = Some(try!(ChangeSourceDeserializer::deserialize(
+                            "ChangeSource",
+                            stack
+                        )));
+                    }
+                    "Evaluation" => {
+                        obj.evaluation = Some(try!(EvaluationTypeDeserializer::deserialize(
+                            "Evaluation",
+                            stack
+                        )));
+                    }
+                    "Target" => {
+                        obj.target = Some(try!(ResourceTargetDefinitionDeserializer::deserialize(
+                            "Target", stack
+                        )));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -5224,8 +5216,7 @@ impl ResourceChangeDetailsDeserializer {
                 DeserializerNext::Element(name) => {
                     if name == "member" {
                         obj.push(try!(ResourceChangeDetailDeserializer::deserialize(
-                            "member",
-                            stack
+                            "member", stack
                         )));
                     } else {
                         skip_tree(stack);
@@ -5643,8 +5634,7 @@ impl RollbackTriggersDeserializer {
                 DeserializerNext::Element(name) => {
                     if name == "member" {
                         obj.push(try!(RollbackTriggerDeserializer::deserialize(
-                            "member",
-                            stack
+                            "member", stack
                         )));
                     } else {
                         skip_tree(stack);
@@ -5698,8 +5688,7 @@ impl ScopeDeserializer {
                 DeserializerNext::Element(name) => {
                     if name == "member" {
                         obj.push(try!(ResourceAttributeDeserializer::deserialize(
-                            "member",
-                            stack
+                            "member", stack
                         )));
                     } else {
                         skip_tree(stack);
@@ -6226,8 +6215,7 @@ impl StackInstanceDeserializer {
                     }
                     "Status" => {
                         obj.status = Some(try!(StackInstanceStatusDeserializer::deserialize(
-                            "Status",
-                            stack
+                            "Status", stack
                         )));
                     }
                     "StatusReason" => {
@@ -6285,8 +6273,7 @@ impl StackInstanceSummariesDeserializer {
                 DeserializerNext::Element(name) => {
                     if name == "member" {
                         obj.push(try!(StackInstanceSummaryDeserializer::deserialize(
-                            "member",
-                            stack
+                            "member", stack
                         )));
                     } else {
                         skip_tree(stack);
@@ -6363,8 +6350,7 @@ impl StackInstanceSummaryDeserializer {
                     }
                     "Status" => {
                         obj.status = Some(try!(StackInstanceStatusDeserializer::deserialize(
-                            "Status",
-                            stack
+                            "Status", stack
                         )));
                     }
                     "StatusReason" => {
@@ -6658,8 +6644,7 @@ impl StackResourceSummariesDeserializer {
                 DeserializerNext::Element(name) => {
                     if name == "member" {
                         obj.push(try!(StackResourceSummaryDeserializer::deserialize(
-                            "member",
-                            stack
+                            "member", stack
                         )));
                     } else {
                         skip_tree(stack);
@@ -6790,8 +6775,7 @@ impl StackResourcesDeserializer {
                 DeserializerNext::Element(name) => {
                     if name == "member" {
                         obj.push(try!(StackResourceDeserializer::deserialize(
-                            "member",
-                            stack
+                            "member", stack
                         )));
                     } else {
                         skip_tree(stack);
@@ -6901,8 +6885,7 @@ impl StackSetDeserializer {
                     }
                     "Status" => {
                         obj.status = Some(try!(StackSetStatusDeserializer::deserialize(
-                            "Status",
-                            stack
+                            "Status", stack
                         )));
                     }
                     "Tags" => {
@@ -7014,62 +6997,61 @@ impl StackSetOperationDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "Action" => {
-                            obj.action = Some(try!(
-                                StackSetOperationActionDeserializer::deserialize("Action", stack)
-                            ));
-                        }
-                        "AdministrationRoleARN" => {
-                            obj.administration_role_arn = Some(try!(
-                                RoleARNDeserializer::deserialize("AdministrationRoleARN", stack)
-                            ));
-                        }
-                        "CreationTimestamp" => {
-                            obj.creation_timestamp = Some(try!(
-                                TimestampDeserializer::deserialize("CreationTimestamp", stack)
-                            ));
-                        }
-                        "EndTimestamp" => {
-                            obj.end_timestamp = Some(try!(TimestampDeserializer::deserialize(
-                                "EndTimestamp",
-                                stack
-                            )));
-                        }
-                        "OperationId" => {
-                            obj.operation_id = Some(try!(
-                                ClientRequestTokenDeserializer::deserialize("OperationId", stack)
-                            ));
-                        }
-                        "OperationPreferences" => {
-                            obj.operation_preferences =
-                                Some(try!(StackSetOperationPreferencesDeserializer::deserialize(
-                                    "OperationPreferences",
-                                    stack
-                                )));
-                        }
-                        "RetainStacks" => {
-                            obj.retain_stacks =
-                                Some(try!(RetainStacksNullableDeserializer::deserialize(
-                                    "RetainStacks",
-                                    stack
-                                )));
-                        }
-                        "StackSetId" => {
-                            obj.stack_set_id = Some(try!(StackSetIdDeserializer::deserialize(
-                                "StackSetId",
-                                stack
-                            )));
-                        }
-                        "Status" => {
-                            obj.status = Some(try!(
-                                StackSetOperationStatusDeserializer::deserialize("Status", stack)
-                            ));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "Action" => {
+                        obj.action = Some(try!(StackSetOperationActionDeserializer::deserialize(
+                            "Action", stack
+                        )));
                     }
-                }
+                    "AdministrationRoleARN" => {
+                        obj.administration_role_arn = Some(try!(RoleARNDeserializer::deserialize(
+                            "AdministrationRoleARN",
+                            stack
+                        )));
+                    }
+                    "CreationTimestamp" => {
+                        obj.creation_timestamp = Some(try!(TimestampDeserializer::deserialize(
+                            "CreationTimestamp",
+                            stack
+                        )));
+                    }
+                    "EndTimestamp" => {
+                        obj.end_timestamp = Some(try!(TimestampDeserializer::deserialize(
+                            "EndTimestamp",
+                            stack
+                        )));
+                    }
+                    "OperationId" => {
+                        obj.operation_id = Some(try!(ClientRequestTokenDeserializer::deserialize(
+                            "OperationId",
+                            stack
+                        )));
+                    }
+                    "OperationPreferences" => {
+                        obj.operation_preferences =
+                            Some(try!(StackSetOperationPreferencesDeserializer::deserialize(
+                                "OperationPreferences",
+                                stack
+                            )));
+                    }
+                    "RetainStacks" => {
+                        obj.retain_stacks = Some(try!(
+                            RetainStacksNullableDeserializer::deserialize("RetainStacks", stack)
+                        ));
+                    }
+                    "StackSetId" => {
+                        obj.stack_set_id = Some(try!(StackSetIdDeserializer::deserialize(
+                            "StackSetId",
+                            stack
+                        )));
+                    }
+                    "Status" => {
+                        obj.status = Some(try!(StackSetOperationStatusDeserializer::deserialize(
+                            "Status", stack
+                        )));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -7263,8 +7245,7 @@ impl StackSetOperationResultSummariesDeserializer {
                     if name == "member" {
                         obj.push(try!(
                             StackSetOperationResultSummaryDeserializer::deserialize(
-                                "member",
-                                stack
+                                "member", stack
                             )
                         ));
                     } else {
@@ -7393,8 +7374,7 @@ impl StackSetOperationSummariesDeserializer {
                 DeserializerNext::Element(name) => {
                     if name == "member" {
                         obj.push(try!(StackSetOperationSummaryDeserializer::deserialize(
-                            "member",
-                            stack
+                            "member", stack
                         )));
                     } else {
                         skip_tree(stack);
@@ -7529,8 +7509,7 @@ impl StackSetSummariesDeserializer {
                 DeserializerNext::Element(name) => {
                     if name == "member" {
                         obj.push(try!(StackSetSummaryDeserializer::deserialize(
-                            "member",
-                            stack
+                            "member", stack
                         )));
                     } else {
                         skip_tree(stack);
@@ -7604,8 +7583,7 @@ impl StackSetSummaryDeserializer {
                     }
                     "Status" => {
                         obj.status = Some(try!(StackSetStatusDeserializer::deserialize(
-                            "Status",
-                            stack
+                            "Status", stack
                         )));
                     }
                     _ => skip_tree(stack),
@@ -7872,8 +7850,7 @@ impl StageListDeserializer {
                 DeserializerNext::Element(name) => {
                     if name == "member" {
                         obj.push(try!(TemplateStageDeserializer::deserialize(
-                            "member",
-                            stack
+                            "member", stack
                         )));
                     } else {
                         skip_tree(stack);
@@ -8212,8 +8189,7 @@ impl TemplateParametersDeserializer {
                 DeserializerNext::Element(name) => {
                     if name == "member" {
                         obj.push(try!(TemplateParameterDeserializer::deserialize(
-                            "member",
-                            stack
+                            "member", stack
                         )));
                     } else {
                         skip_tree(stack);
@@ -8311,8 +8287,7 @@ impl TransformsListDeserializer {
                 DeserializerNext::Element(name) => {
                     if name == "member" {
                         obj.push(try!(TransformNameDeserializer::deserialize(
-                            "member",
-                            stack
+                            "member", stack
                         )));
                     } else {
                         skip_tree(stack);
@@ -12353,242 +12328,239 @@ pub trait CloudFormation {
     /// <p><p>Cancels an update on the specified stack. If the call completes successfully, the stack rolls back the update and reverts to the previous stack configuration.</p> <note> <p>You can cancel only stacks that are in the UPDATE<em>IN</em>PROGRESS state.</p> </note></p>
     fn cancel_update_stack(
         &self,
-        input: &CancelUpdateStackInput,
+        input: CancelUpdateStackInput,
     ) -> RusotoFuture<(), CancelUpdateStackError>;
 
     /// <p>For a specified stack that is in the <code>UPDATE_ROLLBACK_FAILED</code> state, continues rolling it back to the <code>UPDATE_ROLLBACK_COMPLETE</code> state. Depending on the cause of the failure, you can manually <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/troubleshooting.html#troubleshooting-errors-update-rollback-failed"> fix the error</a> and continue the rollback. By continuing the rollback, you can return your stack to a working state (the <code>UPDATE_ROLLBACK_COMPLETE</code> state), and then try to update the stack again.</p> <p>A stack goes into the <code>UPDATE_ROLLBACK_FAILED</code> state when AWS CloudFormation cannot roll back all changes after a failed stack update. For example, you might have a stack that is rolling back to an old database instance that was deleted outside of AWS CloudFormation. Because AWS CloudFormation doesn't know the database was deleted, it assumes that the database instance still exists and attempts to roll back to it, causing the update rollback to fail.</p>
     fn continue_update_rollback(
         &self,
-        input: &ContinueUpdateRollbackInput,
+        input: ContinueUpdateRollbackInput,
     ) -> RusotoFuture<ContinueUpdateRollbackOutput, ContinueUpdateRollbackError>;
 
     /// <p>Creates a list of changes that will be applied to a stack so that you can review the changes before executing them. You can create a change set for a stack that doesn't exist or an existing stack. If you create a change set for a stack that doesn't exist, the change set shows all of the resources that AWS CloudFormation will create. If you create a change set for an existing stack, AWS CloudFormation compares the stack's information with the information that you submit in the change set and lists the differences. Use change sets to understand which resources AWS CloudFormation will create or change, and how it will change resources in an existing stack, before you create or update a stack.</p> <p>To create a change set for a stack that doesn't exist, for the <code>ChangeSetType</code> parameter, specify <code>CREATE</code>. To create a change set for an existing stack, specify <code>UPDATE</code> for the <code>ChangeSetType</code> parameter. After the <code>CreateChangeSet</code> call successfully completes, AWS CloudFormation starts creating the change set. To check the status of the change set or to review it, use the <a>DescribeChangeSet</a> action.</p> <p>When you are satisfied with the changes the change set will make, execute the change set by using the <a>ExecuteChangeSet</a> action. AWS CloudFormation doesn't make changes until you execute the change set.</p>
     fn create_change_set(
         &self,
-        input: &CreateChangeSetInput,
+        input: CreateChangeSetInput,
     ) -> RusotoFuture<CreateChangeSetOutput, CreateChangeSetError>;
 
     /// <p>Creates a stack as specified in the template. After the call completes successfully, the stack creation starts. You can check the status of the stack via the <a>DescribeStacks</a> API.</p>
     fn create_stack(
         &self,
-        input: &CreateStackInput,
+        input: CreateStackInput,
     ) -> RusotoFuture<CreateStackOutput, CreateStackError>;
 
     /// <p>Creates stack instances for the specified accounts, within the specified regions. A stack instance refers to a stack in a specific account and region. <code>Accounts</code> and <code>Regions</code> are required parameters—you must specify at least one account and one region. </p>
     fn create_stack_instances(
         &self,
-        input: &CreateStackInstancesInput,
+        input: CreateStackInstancesInput,
     ) -> RusotoFuture<CreateStackInstancesOutput, CreateStackInstancesError>;
 
     /// <p>Creates a stack set.</p>
     fn create_stack_set(
         &self,
-        input: &CreateStackSetInput,
+        input: CreateStackSetInput,
     ) -> RusotoFuture<CreateStackSetOutput, CreateStackSetError>;
 
     /// <p>Deletes the specified change set. Deleting change sets ensures that no one executes the wrong change set.</p> <p>If the call successfully completes, AWS CloudFormation successfully deleted the change set.</p>
     fn delete_change_set(
         &self,
-        input: &DeleteChangeSetInput,
+        input: DeleteChangeSetInput,
     ) -> RusotoFuture<DeleteChangeSetOutput, DeleteChangeSetError>;
 
     /// <p>Deletes a specified stack. Once the call completes successfully, stack deletion starts. Deleted stacks do not show up in the <a>DescribeStacks</a> API if the deletion has been completed successfully.</p>
-    fn delete_stack(&self, input: &DeleteStackInput) -> RusotoFuture<(), DeleteStackError>;
+    fn delete_stack(&self, input: DeleteStackInput) -> RusotoFuture<(), DeleteStackError>;
 
     /// <p>Deletes stack instances for the specified accounts, in the specified regions. </p>
     fn delete_stack_instances(
         &self,
-        input: &DeleteStackInstancesInput,
+        input: DeleteStackInstancesInput,
     ) -> RusotoFuture<DeleteStackInstancesOutput, DeleteStackInstancesError>;
 
     /// <p>Deletes a stack set. Before you can delete a stack set, all of its member stack instances must be deleted. For more information about how to do this, see <a>DeleteStackInstances</a>. </p>
     fn delete_stack_set(
         &self,
-        input: &DeleteStackSetInput,
+        input: DeleteStackSetInput,
     ) -> RusotoFuture<DeleteStackSetOutput, DeleteStackSetError>;
 
     /// <p>Retrieves your account's AWS CloudFormation limits, such as the maximum number of stacks that you can create in your account.</p>
     fn describe_account_limits(
         &self,
-        input: &DescribeAccountLimitsInput,
+        input: DescribeAccountLimitsInput,
     ) -> RusotoFuture<DescribeAccountLimitsOutput, DescribeAccountLimitsError>;
 
     /// <p>Returns the inputs for the change set and a list of changes that AWS CloudFormation will make if you execute the change set. For more information, see <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-changesets.html">Updating Stacks Using Change Sets</a> in the AWS CloudFormation User Guide.</p>
     fn describe_change_set(
         &self,
-        input: &DescribeChangeSetInput,
+        input: DescribeChangeSetInput,
     ) -> RusotoFuture<DescribeChangeSetOutput, DescribeChangeSetError>;
 
     /// <p><p>Returns all stack related events for a specified stack in reverse chronological order. For more information about a stack&#39;s event history, go to <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/concept-stack.html">Stacks</a> in the AWS CloudFormation User Guide.</p> <note> <p>You can list events for stacks that have failed to create or have been deleted by specifying the unique stack identifier (stack ID).</p> </note></p>
     fn describe_stack_events(
         &self,
-        input: &DescribeStackEventsInput,
+        input: DescribeStackEventsInput,
     ) -> RusotoFuture<DescribeStackEventsOutput, DescribeStackEventsError>;
 
     /// <p>Returns the stack instance that's associated with the specified stack set, AWS account, and region.</p> <p>For a list of stack instances that are associated with a specific stack set, use <a>ListStackInstances</a>.</p>
     fn describe_stack_instance(
         &self,
-        input: &DescribeStackInstanceInput,
+        input: DescribeStackInstanceInput,
     ) -> RusotoFuture<DescribeStackInstanceOutput, DescribeStackInstanceError>;
 
     /// <p>Returns a description of the specified resource in the specified stack.</p> <p>For deleted stacks, DescribeStackResource returns resource information for up to 90 days after the stack has been deleted.</p>
     fn describe_stack_resource(
         &self,
-        input: &DescribeStackResourceInput,
+        input: DescribeStackResourceInput,
     ) -> RusotoFuture<DescribeStackResourceOutput, DescribeStackResourceError>;
 
     /// <p><p>Returns AWS resource descriptions for running and deleted stacks. If <code>StackName</code> is specified, all the associated resources that are part of the stack are returned. If <code>PhysicalResourceId</code> is specified, the associated resources of the stack that the resource belongs to are returned.</p> <note> <p>Only the first 100 resources will be returned. If your stack has more resources than this, you should use <code>ListStackResources</code> instead.</p> </note> <p>For deleted stacks, <code>DescribeStackResources</code> returns resource information for up to 90 days after the stack has been deleted.</p> <p>You must specify either <code>StackName</code> or <code>PhysicalResourceId</code>, but not both. In addition, you can specify <code>LogicalResourceId</code> to filter the returned result. For more information about resources, the <code>LogicalResourceId</code> and <code>PhysicalResourceId</code>, go to the <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/">AWS CloudFormation User Guide</a>.</p> <note> <p>A <code>ValidationError</code> is returned if you specify both <code>StackName</code> and <code>PhysicalResourceId</code> in the same request.</p> </note></p>
     fn describe_stack_resources(
         &self,
-        input: &DescribeStackResourcesInput,
+        input: DescribeStackResourcesInput,
     ) -> RusotoFuture<DescribeStackResourcesOutput, DescribeStackResourcesError>;
 
     /// <p>Returns the description of the specified stack set. </p>
     fn describe_stack_set(
         &self,
-        input: &DescribeStackSetInput,
+        input: DescribeStackSetInput,
     ) -> RusotoFuture<DescribeStackSetOutput, DescribeStackSetError>;
 
     /// <p>Returns the description of the specified stack set operation. </p>
     fn describe_stack_set_operation(
         &self,
-        input: &DescribeStackSetOperationInput,
+        input: DescribeStackSetOperationInput,
     ) -> RusotoFuture<DescribeStackSetOperationOutput, DescribeStackSetOperationError>;
 
     /// <p><p>Returns the description for the specified stack; if no stack name was specified, then it returns the description for all the stacks created.</p> <note> <p>If the stack does not exist, an <code>AmazonCloudFormationException</code> is returned.</p> </note></p>
     fn describe_stacks(
         &self,
-        input: &DescribeStacksInput,
+        input: DescribeStacksInput,
     ) -> RusotoFuture<DescribeStacksOutput, DescribeStacksError>;
 
     /// <p>Returns the estimated monthly cost of a template. The return value is an AWS Simple Monthly Calculator URL with a query string that describes the resources required to run the template.</p>
     fn estimate_template_cost(
         &self,
-        input: &EstimateTemplateCostInput,
+        input: EstimateTemplateCostInput,
     ) -> RusotoFuture<EstimateTemplateCostOutput, EstimateTemplateCostError>;
 
     /// <p>Updates a stack using the input information that was provided when the specified change set was created. After the call successfully completes, AWS CloudFormation starts updating the stack. Use the <a>DescribeStacks</a> action to view the status of the update.</p> <p>When you execute a change set, AWS CloudFormation deletes all other change sets associated with the stack because they aren't valid for the updated stack.</p> <p>If a stack policy is associated with the stack, AWS CloudFormation enforces the policy during the update. You can't specify a temporary stack policy that overrides the current policy.</p>
     fn execute_change_set(
         &self,
-        input: &ExecuteChangeSetInput,
+        input: ExecuteChangeSetInput,
     ) -> RusotoFuture<ExecuteChangeSetOutput, ExecuteChangeSetError>;
 
     /// <p>Returns the stack policy for a specified stack. If a stack doesn't have a policy, a null value is returned.</p>
     fn get_stack_policy(
         &self,
-        input: &GetStackPolicyInput,
+        input: GetStackPolicyInput,
     ) -> RusotoFuture<GetStackPolicyOutput, GetStackPolicyError>;
 
     /// <p><p>Returns the template body for a specified stack. You can get the template for running or deleted stacks.</p> <p>For deleted stacks, GetTemplate returns the template for up to 90 days after the stack has been deleted.</p> <note> <p> If the template does not exist, a <code>ValidationError</code> is returned. </p> </note></p>
     fn get_template(
         &self,
-        input: &GetTemplateInput,
+        input: GetTemplateInput,
     ) -> RusotoFuture<GetTemplateOutput, GetTemplateError>;
 
     /// <p>Returns information about a new or existing template. The <code>GetTemplateSummary</code> action is useful for viewing parameter information, such as default parameter values and parameter types, before you create or update a stack or stack set.</p> <p>You can use the <code>GetTemplateSummary</code> action when you submit a template, or you can get template information for a stack set, or a running or deleted stack.</p> <p>For deleted stacks, <code>GetTemplateSummary</code> returns the template information for up to 90 days after the stack has been deleted. If the template does not exist, a <code>ValidationError</code> is returned.</p>
     fn get_template_summary(
         &self,
-        input: &GetTemplateSummaryInput,
+        input: GetTemplateSummaryInput,
     ) -> RusotoFuture<GetTemplateSummaryOutput, GetTemplateSummaryError>;
 
     /// <p>Returns the ID and status of each active change set for a stack. For example, AWS CloudFormation lists change sets that are in the <code>CREATE_IN_PROGRESS</code> or <code>CREATE_PENDING</code> state.</p>
     fn list_change_sets(
         &self,
-        input: &ListChangeSetsInput,
+        input: ListChangeSetsInput,
     ) -> RusotoFuture<ListChangeSetsOutput, ListChangeSetsError>;
 
     /// <p>Lists all exported output values in the account and region in which you call this action. Use this action to see the exported output values that you can import into other stacks. To import values, use the <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/intrinsic-function-reference-importvalue.html"> <code>Fn::ImportValue</code> </a> function. </p> <p>For more information, see <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-stack-exports.html"> AWS CloudFormation Export Stack Output Values</a>.</p>
     fn list_exports(
         &self,
-        input: &ListExportsInput,
+        input: ListExportsInput,
     ) -> RusotoFuture<ListExportsOutput, ListExportsError>;
 
     /// <p>Lists all stacks that are importing an exported output value. To modify or remove an exported output value, first use this action to see which stacks are using it. To see the exported output values in your account, see <a>ListExports</a>. </p> <p>For more information about importing an exported output value, see the <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/intrinsic-function-reference-importvalue.html"> <code>Fn::ImportValue</code> </a> function. </p>
     fn list_imports(
         &self,
-        input: &ListImportsInput,
+        input: ListImportsInput,
     ) -> RusotoFuture<ListImportsOutput, ListImportsError>;
 
     /// <p>Returns summary information about stack instances that are associated with the specified stack set. You can filter for stack instances that are associated with a specific AWS account name or region.</p>
     fn list_stack_instances(
         &self,
-        input: &ListStackInstancesInput,
+        input: ListStackInstancesInput,
     ) -> RusotoFuture<ListStackInstancesOutput, ListStackInstancesError>;
 
     /// <p>Returns descriptions of all resources of the specified stack.</p> <p>For deleted stacks, ListStackResources returns resource information for up to 90 days after the stack has been deleted.</p>
     fn list_stack_resources(
         &self,
-        input: &ListStackResourcesInput,
+        input: ListStackResourcesInput,
     ) -> RusotoFuture<ListStackResourcesOutput, ListStackResourcesError>;
 
     /// <p>Returns summary information about the results of a stack set operation. </p>
     fn list_stack_set_operation_results(
         &self,
-        input: &ListStackSetOperationResultsInput,
+        input: ListStackSetOperationResultsInput,
     ) -> RusotoFuture<ListStackSetOperationResultsOutput, ListStackSetOperationResultsError>;
 
     /// <p>Returns summary information about operations performed on a stack set. </p>
     fn list_stack_set_operations(
         &self,
-        input: &ListStackSetOperationsInput,
+        input: ListStackSetOperationsInput,
     ) -> RusotoFuture<ListStackSetOperationsOutput, ListStackSetOperationsError>;
 
     /// <p>Returns summary information about stack sets that are associated with the user.</p>
     fn list_stack_sets(
         &self,
-        input: &ListStackSetsInput,
+        input: ListStackSetsInput,
     ) -> RusotoFuture<ListStackSetsOutput, ListStackSetsError>;
 
     /// <p>Returns the summary information for stacks whose status matches the specified StackStatusFilter. Summary information for stacks that have been deleted is kept for 90 days after the stack is deleted. If no StackStatusFilter is specified, summary information for all stacks is returned (including existing stacks and stacks that have been deleted).</p>
     fn list_stacks(
         &self,
-        input: &ListStacksInput,
+        input: ListStacksInput,
     ) -> RusotoFuture<ListStacksOutput, ListStacksError>;
 
     /// <p>Sets a stack policy for a specified stack.</p>
-    fn set_stack_policy(
-        &self,
-        input: &SetStackPolicyInput,
-    ) -> RusotoFuture<(), SetStackPolicyError>;
+    fn set_stack_policy(&self, input: SetStackPolicyInput)
+        -> RusotoFuture<(), SetStackPolicyError>;
 
     /// <p>Sends a signal to the specified resource with a success or failure status. You can use the SignalResource API in conjunction with a creation policy or update policy. AWS CloudFormation doesn't proceed with a stack creation or update until resources receive the required number of signals or the timeout period is exceeded. The SignalResource API is useful in cases where you want to send signals from anywhere other than an Amazon EC2 instance.</p>
-    fn signal_resource(&self, input: &SignalResourceInput)
-        -> RusotoFuture<(), SignalResourceError>;
+    fn signal_resource(&self, input: SignalResourceInput) -> RusotoFuture<(), SignalResourceError>;
 
     /// <p>Stops an in-progress operation on a stack set and its associated stack instances. </p>
     fn stop_stack_set_operation(
         &self,
-        input: &StopStackSetOperationInput,
+        input: StopStackSetOperationInput,
     ) -> RusotoFuture<StopStackSetOperationOutput, StopStackSetOperationError>;
 
     /// <p>Updates a stack as specified in the template. After the call completes successfully, the stack update starts. You can check the status of the stack via the <a>DescribeStacks</a> action.</p> <p>To get a copy of the template for an existing stack, you can use the <a>GetTemplate</a> action.</p> <p>For more information about creating an update template, updating a stack, and monitoring the progress of the update, see <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks.html">Updating a Stack</a>.</p>
     fn update_stack(
         &self,
-        input: &UpdateStackInput,
+        input: UpdateStackInput,
     ) -> RusotoFuture<UpdateStackOutput, UpdateStackError>;
 
     /// <p>Updates the parameter values for stack instances for the specified accounts, within the specified regions. A stack instance refers to a stack in a specific account and region. </p> <p>You can only update stack instances in regions and accounts where they already exist; to create additional stack instances, use <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_CreateStackInstances.html">CreateStackInstances</a>. </p> <p>During stack set updates, any parameters overridden for a stack instance are not updated, but retain their overridden value.</p> <p>You can only update the parameter <i>values</i> that are specified in the stack set; to add or delete a parameter itself, use <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_UpdateStackSet.html">UpdateStackSet</a> to update the stack set template. If you add a parameter to a template, before you can override the parameter value specified in the stack set you must first use <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_UpdateStackSet.html">UpdateStackSet</a> to update all stack instances with the updated template and parameter value specified in the stack set. Once a stack instance has been updated with the new parameter, you can then override the parameter value using <code>UpdateStackInstances</code>.</p>
     fn update_stack_instances(
         &self,
-        input: &UpdateStackInstancesInput,
+        input: UpdateStackInstancesInput,
     ) -> RusotoFuture<UpdateStackInstancesOutput, UpdateStackInstancesError>;
 
     /// <p>Updates the stack set and <i>all</i> associated stack instances.</p> <p>Even if the stack set operation created by updating the stack set fails (completely or partially, below or above a specified failure tolerance), the stack set is updated with your changes. Subsequent <a>CreateStackInstances</a> calls on the specified stack set use the updated stack set.</p>
     fn update_stack_set(
         &self,
-        input: &UpdateStackSetInput,
+        input: UpdateStackSetInput,
     ) -> RusotoFuture<UpdateStackSetOutput, UpdateStackSetError>;
 
     /// <p>Updates termination protection for the specified stack. If a user attempts to delete a stack with termination protection enabled, the operation fails and the stack remains unchanged. For more information, see <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-protect-stacks.html">Protecting a Stack From Being Deleted</a> in the <i>AWS CloudFormation User Guide</i>.</p> <p> For <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-nested-stacks.html">nested stacks</a>, termination protection is set on the root stack and cannot be changed directly on the nested stack.</p>
     fn update_termination_protection(
         &self,
-        input: &UpdateTerminationProtectionInput,
+        input: UpdateTerminationProtectionInput,
     ) -> RusotoFuture<UpdateTerminationProtectionOutput, UpdateTerminationProtectionError>;
 
     /// <p>Validates a specified template. AWS CloudFormation first checks if the template is valid JSON. If it isn't, AWS CloudFormation checks if the template is valid YAML. If both these checks fail, AWS CloudFormation returns a template validation error.</p>
     fn validate_template(
         &self,
-        input: &ValidateTemplateInput,
+        input: ValidateTemplateInput,
     ) -> RusotoFuture<ValidateTemplateOutput, ValidateTemplateError>;
 }
 /// A client for the AWS CloudFormation API.
@@ -12637,7 +12609,7 @@ where
     /// <p><p>Cancels an update on the specified stack. If the call completes successfully, the stack rolls back the update and reverts to the previous stack configuration.</p> <note> <p>You can cancel only stacks that are in the UPDATE<em>IN</em>PROGRESS state.</p> </note></p>
     fn cancel_update_stack(
         &self,
-        input: &CancelUpdateStackInput,
+        input: CancelUpdateStackInput,
     ) -> RusotoFuture<(), CancelUpdateStackError> {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
         let mut params = Params::new();
@@ -12665,7 +12637,7 @@ where
     /// <p>For a specified stack that is in the <code>UPDATE_ROLLBACK_FAILED</code> state, continues rolling it back to the <code>UPDATE_ROLLBACK_COMPLETE</code> state. Depending on the cause of the failure, you can manually <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/troubleshooting.html#troubleshooting-errors-update-rollback-failed"> fix the error</a> and continue the rollback. By continuing the rollback, you can return your stack to a working state (the <code>UPDATE_ROLLBACK_COMPLETE</code> state), and then try to update the stack again.</p> <p>A stack goes into the <code>UPDATE_ROLLBACK_FAILED</code> state when AWS CloudFormation cannot roll back all changes after a failed stack update. For example, you might have a stack that is rolling back to an old database instance that was deleted outside of AWS CloudFormation. Because AWS CloudFormation doesn't know the database was deleted, it assumes that the database instance still exists and attempts to roll back to it, causing the update rollback to fail.</p>
     fn continue_update_rollback(
         &self,
-        input: &ContinueUpdateRollbackInput,
+        input: ContinueUpdateRollbackInput,
     ) -> RusotoFuture<ContinueUpdateRollbackOutput, ContinueUpdateRollbackError> {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
         let mut params = Params::new();
@@ -12716,7 +12688,7 @@ where
     /// <p>Creates a list of changes that will be applied to a stack so that you can review the changes before executing them. You can create a change set for a stack that doesn't exist or an existing stack. If you create a change set for a stack that doesn't exist, the change set shows all of the resources that AWS CloudFormation will create. If you create a change set for an existing stack, AWS CloudFormation compares the stack's information with the information that you submit in the change set and lists the differences. Use change sets to understand which resources AWS CloudFormation will create or change, and how it will change resources in an existing stack, before you create or update a stack.</p> <p>To create a change set for a stack that doesn't exist, for the <code>ChangeSetType</code> parameter, specify <code>CREATE</code>. To create a change set for an existing stack, specify <code>UPDATE</code> for the <code>ChangeSetType</code> parameter. After the <code>CreateChangeSet</code> call successfully completes, AWS CloudFormation starts creating the change set. To check the status of the change set or to review it, use the <a>DescribeChangeSet</a> action.</p> <p>When you are satisfied with the changes the change set will make, execute the change set by using the <a>ExecuteChangeSet</a> action. AWS CloudFormation doesn't make changes until you execute the change set.</p>
     fn create_change_set(
         &self,
-        input: &CreateChangeSetInput,
+        input: CreateChangeSetInput,
     ) -> RusotoFuture<CreateChangeSetOutput, CreateChangeSetError> {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
         let mut params = Params::new();
@@ -12767,7 +12739,7 @@ where
     /// <p>Creates a stack as specified in the template. After the call completes successfully, the stack creation starts. You can check the status of the stack via the <a>DescribeStacks</a> API.</p>
     fn create_stack(
         &self,
-        input: &CreateStackInput,
+        input: CreateStackInput,
     ) -> RusotoFuture<CreateStackOutput, CreateStackError> {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
         let mut params = Params::new();
@@ -12818,7 +12790,7 @@ where
     /// <p>Creates stack instances for the specified accounts, within the specified regions. A stack instance refers to a stack in a specific account and region. <code>Accounts</code> and <code>Regions</code> are required parameters—you must specify at least one account and one region. </p>
     fn create_stack_instances(
         &self,
-        input: &CreateStackInstancesInput,
+        input: CreateStackInstancesInput,
     ) -> RusotoFuture<CreateStackInstancesOutput, CreateStackInstancesError> {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
         let mut params = Params::new();
@@ -12869,7 +12841,7 @@ where
     /// <p>Creates a stack set.</p>
     fn create_stack_set(
         &self,
-        input: &CreateStackSetInput,
+        input: CreateStackSetInput,
     ) -> RusotoFuture<CreateStackSetOutput, CreateStackSetError> {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
         let mut params = Params::new();
@@ -12920,7 +12892,7 @@ where
     /// <p>Deletes the specified change set. Deleting change sets ensures that no one executes the wrong change set.</p> <p>If the call successfully completes, AWS CloudFormation successfully deleted the change set.</p>
     fn delete_change_set(
         &self,
-        input: &DeleteChangeSetInput,
+        input: DeleteChangeSetInput,
     ) -> RusotoFuture<DeleteChangeSetOutput, DeleteChangeSetError> {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
         let mut params = Params::new();
@@ -12969,7 +12941,7 @@ where
     }
 
     /// <p>Deletes a specified stack. Once the call completes successfully, stack deletion starts. Deleted stacks do not show up in the <a>DescribeStacks</a> API if the deletion has been completed successfully.</p>
-    fn delete_stack(&self, input: &DeleteStackInput) -> RusotoFuture<(), DeleteStackError> {
+    fn delete_stack(&self, input: DeleteStackInput) -> RusotoFuture<(), DeleteStackError> {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
         let mut params = Params::new();
 
@@ -12996,7 +12968,7 @@ where
     /// <p>Deletes stack instances for the specified accounts, in the specified regions. </p>
     fn delete_stack_instances(
         &self,
-        input: &DeleteStackInstancesInput,
+        input: DeleteStackInstancesInput,
     ) -> RusotoFuture<DeleteStackInstancesOutput, DeleteStackInstancesError> {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
         let mut params = Params::new();
@@ -13047,7 +13019,7 @@ where
     /// <p>Deletes a stack set. Before you can delete a stack set, all of its member stack instances must be deleted. For more information about how to do this, see <a>DeleteStackInstances</a>. </p>
     fn delete_stack_set(
         &self,
-        input: &DeleteStackSetInput,
+        input: DeleteStackSetInput,
     ) -> RusotoFuture<DeleteStackSetOutput, DeleteStackSetError> {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
         let mut params = Params::new();
@@ -13098,7 +13070,7 @@ where
     /// <p>Retrieves your account's AWS CloudFormation limits, such as the maximum number of stacks that you can create in your account.</p>
     fn describe_account_limits(
         &self,
-        input: &DescribeAccountLimitsInput,
+        input: DescribeAccountLimitsInput,
     ) -> RusotoFuture<DescribeAccountLimitsOutput, DescribeAccountLimitsError> {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
         let mut params = Params::new();
@@ -13149,7 +13121,7 @@ where
     /// <p>Returns the inputs for the change set and a list of changes that AWS CloudFormation will make if you execute the change set. For more information, see <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-changesets.html">Updating Stacks Using Change Sets</a> in the AWS CloudFormation User Guide.</p>
     fn describe_change_set(
         &self,
-        input: &DescribeChangeSetInput,
+        input: DescribeChangeSetInput,
     ) -> RusotoFuture<DescribeChangeSetOutput, DescribeChangeSetError> {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
         let mut params = Params::new();
@@ -13200,7 +13172,7 @@ where
     /// <p><p>Returns all stack related events for a specified stack in reverse chronological order. For more information about a stack&#39;s event history, go to <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/concept-stack.html">Stacks</a> in the AWS CloudFormation User Guide.</p> <note> <p>You can list events for stacks that have failed to create or have been deleted by specifying the unique stack identifier (stack ID).</p> </note></p>
     fn describe_stack_events(
         &self,
-        input: &DescribeStackEventsInput,
+        input: DescribeStackEventsInput,
     ) -> RusotoFuture<DescribeStackEventsOutput, DescribeStackEventsError> {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
         let mut params = Params::new();
@@ -13251,7 +13223,7 @@ where
     /// <p>Returns the stack instance that's associated with the specified stack set, AWS account, and region.</p> <p>For a list of stack instances that are associated with a specific stack set, use <a>ListStackInstances</a>.</p>
     fn describe_stack_instance(
         &self,
-        input: &DescribeStackInstanceInput,
+        input: DescribeStackInstanceInput,
     ) -> RusotoFuture<DescribeStackInstanceOutput, DescribeStackInstanceError> {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
         let mut params = Params::new();
@@ -13302,7 +13274,7 @@ where
     /// <p>Returns a description of the specified resource in the specified stack.</p> <p>For deleted stacks, DescribeStackResource returns resource information for up to 90 days after the stack has been deleted.</p>
     fn describe_stack_resource(
         &self,
-        input: &DescribeStackResourceInput,
+        input: DescribeStackResourceInput,
     ) -> RusotoFuture<DescribeStackResourceOutput, DescribeStackResourceError> {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
         let mut params = Params::new();
@@ -13353,7 +13325,7 @@ where
     /// <p><p>Returns AWS resource descriptions for running and deleted stacks. If <code>StackName</code> is specified, all the associated resources that are part of the stack are returned. If <code>PhysicalResourceId</code> is specified, the associated resources of the stack that the resource belongs to are returned.</p> <note> <p>Only the first 100 resources will be returned. If your stack has more resources than this, you should use <code>ListStackResources</code> instead.</p> </note> <p>For deleted stacks, <code>DescribeStackResources</code> returns resource information for up to 90 days after the stack has been deleted.</p> <p>You must specify either <code>StackName</code> or <code>PhysicalResourceId</code>, but not both. In addition, you can specify <code>LogicalResourceId</code> to filter the returned result. For more information about resources, the <code>LogicalResourceId</code> and <code>PhysicalResourceId</code>, go to the <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/">AWS CloudFormation User Guide</a>.</p> <note> <p>A <code>ValidationError</code> is returned if you specify both <code>StackName</code> and <code>PhysicalResourceId</code> in the same request.</p> </note></p>
     fn describe_stack_resources(
         &self,
-        input: &DescribeStackResourcesInput,
+        input: DescribeStackResourcesInput,
     ) -> RusotoFuture<DescribeStackResourcesOutput, DescribeStackResourcesError> {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
         let mut params = Params::new();
@@ -13404,7 +13376,7 @@ where
     /// <p>Returns the description of the specified stack set. </p>
     fn describe_stack_set(
         &self,
-        input: &DescribeStackSetInput,
+        input: DescribeStackSetInput,
     ) -> RusotoFuture<DescribeStackSetOutput, DescribeStackSetError> {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
         let mut params = Params::new();
@@ -13455,7 +13427,7 @@ where
     /// <p>Returns the description of the specified stack set operation. </p>
     fn describe_stack_set_operation(
         &self,
-        input: &DescribeStackSetOperationInput,
+        input: DescribeStackSetOperationInput,
     ) -> RusotoFuture<DescribeStackSetOperationOutput, DescribeStackSetOperationError> {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
         let mut params = Params::new();
@@ -13506,7 +13478,7 @@ where
     /// <p><p>Returns the description for the specified stack; if no stack name was specified, then it returns the description for all the stacks created.</p> <note> <p>If the stack does not exist, an <code>AmazonCloudFormationException</code> is returned.</p> </note></p>
     fn describe_stacks(
         &self,
-        input: &DescribeStacksInput,
+        input: DescribeStacksInput,
     ) -> RusotoFuture<DescribeStacksOutput, DescribeStacksError> {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
         let mut params = Params::new();
@@ -13557,7 +13529,7 @@ where
     /// <p>Returns the estimated monthly cost of a template. The return value is an AWS Simple Monthly Calculator URL with a query string that describes the resources required to run the template.</p>
     fn estimate_template_cost(
         &self,
-        input: &EstimateTemplateCostInput,
+        input: EstimateTemplateCostInput,
     ) -> RusotoFuture<EstimateTemplateCostOutput, EstimateTemplateCostError> {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
         let mut params = Params::new();
@@ -13608,7 +13580,7 @@ where
     /// <p>Updates a stack using the input information that was provided when the specified change set was created. After the call successfully completes, AWS CloudFormation starts updating the stack. Use the <a>DescribeStacks</a> action to view the status of the update.</p> <p>When you execute a change set, AWS CloudFormation deletes all other change sets associated with the stack because they aren't valid for the updated stack.</p> <p>If a stack policy is associated with the stack, AWS CloudFormation enforces the policy during the update. You can't specify a temporary stack policy that overrides the current policy.</p>
     fn execute_change_set(
         &self,
-        input: &ExecuteChangeSetInput,
+        input: ExecuteChangeSetInput,
     ) -> RusotoFuture<ExecuteChangeSetOutput, ExecuteChangeSetError> {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
         let mut params = Params::new();
@@ -13659,7 +13631,7 @@ where
     /// <p>Returns the stack policy for a specified stack. If a stack doesn't have a policy, a null value is returned.</p>
     fn get_stack_policy(
         &self,
-        input: &GetStackPolicyInput,
+        input: GetStackPolicyInput,
     ) -> RusotoFuture<GetStackPolicyOutput, GetStackPolicyError> {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
         let mut params = Params::new();
@@ -13710,7 +13682,7 @@ where
     /// <p><p>Returns the template body for a specified stack. You can get the template for running or deleted stacks.</p> <p>For deleted stacks, GetTemplate returns the template for up to 90 days after the stack has been deleted.</p> <note> <p> If the template does not exist, a <code>ValidationError</code> is returned. </p> </note></p>
     fn get_template(
         &self,
-        input: &GetTemplateInput,
+        input: GetTemplateInput,
     ) -> RusotoFuture<GetTemplateOutput, GetTemplateError> {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
         let mut params = Params::new();
@@ -13761,7 +13733,7 @@ where
     /// <p>Returns information about a new or existing template. The <code>GetTemplateSummary</code> action is useful for viewing parameter information, such as default parameter values and parameter types, before you create or update a stack or stack set.</p> <p>You can use the <code>GetTemplateSummary</code> action when you submit a template, or you can get template information for a stack set, or a running or deleted stack.</p> <p>For deleted stacks, <code>GetTemplateSummary</code> returns the template information for up to 90 days after the stack has been deleted. If the template does not exist, a <code>ValidationError</code> is returned.</p>
     fn get_template_summary(
         &self,
-        input: &GetTemplateSummaryInput,
+        input: GetTemplateSummaryInput,
     ) -> RusotoFuture<GetTemplateSummaryOutput, GetTemplateSummaryError> {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
         let mut params = Params::new();
@@ -13812,7 +13784,7 @@ where
     /// <p>Returns the ID and status of each active change set for a stack. For example, AWS CloudFormation lists change sets that are in the <code>CREATE_IN_PROGRESS</code> or <code>CREATE_PENDING</code> state.</p>
     fn list_change_sets(
         &self,
-        input: &ListChangeSetsInput,
+        input: ListChangeSetsInput,
     ) -> RusotoFuture<ListChangeSetsOutput, ListChangeSetsError> {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
         let mut params = Params::new();
@@ -13863,7 +13835,7 @@ where
     /// <p>Lists all exported output values in the account and region in which you call this action. Use this action to see the exported output values that you can import into other stacks. To import values, use the <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/intrinsic-function-reference-importvalue.html"> <code>Fn::ImportValue</code> </a> function. </p> <p>For more information, see <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-stack-exports.html"> AWS CloudFormation Export Stack Output Values</a>.</p>
     fn list_exports(
         &self,
-        input: &ListExportsInput,
+        input: ListExportsInput,
     ) -> RusotoFuture<ListExportsOutput, ListExportsError> {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
         let mut params = Params::new();
@@ -13914,7 +13886,7 @@ where
     /// <p>Lists all stacks that are importing an exported output value. To modify or remove an exported output value, first use this action to see which stacks are using it. To see the exported output values in your account, see <a>ListExports</a>. </p> <p>For more information about importing an exported output value, see the <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/intrinsic-function-reference-importvalue.html"> <code>Fn::ImportValue</code> </a> function. </p>
     fn list_imports(
         &self,
-        input: &ListImportsInput,
+        input: ListImportsInput,
     ) -> RusotoFuture<ListImportsOutput, ListImportsError> {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
         let mut params = Params::new();
@@ -13965,7 +13937,7 @@ where
     /// <p>Returns summary information about stack instances that are associated with the specified stack set. You can filter for stack instances that are associated with a specific AWS account name or region.</p>
     fn list_stack_instances(
         &self,
-        input: &ListStackInstancesInput,
+        input: ListStackInstancesInput,
     ) -> RusotoFuture<ListStackInstancesOutput, ListStackInstancesError> {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
         let mut params = Params::new();
@@ -14016,7 +13988,7 @@ where
     /// <p>Returns descriptions of all resources of the specified stack.</p> <p>For deleted stacks, ListStackResources returns resource information for up to 90 days after the stack has been deleted.</p>
     fn list_stack_resources(
         &self,
-        input: &ListStackResourcesInput,
+        input: ListStackResourcesInput,
     ) -> RusotoFuture<ListStackResourcesOutput, ListStackResourcesError> {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
         let mut params = Params::new();
@@ -14067,7 +14039,7 @@ where
     /// <p>Returns summary information about the results of a stack set operation. </p>
     fn list_stack_set_operation_results(
         &self,
-        input: &ListStackSetOperationResultsInput,
+        input: ListStackSetOperationResultsInput,
     ) -> RusotoFuture<ListStackSetOperationResultsOutput, ListStackSetOperationResultsError> {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
         let mut params = Params::new();
@@ -14118,7 +14090,7 @@ where
     /// <p>Returns summary information about operations performed on a stack set. </p>
     fn list_stack_set_operations(
         &self,
-        input: &ListStackSetOperationsInput,
+        input: ListStackSetOperationsInput,
     ) -> RusotoFuture<ListStackSetOperationsOutput, ListStackSetOperationsError> {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
         let mut params = Params::new();
@@ -14169,7 +14141,7 @@ where
     /// <p>Returns summary information about stack sets that are associated with the user.</p>
     fn list_stack_sets(
         &self,
-        input: &ListStackSetsInput,
+        input: ListStackSetsInput,
     ) -> RusotoFuture<ListStackSetsOutput, ListStackSetsError> {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
         let mut params = Params::new();
@@ -14220,7 +14192,7 @@ where
     /// <p>Returns the summary information for stacks whose status matches the specified StackStatusFilter. Summary information for stacks that have been deleted is kept for 90 days after the stack is deleted. If no StackStatusFilter is specified, summary information for all stacks is returned (including existing stacks and stacks that have been deleted).</p>
     fn list_stacks(
         &self,
-        input: &ListStacksInput,
+        input: ListStacksInput,
     ) -> RusotoFuture<ListStacksOutput, ListStacksError> {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
         let mut params = Params::new();
@@ -14271,7 +14243,7 @@ where
     /// <p>Sets a stack policy for a specified stack.</p>
     fn set_stack_policy(
         &self,
-        input: &SetStackPolicyInput,
+        input: SetStackPolicyInput,
     ) -> RusotoFuture<(), SetStackPolicyError> {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
         let mut params = Params::new();
@@ -14297,10 +14269,7 @@ where
     }
 
     /// <p>Sends a signal to the specified resource with a success or failure status. You can use the SignalResource API in conjunction with a creation policy or update policy. AWS CloudFormation doesn't proceed with a stack creation or update until resources receive the required number of signals or the timeout period is exceeded. The SignalResource API is useful in cases where you want to send signals from anywhere other than an Amazon EC2 instance.</p>
-    fn signal_resource(
-        &self,
-        input: &SignalResourceInput,
-    ) -> RusotoFuture<(), SignalResourceError> {
+    fn signal_resource(&self, input: SignalResourceInput) -> RusotoFuture<(), SignalResourceError> {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
         let mut params = Params::new();
 
@@ -14327,7 +14296,7 @@ where
     /// <p>Stops an in-progress operation on a stack set and its associated stack instances. </p>
     fn stop_stack_set_operation(
         &self,
-        input: &StopStackSetOperationInput,
+        input: StopStackSetOperationInput,
     ) -> RusotoFuture<StopStackSetOperationOutput, StopStackSetOperationError> {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
         let mut params = Params::new();
@@ -14378,7 +14347,7 @@ where
     /// <p>Updates a stack as specified in the template. After the call completes successfully, the stack update starts. You can check the status of the stack via the <a>DescribeStacks</a> action.</p> <p>To get a copy of the template for an existing stack, you can use the <a>GetTemplate</a> action.</p> <p>For more information about creating an update template, updating a stack, and monitoring the progress of the update, see <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks.html">Updating a Stack</a>.</p>
     fn update_stack(
         &self,
-        input: &UpdateStackInput,
+        input: UpdateStackInput,
     ) -> RusotoFuture<UpdateStackOutput, UpdateStackError> {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
         let mut params = Params::new();
@@ -14429,7 +14398,7 @@ where
     /// <p>Updates the parameter values for stack instances for the specified accounts, within the specified regions. A stack instance refers to a stack in a specific account and region. </p> <p>You can only update stack instances in regions and accounts where they already exist; to create additional stack instances, use <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_CreateStackInstances.html">CreateStackInstances</a>. </p> <p>During stack set updates, any parameters overridden for a stack instance are not updated, but retain their overridden value.</p> <p>You can only update the parameter <i>values</i> that are specified in the stack set; to add or delete a parameter itself, use <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_UpdateStackSet.html">UpdateStackSet</a> to update the stack set template. If you add a parameter to a template, before you can override the parameter value specified in the stack set you must first use <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_UpdateStackSet.html">UpdateStackSet</a> to update all stack instances with the updated template and parameter value specified in the stack set. Once a stack instance has been updated with the new parameter, you can then override the parameter value using <code>UpdateStackInstances</code>.</p>
     fn update_stack_instances(
         &self,
-        input: &UpdateStackInstancesInput,
+        input: UpdateStackInstancesInput,
     ) -> RusotoFuture<UpdateStackInstancesOutput, UpdateStackInstancesError> {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
         let mut params = Params::new();
@@ -14480,7 +14449,7 @@ where
     /// <p>Updates the stack set and <i>all</i> associated stack instances.</p> <p>Even if the stack set operation created by updating the stack set fails (completely or partially, below or above a specified failure tolerance), the stack set is updated with your changes. Subsequent <a>CreateStackInstances</a> calls on the specified stack set use the updated stack set.</p>
     fn update_stack_set(
         &self,
-        input: &UpdateStackSetInput,
+        input: UpdateStackSetInput,
     ) -> RusotoFuture<UpdateStackSetOutput, UpdateStackSetError> {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
         let mut params = Params::new();
@@ -14531,7 +14500,7 @@ where
     /// <p>Updates termination protection for the specified stack. If a user attempts to delete a stack with termination protection enabled, the operation fails and the stack remains unchanged. For more information, see <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-protect-stacks.html">Protecting a Stack From Being Deleted</a> in the <i>AWS CloudFormation User Guide</i>.</p> <p> For <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-nested-stacks.html">nested stacks</a>, termination protection is set on the root stack and cannot be changed directly on the nested stack.</p>
     fn update_termination_protection(
         &self,
-        input: &UpdateTerminationProtectionInput,
+        input: UpdateTerminationProtectionInput,
     ) -> RusotoFuture<UpdateTerminationProtectionOutput, UpdateTerminationProtectionError> {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
         let mut params = Params::new();
@@ -14582,7 +14551,7 @@ where
     /// <p>Validates a specified template. AWS CloudFormation first checks if the template is valid JSON. If it isn't, AWS CloudFormation checks if the template is valid YAML. If both these checks fail, AWS CloudFormation returns a template validation error.</p>
     fn validate_template(
         &self,
-        input: &ValidateTemplateInput,
+        input: ValidateTemplateInput,
     ) -> RusotoFuture<ValidateTemplateOutput, ValidateTemplateError> {
         let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
         let mut params = Params::new();
@@ -14636,8 +14605,8 @@ mod protocol_tests {
 
     extern crate rusoto_mock;
 
-    use super::*;
     use self::rusoto_mock::*;
+    use super::*;
     use rusoto_core::Region as rusoto_region;
 
     #[test]
@@ -14650,7 +14619,7 @@ mod protocol_tests {
         let client =
             CloudFormationClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = CancelUpdateStackInput::default();
-        let result = client.cancel_update_stack(&request).sync();
+        let result = client.cancel_update_stack(request).sync();
         assert!(!result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -14664,7 +14633,7 @@ mod protocol_tests {
         let client =
             CloudFormationClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = DescribeStacksInput::default();
-        let result = client.describe_stacks(&request).sync();
+        let result = client.describe_stacks(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -14678,7 +14647,7 @@ mod protocol_tests {
         let client =
             CloudFormationClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = GetTemplateInput::default();
-        let result = client.get_template(&request).sync();
+        let result = client.get_template(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -14692,7 +14661,7 @@ mod protocol_tests {
         let client =
             CloudFormationClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = ListStacksInput::default();
-        let result = client.list_stacks(&request).sync();
+        let result = client.list_stacks(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 }
