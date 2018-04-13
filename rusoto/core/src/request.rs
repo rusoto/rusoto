@@ -8,6 +8,7 @@ use std::env;
 use std::io::Error as IoError;
 use std::error::Error;
 use std::fmt;
+use std::io;
 use std::collections::hash_map::{self, HashMap};
 use std::time::Duration;
 use std::mem;
@@ -84,7 +85,7 @@ pub struct HttpResponse {
     /// Status code of HTTP Request
     pub status: StatusCode,
     /// Contents of Response
-    pub body: Box<Stream<Item=Vec<u8>, Error=HttpDispatchError> + Send>,
+    pub body: Box<Stream<Item=Vec<u8>, Error=io::Error> + Send>,
     /// Response headers
     pub headers: Headers,
 }
@@ -103,7 +104,7 @@ pub struct BufferedHttpResponse {
 pub struct BufferedHttpResponseFuture {
     status: StatusCode,
     headers: HashMap<String, String>,
-    future: ::futures::stream::Concat2<Box<Stream<Item=Vec<u8>, Error=HttpDispatchError> + Send>>
+    future: ::futures::stream::Concat2<Box<Stream<Item=Vec<u8>, Error=io::Error> + Send>>
 }
 
 impl Future for BufferedHttpResponseFuture {
@@ -111,7 +112,7 @@ impl Future for BufferedHttpResponseFuture {
     type Error = HttpDispatchError;
 
     fn poll(&mut self) -> Poll<Self::Item, Self::Error> {
-        self.future.poll().map(|async| async.map(|body| {
+        self.future.poll().map_err(|err| err.into()).map(|async| async.map(|body| {
             BufferedHttpResponse {
                 status: self.status,
                 headers: Headers(mem::replace(&mut self.headers, HashMap::new())),
@@ -132,12 +133,21 @@ impl HttpResponse {
     }
 
     fn from_hyper(hyper_response: HyperResponse) -> HttpResponse {
+        let status = hyper_response.status();
         let headers = Headers::new(hyper_response.headers().iter().map(|h| (h.name(), h.value_string())));
+        let body = hyper_response.body()
+            .map(|chunk| chunk.as_ref().to_vec())
+            .map_err(|err| {
+                match err {
+                    HyperError::Io(io_err) => io_err,
+                    _ => io::Error::new(io::ErrorKind::Other, err)
+                }
+            });
 
         HttpResponse {
-            status: hyper_response.status(),
-            body: Box::new(hyper_response.body().from_err().map(|chunk| chunk.as_ref().to_vec())),
+            status: status,
             headers: headers,
+            body: Box::new(body),
         }
     }
 }

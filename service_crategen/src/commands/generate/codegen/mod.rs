@@ -338,12 +338,12 @@ fn generate_types<P>(writer: &mut FileWriter, service: &Service, protocol_genera
             // Add a second type for streaming blobs, which are the only streaming type we can have
             writeln!(writer,
                      "pub struct {streaming_name} {{
-                         inner: Box<::futures::Stream<Item=Vec<u8>, Error=HttpDispatchError> + Send>
+                         inner: Box<::futures::Stream<Item=Vec<u8>, Error=::std::io::Error> + Send>
                      }}
 
                      impl {streaming_name} {{
                          pub fn new<S>(stream: S) -> {streaming_name}
-                             where S: ::futures::Stream<Item=Vec<u8>, Error=HttpDispatchError> + Send + 'static
+                             where S: ::futures::Stream<Item=Vec<u8>, Error=::std::io::Error> + Send + 'static
                          {{
                              {streaming_name} {{
                                  inner: Box::new(stream)
@@ -365,7 +365,7 @@ fn generate_types<P>(writer: &mut FileWriter, service: &Service, protocol_genera
 
                      impl ::futures::Stream for {streaming_name} {{
                          type Item = Vec<u8>;
-                         type Error = HttpDispatchError;
+                         type Error = ::std::io::Error;
 
                          fn poll(&mut self) -> ::futures::Poll<Option<Self::Item>, Self::Error> {{
                              self.inner.poll()
