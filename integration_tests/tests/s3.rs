@@ -487,7 +487,7 @@ fn test_generate_presigned_url(region: &Region, credentials: &AwsCredentials, bu
             key: filename.to_owned(),
             ..Default::default()
         };
-        let presigned_url = req.get_signed_url(region, credentials);
+        let presigned_url = req.get_presigned_url(region, credentials);
         println!("get object presigned url: {:#?}", presigned_url);
         let res = reqwest::get(&presigned_url).unwrap();
         check(res);
@@ -498,7 +498,7 @@ fn test_generate_presigned_url(region: &Region, credentials: &AwsCredentials, bu
             key: filename.to_owned(),
             ..Default::default()
         };
-        let presigned_url = req.get_signed_url(region, credentials);
+        let presigned_url = req.get_presigned_url(region, credentials);
         println!("put object presigned url: {:#?}", presigned_url);
         let res = reqwest::get(&presigned_url).unwrap();
         check(res);
@@ -509,7 +509,7 @@ fn test_generate_presigned_url(region: &Region, credentials: &AwsCredentials, bu
             key: filename.to_owned(),
             ..Default::default()
         };
-        let presigned_url = req.get_signed_url(region, credentials);
+        let presigned_url = req.get_presigned_url(region, credentials);
         println!("delete object presigned url: {:#?}", presigned_url);
         let res = reqwest::get(&presigned_url).unwrap();
         check(res);

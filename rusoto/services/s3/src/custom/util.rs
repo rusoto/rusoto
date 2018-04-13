@@ -61,12 +61,12 @@ macro_rules! add_params {
 
 pub trait PreSignedRequest {
     /// http://docs.aws.amazon.com/AmazonS3/latest/API/sigv4-query-string-auth.html
-    fn get_signed_url(&self, region: &Region, credentials: &AwsCredentials) -> String;
+    fn get_presigned_url(&self, region: &Region, credentials: &AwsCredentials) -> String;
 }
 
 impl PreSignedRequest for GetObjectRequest {
     /// https://docs.aws.amazon.com/AmazonS3/latest/API/RESTObjectGET.html
-    fn get_signed_url(&self, region: &Region, credentials: &AwsCredentials) -> String {
+    fn get_presigned_url(&self, region: &Region, credentials: &AwsCredentials) -> String {
         let request_uri = format!("/{bucket}/{key}", bucket = self.bucket, key = self.key);
         let mut request = SignedRequest::new("GET", "s3", &region, &request_uri);
         let mut params = Params::new();
@@ -102,7 +102,7 @@ impl PreSignedRequest for GetObjectRequest {
 
 impl PreSignedRequest for PutObjectRequest {
     /// https://docs.aws.amazon.com/AmazonS3/latest/API/RESTObjectPUT.html
-    fn get_signed_url(&self, region: &Region, credentials: &AwsCredentials) -> String {
+    fn get_presigned_url(&self, region: &Region, credentials: &AwsCredentials) -> String {
         let request_uri = format!("/{bucket}/{key}", bucket = self.bucket, key = self.key);
         let mut request = SignedRequest::new("PUT", "s3", &region, &request_uri);
 
@@ -146,7 +146,7 @@ impl PreSignedRequest for PutObjectRequest {
 
 impl PreSignedRequest for DeleteObjectRequest {
     /// https://docs.aws.amazon.com/AmazonS3/latest/API/RESTObjectDELETE.html
-    fn get_signed_url(&self, region: &Region, credentials: &AwsCredentials) -> String {
+    fn get_presigned_url(&self, region: &Region, credentials: &AwsCredentials) -> String {
         let request_uri = format!("/{bucket}/{key}", bucket = self.bucket, key = self.key);
         let mut request = SignedRequest::new("DELETE", "s3", &region, &request_uri);
         let mut params = Params::new();
