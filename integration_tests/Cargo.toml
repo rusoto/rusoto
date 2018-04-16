@@ -18,10 +18,18 @@ debug = false
 
 [profile.test]
 codegen-units = 2
-debug = false
+
+[dependencies.uuid]
+version = "0.6"
+features = ["v4"]
+optional = true
 
 [dependencies.rusoto_core]
 path = "../rusoto/core"
+
+[dependencies.rusoto_credential]
+optional = true
+path = "../rusoto/credential"
 
 [dependencies.rusoto_acm]
 optional = true
@@ -573,7 +581,9 @@ codedeploy-commands = [
 	"rusoto_codedeploy",
 	"rusoto_codedeploy_commands",
 	"rusoto_sts",
-	"rusoto_iam"
+	"rusoto_iam",
+	"rusoto_credential",
+	"uuid",
 ]
 codepipeline = ["rusoto_codepipeline"]
 codestar = ["rusoto_codestar"]
