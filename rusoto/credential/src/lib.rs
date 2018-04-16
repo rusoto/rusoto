@@ -35,7 +35,8 @@ use std::fmt;
 use std::error::Error;
 use std::io::Error as IoError;
 use std::ops::Deref;
-use std::sync::Mutex;
+use std::sync::{Arc, Mutex};
+use std::rc::Rc;
 use std::time::Duration;
 use std::cell::RefCell;
 use std::collections::BTreeMap;
@@ -202,6 +203,20 @@ pub trait ProvideAwsCredentials {
 
     /// Produce a new `AwsCredentials` future.
     fn credentials(&self) -> Self::Future;
+}
+
+impl<P: ProvideAwsCredentials> ProvideAwsCredentials for Rc<P> {
+    type Future = P::Future;
+    fn credentials(&self) -> Self::Future {
+        P::credentials(&*self)
+    }
+}
+
+impl<P: ProvideAwsCredentials> ProvideAwsCredentials for Arc<P> {
+    type Future = P::Future;
+    fn credentials(&self) -> Self::Future {
+        P::credentials(&*self)
+    }
 }
 
 /// Wrapper for `ProvideAwsCredentials` that caches the credentials returned by the
