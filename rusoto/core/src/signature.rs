@@ -269,7 +269,7 @@ impl SignedRequest {
                                     &self.service);
         self.params.put("X-Amz-Signature", signature);
 
-        format!("https://{}{}?{}", hostname, self.canonical_uri, build_canonical_query_string(&self.params))
+        format!("{}://{}{}?{}", self.scheme(), hostname, self.canonical_uri, build_canonical_query_string(&self.params))
     }
 
     /// Signs the request using Amazon Signature version 4 to verify identity.
