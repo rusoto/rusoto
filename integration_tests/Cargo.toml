@@ -107,6 +107,10 @@ path = "../rusoto/services/codecommit"
 optional = true
 path = "../rusoto/services/codedeploy"
 
+[dependencies.rusoto_codedeploy_commands]
+optional = true
+path = "../rusoto/services/codedeploy-commands"
+
 [dependencies.rusoto_codepipeline]
 optional = true
 path = "../rusoto/services/codepipeline"
@@ -461,6 +465,7 @@ all = [
 		"codebuild",
 	   	"codecommit",
 	   	"codedeploy",
+		"codedeploy-commands",
 	   	"codepipeline",
 		"codestar",
 	   	"cognito-identity",
@@ -564,6 +569,12 @@ cloudwatch = ["rusoto_cloudwatch"]
 codebuild = ["rusoto_codebuild"]
 codecommit = ["rusoto_codecommit"]
 codedeploy = ["rusoto_codedeploy"]
+codedeploy-commands = [
+	"rusoto_codedeploy",
+	"rusoto_codedeploy_commands",
+	"rusoto_sts",
+	"rusoto_iam"
+]
 codepipeline = ["rusoto_codepipeline"]
 codestar = ["rusoto_codestar"]
 cognito-identity = ["rusoto_cognito_identity"]
