@@ -18,18 +18,18 @@ use std::io;
 use futures::future;
 use futures::Future;
 use rusoto_core::reactor::{CredentialsProvider, RequestDispatcher};
-use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::region;
+use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::{ClientInner, RusotoFuture};
 
-use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
+use rusoto_core::request::HttpDispatchError;
 
-use serde_json;
-use rusoto_core::signature::SignedRequest;
-use serde_json::Value as SerdeJsonValue;
-use serde_json::from_str;
 use hyper::StatusCode;
+use rusoto_core::signature::SignedRequest;
+use serde_json;
+use serde_json::from_str;
+use serde_json::Value as SerdeJsonValue;
 /// <p>Represents the output of the <code>CreateBudget</code> operation. The content consists of the detailed metadata and data file information, and the current status of the <code>budget</code>.</p> <p>The ARN pattern for a budget is: <code>arn:aws:budgetservice::AccountId:budget/budgetName</code> </p>
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct Budget {
@@ -1753,61 +1753,61 @@ pub trait Budgets {
     /// <p>Creates a budget and, if included, notifications and subscribers. </p>
     fn create_budget(
         &self,
-        input: &CreateBudgetRequest,
+        input: CreateBudgetRequest,
     ) -> RusotoFuture<CreateBudgetResponse, CreateBudgetError>;
 
     /// <p>Creates a notification. You must create the budget before you create the associated notification.</p>
     fn create_notification(
         &self,
-        input: &CreateNotificationRequest,
+        input: CreateNotificationRequest,
     ) -> RusotoFuture<CreateNotificationResponse, CreateNotificationError>;
 
     /// <p>Creates a subscriber. You must create the associated budget and notification before you create the subscriber.</p>
     fn create_subscriber(
         &self,
-        input: &CreateSubscriberRequest,
+        input: CreateSubscriberRequest,
     ) -> RusotoFuture<CreateSubscriberResponse, CreateSubscriberError>;
 
     /// <p>Deletes a budget. You can delete your budget at any time.</p> <p> <b>Deleting a budget also deletes the notifications and subscribers associated with that budget.</b> </p>
     fn delete_budget(
         &self,
-        input: &DeleteBudgetRequest,
+        input: DeleteBudgetRequest,
     ) -> RusotoFuture<DeleteBudgetResponse, DeleteBudgetError>;
 
     /// <p>Deletes a notification.</p> <p> <b>Deleting a notification also deletes the subscribers associated with the notification.</b> </p>
     fn delete_notification(
         &self,
-        input: &DeleteNotificationRequest,
+        input: DeleteNotificationRequest,
     ) -> RusotoFuture<DeleteNotificationResponse, DeleteNotificationError>;
 
     /// <p>Deletes a subscriber.</p> <p> <b>Deleting the last subscriber to a notification also deletes the notification.</b> </p>
     fn delete_subscriber(
         &self,
-        input: &DeleteSubscriberRequest,
+        input: DeleteSubscriberRequest,
     ) -> RusotoFuture<DeleteSubscriberResponse, DeleteSubscriberError>;
 
     /// <p>Describes a budget.</p>
     fn describe_budget(
         &self,
-        input: &DescribeBudgetRequest,
+        input: DescribeBudgetRequest,
     ) -> RusotoFuture<DescribeBudgetResponse, DescribeBudgetError>;
 
     /// <p>Lists the budgets associated with an account.</p>
     fn describe_budgets(
         &self,
-        input: &DescribeBudgetsRequest,
+        input: DescribeBudgetsRequest,
     ) -> RusotoFuture<DescribeBudgetsResponse, DescribeBudgetsError>;
 
     /// <p>Lists the notifications associated with a budget.</p>
     fn describe_notifications_for_budget(
         &self,
-        input: &DescribeNotificationsForBudgetRequest,
+        input: DescribeNotificationsForBudgetRequest,
     ) -> RusotoFuture<DescribeNotificationsForBudgetResponse, DescribeNotificationsForBudgetError>;
 
     /// <p>Lists the subscribers associated with a notification.</p>
     fn describe_subscribers_for_notification(
         &self,
-        input: &DescribeSubscribersForNotificationRequest,
+        input: DescribeSubscribersForNotificationRequest,
     ) -> RusotoFuture<
         DescribeSubscribersForNotificationResponse,
         DescribeSubscribersForNotificationError,
@@ -1816,19 +1816,19 @@ pub trait Budgets {
     /// <p>Updates a budget. You can change every part of a budget except for the <code>budgetName</code> and the <code>calculatedSpend</code>. When a budget is modified, the <code>calculatedSpend</code> drops to zero until AWS has new usage data to use for forecasting.</p>
     fn update_budget(
         &self,
-        input: &UpdateBudgetRequest,
+        input: UpdateBudgetRequest,
     ) -> RusotoFuture<UpdateBudgetResponse, UpdateBudgetError>;
 
     /// <p>Updates a notification.</p>
     fn update_notification(
         &self,
-        input: &UpdateNotificationRequest,
+        input: UpdateNotificationRequest,
     ) -> RusotoFuture<UpdateNotificationResponse, UpdateNotificationError>;
 
     /// <p>Updates a subscriber.</p>
     fn update_subscriber(
         &self,
-        input: &UpdateSubscriberRequest,
+        input: UpdateSubscriberRequest,
     ) -> RusotoFuture<UpdateSubscriberResponse, UpdateSubscriberError>;
 }
 /// A client for the AWSBudgets API.
@@ -1877,13 +1877,13 @@ where
     /// <p>Creates a budget and, if included, notifications and subscribers. </p>
     fn create_budget(
         &self,
-        input: &CreateBudgetRequest,
+        input: CreateBudgetRequest,
     ) -> RusotoFuture<CreateBudgetResponse, CreateBudgetError> {
         let mut request = SignedRequest::new("POST", "budgets", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSBudgetServiceGateway.CreateBudget");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -1914,13 +1914,13 @@ where
     /// <p>Creates a notification. You must create the budget before you create the associated notification.</p>
     fn create_notification(
         &self,
-        input: &CreateNotificationRequest,
+        input: CreateNotificationRequest,
     ) -> RusotoFuture<CreateNotificationResponse, CreateNotificationError> {
         let mut request = SignedRequest::new("POST", "budgets", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSBudgetServiceGateway.CreateNotification");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -1951,13 +1951,13 @@ where
     /// <p>Creates a subscriber. You must create the associated budget and notification before you create the subscriber.</p>
     fn create_subscriber(
         &self,
-        input: &CreateSubscriberRequest,
+        input: CreateSubscriberRequest,
     ) -> RusotoFuture<CreateSubscriberResponse, CreateSubscriberError> {
         let mut request = SignedRequest::new("POST", "budgets", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSBudgetServiceGateway.CreateSubscriber");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -1988,13 +1988,13 @@ where
     /// <p>Deletes a budget. You can delete your budget at any time.</p> <p> <b>Deleting a budget also deletes the notifications and subscribers associated with that budget.</b> </p>
     fn delete_budget(
         &self,
-        input: &DeleteBudgetRequest,
+        input: DeleteBudgetRequest,
     ) -> RusotoFuture<DeleteBudgetResponse, DeleteBudgetError> {
         let mut request = SignedRequest::new("POST", "budgets", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSBudgetServiceGateway.DeleteBudget");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -2025,13 +2025,13 @@ where
     /// <p>Deletes a notification.</p> <p> <b>Deleting a notification also deletes the subscribers associated with the notification.</b> </p>
     fn delete_notification(
         &self,
-        input: &DeleteNotificationRequest,
+        input: DeleteNotificationRequest,
     ) -> RusotoFuture<DeleteNotificationResponse, DeleteNotificationError> {
         let mut request = SignedRequest::new("POST", "budgets", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSBudgetServiceGateway.DeleteNotification");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -2062,13 +2062,13 @@ where
     /// <p>Deletes a subscriber.</p> <p> <b>Deleting the last subscriber to a notification also deletes the notification.</b> </p>
     fn delete_subscriber(
         &self,
-        input: &DeleteSubscriberRequest,
+        input: DeleteSubscriberRequest,
     ) -> RusotoFuture<DeleteSubscriberResponse, DeleteSubscriberError> {
         let mut request = SignedRequest::new("POST", "budgets", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSBudgetServiceGateway.DeleteSubscriber");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -2099,13 +2099,13 @@ where
     /// <p>Describes a budget.</p>
     fn describe_budget(
         &self,
-        input: &DescribeBudgetRequest,
+        input: DescribeBudgetRequest,
     ) -> RusotoFuture<DescribeBudgetResponse, DescribeBudgetError> {
         let mut request = SignedRequest::new("POST", "budgets", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSBudgetServiceGateway.DescribeBudget");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -2136,13 +2136,13 @@ where
     /// <p>Lists the budgets associated with an account.</p>
     fn describe_budgets(
         &self,
-        input: &DescribeBudgetsRequest,
+        input: DescribeBudgetsRequest,
     ) -> RusotoFuture<DescribeBudgetsResponse, DescribeBudgetsError> {
         let mut request = SignedRequest::new("POST", "budgets", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSBudgetServiceGateway.DescribeBudgets");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -2173,7 +2173,7 @@ where
     /// <p>Lists the notifications associated with a budget.</p>
     fn describe_notifications_for_budget(
         &self,
-        input: &DescribeNotificationsForBudgetRequest,
+        input: DescribeNotificationsForBudgetRequest,
     ) -> RusotoFuture<DescribeNotificationsForBudgetResponse, DescribeNotificationsForBudgetError>
     {
         let mut request = SignedRequest::new("POST", "budgets", &self.region, "/");
@@ -2183,7 +2183,7 @@ where
             "x-amz-target",
             "AWSBudgetServiceGateway.DescribeNotificationsForBudget",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -2214,7 +2214,7 @@ where
     /// <p>Lists the subscribers associated with a notification.</p>
     fn describe_subscribers_for_notification(
         &self,
-        input: &DescribeSubscribersForNotificationRequest,
+        input: DescribeSubscribersForNotificationRequest,
     ) -> RusotoFuture<
         DescribeSubscribersForNotificationResponse,
         DescribeSubscribersForNotificationError,
@@ -2226,7 +2226,7 @@ where
             "x-amz-target",
             "AWSBudgetServiceGateway.DescribeSubscribersForNotification",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -2257,13 +2257,13 @@ where
     /// <p>Updates a budget. You can change every part of a budget except for the <code>budgetName</code> and the <code>calculatedSpend</code>. When a budget is modified, the <code>calculatedSpend</code> drops to zero until AWS has new usage data to use for forecasting.</p>
     fn update_budget(
         &self,
-        input: &UpdateBudgetRequest,
+        input: UpdateBudgetRequest,
     ) -> RusotoFuture<UpdateBudgetResponse, UpdateBudgetError> {
         let mut request = SignedRequest::new("POST", "budgets", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSBudgetServiceGateway.UpdateBudget");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -2294,13 +2294,13 @@ where
     /// <p>Updates a notification.</p>
     fn update_notification(
         &self,
-        input: &UpdateNotificationRequest,
+        input: UpdateNotificationRequest,
     ) -> RusotoFuture<UpdateNotificationResponse, UpdateNotificationError> {
         let mut request = SignedRequest::new("POST", "budgets", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSBudgetServiceGateway.UpdateNotification");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -2331,13 +2331,13 @@ where
     /// <p>Updates a subscriber.</p>
     fn update_subscriber(
         &self,
-        input: &UpdateSubscriberRequest,
+        input: UpdateSubscriberRequest,
     ) -> RusotoFuture<UpdateSubscriberResponse, UpdateSubscriberError> {
         let mut request = SignedRequest::new("POST", "budgets", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSBudgetServiceGateway.UpdateSubscriber");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {

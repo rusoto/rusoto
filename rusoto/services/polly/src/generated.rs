@@ -18,16 +18,16 @@ use std::io;
 use futures::future;
 use futures::Future;
 use rusoto_core::reactor::{CredentialsProvider, RequestDispatcher};
-use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::region;
+use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::{ClientInner, RusotoFuture};
 
-use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
+use rusoto_core::request::HttpDispatchError;
 
-use serde_json;
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::signature::SignedRequest;
+use serde_json;
 use serde_json::from_str;
 use serde_json::Value as SerdeJsonValue;
 #[derive(Default, Debug, Clone, Serialize)]
@@ -804,37 +804,37 @@ pub trait Polly {
     /// <p>Deletes the specified pronunciation lexicon stored in an AWS Region. A lexicon which has been deleted is not available for speech synthesis, nor is it possible to retrieve it using either the <code>GetLexicon</code> or <code>ListLexicon</code> APIs.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/polly/latest/dg/managing-lexicons.html">Managing Lexicons</a>.</p>
     fn delete_lexicon(
         &self,
-        input: &DeleteLexiconInput,
+        input: DeleteLexiconInput,
     ) -> RusotoFuture<DeleteLexiconOutput, DeleteLexiconError>;
 
     /// <p>Returns the list of voices that are available for use when requesting speech synthesis. Each voice speaks a specified language, is either male or female, and is identified by an ID, which is the ASCII version of the voice name. </p> <p>When synthesizing speech ( <code>SynthesizeSpeech</code> ), you provide the voice ID for the voice you want from the list of voices returned by <code>DescribeVoices</code>.</p> <p>For example, you want your news reader application to read news in a specific language, but giving a user the option to choose the voice. Using the <code>DescribeVoices</code> operation you can provide the user with a list of available voices to select from.</p> <p> You can optionally specify a language code to filter the available voices. For example, if you specify <code>en-US</code>, the operation returns a list of all available US English voices. </p> <p>This operation requires permissions to perform the <code>polly:DescribeVoices</code> action.</p>
     fn describe_voices(
         &self,
-        input: &DescribeVoicesInput,
+        input: DescribeVoicesInput,
     ) -> RusotoFuture<DescribeVoicesOutput, DescribeVoicesError>;
 
     /// <p>Returns the content of the specified pronunciation lexicon stored in an AWS Region. For more information, see <a href="http://docs.aws.amazon.com/polly/latest/dg/managing-lexicons.html">Managing Lexicons</a>.</p>
     fn get_lexicon(
         &self,
-        input: &GetLexiconInput,
+        input: GetLexiconInput,
     ) -> RusotoFuture<GetLexiconOutput, GetLexiconError>;
 
     /// <p>Returns a list of pronunciation lexicons stored in an AWS Region. For more information, see <a href="http://docs.aws.amazon.com/polly/latest/dg/managing-lexicons.html">Managing Lexicons</a>.</p>
     fn list_lexicons(
         &self,
-        input: &ListLexiconsInput,
+        input: ListLexiconsInput,
     ) -> RusotoFuture<ListLexiconsOutput, ListLexiconsError>;
 
     /// <p>Stores a pronunciation lexicon in an AWS Region. If a lexicon with the same name already exists in the region, it is overwritten by the new lexicon. Lexicon operations have eventual consistency, therefore, it might take some time before the lexicon is available to the SynthesizeSpeech operation.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/polly/latest/dg/managing-lexicons.html">Managing Lexicons</a>.</p>
     fn put_lexicon(
         &self,
-        input: &PutLexiconInput,
+        input: PutLexiconInput,
     ) -> RusotoFuture<PutLexiconOutput, PutLexiconError>;
 
     /// <p>Synthesizes UTF-8 input, plain text or SSML, to a stream of bytes. SSML input must be valid, well-formed SSML. Some alphabets might not be available with all the voices (for example, Cyrillic might not be read at all by English voices) unless phoneme mapping is used. For more information, see <a href="http://docs.aws.amazon.com/polly/latest/dg/how-text-to-speech-works.html">How it Works</a>.</p>
     fn synthesize_speech(
         &self,
-        input: &SynthesizeSpeechInput,
+        input: SynthesizeSpeechInput,
     ) -> RusotoFuture<SynthesizeSpeechOutput, SynthesizeSpeechError>;
 }
 /// A client for the Amazon Polly API.
@@ -883,7 +883,7 @@ where
     /// <p>Deletes the specified pronunciation lexicon stored in an AWS Region. A lexicon which has been deleted is not available for speech synthesis, nor is it possible to retrieve it using either the <code>GetLexicon</code> or <code>ListLexicon</code> APIs.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/polly/latest/dg/managing-lexicons.html">Managing Lexicons</a>.</p>
     fn delete_lexicon(
         &self,
-        input: &DeleteLexiconInput,
+        input: DeleteLexiconInput,
     ) -> RusotoFuture<DeleteLexiconOutput, DeleteLexiconError> {
         let request_uri = format!("/v1/lexicons/{lexicon_name}", lexicon_name = input.name);
 
@@ -920,7 +920,7 @@ where
     /// <p>Returns the list of voices that are available for use when requesting speech synthesis. Each voice speaks a specified language, is either male or female, and is identified by an ID, which is the ASCII version of the voice name. </p> <p>When synthesizing speech ( <code>SynthesizeSpeech</code> ), you provide the voice ID for the voice you want from the list of voices returned by <code>DescribeVoices</code>.</p> <p>For example, you want your news reader application to read news in a specific language, but giving a user the option to choose the voice. Using the <code>DescribeVoices</code> operation you can provide the user with a list of available voices to select from.</p> <p> You can optionally specify a language code to filter the available voices. For example, if you specify <code>en-US</code>, the operation returns a list of all available US English voices. </p> <p>This operation requires permissions to perform the <code>polly:DescribeVoices</code> action.</p>
     fn describe_voices(
         &self,
-        input: &DescribeVoicesInput,
+        input: DescribeVoicesInput,
     ) -> RusotoFuture<DescribeVoicesOutput, DescribeVoicesError> {
         let request_uri = "/v1/voices";
 
@@ -966,7 +966,7 @@ where
     /// <p>Returns the content of the specified pronunciation lexicon stored in an AWS Region. For more information, see <a href="http://docs.aws.amazon.com/polly/latest/dg/managing-lexicons.html">Managing Lexicons</a>.</p>
     fn get_lexicon(
         &self,
-        input: &GetLexiconInput,
+        input: GetLexiconInput,
     ) -> RusotoFuture<GetLexiconOutput, GetLexiconError> {
         let request_uri = format!("/v1/lexicons/{lexicon_name}", lexicon_name = input.name);
 
@@ -1003,7 +1003,7 @@ where
     /// <p>Returns a list of pronunciation lexicons stored in an AWS Region. For more information, see <a href="http://docs.aws.amazon.com/polly/latest/dg/managing-lexicons.html">Managing Lexicons</a>.</p>
     fn list_lexicons(
         &self,
-        input: &ListLexiconsInput,
+        input: ListLexiconsInput,
     ) -> RusotoFuture<ListLexiconsOutput, ListLexiconsError> {
         let request_uri = "/v1/lexicons";
 
@@ -1046,14 +1046,14 @@ where
     /// <p>Stores a pronunciation lexicon in an AWS Region. If a lexicon with the same name already exists in the region, it is overwritten by the new lexicon. Lexicon operations have eventual consistency, therefore, it might take some time before the lexicon is available to the SynthesizeSpeech operation.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/polly/latest/dg/managing-lexicons.html">Managing Lexicons</a>.</p>
     fn put_lexicon(
         &self,
-        input: &PutLexiconInput,
+        input: PutLexiconInput,
     ) -> RusotoFuture<PutLexiconOutput, PutLexiconError> {
         let request_uri = format!("/v1/lexicons/{lexicon_name}", lexicon_name = input.name);
 
         let mut request = SignedRequest::new("PUT", "polly", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(input).unwrap());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -1086,14 +1086,14 @@ where
     /// <p>Synthesizes UTF-8 input, plain text or SSML, to a stream of bytes. SSML input must be valid, well-formed SSML. Some alphabets might not be available with all the voices (for example, Cyrillic might not be read at all by English voices) unless phoneme mapping is used. For more information, see <a href="http://docs.aws.amazon.com/polly/latest/dg/how-text-to-speech-works.html">How it Works</a>.</p>
     fn synthesize_speech(
         &self,
-        input: &SynthesizeSpeechInput,
+        input: SynthesizeSpeechInput,
     ) -> RusotoFuture<SynthesizeSpeechOutput, SynthesizeSpeechError> {
         let request_uri = "/v1/speech";
 
         let mut request = SignedRequest::new("POST", "polly", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(input).unwrap());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
         let future = self.inner.sign_and_dispatch(request, |response| {

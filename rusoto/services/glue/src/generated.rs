@@ -18,18 +18,18 @@ use std::io;
 use futures::future;
 use futures::Future;
 use rusoto_core::reactor::{CredentialsProvider, RequestDispatcher};
-use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::region;
+use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::{ClientInner, RusotoFuture};
 
-use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
+use rusoto_core::request::HttpDispatchError;
 
-use serde_json;
-use rusoto_core::signature::SignedRequest;
-use serde_json::Value as SerdeJsonValue;
-use serde_json::from_str;
 use hyper::StatusCode;
+use rusoto_core::signature::SignedRequest;
+use serde_json;
+use serde_json::from_str;
+use serde_json::Value as SerdeJsonValue;
 /// <p>Defines an action to be initiated by a trigger.</p>
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct Action {
@@ -10825,457 +10825,457 @@ pub trait Glue {
     /// <p>Creates one or more partitions in a batch operation.</p>
     fn batch_create_partition(
         &self,
-        input: &BatchCreatePartitionRequest,
+        input: BatchCreatePartitionRequest,
     ) -> RusotoFuture<BatchCreatePartitionResponse, BatchCreatePartitionError>;
 
     /// <p>Deletes a list of connection definitions from the Data Catalog.</p>
     fn batch_delete_connection(
         &self,
-        input: &BatchDeleteConnectionRequest,
+        input: BatchDeleteConnectionRequest,
     ) -> RusotoFuture<BatchDeleteConnectionResponse, BatchDeleteConnectionError>;
 
     /// <p>Deletes one or more partitions in a batch operation.</p>
     fn batch_delete_partition(
         &self,
-        input: &BatchDeletePartitionRequest,
+        input: BatchDeletePartitionRequest,
     ) -> RusotoFuture<BatchDeletePartitionResponse, BatchDeletePartitionError>;
 
     /// <p>Deletes multiple tables at once.</p>
     fn batch_delete_table(
         &self,
-        input: &BatchDeleteTableRequest,
+        input: BatchDeleteTableRequest,
     ) -> RusotoFuture<BatchDeleteTableResponse, BatchDeleteTableError>;
 
     /// <p>Deletes a specified batch of versions of a table.</p>
     fn batch_delete_table_version(
         &self,
-        input: &BatchDeleteTableVersionRequest,
+        input: BatchDeleteTableVersionRequest,
     ) -> RusotoFuture<BatchDeleteTableVersionResponse, BatchDeleteTableVersionError>;
 
     /// <p>Retrieves partitions in a batch request.</p>
     fn batch_get_partition(
         &self,
-        input: &BatchGetPartitionRequest,
+        input: BatchGetPartitionRequest,
     ) -> RusotoFuture<BatchGetPartitionResponse, BatchGetPartitionError>;
 
     /// <p>Stops one or more job runs for a specified Job.</p>
     fn batch_stop_job_run(
         &self,
-        input: &BatchStopJobRunRequest,
+        input: BatchStopJobRunRequest,
     ) -> RusotoFuture<BatchStopJobRunResponse, GlueBatchStopJobRunError>;
 
     /// <p>Creates a classifier in the user's account. This may be a <code>GrokClassifier</code>, an <code>XMLClassifier</code>, or abbrev <code>JsonClassifier</code>, depending on which field of the request is present.</p>
     fn create_classifier(
         &self,
-        input: &CreateClassifierRequest,
+        input: CreateClassifierRequest,
     ) -> RusotoFuture<CreateClassifierResponse, CreateClassifierError>;
 
     /// <p>Creates a connection definition in the Data Catalog.</p>
     fn create_connection(
         &self,
-        input: &CreateConnectionRequest,
+        input: CreateConnectionRequest,
     ) -> RusotoFuture<CreateConnectionResponse, CreateConnectionError>;
 
     /// <p>Creates a new crawler with specified targets, role, configuration, and optional schedule. At least one crawl target must be specified, in either the <i>s3Targets</i> or the <i>jdbcTargets</i> field.</p>
     fn create_crawler(
         &self,
-        input: &CreateCrawlerRequest,
+        input: CreateCrawlerRequest,
     ) -> RusotoFuture<CreateCrawlerResponse, CreateCrawlerError>;
 
     /// <p>Creates a new database in a Data Catalog.</p>
     fn create_database(
         &self,
-        input: &CreateDatabaseRequest,
+        input: CreateDatabaseRequest,
     ) -> RusotoFuture<CreateDatabaseResponse, CreateDatabaseError>;
 
     /// <p>Creates a new DevEndpoint.</p>
     fn create_dev_endpoint(
         &self,
-        input: &CreateDevEndpointRequest,
+        input: CreateDevEndpointRequest,
     ) -> RusotoFuture<CreateDevEndpointResponse, CreateDevEndpointError>;
 
     /// <p>Creates a new job.</p>
     fn create_job(
         &self,
-        input: &CreateJobRequest,
+        input: CreateJobRequest,
     ) -> RusotoFuture<CreateJobResponse, CreateJobError>;
 
     /// <p>Creates a new partition.</p>
     fn create_partition(
         &self,
-        input: &CreatePartitionRequest,
+        input: CreatePartitionRequest,
     ) -> RusotoFuture<CreatePartitionResponse, CreatePartitionError>;
 
     /// <p>Transforms a directed acyclic graph (DAG) into code.</p>
     fn create_script(
         &self,
-        input: &CreateScriptRequest,
+        input: CreateScriptRequest,
     ) -> RusotoFuture<CreateScriptResponse, CreateScriptError>;
 
     /// <p>Creates a new table definition in the Data Catalog.</p>
     fn create_table(
         &self,
-        input: &CreateTableRequest,
+        input: CreateTableRequest,
     ) -> RusotoFuture<CreateTableResponse, CreateTableError>;
 
     /// <p>Creates a new trigger.</p>
     fn create_trigger(
         &self,
-        input: &CreateTriggerRequest,
+        input: CreateTriggerRequest,
     ) -> RusotoFuture<CreateTriggerResponse, CreateTriggerError>;
 
     /// <p>Creates a new function definition in the Data Catalog.</p>
     fn create_user_defined_function(
         &self,
-        input: &CreateUserDefinedFunctionRequest,
+        input: CreateUserDefinedFunctionRequest,
     ) -> RusotoFuture<CreateUserDefinedFunctionResponse, CreateUserDefinedFunctionError>;
 
     /// <p>Removes a classifier from the Data Catalog.</p>
     fn delete_classifier(
         &self,
-        input: &DeleteClassifierRequest,
+        input: DeleteClassifierRequest,
     ) -> RusotoFuture<DeleteClassifierResponse, DeleteClassifierError>;
 
     /// <p>Deletes a connection from the Data Catalog.</p>
     fn delete_connection(
         &self,
-        input: &DeleteConnectionRequest,
+        input: DeleteConnectionRequest,
     ) -> RusotoFuture<DeleteConnectionResponse, DeleteConnectionError>;
 
     /// <p>Removes a specified crawler from the Data Catalog, unless the crawler state is <code>RUNNING</code>.</p>
     fn delete_crawler(
         &self,
-        input: &DeleteCrawlerRequest,
+        input: DeleteCrawlerRequest,
     ) -> RusotoFuture<DeleteCrawlerResponse, DeleteCrawlerError>;
 
     /// <p>Removes a specified Database from a Data Catalog.</p>
     fn delete_database(
         &self,
-        input: &DeleteDatabaseRequest,
+        input: DeleteDatabaseRequest,
     ) -> RusotoFuture<DeleteDatabaseResponse, DeleteDatabaseError>;
 
     /// <p>Deletes a specified DevEndpoint.</p>
     fn delete_dev_endpoint(
         &self,
-        input: &DeleteDevEndpointRequest,
+        input: DeleteDevEndpointRequest,
     ) -> RusotoFuture<DeleteDevEndpointResponse, DeleteDevEndpointError>;
 
     /// <p>Deletes a specified job. If the job is not found, no exception is thrown.</p>
     fn delete_job(
         &self,
-        input: &DeleteJobRequest,
+        input: DeleteJobRequest,
     ) -> RusotoFuture<DeleteJobResponse, DeleteJobError>;
 
     /// <p>Deletes a specified partition.</p>
     fn delete_partition(
         &self,
-        input: &DeletePartitionRequest,
+        input: DeletePartitionRequest,
     ) -> RusotoFuture<DeletePartitionResponse, DeletePartitionError>;
 
     /// <p>Removes a table definition from the Data Catalog.</p>
     fn delete_table(
         &self,
-        input: &DeleteTableRequest,
+        input: DeleteTableRequest,
     ) -> RusotoFuture<DeleteTableResponse, DeleteTableError>;
 
     /// <p>Deletes a specified version of a table.</p>
     fn delete_table_version(
         &self,
-        input: &DeleteTableVersionRequest,
+        input: DeleteTableVersionRequest,
     ) -> RusotoFuture<DeleteTableVersionResponse, DeleteTableVersionError>;
 
     /// <p>Deletes a specified trigger. If the trigger is not found, no exception is thrown.</p>
     fn delete_trigger(
         &self,
-        input: &DeleteTriggerRequest,
+        input: DeleteTriggerRequest,
     ) -> RusotoFuture<DeleteTriggerResponse, DeleteTriggerError>;
 
     /// <p>Deletes an existing function definition from the Data Catalog.</p>
     fn delete_user_defined_function(
         &self,
-        input: &DeleteUserDefinedFunctionRequest,
+        input: DeleteUserDefinedFunctionRequest,
     ) -> RusotoFuture<DeleteUserDefinedFunctionResponse, DeleteUserDefinedFunctionError>;
 
     /// <p>Retrieves the status of a migration operation.</p>
     fn get_catalog_import_status(
         &self,
-        input: &GetCatalogImportStatusRequest,
+        input: GetCatalogImportStatusRequest,
     ) -> RusotoFuture<GetCatalogImportStatusResponse, GetCatalogImportStatusError>;
 
     /// <p>Retrieve a classifier by name.</p>
     fn get_classifier(
         &self,
-        input: &GetClassifierRequest,
+        input: GetClassifierRequest,
     ) -> RusotoFuture<GetClassifierResponse, GetClassifierError>;
 
     /// <p>Lists all classifier objects in the Data Catalog.</p>
     fn get_classifiers(
         &self,
-        input: &GetClassifiersRequest,
+        input: GetClassifiersRequest,
     ) -> RusotoFuture<GetClassifiersResponse, GetClassifiersError>;
 
     /// <p>Retrieves a connection definition from the Data Catalog.</p>
     fn get_connection(
         &self,
-        input: &GetConnectionRequest,
+        input: GetConnectionRequest,
     ) -> RusotoFuture<GetConnectionResponse, GetConnectionError>;
 
     /// <p>Retrieves a list of connection definitions from the Data Catalog.</p>
     fn get_connections(
         &self,
-        input: &GetConnectionsRequest,
+        input: GetConnectionsRequest,
     ) -> RusotoFuture<GetConnectionsResponse, GetConnectionsError>;
 
     /// <p>Retrieves metadata for a specified crawler.</p>
     fn get_crawler(
         &self,
-        input: &GetCrawlerRequest,
+        input: GetCrawlerRequest,
     ) -> RusotoFuture<GetCrawlerResponse, GetCrawlerError>;
 
     /// <p>Retrieves metrics about specified crawlers.</p>
     fn get_crawler_metrics(
         &self,
-        input: &GetCrawlerMetricsRequest,
+        input: GetCrawlerMetricsRequest,
     ) -> RusotoFuture<GetCrawlerMetricsResponse, GetCrawlerMetricsError>;
 
     /// <p>Retrieves metadata for all crawlers defined in the customer account.</p>
     fn get_crawlers(
         &self,
-        input: &GetCrawlersRequest,
+        input: GetCrawlersRequest,
     ) -> RusotoFuture<GetCrawlersResponse, GetCrawlersError>;
 
     /// <p>Retrieves the definition of a specified database.</p>
     fn get_database(
         &self,
-        input: &GetDatabaseRequest,
+        input: GetDatabaseRequest,
     ) -> RusotoFuture<GetDatabaseResponse, GetDatabaseError>;
 
     /// <p>Retrieves all Databases defined in a given Data Catalog.</p>
     fn get_databases(
         &self,
-        input: &GetDatabasesRequest,
+        input: GetDatabasesRequest,
     ) -> RusotoFuture<GetDatabasesResponse, GetDatabasesError>;
 
     /// <p>Transforms a Python script into a directed acyclic graph (DAG). </p>
     fn get_dataflow_graph(
         &self,
-        input: &GetDataflowGraphRequest,
+        input: GetDataflowGraphRequest,
     ) -> RusotoFuture<GetDataflowGraphResponse, GetDataflowGraphError>;
 
     /// <p>Retrieves information about a specified DevEndpoint.</p>
     fn get_dev_endpoint(
         &self,
-        input: &GetDevEndpointRequest,
+        input: GetDevEndpointRequest,
     ) -> RusotoFuture<GetDevEndpointResponse, GetDevEndpointError>;
 
     /// <p>Retrieves all the DevEndpoints in this AWS account.</p>
     fn get_dev_endpoints(
         &self,
-        input: &GetDevEndpointsRequest,
+        input: GetDevEndpointsRequest,
     ) -> RusotoFuture<GetDevEndpointsResponse, GetDevEndpointsError>;
 
     /// <p>Retrieves an existing job definition.</p>
-    fn get_job(&self, input: &GetJobRequest) -> RusotoFuture<GetJobResponse, GetJobError>;
+    fn get_job(&self, input: GetJobRequest) -> RusotoFuture<GetJobResponse, GetJobError>;
 
     /// <p>Retrieves the metadata for a given job run.</p>
     fn get_job_run(
         &self,
-        input: &GetJobRunRequest,
+        input: GetJobRunRequest,
     ) -> RusotoFuture<GetJobRunResponse, GetJobRunError>;
 
     /// <p>Retrieves metadata for all runs of a given job.</p>
     fn get_job_runs(
         &self,
-        input: &GetJobRunsRequest,
+        input: GetJobRunsRequest,
     ) -> RusotoFuture<GetJobRunsResponse, GetJobRunsError>;
 
     /// <p>Retrieves all current jobs.</p>
-    fn get_jobs(&self, input: &GetJobsRequest) -> RusotoFuture<GetJobsResponse, GetJobsError>;
+    fn get_jobs(&self, input: GetJobsRequest) -> RusotoFuture<GetJobsResponse, GetJobsError>;
 
     /// <p>Creates mappings.</p>
     fn get_mapping(
         &self,
-        input: &GetMappingRequest,
+        input: GetMappingRequest,
     ) -> RusotoFuture<GetMappingResponse, GetMappingError>;
 
     /// <p>Retrieves information about a specified partition.</p>
     fn get_partition(
         &self,
-        input: &GetPartitionRequest,
+        input: GetPartitionRequest,
     ) -> RusotoFuture<GetPartitionResponse, GetPartitionError>;
 
     /// <p>Retrieves information about the partitions in a table.</p>
     fn get_partitions(
         &self,
-        input: &GetPartitionsRequest,
+        input: GetPartitionsRequest,
     ) -> RusotoFuture<GetPartitionsResponse, GetPartitionsError>;
 
     /// <p>Gets code to perform a specified mapping.</p>
-    fn get_plan(&self, input: &GetPlanRequest) -> RusotoFuture<GetPlanResponse, GetPlanError>;
+    fn get_plan(&self, input: GetPlanRequest) -> RusotoFuture<GetPlanResponse, GetPlanError>;
 
     /// <p>Retrieves the <code>Table</code> definition in a Data Catalog for a specified table.</p>
-    fn get_table(&self, input: &GetTableRequest) -> RusotoFuture<GetTableResponse, GetTableError>;
+    fn get_table(&self, input: GetTableRequest) -> RusotoFuture<GetTableResponse, GetTableError>;
 
     /// <p>Retrieves a specified version of a table.</p>
     fn get_table_version(
         &self,
-        input: &GetTableVersionRequest,
+        input: GetTableVersionRequest,
     ) -> RusotoFuture<GetTableVersionResponse, GetTableVersionError>;
 
     /// <p>Retrieves a list of strings that identify available versions of a specified table.</p>
     fn get_table_versions(
         &self,
-        input: &GetTableVersionsRequest,
+        input: GetTableVersionsRequest,
     ) -> RusotoFuture<GetTableVersionsResponse, GetTableVersionsError>;
 
     /// <p>Retrieves the definitions of some or all of the tables in a given <code>Database</code>.</p>
     fn get_tables(
         &self,
-        input: &GetTablesRequest,
+        input: GetTablesRequest,
     ) -> RusotoFuture<GetTablesResponse, GetTablesError>;
 
     /// <p>Retrieves the definition of a trigger.</p>
     fn get_trigger(
         &self,
-        input: &GetTriggerRequest,
+        input: GetTriggerRequest,
     ) -> RusotoFuture<GetTriggerResponse, GetTriggerError>;
 
     /// <p>Gets all the triggers associated with a job.</p>
     fn get_triggers(
         &self,
-        input: &GetTriggersRequest,
+        input: GetTriggersRequest,
     ) -> RusotoFuture<GetTriggersResponse, GetTriggersError>;
 
     /// <p>Retrieves a specified function definition from the Data Catalog.</p>
     fn get_user_defined_function(
         &self,
-        input: &GetUserDefinedFunctionRequest,
+        input: GetUserDefinedFunctionRequest,
     ) -> RusotoFuture<GetUserDefinedFunctionResponse, GetUserDefinedFunctionError>;
 
     /// <p>Retrieves a multiple function definitions from the Data Catalog.</p>
     fn get_user_defined_functions(
         &self,
-        input: &GetUserDefinedFunctionsRequest,
+        input: GetUserDefinedFunctionsRequest,
     ) -> RusotoFuture<GetUserDefinedFunctionsResponse, GetUserDefinedFunctionsError>;
 
     /// <p>Imports an existing Athena Data Catalog to AWS Glue</p>
     fn import_catalog_to_glue(
         &self,
-        input: &ImportCatalogToGlueRequest,
+        input: ImportCatalogToGlueRequest,
     ) -> RusotoFuture<ImportCatalogToGlueResponse, ImportCatalogToGlueError>;
 
     /// <p>Resets a bookmark entry.</p>
     fn reset_job_bookmark(
         &self,
-        input: &ResetJobBookmarkRequest,
+        input: ResetJobBookmarkRequest,
     ) -> RusotoFuture<ResetJobBookmarkResponse, ResetJobBookmarkError>;
 
     /// <p>Starts a crawl using the specified crawler, regardless of what is scheduled. If the crawler is already running, does nothing.</p>
     fn start_crawler(
         &self,
-        input: &StartCrawlerRequest,
+        input: StartCrawlerRequest,
     ) -> RusotoFuture<StartCrawlerResponse, StartCrawlerError>;
 
     /// <p>Changes the schedule state of the specified crawler to <code>SCHEDULED</code>, unless the crawler is already running or the schedule state is already <code>SCHEDULED</code>.</p>
     fn start_crawler_schedule(
         &self,
-        input: &StartCrawlerScheduleRequest,
+        input: StartCrawlerScheduleRequest,
     ) -> RusotoFuture<StartCrawlerScheduleResponse, StartCrawlerScheduleError>;
 
     /// <p>Runs a job.</p>
     fn start_job_run(
         &self,
-        input: &StartJobRunRequest,
+        input: StartJobRunRequest,
     ) -> RusotoFuture<StartJobRunResponse, StartJobRunError>;
 
     /// <p>Starts an existing trigger. See <a href="http://docs.aws.amazon.com/glue/latest/dg/trigger-job.html">Triggering Jobs</a> for information about how different types of trigger are started.</p>
     fn start_trigger(
         &self,
-        input: &StartTriggerRequest,
+        input: StartTriggerRequest,
     ) -> RusotoFuture<StartTriggerResponse, StartTriggerError>;
 
     /// <p>If the specified crawler is running, stops the crawl.</p>
     fn stop_crawler(
         &self,
-        input: &StopCrawlerRequest,
+        input: StopCrawlerRequest,
     ) -> RusotoFuture<StopCrawlerResponse, StopCrawlerError>;
 
     /// <p>Sets the schedule state of the specified crawler to <code>NOT_SCHEDULED</code>, but does not stop the crawler if it is already running.</p>
     fn stop_crawler_schedule(
         &self,
-        input: &StopCrawlerScheduleRequest,
+        input: StopCrawlerScheduleRequest,
     ) -> RusotoFuture<StopCrawlerScheduleResponse, StopCrawlerScheduleError>;
 
     /// <p>Stops a specified trigger.</p>
     fn stop_trigger(
         &self,
-        input: &StopTriggerRequest,
+        input: StopTriggerRequest,
     ) -> RusotoFuture<StopTriggerResponse, StopTriggerError>;
 
     /// <p>Modifies an existing classifier (a <code>GrokClassifier</code>, <code>XMLClassifier</code>, or <code>JsonClassifier</code>, depending on which field is present).</p>
     fn update_classifier(
         &self,
-        input: &UpdateClassifierRequest,
+        input: UpdateClassifierRequest,
     ) -> RusotoFuture<UpdateClassifierResponse, UpdateClassifierError>;
 
     /// <p>Updates a connection definition in the Data Catalog.</p>
     fn update_connection(
         &self,
-        input: &UpdateConnectionRequest,
+        input: UpdateConnectionRequest,
     ) -> RusotoFuture<UpdateConnectionResponse, UpdateConnectionError>;
 
     /// <p>Updates a crawler. If a crawler is running, you must stop it using <code>StopCrawler</code> before updating it.</p>
     fn update_crawler(
         &self,
-        input: &UpdateCrawlerRequest,
+        input: UpdateCrawlerRequest,
     ) -> RusotoFuture<UpdateCrawlerResponse, UpdateCrawlerError>;
 
     /// <p>Updates the schedule of a crawler using a <code>cron</code> expression. </p>
     fn update_crawler_schedule(
         &self,
-        input: &UpdateCrawlerScheduleRequest,
+        input: UpdateCrawlerScheduleRequest,
     ) -> RusotoFuture<UpdateCrawlerScheduleResponse, UpdateCrawlerScheduleError>;
 
     /// <p>Updates an existing database definition in a Data Catalog.</p>
     fn update_database(
         &self,
-        input: &UpdateDatabaseRequest,
+        input: UpdateDatabaseRequest,
     ) -> RusotoFuture<UpdateDatabaseResponse, UpdateDatabaseError>;
 
     /// <p>Updates a specified DevEndpoint.</p>
     fn update_dev_endpoint(
         &self,
-        input: &UpdateDevEndpointRequest,
+        input: UpdateDevEndpointRequest,
     ) -> RusotoFuture<UpdateDevEndpointResponse, UpdateDevEndpointError>;
 
     /// <p>Updates an existing job definition.</p>
     fn update_job(
         &self,
-        input: &UpdateJobRequest,
+        input: UpdateJobRequest,
     ) -> RusotoFuture<UpdateJobResponse, UpdateJobError>;
 
     /// <p>Updates a partition.</p>
     fn update_partition(
         &self,
-        input: &UpdatePartitionRequest,
+        input: UpdatePartitionRequest,
     ) -> RusotoFuture<UpdatePartitionResponse, UpdatePartitionError>;
 
     /// <p>Updates a metadata table in the Data Catalog.</p>
     fn update_table(
         &self,
-        input: &UpdateTableRequest,
+        input: UpdateTableRequest,
     ) -> RusotoFuture<UpdateTableResponse, UpdateTableError>;
 
     /// <p>Updates a trigger definition.</p>
     fn update_trigger(
         &self,
-        input: &UpdateTriggerRequest,
+        input: UpdateTriggerRequest,
     ) -> RusotoFuture<UpdateTriggerResponse, UpdateTriggerError>;
 
     /// <p>Updates an existing function definition in the Data Catalog.</p>
     fn update_user_defined_function(
         &self,
-        input: &UpdateUserDefinedFunctionRequest,
+        input: UpdateUserDefinedFunctionRequest,
     ) -> RusotoFuture<UpdateUserDefinedFunctionResponse, UpdateUserDefinedFunctionError>;
 }
 /// A client for the AWS Glue API.
@@ -11324,13 +11324,13 @@ where
     /// <p>Creates one or more partitions in a batch operation.</p>
     fn batch_create_partition(
         &self,
-        input: &BatchCreatePartitionRequest,
+        input: BatchCreatePartitionRequest,
     ) -> RusotoFuture<BatchCreatePartitionResponse, BatchCreatePartitionError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.BatchCreatePartition");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -11361,13 +11361,13 @@ where
     /// <p>Deletes a list of connection definitions from the Data Catalog.</p>
     fn batch_delete_connection(
         &self,
-        input: &BatchDeleteConnectionRequest,
+        input: BatchDeleteConnectionRequest,
     ) -> RusotoFuture<BatchDeleteConnectionResponse, BatchDeleteConnectionError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.BatchDeleteConnection");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -11398,13 +11398,13 @@ where
     /// <p>Deletes one or more partitions in a batch operation.</p>
     fn batch_delete_partition(
         &self,
-        input: &BatchDeletePartitionRequest,
+        input: BatchDeletePartitionRequest,
     ) -> RusotoFuture<BatchDeletePartitionResponse, BatchDeletePartitionError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.BatchDeletePartition");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -11435,13 +11435,13 @@ where
     /// <p>Deletes multiple tables at once.</p>
     fn batch_delete_table(
         &self,
-        input: &BatchDeleteTableRequest,
+        input: BatchDeleteTableRequest,
     ) -> RusotoFuture<BatchDeleteTableResponse, BatchDeleteTableError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.BatchDeleteTable");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -11472,13 +11472,13 @@ where
     /// <p>Deletes a specified batch of versions of a table.</p>
     fn batch_delete_table_version(
         &self,
-        input: &BatchDeleteTableVersionRequest,
+        input: BatchDeleteTableVersionRequest,
     ) -> RusotoFuture<BatchDeleteTableVersionResponse, BatchDeleteTableVersionError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.BatchDeleteTableVersion");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -11509,13 +11509,13 @@ where
     /// <p>Retrieves partitions in a batch request.</p>
     fn batch_get_partition(
         &self,
-        input: &BatchGetPartitionRequest,
+        input: BatchGetPartitionRequest,
     ) -> RusotoFuture<BatchGetPartitionResponse, BatchGetPartitionError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.BatchGetPartition");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -11546,13 +11546,13 @@ where
     /// <p>Stops one or more job runs for a specified Job.</p>
     fn batch_stop_job_run(
         &self,
-        input: &BatchStopJobRunRequest,
+        input: BatchStopJobRunRequest,
     ) -> RusotoFuture<BatchStopJobRunResponse, GlueBatchStopJobRunError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.BatchStopJobRun");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -11583,13 +11583,13 @@ where
     /// <p>Creates a classifier in the user's account. This may be a <code>GrokClassifier</code>, an <code>XMLClassifier</code>, or abbrev <code>JsonClassifier</code>, depending on which field of the request is present.</p>
     fn create_classifier(
         &self,
-        input: &CreateClassifierRequest,
+        input: CreateClassifierRequest,
     ) -> RusotoFuture<CreateClassifierResponse, CreateClassifierError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.CreateClassifier");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -11620,13 +11620,13 @@ where
     /// <p>Creates a connection definition in the Data Catalog.</p>
     fn create_connection(
         &self,
-        input: &CreateConnectionRequest,
+        input: CreateConnectionRequest,
     ) -> RusotoFuture<CreateConnectionResponse, CreateConnectionError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.CreateConnection");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -11657,13 +11657,13 @@ where
     /// <p>Creates a new crawler with specified targets, role, configuration, and optional schedule. At least one crawl target must be specified, in either the <i>s3Targets</i> or the <i>jdbcTargets</i> field.</p>
     fn create_crawler(
         &self,
-        input: &CreateCrawlerRequest,
+        input: CreateCrawlerRequest,
     ) -> RusotoFuture<CreateCrawlerResponse, CreateCrawlerError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.CreateCrawler");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -11694,13 +11694,13 @@ where
     /// <p>Creates a new database in a Data Catalog.</p>
     fn create_database(
         &self,
-        input: &CreateDatabaseRequest,
+        input: CreateDatabaseRequest,
     ) -> RusotoFuture<CreateDatabaseResponse, CreateDatabaseError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.CreateDatabase");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -11731,13 +11731,13 @@ where
     /// <p>Creates a new DevEndpoint.</p>
     fn create_dev_endpoint(
         &self,
-        input: &CreateDevEndpointRequest,
+        input: CreateDevEndpointRequest,
     ) -> RusotoFuture<CreateDevEndpointResponse, CreateDevEndpointError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.CreateDevEndpoint");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -11768,13 +11768,13 @@ where
     /// <p>Creates a new job.</p>
     fn create_job(
         &self,
-        input: &CreateJobRequest,
+        input: CreateJobRequest,
     ) -> RusotoFuture<CreateJobResponse, CreateJobError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.CreateJob");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -11805,13 +11805,13 @@ where
     /// <p>Creates a new partition.</p>
     fn create_partition(
         &self,
-        input: &CreatePartitionRequest,
+        input: CreatePartitionRequest,
     ) -> RusotoFuture<CreatePartitionResponse, CreatePartitionError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.CreatePartition");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -11842,13 +11842,13 @@ where
     /// <p>Transforms a directed acyclic graph (DAG) into code.</p>
     fn create_script(
         &self,
-        input: &CreateScriptRequest,
+        input: CreateScriptRequest,
     ) -> RusotoFuture<CreateScriptResponse, CreateScriptError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.CreateScript");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -11879,13 +11879,13 @@ where
     /// <p>Creates a new table definition in the Data Catalog.</p>
     fn create_table(
         &self,
-        input: &CreateTableRequest,
+        input: CreateTableRequest,
     ) -> RusotoFuture<CreateTableResponse, CreateTableError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.CreateTable");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -11916,13 +11916,13 @@ where
     /// <p>Creates a new trigger.</p>
     fn create_trigger(
         &self,
-        input: &CreateTriggerRequest,
+        input: CreateTriggerRequest,
     ) -> RusotoFuture<CreateTriggerResponse, CreateTriggerError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.CreateTrigger");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -11953,13 +11953,13 @@ where
     /// <p>Creates a new function definition in the Data Catalog.</p>
     fn create_user_defined_function(
         &self,
-        input: &CreateUserDefinedFunctionRequest,
+        input: CreateUserDefinedFunctionRequest,
     ) -> RusotoFuture<CreateUserDefinedFunctionResponse, CreateUserDefinedFunctionError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.CreateUserDefinedFunction");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -11990,13 +11990,13 @@ where
     /// <p>Removes a classifier from the Data Catalog.</p>
     fn delete_classifier(
         &self,
-        input: &DeleteClassifierRequest,
+        input: DeleteClassifierRequest,
     ) -> RusotoFuture<DeleteClassifierResponse, DeleteClassifierError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.DeleteClassifier");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -12027,13 +12027,13 @@ where
     /// <p>Deletes a connection from the Data Catalog.</p>
     fn delete_connection(
         &self,
-        input: &DeleteConnectionRequest,
+        input: DeleteConnectionRequest,
     ) -> RusotoFuture<DeleteConnectionResponse, DeleteConnectionError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.DeleteConnection");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -12064,13 +12064,13 @@ where
     /// <p>Removes a specified crawler from the Data Catalog, unless the crawler state is <code>RUNNING</code>.</p>
     fn delete_crawler(
         &self,
-        input: &DeleteCrawlerRequest,
+        input: DeleteCrawlerRequest,
     ) -> RusotoFuture<DeleteCrawlerResponse, DeleteCrawlerError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.DeleteCrawler");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -12101,13 +12101,13 @@ where
     /// <p>Removes a specified Database from a Data Catalog.</p>
     fn delete_database(
         &self,
-        input: &DeleteDatabaseRequest,
+        input: DeleteDatabaseRequest,
     ) -> RusotoFuture<DeleteDatabaseResponse, DeleteDatabaseError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.DeleteDatabase");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -12138,13 +12138,13 @@ where
     /// <p>Deletes a specified DevEndpoint.</p>
     fn delete_dev_endpoint(
         &self,
-        input: &DeleteDevEndpointRequest,
+        input: DeleteDevEndpointRequest,
     ) -> RusotoFuture<DeleteDevEndpointResponse, DeleteDevEndpointError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.DeleteDevEndpoint");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -12175,13 +12175,13 @@ where
     /// <p>Deletes a specified job. If the job is not found, no exception is thrown.</p>
     fn delete_job(
         &self,
-        input: &DeleteJobRequest,
+        input: DeleteJobRequest,
     ) -> RusotoFuture<DeleteJobResponse, DeleteJobError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.DeleteJob");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -12212,13 +12212,13 @@ where
     /// <p>Deletes a specified partition.</p>
     fn delete_partition(
         &self,
-        input: &DeletePartitionRequest,
+        input: DeletePartitionRequest,
     ) -> RusotoFuture<DeletePartitionResponse, DeletePartitionError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.DeletePartition");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -12249,13 +12249,13 @@ where
     /// <p>Removes a table definition from the Data Catalog.</p>
     fn delete_table(
         &self,
-        input: &DeleteTableRequest,
+        input: DeleteTableRequest,
     ) -> RusotoFuture<DeleteTableResponse, DeleteTableError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.DeleteTable");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -12286,13 +12286,13 @@ where
     /// <p>Deletes a specified version of a table.</p>
     fn delete_table_version(
         &self,
-        input: &DeleteTableVersionRequest,
+        input: DeleteTableVersionRequest,
     ) -> RusotoFuture<DeleteTableVersionResponse, DeleteTableVersionError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.DeleteTableVersion");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -12323,13 +12323,13 @@ where
     /// <p>Deletes a specified trigger. If the trigger is not found, no exception is thrown.</p>
     fn delete_trigger(
         &self,
-        input: &DeleteTriggerRequest,
+        input: DeleteTriggerRequest,
     ) -> RusotoFuture<DeleteTriggerResponse, DeleteTriggerError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.DeleteTrigger");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -12360,13 +12360,13 @@ where
     /// <p>Deletes an existing function definition from the Data Catalog.</p>
     fn delete_user_defined_function(
         &self,
-        input: &DeleteUserDefinedFunctionRequest,
+        input: DeleteUserDefinedFunctionRequest,
     ) -> RusotoFuture<DeleteUserDefinedFunctionResponse, DeleteUserDefinedFunctionError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.DeleteUserDefinedFunction");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -12397,13 +12397,13 @@ where
     /// <p>Retrieves the status of a migration operation.</p>
     fn get_catalog_import_status(
         &self,
-        input: &GetCatalogImportStatusRequest,
+        input: GetCatalogImportStatusRequest,
     ) -> RusotoFuture<GetCatalogImportStatusResponse, GetCatalogImportStatusError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.GetCatalogImportStatus");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -12434,13 +12434,13 @@ where
     /// <p>Retrieve a classifier by name.</p>
     fn get_classifier(
         &self,
-        input: &GetClassifierRequest,
+        input: GetClassifierRequest,
     ) -> RusotoFuture<GetClassifierResponse, GetClassifierError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.GetClassifier");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -12471,13 +12471,13 @@ where
     /// <p>Lists all classifier objects in the Data Catalog.</p>
     fn get_classifiers(
         &self,
-        input: &GetClassifiersRequest,
+        input: GetClassifiersRequest,
     ) -> RusotoFuture<GetClassifiersResponse, GetClassifiersError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.GetClassifiers");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -12508,13 +12508,13 @@ where
     /// <p>Retrieves a connection definition from the Data Catalog.</p>
     fn get_connection(
         &self,
-        input: &GetConnectionRequest,
+        input: GetConnectionRequest,
     ) -> RusotoFuture<GetConnectionResponse, GetConnectionError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.GetConnection");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -12545,13 +12545,13 @@ where
     /// <p>Retrieves a list of connection definitions from the Data Catalog.</p>
     fn get_connections(
         &self,
-        input: &GetConnectionsRequest,
+        input: GetConnectionsRequest,
     ) -> RusotoFuture<GetConnectionsResponse, GetConnectionsError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.GetConnections");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -12582,13 +12582,13 @@ where
     /// <p>Retrieves metadata for a specified crawler.</p>
     fn get_crawler(
         &self,
-        input: &GetCrawlerRequest,
+        input: GetCrawlerRequest,
     ) -> RusotoFuture<GetCrawlerResponse, GetCrawlerError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.GetCrawler");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -12619,13 +12619,13 @@ where
     /// <p>Retrieves metrics about specified crawlers.</p>
     fn get_crawler_metrics(
         &self,
-        input: &GetCrawlerMetricsRequest,
+        input: GetCrawlerMetricsRequest,
     ) -> RusotoFuture<GetCrawlerMetricsResponse, GetCrawlerMetricsError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.GetCrawlerMetrics");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -12656,13 +12656,13 @@ where
     /// <p>Retrieves metadata for all crawlers defined in the customer account.</p>
     fn get_crawlers(
         &self,
-        input: &GetCrawlersRequest,
+        input: GetCrawlersRequest,
     ) -> RusotoFuture<GetCrawlersResponse, GetCrawlersError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.GetCrawlers");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -12693,13 +12693,13 @@ where
     /// <p>Retrieves the definition of a specified database.</p>
     fn get_database(
         &self,
-        input: &GetDatabaseRequest,
+        input: GetDatabaseRequest,
     ) -> RusotoFuture<GetDatabaseResponse, GetDatabaseError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.GetDatabase");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -12730,13 +12730,13 @@ where
     /// <p>Retrieves all Databases defined in a given Data Catalog.</p>
     fn get_databases(
         &self,
-        input: &GetDatabasesRequest,
+        input: GetDatabasesRequest,
     ) -> RusotoFuture<GetDatabasesResponse, GetDatabasesError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.GetDatabases");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -12767,13 +12767,13 @@ where
     /// <p>Transforms a Python script into a directed acyclic graph (DAG). </p>
     fn get_dataflow_graph(
         &self,
-        input: &GetDataflowGraphRequest,
+        input: GetDataflowGraphRequest,
     ) -> RusotoFuture<GetDataflowGraphResponse, GetDataflowGraphError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.GetDataflowGraph");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -12804,13 +12804,13 @@ where
     /// <p>Retrieves information about a specified DevEndpoint.</p>
     fn get_dev_endpoint(
         &self,
-        input: &GetDevEndpointRequest,
+        input: GetDevEndpointRequest,
     ) -> RusotoFuture<GetDevEndpointResponse, GetDevEndpointError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.GetDevEndpoint");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -12841,13 +12841,13 @@ where
     /// <p>Retrieves all the DevEndpoints in this AWS account.</p>
     fn get_dev_endpoints(
         &self,
-        input: &GetDevEndpointsRequest,
+        input: GetDevEndpointsRequest,
     ) -> RusotoFuture<GetDevEndpointsResponse, GetDevEndpointsError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.GetDevEndpoints");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -12876,12 +12876,12 @@ where
     }
 
     /// <p>Retrieves an existing job definition.</p>
-    fn get_job(&self, input: &GetJobRequest) -> RusotoFuture<GetJobResponse, GetJobError> {
+    fn get_job(&self, input: GetJobRequest) -> RusotoFuture<GetJobResponse, GetJobError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.GetJob");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -12912,13 +12912,13 @@ where
     /// <p>Retrieves the metadata for a given job run.</p>
     fn get_job_run(
         &self,
-        input: &GetJobRunRequest,
+        input: GetJobRunRequest,
     ) -> RusotoFuture<GetJobRunResponse, GetJobRunError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.GetJobRun");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -12949,13 +12949,13 @@ where
     /// <p>Retrieves metadata for all runs of a given job.</p>
     fn get_job_runs(
         &self,
-        input: &GetJobRunsRequest,
+        input: GetJobRunsRequest,
     ) -> RusotoFuture<GetJobRunsResponse, GetJobRunsError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.GetJobRuns");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -12984,12 +12984,12 @@ where
     }
 
     /// <p>Retrieves all current jobs.</p>
-    fn get_jobs(&self, input: &GetJobsRequest) -> RusotoFuture<GetJobsResponse, GetJobsError> {
+    fn get_jobs(&self, input: GetJobsRequest) -> RusotoFuture<GetJobsResponse, GetJobsError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.GetJobs");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -13020,13 +13020,13 @@ where
     /// <p>Creates mappings.</p>
     fn get_mapping(
         &self,
-        input: &GetMappingRequest,
+        input: GetMappingRequest,
     ) -> RusotoFuture<GetMappingResponse, GetMappingError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.GetMapping");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -13057,13 +13057,13 @@ where
     /// <p>Retrieves information about a specified partition.</p>
     fn get_partition(
         &self,
-        input: &GetPartitionRequest,
+        input: GetPartitionRequest,
     ) -> RusotoFuture<GetPartitionResponse, GetPartitionError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.GetPartition");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -13094,13 +13094,13 @@ where
     /// <p>Retrieves information about the partitions in a table.</p>
     fn get_partitions(
         &self,
-        input: &GetPartitionsRequest,
+        input: GetPartitionsRequest,
     ) -> RusotoFuture<GetPartitionsResponse, GetPartitionsError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.GetPartitions");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -13129,12 +13129,12 @@ where
     }
 
     /// <p>Gets code to perform a specified mapping.</p>
-    fn get_plan(&self, input: &GetPlanRequest) -> RusotoFuture<GetPlanResponse, GetPlanError> {
+    fn get_plan(&self, input: GetPlanRequest) -> RusotoFuture<GetPlanResponse, GetPlanError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.GetPlan");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -13163,12 +13163,12 @@ where
     }
 
     /// <p>Retrieves the <code>Table</code> definition in a Data Catalog for a specified table.</p>
-    fn get_table(&self, input: &GetTableRequest) -> RusotoFuture<GetTableResponse, GetTableError> {
+    fn get_table(&self, input: GetTableRequest) -> RusotoFuture<GetTableResponse, GetTableError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.GetTable");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -13199,13 +13199,13 @@ where
     /// <p>Retrieves a specified version of a table.</p>
     fn get_table_version(
         &self,
-        input: &GetTableVersionRequest,
+        input: GetTableVersionRequest,
     ) -> RusotoFuture<GetTableVersionResponse, GetTableVersionError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.GetTableVersion");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -13236,13 +13236,13 @@ where
     /// <p>Retrieves a list of strings that identify available versions of a specified table.</p>
     fn get_table_versions(
         &self,
-        input: &GetTableVersionsRequest,
+        input: GetTableVersionsRequest,
     ) -> RusotoFuture<GetTableVersionsResponse, GetTableVersionsError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.GetTableVersions");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -13273,13 +13273,13 @@ where
     /// <p>Retrieves the definitions of some or all of the tables in a given <code>Database</code>.</p>
     fn get_tables(
         &self,
-        input: &GetTablesRequest,
+        input: GetTablesRequest,
     ) -> RusotoFuture<GetTablesResponse, GetTablesError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.GetTables");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -13310,13 +13310,13 @@ where
     /// <p>Retrieves the definition of a trigger.</p>
     fn get_trigger(
         &self,
-        input: &GetTriggerRequest,
+        input: GetTriggerRequest,
     ) -> RusotoFuture<GetTriggerResponse, GetTriggerError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.GetTrigger");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -13347,13 +13347,13 @@ where
     /// <p>Gets all the triggers associated with a job.</p>
     fn get_triggers(
         &self,
-        input: &GetTriggersRequest,
+        input: GetTriggersRequest,
     ) -> RusotoFuture<GetTriggersResponse, GetTriggersError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.GetTriggers");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -13384,13 +13384,13 @@ where
     /// <p>Retrieves a specified function definition from the Data Catalog.</p>
     fn get_user_defined_function(
         &self,
-        input: &GetUserDefinedFunctionRequest,
+        input: GetUserDefinedFunctionRequest,
     ) -> RusotoFuture<GetUserDefinedFunctionResponse, GetUserDefinedFunctionError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.GetUserDefinedFunction");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -13421,13 +13421,13 @@ where
     /// <p>Retrieves a multiple function definitions from the Data Catalog.</p>
     fn get_user_defined_functions(
         &self,
-        input: &GetUserDefinedFunctionsRequest,
+        input: GetUserDefinedFunctionsRequest,
     ) -> RusotoFuture<GetUserDefinedFunctionsResponse, GetUserDefinedFunctionsError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.GetUserDefinedFunctions");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -13458,13 +13458,13 @@ where
     /// <p>Imports an existing Athena Data Catalog to AWS Glue</p>
     fn import_catalog_to_glue(
         &self,
-        input: &ImportCatalogToGlueRequest,
+        input: ImportCatalogToGlueRequest,
     ) -> RusotoFuture<ImportCatalogToGlueResponse, ImportCatalogToGlueError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.ImportCatalogToGlue");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -13495,13 +13495,13 @@ where
     /// <p>Resets a bookmark entry.</p>
     fn reset_job_bookmark(
         &self,
-        input: &ResetJobBookmarkRequest,
+        input: ResetJobBookmarkRequest,
     ) -> RusotoFuture<ResetJobBookmarkResponse, ResetJobBookmarkError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.ResetJobBookmark");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -13532,13 +13532,13 @@ where
     /// <p>Starts a crawl using the specified crawler, regardless of what is scheduled. If the crawler is already running, does nothing.</p>
     fn start_crawler(
         &self,
-        input: &StartCrawlerRequest,
+        input: StartCrawlerRequest,
     ) -> RusotoFuture<StartCrawlerResponse, StartCrawlerError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.StartCrawler");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -13569,13 +13569,13 @@ where
     /// <p>Changes the schedule state of the specified crawler to <code>SCHEDULED</code>, unless the crawler is already running or the schedule state is already <code>SCHEDULED</code>.</p>
     fn start_crawler_schedule(
         &self,
-        input: &StartCrawlerScheduleRequest,
+        input: StartCrawlerScheduleRequest,
     ) -> RusotoFuture<StartCrawlerScheduleResponse, StartCrawlerScheduleError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.StartCrawlerSchedule");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -13606,13 +13606,13 @@ where
     /// <p>Runs a job.</p>
     fn start_job_run(
         &self,
-        input: &StartJobRunRequest,
+        input: StartJobRunRequest,
     ) -> RusotoFuture<StartJobRunResponse, StartJobRunError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.StartJobRun");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -13643,13 +13643,13 @@ where
     /// <p>Starts an existing trigger. See <a href="http://docs.aws.amazon.com/glue/latest/dg/trigger-job.html">Triggering Jobs</a> for information about how different types of trigger are started.</p>
     fn start_trigger(
         &self,
-        input: &StartTriggerRequest,
+        input: StartTriggerRequest,
     ) -> RusotoFuture<StartTriggerResponse, StartTriggerError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.StartTrigger");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -13680,13 +13680,13 @@ where
     /// <p>If the specified crawler is running, stops the crawl.</p>
     fn stop_crawler(
         &self,
-        input: &StopCrawlerRequest,
+        input: StopCrawlerRequest,
     ) -> RusotoFuture<StopCrawlerResponse, StopCrawlerError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.StopCrawler");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -13717,13 +13717,13 @@ where
     /// <p>Sets the schedule state of the specified crawler to <code>NOT_SCHEDULED</code>, but does not stop the crawler if it is already running.</p>
     fn stop_crawler_schedule(
         &self,
-        input: &StopCrawlerScheduleRequest,
+        input: StopCrawlerScheduleRequest,
     ) -> RusotoFuture<StopCrawlerScheduleResponse, StopCrawlerScheduleError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.StopCrawlerSchedule");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -13754,13 +13754,13 @@ where
     /// <p>Stops a specified trigger.</p>
     fn stop_trigger(
         &self,
-        input: &StopTriggerRequest,
+        input: StopTriggerRequest,
     ) -> RusotoFuture<StopTriggerResponse, StopTriggerError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.StopTrigger");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -13791,13 +13791,13 @@ where
     /// <p>Modifies an existing classifier (a <code>GrokClassifier</code>, <code>XMLClassifier</code>, or <code>JsonClassifier</code>, depending on which field is present).</p>
     fn update_classifier(
         &self,
-        input: &UpdateClassifierRequest,
+        input: UpdateClassifierRequest,
     ) -> RusotoFuture<UpdateClassifierResponse, UpdateClassifierError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.UpdateClassifier");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -13828,13 +13828,13 @@ where
     /// <p>Updates a connection definition in the Data Catalog.</p>
     fn update_connection(
         &self,
-        input: &UpdateConnectionRequest,
+        input: UpdateConnectionRequest,
     ) -> RusotoFuture<UpdateConnectionResponse, UpdateConnectionError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.UpdateConnection");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -13865,13 +13865,13 @@ where
     /// <p>Updates a crawler. If a crawler is running, you must stop it using <code>StopCrawler</code> before updating it.</p>
     fn update_crawler(
         &self,
-        input: &UpdateCrawlerRequest,
+        input: UpdateCrawlerRequest,
     ) -> RusotoFuture<UpdateCrawlerResponse, UpdateCrawlerError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.UpdateCrawler");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -13902,13 +13902,13 @@ where
     /// <p>Updates the schedule of a crawler using a <code>cron</code> expression. </p>
     fn update_crawler_schedule(
         &self,
-        input: &UpdateCrawlerScheduleRequest,
+        input: UpdateCrawlerScheduleRequest,
     ) -> RusotoFuture<UpdateCrawlerScheduleResponse, UpdateCrawlerScheduleError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.UpdateCrawlerSchedule");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -13939,13 +13939,13 @@ where
     /// <p>Updates an existing database definition in a Data Catalog.</p>
     fn update_database(
         &self,
-        input: &UpdateDatabaseRequest,
+        input: UpdateDatabaseRequest,
     ) -> RusotoFuture<UpdateDatabaseResponse, UpdateDatabaseError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.UpdateDatabase");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -13976,13 +13976,13 @@ where
     /// <p>Updates a specified DevEndpoint.</p>
     fn update_dev_endpoint(
         &self,
-        input: &UpdateDevEndpointRequest,
+        input: UpdateDevEndpointRequest,
     ) -> RusotoFuture<UpdateDevEndpointResponse, UpdateDevEndpointError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.UpdateDevEndpoint");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -14013,13 +14013,13 @@ where
     /// <p>Updates an existing job definition.</p>
     fn update_job(
         &self,
-        input: &UpdateJobRequest,
+        input: UpdateJobRequest,
     ) -> RusotoFuture<UpdateJobResponse, UpdateJobError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.UpdateJob");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -14050,13 +14050,13 @@ where
     /// <p>Updates a partition.</p>
     fn update_partition(
         &self,
-        input: &UpdatePartitionRequest,
+        input: UpdatePartitionRequest,
     ) -> RusotoFuture<UpdatePartitionResponse, UpdatePartitionError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.UpdatePartition");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -14087,13 +14087,13 @@ where
     /// <p>Updates a metadata table in the Data Catalog.</p>
     fn update_table(
         &self,
-        input: &UpdateTableRequest,
+        input: UpdateTableRequest,
     ) -> RusotoFuture<UpdateTableResponse, UpdateTableError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.UpdateTable");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -14124,13 +14124,13 @@ where
     /// <p>Updates a trigger definition.</p>
     fn update_trigger(
         &self,
-        input: &UpdateTriggerRequest,
+        input: UpdateTriggerRequest,
     ) -> RusotoFuture<UpdateTriggerResponse, UpdateTriggerError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.UpdateTrigger");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -14161,13 +14161,13 @@ where
     /// <p>Updates an existing function definition in the Data Catalog.</p>
     fn update_user_defined_function(
         &self,
-        input: &UpdateUserDefinedFunctionRequest,
+        input: UpdateUserDefinedFunctionRequest,
     ) -> RusotoFuture<UpdateUserDefinedFunctionResponse, UpdateUserDefinedFunctionError> {
         let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.UpdateUserDefinedFunction");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {

@@ -18,18 +18,18 @@ use std::io;
 use futures::future;
 use futures::Future;
 use rusoto_core::reactor::{CredentialsProvider, RequestDispatcher};
-use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::region;
+use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::{ClientInner, RusotoFuture};
 
-use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
+use rusoto_core::request::HttpDispatchError;
 
-use serde_json;
-use rusoto_core::signature::SignedRequest;
-use serde_json::Value as SerdeJsonValue;
-use serde_json::from_str;
 use hyper::StatusCode;
+use rusoto_core::signature::SignedRequest;
+use serde_json;
+use serde_json::from_str;
+use serde_json::Value as SerdeJsonValue;
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct AddIpRoutesRequest {
     /// <p>Identifier (ID) of the directory to which to add the address block.</p>
@@ -5498,156 +5498,155 @@ pub trait DirectoryService {
     /// <p>If the DNS server for your on-premises domain uses a publicly addressable IP address, you must add a CIDR address block to correctly route traffic to and from your Microsoft AD on Amazon Web Services. <i>AddIpRoutes</i> adds this address block. You can also use <i>AddIpRoutes</i> to facilitate routing traffic that uses public IP ranges from your Microsoft AD on AWS to a peer VPC. </p> <p>Before you call <i>AddIpRoutes</i>, ensure that all of the required permissions have been explicitly granted through a policy. For details about what permissions are required to run the <i>AddIpRoutes</i> operation, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/UsingWithDS_IAM_ResourcePermissions.html">AWS Directory Service API Permissions: Actions, Resources, and Conditions Reference</a>.</p>
     fn add_ip_routes(
         &self,
-        input: &AddIpRoutesRequest,
+        input: AddIpRoutesRequest,
     ) -> RusotoFuture<AddIpRoutesResult, AddIpRoutesError>;
 
     /// <p>Adds or overwrites one or more tags for the specified directory. Each directory can have a maximum of 50 tags. Each tag consists of a key and optional value. Tag keys must be unique to each resource.</p>
     fn add_tags_to_resource(
         &self,
-        input: &AddTagsToResourceRequest,
+        input: AddTagsToResourceRequest,
     ) -> RusotoFuture<AddTagsToResourceResult, AddTagsToResourceError>;
 
     /// <p>Cancels an in-progress schema extension to a Microsoft AD directory. Once a schema extension has started replicating to all domain controllers, the task can no longer be canceled. A schema extension can be canceled during any of the following states; <code>Initializing</code>, <code>CreatingSnapshot</code>, and <code>UpdatingSchema</code>.</p>
     fn cancel_schema_extension(
         &self,
-        input: &CancelSchemaExtensionRequest,
+        input: CancelSchemaExtensionRequest,
     ) -> RusotoFuture<CancelSchemaExtensionResult, CancelSchemaExtensionError>;
 
     /// <p>Creates an AD Connector to connect to an on-premises directory.</p> <p>Before you call <i>ConnectDirectory</i>, ensure that all of the required permissions have been explicitly granted through a policy. For details about what permissions are required to run the <i>ConnectDirectory</i> operation, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/UsingWithDS_IAM_ResourcePermissions.html">AWS Directory Service API Permissions: Actions, Resources, and Conditions Reference</a>.</p>
     fn connect_directory(
         &self,
-        input: &ConnectDirectoryRequest,
+        input: ConnectDirectoryRequest,
     ) -> RusotoFuture<ConnectDirectoryResult, ConnectDirectoryError>;
 
     /// <p><p>Creates an alias for a directory and assigns the alias to the directory. The alias is used to construct the access URL for the directory, such as <code>http://&lt;alias&gt;.awsapps.com</code>.</p> <important> <p>After an alias has been created, it cannot be deleted or reused, so this operation should only be used when absolutely necessary.</p> </important></p>
     fn create_alias(
         &self,
-        input: &CreateAliasRequest,
+        input: CreateAliasRequest,
     ) -> RusotoFuture<CreateAliasResult, CreateAliasError>;
 
     /// <p>Creates a computer account in the specified directory, and joins the computer to the directory.</p>
     fn create_computer(
         &self,
-        input: &CreateComputerRequest,
+        input: CreateComputerRequest,
     ) -> RusotoFuture<CreateComputerResult, CreateComputerError>;
 
     /// <p>Creates a conditional forwarder associated with your AWS directory. Conditional forwarders are required in order to set up a trust relationship with another domain. The conditional forwarder points to the trusted domain.</p>
     fn create_conditional_forwarder(
         &self,
-        input: &CreateConditionalForwarderRequest,
+        input: CreateConditionalForwarderRequest,
     ) -> RusotoFuture<CreateConditionalForwarderResult, CreateConditionalForwarderError>;
 
     /// <p>Creates a Simple AD directory.</p> <p>Before you call <i>CreateDirectory</i>, ensure that all of the required permissions have been explicitly granted through a policy. For details about what permissions are required to run the <i>CreateDirectory</i> operation, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/UsingWithDS_IAM_ResourcePermissions.html">AWS Directory Service API Permissions: Actions, Resources, and Conditions Reference</a>.</p>
     fn create_directory(
         &self,
-        input: &CreateDirectoryRequest,
+        input: CreateDirectoryRequest,
     ) -> RusotoFuture<CreateDirectoryResult, CreateDirectoryError>;
 
     /// <p>Creates a Microsoft AD in the AWS cloud.</p> <p>Before you call <i>CreateMicrosoftAD</i>, ensure that all of the required permissions have been explicitly granted through a policy. For details about what permissions are required to run the <i>CreateMicrosoftAD</i> operation, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/UsingWithDS_IAM_ResourcePermissions.html">AWS Directory Service API Permissions: Actions, Resources, and Conditions Reference</a>.</p>
     fn create_microsoft_ad(
         &self,
-        input: &CreateMicrosoftADRequest,
+        input: CreateMicrosoftADRequest,
     ) -> RusotoFuture<CreateMicrosoftADResult, CreateMicrosoftADError>;
 
     /// <p><p>Creates a snapshot of a Simple AD or Microsoft AD directory in the AWS cloud.</p> <note> <p>You cannot take snapshots of AD Connector directories.</p> </note></p>
     fn create_snapshot(
         &self,
-        input: &CreateSnapshotRequest,
+        input: CreateSnapshotRequest,
     ) -> RusotoFuture<CreateSnapshotResult, CreateSnapshotError>;
 
     /// <p>AWS Directory Service for Microsoft Active Directory allows you to configure trust relationships. For example, you can establish a trust between your Microsoft AD in the AWS cloud, and your existing on-premises Microsoft Active Directory. This would allow you to provide users and groups access to resources in either domain, with a single set of credentials.</p> <p>This action initiates the creation of the AWS side of a trust relationship between a Microsoft AD in the AWS cloud and an external domain.</p>
     fn create_trust(
         &self,
-        input: &CreateTrustRequest,
+        input: CreateTrustRequest,
     ) -> RusotoFuture<CreateTrustResult, CreateTrustError>;
 
     /// <p>Deletes a conditional forwarder that has been set up for your AWS directory.</p>
     fn delete_conditional_forwarder(
         &self,
-        input: &DeleteConditionalForwarderRequest,
+        input: DeleteConditionalForwarderRequest,
     ) -> RusotoFuture<DeleteConditionalForwarderResult, DeleteConditionalForwarderError>;
 
     /// <p>Deletes an AWS Directory Service directory.</p> <p>Before you call <i>DeleteDirectory</i>, ensure that all of the required permissions have been explicitly granted through a policy. For details about what permissions are required to run the <i>DeleteDirectory</i> operation, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/UsingWithDS_IAM_ResourcePermissions.html">AWS Directory Service API Permissions: Actions, Resources, and Conditions Reference</a>.</p>
     fn delete_directory(
         &self,
-        input: &DeleteDirectoryRequest,
+        input: DeleteDirectoryRequest,
     ) -> RusotoFuture<DeleteDirectoryResult, DeleteDirectoryError>;
 
     /// <p>Deletes a directory snapshot.</p>
     fn delete_snapshot(
         &self,
-        input: &DeleteSnapshotRequest,
+        input: DeleteSnapshotRequest,
     ) -> RusotoFuture<DeleteSnapshotResult, DeleteSnapshotError>;
 
     /// <p>Deletes an existing trust relationship between your Microsoft AD in the AWS cloud and an external domain.</p>
     fn delete_trust(
         &self,
-        input: &DeleteTrustRequest,
+        input: DeleteTrustRequest,
     ) -> RusotoFuture<DeleteTrustResult, DeleteTrustError>;
 
     /// <p>Removes the specified directory as a publisher to the specified SNS topic.</p>
     fn deregister_event_topic(
         &self,
-        input: &DeregisterEventTopicRequest,
+        input: DeregisterEventTopicRequest,
     ) -> RusotoFuture<DeregisterEventTopicResult, DeregisterEventTopicError>;
 
     /// <p>Obtains information about the conditional forwarders for this account.</p> <p>If no input parameters are provided for RemoteDomainNames, this request describes all conditional forwarders for the specified directory ID.</p>
     fn describe_conditional_forwarders(
         &self,
-        input: &DescribeConditionalForwardersRequest,
+        input: DescribeConditionalForwardersRequest,
     ) -> RusotoFuture<DescribeConditionalForwardersResult, DescribeConditionalForwardersError>;
 
     /// <p>Obtains information about the directories that belong to this account.</p> <p>You can retrieve information about specific directories by passing the directory identifiers in the <i>DirectoryIds</i> parameter. Otherwise, all directories that belong to the current account are returned.</p> <p>This operation supports pagination with the use of the <i>NextToken</i> request and response parameters. If more results are available, the <i>DescribeDirectoriesResult.NextToken</i> member contains a token that you pass in the next call to <a>DescribeDirectories</a> to retrieve the next set of items.</p> <p>You can also specify a maximum number of return results with the <i>Limit</i> parameter.</p>
     fn describe_directories(
         &self,
-        input: &DescribeDirectoriesRequest,
+        input: DescribeDirectoriesRequest,
     ) -> RusotoFuture<DescribeDirectoriesResult, DescribeDirectoriesError>;
 
     /// <p>Provides information about any domain controllers in your directory.</p>
     fn describe_domain_controllers(
         &self,
-        input: &DescribeDomainControllersRequest,
+        input: DescribeDomainControllersRequest,
     ) -> RusotoFuture<DescribeDomainControllersResult, DescribeDomainControllersError>;
 
     /// <p>Obtains information about which SNS topics receive status messages from the specified directory.</p> <p>If no input parameters are provided, such as DirectoryId or TopicName, this request describes all of the associations in the account.</p>
     fn describe_event_topics(
         &self,
-        input: &DescribeEventTopicsRequest,
+        input: DescribeEventTopicsRequest,
     ) -> RusotoFuture<DescribeEventTopicsResult, DescribeEventTopicsError>;
 
     /// <p>Obtains information about the directory snapshots that belong to this account.</p> <p>This operation supports pagination with the use of the <i>NextToken</i> request and response parameters. If more results are available, the <i>DescribeSnapshots.NextToken</i> member contains a token that you pass in the next call to <a>DescribeSnapshots</a> to retrieve the next set of items.</p> <p>You can also specify a maximum number of return results with the <i>Limit</i> parameter.</p>
     fn describe_snapshots(
         &self,
-        input: &DescribeSnapshotsRequest,
+        input: DescribeSnapshotsRequest,
     ) -> RusotoFuture<DescribeSnapshotsResult, DescribeSnapshotsError>;
 
     /// <p>Obtains information about the trust relationships for this account.</p> <p>If no input parameters are provided, such as DirectoryId or TrustIds, this request describes all the trust relationships belonging to the account.</p>
     fn describe_trusts(
         &self,
-        input: &DescribeTrustsRequest,
+        input: DescribeTrustsRequest,
     ) -> RusotoFuture<DescribeTrustsResult, DescribeTrustsError>;
 
     /// <p>Disables multi-factor authentication (MFA) with the Remote Authentication Dial In User Service (RADIUS) server for an AD Connector directory.</p>
     fn disable_radius(
         &self,
-        input: &DisableRadiusRequest,
+        input: DisableRadiusRequest,
     ) -> RusotoFuture<DisableRadiusResult, DisableRadiusError>;
 
     /// <p>Disables single-sign on for a directory.</p>
     fn disable_sso(
         &self,
-        input: &DisableSsoRequest,
+        input: DisableSsoRequest,
     ) -> RusotoFuture<DisableSsoResult, DisableSsoError>;
 
     /// <p>Enables multi-factor authentication (MFA) with the Remote Authentication Dial In User Service (RADIUS) server for an AD Connector directory.</p>
     fn enable_radius(
         &self,
-        input: &EnableRadiusRequest,
+        input: EnableRadiusRequest,
     ) -> RusotoFuture<EnableRadiusResult, EnableRadiusError>;
 
     /// <p>Enables single sign-on for a directory.</p>
-    fn enable_sso(&self, input: &EnableSsoRequest)
-        -> RusotoFuture<EnableSsoResult, EnableSsoError>;
+    fn enable_sso(&self, input: EnableSsoRequest) -> RusotoFuture<EnableSsoResult, EnableSsoError>;
 
     /// <p>Obtains directory limit information for the current region.</p>
     fn get_directory_limits(
@@ -5657,79 +5656,79 @@ pub trait DirectoryService {
     /// <p>Obtains the manual snapshot limits for a directory.</p>
     fn get_snapshot_limits(
         &self,
-        input: &GetSnapshotLimitsRequest,
+        input: GetSnapshotLimitsRequest,
     ) -> RusotoFuture<GetSnapshotLimitsResult, GetSnapshotLimitsError>;
 
     /// <p>Lists the address blocks that you have added to a directory.</p>
     fn list_ip_routes(
         &self,
-        input: &ListIpRoutesRequest,
+        input: ListIpRoutesRequest,
     ) -> RusotoFuture<ListIpRoutesResult, ListIpRoutesError>;
 
     /// <p>Lists all schema extensions applied to a Microsoft AD Directory.</p>
     fn list_schema_extensions(
         &self,
-        input: &ListSchemaExtensionsRequest,
+        input: ListSchemaExtensionsRequest,
     ) -> RusotoFuture<ListSchemaExtensionsResult, ListSchemaExtensionsError>;
 
     /// <p>Lists all tags on a directory.</p>
     fn list_tags_for_resource(
         &self,
-        input: &ListTagsForResourceRequest,
+        input: ListTagsForResourceRequest,
     ) -> RusotoFuture<ListTagsForResourceResult, ListTagsForResourceError>;
 
     /// <p>Associates a directory with an SNS topic. This establishes the directory as a publisher to the specified SNS topic. You can then receive email or text (SMS) messages when the status of your directory changes. You get notified if your directory goes from an Active status to an Impaired or Inoperable status. You also receive a notification when the directory returns to an Active status.</p>
     fn register_event_topic(
         &self,
-        input: &RegisterEventTopicRequest,
+        input: RegisterEventTopicRequest,
     ) -> RusotoFuture<RegisterEventTopicResult, RegisterEventTopicError>;
 
     /// <p>Removes IP address blocks from a directory.</p>
     fn remove_ip_routes(
         &self,
-        input: &RemoveIpRoutesRequest,
+        input: RemoveIpRoutesRequest,
     ) -> RusotoFuture<RemoveIpRoutesResult, RemoveIpRoutesError>;
 
     /// <p>Removes tags from a directory.</p>
     fn remove_tags_from_resource(
         &self,
-        input: &RemoveTagsFromResourceRequest,
+        input: RemoveTagsFromResourceRequest,
     ) -> RusotoFuture<RemoveTagsFromResourceResult, RemoveTagsFromResourceError>;
 
     /// <p>Restores a directory using an existing directory snapshot.</p> <p>When you restore a directory from a snapshot, any changes made to the directory after the snapshot date are overwritten.</p> <p>This action returns as soon as the restore operation is initiated. You can monitor the progress of the restore operation by calling the <a>DescribeDirectories</a> operation with the directory identifier. When the <b>DirectoryDescription.Stage</b> value changes to <code>Active</code>, the restore operation is complete.</p>
     fn restore_from_snapshot(
         &self,
-        input: &RestoreFromSnapshotRequest,
+        input: RestoreFromSnapshotRequest,
     ) -> RusotoFuture<RestoreFromSnapshotResult, RestoreFromSnapshotError>;
 
     /// <p>Applies a schema extension to a Microsoft AD directory.</p>
     fn start_schema_extension(
         &self,
-        input: &StartSchemaExtensionRequest,
+        input: StartSchemaExtensionRequest,
     ) -> RusotoFuture<StartSchemaExtensionResult, StartSchemaExtensionError>;
 
     /// <p>Updates a conditional forwarder that has been set up for your AWS directory.</p>
     fn update_conditional_forwarder(
         &self,
-        input: &UpdateConditionalForwarderRequest,
+        input: UpdateConditionalForwarderRequest,
     ) -> RusotoFuture<UpdateConditionalForwarderResult, UpdateConditionalForwarderError>;
 
     /// <p>Adds or removes domain controllers to or from the directory. Based on the difference between current value and new value (provided through this API call), domain controllers will be added or removed. It may take up to 45 minutes for any new domain controllers to become fully active once the requested number of domain controllers is updated. During this time, you cannot make another update request.</p>
     fn update_number_of_domain_controllers(
         &self,
-        input: &UpdateNumberOfDomainControllersRequest,
+        input: UpdateNumberOfDomainControllersRequest,
     ) -> RusotoFuture<UpdateNumberOfDomainControllersResult, UpdateNumberOfDomainControllersError>;
 
     /// <p>Updates the Remote Authentication Dial In User Service (RADIUS) server information for an AD Connector directory.</p>
     fn update_radius(
         &self,
-        input: &UpdateRadiusRequest,
+        input: UpdateRadiusRequest,
     ) -> RusotoFuture<UpdateRadiusResult, UpdateRadiusError>;
 
     /// <p>AWS Directory Service for Microsoft Active Directory allows you to configure and verify trust relationships.</p> <p>This action verifies a trust relationship between your Microsoft AD in the AWS cloud and an external domain.</p>
     fn verify_trust(
         &self,
-        input: &VerifyTrustRequest,
+        input: VerifyTrustRequest,
     ) -> RusotoFuture<VerifyTrustResult, VerifyTrustError>;
 }
 /// A client for the Directory Service API.
@@ -5778,13 +5777,13 @@ where
     /// <p>If the DNS server for your on-premises domain uses a publicly addressable IP address, you must add a CIDR address block to correctly route traffic to and from your Microsoft AD on Amazon Web Services. <i>AddIpRoutes</i> adds this address block. You can also use <i>AddIpRoutes</i> to facilitate routing traffic that uses public IP ranges from your Microsoft AD on AWS to a peer VPC. </p> <p>Before you call <i>AddIpRoutes</i>, ensure that all of the required permissions have been explicitly granted through a policy. For details about what permissions are required to run the <i>AddIpRoutes</i> operation, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/UsingWithDS_IAM_ResourcePermissions.html">AWS Directory Service API Permissions: Actions, Resources, and Conditions Reference</a>.</p>
     fn add_ip_routes(
         &self,
-        input: &AddIpRoutesRequest,
+        input: AddIpRoutesRequest,
     ) -> RusotoFuture<AddIpRoutesResult, AddIpRoutesError> {
         let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DirectoryService_20150416.AddIpRoutes");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -5815,7 +5814,7 @@ where
     /// <p>Adds or overwrites one or more tags for the specified directory. Each directory can have a maximum of 50 tags. Each tag consists of a key and optional value. Tag keys must be unique to each resource.</p>
     fn add_tags_to_resource(
         &self,
-        input: &AddTagsToResourceRequest,
+        input: AddTagsToResourceRequest,
     ) -> RusotoFuture<AddTagsToResourceResult, AddTagsToResourceError> {
         let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
 
@@ -5824,7 +5823,7 @@ where
             "x-amz-target",
             "DirectoryService_20150416.AddTagsToResource",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -5855,7 +5854,7 @@ where
     /// <p>Cancels an in-progress schema extension to a Microsoft AD directory. Once a schema extension has started replicating to all domain controllers, the task can no longer be canceled. A schema extension can be canceled during any of the following states; <code>Initializing</code>, <code>CreatingSnapshot</code>, and <code>UpdatingSchema</code>.</p>
     fn cancel_schema_extension(
         &self,
-        input: &CancelSchemaExtensionRequest,
+        input: CancelSchemaExtensionRequest,
     ) -> RusotoFuture<CancelSchemaExtensionResult, CancelSchemaExtensionError> {
         let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
 
@@ -5864,7 +5863,7 @@ where
             "x-amz-target",
             "DirectoryService_20150416.CancelSchemaExtension",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -5895,13 +5894,13 @@ where
     /// <p>Creates an AD Connector to connect to an on-premises directory.</p> <p>Before you call <i>ConnectDirectory</i>, ensure that all of the required permissions have been explicitly granted through a policy. For details about what permissions are required to run the <i>ConnectDirectory</i> operation, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/UsingWithDS_IAM_ResourcePermissions.html">AWS Directory Service API Permissions: Actions, Resources, and Conditions Reference</a>.</p>
     fn connect_directory(
         &self,
-        input: &ConnectDirectoryRequest,
+        input: ConnectDirectoryRequest,
     ) -> RusotoFuture<ConnectDirectoryResult, ConnectDirectoryError> {
         let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DirectoryService_20150416.ConnectDirectory");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -5932,13 +5931,13 @@ where
     /// <p><p>Creates an alias for a directory and assigns the alias to the directory. The alias is used to construct the access URL for the directory, such as <code>http://&lt;alias&gt;.awsapps.com</code>.</p> <important> <p>After an alias has been created, it cannot be deleted or reused, so this operation should only be used when absolutely necessary.</p> </important></p>
     fn create_alias(
         &self,
-        input: &CreateAliasRequest,
+        input: CreateAliasRequest,
     ) -> RusotoFuture<CreateAliasResult, CreateAliasError> {
         let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DirectoryService_20150416.CreateAlias");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -5969,13 +5968,13 @@ where
     /// <p>Creates a computer account in the specified directory, and joins the computer to the directory.</p>
     fn create_computer(
         &self,
-        input: &CreateComputerRequest,
+        input: CreateComputerRequest,
     ) -> RusotoFuture<CreateComputerResult, CreateComputerError> {
         let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DirectoryService_20150416.CreateComputer");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -6006,7 +6005,7 @@ where
     /// <p>Creates a conditional forwarder associated with your AWS directory. Conditional forwarders are required in order to set up a trust relationship with another domain. The conditional forwarder points to the trusted domain.</p>
     fn create_conditional_forwarder(
         &self,
-        input: &CreateConditionalForwarderRequest,
+        input: CreateConditionalForwarderRequest,
     ) -> RusotoFuture<CreateConditionalForwarderResult, CreateConditionalForwarderError> {
         let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
 
@@ -6015,7 +6014,7 @@ where
             "x-amz-target",
             "DirectoryService_20150416.CreateConditionalForwarder",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -6046,13 +6045,13 @@ where
     /// <p>Creates a Simple AD directory.</p> <p>Before you call <i>CreateDirectory</i>, ensure that all of the required permissions have been explicitly granted through a policy. For details about what permissions are required to run the <i>CreateDirectory</i> operation, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/UsingWithDS_IAM_ResourcePermissions.html">AWS Directory Service API Permissions: Actions, Resources, and Conditions Reference</a>.</p>
     fn create_directory(
         &self,
-        input: &CreateDirectoryRequest,
+        input: CreateDirectoryRequest,
     ) -> RusotoFuture<CreateDirectoryResult, CreateDirectoryError> {
         let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DirectoryService_20150416.CreateDirectory");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -6083,7 +6082,7 @@ where
     /// <p>Creates a Microsoft AD in the AWS cloud.</p> <p>Before you call <i>CreateMicrosoftAD</i>, ensure that all of the required permissions have been explicitly granted through a policy. For details about what permissions are required to run the <i>CreateMicrosoftAD</i> operation, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/UsingWithDS_IAM_ResourcePermissions.html">AWS Directory Service API Permissions: Actions, Resources, and Conditions Reference</a>.</p>
     fn create_microsoft_ad(
         &self,
-        input: &CreateMicrosoftADRequest,
+        input: CreateMicrosoftADRequest,
     ) -> RusotoFuture<CreateMicrosoftADResult, CreateMicrosoftADError> {
         let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
 
@@ -6092,7 +6091,7 @@ where
             "x-amz-target",
             "DirectoryService_20150416.CreateMicrosoftAD",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -6123,13 +6122,13 @@ where
     /// <p><p>Creates a snapshot of a Simple AD or Microsoft AD directory in the AWS cloud.</p> <note> <p>You cannot take snapshots of AD Connector directories.</p> </note></p>
     fn create_snapshot(
         &self,
-        input: &CreateSnapshotRequest,
+        input: CreateSnapshotRequest,
     ) -> RusotoFuture<CreateSnapshotResult, CreateSnapshotError> {
         let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DirectoryService_20150416.CreateSnapshot");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -6160,13 +6159,13 @@ where
     /// <p>AWS Directory Service for Microsoft Active Directory allows you to configure trust relationships. For example, you can establish a trust between your Microsoft AD in the AWS cloud, and your existing on-premises Microsoft Active Directory. This would allow you to provide users and groups access to resources in either domain, with a single set of credentials.</p> <p>This action initiates the creation of the AWS side of a trust relationship between a Microsoft AD in the AWS cloud and an external domain.</p>
     fn create_trust(
         &self,
-        input: &CreateTrustRequest,
+        input: CreateTrustRequest,
     ) -> RusotoFuture<CreateTrustResult, CreateTrustError> {
         let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DirectoryService_20150416.CreateTrust");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -6197,7 +6196,7 @@ where
     /// <p>Deletes a conditional forwarder that has been set up for your AWS directory.</p>
     fn delete_conditional_forwarder(
         &self,
-        input: &DeleteConditionalForwarderRequest,
+        input: DeleteConditionalForwarderRequest,
     ) -> RusotoFuture<DeleteConditionalForwarderResult, DeleteConditionalForwarderError> {
         let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
 
@@ -6206,7 +6205,7 @@ where
             "x-amz-target",
             "DirectoryService_20150416.DeleteConditionalForwarder",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -6237,13 +6236,13 @@ where
     /// <p>Deletes an AWS Directory Service directory.</p> <p>Before you call <i>DeleteDirectory</i>, ensure that all of the required permissions have been explicitly granted through a policy. For details about what permissions are required to run the <i>DeleteDirectory</i> operation, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/UsingWithDS_IAM_ResourcePermissions.html">AWS Directory Service API Permissions: Actions, Resources, and Conditions Reference</a>.</p>
     fn delete_directory(
         &self,
-        input: &DeleteDirectoryRequest,
+        input: DeleteDirectoryRequest,
     ) -> RusotoFuture<DeleteDirectoryResult, DeleteDirectoryError> {
         let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DirectoryService_20150416.DeleteDirectory");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -6274,13 +6273,13 @@ where
     /// <p>Deletes a directory snapshot.</p>
     fn delete_snapshot(
         &self,
-        input: &DeleteSnapshotRequest,
+        input: DeleteSnapshotRequest,
     ) -> RusotoFuture<DeleteSnapshotResult, DeleteSnapshotError> {
         let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DirectoryService_20150416.DeleteSnapshot");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -6311,13 +6310,13 @@ where
     /// <p>Deletes an existing trust relationship between your Microsoft AD in the AWS cloud and an external domain.</p>
     fn delete_trust(
         &self,
-        input: &DeleteTrustRequest,
+        input: DeleteTrustRequest,
     ) -> RusotoFuture<DeleteTrustResult, DeleteTrustError> {
         let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DirectoryService_20150416.DeleteTrust");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -6348,7 +6347,7 @@ where
     /// <p>Removes the specified directory as a publisher to the specified SNS topic.</p>
     fn deregister_event_topic(
         &self,
-        input: &DeregisterEventTopicRequest,
+        input: DeregisterEventTopicRequest,
     ) -> RusotoFuture<DeregisterEventTopicResult, DeregisterEventTopicError> {
         let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
 
@@ -6357,7 +6356,7 @@ where
             "x-amz-target",
             "DirectoryService_20150416.DeregisterEventTopic",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -6388,7 +6387,7 @@ where
     /// <p>Obtains information about the conditional forwarders for this account.</p> <p>If no input parameters are provided for RemoteDomainNames, this request describes all conditional forwarders for the specified directory ID.</p>
     fn describe_conditional_forwarders(
         &self,
-        input: &DescribeConditionalForwardersRequest,
+        input: DescribeConditionalForwardersRequest,
     ) -> RusotoFuture<DescribeConditionalForwardersResult, DescribeConditionalForwardersError> {
         let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
 
@@ -6397,7 +6396,7 @@ where
             "x-amz-target",
             "DirectoryService_20150416.DescribeConditionalForwarders",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -6428,7 +6427,7 @@ where
     /// <p>Obtains information about the directories that belong to this account.</p> <p>You can retrieve information about specific directories by passing the directory identifiers in the <i>DirectoryIds</i> parameter. Otherwise, all directories that belong to the current account are returned.</p> <p>This operation supports pagination with the use of the <i>NextToken</i> request and response parameters. If more results are available, the <i>DescribeDirectoriesResult.NextToken</i> member contains a token that you pass in the next call to <a>DescribeDirectories</a> to retrieve the next set of items.</p> <p>You can also specify a maximum number of return results with the <i>Limit</i> parameter.</p>
     fn describe_directories(
         &self,
-        input: &DescribeDirectoriesRequest,
+        input: DescribeDirectoriesRequest,
     ) -> RusotoFuture<DescribeDirectoriesResult, DescribeDirectoriesError> {
         let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
 
@@ -6437,7 +6436,7 @@ where
             "x-amz-target",
             "DirectoryService_20150416.DescribeDirectories",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -6468,7 +6467,7 @@ where
     /// <p>Provides information about any domain controllers in your directory.</p>
     fn describe_domain_controllers(
         &self,
-        input: &DescribeDomainControllersRequest,
+        input: DescribeDomainControllersRequest,
     ) -> RusotoFuture<DescribeDomainControllersResult, DescribeDomainControllersError> {
         let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
 
@@ -6477,7 +6476,7 @@ where
             "x-amz-target",
             "DirectoryService_20150416.DescribeDomainControllers",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -6508,7 +6507,7 @@ where
     /// <p>Obtains information about which SNS topics receive status messages from the specified directory.</p> <p>If no input parameters are provided, such as DirectoryId or TopicName, this request describes all of the associations in the account.</p>
     fn describe_event_topics(
         &self,
-        input: &DescribeEventTopicsRequest,
+        input: DescribeEventTopicsRequest,
     ) -> RusotoFuture<DescribeEventTopicsResult, DescribeEventTopicsError> {
         let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
 
@@ -6517,7 +6516,7 @@ where
             "x-amz-target",
             "DirectoryService_20150416.DescribeEventTopics",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -6548,7 +6547,7 @@ where
     /// <p>Obtains information about the directory snapshots that belong to this account.</p> <p>This operation supports pagination with the use of the <i>NextToken</i> request and response parameters. If more results are available, the <i>DescribeSnapshots.NextToken</i> member contains a token that you pass in the next call to <a>DescribeSnapshots</a> to retrieve the next set of items.</p> <p>You can also specify a maximum number of return results with the <i>Limit</i> parameter.</p>
     fn describe_snapshots(
         &self,
-        input: &DescribeSnapshotsRequest,
+        input: DescribeSnapshotsRequest,
     ) -> RusotoFuture<DescribeSnapshotsResult, DescribeSnapshotsError> {
         let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
 
@@ -6557,7 +6556,7 @@ where
             "x-amz-target",
             "DirectoryService_20150416.DescribeSnapshots",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -6588,13 +6587,13 @@ where
     /// <p>Obtains information about the trust relationships for this account.</p> <p>If no input parameters are provided, such as DirectoryId or TrustIds, this request describes all the trust relationships belonging to the account.</p>
     fn describe_trusts(
         &self,
-        input: &DescribeTrustsRequest,
+        input: DescribeTrustsRequest,
     ) -> RusotoFuture<DescribeTrustsResult, DescribeTrustsError> {
         let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DirectoryService_20150416.DescribeTrusts");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -6625,13 +6624,13 @@ where
     /// <p>Disables multi-factor authentication (MFA) with the Remote Authentication Dial In User Service (RADIUS) server for an AD Connector directory.</p>
     fn disable_radius(
         &self,
-        input: &DisableRadiusRequest,
+        input: DisableRadiusRequest,
     ) -> RusotoFuture<DisableRadiusResult, DisableRadiusError> {
         let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DirectoryService_20150416.DisableRadius");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -6662,13 +6661,13 @@ where
     /// <p>Disables single-sign on for a directory.</p>
     fn disable_sso(
         &self,
-        input: &DisableSsoRequest,
+        input: DisableSsoRequest,
     ) -> RusotoFuture<DisableSsoResult, DisableSsoError> {
         let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DirectoryService_20150416.DisableSso");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -6699,13 +6698,13 @@ where
     /// <p>Enables multi-factor authentication (MFA) with the Remote Authentication Dial In User Service (RADIUS) server for an AD Connector directory.</p>
     fn enable_radius(
         &self,
-        input: &EnableRadiusRequest,
+        input: EnableRadiusRequest,
     ) -> RusotoFuture<EnableRadiusResult, EnableRadiusError> {
         let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DirectoryService_20150416.EnableRadius");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -6734,15 +6733,12 @@ where
     }
 
     /// <p>Enables single sign-on for a directory.</p>
-    fn enable_sso(
-        &self,
-        input: &EnableSsoRequest,
-    ) -> RusotoFuture<EnableSsoResult, EnableSsoError> {
+    fn enable_sso(&self, input: EnableSsoRequest) -> RusotoFuture<EnableSsoResult, EnableSsoError> {
         let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DirectoryService_20150416.EnableSso");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -6811,7 +6807,7 @@ where
     /// <p>Obtains the manual snapshot limits for a directory.</p>
     fn get_snapshot_limits(
         &self,
-        input: &GetSnapshotLimitsRequest,
+        input: GetSnapshotLimitsRequest,
     ) -> RusotoFuture<GetSnapshotLimitsResult, GetSnapshotLimitsError> {
         let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
 
@@ -6820,7 +6816,7 @@ where
             "x-amz-target",
             "DirectoryService_20150416.GetSnapshotLimits",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -6851,13 +6847,13 @@ where
     /// <p>Lists the address blocks that you have added to a directory.</p>
     fn list_ip_routes(
         &self,
-        input: &ListIpRoutesRequest,
+        input: ListIpRoutesRequest,
     ) -> RusotoFuture<ListIpRoutesResult, ListIpRoutesError> {
         let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DirectoryService_20150416.ListIpRoutes");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -6888,7 +6884,7 @@ where
     /// <p>Lists all schema extensions applied to a Microsoft AD Directory.</p>
     fn list_schema_extensions(
         &self,
-        input: &ListSchemaExtensionsRequest,
+        input: ListSchemaExtensionsRequest,
     ) -> RusotoFuture<ListSchemaExtensionsResult, ListSchemaExtensionsError> {
         let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
 
@@ -6897,7 +6893,7 @@ where
             "x-amz-target",
             "DirectoryService_20150416.ListSchemaExtensions",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -6928,7 +6924,7 @@ where
     /// <p>Lists all tags on a directory.</p>
     fn list_tags_for_resource(
         &self,
-        input: &ListTagsForResourceRequest,
+        input: ListTagsForResourceRequest,
     ) -> RusotoFuture<ListTagsForResourceResult, ListTagsForResourceError> {
         let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
 
@@ -6937,7 +6933,7 @@ where
             "x-amz-target",
             "DirectoryService_20150416.ListTagsForResource",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -6968,7 +6964,7 @@ where
     /// <p>Associates a directory with an SNS topic. This establishes the directory as a publisher to the specified SNS topic. You can then receive email or text (SMS) messages when the status of your directory changes. You get notified if your directory goes from an Active status to an Impaired or Inoperable status. You also receive a notification when the directory returns to an Active status.</p>
     fn register_event_topic(
         &self,
-        input: &RegisterEventTopicRequest,
+        input: RegisterEventTopicRequest,
     ) -> RusotoFuture<RegisterEventTopicResult, RegisterEventTopicError> {
         let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
 
@@ -6977,7 +6973,7 @@ where
             "x-amz-target",
             "DirectoryService_20150416.RegisterEventTopic",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -7008,13 +7004,13 @@ where
     /// <p>Removes IP address blocks from a directory.</p>
     fn remove_ip_routes(
         &self,
-        input: &RemoveIpRoutesRequest,
+        input: RemoveIpRoutesRequest,
     ) -> RusotoFuture<RemoveIpRoutesResult, RemoveIpRoutesError> {
         let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DirectoryService_20150416.RemoveIpRoutes");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -7045,7 +7041,7 @@ where
     /// <p>Removes tags from a directory.</p>
     fn remove_tags_from_resource(
         &self,
-        input: &RemoveTagsFromResourceRequest,
+        input: RemoveTagsFromResourceRequest,
     ) -> RusotoFuture<RemoveTagsFromResourceResult, RemoveTagsFromResourceError> {
         let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
 
@@ -7054,7 +7050,7 @@ where
             "x-amz-target",
             "DirectoryService_20150416.RemoveTagsFromResource",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -7085,7 +7081,7 @@ where
     /// <p>Restores a directory using an existing directory snapshot.</p> <p>When you restore a directory from a snapshot, any changes made to the directory after the snapshot date are overwritten.</p> <p>This action returns as soon as the restore operation is initiated. You can monitor the progress of the restore operation by calling the <a>DescribeDirectories</a> operation with the directory identifier. When the <b>DirectoryDescription.Stage</b> value changes to <code>Active</code>, the restore operation is complete.</p>
     fn restore_from_snapshot(
         &self,
-        input: &RestoreFromSnapshotRequest,
+        input: RestoreFromSnapshotRequest,
     ) -> RusotoFuture<RestoreFromSnapshotResult, RestoreFromSnapshotError> {
         let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
 
@@ -7094,7 +7090,7 @@ where
             "x-amz-target",
             "DirectoryService_20150416.RestoreFromSnapshot",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -7125,7 +7121,7 @@ where
     /// <p>Applies a schema extension to a Microsoft AD directory.</p>
     fn start_schema_extension(
         &self,
-        input: &StartSchemaExtensionRequest,
+        input: StartSchemaExtensionRequest,
     ) -> RusotoFuture<StartSchemaExtensionResult, StartSchemaExtensionError> {
         let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
 
@@ -7134,7 +7130,7 @@ where
             "x-amz-target",
             "DirectoryService_20150416.StartSchemaExtension",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -7165,7 +7161,7 @@ where
     /// <p>Updates a conditional forwarder that has been set up for your AWS directory.</p>
     fn update_conditional_forwarder(
         &self,
-        input: &UpdateConditionalForwarderRequest,
+        input: UpdateConditionalForwarderRequest,
     ) -> RusotoFuture<UpdateConditionalForwarderResult, UpdateConditionalForwarderError> {
         let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
 
@@ -7174,7 +7170,7 @@ where
             "x-amz-target",
             "DirectoryService_20150416.UpdateConditionalForwarder",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -7205,7 +7201,7 @@ where
     /// <p>Adds or removes domain controllers to or from the directory. Based on the difference between current value and new value (provided through this API call), domain controllers will be added or removed. It may take up to 45 minutes for any new domain controllers to become fully active once the requested number of domain controllers is updated. During this time, you cannot make another update request.</p>
     fn update_number_of_domain_controllers(
         &self,
-        input: &UpdateNumberOfDomainControllersRequest,
+        input: UpdateNumberOfDomainControllersRequest,
     ) -> RusotoFuture<UpdateNumberOfDomainControllersResult, UpdateNumberOfDomainControllersError>
     {
         let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
@@ -7215,7 +7211,7 @@ where
             "x-amz-target",
             "DirectoryService_20150416.UpdateNumberOfDomainControllers",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -7246,13 +7242,13 @@ where
     /// <p>Updates the Remote Authentication Dial In User Service (RADIUS) server information for an AD Connector directory.</p>
     fn update_radius(
         &self,
-        input: &UpdateRadiusRequest,
+        input: UpdateRadiusRequest,
     ) -> RusotoFuture<UpdateRadiusResult, UpdateRadiusError> {
         let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DirectoryService_20150416.UpdateRadius");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -7283,13 +7279,13 @@ where
     /// <p>AWS Directory Service for Microsoft Active Directory allows you to configure and verify trust relationships.</p> <p>This action verifies a trust relationship between your Microsoft AD in the AWS cloud and an external domain.</p>
     fn verify_trust(
         &self,
-        input: &VerifyTrustRequest,
+        input: VerifyTrustRequest,
     ) -> RusotoFuture<VerifyTrustResult, VerifyTrustError> {
         let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DirectoryService_20150416.VerifyTrust");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {

@@ -18,24 +18,24 @@ use std::io;
 use futures::future;
 use futures::Future;
 use rusoto_core::reactor::{CredentialsProvider, RequestDispatcher};
-use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::region;
+use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::{ClientInner, RusotoFuture};
 
-use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
+use rusoto_core::request::HttpDispatchError;
 
-use std::str::FromStr;
-use xml::EventReader;
-use xml::reader::ParserConfig;
+use hyper::StatusCode;
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::signature::SignedRequest;
-use xml::reader::XmlEvent;
-use rusoto_core::xmlutil::{Next, Peek, XmlParseError, XmlResponse};
+use rusoto_core::xmlerror::*;
 use rusoto_core::xmlutil::{characters, end_element, find_start_element, peek_at_name, skip_tree,
                            start_element};
-use rusoto_core::xmlerror::*;
-use hyper::StatusCode;
+use rusoto_core::xmlutil::{Next, Peek, XmlParseError, XmlResponse};
+use std::str::FromStr;
+use xml::reader::ParserConfig;
+use xml::reader::XmlEvent;
+use xml::EventReader;
 
 enum DeserializerNext {
     Close,
@@ -227,8 +227,7 @@ impl ApplicationDescriptionDeserializer {
                     }
                     "Versions" => {
                         obj.versions = Some(try!(VersionLabelsListDeserializer::deserialize(
-                            "Versions",
-                            stack
+                            "Versions", stack
                         )));
                     }
                     _ => skip_tree(stack),
@@ -268,8 +267,7 @@ impl ApplicationDescriptionListDeserializer {
                 DeserializerNext::Element(name) => {
                     if name == "member" {
                         obj.push(try!(ApplicationDescriptionDeserializer::deserialize(
-                            "member",
-                            stack
+                            "member", stack
                         )));
                     } else {
                         skip_tree(stack);
@@ -423,8 +421,7 @@ impl ApplicationMetricsDeserializer {
                 DeserializerNext::Element(name) => match &name[..] {
                     "Duration" => {
                         obj.duration = Some(try!(NullableIntegerDeserializer::deserialize(
-                            "Duration",
-                            stack
+                            "Duration", stack
                         )));
                     }
                     "Latency" => {
@@ -710,8 +707,7 @@ impl ApplicationVersionDescriptionDeserializer {
                     }
                     "Status" => {
                         obj.status = Some(try!(ApplicationVersionStatusDeserializer::deserialize(
-                            "Status",
-                            stack
+                            "Status", stack
                         )));
                     }
                     "VersionLabel" => {
@@ -1158,8 +1154,7 @@ impl AutoScalingGroupListDeserializer {
                 DeserializerNext::Element(name) => {
                     if name == "member" {
                         obj.push(try!(AutoScalingGroupDeserializer::deserialize(
-                            "member",
-                            stack
+                            "member", stack
                         )));
                     } else {
                         skip_tree(stack);
@@ -1201,8 +1196,7 @@ impl AvailableSolutionStackDetailsListDeserializer {
                 DeserializerNext::Element(name) => {
                     if name == "member" {
                         obj.push(try!(SolutionStackDescriptionDeserializer::deserialize(
-                            "member",
-                            stack
+                            "member", stack
                         )));
                     } else {
                         skip_tree(stack);
@@ -1244,8 +1238,7 @@ impl AvailableSolutionStackNamesListDeserializer {
                 DeserializerNext::Element(name) => {
                     if name == "member" {
                         obj.push(try!(SolutionStackNameDeserializer::deserialize(
-                            "member",
-                            stack
+                            "member", stack
                         )));
                     } else {
                         skip_tree(stack);
@@ -1434,8 +1427,7 @@ impl CPUUtilizationDeserializer {
                 DeserializerNext::Element(name) => match &name[..] {
                     "IOWait" => {
                         obj.io_wait = Some(try!(NullableDoubleDeserializer::deserialize(
-                            "IOWait",
-                            stack
+                            "IOWait", stack
                         )));
                     }
                     "IRQ" => {
@@ -1451,14 +1443,12 @@ impl CPUUtilizationDeserializer {
                     }
                     "SoftIRQ" => {
                         obj.soft_irq = Some(try!(NullableDoubleDeserializer::deserialize(
-                            "SoftIRQ",
-                            stack
+                            "SoftIRQ", stack
                         )));
                     }
                     "System" => {
                         obj.system = Some(try!(NullableDoubleDeserializer::deserialize(
-                            "System",
-                            stack
+                            "System", stack
                         )));
                     }
                     "User" => {
@@ -1778,8 +1768,7 @@ impl ConfigurationOptionDescriptionDeserializer {
                     }
                     "Name" => {
                         obj.name = Some(try!(ConfigurationOptionNameDeserializer::deserialize(
-                            "Name",
-                            stack
+                            "Name", stack
                         )));
                     }
                     "Namespace" => {
@@ -1790,8 +1779,7 @@ impl ConfigurationOptionDescriptionDeserializer {
                     }
                     "Regex" => {
                         obj.regex = Some(try!(OptionRestrictionRegexDeserializer::deserialize(
-                            "Regex",
-                            stack
+                            "Regex", stack
                         )));
                     }
                     "UserDefined" => {
@@ -1853,8 +1841,7 @@ impl ConfigurationOptionDescriptionsListDeserializer {
                     if name == "member" {
                         obj.push(try!(
                             ConfigurationOptionDescriptionDeserializer::deserialize(
-                                "member",
-                                stack
+                                "member", stack
                             )
                         ));
                     } else {
@@ -1926,8 +1913,7 @@ impl ConfigurationOptionPossibleValuesDeserializer {
                     if name == "member" {
                         obj.push(try!(
                             ConfigurationOptionPossibleValueDeserializer::deserialize(
-                                "member",
-                                stack
+                                "member", stack
                             )
                         ));
                     } else {
@@ -2001,8 +1987,7 @@ impl ConfigurationOptionSettingDeserializer {
                     }
                     "Value" => {
                         obj.value = Some(try!(ConfigurationOptionValueDeserializer::deserialize(
-                            "Value",
-                            stack
+                            "Value", stack
                         )));
                     }
                     _ => skip_tree(stack),
@@ -2079,8 +2064,7 @@ impl ConfigurationOptionSettingsListDeserializer {
                 DeserializerNext::Element(name) => {
                     if name == "member" {
                         obj.push(try!(ConfigurationOptionSettingDeserializer::deserialize(
-                            "member",
-                            stack
+                            "member", stack
                         )));
                     } else {
                         skip_tree(stack);
@@ -2189,8 +2173,7 @@ impl ConfigurationOptionsDescriptionDeserializer {
                     "Options" => {
                         obj.options = Some(try!(
                             ConfigurationOptionDescriptionsListDeserializer::deserialize(
-                                "Options",
-                                stack
+                                "Options", stack
                             )
                         ));
                     }
@@ -2366,8 +2349,7 @@ impl ConfigurationSettingsDescriptionListDeserializer {
                     if name == "member" {
                         obj.push(try!(
                             ConfigurationSettingsDescriptionDeserializer::deserialize(
-                                "member",
-                                stack
+                                "member", stack
                             )
                         ));
                     } else {
@@ -2469,8 +2451,7 @@ impl ConfigurationSettingsValidationMessagesDeserializer {
                 DeserializerNext::Element(name) => match &name[..] {
                     "Messages" => {
                         obj.messages = Some(try!(ValidationMessagesListDeserializer::deserialize(
-                            "Messages",
-                            stack
+                            "Messages", stack
                         )));
                     }
                     _ => skip_tree(stack),
@@ -2524,8 +2505,7 @@ impl ConfigurationTemplateNamesListDeserializer {
                 DeserializerNext::Element(name) => {
                     if name == "member" {
                         obj.push(try!(ConfigurationTemplateNameDeserializer::deserialize(
-                            "member",
-                            stack
+                            "member", stack
                         )));
                     } else {
                         skip_tree(stack);
@@ -3768,8 +3748,7 @@ impl DescribeEnvironmentHealthResultDeserializer {
                     }
                     "Status" => {
                         obj.status = Some(try!(EnvironmentHealthDeserializer::deserialize(
-                            "Status",
-                            stack
+                            "Status", stack
                         )));
                     }
                     _ => skip_tree(stack),
@@ -4587,8 +4566,7 @@ impl EnvironmentDescriptionDeserializer {
                     }
                     "Health" => {
                         obj.health = Some(try!(EnvironmentHealthDeserializer::deserialize(
-                            "Health",
-                            stack
+                            "Health", stack
                         )));
                     }
                     "HealthStatus" => {
@@ -4617,8 +4595,7 @@ impl EnvironmentDescriptionDeserializer {
                     }
                     "Status" => {
                         obj.status = Some(try!(EnvironmentStatusDeserializer::deserialize(
-                            "Status",
-                            stack
+                            "Status", stack
                         )));
                     }
                     "TemplateName" => {
@@ -4630,8 +4607,7 @@ impl EnvironmentDescriptionDeserializer {
                     }
                     "Tier" => {
                         obj.tier = Some(try!(EnvironmentTierDeserializer::deserialize(
-                            "Tier",
-                            stack
+                            "Tier", stack
                         )));
                     }
                     "VersionLabel" => {
@@ -4677,8 +4653,7 @@ impl EnvironmentDescriptionsListDeserializer {
                 DeserializerNext::Element(name) => {
                     if name == "member" {
                         obj.push(try!(EnvironmentDescriptionDeserializer::deserialize(
-                            "member",
-                            stack
+                            "member", stack
                         )));
                     } else {
                         skip_tree(stack);
@@ -4853,30 +4828,29 @@ impl EnvironmentInfoDescriptionDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "Ec2InstanceId" => {
-                            obj.ec_2_instance_id = Some(try!(
-                                Ec2InstanceIdDeserializer::deserialize("Ec2InstanceId", stack)
-                            ));
-                        }
-                        "InfoType" => {
-                            obj.info_type = Some(try!(
-                                EnvironmentInfoTypeDeserializer::deserialize("InfoType", stack)
-                            ));
-                        }
-                        "Message" => {
-                            obj.message =
-                                Some(try!(MessageDeserializer::deserialize("Message", stack)));
-                        }
-                        "SampleTimestamp" => {
-                            obj.sample_timestamp = Some(try!(
-                                SampleTimestampDeserializer::deserialize("SampleTimestamp", stack)
-                            ));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "Ec2InstanceId" => {
+                        obj.ec_2_instance_id = Some(try!(Ec2InstanceIdDeserializer::deserialize(
+                            "Ec2InstanceId",
+                            stack
+                        )));
                     }
-                }
+                    "InfoType" => {
+                        obj.info_type = Some(try!(EnvironmentInfoTypeDeserializer::deserialize(
+                            "InfoType", stack
+                        )));
+                    }
+                    "Message" => {
+                        obj.message =
+                            Some(try!(MessageDeserializer::deserialize("Message", stack)));
+                    }
+                    "SampleTimestamp" => {
+                        obj.sample_timestamp = Some(try!(
+                            SampleTimestampDeserializer::deserialize("SampleTimestamp", stack)
+                        ));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -4912,8 +4886,7 @@ impl EnvironmentInfoDescriptionListDeserializer {
                 DeserializerNext::Element(name) => {
                     if name == "member" {
                         obj.push(try!(EnvironmentInfoDescriptionDeserializer::deserialize(
-                            "member",
-                            stack
+                            "member", stack
                         )));
                     } else {
                         skip_tree(stack);
@@ -5024,8 +4997,7 @@ impl EnvironmentLinksDeserializer {
                 DeserializerNext::Element(name) => {
                     if name == "member" {
                         obj.push(try!(EnvironmentLinkDeserializer::deserialize(
-                            "member",
-                            stack
+                            "member", stack
                         )));
                     } else {
                         skip_tree(stack);
@@ -5148,8 +5120,7 @@ impl EnvironmentResourceDescriptionDeserializer {
                     }
                     "Triggers" => {
                         obj.triggers = Some(try!(TriggerListDeserializer::deserialize(
-                            "Triggers",
-                            stack
+                            "Triggers", stack
                         )));
                     }
                     _ => skip_tree(stack),
@@ -5441,8 +5412,7 @@ impl EventDescriptionDeserializer {
                     }
                     "Message" => {
                         obj.message = Some(try!(EventMessageDeserializer::deserialize(
-                            "Message",
-                            stack
+                            "Message", stack
                         )));
                     }
                     "PlatformArn" => {
@@ -5457,8 +5427,7 @@ impl EventDescriptionDeserializer {
                     }
                     "Severity" => {
                         obj.severity = Some(try!(EventSeverityDeserializer::deserialize(
-                            "Severity",
-                            stack
+                            "Severity", stack
                         )));
                     }
                     "TemplateName" => {
@@ -5511,8 +5480,7 @@ impl EventDescriptionListDeserializer {
                 DeserializerNext::Element(name) => {
                     if name == "member" {
                         obj.push(try!(EventDescriptionDeserializer::deserialize(
-                            "member",
-                            stack
+                            "member", stack
                         )));
                     } else {
                         skip_tree(stack);
@@ -5564,8 +5532,7 @@ impl EventDescriptionsMessageDeserializer {
                 DeserializerNext::Element(name) => match &name[..] {
                     "Events" => {
                         obj.events = Some(try!(EventDescriptionListDeserializer::deserialize(
-                            "Events",
-                            stack
+                            "Events", stack
                         )));
                     }
                     "NextToken" => {
@@ -5725,8 +5692,7 @@ impl InstanceHealthListDeserializer {
                 DeserializerNext::Element(name) => {
                     if name == "member" {
                         obj.push(try!(SingleInstanceHealthDeserializer::deserialize(
-                            "member",
-                            stack
+                            "member", stack
                         )));
                     } else {
                         skip_tree(stack);
@@ -5790,20 +5756,17 @@ impl InstanceHealthSummaryDeserializer {
                 DeserializerNext::Element(name) => match &name[..] {
                     "Degraded" => {
                         obj.degraded = Some(try!(NullableIntegerDeserializer::deserialize(
-                            "Degraded",
-                            stack
+                            "Degraded", stack
                         )));
                     }
                     "Info" => {
                         obj.info = Some(try!(NullableIntegerDeserializer::deserialize(
-                            "Info",
-                            stack
+                            "Info", stack
                         )));
                     }
                     "NoData" => {
                         obj.no_data = Some(try!(NullableIntegerDeserializer::deserialize(
-                            "NoData",
-                            stack
+                            "NoData", stack
                         )));
                     }
                     "Ok" => {
@@ -5811,26 +5774,22 @@ impl InstanceHealthSummaryDeserializer {
                     }
                     "Pending" => {
                         obj.pending = Some(try!(NullableIntegerDeserializer::deserialize(
-                            "Pending",
-                            stack
+                            "Pending", stack
                         )));
                     }
                     "Severe" => {
                         obj.severe = Some(try!(NullableIntegerDeserializer::deserialize(
-                            "Severe",
-                            stack
+                            "Severe", stack
                         )));
                     }
                     "Unknown" => {
                         obj.unknown = Some(try!(NullableIntegerDeserializer::deserialize(
-                            "Unknown",
-                            stack
+                            "Unknown", stack
                         )));
                     }
                     "Warning" => {
                         obj.warning = Some(try!(NullableIntegerDeserializer::deserialize(
-                            "Warning",
-                            stack
+                            "Warning", stack
                         )));
                     }
                     _ => skip_tree(stack),
@@ -6078,8 +6037,7 @@ impl LaunchConfigurationListDeserializer {
                 DeserializerNext::Element(name) => {
                     if name == "member" {
                         obj.push(try!(LaunchConfigurationDeserializer::deserialize(
-                            "member",
-                            stack
+                            "member", stack
                         )));
                     } else {
                         skip_tree(stack);
@@ -6366,8 +6324,7 @@ impl LoadAverageDeserializer {
                 DeserializerNext::Element(name) => {
                     if name == "member" {
                         obj.push(try!(LoadAverageValueDeserializer::deserialize(
-                            "member",
-                            stack
+                            "member", stack
                         )));
                     } else {
                         skip_tree(stack);
@@ -6766,8 +6723,7 @@ impl ManagedActionHistoryItemDeserializer {
                     }
                     "Status" => {
                         obj.status = Some(try!(ActionHistoryStatusDeserializer::deserialize(
-                            "Status",
-                            stack
+                            "Status", stack
                         )));
                     }
                     _ => skip_tree(stack),
@@ -6807,8 +6763,7 @@ impl ManagedActionHistoryItemsDeserializer {
                 DeserializerNext::Element(name) => {
                     if name == "member" {
                         obj.push(try!(ManagedActionHistoryItemDeserializer::deserialize(
-                            "member",
-                            stack
+                            "member", stack
                         )));
                     } else {
                         skip_tree(stack);
@@ -6850,8 +6805,7 @@ impl ManagedActionsDeserializer {
                 DeserializerNext::Element(name) => {
                     if name == "member" {
                         obj.push(try!(ManagedActionDeserializer::deserialize(
-                            "member",
-                            stack
+                            "member", stack
                         )));
                     } else {
                         skip_tree(stack);
@@ -7238,8 +7192,7 @@ impl OptionRestrictionRegexDeserializer {
                     }
                     "Pattern" => {
                         obj.pattern = Some(try!(RegexPatternDeserializer::deserialize(
-                            "Pattern",
-                            stack
+                            "Pattern", stack
                         )));
                     }
                     _ => skip_tree(stack),
@@ -7659,8 +7612,7 @@ impl PlatformFrameworksDeserializer {
                 DeserializerNext::Element(name) => {
                     if name == "member" {
                         obj.push(try!(PlatformFrameworkDeserializer::deserialize(
-                            "member",
-                            stack
+                            "member", stack
                         )));
                     } else {
                         skip_tree(stack);
@@ -7781,8 +7733,7 @@ impl PlatformProgrammingLanguagesDeserializer {
                 DeserializerNext::Element(name) => {
                     if name == "member" {
                         obj.push(try!(PlatformProgrammingLanguageDeserializer::deserialize(
-                            "member",
-                            stack
+                            "member", stack
                         )));
                     } else {
                         skip_tree(stack);
@@ -7944,8 +7895,7 @@ impl PlatformSummaryListDeserializer {
                 DeserializerNext::Element(name) => {
                     if name == "member" {
                         obj.push(try!(PlatformSummaryDeserializer::deserialize(
-                            "member",
-                            stack
+                            "member", stack
                         )));
                     } else {
                         skip_tree(stack);
@@ -8870,8 +8820,7 @@ impl SolutionStackFileTypeListDeserializer {
                 DeserializerNext::Element(name) => {
                     if name == "member" {
                         obj.push(try!(FileTypeExtensionDeserializer::deserialize(
-                            "member",
-                            stack
+                            "member", stack
                         )));
                     } else {
                         skip_tree(stack);
@@ -9191,8 +9140,7 @@ impl SupportedAddonListDeserializer {
                 DeserializerNext::Element(name) => {
                     if name == "member" {
                         obj.push(try!(SupportedAddonDeserializer::deserialize(
-                            "member",
-                            stack
+                            "member", stack
                         )));
                     } else {
                         skip_tree(stack);
@@ -9248,8 +9196,7 @@ impl SupportedTierListDeserializer {
                 DeserializerNext::Element(name) => {
                     if name == "member" {
                         obj.push(try!(SupportedTierDeserializer::deserialize(
-                            "member",
-                            stack
+                            "member", stack
                         )));
                     } else {
                         skip_tree(stack);
@@ -10136,8 +10083,7 @@ impl ValidationMessageDeserializer {
                 DeserializerNext::Element(name) => match &name[..] {
                     "Message" => {
                         obj.message = Some(try!(ValidationMessageStringDeserializer::deserialize(
-                            "Message",
-                            stack
+                            "Message", stack
                         )));
                     }
                     "Namespace" => {
@@ -10153,8 +10099,7 @@ impl ValidationMessageDeserializer {
                     }
                     "Severity" => {
                         obj.severity = Some(try!(ValidationSeverityDeserializer::deserialize(
-                            "Severity",
-                            stack
+                            "Severity", stack
                         )));
                     }
                     _ => skip_tree(stack),
@@ -10208,8 +10153,7 @@ impl ValidationMessagesListDeserializer {
                 DeserializerNext::Element(name) => {
                     if name == "member" {
                         obj.push(try!(ValidationMessageDeserializer::deserialize(
-                            "member",
-                            stack
+                            "member", stack
                         )));
                     } else {
                         skip_tree(stack);
@@ -14013,55 +13957,55 @@ pub trait ElasticBeanstalk {
     /// <p>Cancels in-progress environment configuration update or application version deployment.</p>
     fn abort_environment_update(
         &self,
-        input: &AbortEnvironmentUpdateMessage,
+        input: AbortEnvironmentUpdateMessage,
     ) -> RusotoFuture<(), AbortEnvironmentUpdateError>;
 
     /// <p>Applies a scheduled managed action immediately. A managed action can be applied only if its status is <code>Scheduled</code>. Get the status and action ID of a managed action with <a>DescribeEnvironmentManagedActions</a>.</p>
     fn apply_environment_managed_action(
         &self,
-        input: &ApplyEnvironmentManagedActionRequest,
+        input: ApplyEnvironmentManagedActionRequest,
     ) -> RusotoFuture<ApplyEnvironmentManagedActionResult, ApplyEnvironmentManagedActionError>;
 
     /// <p>Checks if the specified CNAME is available.</p>
     fn check_dns_availability(
         &self,
-        input: &CheckDNSAvailabilityMessage,
+        input: CheckDNSAvailabilityMessage,
     ) -> RusotoFuture<CheckDNSAvailabilityResultMessage, CheckDNSAvailabilityError>;
 
     /// <p>Create or update a group of environments that each run a separate component of a single application. Takes a list of version labels that specify application source bundles for each of the environments to create or update. The name of each environment and other required information must be included in the source bundles in an environment manifest named <code>env.yaml</code>. See <a href="http://docs.aws.amazon.com/elasticbeanstalk/latest/dg/environment-mgmt-compose.html">Compose Environments</a> for details.</p>
     fn compose_environments(
         &self,
-        input: &ComposeEnvironmentsMessage,
+        input: ComposeEnvironmentsMessage,
     ) -> RusotoFuture<EnvironmentDescriptionsMessage, ComposeEnvironmentsError>;
 
     /// <p> Creates an application that has one configuration template named <code>default</code> and no application versions. </p>
     fn create_application(
         &self,
-        input: &CreateApplicationMessage,
+        input: CreateApplicationMessage,
     ) -> RusotoFuture<ApplicationDescriptionMessage, CreateApplicationError>;
 
     /// <p><p>Creates an application version for the specified application. You can create an application version from a source bundle in Amazon S3, a commit in AWS CodeCommit, or the output of an AWS CodeBuild build as follows:</p> <p>Specify a commit in an AWS CodeCommit repository with <code>SourceBuildInformation</code>.</p> <p>Specify a build in an AWS CodeBuild with <code>SourceBuildInformation</code> and <code>BuildConfiguration</code>.</p> <p>Specify a source bundle in S3 with <code>SourceBundle</code> </p> <p>Omit both <code>SourceBuildInformation</code> and <code>SourceBundle</code> to use the default sample application.</p> <note> <p>Once you create an application version with a specified Amazon S3 bucket and key location, you cannot change that Amazon S3 location. If you change the Amazon S3 location, you receive an exception when you attempt to launch an environment from the application version.</p> </note></p>
     fn create_application_version(
         &self,
-        input: &CreateApplicationVersionMessage,
+        input: CreateApplicationVersionMessage,
     ) -> RusotoFuture<ApplicationVersionDescriptionMessage, CreateApplicationVersionError>;
 
     /// <p><p>Creates a configuration template. Templates are associated with a specific application and are used to deploy different versions of the application with the same configuration settings.</p> <p>Related Topics</p> <ul> <li> <p> <a>DescribeConfigurationOptions</a> </p> </li> <li> <p> <a>DescribeConfigurationSettings</a> </p> </li> <li> <p> <a>ListAvailableSolutionStacks</a> </p> </li> </ul></p>
     fn create_configuration_template(
         &self,
-        input: &CreateConfigurationTemplateMessage,
+        input: CreateConfigurationTemplateMessage,
     ) -> RusotoFuture<ConfigurationSettingsDescription, CreateConfigurationTemplateError>;
 
     /// <p>Launches an environment for the specified application using the specified configuration.</p>
     fn create_environment(
         &self,
-        input: &CreateEnvironmentMessage,
+        input: CreateEnvironmentMessage,
     ) -> RusotoFuture<EnvironmentDescription, CreateEnvironmentError>;
 
     /// <p>Create a new version of your custom platform.</p>
     fn create_platform_version(
         &self,
-        input: &CreatePlatformVersionRequest,
+        input: CreatePlatformVersionRequest,
     ) -> RusotoFuture<CreatePlatformVersionResult, CreatePlatformVersionError>;
 
     /// <p>Creates a bucket in Amazon S3 to store application versions, logs, and other files used by Elastic Beanstalk environments. The Elastic Beanstalk console and EB CLI call this API the first time you create an environment in a region. If the storage location already exists, <code>CreateStorageLocation</code> still returns the bucket name but does not create a new bucket.</p>
@@ -14072,31 +14016,31 @@ pub trait ElasticBeanstalk {
     /// <p><p>Deletes the specified application along with all associated versions and configurations. The application versions will not be deleted from your Amazon S3 bucket.</p> <note> <p>You cannot delete an application that has a running environment.</p> </note></p>
     fn delete_application(
         &self,
-        input: &DeleteApplicationMessage,
+        input: DeleteApplicationMessage,
     ) -> RusotoFuture<(), DeleteApplicationError>;
 
     /// <p><p>Deletes the specified version from the specified application.</p> <note> <p>You cannot delete an application version that is associated with a running environment.</p> </note></p>
     fn delete_application_version(
         &self,
-        input: &DeleteApplicationVersionMessage,
+        input: DeleteApplicationVersionMessage,
     ) -> RusotoFuture<(), DeleteApplicationVersionError>;
 
     /// <p><p>Deletes the specified configuration template.</p> <note> <p>When you launch an environment using a configuration template, the environment gets a copy of the template. You can delete or modify the environment&#39;s copy of the template without affecting the running environment.</p> </note></p>
     fn delete_configuration_template(
         &self,
-        input: &DeleteConfigurationTemplateMessage,
+        input: DeleteConfigurationTemplateMessage,
     ) -> RusotoFuture<(), DeleteConfigurationTemplateError>;
 
     /// <p>Deletes the draft configuration associated with the running environment.</p> <p>Updating a running environment with any configuration changes creates a draft configuration set. You can get the draft configuration using <a>DescribeConfigurationSettings</a> while the update is in progress or if the update fails. The <code>DeploymentStatus</code> for the draft configuration indicates whether the deployment is in process or has failed. The draft configuration remains in existence until it is deleted with this action.</p>
     fn delete_environment_configuration(
         &self,
-        input: &DeleteEnvironmentConfigurationMessage,
+        input: DeleteEnvironmentConfigurationMessage,
     ) -> RusotoFuture<(), DeleteEnvironmentConfigurationError>;
 
     /// <p>Deletes the specified version of a custom platform.</p>
     fn delete_platform_version(
         &self,
-        input: &DeletePlatformVersionRequest,
+        input: DeletePlatformVersionRequest,
     ) -> RusotoFuture<DeletePlatformVersionResult, DeletePlatformVersionError>;
 
     /// <p>Returns attributes related to AWS Elastic Beanstalk that are associated with the calling AWS account.</p> <p>The result currently has one set of attributes—resource quotas.</p>
@@ -14107,37 +14051,37 @@ pub trait ElasticBeanstalk {
     /// <p>Retrieve a list of application versions.</p>
     fn describe_application_versions(
         &self,
-        input: &DescribeApplicationVersionsMessage,
+        input: DescribeApplicationVersionsMessage,
     ) -> RusotoFuture<ApplicationVersionDescriptionsMessage, DescribeApplicationVersionsError>;
 
     /// <p>Returns the descriptions of existing applications.</p>
     fn describe_applications(
         &self,
-        input: &DescribeApplicationsMessage,
+        input: DescribeApplicationsMessage,
     ) -> RusotoFuture<ApplicationDescriptionsMessage, DescribeApplicationsError>;
 
     /// <p>Describes the configuration options that are used in a particular configuration template or environment, or that a specified solution stack defines. The description includes the values the options, their default values, and an indication of the required action on a running environment if an option value is changed.</p>
     fn describe_configuration_options(
         &self,
-        input: &DescribeConfigurationOptionsMessage,
+        input: DescribeConfigurationOptionsMessage,
     ) -> RusotoFuture<ConfigurationOptionsDescription, DescribeConfigurationOptionsError>;
 
     /// <p><p>Returns a description of the settings for the specified configuration set, that is, either a configuration template or the configuration set associated with a running environment.</p> <p>When describing the settings for the configuration set associated with a running environment, it is possible to receive two sets of setting descriptions. One is the deployed configuration set, and the other is a draft configuration of an environment that is either in the process of deployment or that failed to deploy.</p> <p>Related Topics</p> <ul> <li> <p> <a>DeleteEnvironmentConfiguration</a> </p> </li> </ul></p>
     fn describe_configuration_settings(
         &self,
-        input: &DescribeConfigurationSettingsMessage,
+        input: DescribeConfigurationSettingsMessage,
     ) -> RusotoFuture<ConfigurationSettingsDescriptions, DescribeConfigurationSettingsError>;
 
     /// <p>Returns information about the overall health of the specified environment. The <b>DescribeEnvironmentHealth</b> operation is only available with AWS Elastic Beanstalk Enhanced Health.</p>
     fn describe_environment_health(
         &self,
-        input: &DescribeEnvironmentHealthRequest,
+        input: DescribeEnvironmentHealthRequest,
     ) -> RusotoFuture<DescribeEnvironmentHealthResult, DescribeEnvironmentHealthError>;
 
     /// <p>Lists an environment's completed and failed managed actions.</p>
     fn describe_environment_managed_action_history(
         &self,
-        input: &DescribeEnvironmentManagedActionHistoryRequest,
+        input: DescribeEnvironmentManagedActionHistoryRequest,
     ) -> RusotoFuture<
         DescribeEnvironmentManagedActionHistoryResult,
         DescribeEnvironmentManagedActionHistoryError,
@@ -14146,37 +14090,37 @@ pub trait ElasticBeanstalk {
     /// <p>Lists an environment's upcoming and in-progress managed actions.</p>
     fn describe_environment_managed_actions(
         &self,
-        input: &DescribeEnvironmentManagedActionsRequest,
+        input: DescribeEnvironmentManagedActionsRequest,
     ) -> RusotoFuture<DescribeEnvironmentManagedActionsResult, DescribeEnvironmentManagedActionsError>;
 
     /// <p>Returns AWS resources for this environment.</p>
     fn describe_environment_resources(
         &self,
-        input: &DescribeEnvironmentResourcesMessage,
+        input: DescribeEnvironmentResourcesMessage,
     ) -> RusotoFuture<EnvironmentResourceDescriptionsMessage, DescribeEnvironmentResourcesError>;
 
     /// <p>Returns descriptions for existing environments.</p>
     fn describe_environments(
         &self,
-        input: &DescribeEnvironmentsMessage,
+        input: DescribeEnvironmentsMessage,
     ) -> RusotoFuture<EnvironmentDescriptionsMessage, DescribeEnvironmentsError>;
 
     /// <p><p>Returns list of event descriptions matching criteria up to the last 6 weeks.</p> <note> <p>This action returns the most recent 1,000 events from the specified <code>NextToken</code>.</p> </note></p>
     fn describe_events(
         &self,
-        input: &DescribeEventsMessage,
+        input: DescribeEventsMessage,
     ) -> RusotoFuture<EventDescriptionsMessage, DescribeEventsError>;
 
     /// <p>Retrives detailed information about the health of instances in your AWS Elastic Beanstalk. This operation requires <a href="http://docs.aws.amazon.com/elasticbeanstalk/latest/dg/health-enhanced.html">enhanced health reporting</a>.</p>
     fn describe_instances_health(
         &self,
-        input: &DescribeInstancesHealthRequest,
+        input: DescribeInstancesHealthRequest,
     ) -> RusotoFuture<DescribeInstancesHealthResult, DescribeInstancesHealthError>;
 
     /// <p>Describes the version of the platform.</p>
     fn describe_platform_version(
         &self,
-        input: &DescribePlatformVersionRequest,
+        input: DescribePlatformVersionRequest,
     ) -> RusotoFuture<DescribePlatformVersionResult, DescribePlatformVersionError>;
 
     /// <p>Returns a list of the available solution stack names, with the public version first and then in reverse chronological order.</p>
@@ -14187,61 +14131,61 @@ pub trait ElasticBeanstalk {
     /// <p>Lists the available platforms.</p>
     fn list_platform_versions(
         &self,
-        input: &ListPlatformVersionsRequest,
+        input: ListPlatformVersionsRequest,
     ) -> RusotoFuture<ListPlatformVersionsResult, ListPlatformVersionsError>;
 
     /// <p>Returns the tags applied to an AWS Elastic Beanstalk resource. The response contains a list of tag key-value pairs.</p> <p>Currently, Elastic Beanstalk only supports tagging of Elastic Beanstalk environments. For details about environment tagging, see <a href="http://docs.aws.amazon.com/elasticbeanstalk/latest/dg/using-features.tagging.html">Tagging Resources in Your Elastic Beanstalk Environment</a>.</p>
     fn list_tags_for_resource(
         &self,
-        input: &ListTagsForResourceMessage,
+        input: ListTagsForResourceMessage,
     ) -> RusotoFuture<ResourceTagsDescriptionMessage, ListTagsForResourceError>;
 
     /// <p>Deletes and recreates all of the AWS resources (for example: the Auto Scaling group, load balancer, etc.) for a specified environment and forces a restart.</p>
     fn rebuild_environment(
         &self,
-        input: &RebuildEnvironmentMessage,
+        input: RebuildEnvironmentMessage,
     ) -> RusotoFuture<(), RebuildEnvironmentError>;
 
     /// <p><p>Initiates a request to compile the specified type of information of the deployed environment.</p> <p> Setting the <code>InfoType</code> to <code>tail</code> compiles the last lines from the application server log files of every Amazon EC2 instance in your environment. </p> <p> Setting the <code>InfoType</code> to <code>bundle</code> compresses the application server log files for every Amazon EC2 instance into a <code>.zip</code> file. Legacy and .NET containers do not support bundle logs. </p> <p> Use <a>RetrieveEnvironmentInfo</a> to obtain the set of logs. </p> <p>Related Topics</p> <ul> <li> <p> <a>RetrieveEnvironmentInfo</a> </p> </li> </ul></p>
     fn request_environment_info(
         &self,
-        input: &RequestEnvironmentInfoMessage,
+        input: RequestEnvironmentInfoMessage,
     ) -> RusotoFuture<(), RequestEnvironmentInfoError>;
 
     /// <p>Causes the environment to restart the application container server running on each Amazon EC2 instance.</p>
     fn restart_app_server(
         &self,
-        input: &RestartAppServerMessage,
+        input: RestartAppServerMessage,
     ) -> RusotoFuture<(), RestartAppServerError>;
 
     /// <p><p>Retrieves the compiled information from a <a>RequestEnvironmentInfo</a> request.</p> <p>Related Topics</p> <ul> <li> <p> <a>RequestEnvironmentInfo</a> </p> </li> </ul></p>
     fn retrieve_environment_info(
         &self,
-        input: &RetrieveEnvironmentInfoMessage,
+        input: RetrieveEnvironmentInfoMessage,
     ) -> RusotoFuture<RetrieveEnvironmentInfoResultMessage, RetrieveEnvironmentInfoError>;
 
     /// <p>Swaps the CNAMEs of two environments.</p>
     fn swap_environment_cnam_es(
         &self,
-        input: &SwapEnvironmentCNAMEsMessage,
+        input: SwapEnvironmentCNAMEsMessage,
     ) -> RusotoFuture<(), SwapEnvironmentCNAMEsError>;
 
     /// <p>Terminates the specified environment.</p>
     fn terminate_environment(
         &self,
-        input: &TerminateEnvironmentMessage,
+        input: TerminateEnvironmentMessage,
     ) -> RusotoFuture<EnvironmentDescription, TerminateEnvironmentError>;
 
     /// <p><p>Updates the specified application to have the specified properties.</p> <note> <p>If a property (for example, <code>description</code>) is not provided, the value remains unchanged. To clear these properties, specify an empty string.</p> </note></p>
     fn update_application(
         &self,
-        input: &UpdateApplicationMessage,
+        input: UpdateApplicationMessage,
     ) -> RusotoFuture<ApplicationDescriptionMessage, UpdateApplicationError>;
 
     /// <p>Modifies lifecycle settings for an application.</p>
     fn update_application_resource_lifecycle(
         &self,
-        input: &UpdateApplicationResourceLifecycleMessage,
+        input: UpdateApplicationResourceLifecycleMessage,
     ) -> RusotoFuture<
         ApplicationResourceLifecycleDescriptionMessage,
         UpdateApplicationResourceLifecycleError,
@@ -14250,31 +14194,31 @@ pub trait ElasticBeanstalk {
     /// <p><p>Updates the specified application version to have the specified properties.</p> <note> <p>If a property (for example, <code>description</code>) is not provided, the value remains unchanged. To clear properties, specify an empty string.</p> </note></p>
     fn update_application_version(
         &self,
-        input: &UpdateApplicationVersionMessage,
+        input: UpdateApplicationVersionMessage,
     ) -> RusotoFuture<ApplicationVersionDescriptionMessage, UpdateApplicationVersionError>;
 
     /// <p><p>Updates the specified configuration template to have the specified properties or configuration option values.</p> <note> <p>If a property (for example, <code>ApplicationName</code>) is not provided, its value remains unchanged. To clear such properties, specify an empty string.</p> </note> <p>Related Topics</p> <ul> <li> <p> <a>DescribeConfigurationOptions</a> </p> </li> </ul></p>
     fn update_configuration_template(
         &self,
-        input: &UpdateConfigurationTemplateMessage,
+        input: UpdateConfigurationTemplateMessage,
     ) -> RusotoFuture<ConfigurationSettingsDescription, UpdateConfigurationTemplateError>;
 
     /// <p>Updates the environment description, deploys a new application version, updates the configuration settings to an entirely new configuration template, or updates select configuration option values in the running environment.</p> <p> Attempting to update both the release and configuration is not allowed and AWS Elastic Beanstalk returns an <code>InvalidParameterCombination</code> error. </p> <p> When updating the configuration settings to a new template or individual settings, a draft configuration is created and <a>DescribeConfigurationSettings</a> for this environment returns two setting descriptions with different <code>DeploymentStatus</code> values. </p>
     fn update_environment(
         &self,
-        input: &UpdateEnvironmentMessage,
+        input: UpdateEnvironmentMessage,
     ) -> RusotoFuture<EnvironmentDescription, UpdateEnvironmentError>;
 
     /// <p>Update the list of tags applied to an AWS Elastic Beanstalk resource. Two lists can be passed: <code>TagsToAdd</code> for tags to add or update, and <code>TagsToRemove</code>.</p> <p>Currently, Elastic Beanstalk only supports tagging of Elastic Beanstalk environments. For details about environment tagging, see <a href="http://docs.aws.amazon.com/elasticbeanstalk/latest/dg/using-features.tagging.html">Tagging Resources in Your Elastic Beanstalk Environment</a>.</p> <p>If you create a custom IAM user policy to control permission to this operation, specify one of the following two virtual actions (or both) instead of the API operation name:</p> <dl> <dt>elasticbeanstalk:AddTags</dt> <dd> <p>Controls permission to call <code>UpdateTagsForResource</code> and pass a list of tags to add in the <code>TagsToAdd</code> parameter.</p> </dd> <dt>elasticbeanstalk:RemoveTags</dt> <dd> <p>Controls permission to call <code>UpdateTagsForResource</code> and pass a list of tag keys to remove in the <code>TagsToRemove</code> parameter.</p> </dd> </dl> <p>For details about creating a custom user policy, see <a href="http://docs.aws.amazon.com/elasticbeanstalk/latest/dg/AWSHowTo.iam.managed-policies.html#AWSHowTo.iam.policies">Creating a Custom User Policy</a>.</p>
     fn update_tags_for_resource(
         &self,
-        input: &UpdateTagsForResourceMessage,
+        input: UpdateTagsForResourceMessage,
     ) -> RusotoFuture<(), UpdateTagsForResourceError>;
 
     /// <p>Takes a set of configuration settings and either a configuration template or environment, and determines whether those values are valid.</p> <p>This action returns a list of messages indicating any errors or warnings associated with the selection of option values.</p>
     fn validate_configuration_settings(
         &self,
-        input: &ValidateConfigurationSettingsMessage,
+        input: ValidateConfigurationSettingsMessage,
     ) -> RusotoFuture<ConfigurationSettingsValidationMessages, ValidateConfigurationSettingsError>;
 }
 /// A client for the Elastic Beanstalk API.
@@ -14323,7 +14267,7 @@ where
     /// <p>Cancels in-progress environment configuration update or application version deployment.</p>
     fn abort_environment_update(
         &self,
-        input: &AbortEnvironmentUpdateMessage,
+        input: AbortEnvironmentUpdateMessage,
     ) -> RusotoFuture<(), AbortEnvironmentUpdateError> {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
         let mut params = Params::new();
@@ -14351,7 +14295,7 @@ where
     /// <p>Applies a scheduled managed action immediately. A managed action can be applied only if its status is <code>Scheduled</code>. Get the status and action ID of a managed action with <a>DescribeEnvironmentManagedActions</a>.</p>
     fn apply_environment_managed_action(
         &self,
-        input: &ApplyEnvironmentManagedActionRequest,
+        input: ApplyEnvironmentManagedActionRequest,
     ) -> RusotoFuture<ApplyEnvironmentManagedActionResult, ApplyEnvironmentManagedActionError> {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
         let mut params = Params::new();
@@ -14404,7 +14348,7 @@ where
     /// <p>Checks if the specified CNAME is available.</p>
     fn check_dns_availability(
         &self,
-        input: &CheckDNSAvailabilityMessage,
+        input: CheckDNSAvailabilityMessage,
     ) -> RusotoFuture<CheckDNSAvailabilityResultMessage, CheckDNSAvailabilityError> {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
         let mut params = Params::new();
@@ -14455,7 +14399,7 @@ where
     /// <p>Create or update a group of environments that each run a separate component of a single application. Takes a list of version labels that specify application source bundles for each of the environments to create or update. The name of each environment and other required information must be included in the source bundles in an environment manifest named <code>env.yaml</code>. See <a href="http://docs.aws.amazon.com/elasticbeanstalk/latest/dg/environment-mgmt-compose.html">Compose Environments</a> for details.</p>
     fn compose_environments(
         &self,
-        input: &ComposeEnvironmentsMessage,
+        input: ComposeEnvironmentsMessage,
     ) -> RusotoFuture<EnvironmentDescriptionsMessage, ComposeEnvironmentsError> {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
         let mut params = Params::new();
@@ -14506,7 +14450,7 @@ where
     /// <p> Creates an application that has one configuration template named <code>default</code> and no application versions. </p>
     fn create_application(
         &self,
-        input: &CreateApplicationMessage,
+        input: CreateApplicationMessage,
     ) -> RusotoFuture<ApplicationDescriptionMessage, CreateApplicationError> {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
         let mut params = Params::new();
@@ -14557,7 +14501,7 @@ where
     /// <p><p>Creates an application version for the specified application. You can create an application version from a source bundle in Amazon S3, a commit in AWS CodeCommit, or the output of an AWS CodeBuild build as follows:</p> <p>Specify a commit in an AWS CodeCommit repository with <code>SourceBuildInformation</code>.</p> <p>Specify a build in an AWS CodeBuild with <code>SourceBuildInformation</code> and <code>BuildConfiguration</code>.</p> <p>Specify a source bundle in S3 with <code>SourceBundle</code> </p> <p>Omit both <code>SourceBuildInformation</code> and <code>SourceBundle</code> to use the default sample application.</p> <note> <p>Once you create an application version with a specified Amazon S3 bucket and key location, you cannot change that Amazon S3 location. If you change the Amazon S3 location, you receive an exception when you attempt to launch an environment from the application version.</p> </note></p>
     fn create_application_version(
         &self,
-        input: &CreateApplicationVersionMessage,
+        input: CreateApplicationVersionMessage,
     ) -> RusotoFuture<ApplicationVersionDescriptionMessage, CreateApplicationVersionError> {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
         let mut params = Params::new();
@@ -14610,7 +14554,7 @@ where
     /// <p><p>Creates a configuration template. Templates are associated with a specific application and are used to deploy different versions of the application with the same configuration settings.</p> <p>Related Topics</p> <ul> <li> <p> <a>DescribeConfigurationOptions</a> </p> </li> <li> <p> <a>DescribeConfigurationSettings</a> </p> </li> <li> <p> <a>ListAvailableSolutionStacks</a> </p> </li> </ul></p>
     fn create_configuration_template(
         &self,
-        input: &CreateConfigurationTemplateMessage,
+        input: CreateConfigurationTemplateMessage,
     ) -> RusotoFuture<ConfigurationSettingsDescription, CreateConfigurationTemplateError> {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
         let mut params = Params::new();
@@ -14661,7 +14605,7 @@ where
     /// <p>Launches an environment for the specified application using the specified configuration.</p>
     fn create_environment(
         &self,
-        input: &CreateEnvironmentMessage,
+        input: CreateEnvironmentMessage,
     ) -> RusotoFuture<EnvironmentDescription, CreateEnvironmentError> {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
         let mut params = Params::new();
@@ -14712,7 +14656,7 @@ where
     /// <p>Create a new version of your custom platform.</p>
     fn create_platform_version(
         &self,
-        input: &CreatePlatformVersionRequest,
+        input: CreatePlatformVersionRequest,
     ) -> RusotoFuture<CreatePlatformVersionResult, CreatePlatformVersionError> {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
         let mut params = Params::new();
@@ -14813,7 +14757,7 @@ where
     /// <p><p>Deletes the specified application along with all associated versions and configurations. The application versions will not be deleted from your Amazon S3 bucket.</p> <note> <p>You cannot delete an application that has a running environment.</p> </note></p>
     fn delete_application(
         &self,
-        input: &DeleteApplicationMessage,
+        input: DeleteApplicationMessage,
     ) -> RusotoFuture<(), DeleteApplicationError> {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
         let mut params = Params::new();
@@ -14841,7 +14785,7 @@ where
     /// <p><p>Deletes the specified version from the specified application.</p> <note> <p>You cannot delete an application version that is associated with a running environment.</p> </note></p>
     fn delete_application_version(
         &self,
-        input: &DeleteApplicationVersionMessage,
+        input: DeleteApplicationVersionMessage,
     ) -> RusotoFuture<(), DeleteApplicationVersionError> {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
         let mut params = Params::new();
@@ -14869,7 +14813,7 @@ where
     /// <p><p>Deletes the specified configuration template.</p> <note> <p>When you launch an environment using a configuration template, the environment gets a copy of the template. You can delete or modify the environment&#39;s copy of the template without affecting the running environment.</p> </note></p>
     fn delete_configuration_template(
         &self,
-        input: &DeleteConfigurationTemplateMessage,
+        input: DeleteConfigurationTemplateMessage,
     ) -> RusotoFuture<(), DeleteConfigurationTemplateError> {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
         let mut params = Params::new();
@@ -14897,7 +14841,7 @@ where
     /// <p>Deletes the draft configuration associated with the running environment.</p> <p>Updating a running environment with any configuration changes creates a draft configuration set. You can get the draft configuration using <a>DescribeConfigurationSettings</a> while the update is in progress or if the update fails. The <code>DeploymentStatus</code> for the draft configuration indicates whether the deployment is in process or has failed. The draft configuration remains in existence until it is deleted with this action.</p>
     fn delete_environment_configuration(
         &self,
-        input: &DeleteEnvironmentConfigurationMessage,
+        input: DeleteEnvironmentConfigurationMessage,
     ) -> RusotoFuture<(), DeleteEnvironmentConfigurationError> {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
         let mut params = Params::new();
@@ -14925,7 +14869,7 @@ where
     /// <p>Deletes the specified version of a custom platform.</p>
     fn delete_platform_version(
         &self,
-        input: &DeletePlatformVersionRequest,
+        input: DeletePlatformVersionRequest,
     ) -> RusotoFuture<DeletePlatformVersionResult, DeletePlatformVersionError> {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
         let mut params = Params::new();
@@ -15026,7 +14970,7 @@ where
     /// <p>Retrieve a list of application versions.</p>
     fn describe_application_versions(
         &self,
-        input: &DescribeApplicationVersionsMessage,
+        input: DescribeApplicationVersionsMessage,
     ) -> RusotoFuture<ApplicationVersionDescriptionsMessage, DescribeApplicationVersionsError> {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
         let mut params = Params::new();
@@ -15079,7 +15023,7 @@ where
     /// <p>Returns the descriptions of existing applications.</p>
     fn describe_applications(
         &self,
-        input: &DescribeApplicationsMessage,
+        input: DescribeApplicationsMessage,
     ) -> RusotoFuture<ApplicationDescriptionsMessage, DescribeApplicationsError> {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
         let mut params = Params::new();
@@ -15130,7 +15074,7 @@ where
     /// <p>Describes the configuration options that are used in a particular configuration template or environment, or that a specified solution stack defines. The description includes the values the options, their default values, and an indication of the required action on a running environment if an option value is changed.</p>
     fn describe_configuration_options(
         &self,
-        input: &DescribeConfigurationOptionsMessage,
+        input: DescribeConfigurationOptionsMessage,
     ) -> RusotoFuture<ConfigurationOptionsDescription, DescribeConfigurationOptionsError> {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
         let mut params = Params::new();
@@ -15181,7 +15125,7 @@ where
     /// <p><p>Returns a description of the settings for the specified configuration set, that is, either a configuration template or the configuration set associated with a running environment.</p> <p>When describing the settings for the configuration set associated with a running environment, it is possible to receive two sets of setting descriptions. One is the deployed configuration set, and the other is a draft configuration of an environment that is either in the process of deployment or that failed to deploy.</p> <p>Related Topics</p> <ul> <li> <p> <a>DeleteEnvironmentConfiguration</a> </p> </li> </ul></p>
     fn describe_configuration_settings(
         &self,
-        input: &DescribeConfigurationSettingsMessage,
+        input: DescribeConfigurationSettingsMessage,
     ) -> RusotoFuture<ConfigurationSettingsDescriptions, DescribeConfigurationSettingsError> {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
         let mut params = Params::new();
@@ -15232,7 +15176,7 @@ where
     /// <p>Returns information about the overall health of the specified environment. The <b>DescribeEnvironmentHealth</b> operation is only available with AWS Elastic Beanstalk Enhanced Health.</p>
     fn describe_environment_health(
         &self,
-        input: &DescribeEnvironmentHealthRequest,
+        input: DescribeEnvironmentHealthRequest,
     ) -> RusotoFuture<DescribeEnvironmentHealthResult, DescribeEnvironmentHealthError> {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
         let mut params = Params::new();
@@ -15283,7 +15227,7 @@ where
     /// <p>Lists an environment's completed and failed managed actions.</p>
     fn describe_environment_managed_action_history(
         &self,
-        input: &DescribeEnvironmentManagedActionHistoryRequest,
+        input: DescribeEnvironmentManagedActionHistoryRequest,
     ) -> RusotoFuture<
         DescribeEnvironmentManagedActionHistoryResult,
         DescribeEnvironmentManagedActionHistoryError,
@@ -15343,7 +15287,7 @@ where
     /// <p>Lists an environment's upcoming and in-progress managed actions.</p>
     fn describe_environment_managed_actions(
         &self,
-        input: &DescribeEnvironmentManagedActionsRequest,
+        input: DescribeEnvironmentManagedActionsRequest,
     ) -> RusotoFuture<DescribeEnvironmentManagedActionsResult, DescribeEnvironmentManagedActionsError>
     {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
@@ -15397,7 +15341,7 @@ where
     /// <p>Returns AWS resources for this environment.</p>
     fn describe_environment_resources(
         &self,
-        input: &DescribeEnvironmentResourcesMessage,
+        input: DescribeEnvironmentResourcesMessage,
     ) -> RusotoFuture<EnvironmentResourceDescriptionsMessage, DescribeEnvironmentResourcesError>
     {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
@@ -15451,7 +15395,7 @@ where
     /// <p>Returns descriptions for existing environments.</p>
     fn describe_environments(
         &self,
-        input: &DescribeEnvironmentsMessage,
+        input: DescribeEnvironmentsMessage,
     ) -> RusotoFuture<EnvironmentDescriptionsMessage, DescribeEnvironmentsError> {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
         let mut params = Params::new();
@@ -15502,7 +15446,7 @@ where
     /// <p><p>Returns list of event descriptions matching criteria up to the last 6 weeks.</p> <note> <p>This action returns the most recent 1,000 events from the specified <code>NextToken</code>.</p> </note></p>
     fn describe_events(
         &self,
-        input: &DescribeEventsMessage,
+        input: DescribeEventsMessage,
     ) -> RusotoFuture<EventDescriptionsMessage, DescribeEventsError> {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
         let mut params = Params::new();
@@ -15553,7 +15497,7 @@ where
     /// <p>Retrives detailed information about the health of instances in your AWS Elastic Beanstalk. This operation requires <a href="http://docs.aws.amazon.com/elasticbeanstalk/latest/dg/health-enhanced.html">enhanced health reporting</a>.</p>
     fn describe_instances_health(
         &self,
-        input: &DescribeInstancesHealthRequest,
+        input: DescribeInstancesHealthRequest,
     ) -> RusotoFuture<DescribeInstancesHealthResult, DescribeInstancesHealthError> {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
         let mut params = Params::new();
@@ -15604,7 +15548,7 @@ where
     /// <p>Describes the version of the platform.</p>
     fn describe_platform_version(
         &self,
-        input: &DescribePlatformVersionRequest,
+        input: DescribePlatformVersionRequest,
     ) -> RusotoFuture<DescribePlatformVersionResult, DescribePlatformVersionError> {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
         let mut params = Params::new();
@@ -15708,7 +15652,7 @@ where
     /// <p>Lists the available platforms.</p>
     fn list_platform_versions(
         &self,
-        input: &ListPlatformVersionsRequest,
+        input: ListPlatformVersionsRequest,
     ) -> RusotoFuture<ListPlatformVersionsResult, ListPlatformVersionsError> {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
         let mut params = Params::new();
@@ -15759,7 +15703,7 @@ where
     /// <p>Returns the tags applied to an AWS Elastic Beanstalk resource. The response contains a list of tag key-value pairs.</p> <p>Currently, Elastic Beanstalk only supports tagging of Elastic Beanstalk environments. For details about environment tagging, see <a href="http://docs.aws.amazon.com/elasticbeanstalk/latest/dg/using-features.tagging.html">Tagging Resources in Your Elastic Beanstalk Environment</a>.</p>
     fn list_tags_for_resource(
         &self,
-        input: &ListTagsForResourceMessage,
+        input: ListTagsForResourceMessage,
     ) -> RusotoFuture<ResourceTagsDescriptionMessage, ListTagsForResourceError> {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
         let mut params = Params::new();
@@ -15810,7 +15754,7 @@ where
     /// <p>Deletes and recreates all of the AWS resources (for example: the Auto Scaling group, load balancer, etc.) for a specified environment and forces a restart.</p>
     fn rebuild_environment(
         &self,
-        input: &RebuildEnvironmentMessage,
+        input: RebuildEnvironmentMessage,
     ) -> RusotoFuture<(), RebuildEnvironmentError> {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
         let mut params = Params::new();
@@ -15838,7 +15782,7 @@ where
     /// <p><p>Initiates a request to compile the specified type of information of the deployed environment.</p> <p> Setting the <code>InfoType</code> to <code>tail</code> compiles the last lines from the application server log files of every Amazon EC2 instance in your environment. </p> <p> Setting the <code>InfoType</code> to <code>bundle</code> compresses the application server log files for every Amazon EC2 instance into a <code>.zip</code> file. Legacy and .NET containers do not support bundle logs. </p> <p> Use <a>RetrieveEnvironmentInfo</a> to obtain the set of logs. </p> <p>Related Topics</p> <ul> <li> <p> <a>RetrieveEnvironmentInfo</a> </p> </li> </ul></p>
     fn request_environment_info(
         &self,
-        input: &RequestEnvironmentInfoMessage,
+        input: RequestEnvironmentInfoMessage,
     ) -> RusotoFuture<(), RequestEnvironmentInfoError> {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
         let mut params = Params::new();
@@ -15866,7 +15810,7 @@ where
     /// <p>Causes the environment to restart the application container server running on each Amazon EC2 instance.</p>
     fn restart_app_server(
         &self,
-        input: &RestartAppServerMessage,
+        input: RestartAppServerMessage,
     ) -> RusotoFuture<(), RestartAppServerError> {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
         let mut params = Params::new();
@@ -15894,7 +15838,7 @@ where
     /// <p><p>Retrieves the compiled information from a <a>RequestEnvironmentInfo</a> request.</p> <p>Related Topics</p> <ul> <li> <p> <a>RequestEnvironmentInfo</a> </p> </li> </ul></p>
     fn retrieve_environment_info(
         &self,
-        input: &RetrieveEnvironmentInfoMessage,
+        input: RetrieveEnvironmentInfoMessage,
     ) -> RusotoFuture<RetrieveEnvironmentInfoResultMessage, RetrieveEnvironmentInfoError> {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
         let mut params = Params::new();
@@ -15947,7 +15891,7 @@ where
     /// <p>Swaps the CNAMEs of two environments.</p>
     fn swap_environment_cnam_es(
         &self,
-        input: &SwapEnvironmentCNAMEsMessage,
+        input: SwapEnvironmentCNAMEsMessage,
     ) -> RusotoFuture<(), SwapEnvironmentCNAMEsError> {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
         let mut params = Params::new();
@@ -15975,7 +15919,7 @@ where
     /// <p>Terminates the specified environment.</p>
     fn terminate_environment(
         &self,
-        input: &TerminateEnvironmentMessage,
+        input: TerminateEnvironmentMessage,
     ) -> RusotoFuture<EnvironmentDescription, TerminateEnvironmentError> {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
         let mut params = Params::new();
@@ -16026,7 +15970,7 @@ where
     /// <p><p>Updates the specified application to have the specified properties.</p> <note> <p>If a property (for example, <code>description</code>) is not provided, the value remains unchanged. To clear these properties, specify an empty string.</p> </note></p>
     fn update_application(
         &self,
-        input: &UpdateApplicationMessage,
+        input: UpdateApplicationMessage,
     ) -> RusotoFuture<ApplicationDescriptionMessage, UpdateApplicationError> {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
         let mut params = Params::new();
@@ -16077,7 +16021,7 @@ where
     /// <p>Modifies lifecycle settings for an application.</p>
     fn update_application_resource_lifecycle(
         &self,
-        input: &UpdateApplicationResourceLifecycleMessage,
+        input: UpdateApplicationResourceLifecycleMessage,
     ) -> RusotoFuture<
         ApplicationResourceLifecycleDescriptionMessage,
         UpdateApplicationResourceLifecycleError,
@@ -16133,7 +16077,7 @@ where
     /// <p><p>Updates the specified application version to have the specified properties.</p> <note> <p>If a property (for example, <code>description</code>) is not provided, the value remains unchanged. To clear properties, specify an empty string.</p> </note></p>
     fn update_application_version(
         &self,
-        input: &UpdateApplicationVersionMessage,
+        input: UpdateApplicationVersionMessage,
     ) -> RusotoFuture<ApplicationVersionDescriptionMessage, UpdateApplicationVersionError> {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
         let mut params = Params::new();
@@ -16186,7 +16130,7 @@ where
     /// <p><p>Updates the specified configuration template to have the specified properties or configuration option values.</p> <note> <p>If a property (for example, <code>ApplicationName</code>) is not provided, its value remains unchanged. To clear such properties, specify an empty string.</p> </note> <p>Related Topics</p> <ul> <li> <p> <a>DescribeConfigurationOptions</a> </p> </li> </ul></p>
     fn update_configuration_template(
         &self,
-        input: &UpdateConfigurationTemplateMessage,
+        input: UpdateConfigurationTemplateMessage,
     ) -> RusotoFuture<ConfigurationSettingsDescription, UpdateConfigurationTemplateError> {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
         let mut params = Params::new();
@@ -16237,7 +16181,7 @@ where
     /// <p>Updates the environment description, deploys a new application version, updates the configuration settings to an entirely new configuration template, or updates select configuration option values in the running environment.</p> <p> Attempting to update both the release and configuration is not allowed and AWS Elastic Beanstalk returns an <code>InvalidParameterCombination</code> error. </p> <p> When updating the configuration settings to a new template or individual settings, a draft configuration is created and <a>DescribeConfigurationSettings</a> for this environment returns two setting descriptions with different <code>DeploymentStatus</code> values. </p>
     fn update_environment(
         &self,
-        input: &UpdateEnvironmentMessage,
+        input: UpdateEnvironmentMessage,
     ) -> RusotoFuture<EnvironmentDescription, UpdateEnvironmentError> {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
         let mut params = Params::new();
@@ -16288,7 +16232,7 @@ where
     /// <p>Update the list of tags applied to an AWS Elastic Beanstalk resource. Two lists can be passed: <code>TagsToAdd</code> for tags to add or update, and <code>TagsToRemove</code>.</p> <p>Currently, Elastic Beanstalk only supports tagging of Elastic Beanstalk environments. For details about environment tagging, see <a href="http://docs.aws.amazon.com/elasticbeanstalk/latest/dg/using-features.tagging.html">Tagging Resources in Your Elastic Beanstalk Environment</a>.</p> <p>If you create a custom IAM user policy to control permission to this operation, specify one of the following two virtual actions (or both) instead of the API operation name:</p> <dl> <dt>elasticbeanstalk:AddTags</dt> <dd> <p>Controls permission to call <code>UpdateTagsForResource</code> and pass a list of tags to add in the <code>TagsToAdd</code> parameter.</p> </dd> <dt>elasticbeanstalk:RemoveTags</dt> <dd> <p>Controls permission to call <code>UpdateTagsForResource</code> and pass a list of tag keys to remove in the <code>TagsToRemove</code> parameter.</p> </dd> </dl> <p>For details about creating a custom user policy, see <a href="http://docs.aws.amazon.com/elasticbeanstalk/latest/dg/AWSHowTo.iam.managed-policies.html#AWSHowTo.iam.policies">Creating a Custom User Policy</a>.</p>
     fn update_tags_for_resource(
         &self,
-        input: &UpdateTagsForResourceMessage,
+        input: UpdateTagsForResourceMessage,
     ) -> RusotoFuture<(), UpdateTagsForResourceError> {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
         let mut params = Params::new();
@@ -16316,7 +16260,7 @@ where
     /// <p>Takes a set of configuration settings and either a configuration template or environment, and determines whether those values are valid.</p> <p>This action returns a list of messages indicating any errors or warnings associated with the selection of option values.</p>
     fn validate_configuration_settings(
         &self,
-        input: &ValidateConfigurationSettingsMessage,
+        input: ValidateConfigurationSettingsMessage,
     ) -> RusotoFuture<ConfigurationSettingsValidationMessages, ValidateConfigurationSettingsError>
     {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
@@ -16373,8 +16317,8 @@ mod protocol_tests {
 
     extern crate rusoto_mock;
 
-    use super::*;
     use self::rusoto_mock::*;
+    use super::*;
     use rusoto_core::Region as rusoto_region;
 
     #[test]
@@ -16387,7 +16331,7 @@ mod protocol_tests {
         let client =
             ElasticBeanstalkClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = CheckDNSAvailabilityMessage::default();
-        let result = client.check_dns_availability(&request).sync();
+        let result = client.check_dns_availability(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -16401,7 +16345,7 @@ mod protocol_tests {
         let client =
             ElasticBeanstalkClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = CreateApplicationVersionMessage::default();
-        let result = client.create_application_version(&request).sync();
+        let result = client.create_application_version(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -16415,7 +16359,7 @@ mod protocol_tests {
         let client =
             ElasticBeanstalkClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = CreateApplicationMessage::default();
-        let result = client.create_application(&request).sync();
+        let result = client.create_application(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -16429,7 +16373,7 @@ mod protocol_tests {
         let client =
             ElasticBeanstalkClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = CreateConfigurationTemplateMessage::default();
-        let result = client.create_configuration_template(&request).sync();
+        let result = client.create_configuration_template(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -16443,7 +16387,7 @@ mod protocol_tests {
         let client =
             ElasticBeanstalkClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = CreateEnvironmentMessage::default();
-        let result = client.create_environment(&request).sync();
+        let result = client.create_environment(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -16471,7 +16415,7 @@ mod protocol_tests {
         let client =
             ElasticBeanstalkClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = DeleteApplicationMessage::default();
-        let result = client.delete_application(&request).sync();
+        let result = client.delete_application(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -16485,7 +16429,7 @@ mod protocol_tests {
         let client =
             ElasticBeanstalkClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = DescribeApplicationVersionsMessage::default();
-        let result = client.describe_application_versions(&request).sync();
+        let result = client.describe_application_versions(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -16499,7 +16443,7 @@ mod protocol_tests {
         let client =
             ElasticBeanstalkClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = DescribeApplicationsMessage::default();
-        let result = client.describe_applications(&request).sync();
+        let result = client.describe_applications(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -16513,7 +16457,7 @@ mod protocol_tests {
         let client =
             ElasticBeanstalkClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = DescribeConfigurationOptionsMessage::default();
-        let result = client.describe_configuration_options(&request).sync();
+        let result = client.describe_configuration_options(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -16527,7 +16471,7 @@ mod protocol_tests {
         let client =
             ElasticBeanstalkClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = DescribeEnvironmentsMessage::default();
-        let result = client.describe_environments(&request).sync();
+        let result = client.describe_environments(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -16541,7 +16485,7 @@ mod protocol_tests {
         let client =
             ElasticBeanstalkClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = DescribeEventsMessage::default();
-        let result = client.describe_events(&request).sync();
+        let result = client.describe_events(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -16569,7 +16513,7 @@ mod protocol_tests {
         let client =
             ElasticBeanstalkClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = RetrieveEnvironmentInfoMessage::default();
-        let result = client.retrieve_environment_info(&request).sync();
+        let result = client.retrieve_environment_info(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -16583,7 +16527,7 @@ mod protocol_tests {
         let client =
             ElasticBeanstalkClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = TerminateEnvironmentMessage::default();
-        let result = client.terminate_environment(&request).sync();
+        let result = client.terminate_environment(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -16597,7 +16541,7 @@ mod protocol_tests {
         let client =
             ElasticBeanstalkClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = UpdateApplicationVersionMessage::default();
-        let result = client.update_application_version(&request).sync();
+        let result = client.update_application_version(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -16611,7 +16555,7 @@ mod protocol_tests {
         let client =
             ElasticBeanstalkClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = UpdateApplicationMessage::default();
-        let result = client.update_application(&request).sync();
+        let result = client.update_application(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 }

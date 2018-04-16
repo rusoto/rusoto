@@ -12,7 +12,7 @@ fn should_describe_db_clusters() {
     let client = RdsClient::simple(Region::UsEast1);
     let request = DescribeDBClustersMessage::default();
 
-    let result = client.describe_db_clusters(&request).sync();
+    let result = client.describe_db_clusters(request).sync();
     println!("{:#?}", result);
     assert!(result.is_ok());
 }
@@ -37,7 +37,7 @@ fn should_create_destroy_options_group() {
         tags: Some(tags),
     };
 
-    let result = client.create_option_group(&create_opt_group_request).sync();
+    let result = client.create_option_group(create_opt_group_request).sync();
     println!("{:#?}", result);
     assert!(result.is_ok());
 
@@ -47,7 +47,7 @@ fn should_create_destroy_options_group() {
     let delete_opt_group_req = DeleteOptionGroupMessage {
         option_group_name: "rusotogroup".to_string(),
     };
-    let delete_result = client.delete_option_group(&delete_opt_group_req).sync();
+    let delete_result = client.delete_option_group(delete_opt_group_req).sync();
     println!("{:#?}", delete_result);
     assert!(delete_result.is_ok());
 }

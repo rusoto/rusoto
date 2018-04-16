@@ -81,8 +81,8 @@ impl GenerateProtocol for RestXmlGenerator {
         Ok(())
     }
 
-    fn generate_prelude(&self, writer: &mut FileWriter, service: &Service) -> IoResult {
-        let mut imports = "
+    fn generate_prelude(&self, writer: &mut FileWriter, _service: &Service) -> IoResult {
+        let imports = "
             use std::str::{FromStr};
             use std::io::Write;
             use xml::reader::ParserConfig;
@@ -102,12 +102,6 @@ impl GenerateProtocol for RestXmlGenerator {
                 Element(String),
             }"
             .to_owned();
-
-        if service.service_type_name() == "S3" {
-            imports += "
-                use md5;
-                use base64;";
-        }
 
         writeln!(writer, "{}", imports)
     }
@@ -172,11 +166,9 @@ fn generate_payload_serialization(service: &Service, operation: &Operation) -> O
 
     // the payload field determines which member of the input shape is sent as the request body (if any)
     if input_shape.payload.is_some() {
-        parts.push("let mut payload: Vec<u8>;".to_owned());
         parts.push(generate_payload_member_serialization(input_shape));
         parts.push(generate_service_specific_code(service, operation)
             .unwrap_or_else(|| "".to_owned()));
-        parts.push("request.set_payload(Some(payload));".to_owned());
     } else if used_as_request_payload(input_shape) {
         // In Route 53, no operation has "payload" parameter but some API actually requires
         // payload. In that case, the payload should include members whose "location" parameter is
@@ -184,8 +176,8 @@ fn generate_payload_serialization(service: &Service, operation: &Operation) -> O
         let xmlns = input.xml_namespace.as_ref().unwrap();
         parts.push("let mut writer = EventWriter::new(Vec::new());".to_owned());
         parts.push(format!("{name}Serializer::serialize(&mut writer, \"{name}\", &input, \"{xmlns}\");", name = input.shape, xmlns = xmlns.uri));
-        parts.push(generate_service_specific_code(service, operation).unwrap_or_else(|| "".to_owned()));
         parts.push("request.set_payload(Some(writer.into_inner()));".to_owned());
+        parts.push(generate_service_specific_code(service, operation).unwrap_or_else(|| "".to_owned()));
     }
 
     Some(parts.join("\n"))
@@ -203,10 +195,7 @@ fn generate_service_specific_code(service: &Service, operation: &Operation) -> O
                 "PutBucketCors" |
                 "DeleteObjects" |
                 "PutBucketReplication" => {
-                    Some("let digest = md5::compute(&payload);
-                          // need to deref digest and then pass that reference:
-                          request.add_header(\"Content-MD5\", &base64::encode(&(*digest)));"
-                        .to_owned())
+                    Some("request.set_content_md5_header();".to_owned())
                 }
                 _ => None,
             }
@@ -219,24 +208,28 @@ fn generate_payload_member_serialization(shape: &Shape) -> String {
     let payload_field = shape.payload.as_ref().unwrap();
     let payload_member = shape.members.as_ref().unwrap().get(payload_field).unwrap();
 
-    // if the member is 'streaming', it's a Vec<u8> that should just be delivered as the body
+    // if the member is 'streaming', it's a boxed stream that should just be delivered as the body
     if payload_member.streaming() {
-        format!("payload = input.{}.clone().unwrap();",
-                payload_field.to_snake_case())
+        format!("if let Some(__body) = input.{} {{
+                     let __body_len = __body.len.expect(\"no length specified for streaming body\");
+                     request.set_payload_stream(__body_len, __body.inner);
+                 }}", payload_field.to_snake_case())
     }
     // otherwise serialize the object to XML and use that as the payload
     else if shape.required(payload_field) {
         // some payload types are not required members of their shape
-        format!("let mut writer = EventWriter::new(Vec::new()); {xml_type}Serializer::serialize(&mut writer, \"{xml_type}\", &input.{payload_field}); payload = writer.into_inner();",
+        format!("let mut writer = EventWriter::new(Vec::new());
+                 {xml_type}Serializer::serialize(&mut writer, \"{xml_type}\", &input.{payload_field});
+                 request.set_payload(Some(writer.into_inner()));",
                 payload_field = payload_field.to_snake_case(),
                 xml_type = payload_member.shape)
     } else {
         format!("if input.{payload_field}.is_some() {{
                     let mut writer = EventWriter::new(Vec::new());
                     {xml_type}Serializer::serialize(&mut writer, \"{location_name}\", input.{payload_field}.as_ref().unwrap());
-                    payload = writer.into_inner();
+                    request.set_payload(Some(writer.into_inner()));
                 }} else {{
-                    payload = Vec::new();
+                    request.set_payload(Some(Vec::new()));
                 }}",
                 payload_field = payload_field.to_snake_case(),
                 xml_type = payload_member.shape,
@@ -248,7 +241,7 @@ fn generate_payload_member_serialization(shape: &Shape) -> String {
 fn generate_method_signature(operation_name: &str, operation: &Operation, service: &Service) -> String {
     if operation.input.is_some() {
         format!(
-            "fn {operation_name}(&self, input: &{input_type}) -> RusotoFuture<{output_type}, {error_type}>",
+            "fn {operation_name}(&self, input: {input_type}) -> RusotoFuture<{output_type}, {error_type}>",
             input_type = operation.input.as_ref().unwrap().shape,
             operation_name = operation_name.to_snake_case(),
             output_type = &operation.output_shape_or("()"),

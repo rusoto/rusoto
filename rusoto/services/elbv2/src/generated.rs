@@ -18,24 +18,24 @@ use std::io;
 use futures::future;
 use futures::Future;
 use rusoto_core::reactor::{CredentialsProvider, RequestDispatcher};
-use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::region;
+use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::{ClientInner, RusotoFuture};
 
-use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
+use rusoto_core::request::HttpDispatchError;
 
-use std::str::FromStr;
-use xml::EventReader;
-use xml::reader::ParserConfig;
+use hyper::StatusCode;
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::signature::SignedRequest;
-use xml::reader::XmlEvent;
-use rusoto_core::xmlutil::{Next, Peek, XmlParseError, XmlResponse};
+use rusoto_core::xmlerror::*;
 use rusoto_core::xmlutil::{characters, end_element, find_start_element, peek_at_name, skip_tree,
                            start_element};
-use rusoto_core::xmlerror::*;
-use hyper::StatusCode;
+use rusoto_core::xmlutil::{Next, Peek, XmlParseError, XmlResponse};
+use std::str::FromStr;
+use xml::reader::ParserConfig;
+use xml::reader::XmlEvent;
+use xml::EventReader;
 
 enum DeserializerNext {
     Close,
@@ -404,8 +404,7 @@ impl AvailabilityZonesDeserializer {
                 DeserializerNext::Element(name) => {
                     if name == "member" {
                         obj.push(try!(AvailabilityZoneDeserializer::deserialize(
-                            "member",
-                            stack
+                            "member", stack
                         )));
                     } else {
                         skip_tree(stack);
@@ -620,8 +619,7 @@ impl CipherDeserializer {
                     }
                     "Priority" => {
                         obj.priority = Some(try!(CipherPriorityDeserializer::deserialize(
-                            "Priority",
-                            stack
+                            "Priority", stack
                         )));
                     }
                     _ => skip_tree(stack),
@@ -2753,8 +2751,7 @@ impl ListenerDeserializer {
                     }
                     "Protocol" => {
                         obj.protocol = Some(try!(ProtocolEnumDeserializer::deserialize(
-                            "Protocol",
-                            stack
+                            "Protocol", stack
                         )));
                     }
                     "SslPolicy" => {
@@ -2934,8 +2931,7 @@ impl LoadBalancerDeserializer {
                     }
                     "Scheme" => {
                         obj.scheme = Some(try!(LoadBalancerSchemeEnumDeserializer::deserialize(
-                            "Scheme",
-                            stack
+                            "Scheme", stack
                         )));
                     }
                     "SecurityGroups" => {
@@ -2946,14 +2942,12 @@ impl LoadBalancerDeserializer {
                     }
                     "State" => {
                         obj.state = Some(try!(LoadBalancerStateDeserializer::deserialize(
-                            "State",
-                            stack
+                            "State", stack
                         )));
                     }
                     "Type" => {
                         obj.type_ = Some(try!(LoadBalancerTypeEnumDeserializer::deserialize(
-                            "Type",
-                            stack
+                            "Type", stack
                         )));
                     }
                     "VpcId" => {
@@ -3051,8 +3045,7 @@ impl LoadBalancerAddressesDeserializer {
                 DeserializerNext::Element(name) => {
                     if name == "member" {
                         obj.push(try!(LoadBalancerAddressDeserializer::deserialize(
-                            "member",
-                            stack
+                            "member", stack
                         )));
                     } else {
                         skip_tree(stack);
@@ -3108,8 +3101,7 @@ impl LoadBalancerArnsDeserializer {
                 DeserializerNext::Element(name) => {
                     if name == "member" {
                         obj.push(try!(LoadBalancerArnDeserializer::deserialize(
-                            "member",
-                            stack
+                            "member", stack
                         )));
                     } else {
                         skip_tree(stack);
@@ -3173,8 +3165,7 @@ impl LoadBalancerAttributeDeserializer {
                 DeserializerNext::Element(name) => match &name[..] {
                     "Key" => {
                         obj.key = Some(try!(LoadBalancerAttributeKeyDeserializer::deserialize(
-                            "Key",
-                            stack
+                            "Key", stack
                         )));
                     }
                     "Value" => {
@@ -3272,8 +3263,7 @@ impl LoadBalancerAttributesDeserializer {
                 DeserializerNext::Element(name) => {
                     if name == "member" {
                         obj.push(try!(LoadBalancerAttributeDeserializer::deserialize(
-                            "member",
-                            stack
+                            "member", stack
                         )));
                     } else {
                         skip_tree(stack);
@@ -3377,8 +3367,7 @@ impl LoadBalancerStateDeserializer {
                 DeserializerNext::Element(name) => match &name[..] {
                     "Code" => {
                         obj.code = Some(try!(LoadBalancerStateEnumDeserializer::deserialize(
-                            "Code",
-                            stack
+                            "Code", stack
                         )));
                     }
                     "Reason" => {
@@ -4387,8 +4376,7 @@ impl RuleConditionDeserializer {
                 DeserializerNext::Element(name) => match &name[..] {
                     "Field" => {
                         obj.field = Some(try!(ConditionFieldNameDeserializer::deserialize(
-                            "Field",
-                            stack
+                            "Field", stack
                         )));
                     }
                     "Values" => {
@@ -4458,8 +4446,7 @@ impl RuleConditionListDeserializer {
                 DeserializerNext::Element(name) => {
                     if name == "member" {
                         obj.push(try!(RuleConditionDeserializer::deserialize(
-                            "member",
-                            stack
+                            "member", stack
                         )));
                     } else {
                         skip_tree(stack);
@@ -4611,8 +4598,7 @@ impl SecurityGroupsDeserializer {
                 DeserializerNext::Element(name) => {
                     if name == "member" {
                         obj.push(try!(SecurityGroupIdDeserializer::deserialize(
-                            "member",
-                            stack
+                            "member", stack
                         )));
                     } else {
                         skip_tree(stack);
@@ -5387,8 +5373,7 @@ impl TagDescriptionsDeserializer {
                 DeserializerNext::Element(name) => {
                     if name == "member" {
                         obj.push(try!(TagDescriptionDeserializer::deserialize(
-                            "member",
-                            stack
+                            "member", stack
                         )));
                     } else {
                         skip_tree(stack);
@@ -5703,8 +5688,7 @@ impl TargetGroupDeserializer {
                     }
                     "Protocol" => {
                         obj.protocol = Some(try!(ProtocolEnumDeserializer::deserialize(
-                            "Protocol",
-                            stack
+                            "Protocol", stack
                         )));
                     }
                     "TargetGroupArn" => {
@@ -5807,14 +5791,12 @@ impl TargetGroupAttributeDeserializer {
                 DeserializerNext::Element(name) => match &name[..] {
                     "Key" => {
                         obj.key = Some(try!(TargetGroupAttributeKeyDeserializer::deserialize(
-                            "Key",
-                            stack
+                            "Key", stack
                         )));
                     }
                     "Value" => {
                         obj.value = Some(try!(TargetGroupAttributeValueDeserializer::deserialize(
-                            "Value",
-                            stack
+                            "Value", stack
                         )));
                     }
                     _ => skip_tree(stack),
@@ -5907,8 +5889,7 @@ impl TargetGroupAttributesDeserializer {
                 DeserializerNext::Element(name) => {
                     if name == "member" {
                         obj.push(try!(TargetGroupAttributeDeserializer::deserialize(
-                            "member",
-                            stack
+                            "member", stack
                         )));
                     } else {
                         skip_tree(stack);
@@ -6046,14 +6027,12 @@ impl TargetHealthDeserializer {
                     }
                     "Reason" => {
                         obj.reason = Some(try!(TargetHealthReasonEnumDeserializer::deserialize(
-                            "Reason",
-                            stack
+                            "Reason", stack
                         )));
                     }
                     "State" => {
                         obj.state = Some(try!(TargetHealthStateEnumDeserializer::deserialize(
-                            "State",
-                            stack
+                            "State", stack
                         )));
                     }
                     _ => skip_tree(stack),
@@ -6110,8 +6089,7 @@ impl TargetHealthDescriptionDeserializer {
                     }
                     "Target" => {
                         obj.target = Some(try!(TargetDescriptionDeserializer::deserialize(
-                            "Target",
-                            stack
+                            "Target", stack
                         )));
                     }
                     "TargetHealth" => {
@@ -6157,8 +6135,7 @@ impl TargetHealthDescriptionsDeserializer {
                 DeserializerNext::Element(name) => {
                     if name == "member" {
                         obj.push(try!(TargetHealthDescriptionDeserializer::deserialize(
-                            "member",
-                            stack
+                            "member", stack
                         )));
                     } else {
                         skip_tree(stack);
@@ -9488,202 +9465,202 @@ pub trait Elb {
     /// <p>Adds the specified certificate to the specified secure listener.</p> <p>If the certificate was already added, the call is successful but the certificate is not added again.</p> <p>To list the certificates for your listener, use <a>DescribeListenerCertificates</a>. To remove certificates from your listener, use <a>RemoveListenerCertificates</a>.</p>
     fn add_listener_certificates(
         &self,
-        input: &AddListenerCertificatesInput,
+        input: AddListenerCertificatesInput,
     ) -> RusotoFuture<AddListenerCertificatesOutput, AddListenerCertificatesError>;
 
     /// <p>Adds the specified tags to the specified Elastic Load Balancing resource. You can tag your Application Load Balancers, Network Load Balancers, and your target groups.</p> <p>Each tag consists of a key and an optional value. If a resource already has a tag with the same key, <code>AddTags</code> updates its value.</p> <p>To list the current tags for your resources, use <a>DescribeTags</a>. To remove tags from your resources, use <a>RemoveTags</a>.</p>
-    fn add_tags(&self, input: &AddTagsInput) -> RusotoFuture<AddTagsOutput, AddTagsError>;
+    fn add_tags(&self, input: AddTagsInput) -> RusotoFuture<AddTagsOutput, AddTagsError>;
 
     /// <p>Creates a listener for the specified Application Load Balancer or Network Load Balancer.</p> <p>To update a listener, use <a>ModifyListener</a>. When you are finished with a listener, you can delete it using <a>DeleteListener</a>. If you are finished with both the listener and the load balancer, you can delete them both using <a>DeleteLoadBalancer</a>.</p> <p>This operation is idempotent, which means that it completes at most one time. If you attempt to create multiple listeners with the same settings, each call succeeds.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-listeners.html">Listeners for Your Application Load Balancers</a> in the <i>Application Load Balancers Guide</i> and <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/network/load-balancer-listeners.html">Listeners for Your Network Load Balancers</a> in the <i>Network Load Balancers Guide</i>.</p>
     fn create_listener(
         &self,
-        input: &CreateListenerInput,
+        input: CreateListenerInput,
     ) -> RusotoFuture<CreateListenerOutput, CreateListenerError>;
 
     /// <p>Creates an Application Load Balancer or a Network Load Balancer.</p> <p>When you create a load balancer, you can specify security groups, public subnets, IP address type, and tags. Otherwise, you could do so later using <a>SetSecurityGroups</a>, <a>SetSubnets</a>, <a>SetIpAddressType</a>, and <a>AddTags</a>.</p> <p>To create listeners for your load balancer, use <a>CreateListener</a>. To describe your current load balancers, see <a>DescribeLoadBalancers</a>. When you are finished with a load balancer, you can delete it using <a>DeleteLoadBalancer</a>.</p> <p>For limit information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-limits.html">Limits for Your Application Load Balancer</a> in the <i>Application Load Balancers Guide</i> and <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/network/load-balancer-limits.html">Limits for Your Network Load Balancer</a> in the <i>Network Load Balancers Guide</i>.</p> <p>This operation is idempotent, which means that it completes at most one time. If you attempt to create multiple load balancers with the same settings, each call succeeds.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/application/application-load-balancers.html">Application Load Balancers</a> in the <i>Application Load Balancers Guide</i> and <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/network/network-load-balancers.html">Network Load Balancers</a> in the <i>Network Load Balancers Guide</i>.</p>
     fn create_load_balancer(
         &self,
-        input: &CreateLoadBalancerInput,
+        input: CreateLoadBalancerInput,
     ) -> RusotoFuture<CreateLoadBalancerOutput, CreateLoadBalancerError>;
 
     /// <p>Creates a rule for the specified listener. The listener must be associated with an Application Load Balancer.</p> <p>Rules are evaluated in priority order, from the lowest value to the highest value. When the condition for a rule is met, the specified action is taken. If no conditions are met, the action for the default rule is taken. For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-listeners.html#listener-rules">Listener Rules</a> in the <i>Application Load Balancers Guide</i>.</p> <p>To view your current rules, use <a>DescribeRules</a>. To update a rule, use <a>ModifyRule</a>. To set the priorities of your rules, use <a>SetRulePriorities</a>. To delete a rule, use <a>DeleteRule</a>.</p>
     fn create_rule(
         &self,
-        input: &CreateRuleInput,
+        input: CreateRuleInput,
     ) -> RusotoFuture<CreateRuleOutput, CreateRuleError>;
 
     /// <p>Creates a target group.</p> <p>To register targets with the target group, use <a>RegisterTargets</a>. To update the health check settings for the target group, use <a>ModifyTargetGroup</a>. To monitor the health of targets in the target group, use <a>DescribeTargetHealth</a>.</p> <p>To route traffic to the targets in a target group, specify the target group in an action using <a>CreateListener</a> or <a>CreateRule</a>.</p> <p>To delete a target group, use <a>DeleteTargetGroup</a>.</p> <p>This operation is idempotent, which means that it completes at most one time. If you attempt to create multiple target groups with the same settings, each call succeeds.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-target-groups.html">Target Groups for Your Application Load Balancers</a> in the <i>Application Load Balancers Guide</i> or <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/network/load-balancer-target-groups.html">Target Groups for Your Network Load Balancers</a> in the <i>Network Load Balancers Guide</i>.</p>
     fn create_target_group(
         &self,
-        input: &CreateTargetGroupInput,
+        input: CreateTargetGroupInput,
     ) -> RusotoFuture<CreateTargetGroupOutput, CreateTargetGroupError>;
 
     /// <p>Deletes the specified listener.</p> <p>Alternatively, your listener is deleted when you delete the load balancer it is attached to using <a>DeleteLoadBalancer</a>.</p>
     fn delete_listener(
         &self,
-        input: &DeleteListenerInput,
+        input: DeleteListenerInput,
     ) -> RusotoFuture<DeleteListenerOutput, DeleteListenerError>;
 
     /// <p>Deletes the specified Application Load Balancer or Network Load Balancer and its attached listeners.</p> <p>You can't delete a load balancer if deletion protection is enabled. If the load balancer does not exist or has already been deleted, the call succeeds.</p> <p>Deleting a load balancer does not affect its registered targets. For example, your EC2 instances continue to run and are still registered to their target groups. If you no longer need these EC2 instances, you can stop or terminate them.</p>
     fn delete_load_balancer(
         &self,
-        input: &DeleteLoadBalancerInput,
+        input: DeleteLoadBalancerInput,
     ) -> RusotoFuture<DeleteLoadBalancerOutput, DeleteLoadBalancerError>;
 
     /// <p>Deletes the specified rule.</p>
     fn delete_rule(
         &self,
-        input: &DeleteRuleInput,
+        input: DeleteRuleInput,
     ) -> RusotoFuture<DeleteRuleOutput, DeleteRuleError>;
 
     /// <p>Deletes the specified target group.</p> <p>You can delete a target group if it is not referenced by any actions. Deleting a target group also deletes any associated health checks.</p>
     fn delete_target_group(
         &self,
-        input: &DeleteTargetGroupInput,
+        input: DeleteTargetGroupInput,
     ) -> RusotoFuture<DeleteTargetGroupOutput, DeleteTargetGroupError>;
 
     /// <p>Deregisters the specified targets from the specified target group. After the targets are deregistered, they no longer receive traffic from the load balancer.</p>
     fn deregister_targets(
         &self,
-        input: &DeregisterTargetsInput,
+        input: DeregisterTargetsInput,
     ) -> RusotoFuture<DeregisterTargetsOutput, DeregisterTargetsError>;
 
     /// <p>Describes the current Elastic Load Balancing resource limits for your AWS account.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-limits.html">Limits for Your Application Load Balancers</a> in the <i>Application Load Balancer Guide</i> or <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/network/load-balancer-limits.html">Limits for Your Network Load Balancers</a> in the <i>Network Load Balancers Guide</i>.</p>
     fn describe_account_limits(
         &self,
-        input: &DescribeAccountLimitsInput,
+        input: DescribeAccountLimitsInput,
     ) -> RusotoFuture<DescribeAccountLimitsOutput, DescribeAccountLimitsError>;
 
     /// <p>Describes the certificates for the specified secure listener.</p>
     fn describe_listener_certificates(
         &self,
-        input: &DescribeListenerCertificatesInput,
+        input: DescribeListenerCertificatesInput,
     ) -> RusotoFuture<DescribeListenerCertificatesOutput, DescribeListenerCertificatesError>;
 
     /// <p>Describes the specified listeners or the listeners for the specified Application Load Balancer or Network Load Balancer. You must specify either a load balancer or one or more listeners.</p>
     fn describe_listeners(
         &self,
-        input: &DescribeListenersInput,
+        input: DescribeListenersInput,
     ) -> RusotoFuture<DescribeListenersOutput, DescribeListenersError>;
 
     /// <p>Describes the attributes for the specified Application Load Balancer or Network Load Balancer.</p>
     fn describe_load_balancer_attributes(
         &self,
-        input: &DescribeLoadBalancerAttributesInput,
+        input: DescribeLoadBalancerAttributesInput,
     ) -> RusotoFuture<DescribeLoadBalancerAttributesOutput, DescribeLoadBalancerAttributesError>;
 
     /// <p>Describes the specified load balancers or all of your load balancers.</p> <p>To describe the listeners for a load balancer, use <a>DescribeListeners</a>. To describe the attributes for a load balancer, use <a>DescribeLoadBalancerAttributes</a>.</p>
     fn describe_load_balancers(
         &self,
-        input: &DescribeLoadBalancersInput,
+        input: DescribeLoadBalancersInput,
     ) -> RusotoFuture<DescribeLoadBalancersOutput, DescribeLoadBalancersError>;
 
     /// <p>Describes the specified rules or the rules for the specified listener. You must specify either a listener or one or more rules.</p>
     fn describe_rules(
         &self,
-        input: &DescribeRulesInput,
+        input: DescribeRulesInput,
     ) -> RusotoFuture<DescribeRulesOutput, DescribeRulesError>;
 
     /// <p>Describes the specified policies or all policies used for SSL negotiation.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/application/create-https-listener.html#describe-ssl-policies">Security Policies</a> in the <i>Application Load Balancers Guide</i>.</p>
     fn describe_ssl_policies(
         &self,
-        input: &DescribeSSLPoliciesInput,
+        input: DescribeSSLPoliciesInput,
     ) -> RusotoFuture<DescribeSSLPoliciesOutput, DescribeSSLPoliciesError>;
 
     /// <p>Describes the tags for the specified resources. You can describe the tags for one or more Application Load Balancers, Network Load Balancers, and target groups.</p>
     fn describe_tags(
         &self,
-        input: &DescribeTagsInput,
+        input: DescribeTagsInput,
     ) -> RusotoFuture<DescribeTagsOutput, DescribeTagsError>;
 
     /// <p>Describes the attributes for the specified target group.</p>
     fn describe_target_group_attributes(
         &self,
-        input: &DescribeTargetGroupAttributesInput,
+        input: DescribeTargetGroupAttributesInput,
     ) -> RusotoFuture<DescribeTargetGroupAttributesOutput, DescribeTargetGroupAttributesError>;
 
     /// <p>Describes the specified target groups or all of your target groups. By default, all target groups are described. Alternatively, you can specify one of the following to filter the results: the ARN of the load balancer, the names of one or more target groups, or the ARNs of one or more target groups.</p> <p>To describe the targets for a target group, use <a>DescribeTargetHealth</a>. To describe the attributes of a target group, use <a>DescribeTargetGroupAttributes</a>.</p>
     fn describe_target_groups(
         &self,
-        input: &DescribeTargetGroupsInput,
+        input: DescribeTargetGroupsInput,
     ) -> RusotoFuture<DescribeTargetGroupsOutput, DescribeTargetGroupsError>;
 
     /// <p>Describes the health of the specified targets or all of your targets.</p>
     fn describe_target_health(
         &self,
-        input: &DescribeTargetHealthInput,
+        input: DescribeTargetHealthInput,
     ) -> RusotoFuture<DescribeTargetHealthOutput, DescribeTargetHealthError>;
 
     /// <p>Modifies the specified properties of the specified listener.</p> <p>Any properties that you do not specify retain their current values. However, changing the protocol from HTTPS to HTTP removes the security policy and SSL certificate properties. If you change the protocol from HTTP to HTTPS, you must add the security policy and server certificate.</p>
     fn modify_listener(
         &self,
-        input: &ModifyListenerInput,
+        input: ModifyListenerInput,
     ) -> RusotoFuture<ModifyListenerOutput, ModifyListenerError>;
 
     /// <p>Modifies the specified attributes of the specified Application Load Balancer or Network Load Balancer.</p> <p>If any of the specified attributes can't be modified as requested, the call fails. Any existing attributes that you do not modify retain their current values.</p>
     fn modify_load_balancer_attributes(
         &self,
-        input: &ModifyLoadBalancerAttributesInput,
+        input: ModifyLoadBalancerAttributesInput,
     ) -> RusotoFuture<ModifyLoadBalancerAttributesOutput, ModifyLoadBalancerAttributesError>;
 
     /// <p>Modifies the specified rule.</p> <p>Any existing properties that you do not modify retain their current values.</p> <p>To modify the default action, use <a>ModifyListener</a>.</p>
     fn modify_rule(
         &self,
-        input: &ModifyRuleInput,
+        input: ModifyRuleInput,
     ) -> RusotoFuture<ModifyRuleOutput, ModifyRuleError>;
 
     /// <p>Modifies the health checks used when evaluating the health state of the targets in the specified target group.</p> <p>To monitor the health of the targets, use <a>DescribeTargetHealth</a>.</p>
     fn modify_target_group(
         &self,
-        input: &ModifyTargetGroupInput,
+        input: ModifyTargetGroupInput,
     ) -> RusotoFuture<ModifyTargetGroupOutput, ModifyTargetGroupError>;
 
     /// <p>Modifies the specified attributes of the specified target group.</p>
     fn modify_target_group_attributes(
         &self,
-        input: &ModifyTargetGroupAttributesInput,
+        input: ModifyTargetGroupAttributesInput,
     ) -> RusotoFuture<ModifyTargetGroupAttributesOutput, ModifyTargetGroupAttributesError>;
 
     /// <p>Registers the specified targets with the specified target group.</p> <p>You can register targets by instance ID or by IP address. If the target is an EC2 instance, it must be in the <code>running</code> state when you register it.</p> <p>By default, the load balancer routes requests to registered targets using the protocol and port for the target group. Alternatively, you can override the port for a target when you register it. You can register each EC2 instance or IP address with the same target group multiple times using different ports.</p> <p>With a Network Load Balancer, you cannot register instances by instance ID if they have the following instance types: C1, CC1, CC2, CG1, CG2, CR1, CS1, G1, G2, HI1, HS1, M1, M2, M3, and T1. You can register instances of these types by IP address.</p> <p>To remove a target from a target group, use <a>DeregisterTargets</a>.</p>
     fn register_targets(
         &self,
-        input: &RegisterTargetsInput,
+        input: RegisterTargetsInput,
     ) -> RusotoFuture<RegisterTargetsOutput, RegisterTargetsError>;
 
     /// <p>Removes the specified certificate from the specified secure listener.</p> <p>You can't remove the default certificate for a listener. To replace the default certificate, call <a>ModifyListener</a>.</p> <p>To list the certificates for your listener, use <a>DescribeListenerCertificates</a>.</p>
     fn remove_listener_certificates(
         &self,
-        input: &RemoveListenerCertificatesInput,
+        input: RemoveListenerCertificatesInput,
     ) -> RusotoFuture<RemoveListenerCertificatesOutput, RemoveListenerCertificatesError>;
 
     /// <p>Removes the specified tags from the specified Elastic Load Balancing resource.</p> <p>To list the current tags for your resources, use <a>DescribeTags</a>.</p>
     fn remove_tags(
         &self,
-        input: &RemoveTagsInput,
+        input: RemoveTagsInput,
     ) -> RusotoFuture<RemoveTagsOutput, RemoveTagsError>;
 
     /// <p>Sets the type of IP addresses used by the subnets of the specified Application Load Balancer or Network Load Balancer.</p> <p>Note that Network Load Balancers must use <code>ipv4</code>.</p>
     fn set_ip_address_type(
         &self,
-        input: &SetIpAddressTypeInput,
+        input: SetIpAddressTypeInput,
     ) -> RusotoFuture<SetIpAddressTypeOutput, SetIpAddressTypeError>;
 
     /// <p>Sets the priorities of the specified rules.</p> <p>You can reorder the rules as long as there are no priority conflicts in the new order. Any existing rules that you do not specify retain their current priority.</p>
     fn set_rule_priorities(
         &self,
-        input: &SetRulePrioritiesInput,
+        input: SetRulePrioritiesInput,
     ) -> RusotoFuture<SetRulePrioritiesOutput, SetRulePrioritiesError>;
 
     /// <p>Associates the specified security groups with the specified Application Load Balancer. The specified security groups override the previously associated security groups.</p> <p>Note that you can't specify a security group for a Network Load Balancer.</p>
     fn set_security_groups(
         &self,
-        input: &SetSecurityGroupsInput,
+        input: SetSecurityGroupsInput,
     ) -> RusotoFuture<SetSecurityGroupsOutput, SetSecurityGroupsError>;
 
     /// <p>Enables the Availability Zone for the specified public subnets for the specified Application Load Balancer. The specified subnets replace the previously enabled subnets.</p> <p>Note that you can't change the subnets for a Network Load Balancer.</p>
     fn set_subnets(
         &self,
-        input: &SetSubnetsInput,
+        input: SetSubnetsInput,
     ) -> RusotoFuture<SetSubnetsOutput, SetSubnetsError>;
 }
 /// A client for the Elastic Load Balancing v2 API.
@@ -9732,7 +9709,7 @@ where
     /// <p>Adds the specified certificate to the specified secure listener.</p> <p>If the certificate was already added, the call is successful but the certificate is not added again.</p> <p>To list the certificates for your listener, use <a>DescribeListenerCertificates</a>. To remove certificates from your listener, use <a>RemoveListenerCertificates</a>.</p>
     fn add_listener_certificates(
         &self,
-        input: &AddListenerCertificatesInput,
+        input: AddListenerCertificatesInput,
     ) -> RusotoFuture<AddListenerCertificatesOutput, AddListenerCertificatesError> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
@@ -9781,7 +9758,7 @@ where
     }
 
     /// <p>Adds the specified tags to the specified Elastic Load Balancing resource. You can tag your Application Load Balancers, Network Load Balancers, and your target groups.</p> <p>Each tag consists of a key and an optional value. If a resource already has a tag with the same key, <code>AddTags</code> updates its value.</p> <p>To list the current tags for your resources, use <a>DescribeTags</a>. To remove tags from your resources, use <a>RemoveTags</a>.</p>
-    fn add_tags(&self, input: &AddTagsInput) -> RusotoFuture<AddTagsOutput, AddTagsError> {
+    fn add_tags(&self, input: AddTagsInput) -> RusotoFuture<AddTagsOutput, AddTagsError> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
 
@@ -9831,7 +9808,7 @@ where
     /// <p>Creates a listener for the specified Application Load Balancer or Network Load Balancer.</p> <p>To update a listener, use <a>ModifyListener</a>. When you are finished with a listener, you can delete it using <a>DeleteListener</a>. If you are finished with both the listener and the load balancer, you can delete them both using <a>DeleteLoadBalancer</a>.</p> <p>This operation is idempotent, which means that it completes at most one time. If you attempt to create multiple listeners with the same settings, each call succeeds.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-listeners.html">Listeners for Your Application Load Balancers</a> in the <i>Application Load Balancers Guide</i> and <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/network/load-balancer-listeners.html">Listeners for Your Network Load Balancers</a> in the <i>Network Load Balancers Guide</i>.</p>
     fn create_listener(
         &self,
-        input: &CreateListenerInput,
+        input: CreateListenerInput,
     ) -> RusotoFuture<CreateListenerOutput, CreateListenerError> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
@@ -9882,7 +9859,7 @@ where
     /// <p>Creates an Application Load Balancer or a Network Load Balancer.</p> <p>When you create a load balancer, you can specify security groups, public subnets, IP address type, and tags. Otherwise, you could do so later using <a>SetSecurityGroups</a>, <a>SetSubnets</a>, <a>SetIpAddressType</a>, and <a>AddTags</a>.</p> <p>To create listeners for your load balancer, use <a>CreateListener</a>. To describe your current load balancers, see <a>DescribeLoadBalancers</a>. When you are finished with a load balancer, you can delete it using <a>DeleteLoadBalancer</a>.</p> <p>For limit information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-limits.html">Limits for Your Application Load Balancer</a> in the <i>Application Load Balancers Guide</i> and <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/network/load-balancer-limits.html">Limits for Your Network Load Balancer</a> in the <i>Network Load Balancers Guide</i>.</p> <p>This operation is idempotent, which means that it completes at most one time. If you attempt to create multiple load balancers with the same settings, each call succeeds.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/application/application-load-balancers.html">Application Load Balancers</a> in the <i>Application Load Balancers Guide</i> and <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/network/network-load-balancers.html">Network Load Balancers</a> in the <i>Network Load Balancers Guide</i>.</p>
     fn create_load_balancer(
         &self,
-        input: &CreateLoadBalancerInput,
+        input: CreateLoadBalancerInput,
     ) -> RusotoFuture<CreateLoadBalancerOutput, CreateLoadBalancerError> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
@@ -9933,7 +9910,7 @@ where
     /// <p>Creates a rule for the specified listener. The listener must be associated with an Application Load Balancer.</p> <p>Rules are evaluated in priority order, from the lowest value to the highest value. When the condition for a rule is met, the specified action is taken. If no conditions are met, the action for the default rule is taken. For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-listeners.html#listener-rules">Listener Rules</a> in the <i>Application Load Balancers Guide</i>.</p> <p>To view your current rules, use <a>DescribeRules</a>. To update a rule, use <a>ModifyRule</a>. To set the priorities of your rules, use <a>SetRulePriorities</a>. To delete a rule, use <a>DeleteRule</a>.</p>
     fn create_rule(
         &self,
-        input: &CreateRuleInput,
+        input: CreateRuleInput,
     ) -> RusotoFuture<CreateRuleOutput, CreateRuleError> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
@@ -9984,7 +9961,7 @@ where
     /// <p>Creates a target group.</p> <p>To register targets with the target group, use <a>RegisterTargets</a>. To update the health check settings for the target group, use <a>ModifyTargetGroup</a>. To monitor the health of targets in the target group, use <a>DescribeTargetHealth</a>.</p> <p>To route traffic to the targets in a target group, specify the target group in an action using <a>CreateListener</a> or <a>CreateRule</a>.</p> <p>To delete a target group, use <a>DeleteTargetGroup</a>.</p> <p>This operation is idempotent, which means that it completes at most one time. If you attempt to create multiple target groups with the same settings, each call succeeds.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-target-groups.html">Target Groups for Your Application Load Balancers</a> in the <i>Application Load Balancers Guide</i> or <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/network/load-balancer-target-groups.html">Target Groups for Your Network Load Balancers</a> in the <i>Network Load Balancers Guide</i>.</p>
     fn create_target_group(
         &self,
-        input: &CreateTargetGroupInput,
+        input: CreateTargetGroupInput,
     ) -> RusotoFuture<CreateTargetGroupOutput, CreateTargetGroupError> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
@@ -10035,7 +10012,7 @@ where
     /// <p>Deletes the specified listener.</p> <p>Alternatively, your listener is deleted when you delete the load balancer it is attached to using <a>DeleteLoadBalancer</a>.</p>
     fn delete_listener(
         &self,
-        input: &DeleteListenerInput,
+        input: DeleteListenerInput,
     ) -> RusotoFuture<DeleteListenerOutput, DeleteListenerError> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
@@ -10086,7 +10063,7 @@ where
     /// <p>Deletes the specified Application Load Balancer or Network Load Balancer and its attached listeners.</p> <p>You can't delete a load balancer if deletion protection is enabled. If the load balancer does not exist or has already been deleted, the call succeeds.</p> <p>Deleting a load balancer does not affect its registered targets. For example, your EC2 instances continue to run and are still registered to their target groups. If you no longer need these EC2 instances, you can stop or terminate them.</p>
     fn delete_load_balancer(
         &self,
-        input: &DeleteLoadBalancerInput,
+        input: DeleteLoadBalancerInput,
     ) -> RusotoFuture<DeleteLoadBalancerOutput, DeleteLoadBalancerError> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
@@ -10137,7 +10114,7 @@ where
     /// <p>Deletes the specified rule.</p>
     fn delete_rule(
         &self,
-        input: &DeleteRuleInput,
+        input: DeleteRuleInput,
     ) -> RusotoFuture<DeleteRuleOutput, DeleteRuleError> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
@@ -10188,7 +10165,7 @@ where
     /// <p>Deletes the specified target group.</p> <p>You can delete a target group if it is not referenced by any actions. Deleting a target group also deletes any associated health checks.</p>
     fn delete_target_group(
         &self,
-        input: &DeleteTargetGroupInput,
+        input: DeleteTargetGroupInput,
     ) -> RusotoFuture<DeleteTargetGroupOutput, DeleteTargetGroupError> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
@@ -10239,7 +10216,7 @@ where
     /// <p>Deregisters the specified targets from the specified target group. After the targets are deregistered, they no longer receive traffic from the load balancer.</p>
     fn deregister_targets(
         &self,
-        input: &DeregisterTargetsInput,
+        input: DeregisterTargetsInput,
     ) -> RusotoFuture<DeregisterTargetsOutput, DeregisterTargetsError> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
@@ -10290,7 +10267,7 @@ where
     /// <p>Describes the current Elastic Load Balancing resource limits for your AWS account.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-limits.html">Limits for Your Application Load Balancers</a> in the <i>Application Load Balancer Guide</i> or <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/network/load-balancer-limits.html">Limits for Your Network Load Balancers</a> in the <i>Network Load Balancers Guide</i>.</p>
     fn describe_account_limits(
         &self,
-        input: &DescribeAccountLimitsInput,
+        input: DescribeAccountLimitsInput,
     ) -> RusotoFuture<DescribeAccountLimitsOutput, DescribeAccountLimitsError> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
@@ -10341,7 +10318,7 @@ where
     /// <p>Describes the certificates for the specified secure listener.</p>
     fn describe_listener_certificates(
         &self,
-        input: &DescribeListenerCertificatesInput,
+        input: DescribeListenerCertificatesInput,
     ) -> RusotoFuture<DescribeListenerCertificatesOutput, DescribeListenerCertificatesError> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
@@ -10392,7 +10369,7 @@ where
     /// <p>Describes the specified listeners or the listeners for the specified Application Load Balancer or Network Load Balancer. You must specify either a load balancer or one or more listeners.</p>
     fn describe_listeners(
         &self,
-        input: &DescribeListenersInput,
+        input: DescribeListenersInput,
     ) -> RusotoFuture<DescribeListenersOutput, DescribeListenersError> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
@@ -10443,7 +10420,7 @@ where
     /// <p>Describes the attributes for the specified Application Load Balancer or Network Load Balancer.</p>
     fn describe_load_balancer_attributes(
         &self,
-        input: &DescribeLoadBalancerAttributesInput,
+        input: DescribeLoadBalancerAttributesInput,
     ) -> RusotoFuture<DescribeLoadBalancerAttributesOutput, DescribeLoadBalancerAttributesError>
     {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
@@ -10497,7 +10474,7 @@ where
     /// <p>Describes the specified load balancers or all of your load balancers.</p> <p>To describe the listeners for a load balancer, use <a>DescribeListeners</a>. To describe the attributes for a load balancer, use <a>DescribeLoadBalancerAttributes</a>.</p>
     fn describe_load_balancers(
         &self,
-        input: &DescribeLoadBalancersInput,
+        input: DescribeLoadBalancersInput,
     ) -> RusotoFuture<DescribeLoadBalancersOutput, DescribeLoadBalancersError> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
@@ -10548,7 +10525,7 @@ where
     /// <p>Describes the specified rules or the rules for the specified listener. You must specify either a listener or one or more rules.</p>
     fn describe_rules(
         &self,
-        input: &DescribeRulesInput,
+        input: DescribeRulesInput,
     ) -> RusotoFuture<DescribeRulesOutput, DescribeRulesError> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
@@ -10599,7 +10576,7 @@ where
     /// <p>Describes the specified policies or all policies used for SSL negotiation.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/application/create-https-listener.html#describe-ssl-policies">Security Policies</a> in the <i>Application Load Balancers Guide</i>.</p>
     fn describe_ssl_policies(
         &self,
-        input: &DescribeSSLPoliciesInput,
+        input: DescribeSSLPoliciesInput,
     ) -> RusotoFuture<DescribeSSLPoliciesOutput, DescribeSSLPoliciesError> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
@@ -10650,7 +10627,7 @@ where
     /// <p>Describes the tags for the specified resources. You can describe the tags for one or more Application Load Balancers, Network Load Balancers, and target groups.</p>
     fn describe_tags(
         &self,
-        input: &DescribeTagsInput,
+        input: DescribeTagsInput,
     ) -> RusotoFuture<DescribeTagsOutput, DescribeTagsError> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
@@ -10701,7 +10678,7 @@ where
     /// <p>Describes the attributes for the specified target group.</p>
     fn describe_target_group_attributes(
         &self,
-        input: &DescribeTargetGroupAttributesInput,
+        input: DescribeTargetGroupAttributesInput,
     ) -> RusotoFuture<DescribeTargetGroupAttributesOutput, DescribeTargetGroupAttributesError> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
@@ -10754,7 +10731,7 @@ where
     /// <p>Describes the specified target groups or all of your target groups. By default, all target groups are described. Alternatively, you can specify one of the following to filter the results: the ARN of the load balancer, the names of one or more target groups, or the ARNs of one or more target groups.</p> <p>To describe the targets for a target group, use <a>DescribeTargetHealth</a>. To describe the attributes of a target group, use <a>DescribeTargetGroupAttributes</a>.</p>
     fn describe_target_groups(
         &self,
-        input: &DescribeTargetGroupsInput,
+        input: DescribeTargetGroupsInput,
     ) -> RusotoFuture<DescribeTargetGroupsOutput, DescribeTargetGroupsError> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
@@ -10805,7 +10782,7 @@ where
     /// <p>Describes the health of the specified targets or all of your targets.</p>
     fn describe_target_health(
         &self,
-        input: &DescribeTargetHealthInput,
+        input: DescribeTargetHealthInput,
     ) -> RusotoFuture<DescribeTargetHealthOutput, DescribeTargetHealthError> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
@@ -10856,7 +10833,7 @@ where
     /// <p>Modifies the specified properties of the specified listener.</p> <p>Any properties that you do not specify retain their current values. However, changing the protocol from HTTPS to HTTP removes the security policy and SSL certificate properties. If you change the protocol from HTTP to HTTPS, you must add the security policy and server certificate.</p>
     fn modify_listener(
         &self,
-        input: &ModifyListenerInput,
+        input: ModifyListenerInput,
     ) -> RusotoFuture<ModifyListenerOutput, ModifyListenerError> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
@@ -10907,7 +10884,7 @@ where
     /// <p>Modifies the specified attributes of the specified Application Load Balancer or Network Load Balancer.</p> <p>If any of the specified attributes can't be modified as requested, the call fails. Any existing attributes that you do not modify retain their current values.</p>
     fn modify_load_balancer_attributes(
         &self,
-        input: &ModifyLoadBalancerAttributesInput,
+        input: ModifyLoadBalancerAttributesInput,
     ) -> RusotoFuture<ModifyLoadBalancerAttributesOutput, ModifyLoadBalancerAttributesError> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
@@ -10958,7 +10935,7 @@ where
     /// <p>Modifies the specified rule.</p> <p>Any existing properties that you do not modify retain their current values.</p> <p>To modify the default action, use <a>ModifyListener</a>.</p>
     fn modify_rule(
         &self,
-        input: &ModifyRuleInput,
+        input: ModifyRuleInput,
     ) -> RusotoFuture<ModifyRuleOutput, ModifyRuleError> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
@@ -11009,7 +10986,7 @@ where
     /// <p>Modifies the health checks used when evaluating the health state of the targets in the specified target group.</p> <p>To monitor the health of the targets, use <a>DescribeTargetHealth</a>.</p>
     fn modify_target_group(
         &self,
-        input: &ModifyTargetGroupInput,
+        input: ModifyTargetGroupInput,
     ) -> RusotoFuture<ModifyTargetGroupOutput, ModifyTargetGroupError> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
@@ -11060,7 +11037,7 @@ where
     /// <p>Modifies the specified attributes of the specified target group.</p>
     fn modify_target_group_attributes(
         &self,
-        input: &ModifyTargetGroupAttributesInput,
+        input: ModifyTargetGroupAttributesInput,
     ) -> RusotoFuture<ModifyTargetGroupAttributesOutput, ModifyTargetGroupAttributesError> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
@@ -11111,7 +11088,7 @@ where
     /// <p>Registers the specified targets with the specified target group.</p> <p>You can register targets by instance ID or by IP address. If the target is an EC2 instance, it must be in the <code>running</code> state when you register it.</p> <p>By default, the load balancer routes requests to registered targets using the protocol and port for the target group. Alternatively, you can override the port for a target when you register it. You can register each EC2 instance or IP address with the same target group multiple times using different ports.</p> <p>With a Network Load Balancer, you cannot register instances by instance ID if they have the following instance types: C1, CC1, CC2, CG1, CG2, CR1, CS1, G1, G2, HI1, HS1, M1, M2, M3, and T1. You can register instances of these types by IP address.</p> <p>To remove a target from a target group, use <a>DeregisterTargets</a>.</p>
     fn register_targets(
         &self,
-        input: &RegisterTargetsInput,
+        input: RegisterTargetsInput,
     ) -> RusotoFuture<RegisterTargetsOutput, RegisterTargetsError> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
@@ -11162,7 +11139,7 @@ where
     /// <p>Removes the specified certificate from the specified secure listener.</p> <p>You can't remove the default certificate for a listener. To replace the default certificate, call <a>ModifyListener</a>.</p> <p>To list the certificates for your listener, use <a>DescribeListenerCertificates</a>.</p>
     fn remove_listener_certificates(
         &self,
-        input: &RemoveListenerCertificatesInput,
+        input: RemoveListenerCertificatesInput,
     ) -> RusotoFuture<RemoveListenerCertificatesOutput, RemoveListenerCertificatesError> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
@@ -11213,7 +11190,7 @@ where
     /// <p>Removes the specified tags from the specified Elastic Load Balancing resource.</p> <p>To list the current tags for your resources, use <a>DescribeTags</a>.</p>
     fn remove_tags(
         &self,
-        input: &RemoveTagsInput,
+        input: RemoveTagsInput,
     ) -> RusotoFuture<RemoveTagsOutput, RemoveTagsError> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
@@ -11264,7 +11241,7 @@ where
     /// <p>Sets the type of IP addresses used by the subnets of the specified Application Load Balancer or Network Load Balancer.</p> <p>Note that Network Load Balancers must use <code>ipv4</code>.</p>
     fn set_ip_address_type(
         &self,
-        input: &SetIpAddressTypeInput,
+        input: SetIpAddressTypeInput,
     ) -> RusotoFuture<SetIpAddressTypeOutput, SetIpAddressTypeError> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
@@ -11315,7 +11292,7 @@ where
     /// <p>Sets the priorities of the specified rules.</p> <p>You can reorder the rules as long as there are no priority conflicts in the new order. Any existing rules that you do not specify retain their current priority.</p>
     fn set_rule_priorities(
         &self,
-        input: &SetRulePrioritiesInput,
+        input: SetRulePrioritiesInput,
     ) -> RusotoFuture<SetRulePrioritiesOutput, SetRulePrioritiesError> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
@@ -11366,7 +11343,7 @@ where
     /// <p>Associates the specified security groups with the specified Application Load Balancer. The specified security groups override the previously associated security groups.</p> <p>Note that you can't specify a security group for a Network Load Balancer.</p>
     fn set_security_groups(
         &self,
-        input: &SetSecurityGroupsInput,
+        input: SetSecurityGroupsInput,
     ) -> RusotoFuture<SetSecurityGroupsOutput, SetSecurityGroupsError> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
@@ -11417,7 +11394,7 @@ where
     /// <p>Enables the Availability Zone for the specified public subnets for the specified Application Load Balancer. The specified subnets replace the previously enabled subnets.</p> <p>Note that you can't change the subnets for a Network Load Balancer.</p>
     fn set_subnets(
         &self,
-        input: &SetSubnetsInput,
+        input: SetSubnetsInput,
     ) -> RusotoFuture<SetSubnetsOutput, SetSubnetsError> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
@@ -11471,8 +11448,8 @@ mod protocol_tests {
 
     extern crate rusoto_mock;
 
-    use super::*;
     use self::rusoto_mock::*;
+    use super::*;
     use rusoto_core::Region as rusoto_region;
 
     #[test]
@@ -11484,7 +11461,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(400).with_body(&mock_response);
         let client = ElbClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = DescribeLoadBalancersInput::default();
-        let result = client.describe_load_balancers(&request).sync();
+        let result = client.describe_load_balancers(request).sync();
         assert!(!result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -11497,7 +11474,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = ElbClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = DescribeLoadBalancersInput::default();
-        let result = client.describe_load_balancers(&request).sync();
+        let result = client.describe_load_balancers(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 }
