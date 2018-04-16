@@ -10,6 +10,8 @@ use std::error::Error;
 use std::fmt;
 use std::io;
 use std::collections::hash_map::{self, HashMap};
+use std::rc::Rc;
+use std::sync::Arc;
 use std::time::Duration;
 use std::mem;
 
@@ -189,6 +191,20 @@ pub trait DispatchSignedRequest {
     type Future: Future<Item=HttpResponse, Error=HttpDispatchError> + 'static;
     /// Dispatch Request, and then return a Response
     fn dispatch(&self, request: SignedRequest, timeout: Option<Duration>) -> Self::Future;
+}
+
+impl<D: DispatchSignedRequest> DispatchSignedRequest for Rc<D> {
+    type Future = D::Future;
+    fn dispatch(&self, request: SignedRequest, timeout: Option<Duration>) -> Self::Future {
+        D::dispatch(&*self, request, timeout)
+    }
+}
+
+impl<D: DispatchSignedRequest> DispatchSignedRequest for Arc<D> {
+    type Future = D::Future;
+    fn dispatch(&self, request: SignedRequest, timeout: Option<Duration>) -> Self::Future {
+        D::dispatch(&*self, request, timeout)
+    }
 }
 
 /// A future that will resolve to an `HttpResponse`.
