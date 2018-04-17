@@ -78,50 +78,55 @@ fn successful_deployment_to_host() {
     let cd = CodeDeployClient::simple(region.clone());
 
     // Get identity information for integration test credentials.
-    println!("get_integration_test_identity");
+    println!("Getting integration test identity");
     let test_identity = get_integration_test_identity(&sts);
 
     // Create on-premise IAM role, with permissions to call "codedeploy-commands:*".
-    println!("create_on_premise_iam_role");
+    println!("Creating on premise IAM role");
     let on_premise_role = create_on_premise_iam_role(&iam, ON_PREMISE_INSTANCE_ROLE_NAME, &test_identity, ON_PREMISE_INSTANCE_POLICY_NAME);
 
     // Create CodeDeploy service role with AWSCodeDeployRole managed policy.
-    println!("create_codedeploy_service_iam_role");
+    println!("Creating CodeDeploy service IAM role");
     let (codedeploy_service_role, codedeploy_policy_arn) = create_codedeploy_service_iam_role(&iam, CODEDEPLOY_SERVICE_ROLE_NAME);
 
     // Assume role to get on-premise session credentials.
-    println!("assume_on_premise_session_credentials");
+    println!("Retrieving on-premise session credentials for simulated instance");
     let (on_premise_credentials, on_premise_session_arn) = assume_on_premise_session_credentials(&sts, &on_premise_role.arn, &on_premise_instance_session_name);
 
     // Create CodeDeploy application and deployment group.
-    println!("create_codedeploy_state");
+    println!("Creating CodeDeploy application state");
     let (application_id, deployment_group_id) = create_codedeploy_state(&cd, APPLICATION_NAME, DEPLOYMENT_GROUP_NAME, &codedeploy_service_role.arn, ON_PREMISE_TAG_KEY, &on_premise_tag_value);
 
     // Register and tag the on-premise instance.
-    println!("register_and_tag_on_premise_instance");
+    println!("Registering simulated host as CodeDeploy on-premise instance");
     register_and_tag_on_premise_instance(&cd, &on_premise_instance_name, &on_premise_session_arn, ON_PREMISE_TAG_KEY, &on_premise_tag_value);
 
     // Start a CodeDeploy deployment.
-    println!("start_deployment_to_on_premise_instance");
+    println!("Starting deployment to simulated on-premise instance");
     let deployment_id = start_deployment_to_on_premise_instance(&cd, APPLICATION_NAME, DEPLOYMENT_GROUP_NAME);
 
     // Process each command sequentially, returning success for each.
-    println!("process_all_deployment_commands");
+    println!("Processing all deployment commands for simulated instance");
     process_all_deployment_commands(region.clone(), on_premise_credentials, &on_premise_session_arn);
 
     // Wait for deployment to complete successfully.
+    println!("Waiting for deployment to successfully complete");
     wait_for_successful_deployment_completion(&cd, &deployment_id);
 
     // Unregister/untag the on-premise instance.
+    println!("Deregistering simulated host from CodeDeploy");
     untag_and_deregister_on_premise_instance(&cd, &on_premise_instance_name, ON_PREMISE_TAG_KEY, &on_premise_tag_value);
 
     // Delete Codedeploy deployment group and application.
+    println!("Deleting CodeDeploy application state");
     delete_codedeploy_state(&cd, APPLICATION_NAME, DEPLOYMENT_GROUP_NAME);
 
     // Delete CodeDeploy service role.
+    println!("Deleting CodeDeploy service IAM role");
     delete_codedeploy_service_iam_role(&iam, CODEDEPLOY_SERVICE_ROLE_NAME, &codedeploy_policy_arn);
 
     // Delete on-premise IAM role.
+    println!("Deleting on-premise IAM role");
     delete_on_premise_iam_role(&iam, ON_PREMISE_INSTANCE_ROLE_NAME, ON_PREMISE_INSTANCE_POLICY_NAME);
 }
 
@@ -548,7 +553,6 @@ fn process_single_instance_command<CodeDeployCommands: rusoto_codedeploy_command
     let host_command = cdc.poll_host_command(poll_request).sync()
         .expect("Failed to invoke CodeDeployCommands::PollHostCommand to retrieve the command to be processed")
         .host_command.expect("CodeDeployCommands::PollHostCommand did not return a host command when one was expected to be available");
-    println!("Got command {:?}", host_command);
 
     // Extract fields from the host command.
     let host_command_identifier = host_command.host_command_identifier.expect("No host command identifier received for polled command");
@@ -558,6 +562,8 @@ fn process_single_instance_command<CodeDeployCommands: rusoto_codedeploy_command
 
     // Make sure we get the command we expect.
     assert_eq!(command_name, expected_command_name, "Received unexpected command name - has CodeDeploy modified the set or order of commands it uses?");
+
+    println!("Polled command {}, going to acknowledge and complete it", command_name);
 
     // Acknowledge.
     let ack_request = rusoto_codedeploy_commands::PutHostCommandAcknowledgementInput {
