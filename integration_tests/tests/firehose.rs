@@ -11,5 +11,5 @@ fn should_list_delivery_streams() {
     let client = KinesisFirehoseClient::simple(Region::UsEast1);
     let request = ListDeliveryStreamsInput::default();
 
-    client.list_delivery_streams(&request).sync().unwrap();
+    client.list_delivery_streams(request).sync().unwrap();
 }

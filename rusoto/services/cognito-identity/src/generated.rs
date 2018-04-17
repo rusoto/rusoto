@@ -18,18 +18,18 @@ use std::io;
 use futures::future;
 use futures::Future;
 use rusoto_core::reactor::{CredentialsProvider, RequestDispatcher};
-use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::region;
+use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::{ClientInner, RusotoFuture};
 
-use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
+use rusoto_core::request::HttpDispatchError;
 
-use serde_json;
-use rusoto_core::signature::SignedRequest;
-use serde_json::Value as SerdeJsonValue;
-use serde_json::from_str;
 use hyper::StatusCode;
+use rusoto_core::signature::SignedRequest;
+use serde_json;
+use serde_json::from_str;
+use serde_json::Value as SerdeJsonValue;
 /// <p>A provider representing an Amazon Cognito Identity User Pool and its client ID.</p>
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct CognitoIdentityProvider {
@@ -2575,58 +2575,58 @@ pub trait CognitoIdentity {
     /// <p>Creates a new identity pool. The identity pool is a store of user identity information that is specific to your AWS account. The limit on identity pools is 60 per account. The keys for <code>SupportedLoginProviders</code> are as follows:</p> <ul> <li> <p>Facebook: <code>graph.facebook.com</code> </p> </li> <li> <p>Google: <code>accounts.google.com</code> </p> </li> <li> <p>Amazon: <code>www.amazon.com</code> </p> </li> <li> <p>Twitter: <code>api.twitter.com</code> </p> </li> <li> <p>Digits: <code>www.digits.com</code> </p> </li> </ul> <p>You must use AWS Developer credentials to call this API.</p>
     fn create_identity_pool(
         &self,
-        input: &CreateIdentityPoolInput,
+        input: CreateIdentityPoolInput,
     ) -> RusotoFuture<IdentityPool, CreateIdentityPoolError>;
 
     /// <p>Deletes identities from an identity pool. You can specify a list of 1-60 identities that you want to delete.</p> <p>You must use AWS Developer credentials to call this API.</p>
     fn delete_identities(
         &self,
-        input: &DeleteIdentitiesInput,
+        input: DeleteIdentitiesInput,
     ) -> RusotoFuture<DeleteIdentitiesResponse, DeleteIdentitiesError>;
 
     /// <p>Deletes a user pool. Once a pool is deleted, users will not be able to authenticate with the pool.</p> <p>You must use AWS Developer credentials to call this API.</p>
     fn delete_identity_pool(
         &self,
-        input: &DeleteIdentityPoolInput,
+        input: DeleteIdentityPoolInput,
     ) -> RusotoFuture<(), DeleteIdentityPoolError>;
 
     /// <p>Returns metadata related to the given identity, including when the identity was created and any associated linked logins.</p> <p>You must use AWS Developer credentials to call this API.</p>
     fn describe_identity(
         &self,
-        input: &DescribeIdentityInput,
+        input: DescribeIdentityInput,
     ) -> RusotoFuture<IdentityDescription, DescribeIdentityError>;
 
     /// <p>Gets details about a particular identity pool, including the pool name, ID description, creation date, and current number of users.</p> <p>You must use AWS Developer credentials to call this API.</p>
     fn describe_identity_pool(
         &self,
-        input: &DescribeIdentityPoolInput,
+        input: DescribeIdentityPoolInput,
     ) -> RusotoFuture<IdentityPool, DescribeIdentityPoolError>;
 
     /// <p>Returns credentials for the provided identity ID. Any provided logins will be validated against supported login providers. If the token is for cognito-identity.amazonaws.com, it will be passed through to AWS Security Token Service with the appropriate role for the token.</p> <p>This is a public API. You do not need any credentials to call this API.</p>
     fn get_credentials_for_identity(
         &self,
-        input: &GetCredentialsForIdentityInput,
+        input: GetCredentialsForIdentityInput,
     ) -> RusotoFuture<GetCredentialsForIdentityResponse, GetCredentialsForIdentityError>;
 
     /// <p>Generates (or retrieves) a Cognito ID. Supplying multiple logins will create an implicit linked account.</p> <p>This is a public API. You do not need any credentials to call this API.</p>
-    fn get_id(&self, input: &GetIdInput) -> RusotoFuture<GetIdResponse, GetIdError>;
+    fn get_id(&self, input: GetIdInput) -> RusotoFuture<GetIdResponse, GetIdError>;
 
     /// <p>Gets the roles for an identity pool.</p> <p>You must use AWS Developer credentials to call this API.</p>
     fn get_identity_pool_roles(
         &self,
-        input: &GetIdentityPoolRolesInput,
+        input: GetIdentityPoolRolesInput,
     ) -> RusotoFuture<GetIdentityPoolRolesResponse, GetIdentityPoolRolesError>;
 
     /// <p>Gets an OpenID token, using a known Cognito ID. This known Cognito ID is returned by <a>GetId</a>. You can optionally add additional logins for the identity. Supplying multiple logins creates an implicit link.</p> <p>The OpenId token is valid for 15 minutes.</p> <p>This is a public API. You do not need any credentials to call this API.</p>
     fn get_open_id_token(
         &self,
-        input: &GetOpenIdTokenInput,
+        input: GetOpenIdTokenInput,
     ) -> RusotoFuture<GetOpenIdTokenResponse, GetOpenIdTokenError>;
 
     /// <p>Registers (or retrieves) a Cognito <code>IdentityId</code> and an OpenID Connect token for a user authenticated by your backend authentication process. Supplying multiple logins will create an implicit linked account. You can only specify one developer provider as part of the <code>Logins</code> map, which is linked to the identity pool. The developer provider is the "domain" by which Cognito will refer to your users.</p> <p>You can use <code>GetOpenIdTokenForDeveloperIdentity</code> to create a new identity and to link new logins (that is, user credentials issued by a public provider or developer provider) to an existing identity. When you want to create a new identity, the <code>IdentityId</code> should be null. When you want to associate a new login with an existing authenticated/unauthenticated identity, you can do so by providing the existing <code>IdentityId</code>. This API will create the identity in the specified <code>IdentityPoolId</code>.</p> <p>You must use AWS Developer credentials to call this API.</p>
     fn get_open_id_token_for_developer_identity(
         &self,
-        input: &GetOpenIdTokenForDeveloperIdentityInput,
+        input: GetOpenIdTokenForDeveloperIdentityInput,
     ) -> RusotoFuture<
         GetOpenIdTokenForDeveloperIdentityResponse,
         GetOpenIdTokenForDeveloperIdentityError,
@@ -2635,47 +2635,46 @@ pub trait CognitoIdentity {
     /// <p>Lists the identities in a pool.</p> <p>You must use AWS Developer credentials to call this API.</p>
     fn list_identities(
         &self,
-        input: &ListIdentitiesInput,
+        input: ListIdentitiesInput,
     ) -> RusotoFuture<ListIdentitiesResponse, ListIdentitiesError>;
 
     /// <p>Lists all of the Cognito identity pools registered for your account.</p> <p>You must use AWS Developer credentials to call this API.</p>
     fn list_identity_pools(
         &self,
-        input: &ListIdentityPoolsInput,
+        input: ListIdentityPoolsInput,
     ) -> RusotoFuture<ListIdentityPoolsResponse, ListIdentityPoolsError>;
 
     /// <p>Retrieves the <code>IdentityID</code> associated with a <code>DeveloperUserIdentifier</code> or the list of <code>DeveloperUserIdentifier</code>s associated with an <code>IdentityId</code> for an existing identity. Either <code>IdentityID</code> or <code>DeveloperUserIdentifier</code> must not be null. If you supply only one of these values, the other value will be searched in the database and returned as a part of the response. If you supply both, <code>DeveloperUserIdentifier</code> will be matched against <code>IdentityID</code>. If the values are verified against the database, the response returns both values and is the same as the request. Otherwise a <code>ResourceConflictException</code> is thrown.</p> <p>You must use AWS Developer credentials to call this API.</p>
     fn lookup_developer_identity(
         &self,
-        input: &LookupDeveloperIdentityInput,
+        input: LookupDeveloperIdentityInput,
     ) -> RusotoFuture<LookupDeveloperIdentityResponse, LookupDeveloperIdentityError>;
 
     /// <p>Merges two users having different <code>IdentityId</code>s, existing in the same identity pool, and identified by the same developer provider. You can use this action to request that discrete users be merged and identified as a single user in the Cognito environment. Cognito associates the given source user (<code>SourceUserIdentifier</code>) with the <code>IdentityId</code> of the <code>DestinationUserIdentifier</code>. Only developer-authenticated users can be merged. If the users to be merged are associated with the same public provider, but as two different users, an exception will be thrown.</p> <p>You must use AWS Developer credentials to call this API.</p>
     fn merge_developer_identities(
         &self,
-        input: &MergeDeveloperIdentitiesInput,
+        input: MergeDeveloperIdentitiesInput,
     ) -> RusotoFuture<MergeDeveloperIdentitiesResponse, MergeDeveloperIdentitiesError>;
 
     /// <p>Sets the roles for an identity pool. These roles are used when making calls to <a>GetCredentialsForIdentity</a> action.</p> <p>You must use AWS Developer credentials to call this API.</p>
     fn set_identity_pool_roles(
         &self,
-        input: &SetIdentityPoolRolesInput,
+        input: SetIdentityPoolRolesInput,
     ) -> RusotoFuture<(), SetIdentityPoolRolesError>;
 
     /// <p>Unlinks a <code>DeveloperUserIdentifier</code> from an existing identity. Unlinked developer users will be considered new identities next time they are seen. If, for a given Cognito identity, you remove all federated identities as well as the developer user identifier, the Cognito identity becomes inaccessible.</p> <p>You must use AWS Developer credentials to call this API.</p>
     fn unlink_developer_identity(
         &self,
-        input: &UnlinkDeveloperIdentityInput,
+        input: UnlinkDeveloperIdentityInput,
     ) -> RusotoFuture<(), UnlinkDeveloperIdentityError>;
 
     /// <p>Unlinks a federated identity from an existing account. Unlinked logins will be considered new identities next time they are seen. Removing the last linked login will make this identity inaccessible.</p> <p>This is a public API. You do not need any credentials to call this API.</p>
-    fn unlink_identity(&self, input: &UnlinkIdentityInput)
-        -> RusotoFuture<(), UnlinkIdentityError>;
+    fn unlink_identity(&self, input: UnlinkIdentityInput) -> RusotoFuture<(), UnlinkIdentityError>;
 
     /// <p>Updates a user pool.</p> <p>You must use AWS Developer credentials to call this API.</p>
     fn update_identity_pool(
         &self,
-        input: &IdentityPool,
+        input: IdentityPool,
     ) -> RusotoFuture<IdentityPool, UpdateIdentityPoolError>;
 }
 /// A client for the Amazon Cognito Identity API.
@@ -2724,7 +2723,7 @@ where
     /// <p>Creates a new identity pool. The identity pool is a store of user identity information that is specific to your AWS account. The limit on identity pools is 60 per account. The keys for <code>SupportedLoginProviders</code> are as follows:</p> <ul> <li> <p>Facebook: <code>graph.facebook.com</code> </p> </li> <li> <p>Google: <code>accounts.google.com</code> </p> </li> <li> <p>Amazon: <code>www.amazon.com</code> </p> </li> <li> <p>Twitter: <code>api.twitter.com</code> </p> </li> <li> <p>Digits: <code>www.digits.com</code> </p> </li> </ul> <p>You must use AWS Developer credentials to call this API.</p>
     fn create_identity_pool(
         &self,
-        input: &CreateIdentityPoolInput,
+        input: CreateIdentityPoolInput,
     ) -> RusotoFuture<IdentityPool, CreateIdentityPoolError> {
         let mut request = SignedRequest::new("POST", "cognito-identity", &self.region, "/");
 
@@ -2733,7 +2732,7 @@ where
             "x-amz-target",
             "AWSCognitoIdentityService.CreateIdentityPool",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -2764,13 +2763,13 @@ where
     /// <p>Deletes identities from an identity pool. You can specify a list of 1-60 identities that you want to delete.</p> <p>You must use AWS Developer credentials to call this API.</p>
     fn delete_identities(
         &self,
-        input: &DeleteIdentitiesInput,
+        input: DeleteIdentitiesInput,
     ) -> RusotoFuture<DeleteIdentitiesResponse, DeleteIdentitiesError> {
         let mut request = SignedRequest::new("POST", "cognito-identity", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSCognitoIdentityService.DeleteIdentities");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -2801,7 +2800,7 @@ where
     /// <p>Deletes a user pool. Once a pool is deleted, users will not be able to authenticate with the pool.</p> <p>You must use AWS Developer credentials to call this API.</p>
     fn delete_identity_pool(
         &self,
-        input: &DeleteIdentityPoolInput,
+        input: DeleteIdentityPoolInput,
     ) -> RusotoFuture<(), DeleteIdentityPoolError> {
         let mut request = SignedRequest::new("POST", "cognito-identity", &self.region, "/");
 
@@ -2810,7 +2809,7 @@ where
             "x-amz-target",
             "AWSCognitoIdentityService.DeleteIdentityPool",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -2831,13 +2830,13 @@ where
     /// <p>Returns metadata related to the given identity, including when the identity was created and any associated linked logins.</p> <p>You must use AWS Developer credentials to call this API.</p>
     fn describe_identity(
         &self,
-        input: &DescribeIdentityInput,
+        input: DescribeIdentityInput,
     ) -> RusotoFuture<IdentityDescription, DescribeIdentityError> {
         let mut request = SignedRequest::new("POST", "cognito-identity", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSCognitoIdentityService.DescribeIdentity");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -2868,7 +2867,7 @@ where
     /// <p>Gets details about a particular identity pool, including the pool name, ID description, creation date, and current number of users.</p> <p>You must use AWS Developer credentials to call this API.</p>
     fn describe_identity_pool(
         &self,
-        input: &DescribeIdentityPoolInput,
+        input: DescribeIdentityPoolInput,
     ) -> RusotoFuture<IdentityPool, DescribeIdentityPoolError> {
         let mut request = SignedRequest::new("POST", "cognito-identity", &self.region, "/");
 
@@ -2877,7 +2876,7 @@ where
             "x-amz-target",
             "AWSCognitoIdentityService.DescribeIdentityPool",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -2908,7 +2907,7 @@ where
     /// <p>Returns credentials for the provided identity ID. Any provided logins will be validated against supported login providers. If the token is for cognito-identity.amazonaws.com, it will be passed through to AWS Security Token Service with the appropriate role for the token.</p> <p>This is a public API. You do not need any credentials to call this API.</p>
     fn get_credentials_for_identity(
         &self,
-        input: &GetCredentialsForIdentityInput,
+        input: GetCredentialsForIdentityInput,
     ) -> RusotoFuture<GetCredentialsForIdentityResponse, GetCredentialsForIdentityError> {
         let mut request = SignedRequest::new("POST", "cognito-identity", &self.region, "/");
 
@@ -2917,7 +2916,7 @@ where
             "x-amz-target",
             "AWSCognitoIdentityService.GetCredentialsForIdentity",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -2946,12 +2945,12 @@ where
     }
 
     /// <p>Generates (or retrieves) a Cognito ID. Supplying multiple logins will create an implicit linked account.</p> <p>This is a public API. You do not need any credentials to call this API.</p>
-    fn get_id(&self, input: &GetIdInput) -> RusotoFuture<GetIdResponse, GetIdError> {
+    fn get_id(&self, input: GetIdInput) -> RusotoFuture<GetIdResponse, GetIdError> {
         let mut request = SignedRequest::new("POST", "cognito-identity", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSCognitoIdentityService.GetId");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -2982,7 +2981,7 @@ where
     /// <p>Gets the roles for an identity pool.</p> <p>You must use AWS Developer credentials to call this API.</p>
     fn get_identity_pool_roles(
         &self,
-        input: &GetIdentityPoolRolesInput,
+        input: GetIdentityPoolRolesInput,
     ) -> RusotoFuture<GetIdentityPoolRolesResponse, GetIdentityPoolRolesError> {
         let mut request = SignedRequest::new("POST", "cognito-identity", &self.region, "/");
 
@@ -2991,7 +2990,7 @@ where
             "x-amz-target",
             "AWSCognitoIdentityService.GetIdentityPoolRoles",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -3022,13 +3021,13 @@ where
     /// <p>Gets an OpenID token, using a known Cognito ID. This known Cognito ID is returned by <a>GetId</a>. You can optionally add additional logins for the identity. Supplying multiple logins creates an implicit link.</p> <p>The OpenId token is valid for 15 minutes.</p> <p>This is a public API. You do not need any credentials to call this API.</p>
     fn get_open_id_token(
         &self,
-        input: &GetOpenIdTokenInput,
+        input: GetOpenIdTokenInput,
     ) -> RusotoFuture<GetOpenIdTokenResponse, GetOpenIdTokenError> {
         let mut request = SignedRequest::new("POST", "cognito-identity", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSCognitoIdentityService.GetOpenIdToken");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -3059,7 +3058,7 @@ where
     /// <p>Registers (or retrieves) a Cognito <code>IdentityId</code> and an OpenID Connect token for a user authenticated by your backend authentication process. Supplying multiple logins will create an implicit linked account. You can only specify one developer provider as part of the <code>Logins</code> map, which is linked to the identity pool. The developer provider is the "domain" by which Cognito will refer to your users.</p> <p>You can use <code>GetOpenIdTokenForDeveloperIdentity</code> to create a new identity and to link new logins (that is, user credentials issued by a public provider or developer provider) to an existing identity. When you want to create a new identity, the <code>IdentityId</code> should be null. When you want to associate a new login with an existing authenticated/unauthenticated identity, you can do so by providing the existing <code>IdentityId</code>. This API will create the identity in the specified <code>IdentityPoolId</code>.</p> <p>You must use AWS Developer credentials to call this API.</p>
     fn get_open_id_token_for_developer_identity(
         &self,
-        input: &GetOpenIdTokenForDeveloperIdentityInput,
+        input: GetOpenIdTokenForDeveloperIdentityInput,
     ) -> RusotoFuture<
         GetOpenIdTokenForDeveloperIdentityResponse,
         GetOpenIdTokenForDeveloperIdentityError,
@@ -3071,7 +3070,7 @@ where
             "x-amz-target",
             "AWSCognitoIdentityService.GetOpenIdTokenForDeveloperIdentity",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -3102,13 +3101,13 @@ where
     /// <p>Lists the identities in a pool.</p> <p>You must use AWS Developer credentials to call this API.</p>
     fn list_identities(
         &self,
-        input: &ListIdentitiesInput,
+        input: ListIdentitiesInput,
     ) -> RusotoFuture<ListIdentitiesResponse, ListIdentitiesError> {
         let mut request = SignedRequest::new("POST", "cognito-identity", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSCognitoIdentityService.ListIdentities");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -3139,7 +3138,7 @@ where
     /// <p>Lists all of the Cognito identity pools registered for your account.</p> <p>You must use AWS Developer credentials to call this API.</p>
     fn list_identity_pools(
         &self,
-        input: &ListIdentityPoolsInput,
+        input: ListIdentityPoolsInput,
     ) -> RusotoFuture<ListIdentityPoolsResponse, ListIdentityPoolsError> {
         let mut request = SignedRequest::new("POST", "cognito-identity", &self.region, "/");
 
@@ -3148,7 +3147,7 @@ where
             "x-amz-target",
             "AWSCognitoIdentityService.ListIdentityPools",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -3179,7 +3178,7 @@ where
     /// <p>Retrieves the <code>IdentityID</code> associated with a <code>DeveloperUserIdentifier</code> or the list of <code>DeveloperUserIdentifier</code>s associated with an <code>IdentityId</code> for an existing identity. Either <code>IdentityID</code> or <code>DeveloperUserIdentifier</code> must not be null. If you supply only one of these values, the other value will be searched in the database and returned as a part of the response. If you supply both, <code>DeveloperUserIdentifier</code> will be matched against <code>IdentityID</code>. If the values are verified against the database, the response returns both values and is the same as the request. Otherwise a <code>ResourceConflictException</code> is thrown.</p> <p>You must use AWS Developer credentials to call this API.</p>
     fn lookup_developer_identity(
         &self,
-        input: &LookupDeveloperIdentityInput,
+        input: LookupDeveloperIdentityInput,
     ) -> RusotoFuture<LookupDeveloperIdentityResponse, LookupDeveloperIdentityError> {
         let mut request = SignedRequest::new("POST", "cognito-identity", &self.region, "/");
 
@@ -3188,7 +3187,7 @@ where
             "x-amz-target",
             "AWSCognitoIdentityService.LookupDeveloperIdentity",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -3219,7 +3218,7 @@ where
     /// <p>Merges two users having different <code>IdentityId</code>s, existing in the same identity pool, and identified by the same developer provider. You can use this action to request that discrete users be merged and identified as a single user in the Cognito environment. Cognito associates the given source user (<code>SourceUserIdentifier</code>) with the <code>IdentityId</code> of the <code>DestinationUserIdentifier</code>. Only developer-authenticated users can be merged. If the users to be merged are associated with the same public provider, but as two different users, an exception will be thrown.</p> <p>You must use AWS Developer credentials to call this API.</p>
     fn merge_developer_identities(
         &self,
-        input: &MergeDeveloperIdentitiesInput,
+        input: MergeDeveloperIdentitiesInput,
     ) -> RusotoFuture<MergeDeveloperIdentitiesResponse, MergeDeveloperIdentitiesError> {
         let mut request = SignedRequest::new("POST", "cognito-identity", &self.region, "/");
 
@@ -3228,7 +3227,7 @@ where
             "x-amz-target",
             "AWSCognitoIdentityService.MergeDeveloperIdentities",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -3259,7 +3258,7 @@ where
     /// <p>Sets the roles for an identity pool. These roles are used when making calls to <a>GetCredentialsForIdentity</a> action.</p> <p>You must use AWS Developer credentials to call this API.</p>
     fn set_identity_pool_roles(
         &self,
-        input: &SetIdentityPoolRolesInput,
+        input: SetIdentityPoolRolesInput,
     ) -> RusotoFuture<(), SetIdentityPoolRolesError> {
         let mut request = SignedRequest::new("POST", "cognito-identity", &self.region, "/");
 
@@ -3268,7 +3267,7 @@ where
             "x-amz-target",
             "AWSCognitoIdentityService.SetIdentityPoolRoles",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -3289,7 +3288,7 @@ where
     /// <p>Unlinks a <code>DeveloperUserIdentifier</code> from an existing identity. Unlinked developer users will be considered new identities next time they are seen. If, for a given Cognito identity, you remove all federated identities as well as the developer user identifier, the Cognito identity becomes inaccessible.</p> <p>You must use AWS Developer credentials to call this API.</p>
     fn unlink_developer_identity(
         &self,
-        input: &UnlinkDeveloperIdentityInput,
+        input: UnlinkDeveloperIdentityInput,
     ) -> RusotoFuture<(), UnlinkDeveloperIdentityError> {
         let mut request = SignedRequest::new("POST", "cognito-identity", &self.region, "/");
 
@@ -3298,7 +3297,7 @@ where
             "x-amz-target",
             "AWSCognitoIdentityService.UnlinkDeveloperIdentity",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -3317,15 +3316,12 @@ where
     }
 
     /// <p>Unlinks a federated identity from an existing account. Unlinked logins will be considered new identities next time they are seen. Removing the last linked login will make this identity inaccessible.</p> <p>This is a public API. You do not need any credentials to call this API.</p>
-    fn unlink_identity(
-        &self,
-        input: &UnlinkIdentityInput,
-    ) -> RusotoFuture<(), UnlinkIdentityError> {
+    fn unlink_identity(&self, input: UnlinkIdentityInput) -> RusotoFuture<(), UnlinkIdentityError> {
         let mut request = SignedRequest::new("POST", "cognito-identity", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSCognitoIdentityService.UnlinkIdentity");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -3346,7 +3342,7 @@ where
     /// <p>Updates a user pool.</p> <p>You must use AWS Developer credentials to call this API.</p>
     fn update_identity_pool(
         &self,
-        input: &IdentityPool,
+        input: IdentityPool,
     ) -> RusotoFuture<IdentityPool, UpdateIdentityPoolError> {
         let mut request = SignedRequest::new("POST", "cognito-identity", &self.region, "/");
 
@@ -3355,7 +3351,7 @@ where
             "x-amz-target",
             "AWSCognitoIdentityService.UpdateIdentityPool",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {

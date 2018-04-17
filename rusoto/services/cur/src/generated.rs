@@ -18,18 +18,18 @@ use std::io;
 use futures::future;
 use futures::Future;
 use rusoto_core::reactor::{CredentialsProvider, RequestDispatcher};
-use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::region;
+use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::{ClientInner, RusotoFuture};
 
-use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
+use rusoto_core::request::HttpDispatchError;
 
-use serde_json;
-use rusoto_core::signature::SignedRequest;
-use serde_json::Value as SerdeJsonValue;
-use serde_json::from_str;
 use hyper::StatusCode;
+use rusoto_core::signature::SignedRequest;
+use serde_json;
+use serde_json::from_str;
+use serde_json::Value as SerdeJsonValue;
 /// <p>Request of DeleteReportDefinition</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteReportDefinitionRequest {
@@ -360,19 +360,19 @@ pub trait CostAndUsageReport {
     /// <p>Delete a specified report definition</p>
     fn delete_report_definition(
         &self,
-        input: &DeleteReportDefinitionRequest,
+        input: DeleteReportDefinitionRequest,
     ) -> RusotoFuture<DeleteReportDefinitionResponse, DeleteReportDefinitionError>;
 
     /// <p>Describe a list of report definitions owned by the account</p>
     fn describe_report_definitions(
         &self,
-        input: &DescribeReportDefinitionsRequest,
+        input: DescribeReportDefinitionsRequest,
     ) -> RusotoFuture<DescribeReportDefinitionsResponse, DescribeReportDefinitionsError>;
 
     /// <p>Create a new report definition</p>
     fn put_report_definition(
         &self,
-        input: &PutReportDefinitionRequest,
+        input: PutReportDefinitionRequest,
     ) -> RusotoFuture<PutReportDefinitionResponse, PutReportDefinitionError>;
 }
 /// A client for the AWS Cost and Usage Report Service API.
@@ -421,7 +421,7 @@ where
     /// <p>Delete a specified report definition</p>
     fn delete_report_definition(
         &self,
-        input: &DeleteReportDefinitionRequest,
+        input: DeleteReportDefinitionRequest,
     ) -> RusotoFuture<DeleteReportDefinitionResponse, DeleteReportDefinitionError> {
         let mut request = SignedRequest::new("POST", "cur", &self.region, "/");
 
@@ -430,7 +430,7 @@ where
             "x-amz-target",
             "AWSOrigamiServiceGatewayService.DeleteReportDefinition",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -461,7 +461,7 @@ where
     /// <p>Describe a list of report definitions owned by the account</p>
     fn describe_report_definitions(
         &self,
-        input: &DescribeReportDefinitionsRequest,
+        input: DescribeReportDefinitionsRequest,
     ) -> RusotoFuture<DescribeReportDefinitionsResponse, DescribeReportDefinitionsError> {
         let mut request = SignedRequest::new("POST", "cur", &self.region, "/");
 
@@ -470,7 +470,7 @@ where
             "x-amz-target",
             "AWSOrigamiServiceGatewayService.DescribeReportDefinitions",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -501,7 +501,7 @@ where
     /// <p>Create a new report definition</p>
     fn put_report_definition(
         &self,
-        input: &PutReportDefinitionRequest,
+        input: PutReportDefinitionRequest,
     ) -> RusotoFuture<PutReportDefinitionResponse, PutReportDefinitionError> {
         let mut request = SignedRequest::new("POST", "cur", &self.region, "/");
 
@@ -510,7 +510,7 @@ where
             "x-amz-target",
             "AWSOrigamiServiceGatewayService.PutReportDefinition",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {

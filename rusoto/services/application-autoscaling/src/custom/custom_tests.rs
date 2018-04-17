@@ -12,7 +12,7 @@ fn register_scalable_target_happy_path() {
     let mock = MockRequestDispatcher::with_status(200).with_body(&body);
 
     let client = ApplicationAutoScalingClient::new(mock, MockCredentialsProvider, Region::UsEast1);
-    let result = client.register_scalable_target(&Default::default()).sync();
+    let result = client.register_scalable_target(Default::default()).sync();
 
     result.expect("Couldn't parse register_scalable_target");
 }

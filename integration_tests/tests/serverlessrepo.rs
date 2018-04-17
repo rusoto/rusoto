@@ -10,7 +10,7 @@ fn should_list_applications() {
     let client = ServerlessRepoClient::simple(Region::UsEast1);
     let request = ListApplicationsRequest::default();
 
-    let result = client.list_applications(&request).sync();
+    let result = client.list_applications(request).sync();
     println!("{:#?}", result);
     assert!(result.is_ok());
 }

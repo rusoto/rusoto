@@ -22,7 +22,7 @@ fn should_get_service_graph() {
         ..Default::default()
     };
 
-    let result = client.get_service_graph(&request).sync();
+    let result = client.get_service_graph(request).sync();
     println!("{:#?}", result);
     result.unwrap();
 }

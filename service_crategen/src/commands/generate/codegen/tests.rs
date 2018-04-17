@@ -98,7 +98,7 @@ fn generate_response_parse_test(
     if operation.input.is_some() {
         request_constructor = format!("let request = {request_type}::default();",
                                       request_type = operation.input_shape());
-        request_params = "&request".to_string();
+        request_params = "request".to_string();
     } else {
         request_constructor = "".to_string();
         request_params = "".to_string();

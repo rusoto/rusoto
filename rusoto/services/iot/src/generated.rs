@@ -18,16 +18,16 @@ use std::io;
 use futures::future;
 use futures::Future;
 use rusoto_core::reactor::{CredentialsProvider, RequestDispatcher};
-use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::region;
+use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::{ClientInner, RusotoFuture};
 
-use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
+use rusoto_core::request::HttpDispatchError;
 
-use serde_json;
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::signature::SignedRequest;
+use serde_json;
 use serde_json::from_str;
 use serde_json::Value as SerdeJsonValue;
 /// <p>The input for the AcceptCertificateTransfer operation.</p>
@@ -550,8 +550,11 @@ pub struct CodeSigningCertificateChain {
 pub struct CodeSigningSignature {
     /// <p>A base64 encoded binary representation of the code signing signature.</p>
     #[serde(rename = "inlineDocument")]
-    #[serde(deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
-            serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob", default)]
+    #[serde(
+        deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
+        serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
+        default
+    )]
     pub inline_document: Option<Vec<u8>>,
     /// <p>A stream of the code signing signature.</p>
     #[serde(rename = "stream")]
@@ -17517,46 +17520,46 @@ pub trait Iot {
     /// <p>Accepts a pending certificate transfer. The default state of the certificate is INACTIVE.</p> <p>To check for pending certificate transfers, call <a>ListCertificates</a> to enumerate your certificates.</p>
     fn accept_certificate_transfer(
         &self,
-        input: &AcceptCertificateTransferRequest,
+        input: AcceptCertificateTransferRequest,
     ) -> RusotoFuture<(), AcceptCertificateTransferError>;
 
     /// <p>Adds a thing to a thing group.</p>
     fn add_thing_to_thing_group(
         &self,
-        input: &AddThingToThingGroupRequest,
+        input: AddThingToThingGroupRequest,
     ) -> RusotoFuture<AddThingToThingGroupResponse, AddThingToThingGroupError>;
 
     /// <p><p>Associates a group with a continuous job. The following criteria must be met: </p> <ul> <li> <p>The job must have been created with the <code>targetSelection</code> field set to &quot;CONTINUOUS&quot;.</p> </li> <li> <p>The job status must currently be &quot;IN_PROGRESS&quot;.</p> </li> <li> <p>The total number of targets associated with a job must not exceed 100.</p> </li> </ul></p>
     fn associate_targets_with_job(
         &self,
-        input: &AssociateTargetsWithJobRequest,
+        input: AssociateTargetsWithJobRequest,
     ) -> RusotoFuture<AssociateTargetsWithJobResponse, AssociateTargetsWithJobError>;
 
     /// <p>Attaches a policy to the specified target.</p>
-    fn attach_policy(&self, input: &AttachPolicyRequest) -> RusotoFuture<(), AttachPolicyError>;
+    fn attach_policy(&self, input: AttachPolicyRequest) -> RusotoFuture<(), AttachPolicyError>;
 
     /// <p>Attaches the specified policy to the specified principal (certificate or other credential).</p> <p> <b>Note:</b> This API is deprecated. Please use <a>AttachPolicy</a> instead.</p>
     fn attach_principal_policy(
         &self,
-        input: &AttachPrincipalPolicyRequest,
+        input: AttachPrincipalPolicyRequest,
     ) -> RusotoFuture<(), AttachPrincipalPolicyError>;
 
     /// <p>Attaches the specified principal to the specified thing.</p>
     fn attach_thing_principal(
         &self,
-        input: &AttachThingPrincipalRequest,
+        input: AttachThingPrincipalRequest,
     ) -> RusotoFuture<AttachThingPrincipalResponse, AttachThingPrincipalError>;
 
     /// <p>Cancels a pending transfer for the specified certificate.</p> <p> <b>Note</b> Only the transfer source account can use this operation to cancel a transfer. (Transfer destinations can use <a>RejectCertificateTransfer</a> instead.) After transfer, AWS IoT returns the certificate to the source account in the INACTIVE state. After the destination account has accepted the transfer, the transfer cannot be cancelled.</p> <p>After a certificate transfer is cancelled, the status of the certificate changes from PENDING_TRANSFER to INACTIVE.</p>
     fn cancel_certificate_transfer(
         &self,
-        input: &CancelCertificateTransferRequest,
+        input: CancelCertificateTransferRequest,
     ) -> RusotoFuture<(), CancelCertificateTransferError>;
 
     /// <p>Cancels a job.</p>
     fn cancel_job(
         &self,
-        input: &CancelJobRequest,
+        input: CancelJobRequest,
     ) -> RusotoFuture<CancelJobResponse, CancelJobError>;
 
     /// <p>Clears the default authorizer.</p>
@@ -17567,112 +17570,112 @@ pub trait Iot {
     /// <p>Creates an authorizer.</p>
     fn create_authorizer(
         &self,
-        input: &CreateAuthorizerRequest,
+        input: CreateAuthorizerRequest,
     ) -> RusotoFuture<CreateAuthorizerResponse, CreateAuthorizerError>;
 
     /// <p>Creates an X.509 certificate using the specified certificate signing request.</p> <p> <b>Note:</b> The CSR must include a public key that is either an RSA key with a length of at least 2048 bits or an ECC key from NIST P-256 or NIST P-384 curves. </p> <p> <b>Note:</b> Reusing the same certificate signing request (CSR) results in a distinct certificate.</p> <p>You can create multiple certificates in a batch by creating a directory, copying multiple .csr files into that directory, and then specifying that directory on the command line. The following commands show how to create a batch of certificates given a batch of CSRs.</p> <p>Assuming a set of CSRs are located inside of the directory my-csr-directory:</p> <p>On Linux and OS X, the command is:</p> <p>$ ls my-csr-directory/ | xargs -I {} aws iot create-certificate-from-csr --certificate-signing-request file://my-csr-directory/{}</p> <p>This command lists all of the CSRs in my-csr-directory and pipes each CSR file name to the aws iot create-certificate-from-csr AWS CLI command to create a certificate for the corresponding CSR.</p> <p>The aws iot create-certificate-from-csr part of the command can also be run in parallel to speed up the certificate creation process:</p> <p>$ ls my-csr-directory/ | xargs -P 10 -I {} aws iot create-certificate-from-csr --certificate-signing-request file://my-csr-directory/{}</p> <p>On Windows PowerShell, the command to create certificates for all CSRs in my-csr-directory is:</p> <p>&gt; ls -Name my-csr-directory | %{aws iot create-certificate-from-csr --certificate-signing-request file://my-csr-directory/$_}</p> <p>On a Windows command prompt, the command to create certificates for all CSRs in my-csr-directory is:</p> <p>&gt; forfiles /p my-csr-directory /c "cmd /c aws iot create-certificate-from-csr --certificate-signing-request file://@path"</p>
     fn create_certificate_from_csr(
         &self,
-        input: &CreateCertificateFromCsrRequest,
+        input: CreateCertificateFromCsrRequest,
     ) -> RusotoFuture<CreateCertificateFromCsrResponse, CreateCertificateFromCsrError>;
 
     /// <p>Creates a job.</p>
     fn create_job(
         &self,
-        input: &CreateJobRequest,
+        input: CreateJobRequest,
     ) -> RusotoFuture<CreateJobResponse, CreateJobError>;
 
     /// <p>Creates a 2048-bit RSA key pair and issues an X.509 certificate using the issued public key.</p> <p> <b>Note</b> This is the only time AWS IoT issues the private key for this certificate, so it is important to keep it in a secure location.</p>
     fn create_keys_and_certificate(
         &self,
-        input: &CreateKeysAndCertificateRequest,
+        input: CreateKeysAndCertificateRequest,
     ) -> RusotoFuture<CreateKeysAndCertificateResponse, CreateKeysAndCertificateError>;
 
     /// <p>Creates an AWS IoT OTAUpdate on a target group of things or groups.</p>
     fn create_ota_update(
         &self,
-        input: &CreateOTAUpdateRequest,
+        input: CreateOTAUpdateRequest,
     ) -> RusotoFuture<CreateOTAUpdateResponse, CreateOTAUpdateError>;
 
     /// <p>Creates an AWS IoT policy.</p> <p>The created policy is the default version for the policy. This operation creates a policy version with a version identifier of <b>1</b> and sets <b>1</b> as the policy's default version.</p>
     fn create_policy(
         &self,
-        input: &CreatePolicyRequest,
+        input: CreatePolicyRequest,
     ) -> RusotoFuture<CreatePolicyResponse, CreatePolicyError>;
 
     /// <p>Creates a new version of the specified AWS IoT policy. To update a policy, create a new policy version. A managed policy can have up to five versions. If the policy has five versions, you must use <a>DeletePolicyVersion</a> to delete an existing version before you create a new one.</p> <p>Optionally, you can set the new version as the policy's default version. The default version is the operative version (that is, the version that is in effect for the certificates to which the policy is attached).</p>
     fn create_policy_version(
         &self,
-        input: &CreatePolicyVersionRequest,
+        input: CreatePolicyVersionRequest,
     ) -> RusotoFuture<CreatePolicyVersionResponse, CreatePolicyVersionError>;
 
     /// <p>Creates a role alias.</p>
     fn create_role_alias(
         &self,
-        input: &CreateRoleAliasRequest,
+        input: CreateRoleAliasRequest,
     ) -> RusotoFuture<CreateRoleAliasResponse, CreateRoleAliasError>;
 
     /// <p>Creates a stream for delivering one or more large files in chunks over MQTT. A stream transports data bytes in chunks or blocks packaged as MQTT messages from a source like S3. You can have one or more files associated with a stream. The total size of a file associated with the stream cannot exceed more than 2 MB. The stream will be created with version 0. If a stream is created with the same streamID as a stream that existed and was deleted within last 90 days, we will resurrect that old stream by incrementing the version by 1.</p>
     fn create_stream(
         &self,
-        input: &CreateStreamRequest,
+        input: CreateStreamRequest,
     ) -> RusotoFuture<CreateStreamResponse, CreateStreamError>;
 
     /// <p>Creates a thing record in the thing registry.</p>
     fn create_thing(
         &self,
-        input: &CreateThingRequest,
+        input: CreateThingRequest,
     ) -> RusotoFuture<CreateThingResponse, CreateThingError>;
 
     /// <p>Create a thing group.</p>
     fn create_thing_group(
         &self,
-        input: &CreateThingGroupRequest,
+        input: CreateThingGroupRequest,
     ) -> RusotoFuture<CreateThingGroupResponse, CreateThingGroupError>;
 
     /// <p>Creates a new thing type.</p>
     fn create_thing_type(
         &self,
-        input: &CreateThingTypeRequest,
+        input: CreateThingTypeRequest,
     ) -> RusotoFuture<CreateThingTypeResponse, CreateThingTypeError>;
 
     /// <p>Creates a rule. Creating rules is an administrator-level action. Any user who has permission to create rules will be able to access data processed by the rule.</p>
     fn create_topic_rule(
         &self,
-        input: &CreateTopicRuleRequest,
+        input: CreateTopicRuleRequest,
     ) -> RusotoFuture<(), CreateTopicRuleError>;
 
     /// <p>Deletes an authorizer.</p>
     fn delete_authorizer(
         &self,
-        input: &DeleteAuthorizerRequest,
+        input: DeleteAuthorizerRequest,
     ) -> RusotoFuture<DeleteAuthorizerResponse, DeleteAuthorizerError>;
 
     /// <p>Deletes a registered CA certificate.</p>
     fn delete_ca_certificate(
         &self,
-        input: &DeleteCACertificateRequest,
+        input: DeleteCACertificateRequest,
     ) -> RusotoFuture<DeleteCACertificateResponse, DeleteCACertificateError>;
 
     /// <p>Deletes the specified certificate.</p> <p>A certificate cannot be deleted if it has a policy attached to it or if its status is set to ACTIVE. To delete a certificate, first use the <a>DetachPrincipalPolicy</a> API to detach all policies. Next, use the <a>UpdateCertificate</a> API to set the certificate to the INACTIVE status.</p>
     fn delete_certificate(
         &self,
-        input: &DeleteCertificateRequest,
+        input: DeleteCertificateRequest,
     ) -> RusotoFuture<(), DeleteCertificateError>;
 
     /// <p>Delete an OTA update.</p>
     fn delete_ota_update(
         &self,
-        input: &DeleteOTAUpdateRequest,
+        input: DeleteOTAUpdateRequest,
     ) -> RusotoFuture<DeleteOTAUpdateResponse, DeleteOTAUpdateError>;
 
     /// <p>Deletes the specified policy.</p> <p>A policy cannot be deleted if it has non-default versions or it is attached to any certificate.</p> <p>To delete a policy, use the DeletePolicyVersion API to delete all non-default versions of the policy; use the DetachPrincipalPolicy API to detach the policy from any certificate; and then use the DeletePolicy API to delete the policy.</p> <p>When a policy is deleted using DeletePolicy, its default version is deleted with it.</p>
-    fn delete_policy(&self, input: &DeletePolicyRequest) -> RusotoFuture<(), DeletePolicyError>;
+    fn delete_policy(&self, input: DeletePolicyRequest) -> RusotoFuture<(), DeletePolicyError>;
 
     /// <p>Deletes the specified version of the specified policy. You cannot delete the default version of a policy using this API. To delete the default version of a policy, use <a>DeletePolicy</a>. To find out which version of a policy is marked as the default version, use ListPolicyVersions.</p>
     fn delete_policy_version(
         &self,
-        input: &DeletePolicyVersionRequest,
+        input: DeletePolicyVersionRequest,
     ) -> RusotoFuture<(), DeletePolicyVersionError>;
 
     /// <p>Deletes a CA certificate registration code.</p>
@@ -17683,67 +17686,67 @@ pub trait Iot {
     /// <p>Deletes a role alias</p>
     fn delete_role_alias(
         &self,
-        input: &DeleteRoleAliasRequest,
+        input: DeleteRoleAliasRequest,
     ) -> RusotoFuture<DeleteRoleAliasResponse, DeleteRoleAliasError>;
 
     /// <p>Deletes a stream.</p>
     fn delete_stream(
         &self,
-        input: &DeleteStreamRequest,
+        input: DeleteStreamRequest,
     ) -> RusotoFuture<DeleteStreamResponse, DeleteStreamError>;
 
     /// <p>Deletes the specified thing.</p>
     fn delete_thing(
         &self,
-        input: &DeleteThingRequest,
+        input: DeleteThingRequest,
     ) -> RusotoFuture<DeleteThingResponse, DeleteThingError>;
 
     /// <p>Deletes a thing group.</p>
     fn delete_thing_group(
         &self,
-        input: &DeleteThingGroupRequest,
+        input: DeleteThingGroupRequest,
     ) -> RusotoFuture<DeleteThingGroupResponse, DeleteThingGroupError>;
 
     /// <p>Deletes the specified thing type . You cannot delete a thing type if it has things associated with it. To delete a thing type, first mark it as deprecated by calling <a>DeprecateThingType</a>, then remove any associated things by calling <a>UpdateThing</a> to change the thing type on any associated thing, and finally use <a>DeleteThingType</a> to delete the thing type.</p>
     fn delete_thing_type(
         &self,
-        input: &DeleteThingTypeRequest,
+        input: DeleteThingTypeRequest,
     ) -> RusotoFuture<DeleteThingTypeResponse, DeleteThingTypeError>;
 
     /// <p>Deletes the rule.</p>
     fn delete_topic_rule(
         &self,
-        input: &DeleteTopicRuleRequest,
+        input: DeleteTopicRuleRequest,
     ) -> RusotoFuture<(), DeleteTopicRuleError>;
 
     /// <p>Deletes a logging level.</p>
     fn delete_v2_logging_level(
         &self,
-        input: &DeleteV2LoggingLevelRequest,
+        input: DeleteV2LoggingLevelRequest,
     ) -> RusotoFuture<(), DeleteV2LoggingLevelError>;
 
     /// <p>Deprecates a thing type. You can not associate new things with deprecated thing type.</p>
     fn deprecate_thing_type(
         &self,
-        input: &DeprecateThingTypeRequest,
+        input: DeprecateThingTypeRequest,
     ) -> RusotoFuture<DeprecateThingTypeResponse, DeprecateThingTypeError>;
 
     /// <p>Describes an authorizer.</p>
     fn describe_authorizer(
         &self,
-        input: &DescribeAuthorizerRequest,
+        input: DescribeAuthorizerRequest,
     ) -> RusotoFuture<DescribeAuthorizerResponse, DescribeAuthorizerError>;
 
     /// <p>Describes a registered CA certificate.</p>
     fn describe_ca_certificate(
         &self,
-        input: &DescribeCACertificateRequest,
+        input: DescribeCACertificateRequest,
     ) -> RusotoFuture<DescribeCACertificateResponse, DescribeCACertificateError>;
 
     /// <p>Gets information about the specified certificate.</p>
     fn describe_certificate(
         &self,
-        input: &DescribeCertificateRequest,
+        input: DescribeCertificateRequest,
     ) -> RusotoFuture<DescribeCertificateResponse, DescribeCertificateError>;
 
     /// <p>Describes the default authorizer.</p>
@@ -17754,7 +17757,7 @@ pub trait Iot {
     /// <p>Returns a unique endpoint specific to the AWS account making the call.</p>
     fn describe_endpoint(
         &self,
-        input: &DescribeEndpointRequest,
+        input: DescribeEndpointRequest,
     ) -> RusotoFuture<DescribeEndpointResponse, DescribeEndpointError>;
 
     /// <p>Describes event configurations.</p>
@@ -17765,88 +17768,88 @@ pub trait Iot {
     /// <p>Describes a search index.</p>
     fn describe_index(
         &self,
-        input: &DescribeIndexRequest,
+        input: DescribeIndexRequest,
     ) -> RusotoFuture<DescribeIndexResponse, DescribeIndexError>;
 
     /// <p>Describes a job.</p>
     fn describe_job(
         &self,
-        input: &DescribeJobRequest,
+        input: DescribeJobRequest,
     ) -> RusotoFuture<DescribeJobResponse, DescribeJobError>;
 
     /// <p>Describes a job execution.</p>
     fn describe_job_execution(
         &self,
-        input: &DescribeJobExecutionRequest,
+        input: DescribeJobExecutionRequest,
     ) -> RusotoFuture<DescribeJobExecutionResponse, DescribeJobExecutionError>;
 
     /// <p>Describes a role alias.</p>
     fn describe_role_alias(
         &self,
-        input: &DescribeRoleAliasRequest,
+        input: DescribeRoleAliasRequest,
     ) -> RusotoFuture<DescribeRoleAliasResponse, DescribeRoleAliasError>;
 
     /// <p>Gets information about a stream.</p>
     fn describe_stream(
         &self,
-        input: &DescribeStreamRequest,
+        input: DescribeStreamRequest,
     ) -> RusotoFuture<DescribeStreamResponse, DescribeStreamError>;
 
     /// <p>Gets information about the specified thing.</p>
     fn describe_thing(
         &self,
-        input: &DescribeThingRequest,
+        input: DescribeThingRequest,
     ) -> RusotoFuture<DescribeThingResponse, DescribeThingError>;
 
     /// <p>Describe a thing group.</p>
     fn describe_thing_group(
         &self,
-        input: &DescribeThingGroupRequest,
+        input: DescribeThingGroupRequest,
     ) -> RusotoFuture<DescribeThingGroupResponse, DescribeThingGroupError>;
 
     /// <p>Describes a bulk thing provisioning task.</p>
     fn describe_thing_registration_task(
         &self,
-        input: &DescribeThingRegistrationTaskRequest,
+        input: DescribeThingRegistrationTaskRequest,
     ) -> RusotoFuture<DescribeThingRegistrationTaskResponse, DescribeThingRegistrationTaskError>;
 
     /// <p>Gets information about the specified thing type.</p>
     fn describe_thing_type(
         &self,
-        input: &DescribeThingTypeRequest,
+        input: DescribeThingTypeRequest,
     ) -> RusotoFuture<DescribeThingTypeResponse, DescribeThingTypeError>;
 
     /// <p>Detaches a policy from the specified target.</p>
-    fn detach_policy(&self, input: &DetachPolicyRequest) -> RusotoFuture<(), DetachPolicyError>;
+    fn detach_policy(&self, input: DetachPolicyRequest) -> RusotoFuture<(), DetachPolicyError>;
 
     /// <p>Removes the specified policy from the specified certificate.</p> <p> <b>Note:</b> This API is deprecated. Please use <a>DetachPolicy</a> instead.</p>
     fn detach_principal_policy(
         &self,
-        input: &DetachPrincipalPolicyRequest,
+        input: DetachPrincipalPolicyRequest,
     ) -> RusotoFuture<(), DetachPrincipalPolicyError>;
 
     /// <p>Detaches the specified principal from the specified thing.</p>
     fn detach_thing_principal(
         &self,
-        input: &DetachThingPrincipalRequest,
+        input: DetachThingPrincipalRequest,
     ) -> RusotoFuture<DetachThingPrincipalResponse, DetachThingPrincipalError>;
 
     /// <p>Disables the rule.</p>
     fn disable_topic_rule(
         &self,
-        input: &DisableTopicRuleRequest,
+        input: DisableTopicRuleRequest,
     ) -> RusotoFuture<(), DisableTopicRuleError>;
 
     /// <p>Enables the rule.</p>
     fn enable_topic_rule(
         &self,
-        input: &EnableTopicRuleRequest,
+        input: EnableTopicRuleRequest,
     ) -> RusotoFuture<(), EnableTopicRuleError>;
 
     /// <p>Gets effective policies.</p>
     fn get_effective_policies(
         &self,
-        input: &GetEffectivePoliciesRequest,
+        input: GetEffectivePoliciesRequest,
     ) -> RusotoFuture<GetEffectivePoliciesResponse, GetEffectivePoliciesError>;
 
     /// <p>Gets the search configuration.</p>
@@ -17857,7 +17860,7 @@ pub trait Iot {
     /// <p>Gets a job document.</p>
     fn get_job_document(
         &self,
-        input: &GetJobDocumentRequest,
+        input: GetJobDocumentRequest,
     ) -> RusotoFuture<GetJobDocumentResponse, GetJobDocumentError>;
 
     /// <p>Gets the logging options.</p>
@@ -17868,19 +17871,19 @@ pub trait Iot {
     /// <p>Gets an OTA update.</p>
     fn get_ota_update(
         &self,
-        input: &GetOTAUpdateRequest,
+        input: GetOTAUpdateRequest,
     ) -> RusotoFuture<GetOTAUpdateResponse, GetOTAUpdateError>;
 
     /// <p>Gets information about the specified policy with the policy document of the default version.</p>
     fn get_policy(
         &self,
-        input: &GetPolicyRequest,
+        input: GetPolicyRequest,
     ) -> RusotoFuture<GetPolicyResponse, GetPolicyError>;
 
     /// <p>Gets information about the specified policy version.</p>
     fn get_policy_version(
         &self,
-        input: &GetPolicyVersionRequest,
+        input: GetPolicyVersionRequest,
     ) -> RusotoFuture<GetPolicyVersionResponse, GetPolicyVersionError>;
 
     /// <p>Gets a registration code used to register a CA certificate with AWS IoT.</p>
@@ -17891,7 +17894,7 @@ pub trait Iot {
     /// <p>Gets information about the rule.</p>
     fn get_topic_rule(
         &self,
-        input: &GetTopicRuleRequest,
+        input: GetTopicRuleRequest,
     ) -> RusotoFuture<GetTopicRuleResponse, GetTopicRuleError>;
 
     /// <p>Gets the fine grained logging options.</p>
@@ -17902,334 +17905,334 @@ pub trait Iot {
     /// <p>Lists the policies attached to the specified thing group.</p>
     fn list_attached_policies(
         &self,
-        input: &ListAttachedPoliciesRequest,
+        input: ListAttachedPoliciesRequest,
     ) -> RusotoFuture<ListAttachedPoliciesResponse, ListAttachedPoliciesError>;
 
     /// <p>Lists the authorizers registered in your account.</p>
     fn list_authorizers(
         &self,
-        input: &ListAuthorizersRequest,
+        input: ListAuthorizersRequest,
     ) -> RusotoFuture<ListAuthorizersResponse, ListAuthorizersError>;
 
     /// <p>Lists the CA certificates registered for your AWS account.</p> <p>The results are paginated with a default page size of 25. You can use the returned marker to retrieve additional results.</p>
     fn list_ca_certificates(
         &self,
-        input: &ListCACertificatesRequest,
+        input: ListCACertificatesRequest,
     ) -> RusotoFuture<ListCACertificatesResponse, ListCACertificatesError>;
 
     /// <p>Lists the certificates registered in your AWS account.</p> <p>The results are paginated with a default page size of 25. You can use the returned marker to retrieve additional results.</p>
     fn list_certificates(
         &self,
-        input: &ListCertificatesRequest,
+        input: ListCertificatesRequest,
     ) -> RusotoFuture<ListCertificatesResponse, ListCertificatesError>;
 
     /// <p>List the device certificates signed by the specified CA certificate.</p>
     fn list_certificates_by_ca(
         &self,
-        input: &ListCertificatesByCARequest,
+        input: ListCertificatesByCARequest,
     ) -> RusotoFuture<ListCertificatesByCAResponse, ListCertificatesByCAError>;
 
     /// <p>Lists the search indices.</p>
     fn list_indices(
         &self,
-        input: &ListIndicesRequest,
+        input: ListIndicesRequest,
     ) -> RusotoFuture<ListIndicesResponse, ListIndicesError>;
 
     /// <p>Lists the job executions for a job.</p>
     fn list_job_executions_for_job(
         &self,
-        input: &ListJobExecutionsForJobRequest,
+        input: ListJobExecutionsForJobRequest,
     ) -> RusotoFuture<ListJobExecutionsForJobResponse, ListJobExecutionsForJobError>;
 
     /// <p>Lists the job executions for the specified thing.</p>
     fn list_job_executions_for_thing(
         &self,
-        input: &ListJobExecutionsForThingRequest,
+        input: ListJobExecutionsForThingRequest,
     ) -> RusotoFuture<ListJobExecutionsForThingResponse, ListJobExecutionsForThingError>;
 
     /// <p>Lists jobs.</p>
-    fn list_jobs(&self, input: &ListJobsRequest) -> RusotoFuture<ListJobsResponse, ListJobsError>;
+    fn list_jobs(&self, input: ListJobsRequest) -> RusotoFuture<ListJobsResponse, ListJobsError>;
 
     /// <p>Lists OTA updates.</p>
     fn list_ota_updates(
         &self,
-        input: &ListOTAUpdatesRequest,
+        input: ListOTAUpdatesRequest,
     ) -> RusotoFuture<ListOTAUpdatesResponse, ListOTAUpdatesError>;
 
     /// <p>Lists certificates that are being transferred but not yet accepted.</p>
     fn list_outgoing_certificates(
         &self,
-        input: &ListOutgoingCertificatesRequest,
+        input: ListOutgoingCertificatesRequest,
     ) -> RusotoFuture<ListOutgoingCertificatesResponse, ListOutgoingCertificatesError>;
 
     /// <p>Lists your policies.</p>
     fn list_policies(
         &self,
-        input: &ListPoliciesRequest,
+        input: ListPoliciesRequest,
     ) -> RusotoFuture<ListPoliciesResponse, ListPoliciesError>;
 
     /// <p>Lists the principals associated with the specified policy.</p> <p> <b>Note:</b> This API is deprecated. Please use <a>ListTargetsForPolicy</a> instead.</p>
     fn list_policy_principals(
         &self,
-        input: &ListPolicyPrincipalsRequest,
+        input: ListPolicyPrincipalsRequest,
     ) -> RusotoFuture<ListPolicyPrincipalsResponse, ListPolicyPrincipalsError>;
 
     /// <p>Lists the versions of the specified policy and identifies the default version.</p>
     fn list_policy_versions(
         &self,
-        input: &ListPolicyVersionsRequest,
+        input: ListPolicyVersionsRequest,
     ) -> RusotoFuture<ListPolicyVersionsResponse, ListPolicyVersionsError>;
 
     /// <p>Lists the policies attached to the specified principal. If you use an Cognito identity, the ID must be in <a href="http://docs.aws.amazon.com/cognitoidentity/latest/APIReference/API_GetCredentialsForIdentity.html#API_GetCredentialsForIdentity_RequestSyntax">AmazonCognito Identity format</a>.</p> <p> <b>Note:</b> This API is deprecated. Please use <a>ListAttachedPolicies</a> instead.</p>
     fn list_principal_policies(
         &self,
-        input: &ListPrincipalPoliciesRequest,
+        input: ListPrincipalPoliciesRequest,
     ) -> RusotoFuture<ListPrincipalPoliciesResponse, ListPrincipalPoliciesError>;
 
     /// <p>Lists the things associated with the specified principal.</p>
     fn list_principal_things(
         &self,
-        input: &ListPrincipalThingsRequest,
+        input: ListPrincipalThingsRequest,
     ) -> RusotoFuture<ListPrincipalThingsResponse, ListPrincipalThingsError>;
 
     /// <p>Lists the role aliases registered in your account.</p>
     fn list_role_aliases(
         &self,
-        input: &ListRoleAliasesRequest,
+        input: ListRoleAliasesRequest,
     ) -> RusotoFuture<ListRoleAliasesResponse, ListRoleAliasesError>;
 
     /// <p>Lists all of the streams in your AWS account.</p>
     fn list_streams(
         &self,
-        input: &ListStreamsRequest,
+        input: ListStreamsRequest,
     ) -> RusotoFuture<ListStreamsResponse, ListStreamsError>;
 
     /// <p>List targets for the specified policy.</p>
     fn list_targets_for_policy(
         &self,
-        input: &ListTargetsForPolicyRequest,
+        input: ListTargetsForPolicyRequest,
     ) -> RusotoFuture<ListTargetsForPolicyResponse, ListTargetsForPolicyError>;
 
     /// <p>List the thing groups in your account.</p>
     fn list_thing_groups(
         &self,
-        input: &ListThingGroupsRequest,
+        input: ListThingGroupsRequest,
     ) -> RusotoFuture<ListThingGroupsResponse, ListThingGroupsError>;
 
     /// <p>List the thing groups to which the specified thing belongs.</p>
     fn list_thing_groups_for_thing(
         &self,
-        input: &ListThingGroupsForThingRequest,
+        input: ListThingGroupsForThingRequest,
     ) -> RusotoFuture<ListThingGroupsForThingResponse, ListThingGroupsForThingError>;
 
     /// <p>Lists the principals associated with the specified thing.</p>
     fn list_thing_principals(
         &self,
-        input: &ListThingPrincipalsRequest,
+        input: ListThingPrincipalsRequest,
     ) -> RusotoFuture<ListThingPrincipalsResponse, ListThingPrincipalsError>;
 
     /// <p>Information about the thing registration tasks.</p>
     fn list_thing_registration_task_reports(
         &self,
-        input: &ListThingRegistrationTaskReportsRequest,
+        input: ListThingRegistrationTaskReportsRequest,
     ) -> RusotoFuture<ListThingRegistrationTaskReportsResponse, ListThingRegistrationTaskReportsError>;
 
     /// <p>List bulk thing provisioning tasks.</p>
     fn list_thing_registration_tasks(
         &self,
-        input: &ListThingRegistrationTasksRequest,
+        input: ListThingRegistrationTasksRequest,
     ) -> RusotoFuture<ListThingRegistrationTasksResponse, ListThingRegistrationTasksError>;
 
     /// <p>Lists the existing thing types.</p>
     fn list_thing_types(
         &self,
-        input: &ListThingTypesRequest,
+        input: ListThingTypesRequest,
     ) -> RusotoFuture<ListThingTypesResponse, ListThingTypesError>;
 
     /// <p>Lists your things. Use the <b>attributeName</b> and <b>attributeValue</b> parameters to filter your things. For example, calling <code>ListThings</code> with attributeName=Color and attributeValue=Red retrieves all things in the registry that contain an attribute <b>Color</b> with the value <b>Red</b>. </p>
     fn list_things(
         &self,
-        input: &ListThingsRequest,
+        input: ListThingsRequest,
     ) -> RusotoFuture<ListThingsResponse, ListThingsError>;
 
     /// <p>Lists the things in the specified group.</p>
     fn list_things_in_thing_group(
         &self,
-        input: &ListThingsInThingGroupRequest,
+        input: ListThingsInThingGroupRequest,
     ) -> RusotoFuture<ListThingsInThingGroupResponse, ListThingsInThingGroupError>;
 
     /// <p>Lists the rules for the specific topic.</p>
     fn list_topic_rules(
         &self,
-        input: &ListTopicRulesRequest,
+        input: ListTopicRulesRequest,
     ) -> RusotoFuture<ListTopicRulesResponse, ListTopicRulesError>;
 
     /// <p>Lists logging levels.</p>
     fn list_v2_logging_levels(
         &self,
-        input: &ListV2LoggingLevelsRequest,
+        input: ListV2LoggingLevelsRequest,
     ) -> RusotoFuture<ListV2LoggingLevelsResponse, ListV2LoggingLevelsError>;
 
     /// <p>Registers a CA certificate with AWS IoT. This CA certificate can then be used to sign device certificates, which can be then registered with AWS IoT. You can register up to 10 CA certificates per AWS account that have the same subject field. This enables you to have up to 10 certificate authorities sign your device certificates. If you have more than one CA certificate registered, make sure you pass the CA certificate when you register your device certificates with the RegisterCertificate API.</p>
     fn register_ca_certificate(
         &self,
-        input: &RegisterCACertificateRequest,
+        input: RegisterCACertificateRequest,
     ) -> RusotoFuture<RegisterCACertificateResponse, RegisterCACertificateError>;
 
     /// <p>Registers a device certificate with AWS IoT. If you have more than one CA certificate that has the same subject field, you must specify the CA certificate that was used to sign the device certificate being registered.</p>
     fn register_certificate(
         &self,
-        input: &RegisterCertificateRequest,
+        input: RegisterCertificateRequest,
     ) -> RusotoFuture<RegisterCertificateResponse, RegisterCertificateError>;
 
     /// <p>Provisions a thing.</p>
     fn register_thing(
         &self,
-        input: &RegisterThingRequest,
+        input: RegisterThingRequest,
     ) -> RusotoFuture<RegisterThingResponse, RegisterThingError>;
 
     /// <p>Rejects a pending certificate transfer. After AWS IoT rejects a certificate transfer, the certificate status changes from <b>PENDING_TRANSFER</b> to <b>INACTIVE</b>.</p> <p>To check for pending certificate transfers, call <a>ListCertificates</a> to enumerate your certificates.</p> <p>This operation can only be called by the transfer destination. After it is called, the certificate will be returned to the source's account in the INACTIVE state.</p>
     fn reject_certificate_transfer(
         &self,
-        input: &RejectCertificateTransferRequest,
+        input: RejectCertificateTransferRequest,
     ) -> RusotoFuture<(), RejectCertificateTransferError>;
 
     /// <p>Remove the specified thing from the specified group.</p>
     fn remove_thing_from_thing_group(
         &self,
-        input: &RemoveThingFromThingGroupRequest,
+        input: RemoveThingFromThingGroupRequest,
     ) -> RusotoFuture<RemoveThingFromThingGroupResponse, RemoveThingFromThingGroupError>;
 
     /// <p>Replaces the rule. You must specify all parameters for the new rule. Creating rules is an administrator-level action. Any user who has permission to create rules will be able to access data processed by the rule.</p>
     fn replace_topic_rule(
         &self,
-        input: &ReplaceTopicRuleRequest,
+        input: ReplaceTopicRuleRequest,
     ) -> RusotoFuture<(), ReplaceTopicRuleError>;
 
     /// <p>The query search index.</p>
     fn search_index(
         &self,
-        input: &SearchIndexRequest,
+        input: SearchIndexRequest,
     ) -> RusotoFuture<SearchIndexResponse, SearchIndexError>;
 
     /// <p>Sets the default authorizer. This will be used if a websocket connection is made without specifying an authorizer.</p>
     fn set_default_authorizer(
         &self,
-        input: &SetDefaultAuthorizerRequest,
+        input: SetDefaultAuthorizerRequest,
     ) -> RusotoFuture<SetDefaultAuthorizerResponse, SetDefaultAuthorizerError>;
 
     /// <p>Sets the specified version of the specified policy as the policy's default (operative) version. This action affects all certificates to which the policy is attached. To list the principals the policy is attached to, use the ListPrincipalPolicy API.</p>
     fn set_default_policy_version(
         &self,
-        input: &SetDefaultPolicyVersionRequest,
+        input: SetDefaultPolicyVersionRequest,
     ) -> RusotoFuture<(), SetDefaultPolicyVersionError>;
 
     /// <p>Sets the logging options.</p>
     fn set_logging_options(
         &self,
-        input: &SetLoggingOptionsRequest,
+        input: SetLoggingOptionsRequest,
     ) -> RusotoFuture<(), SetLoggingOptionsError>;
 
     /// <p>Sets the logging level.</p>
     fn set_v2_logging_level(
         &self,
-        input: &SetV2LoggingLevelRequest,
+        input: SetV2LoggingLevelRequest,
     ) -> RusotoFuture<(), SetV2LoggingLevelError>;
 
     /// <p>Sets the logging options for the V2 logging service.</p>
     fn set_v2_logging_options(
         &self,
-        input: &SetV2LoggingOptionsRequest,
+        input: SetV2LoggingOptionsRequest,
     ) -> RusotoFuture<(), SetV2LoggingOptionsError>;
 
     /// <p>Creates a bulk thing provisioning task.</p>
     fn start_thing_registration_task(
         &self,
-        input: &StartThingRegistrationTaskRequest,
+        input: StartThingRegistrationTaskRequest,
     ) -> RusotoFuture<StartThingRegistrationTaskResponse, StartThingRegistrationTaskError>;
 
     /// <p>Cancels a bulk thing provisioning task.</p>
     fn stop_thing_registration_task(
         &self,
-        input: &StopThingRegistrationTaskRequest,
+        input: StopThingRegistrationTaskRequest,
     ) -> RusotoFuture<StopThingRegistrationTaskResponse, StopThingRegistrationTaskError>;
 
     /// <p>Test custom authorization.</p>
     fn test_authorization(
         &self,
-        input: &TestAuthorizationRequest,
+        input: TestAuthorizationRequest,
     ) -> RusotoFuture<TestAuthorizationResponse, TestAuthorizationError>;
 
     /// <p>Invoke the specified custom authorizer for testing purposes.</p>
     fn test_invoke_authorizer(
         &self,
-        input: &TestInvokeAuthorizerRequest,
+        input: TestInvokeAuthorizerRequest,
     ) -> RusotoFuture<TestInvokeAuthorizerResponse, TestInvokeAuthorizerError>;
 
     /// <p>Transfers the specified certificate to the specified AWS account.</p> <p>You can cancel the transfer until it is acknowledged by the recipient.</p> <p>No notification is sent to the transfer destination's account. It is up to the caller to notify the transfer target.</p> <p>The certificate being transferred must not be in the ACTIVE state. You can use the UpdateCertificate API to deactivate it.</p> <p>The certificate must not have any policies attached to it. You can use the DetachPrincipalPolicy API to detach them.</p>
     fn transfer_certificate(
         &self,
-        input: &TransferCertificateRequest,
+        input: TransferCertificateRequest,
     ) -> RusotoFuture<TransferCertificateResponse, TransferCertificateError>;
 
     /// <p>Updates an authorizer.</p>
     fn update_authorizer(
         &self,
-        input: &UpdateAuthorizerRequest,
+        input: UpdateAuthorizerRequest,
     ) -> RusotoFuture<UpdateAuthorizerResponse, UpdateAuthorizerError>;
 
     /// <p>Updates a registered CA certificate.</p>
     fn update_ca_certificate(
         &self,
-        input: &UpdateCACertificateRequest,
+        input: UpdateCACertificateRequest,
     ) -> RusotoFuture<(), UpdateCACertificateError>;
 
     /// <p>Updates the status of the specified certificate. This operation is idempotent.</p> <p>Moving a certificate from the ACTIVE state (including REVOKED) will not disconnect currently connected devices, but these devices will be unable to reconnect.</p> <p>The ACTIVE state is required to authenticate devices connecting to AWS IoT using a certificate.</p>
     fn update_certificate(
         &self,
-        input: &UpdateCertificateRequest,
+        input: UpdateCertificateRequest,
     ) -> RusotoFuture<(), UpdateCertificateError>;
 
     /// <p>Updates the event configurations.</p>
     fn update_event_configurations(
         &self,
-        input: &UpdateEventConfigurationsRequest,
+        input: UpdateEventConfigurationsRequest,
     ) -> RusotoFuture<UpdateEventConfigurationsResponse, UpdateEventConfigurationsError>;
 
     /// <p>Updates the search configuration.</p>
     fn update_indexing_configuration(
         &self,
-        input: &UpdateIndexingConfigurationRequest,
+        input: UpdateIndexingConfigurationRequest,
     ) -> RusotoFuture<UpdateIndexingConfigurationResponse, UpdateIndexingConfigurationError>;
 
     /// <p>Updates a role alias.</p>
     fn update_role_alias(
         &self,
-        input: &UpdateRoleAliasRequest,
+        input: UpdateRoleAliasRequest,
     ) -> RusotoFuture<UpdateRoleAliasResponse, UpdateRoleAliasError>;
 
     /// <p>Updates an existing stream. The stream version will be incremented by one.</p>
     fn update_stream(
         &self,
-        input: &UpdateStreamRequest,
+        input: UpdateStreamRequest,
     ) -> RusotoFuture<UpdateStreamResponse, UpdateStreamError>;
 
     /// <p>Updates the data for a thing.</p>
     fn update_thing(
         &self,
-        input: &UpdateThingRequest,
+        input: UpdateThingRequest,
     ) -> RusotoFuture<UpdateThingResponse, UpdateThingError>;
 
     /// <p>Update a thing group.</p>
     fn update_thing_group(
         &self,
-        input: &UpdateThingGroupRequest,
+        input: UpdateThingGroupRequest,
     ) -> RusotoFuture<UpdateThingGroupResponse, UpdateThingGroupError>;
 
     /// <p>Updates the groups to which the thing belongs.</p>
     fn update_thing_groups_for_thing(
         &self,
-        input: &UpdateThingGroupsForThingRequest,
+        input: UpdateThingGroupsForThingRequest,
     ) -> RusotoFuture<UpdateThingGroupsForThingResponse, UpdateThingGroupsForThingError>;
 }
 /// A client for the AWS IoT API.
@@ -18278,7 +18281,7 @@ where
     /// <p>Accepts a pending certificate transfer. The default state of the certificate is INACTIVE.</p> <p>To check for pending certificate transfers, call <a>ListCertificates</a> to enumerate your certificates.</p>
     fn accept_certificate_transfer(
         &self,
-        input: &AcceptCertificateTransferRequest,
+        input: AcceptCertificateTransferRequest,
     ) -> RusotoFuture<(), AcceptCertificateTransferError> {
         let request_uri = format!(
             "/accept-certificate-transfer/{certificate_id}",
@@ -18318,7 +18321,7 @@ where
     /// <p>Adds a thing to a thing group.</p>
     fn add_thing_to_thing_group(
         &self,
-        input: &AddThingToThingGroupRequest,
+        input: AddThingToThingGroupRequest,
     ) -> RusotoFuture<AddThingToThingGroupResponse, AddThingToThingGroupError> {
         let request_uri = "/thing-groups/addThingToThingGroup";
 
@@ -18326,7 +18329,7 @@ where
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
-        let encoded = Some(serde_json::to_vec(input).unwrap());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -18360,7 +18363,7 @@ where
     /// <p><p>Associates a group with a continuous job. The following criteria must be met: </p> <ul> <li> <p>The job must have been created with the <code>targetSelection</code> field set to &quot;CONTINUOUS&quot;.</p> </li> <li> <p>The job status must currently be &quot;IN_PROGRESS&quot;.</p> </li> <li> <p>The total number of targets associated with a job must not exceed 100.</p> </li> </ul></p>
     fn associate_targets_with_job(
         &self,
-        input: &AssociateTargetsWithJobRequest,
+        input: AssociateTargetsWithJobRequest,
     ) -> RusotoFuture<AssociateTargetsWithJobResponse, AssociateTargetsWithJobError> {
         let request_uri = format!("/jobs/{job_id}/targets", job_id = input.job_id);
 
@@ -18368,7 +18371,7 @@ where
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
-        let encoded = Some(serde_json::to_vec(input).unwrap());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -18400,7 +18403,7 @@ where
     }
 
     /// <p>Attaches a policy to the specified target.</p>
-    fn attach_policy(&self, input: &AttachPolicyRequest) -> RusotoFuture<(), AttachPolicyError> {
+    fn attach_policy(&self, input: AttachPolicyRequest) -> RusotoFuture<(), AttachPolicyError> {
         let request_uri = format!(
             "/target-policies/{policy_name}",
             policy_name = input.policy_name
@@ -18410,7 +18413,7 @@ where
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
-        let encoded = Some(serde_json::to_vec(input).unwrap());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -18435,7 +18438,7 @@ where
     /// <p>Attaches the specified policy to the specified principal (certificate or other credential).</p> <p> <b>Note:</b> This API is deprecated. Please use <a>AttachPolicy</a> instead.</p>
     fn attach_principal_policy(
         &self,
-        input: &AttachPrincipalPolicyRequest,
+        input: AttachPrincipalPolicyRequest,
     ) -> RusotoFuture<(), AttachPrincipalPolicyError> {
         let request_uri = format!(
             "/principal-policies/{policy_name}",
@@ -18471,7 +18474,7 @@ where
     /// <p>Attaches the specified principal to the specified thing.</p>
     fn attach_thing_principal(
         &self,
-        input: &AttachThingPrincipalRequest,
+        input: AttachThingPrincipalRequest,
     ) -> RusotoFuture<AttachThingPrincipalResponse, AttachThingPrincipalError> {
         let request_uri = format!(
             "/things/{thing_name}/principals",
@@ -18516,7 +18519,7 @@ where
     /// <p>Cancels a pending transfer for the specified certificate.</p> <p> <b>Note</b> Only the transfer source account can use this operation to cancel a transfer. (Transfer destinations can use <a>RejectCertificateTransfer</a> instead.) After transfer, AWS IoT returns the certificate to the source account in the INACTIVE state. After the destination account has accepted the transfer, the transfer cannot be cancelled.</p> <p>After a certificate transfer is cancelled, the status of the certificate changes from PENDING_TRANSFER to INACTIVE.</p>
     fn cancel_certificate_transfer(
         &self,
-        input: &CancelCertificateTransferRequest,
+        input: CancelCertificateTransferRequest,
     ) -> RusotoFuture<(), CancelCertificateTransferError> {
         let request_uri = format!(
             "/cancel-certificate-transfer/{certificate_id}",
@@ -18550,7 +18553,7 @@ where
     /// <p>Cancels a job.</p>
     fn cancel_job(
         &self,
-        input: &CancelJobRequest,
+        input: CancelJobRequest,
     ) -> RusotoFuture<CancelJobResponse, CancelJobError> {
         let request_uri = format!("/jobs/{job_id}/cancel", job_id = input.job_id);
 
@@ -18558,7 +18561,7 @@ where
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
-        let encoded = Some(serde_json::to_vec(input).unwrap());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -18630,7 +18633,7 @@ where
     /// <p>Creates an authorizer.</p>
     fn create_authorizer(
         &self,
-        input: &CreateAuthorizerRequest,
+        input: CreateAuthorizerRequest,
     ) -> RusotoFuture<CreateAuthorizerResponse, CreateAuthorizerError> {
         let request_uri = format!(
             "/authorizer/{authorizer_name}",
@@ -18641,7 +18644,7 @@ where
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
-        let encoded = Some(serde_json::to_vec(input).unwrap());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -18674,7 +18677,7 @@ where
     /// <p>Creates an X.509 certificate using the specified certificate signing request.</p> <p> <b>Note:</b> The CSR must include a public key that is either an RSA key with a length of at least 2048 bits or an ECC key from NIST P-256 or NIST P-384 curves. </p> <p> <b>Note:</b> Reusing the same certificate signing request (CSR) results in a distinct certificate.</p> <p>You can create multiple certificates in a batch by creating a directory, copying multiple .csr files into that directory, and then specifying that directory on the command line. The following commands show how to create a batch of certificates given a batch of CSRs.</p> <p>Assuming a set of CSRs are located inside of the directory my-csr-directory:</p> <p>On Linux and OS X, the command is:</p> <p>$ ls my-csr-directory/ | xargs -I {} aws iot create-certificate-from-csr --certificate-signing-request file://my-csr-directory/{}</p> <p>This command lists all of the CSRs in my-csr-directory and pipes each CSR file name to the aws iot create-certificate-from-csr AWS CLI command to create a certificate for the corresponding CSR.</p> <p>The aws iot create-certificate-from-csr part of the command can also be run in parallel to speed up the certificate creation process:</p> <p>$ ls my-csr-directory/ | xargs -P 10 -I {} aws iot create-certificate-from-csr --certificate-signing-request file://my-csr-directory/{}</p> <p>On Windows PowerShell, the command to create certificates for all CSRs in my-csr-directory is:</p> <p>&gt; ls -Name my-csr-directory | %{aws iot create-certificate-from-csr --certificate-signing-request file://my-csr-directory/$_}</p> <p>On a Windows command prompt, the command to create certificates for all CSRs in my-csr-directory is:</p> <p>&gt; forfiles /p my-csr-directory /c "cmd /c aws iot create-certificate-from-csr --certificate-signing-request file://@path"</p>
     fn create_certificate_from_csr(
         &self,
-        input: &CreateCertificateFromCsrRequest,
+        input: CreateCertificateFromCsrRequest,
     ) -> RusotoFuture<CreateCertificateFromCsrResponse, CreateCertificateFromCsrError> {
         let request_uri = "/certificates";
 
@@ -18682,7 +18685,7 @@ where
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
-        let encoded = Some(serde_json::to_vec(input).unwrap());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
         let mut params = Params::new();
@@ -18722,7 +18725,7 @@ where
     /// <p>Creates a job.</p>
     fn create_job(
         &self,
-        input: &CreateJobRequest,
+        input: CreateJobRequest,
     ) -> RusotoFuture<CreateJobResponse, CreateJobError> {
         let request_uri = format!("/jobs/{job_id}", job_id = input.job_id);
 
@@ -18730,7 +18733,7 @@ where
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
-        let encoded = Some(serde_json::to_vec(input).unwrap());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -18763,7 +18766,7 @@ where
     /// <p>Creates a 2048-bit RSA key pair and issues an X.509 certificate using the issued public key.</p> <p> <b>Note</b> This is the only time AWS IoT issues the private key for this certificate, so it is important to keep it in a secure location.</p>
     fn create_keys_and_certificate(
         &self,
-        input: &CreateKeysAndCertificateRequest,
+        input: CreateKeysAndCertificateRequest,
     ) -> RusotoFuture<CreateKeysAndCertificateResponse, CreateKeysAndCertificateError> {
         let request_uri = "/keys-and-certificate";
 
@@ -18809,7 +18812,7 @@ where
     /// <p>Creates an AWS IoT OTAUpdate on a target group of things or groups.</p>
     fn create_ota_update(
         &self,
-        input: &CreateOTAUpdateRequest,
+        input: CreateOTAUpdateRequest,
     ) -> RusotoFuture<CreateOTAUpdateResponse, CreateOTAUpdateError> {
         let request_uri = format!(
             "/otaUpdates/{ota_update_id}",
@@ -18820,7 +18823,7 @@ where
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
-        let encoded = Some(serde_json::to_vec(input).unwrap());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -18853,7 +18856,7 @@ where
     /// <p>Creates an AWS IoT policy.</p> <p>The created policy is the default version for the policy. This operation creates a policy version with a version identifier of <b>1</b> and sets <b>1</b> as the policy's default version.</p>
     fn create_policy(
         &self,
-        input: &CreatePolicyRequest,
+        input: CreatePolicyRequest,
     ) -> RusotoFuture<CreatePolicyResponse, CreatePolicyError> {
         let request_uri = format!("/policies/{policy_name}", policy_name = input.policy_name);
 
@@ -18861,7 +18864,7 @@ where
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
-        let encoded = Some(serde_json::to_vec(input).unwrap());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -18894,7 +18897,7 @@ where
     /// <p>Creates a new version of the specified AWS IoT policy. To update a policy, create a new policy version. A managed policy can have up to five versions. If the policy has five versions, you must use <a>DeletePolicyVersion</a> to delete an existing version before you create a new one.</p> <p>Optionally, you can set the new version as the policy's default version. The default version is the operative version (that is, the version that is in effect for the certificates to which the policy is attached).</p>
     fn create_policy_version(
         &self,
-        input: &CreatePolicyVersionRequest,
+        input: CreatePolicyVersionRequest,
     ) -> RusotoFuture<CreatePolicyVersionResponse, CreatePolicyVersionError> {
         let request_uri = format!(
             "/policies/{policy_name}/version",
@@ -18905,7 +18908,7 @@ where
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
-        let encoded = Some(serde_json::to_vec(input).unwrap());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
         let mut params = Params::new();
@@ -18945,7 +18948,7 @@ where
     /// <p>Creates a role alias.</p>
     fn create_role_alias(
         &self,
-        input: &CreateRoleAliasRequest,
+        input: CreateRoleAliasRequest,
     ) -> RusotoFuture<CreateRoleAliasResponse, CreateRoleAliasError> {
         let request_uri = format!("/role-aliases/{role_alias}", role_alias = input.role_alias);
 
@@ -18953,7 +18956,7 @@ where
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
-        let encoded = Some(serde_json::to_vec(input).unwrap());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -18986,7 +18989,7 @@ where
     /// <p>Creates a stream for delivering one or more large files in chunks over MQTT. A stream transports data bytes in chunks or blocks packaged as MQTT messages from a source like S3. You can have one or more files associated with a stream. The total size of a file associated with the stream cannot exceed more than 2 MB. The stream will be created with version 0. If a stream is created with the same streamID as a stream that existed and was deleted within last 90 days, we will resurrect that old stream by incrementing the version by 1.</p>
     fn create_stream(
         &self,
-        input: &CreateStreamRequest,
+        input: CreateStreamRequest,
     ) -> RusotoFuture<CreateStreamResponse, CreateStreamError> {
         let request_uri = format!("/streams/{stream_id}", stream_id = input.stream_id);
 
@@ -18994,7 +18997,7 @@ where
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
-        let encoded = Some(serde_json::to_vec(input).unwrap());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -19027,7 +19030,7 @@ where
     /// <p>Creates a thing record in the thing registry.</p>
     fn create_thing(
         &self,
-        input: &CreateThingRequest,
+        input: CreateThingRequest,
     ) -> RusotoFuture<CreateThingResponse, CreateThingError> {
         let request_uri = format!("/things/{thing_name}", thing_name = input.thing_name);
 
@@ -19035,7 +19038,7 @@ where
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
-        let encoded = Some(serde_json::to_vec(input).unwrap());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -19068,7 +19071,7 @@ where
     /// <p>Create a thing group.</p>
     fn create_thing_group(
         &self,
-        input: &CreateThingGroupRequest,
+        input: CreateThingGroupRequest,
     ) -> RusotoFuture<CreateThingGroupResponse, CreateThingGroupError> {
         let request_uri = format!(
             "/thing-groups/{thing_group_name}",
@@ -19079,7 +19082,7 @@ where
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
-        let encoded = Some(serde_json::to_vec(input).unwrap());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -19112,7 +19115,7 @@ where
     /// <p>Creates a new thing type.</p>
     fn create_thing_type(
         &self,
-        input: &CreateThingTypeRequest,
+        input: CreateThingTypeRequest,
     ) -> RusotoFuture<CreateThingTypeResponse, CreateThingTypeError> {
         let request_uri = format!(
             "/thing-types/{thing_type_name}",
@@ -19123,7 +19126,7 @@ where
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
-        let encoded = Some(serde_json::to_vec(input).unwrap());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -19156,7 +19159,7 @@ where
     /// <p>Creates a rule. Creating rules is an administrator-level action. Any user who has permission to create rules will be able to access data processed by the rule.</p>
     fn create_topic_rule(
         &self,
-        input: &CreateTopicRuleRequest,
+        input: CreateTopicRuleRequest,
     ) -> RusotoFuture<(), CreateTopicRuleError> {
         let request_uri = format!("/rules/{rule_name}", rule_name = input.rule_name);
 
@@ -19189,7 +19192,7 @@ where
     /// <p>Deletes an authorizer.</p>
     fn delete_authorizer(
         &self,
-        input: &DeleteAuthorizerRequest,
+        input: DeleteAuthorizerRequest,
     ) -> RusotoFuture<DeleteAuthorizerResponse, DeleteAuthorizerError> {
         let request_uri = format!(
             "/authorizer/{authorizer_name}",
@@ -19231,7 +19234,7 @@ where
     /// <p>Deletes a registered CA certificate.</p>
     fn delete_ca_certificate(
         &self,
-        input: &DeleteCACertificateRequest,
+        input: DeleteCACertificateRequest,
     ) -> RusotoFuture<DeleteCACertificateResponse, DeleteCACertificateError> {
         let request_uri = format!(
             "/cacertificate/{ca_certificate_id}",
@@ -19274,7 +19277,7 @@ where
     /// <p>Deletes the specified certificate.</p> <p>A certificate cannot be deleted if it has a policy attached to it or if its status is set to ACTIVE. To delete a certificate, first use the <a>DetachPrincipalPolicy</a> API to detach all policies. Next, use the <a>UpdateCertificate</a> API to set the certificate to the INACTIVE status.</p>
     fn delete_certificate(
         &self,
-        input: &DeleteCertificateRequest,
+        input: DeleteCertificateRequest,
     ) -> RusotoFuture<(), DeleteCertificateError> {
         let request_uri = format!(
             "/certificates/{certificate_id}",
@@ -19314,7 +19317,7 @@ where
     /// <p>Delete an OTA update.</p>
     fn delete_ota_update(
         &self,
-        input: &DeleteOTAUpdateRequest,
+        input: DeleteOTAUpdateRequest,
     ) -> RusotoFuture<DeleteOTAUpdateResponse, DeleteOTAUpdateError> {
         let request_uri = format!(
             "/otaUpdates/{ota_update_id}",
@@ -19354,7 +19357,7 @@ where
     }
 
     /// <p>Deletes the specified policy.</p> <p>A policy cannot be deleted if it has non-default versions or it is attached to any certificate.</p> <p>To delete a policy, use the DeletePolicyVersion API to delete all non-default versions of the policy; use the DetachPrincipalPolicy API to detach the policy from any certificate; and then use the DeletePolicy API to delete the policy.</p> <p>When a policy is deleted using DeletePolicy, its default version is deleted with it.</p>
-    fn delete_policy(&self, input: &DeletePolicyRequest) -> RusotoFuture<(), DeletePolicyError> {
+    fn delete_policy(&self, input: DeletePolicyRequest) -> RusotoFuture<(), DeletePolicyError> {
         let request_uri = format!("/policies/{policy_name}", policy_name = input.policy_name);
 
         let mut request = SignedRequest::new("DELETE", "execute-api", &self.region, &request_uri);
@@ -19384,7 +19387,7 @@ where
     /// <p>Deletes the specified version of the specified policy. You cannot delete the default version of a policy using this API. To delete the default version of a policy, use <a>DeletePolicy</a>. To find out which version of a policy is marked as the default version, use ListPolicyVersions.</p>
     fn delete_policy_version(
         &self,
-        input: &DeletePolicyVersionRequest,
+        input: DeletePolicyVersionRequest,
     ) -> RusotoFuture<(), DeletePolicyVersionError> {
         let request_uri = format!(
             "/policies/{policy_name}/version/{policy_version_id}",
@@ -19458,7 +19461,7 @@ where
     /// <p>Deletes a role alias</p>
     fn delete_role_alias(
         &self,
-        input: &DeleteRoleAliasRequest,
+        input: DeleteRoleAliasRequest,
     ) -> RusotoFuture<DeleteRoleAliasResponse, DeleteRoleAliasError> {
         let request_uri = format!("/role-aliases/{role_alias}", role_alias = input.role_alias);
 
@@ -19497,7 +19500,7 @@ where
     /// <p>Deletes a stream.</p>
     fn delete_stream(
         &self,
-        input: &DeleteStreamRequest,
+        input: DeleteStreamRequest,
     ) -> RusotoFuture<DeleteStreamResponse, DeleteStreamError> {
         let request_uri = format!("/streams/{stream_id}", stream_id = input.stream_id);
 
@@ -19536,7 +19539,7 @@ where
     /// <p>Deletes the specified thing.</p>
     fn delete_thing(
         &self,
-        input: &DeleteThingRequest,
+        input: DeleteThingRequest,
     ) -> RusotoFuture<DeleteThingResponse, DeleteThingError> {
         let request_uri = format!("/things/{thing_name}", thing_name = input.thing_name);
 
@@ -19581,7 +19584,7 @@ where
     /// <p>Deletes a thing group.</p>
     fn delete_thing_group(
         &self,
-        input: &DeleteThingGroupRequest,
+        input: DeleteThingGroupRequest,
     ) -> RusotoFuture<DeleteThingGroupResponse, DeleteThingGroupError> {
         let request_uri = format!(
             "/thing-groups/{thing_group_name}",
@@ -19629,7 +19632,7 @@ where
     /// <p>Deletes the specified thing type . You cannot delete a thing type if it has things associated with it. To delete a thing type, first mark it as deprecated by calling <a>DeprecateThingType</a>, then remove any associated things by calling <a>UpdateThing</a> to change the thing type on any associated thing, and finally use <a>DeleteThingType</a> to delete the thing type.</p>
     fn delete_thing_type(
         &self,
-        input: &DeleteThingTypeRequest,
+        input: DeleteThingTypeRequest,
     ) -> RusotoFuture<DeleteThingTypeResponse, DeleteThingTypeError> {
         let request_uri = format!(
             "/thing-types/{thing_type_name}",
@@ -19671,7 +19674,7 @@ where
     /// <p>Deletes the rule.</p>
     fn delete_topic_rule(
         &self,
-        input: &DeleteTopicRuleRequest,
+        input: DeleteTopicRuleRequest,
     ) -> RusotoFuture<(), DeleteTopicRuleError> {
         let request_uri = format!("/rules/{rule_name}", rule_name = input.rule_name);
 
@@ -19702,7 +19705,7 @@ where
     /// <p>Deletes a logging level.</p>
     fn delete_v2_logging_level(
         &self,
-        input: &DeleteV2LoggingLevelRequest,
+        input: DeleteV2LoggingLevelRequest,
     ) -> RusotoFuture<(), DeleteV2LoggingLevelError> {
         let request_uri = "/v2LoggingLevel";
 
@@ -19738,7 +19741,7 @@ where
     /// <p>Deprecates a thing type. You can not associate new things with deprecated thing type.</p>
     fn deprecate_thing_type(
         &self,
-        input: &DeprecateThingTypeRequest,
+        input: DeprecateThingTypeRequest,
     ) -> RusotoFuture<DeprecateThingTypeResponse, DeprecateThingTypeError> {
         let request_uri = format!(
             "/thing-types/{thing_type_name}/deprecate",
@@ -19749,7 +19752,7 @@ where
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
-        let encoded = Some(serde_json::to_vec(input).unwrap());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -19783,7 +19786,7 @@ where
     /// <p>Describes an authorizer.</p>
     fn describe_authorizer(
         &self,
-        input: &DescribeAuthorizerRequest,
+        input: DescribeAuthorizerRequest,
     ) -> RusotoFuture<DescribeAuthorizerResponse, DescribeAuthorizerError> {
         let request_uri = format!(
             "/authorizer/{authorizer_name}",
@@ -19826,7 +19829,7 @@ where
     /// <p>Describes a registered CA certificate.</p>
     fn describe_ca_certificate(
         &self,
-        input: &DescribeCACertificateRequest,
+        input: DescribeCACertificateRequest,
     ) -> RusotoFuture<DescribeCACertificateResponse, DescribeCACertificateError> {
         let request_uri = format!(
             "/cacertificate/{ca_certificate_id}",
@@ -19869,7 +19872,7 @@ where
     /// <p>Gets information about the specified certificate.</p>
     fn describe_certificate(
         &self,
-        input: &DescribeCertificateRequest,
+        input: DescribeCertificateRequest,
     ) -> RusotoFuture<DescribeCertificateResponse, DescribeCertificateError> {
         let request_uri = format!(
             "/certificates/{certificate_id}",
@@ -19951,7 +19954,7 @@ where
     /// <p>Returns a unique endpoint specific to the AWS account making the call.</p>
     fn describe_endpoint(
         &self,
-        input: &DescribeEndpointRequest,
+        input: DescribeEndpointRequest,
     ) -> RusotoFuture<DescribeEndpointResponse, DescribeEndpointError> {
         let request_uri = "/endpoint";
 
@@ -20036,7 +20039,7 @@ where
     /// <p>Describes a search index.</p>
     fn describe_index(
         &self,
-        input: &DescribeIndexRequest,
+        input: DescribeIndexRequest,
     ) -> RusotoFuture<DescribeIndexResponse, DescribeIndexError> {
         let request_uri = format!("/indices/{index_name}", index_name = input.index_name);
 
@@ -20075,7 +20078,7 @@ where
     /// <p>Describes a job.</p>
     fn describe_job(
         &self,
-        input: &DescribeJobRequest,
+        input: DescribeJobRequest,
     ) -> RusotoFuture<DescribeJobResponse, DescribeJobError> {
         let request_uri = format!("/jobs/{job_id}", job_id = input.job_id);
 
@@ -20114,7 +20117,7 @@ where
     /// <p>Describes a job execution.</p>
     fn describe_job_execution(
         &self,
-        input: &DescribeJobExecutionRequest,
+        input: DescribeJobExecutionRequest,
     ) -> RusotoFuture<DescribeJobExecutionResponse, DescribeJobExecutionError> {
         let request_uri = format!(
             "/things/{thing_name}/jobs/{job_id}",
@@ -20164,7 +20167,7 @@ where
     /// <p>Describes a role alias.</p>
     fn describe_role_alias(
         &self,
-        input: &DescribeRoleAliasRequest,
+        input: DescribeRoleAliasRequest,
     ) -> RusotoFuture<DescribeRoleAliasResponse, DescribeRoleAliasError> {
         let request_uri = format!("/role-aliases/{role_alias}", role_alias = input.role_alias);
 
@@ -20204,7 +20207,7 @@ where
     /// <p>Gets information about a stream.</p>
     fn describe_stream(
         &self,
-        input: &DescribeStreamRequest,
+        input: DescribeStreamRequest,
     ) -> RusotoFuture<DescribeStreamResponse, DescribeStreamError> {
         let request_uri = format!("/streams/{stream_id}", stream_id = input.stream_id);
 
@@ -20243,7 +20246,7 @@ where
     /// <p>Gets information about the specified thing.</p>
     fn describe_thing(
         &self,
-        input: &DescribeThingRequest,
+        input: DescribeThingRequest,
     ) -> RusotoFuture<DescribeThingResponse, DescribeThingError> {
         let request_uri = format!("/things/{thing_name}", thing_name = input.thing_name);
 
@@ -20282,7 +20285,7 @@ where
     /// <p>Describe a thing group.</p>
     fn describe_thing_group(
         &self,
-        input: &DescribeThingGroupRequest,
+        input: DescribeThingGroupRequest,
     ) -> RusotoFuture<DescribeThingGroupResponse, DescribeThingGroupError> {
         let request_uri = format!(
             "/thing-groups/{thing_group_name}",
@@ -20325,7 +20328,7 @@ where
     /// <p>Describes a bulk thing provisioning task.</p>
     fn describe_thing_registration_task(
         &self,
-        input: &DescribeThingRegistrationTaskRequest,
+        input: DescribeThingRegistrationTaskRequest,
     ) -> RusotoFuture<DescribeThingRegistrationTaskResponse, DescribeThingRegistrationTaskError>
     {
         let request_uri = format!(
@@ -20370,7 +20373,7 @@ where
     /// <p>Gets information about the specified thing type.</p>
     fn describe_thing_type(
         &self,
-        input: &DescribeThingTypeRequest,
+        input: DescribeThingTypeRequest,
     ) -> RusotoFuture<DescribeThingTypeResponse, DescribeThingTypeError> {
         let request_uri = format!(
             "/thing-types/{thing_type_name}",
@@ -20411,7 +20414,7 @@ where
     }
 
     /// <p>Detaches a policy from the specified target.</p>
-    fn detach_policy(&self, input: &DetachPolicyRequest) -> RusotoFuture<(), DetachPolicyError> {
+    fn detach_policy(&self, input: DetachPolicyRequest) -> RusotoFuture<(), DetachPolicyError> {
         let request_uri = format!(
             "/target-policies/{policy_name}",
             policy_name = input.policy_name
@@ -20421,7 +20424,7 @@ where
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
-        let encoded = Some(serde_json::to_vec(input).unwrap());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -20446,7 +20449,7 @@ where
     /// <p>Removes the specified policy from the specified certificate.</p> <p> <b>Note:</b> This API is deprecated. Please use <a>DetachPolicy</a> instead.</p>
     fn detach_principal_policy(
         &self,
-        input: &DetachPrincipalPolicyRequest,
+        input: DetachPrincipalPolicyRequest,
     ) -> RusotoFuture<(), DetachPrincipalPolicyError> {
         let request_uri = format!(
             "/principal-policies/{policy_name}",
@@ -20482,7 +20485,7 @@ where
     /// <p>Detaches the specified principal from the specified thing.</p>
     fn detach_thing_principal(
         &self,
-        input: &DetachThingPrincipalRequest,
+        input: DetachThingPrincipalRequest,
     ) -> RusotoFuture<DetachThingPrincipalResponse, DetachThingPrincipalError> {
         let request_uri = format!(
             "/things/{thing_name}/principals",
@@ -20527,7 +20530,7 @@ where
     /// <p>Disables the rule.</p>
     fn disable_topic_rule(
         &self,
-        input: &DisableTopicRuleRequest,
+        input: DisableTopicRuleRequest,
     ) -> RusotoFuture<(), DisableTopicRuleError> {
         let request_uri = format!("/rules/{rule_name}/disable", rule_name = input.rule_name);
 
@@ -20558,7 +20561,7 @@ where
     /// <p>Enables the rule.</p>
     fn enable_topic_rule(
         &self,
-        input: &EnableTopicRuleRequest,
+        input: EnableTopicRuleRequest,
     ) -> RusotoFuture<(), EnableTopicRuleError> {
         let request_uri = format!("/rules/{rule_name}/enable", rule_name = input.rule_name);
 
@@ -20589,7 +20592,7 @@ where
     /// <p>Gets effective policies.</p>
     fn get_effective_policies(
         &self,
-        input: &GetEffectivePoliciesRequest,
+        input: GetEffectivePoliciesRequest,
     ) -> RusotoFuture<GetEffectivePoliciesResponse, GetEffectivePoliciesError> {
         let request_uri = "/effective-policies";
 
@@ -20597,7 +20600,7 @@ where
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
-        let encoded = Some(serde_json::to_vec(input).unwrap());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
         let mut params = Params::new();
@@ -20676,7 +20679,7 @@ where
     /// <p>Gets a job document.</p>
     fn get_job_document(
         &self,
-        input: &GetJobDocumentRequest,
+        input: GetJobDocumentRequest,
     ) -> RusotoFuture<GetJobDocumentResponse, GetJobDocumentError> {
         let request_uri = format!("/jobs/{job_id}/job-document", job_id = input.job_id);
 
@@ -20754,7 +20757,7 @@ where
     /// <p>Gets an OTA update.</p>
     fn get_ota_update(
         &self,
-        input: &GetOTAUpdateRequest,
+        input: GetOTAUpdateRequest,
     ) -> RusotoFuture<GetOTAUpdateResponse, GetOTAUpdateError> {
         let request_uri = format!(
             "/otaUpdates/{ota_update_id}",
@@ -20796,7 +20799,7 @@ where
     /// <p>Gets information about the specified policy with the policy document of the default version.</p>
     fn get_policy(
         &self,
-        input: &GetPolicyRequest,
+        input: GetPolicyRequest,
     ) -> RusotoFuture<GetPolicyResponse, GetPolicyError> {
         let request_uri = format!("/policies/{policy_name}", policy_name = input.policy_name);
 
@@ -20835,7 +20838,7 @@ where
     /// <p>Gets information about the specified policy version.</p>
     fn get_policy_version(
         &self,
-        input: &GetPolicyVersionRequest,
+        input: GetPolicyVersionRequest,
     ) -> RusotoFuture<GetPolicyVersionResponse, GetPolicyVersionError> {
         let request_uri = format!(
             "/policies/{policy_name}/version/{policy_version_id}",
@@ -20917,7 +20920,7 @@ where
     /// <p>Gets information about the rule.</p>
     fn get_topic_rule(
         &self,
-        input: &GetTopicRuleRequest,
+        input: GetTopicRuleRequest,
     ) -> RusotoFuture<GetTopicRuleResponse, GetTopicRuleError> {
         let request_uri = format!("/rules/{rule_name}", rule_name = input.rule_name);
 
@@ -20995,7 +20998,7 @@ where
     /// <p>Lists the policies attached to the specified thing group.</p>
     fn list_attached_policies(
         &self,
-        input: &ListAttachedPoliciesRequest,
+        input: ListAttachedPoliciesRequest,
     ) -> RusotoFuture<ListAttachedPoliciesResponse, ListAttachedPoliciesError> {
         let request_uri = format!("/attached-policies/{target}", target = input.target);
 
@@ -21047,7 +21050,7 @@ where
     /// <p>Lists the authorizers registered in your account.</p>
     fn list_authorizers(
         &self,
-        input: &ListAuthorizersRequest,
+        input: ListAuthorizersRequest,
     ) -> RusotoFuture<ListAuthorizersResponse, ListAuthorizersError> {
         let request_uri = "/authorizers/";
 
@@ -21101,7 +21104,7 @@ where
     /// <p>Lists the CA certificates registered for your AWS account.</p> <p>The results are paginated with a default page size of 25. You can use the returned marker to retrieve additional results.</p>
     fn list_ca_certificates(
         &self,
-        input: &ListCACertificatesRequest,
+        input: ListCACertificatesRequest,
     ) -> RusotoFuture<ListCACertificatesResponse, ListCACertificatesError> {
         let request_uri = "/cacertificates";
 
@@ -21153,7 +21156,7 @@ where
     /// <p>Lists the certificates registered in your AWS account.</p> <p>The results are paginated with a default page size of 25. You can use the returned marker to retrieve additional results.</p>
     fn list_certificates(
         &self,
-        input: &ListCertificatesRequest,
+        input: ListCertificatesRequest,
     ) -> RusotoFuture<ListCertificatesResponse, ListCertificatesError> {
         let request_uri = "/certificates";
 
@@ -21204,7 +21207,7 @@ where
     /// <p>List the device certificates signed by the specified CA certificate.</p>
     fn list_certificates_by_ca(
         &self,
-        input: &ListCertificatesByCARequest,
+        input: ListCertificatesByCARequest,
     ) -> RusotoFuture<ListCertificatesByCAResponse, ListCertificatesByCAError> {
         let request_uri = format!(
             "/certificates-by-ca/{ca_certificate_id}",
@@ -21259,7 +21262,7 @@ where
     /// <p>Lists the search indices.</p>
     fn list_indices(
         &self,
-        input: &ListIndicesRequest,
+        input: ListIndicesRequest,
     ) -> RusotoFuture<ListIndicesResponse, ListIndicesError> {
         let request_uri = "/indices";
 
@@ -21307,7 +21310,7 @@ where
     /// <p>Lists the job executions for a job.</p>
     fn list_job_executions_for_job(
         &self,
-        input: &ListJobExecutionsForJobRequest,
+        input: ListJobExecutionsForJobRequest,
     ) -> RusotoFuture<ListJobExecutionsForJobResponse, ListJobExecutionsForJobError> {
         let request_uri = format!("/jobs/{job_id}/things", job_id = input.job_id);
 
@@ -21359,7 +21362,7 @@ where
     /// <p>Lists the job executions for the specified thing.</p>
     fn list_job_executions_for_thing(
         &self,
-        input: &ListJobExecutionsForThingRequest,
+        input: ListJobExecutionsForThingRequest,
     ) -> RusotoFuture<ListJobExecutionsForThingResponse, ListJobExecutionsForThingError> {
         let request_uri = format!("/things/{thing_name}/jobs", thing_name = input.thing_name);
 
@@ -21409,7 +21412,7 @@ where
     }
 
     /// <p>Lists jobs.</p>
-    fn list_jobs(&self, input: &ListJobsRequest) -> RusotoFuture<ListJobsResponse, ListJobsError> {
+    fn list_jobs(&self, input: ListJobsRequest) -> RusotoFuture<ListJobsResponse, ListJobsError> {
         let request_uri = "/jobs";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
@@ -21468,7 +21471,7 @@ where
     /// <p>Lists OTA updates.</p>
     fn list_ota_updates(
         &self,
-        input: &ListOTAUpdatesRequest,
+        input: ListOTAUpdatesRequest,
     ) -> RusotoFuture<ListOTAUpdatesResponse, ListOTAUpdatesError> {
         let request_uri = "/otaUpdates";
 
@@ -21519,7 +21522,7 @@ where
     /// <p>Lists certificates that are being transferred but not yet accepted.</p>
     fn list_outgoing_certificates(
         &self,
-        input: &ListOutgoingCertificatesRequest,
+        input: ListOutgoingCertificatesRequest,
     ) -> RusotoFuture<ListOutgoingCertificatesResponse, ListOutgoingCertificatesError> {
         let request_uri = "/certificates-out-going";
 
@@ -21571,7 +21574,7 @@ where
     /// <p>Lists your policies.</p>
     fn list_policies(
         &self,
-        input: &ListPoliciesRequest,
+        input: ListPoliciesRequest,
     ) -> RusotoFuture<ListPoliciesResponse, ListPoliciesError> {
         let request_uri = "/policies";
 
@@ -21622,7 +21625,7 @@ where
     /// <p>Lists the principals associated with the specified policy.</p> <p> <b>Note:</b> This API is deprecated. Please use <a>ListTargetsForPolicy</a> instead.</p>
     fn list_policy_principals(
         &self,
-        input: &ListPolicyPrincipalsRequest,
+        input: ListPolicyPrincipalsRequest,
     ) -> RusotoFuture<ListPolicyPrincipalsResponse, ListPolicyPrincipalsError> {
         let request_uri = "/policy-principals";
 
@@ -21675,7 +21678,7 @@ where
     /// <p>Lists the versions of the specified policy and identifies the default version.</p>
     fn list_policy_versions(
         &self,
-        input: &ListPolicyVersionsRequest,
+        input: ListPolicyVersionsRequest,
     ) -> RusotoFuture<ListPolicyVersionsResponse, ListPolicyVersionsError> {
         let request_uri = format!(
             "/policies/{policy_name}/version",
@@ -21718,7 +21721,7 @@ where
     /// <p>Lists the policies attached to the specified principal. If you use an Cognito identity, the ID must be in <a href="http://docs.aws.amazon.com/cognitoidentity/latest/APIReference/API_GetCredentialsForIdentity.html#API_GetCredentialsForIdentity_RequestSyntax">AmazonCognito Identity format</a>.</p> <p> <b>Note:</b> This API is deprecated. Please use <a>ListAttachedPolicies</a> instead.</p>
     fn list_principal_policies(
         &self,
-        input: &ListPrincipalPoliciesRequest,
+        input: ListPrincipalPoliciesRequest,
     ) -> RusotoFuture<ListPrincipalPoliciesResponse, ListPrincipalPoliciesError> {
         let request_uri = "/principal-policies";
 
@@ -21771,7 +21774,7 @@ where
     /// <p>Lists the things associated with the specified principal.</p>
     fn list_principal_things(
         &self,
-        input: &ListPrincipalThingsRequest,
+        input: ListPrincipalThingsRequest,
     ) -> RusotoFuture<ListPrincipalThingsResponse, ListPrincipalThingsError> {
         let request_uri = "/principals/things";
 
@@ -21821,7 +21824,7 @@ where
     /// <p>Lists the role aliases registered in your account.</p>
     fn list_role_aliases(
         &self,
-        input: &ListRoleAliasesRequest,
+        input: ListRoleAliasesRequest,
     ) -> RusotoFuture<ListRoleAliasesResponse, ListRoleAliasesError> {
         let request_uri = "/role-aliases";
 
@@ -21872,7 +21875,7 @@ where
     /// <p>Lists all of the streams in your AWS account.</p>
     fn list_streams(
         &self,
-        input: &ListStreamsRequest,
+        input: ListStreamsRequest,
     ) -> RusotoFuture<ListStreamsResponse, ListStreamsError> {
         let request_uri = "/streams";
 
@@ -21923,7 +21926,7 @@ where
     /// <p>List targets for the specified policy.</p>
     fn list_targets_for_policy(
         &self,
-        input: &ListTargetsForPolicyRequest,
+        input: ListTargetsForPolicyRequest,
     ) -> RusotoFuture<ListTargetsForPolicyResponse, ListTargetsForPolicyError> {
         let request_uri = format!(
             "/policy-targets/{policy_name}",
@@ -21975,7 +21978,7 @@ where
     /// <p>List the thing groups in your account.</p>
     fn list_thing_groups(
         &self,
-        input: &ListThingGroupsRequest,
+        input: ListThingGroupsRequest,
     ) -> RusotoFuture<ListThingGroupsResponse, ListThingGroupsError> {
         let request_uri = "/thing-groups";
 
@@ -22032,7 +22035,7 @@ where
     /// <p>List the thing groups to which the specified thing belongs.</p>
     fn list_thing_groups_for_thing(
         &self,
-        input: &ListThingGroupsForThingRequest,
+        input: ListThingGroupsForThingRequest,
     ) -> RusotoFuture<ListThingGroupsForThingResponse, ListThingGroupsForThingError> {
         let request_uri = format!(
             "/things/{thing_name}/thing-groups",
@@ -22084,7 +22087,7 @@ where
     /// <p>Lists the principals associated with the specified thing.</p>
     fn list_thing_principals(
         &self,
-        input: &ListThingPrincipalsRequest,
+        input: ListThingPrincipalsRequest,
     ) -> RusotoFuture<ListThingPrincipalsResponse, ListThingPrincipalsError> {
         let request_uri = format!(
             "/things/{thing_name}/principals",
@@ -22127,7 +22130,7 @@ where
     /// <p>Information about the thing registration tasks.</p>
     fn list_thing_registration_task_reports(
         &self,
-        input: &ListThingRegistrationTaskReportsRequest,
+        input: ListThingRegistrationTaskReportsRequest,
     ) -> RusotoFuture<ListThingRegistrationTaskReportsResponse, ListThingRegistrationTaskReportsError>
     {
         let request_uri = format!(
@@ -22182,7 +22185,7 @@ where
     /// <p>List bulk thing provisioning tasks.</p>
     fn list_thing_registration_tasks(
         &self,
-        input: &ListThingRegistrationTasksRequest,
+        input: ListThingRegistrationTasksRequest,
     ) -> RusotoFuture<ListThingRegistrationTasksResponse, ListThingRegistrationTasksError> {
         let request_uri = "/thing-registration-tasks";
 
@@ -22235,7 +22238,7 @@ where
     /// <p>Lists the existing thing types.</p>
     fn list_thing_types(
         &self,
-        input: &ListThingTypesRequest,
+        input: ListThingTypesRequest,
     ) -> RusotoFuture<ListThingTypesResponse, ListThingTypesError> {
         let request_uri = "/thing-types";
 
@@ -22286,7 +22289,7 @@ where
     /// <p>Lists your things. Use the <b>attributeName</b> and <b>attributeValue</b> parameters to filter your things. For example, calling <code>ListThings</code> with attributeName=Color and attributeValue=Red retrieves all things in the registry that contain an attribute <b>Color</b> with the value <b>Red</b>. </p>
     fn list_things(
         &self,
-        input: &ListThingsRequest,
+        input: ListThingsRequest,
     ) -> RusotoFuture<ListThingsResponse, ListThingsError> {
         let request_uri = "/things";
 
@@ -22343,7 +22346,7 @@ where
     /// <p>Lists the things in the specified group.</p>
     fn list_things_in_thing_group(
         &self,
-        input: &ListThingsInThingGroupRequest,
+        input: ListThingsInThingGroupRequest,
     ) -> RusotoFuture<ListThingsInThingGroupResponse, ListThingsInThingGroupError> {
         let request_uri = format!(
             "/thing-groups/{thing_group_name}/things",
@@ -22398,7 +22401,7 @@ where
     /// <p>Lists the rules for the specific topic.</p>
     fn list_topic_rules(
         &self,
-        input: &ListTopicRulesRequest,
+        input: ListTopicRulesRequest,
     ) -> RusotoFuture<ListTopicRulesResponse, ListTopicRulesError> {
         let request_uri = "/rules";
 
@@ -22452,7 +22455,7 @@ where
     /// <p>Lists logging levels.</p>
     fn list_v2_logging_levels(
         &self,
-        input: &ListV2LoggingLevelsRequest,
+        input: ListV2LoggingLevelsRequest,
     ) -> RusotoFuture<ListV2LoggingLevelsResponse, ListV2LoggingLevelsError> {
         let request_uri = "/v2LoggingLevel";
 
@@ -22504,7 +22507,7 @@ where
     /// <p>Registers a CA certificate with AWS IoT. This CA certificate can then be used to sign device certificates, which can be then registered with AWS IoT. You can register up to 10 CA certificates per AWS account that have the same subject field. This enables you to have up to 10 certificate authorities sign your device certificates. If you have more than one CA certificate registered, make sure you pass the CA certificate when you register your device certificates with the RegisterCertificate API.</p>
     fn register_ca_certificate(
         &self,
-        input: &RegisterCACertificateRequest,
+        input: RegisterCACertificateRequest,
     ) -> RusotoFuture<RegisterCACertificateResponse, RegisterCACertificateError> {
         let request_uri = "/cacertificate";
 
@@ -22512,7 +22515,7 @@ where
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
-        let encoded = Some(serde_json::to_vec(input).unwrap());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
         let mut params = Params::new();
@@ -22555,7 +22558,7 @@ where
     /// <p>Registers a device certificate with AWS IoT. If you have more than one CA certificate that has the same subject field, you must specify the CA certificate that was used to sign the device certificate being registered.</p>
     fn register_certificate(
         &self,
-        input: &RegisterCertificateRequest,
+        input: RegisterCertificateRequest,
     ) -> RusotoFuture<RegisterCertificateResponse, RegisterCertificateError> {
         let request_uri = "/certificate/register";
 
@@ -22563,7 +22566,7 @@ where
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
-        let encoded = Some(serde_json::to_vec(input).unwrap());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -22597,7 +22600,7 @@ where
     /// <p>Provisions a thing.</p>
     fn register_thing(
         &self,
-        input: &RegisterThingRequest,
+        input: RegisterThingRequest,
     ) -> RusotoFuture<RegisterThingResponse, RegisterThingError> {
         let request_uri = "/things";
 
@@ -22605,7 +22608,7 @@ where
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
-        let encoded = Some(serde_json::to_vec(input).unwrap());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -22638,7 +22641,7 @@ where
     /// <p>Rejects a pending certificate transfer. After AWS IoT rejects a certificate transfer, the certificate status changes from <b>PENDING_TRANSFER</b> to <b>INACTIVE</b>.</p> <p>To check for pending certificate transfers, call <a>ListCertificates</a> to enumerate your certificates.</p> <p>This operation can only be called by the transfer destination. After it is called, the certificate will be returned to the source's account in the INACTIVE state.</p>
     fn reject_certificate_transfer(
         &self,
-        input: &RejectCertificateTransferRequest,
+        input: RejectCertificateTransferRequest,
     ) -> RusotoFuture<(), RejectCertificateTransferError> {
         let request_uri = format!(
             "/reject-certificate-transfer/{certificate_id}",
@@ -22649,7 +22652,7 @@ where
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
-        let encoded = Some(serde_json::to_vec(input).unwrap());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -22674,7 +22677,7 @@ where
     /// <p>Remove the specified thing from the specified group.</p>
     fn remove_thing_from_thing_group(
         &self,
-        input: &RemoveThingFromThingGroupRequest,
+        input: RemoveThingFromThingGroupRequest,
     ) -> RusotoFuture<RemoveThingFromThingGroupResponse, RemoveThingFromThingGroupError> {
         let request_uri = "/thing-groups/removeThingFromThingGroup";
 
@@ -22682,7 +22685,7 @@ where
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
-        let encoded = Some(serde_json::to_vec(input).unwrap());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -22716,7 +22719,7 @@ where
     /// <p>Replaces the rule. You must specify all parameters for the new rule. Creating rules is an administrator-level action. Any user who has permission to create rules will be able to access data processed by the rule.</p>
     fn replace_topic_rule(
         &self,
-        input: &ReplaceTopicRuleRequest,
+        input: ReplaceTopicRuleRequest,
     ) -> RusotoFuture<(), ReplaceTopicRuleError> {
         let request_uri = format!("/rules/{rule_name}", rule_name = input.rule_name);
 
@@ -22749,7 +22752,7 @@ where
     /// <p>The query search index.</p>
     fn search_index(
         &self,
-        input: &SearchIndexRequest,
+        input: SearchIndexRequest,
     ) -> RusotoFuture<SearchIndexResponse, SearchIndexError> {
         let request_uri = "/indices/search";
 
@@ -22757,7 +22760,7 @@ where
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
-        let encoded = Some(serde_json::to_vec(input).unwrap());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -22790,7 +22793,7 @@ where
     /// <p>Sets the default authorizer. This will be used if a websocket connection is made without specifying an authorizer.</p>
     fn set_default_authorizer(
         &self,
-        input: &SetDefaultAuthorizerRequest,
+        input: SetDefaultAuthorizerRequest,
     ) -> RusotoFuture<SetDefaultAuthorizerResponse, SetDefaultAuthorizerError> {
         let request_uri = "/default-authorizer";
 
@@ -22798,7 +22801,7 @@ where
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
-        let encoded = Some(serde_json::to_vec(input).unwrap());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -22832,7 +22835,7 @@ where
     /// <p>Sets the specified version of the specified policy as the policy's default (operative) version. This action affects all certificates to which the policy is attached. To list the principals the policy is attached to, use the ListPrincipalPolicy API.</p>
     fn set_default_policy_version(
         &self,
-        input: &SetDefaultPolicyVersionRequest,
+        input: SetDefaultPolicyVersionRequest,
     ) -> RusotoFuture<(), SetDefaultPolicyVersionError> {
         let request_uri = format!(
             "/policies/{policy_name}/version/{policy_version_id}",
@@ -22867,7 +22870,7 @@ where
     /// <p>Sets the logging options.</p>
     fn set_logging_options(
         &self,
-        input: &SetLoggingOptionsRequest,
+        input: SetLoggingOptionsRequest,
     ) -> RusotoFuture<(), SetLoggingOptionsError> {
         let request_uri = "/loggingOptions";
 
@@ -22900,7 +22903,7 @@ where
     /// <p>Sets the logging level.</p>
     fn set_v2_logging_level(
         &self,
-        input: &SetV2LoggingLevelRequest,
+        input: SetV2LoggingLevelRequest,
     ) -> RusotoFuture<(), SetV2LoggingLevelError> {
         let request_uri = "/v2LoggingLevel";
 
@@ -22908,7 +22911,7 @@ where
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
-        let encoded = Some(serde_json::to_vec(input).unwrap());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -22933,7 +22936,7 @@ where
     /// <p>Sets the logging options for the V2 logging service.</p>
     fn set_v2_logging_options(
         &self,
-        input: &SetV2LoggingOptionsRequest,
+        input: SetV2LoggingOptionsRequest,
     ) -> RusotoFuture<(), SetV2LoggingOptionsError> {
         let request_uri = "/v2LoggingOptions";
 
@@ -22941,7 +22944,7 @@ where
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
-        let encoded = Some(serde_json::to_vec(input).unwrap());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -22966,7 +22969,7 @@ where
     /// <p>Creates a bulk thing provisioning task.</p>
     fn start_thing_registration_task(
         &self,
-        input: &StartThingRegistrationTaskRequest,
+        input: StartThingRegistrationTaskRequest,
     ) -> RusotoFuture<StartThingRegistrationTaskResponse, StartThingRegistrationTaskError> {
         let request_uri = "/thing-registration-tasks";
 
@@ -22974,7 +22977,7 @@ where
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
-        let encoded = Some(serde_json::to_vec(input).unwrap());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -23009,7 +23012,7 @@ where
     /// <p>Cancels a bulk thing provisioning task.</p>
     fn stop_thing_registration_task(
         &self,
-        input: &StopThingRegistrationTaskRequest,
+        input: StopThingRegistrationTaskRequest,
     ) -> RusotoFuture<StopThingRegistrationTaskResponse, StopThingRegistrationTaskError> {
         let request_uri = format!(
             "/thing-registration-tasks/{task_id}/cancel",
@@ -23052,7 +23055,7 @@ where
     /// <p>Test custom authorization.</p>
     fn test_authorization(
         &self,
-        input: &TestAuthorizationRequest,
+        input: TestAuthorizationRequest,
     ) -> RusotoFuture<TestAuthorizationResponse, TestAuthorizationError> {
         let request_uri = "/test-authorization";
 
@@ -23060,7 +23063,7 @@ where
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
-        let encoded = Some(serde_json::to_vec(input).unwrap());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
         let mut params = Params::new();
@@ -23100,7 +23103,7 @@ where
     /// <p>Invoke the specified custom authorizer for testing purposes.</p>
     fn test_invoke_authorizer(
         &self,
-        input: &TestInvokeAuthorizerRequest,
+        input: TestInvokeAuthorizerRequest,
     ) -> RusotoFuture<TestInvokeAuthorizerResponse, TestInvokeAuthorizerError> {
         let request_uri = format!(
             "/authorizer/{authorizer_name}/test",
@@ -23111,7 +23114,7 @@ where
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
-        let encoded = Some(serde_json::to_vec(input).unwrap());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -23145,7 +23148,7 @@ where
     /// <p>Transfers the specified certificate to the specified AWS account.</p> <p>You can cancel the transfer until it is acknowledged by the recipient.</p> <p>No notification is sent to the transfer destination's account. It is up to the caller to notify the transfer target.</p> <p>The certificate being transferred must not be in the ACTIVE state. You can use the UpdateCertificate API to deactivate it.</p> <p>The certificate must not have any policies attached to it. You can use the DetachPrincipalPolicy API to detach them.</p>
     fn transfer_certificate(
         &self,
-        input: &TransferCertificateRequest,
+        input: TransferCertificateRequest,
     ) -> RusotoFuture<TransferCertificateResponse, TransferCertificateError> {
         let request_uri = format!(
             "/transfer-certificate/{certificate_id}",
@@ -23156,7 +23159,7 @@ where
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
-        let encoded = Some(serde_json::to_vec(input).unwrap());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
         let mut params = Params::new();
@@ -23194,7 +23197,7 @@ where
     /// <p>Updates an authorizer.</p>
     fn update_authorizer(
         &self,
-        input: &UpdateAuthorizerRequest,
+        input: UpdateAuthorizerRequest,
     ) -> RusotoFuture<UpdateAuthorizerResponse, UpdateAuthorizerError> {
         let request_uri = format!(
             "/authorizer/{authorizer_name}",
@@ -23205,7 +23208,7 @@ where
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
-        let encoded = Some(serde_json::to_vec(input).unwrap());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -23238,7 +23241,7 @@ where
     /// <p>Updates a registered CA certificate.</p>
     fn update_ca_certificate(
         &self,
-        input: &UpdateCACertificateRequest,
+        input: UpdateCACertificateRequest,
     ) -> RusotoFuture<(), UpdateCACertificateError> {
         let request_uri = format!(
             "/cacertificate/{ca_certificate_id}",
@@ -23249,7 +23252,7 @@ where
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
-        let encoded = Some(serde_json::to_vec(input).unwrap());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
         let mut params = Params::new();
@@ -23283,7 +23286,7 @@ where
     /// <p>Updates the status of the specified certificate. This operation is idempotent.</p> <p>Moving a certificate from the ACTIVE state (including REVOKED) will not disconnect currently connected devices, but these devices will be unable to reconnect.</p> <p>The ACTIVE state is required to authenticate devices connecting to AWS IoT using a certificate.</p>
     fn update_certificate(
         &self,
-        input: &UpdateCertificateRequest,
+        input: UpdateCertificateRequest,
     ) -> RusotoFuture<(), UpdateCertificateError> {
         let request_uri = format!(
             "/certificates/{certificate_id}",
@@ -23321,7 +23324,7 @@ where
     /// <p>Updates the event configurations.</p>
     fn update_event_configurations(
         &self,
-        input: &UpdateEventConfigurationsRequest,
+        input: UpdateEventConfigurationsRequest,
     ) -> RusotoFuture<UpdateEventConfigurationsResponse, UpdateEventConfigurationsError> {
         let request_uri = "/event-configurations";
 
@@ -23329,7 +23332,7 @@ where
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
-        let encoded = Some(serde_json::to_vec(input).unwrap());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -23363,7 +23366,7 @@ where
     /// <p>Updates the search configuration.</p>
     fn update_indexing_configuration(
         &self,
-        input: &UpdateIndexingConfigurationRequest,
+        input: UpdateIndexingConfigurationRequest,
     ) -> RusotoFuture<UpdateIndexingConfigurationResponse, UpdateIndexingConfigurationError> {
         let request_uri = "/indexing/config";
 
@@ -23371,7 +23374,7 @@ where
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
-        let encoded = Some(serde_json::to_vec(input).unwrap());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -23406,7 +23409,7 @@ where
     /// <p>Updates a role alias.</p>
     fn update_role_alias(
         &self,
-        input: &UpdateRoleAliasRequest,
+        input: UpdateRoleAliasRequest,
     ) -> RusotoFuture<UpdateRoleAliasResponse, UpdateRoleAliasError> {
         let request_uri = format!("/role-aliases/{role_alias}", role_alias = input.role_alias);
 
@@ -23414,7 +23417,7 @@ where
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
-        let encoded = Some(serde_json::to_vec(input).unwrap());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -23447,7 +23450,7 @@ where
     /// <p>Updates an existing stream. The stream version will be incremented by one.</p>
     fn update_stream(
         &self,
-        input: &UpdateStreamRequest,
+        input: UpdateStreamRequest,
     ) -> RusotoFuture<UpdateStreamResponse, UpdateStreamError> {
         let request_uri = format!("/streams/{stream_id}", stream_id = input.stream_id);
 
@@ -23455,7 +23458,7 @@ where
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
-        let encoded = Some(serde_json::to_vec(input).unwrap());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -23488,7 +23491,7 @@ where
     /// <p>Updates the data for a thing.</p>
     fn update_thing(
         &self,
-        input: &UpdateThingRequest,
+        input: UpdateThingRequest,
     ) -> RusotoFuture<UpdateThingResponse, UpdateThingError> {
         let request_uri = format!("/things/{thing_name}", thing_name = input.thing_name);
 
@@ -23496,7 +23499,7 @@ where
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
-        let encoded = Some(serde_json::to_vec(input).unwrap());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -23529,7 +23532,7 @@ where
     /// <p>Update a thing group.</p>
     fn update_thing_group(
         &self,
-        input: &UpdateThingGroupRequest,
+        input: UpdateThingGroupRequest,
     ) -> RusotoFuture<UpdateThingGroupResponse, UpdateThingGroupError> {
         let request_uri = format!(
             "/thing-groups/{thing_group_name}",
@@ -23540,7 +23543,7 @@ where
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
-        let encoded = Some(serde_json::to_vec(input).unwrap());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -23573,7 +23576,7 @@ where
     /// <p>Updates the groups to which the thing belongs.</p>
     fn update_thing_groups_for_thing(
         &self,
-        input: &UpdateThingGroupsForThingRequest,
+        input: UpdateThingGroupsForThingRequest,
     ) -> RusotoFuture<UpdateThingGroupsForThingResponse, UpdateThingGroupsForThingError> {
         let request_uri = "/thing-groups/updateThingGroupsForThing";
 
@@ -23581,7 +23584,7 @@ where
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
-        let encoded = Some(serde_json::to_vec(input).unwrap());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
         let future = self.inner.sign_and_dispatch(request, |response| {

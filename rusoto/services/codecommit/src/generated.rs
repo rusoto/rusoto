@@ -18,18 +18,18 @@ use std::io;
 use futures::future;
 use futures::Future;
 use rusoto_core::reactor::{CredentialsProvider, RequestDispatcher};
-use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::region;
+use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::{ClientInner, RusotoFuture};
 
-use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
+use rusoto_core::request::HttpDispatchError;
 
-use serde_json;
-use rusoto_core::signature::SignedRequest;
-use serde_json::Value as SerdeJsonValue;
-use serde_json::from_str;
 use hyper::StatusCode;
+use rusoto_core::signature::SignedRequest;
+use serde_json;
+use serde_json::from_str;
+use serde_json::Value as SerdeJsonValue;
 /// <p>Represents the input of a batch get repositories operation.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct BatchGetRepositoriesInput {
@@ -400,8 +400,11 @@ pub struct GetBlobInput {
 pub struct GetBlobOutput {
     /// <p>The content of the blob, usually a file.</p>
     #[serde(rename = "content")]
-    #[serde(deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
-            serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob", default)]
+    #[serde(
+        deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
+        serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
+        default
+    )]
     pub content: Vec<u8>,
 }
 
@@ -1103,8 +1106,11 @@ pub struct PutFileInput {
     pub email: Option<String>,
     /// <p>The content of the file, in binary object format. </p>
     #[serde(rename = "fileContent")]
-    #[serde(deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
-            serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob", default)]
+    #[serde(
+        deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
+        serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
+        default
+    )]
     pub file_content: Vec<u8>,
     /// <p>The file mode permissions of the blob. Valid file mode permissions are listed below.</p>
     #[serde(rename = "fileMode")]
@@ -7134,202 +7140,202 @@ pub trait CodeCommit {
     /// <p><p>Returns information about one or more repositories.</p> <note> <p>The description field for a repository accepts all HTML characters and all valid Unicode characters. Applications that do not HTML-encode the description and display it in a web page could expose users to potentially malicious code. Make sure that you HTML-encode the description field in any application that uses this API to display the repository description on a web page.</p> </note></p>
     fn batch_get_repositories(
         &self,
-        input: &BatchGetRepositoriesInput,
+        input: BatchGetRepositoriesInput,
     ) -> RusotoFuture<BatchGetRepositoriesOutput, BatchGetRepositoriesError>;
 
     /// <p><p>Creates a new branch in a repository and points the branch to a commit.</p> <note> <p>Calling the create branch operation does not set a repository&#39;s default branch. To do this, call the update default branch operation.</p> </note></p>
-    fn create_branch(&self, input: &CreateBranchInput) -> RusotoFuture<(), CreateBranchError>;
+    fn create_branch(&self, input: CreateBranchInput) -> RusotoFuture<(), CreateBranchError>;
 
     /// <p>Creates a pull request in the specified repository.</p>
     fn create_pull_request(
         &self,
-        input: &CreatePullRequestInput,
+        input: CreatePullRequestInput,
     ) -> RusotoFuture<CreatePullRequestOutput, CreatePullRequestError>;
 
     /// <p>Creates a new, empty repository.</p>
     fn create_repository(
         &self,
-        input: &CreateRepositoryInput,
+        input: CreateRepositoryInput,
     ) -> RusotoFuture<CreateRepositoryOutput, CreateRepositoryError>;
 
     /// <p>Deletes a branch from a repository, unless that branch is the default branch for the repository. </p>
     fn delete_branch(
         &self,
-        input: &DeleteBranchInput,
+        input: DeleteBranchInput,
     ) -> RusotoFuture<DeleteBranchOutput, DeleteBranchError>;
 
     /// <p>Deletes the content of a comment made on a change, file, or commit in a repository.</p>
     fn delete_comment_content(
         &self,
-        input: &DeleteCommentContentInput,
+        input: DeleteCommentContentInput,
     ) -> RusotoFuture<DeleteCommentContentOutput, DeleteCommentContentError>;
 
     /// <p><p>Deletes a repository. If a specified repository was already deleted, a null repository ID will be returned.</p> <important> <p>Deleting a repository also deletes all associated objects and metadata. After a repository is deleted, all future push calls to the deleted repository will fail.</p> </important></p>
     fn delete_repository(
         &self,
-        input: &DeleteRepositoryInput,
+        input: DeleteRepositoryInput,
     ) -> RusotoFuture<DeleteRepositoryOutput, DeleteRepositoryError>;
 
     /// <p>Returns information about one or more pull request events.</p>
     fn describe_pull_request_events(
         &self,
-        input: &DescribePullRequestEventsInput,
+        input: DescribePullRequestEventsInput,
     ) -> RusotoFuture<DescribePullRequestEventsOutput, DescribePullRequestEventsError>;
 
     /// <p>Returns the base-64 encoded content of an individual blob within a repository.</p>
-    fn get_blob(&self, input: &GetBlobInput) -> RusotoFuture<GetBlobOutput, GetBlobError>;
+    fn get_blob(&self, input: GetBlobInput) -> RusotoFuture<GetBlobOutput, GetBlobError>;
 
     /// <p>Returns information about a repository branch, including its name and the last commit ID.</p>
-    fn get_branch(&self, input: &GetBranchInput) -> RusotoFuture<GetBranchOutput, GetBranchError>;
+    fn get_branch(&self, input: GetBranchInput) -> RusotoFuture<GetBranchOutput, GetBranchError>;
 
     /// <p>Returns the content of a comment made on a change, file, or commit in a repository.</p>
     fn get_comment(
         &self,
-        input: &GetCommentInput,
+        input: GetCommentInput,
     ) -> RusotoFuture<GetCommentOutput, GetCommentError>;
 
     /// <p>Returns information about comments made on the comparison between two commits.</p>
     fn get_comments_for_compared_commit(
         &self,
-        input: &GetCommentsForComparedCommitInput,
+        input: GetCommentsForComparedCommitInput,
     ) -> RusotoFuture<GetCommentsForComparedCommitOutput, GetCommentsForComparedCommitError>;
 
     /// <p>Returns comments made on a pull request.</p>
     fn get_comments_for_pull_request(
         &self,
-        input: &GetCommentsForPullRequestInput,
+        input: GetCommentsForPullRequestInput,
     ) -> RusotoFuture<GetCommentsForPullRequestOutput, GetCommentsForPullRequestError>;
 
     /// <p>Returns information about a commit, including commit message and committer information.</p>
-    fn get_commit(&self, input: &GetCommitInput) -> RusotoFuture<GetCommitOutput, GetCommitError>;
+    fn get_commit(&self, input: GetCommitInput) -> RusotoFuture<GetCommitOutput, GetCommitError>;
 
     /// <p>Returns information about the differences in a valid commit specifier (such as a branch, tag, HEAD, commit ID or other fully qualified reference). Results can be limited to a specified path.</p>
     fn get_differences(
         &self,
-        input: &GetDifferencesInput,
+        input: GetDifferencesInput,
     ) -> RusotoFuture<GetDifferencesOutput, GetDifferencesError>;
 
     /// <p>Returns information about merge conflicts between the before and after commit IDs for a pull request in a repository.</p>
     fn get_merge_conflicts(
         &self,
-        input: &GetMergeConflictsInput,
+        input: GetMergeConflictsInput,
     ) -> RusotoFuture<GetMergeConflictsOutput, GetMergeConflictsError>;
 
     /// <p>Gets information about a pull request in a specified repository.</p>
     fn get_pull_request(
         &self,
-        input: &GetPullRequestInput,
+        input: GetPullRequestInput,
     ) -> RusotoFuture<GetPullRequestOutput, GetPullRequestError>;
 
     /// <p><p>Returns information about a repository.</p> <note> <p>The description field for a repository accepts all HTML characters and all valid Unicode characters. Applications that do not HTML-encode the description and display it in a web page could expose users to potentially malicious code. Make sure that you HTML-encode the description field in any application that uses this API to display the repository description on a web page.</p> </note></p>
     fn get_repository(
         &self,
-        input: &GetRepositoryInput,
+        input: GetRepositoryInput,
     ) -> RusotoFuture<GetRepositoryOutput, GetRepositoryError>;
 
     /// <p>Gets information about triggers configured for a repository.</p>
     fn get_repository_triggers(
         &self,
-        input: &GetRepositoryTriggersInput,
+        input: GetRepositoryTriggersInput,
     ) -> RusotoFuture<GetRepositoryTriggersOutput, GetRepositoryTriggersError>;
 
     /// <p>Gets information about one or more branches in a repository.</p>
     fn list_branches(
         &self,
-        input: &ListBranchesInput,
+        input: ListBranchesInput,
     ) -> RusotoFuture<ListBranchesOutput, ListBranchesError>;
 
     /// <p>Returns a list of pull requests for a specified repository. The return list can be refined by pull request status or pull request author ARN.</p>
     fn list_pull_requests(
         &self,
-        input: &ListPullRequestsInput,
+        input: ListPullRequestsInput,
     ) -> RusotoFuture<ListPullRequestsOutput, ListPullRequestsError>;
 
     /// <p>Gets information about one or more repositories.</p>
     fn list_repositories(
         &self,
-        input: &ListRepositoriesInput,
+        input: ListRepositoriesInput,
     ) -> RusotoFuture<ListRepositoriesOutput, ListRepositoriesError>;
 
     /// <p>Closes a pull request and attempts to merge the source commit of a pull request into the specified destination branch for that pull request at the specified commit using the fast-forward merge option.</p>
     fn merge_pull_request_by_fast_forward(
         &self,
-        input: &MergePullRequestByFastForwardInput,
+        input: MergePullRequestByFastForwardInput,
     ) -> RusotoFuture<MergePullRequestByFastForwardOutput, MergePullRequestByFastForwardError>;
 
     /// <p>Posts a comment on the comparison between two commits.</p>
     fn post_comment_for_compared_commit(
         &self,
-        input: &PostCommentForComparedCommitInput,
+        input: PostCommentForComparedCommitInput,
     ) -> RusotoFuture<PostCommentForComparedCommitOutput, PostCommentForComparedCommitError>;
 
     /// <p>Posts a comment on a pull request.</p>
     fn post_comment_for_pull_request(
         &self,
-        input: &PostCommentForPullRequestInput,
+        input: PostCommentForPullRequestInput,
     ) -> RusotoFuture<PostCommentForPullRequestOutput, PostCommentForPullRequestError>;
 
     /// <p>Posts a comment in reply to an existing comment on a comparison between commits or a pull request.</p>
     fn post_comment_reply(
         &self,
-        input: &PostCommentReplyInput,
+        input: PostCommentReplyInput,
     ) -> RusotoFuture<PostCommentReplyOutput, PostCommentReplyError>;
 
     /// <p>Adds or updates a file in an AWS CodeCommit repository.</p>
-    fn put_file(&self, input: &PutFileInput) -> RusotoFuture<PutFileOutput, PutFileError>;
+    fn put_file(&self, input: PutFileInput) -> RusotoFuture<PutFileOutput, PutFileError>;
 
     /// <p>Replaces all triggers for a repository. This can be used to create or delete triggers.</p>
     fn put_repository_triggers(
         &self,
-        input: &PutRepositoryTriggersInput,
+        input: PutRepositoryTriggersInput,
     ) -> RusotoFuture<PutRepositoryTriggersOutput, PutRepositoryTriggersError>;
 
     /// <p>Tests the functionality of repository triggers by sending information to the trigger target. If real data is available in the repository, the test will send data from the last commit. If no data is available, sample data will be generated.</p>
     fn test_repository_triggers(
         &self,
-        input: &TestRepositoryTriggersInput,
+        input: TestRepositoryTriggersInput,
     ) -> RusotoFuture<TestRepositoryTriggersOutput, TestRepositoryTriggersError>;
 
     /// <p>Replaces the contents of a comment.</p>
     fn update_comment(
         &self,
-        input: &UpdateCommentInput,
+        input: UpdateCommentInput,
     ) -> RusotoFuture<UpdateCommentOutput, UpdateCommentError>;
 
     /// <p><p>Sets or changes the default branch name for the specified repository.</p> <note> <p>If you use this operation to change the default branch name to the current default branch name, a success message is returned even though the default branch did not change.</p> </note></p>
     fn update_default_branch(
         &self,
-        input: &UpdateDefaultBranchInput,
+        input: UpdateDefaultBranchInput,
     ) -> RusotoFuture<(), UpdateDefaultBranchError>;
 
     /// <p>Replaces the contents of the description of a pull request.</p>
     fn update_pull_request_description(
         &self,
-        input: &UpdatePullRequestDescriptionInput,
+        input: UpdatePullRequestDescriptionInput,
     ) -> RusotoFuture<UpdatePullRequestDescriptionOutput, UpdatePullRequestDescriptionError>;
 
     /// <p>Updates the status of a pull request. </p>
     fn update_pull_request_status(
         &self,
-        input: &UpdatePullRequestStatusInput,
+        input: UpdatePullRequestStatusInput,
     ) -> RusotoFuture<UpdatePullRequestStatusOutput, UpdatePullRequestStatusError>;
 
     /// <p>Replaces the title of a pull request.</p>
     fn update_pull_request_title(
         &self,
-        input: &UpdatePullRequestTitleInput,
+        input: UpdatePullRequestTitleInput,
     ) -> RusotoFuture<UpdatePullRequestTitleOutput, UpdatePullRequestTitleError>;
 
     /// <p><p>Sets or changes the comment or description for a repository.</p> <note> <p>The description field for a repository accepts all HTML characters and all valid Unicode characters. Applications that do not HTML-encode the description and display it in a web page could expose users to potentially malicious code. Make sure that you HTML-encode the description field in any application that uses this API to display the repository description on a web page.</p> </note></p>
     fn update_repository_description(
         &self,
-        input: &UpdateRepositoryDescriptionInput,
+        input: UpdateRepositoryDescriptionInput,
     ) -> RusotoFuture<(), UpdateRepositoryDescriptionError>;
 
     /// <p>Renames a repository. The repository name must be unique across the calling AWS account. In addition, repository names are limited to 100 alphanumeric, dash, and underscore characters, and cannot include certain characters. The suffix ".git" is prohibited. For a full description of the limits on repository names, see <a href="http://docs.aws.amazon.com/codecommit/latest/userguide/limits.html">Limits</a> in the AWS CodeCommit User Guide.</p>
     fn update_repository_name(
         &self,
-        input: &UpdateRepositoryNameInput,
+        input: UpdateRepositoryNameInput,
     ) -> RusotoFuture<(), UpdateRepositoryNameError>;
 }
 /// A client for the CodeCommit API.
@@ -7378,13 +7384,13 @@ where
     /// <p><p>Returns information about one or more repositories.</p> <note> <p>The description field for a repository accepts all HTML characters and all valid Unicode characters. Applications that do not HTML-encode the description and display it in a web page could expose users to potentially malicious code. Make sure that you HTML-encode the description field in any application that uses this API to display the repository description on a web page.</p> </note></p>
     fn batch_get_repositories(
         &self,
-        input: &BatchGetRepositoriesInput,
+        input: BatchGetRepositoriesInput,
     ) -> RusotoFuture<BatchGetRepositoriesOutput, BatchGetRepositoriesError> {
         let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeCommit_20150413.BatchGetRepositories");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -7413,12 +7419,12 @@ where
     }
 
     /// <p><p>Creates a new branch in a repository and points the branch to a commit.</p> <note> <p>Calling the create branch operation does not set a repository&#39;s default branch. To do this, call the update default branch operation.</p> </note></p>
-    fn create_branch(&self, input: &CreateBranchInput) -> RusotoFuture<(), CreateBranchError> {
+    fn create_branch(&self, input: CreateBranchInput) -> RusotoFuture<(), CreateBranchError> {
         let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeCommit_20150413.CreateBranch");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -7439,13 +7445,13 @@ where
     /// <p>Creates a pull request in the specified repository.</p>
     fn create_pull_request(
         &self,
-        input: &CreatePullRequestInput,
+        input: CreatePullRequestInput,
     ) -> RusotoFuture<CreatePullRequestOutput, CreatePullRequestError> {
         let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeCommit_20150413.CreatePullRequest");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -7476,13 +7482,13 @@ where
     /// <p>Creates a new, empty repository.</p>
     fn create_repository(
         &self,
-        input: &CreateRepositoryInput,
+        input: CreateRepositoryInput,
     ) -> RusotoFuture<CreateRepositoryOutput, CreateRepositoryError> {
         let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeCommit_20150413.CreateRepository");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -7513,13 +7519,13 @@ where
     /// <p>Deletes a branch from a repository, unless that branch is the default branch for the repository. </p>
     fn delete_branch(
         &self,
-        input: &DeleteBranchInput,
+        input: DeleteBranchInput,
     ) -> RusotoFuture<DeleteBranchOutput, DeleteBranchError> {
         let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeCommit_20150413.DeleteBranch");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -7550,13 +7556,13 @@ where
     /// <p>Deletes the content of a comment made on a change, file, or commit in a repository.</p>
     fn delete_comment_content(
         &self,
-        input: &DeleteCommentContentInput,
+        input: DeleteCommentContentInput,
     ) -> RusotoFuture<DeleteCommentContentOutput, DeleteCommentContentError> {
         let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeCommit_20150413.DeleteCommentContent");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -7587,13 +7593,13 @@ where
     /// <p><p>Deletes a repository. If a specified repository was already deleted, a null repository ID will be returned.</p> <important> <p>Deleting a repository also deletes all associated objects and metadata. After a repository is deleted, all future push calls to the deleted repository will fail.</p> </important></p>
     fn delete_repository(
         &self,
-        input: &DeleteRepositoryInput,
+        input: DeleteRepositoryInput,
     ) -> RusotoFuture<DeleteRepositoryOutput, DeleteRepositoryError> {
         let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeCommit_20150413.DeleteRepository");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -7624,7 +7630,7 @@ where
     /// <p>Returns information about one or more pull request events.</p>
     fn describe_pull_request_events(
         &self,
-        input: &DescribePullRequestEventsInput,
+        input: DescribePullRequestEventsInput,
     ) -> RusotoFuture<DescribePullRequestEventsOutput, DescribePullRequestEventsError> {
         let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
 
@@ -7633,7 +7639,7 @@ where
             "x-amz-target",
             "CodeCommit_20150413.DescribePullRequestEvents",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -7662,12 +7668,12 @@ where
     }
 
     /// <p>Returns the base-64 encoded content of an individual blob within a repository.</p>
-    fn get_blob(&self, input: &GetBlobInput) -> RusotoFuture<GetBlobOutput, GetBlobError> {
+    fn get_blob(&self, input: GetBlobInput) -> RusotoFuture<GetBlobOutput, GetBlobError> {
         let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeCommit_20150413.GetBlob");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -7696,12 +7702,12 @@ where
     }
 
     /// <p>Returns information about a repository branch, including its name and the last commit ID.</p>
-    fn get_branch(&self, input: &GetBranchInput) -> RusotoFuture<GetBranchOutput, GetBranchError> {
+    fn get_branch(&self, input: GetBranchInput) -> RusotoFuture<GetBranchOutput, GetBranchError> {
         let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeCommit_20150413.GetBranch");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -7732,13 +7738,13 @@ where
     /// <p>Returns the content of a comment made on a change, file, or commit in a repository.</p>
     fn get_comment(
         &self,
-        input: &GetCommentInput,
+        input: GetCommentInput,
     ) -> RusotoFuture<GetCommentOutput, GetCommentError> {
         let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeCommit_20150413.GetComment");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -7769,7 +7775,7 @@ where
     /// <p>Returns information about comments made on the comparison between two commits.</p>
     fn get_comments_for_compared_commit(
         &self,
-        input: &GetCommentsForComparedCommitInput,
+        input: GetCommentsForComparedCommitInput,
     ) -> RusotoFuture<GetCommentsForComparedCommitOutput, GetCommentsForComparedCommitError> {
         let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
 
@@ -7778,7 +7784,7 @@ where
             "x-amz-target",
             "CodeCommit_20150413.GetCommentsForComparedCommit",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -7809,7 +7815,7 @@ where
     /// <p>Returns comments made on a pull request.</p>
     fn get_comments_for_pull_request(
         &self,
-        input: &GetCommentsForPullRequestInput,
+        input: GetCommentsForPullRequestInput,
     ) -> RusotoFuture<GetCommentsForPullRequestOutput, GetCommentsForPullRequestError> {
         let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
 
@@ -7818,7 +7824,7 @@ where
             "x-amz-target",
             "CodeCommit_20150413.GetCommentsForPullRequest",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -7847,12 +7853,12 @@ where
     }
 
     /// <p>Returns information about a commit, including commit message and committer information.</p>
-    fn get_commit(&self, input: &GetCommitInput) -> RusotoFuture<GetCommitOutput, GetCommitError> {
+    fn get_commit(&self, input: GetCommitInput) -> RusotoFuture<GetCommitOutput, GetCommitError> {
         let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeCommit_20150413.GetCommit");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -7883,13 +7889,13 @@ where
     /// <p>Returns information about the differences in a valid commit specifier (such as a branch, tag, HEAD, commit ID or other fully qualified reference). Results can be limited to a specified path.</p>
     fn get_differences(
         &self,
-        input: &GetDifferencesInput,
+        input: GetDifferencesInput,
     ) -> RusotoFuture<GetDifferencesOutput, GetDifferencesError> {
         let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeCommit_20150413.GetDifferences");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -7920,13 +7926,13 @@ where
     /// <p>Returns information about merge conflicts between the before and after commit IDs for a pull request in a repository.</p>
     fn get_merge_conflicts(
         &self,
-        input: &GetMergeConflictsInput,
+        input: GetMergeConflictsInput,
     ) -> RusotoFuture<GetMergeConflictsOutput, GetMergeConflictsError> {
         let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeCommit_20150413.GetMergeConflicts");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -7957,13 +7963,13 @@ where
     /// <p>Gets information about a pull request in a specified repository.</p>
     fn get_pull_request(
         &self,
-        input: &GetPullRequestInput,
+        input: GetPullRequestInput,
     ) -> RusotoFuture<GetPullRequestOutput, GetPullRequestError> {
         let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeCommit_20150413.GetPullRequest");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -7994,13 +8000,13 @@ where
     /// <p><p>Returns information about a repository.</p> <note> <p>The description field for a repository accepts all HTML characters and all valid Unicode characters. Applications that do not HTML-encode the description and display it in a web page could expose users to potentially malicious code. Make sure that you HTML-encode the description field in any application that uses this API to display the repository description on a web page.</p> </note></p>
     fn get_repository(
         &self,
-        input: &GetRepositoryInput,
+        input: GetRepositoryInput,
     ) -> RusotoFuture<GetRepositoryOutput, GetRepositoryError> {
         let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeCommit_20150413.GetRepository");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -8031,13 +8037,13 @@ where
     /// <p>Gets information about triggers configured for a repository.</p>
     fn get_repository_triggers(
         &self,
-        input: &GetRepositoryTriggersInput,
+        input: GetRepositoryTriggersInput,
     ) -> RusotoFuture<GetRepositoryTriggersOutput, GetRepositoryTriggersError> {
         let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeCommit_20150413.GetRepositoryTriggers");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -8068,13 +8074,13 @@ where
     /// <p>Gets information about one or more branches in a repository.</p>
     fn list_branches(
         &self,
-        input: &ListBranchesInput,
+        input: ListBranchesInput,
     ) -> RusotoFuture<ListBranchesOutput, ListBranchesError> {
         let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeCommit_20150413.ListBranches");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -8105,13 +8111,13 @@ where
     /// <p>Returns a list of pull requests for a specified repository. The return list can be refined by pull request status or pull request author ARN.</p>
     fn list_pull_requests(
         &self,
-        input: &ListPullRequestsInput,
+        input: ListPullRequestsInput,
     ) -> RusotoFuture<ListPullRequestsOutput, ListPullRequestsError> {
         let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeCommit_20150413.ListPullRequests");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -8142,13 +8148,13 @@ where
     /// <p>Gets information about one or more repositories.</p>
     fn list_repositories(
         &self,
-        input: &ListRepositoriesInput,
+        input: ListRepositoriesInput,
     ) -> RusotoFuture<ListRepositoriesOutput, ListRepositoriesError> {
         let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeCommit_20150413.ListRepositories");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -8179,7 +8185,7 @@ where
     /// <p>Closes a pull request and attempts to merge the source commit of a pull request into the specified destination branch for that pull request at the specified commit using the fast-forward merge option.</p>
     fn merge_pull_request_by_fast_forward(
         &self,
-        input: &MergePullRequestByFastForwardInput,
+        input: MergePullRequestByFastForwardInput,
     ) -> RusotoFuture<MergePullRequestByFastForwardOutput, MergePullRequestByFastForwardError> {
         let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
 
@@ -8188,7 +8194,7 @@ where
             "x-amz-target",
             "CodeCommit_20150413.MergePullRequestByFastForward",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -8219,7 +8225,7 @@ where
     /// <p>Posts a comment on the comparison between two commits.</p>
     fn post_comment_for_compared_commit(
         &self,
-        input: &PostCommentForComparedCommitInput,
+        input: PostCommentForComparedCommitInput,
     ) -> RusotoFuture<PostCommentForComparedCommitOutput, PostCommentForComparedCommitError> {
         let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
 
@@ -8228,7 +8234,7 @@ where
             "x-amz-target",
             "CodeCommit_20150413.PostCommentForComparedCommit",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -8259,7 +8265,7 @@ where
     /// <p>Posts a comment on a pull request.</p>
     fn post_comment_for_pull_request(
         &self,
-        input: &PostCommentForPullRequestInput,
+        input: PostCommentForPullRequestInput,
     ) -> RusotoFuture<PostCommentForPullRequestOutput, PostCommentForPullRequestError> {
         let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
 
@@ -8268,7 +8274,7 @@ where
             "x-amz-target",
             "CodeCommit_20150413.PostCommentForPullRequest",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -8299,13 +8305,13 @@ where
     /// <p>Posts a comment in reply to an existing comment on a comparison between commits or a pull request.</p>
     fn post_comment_reply(
         &self,
-        input: &PostCommentReplyInput,
+        input: PostCommentReplyInput,
     ) -> RusotoFuture<PostCommentReplyOutput, PostCommentReplyError> {
         let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeCommit_20150413.PostCommentReply");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -8334,12 +8340,12 @@ where
     }
 
     /// <p>Adds or updates a file in an AWS CodeCommit repository.</p>
-    fn put_file(&self, input: &PutFileInput) -> RusotoFuture<PutFileOutput, PutFileError> {
+    fn put_file(&self, input: PutFileInput) -> RusotoFuture<PutFileOutput, PutFileError> {
         let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeCommit_20150413.PutFile");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -8370,13 +8376,13 @@ where
     /// <p>Replaces all triggers for a repository. This can be used to create or delete triggers.</p>
     fn put_repository_triggers(
         &self,
-        input: &PutRepositoryTriggersInput,
+        input: PutRepositoryTriggersInput,
     ) -> RusotoFuture<PutRepositoryTriggersOutput, PutRepositoryTriggersError> {
         let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeCommit_20150413.PutRepositoryTriggers");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -8407,13 +8413,13 @@ where
     /// <p>Tests the functionality of repository triggers by sending information to the trigger target. If real data is available in the repository, the test will send data from the last commit. If no data is available, sample data will be generated.</p>
     fn test_repository_triggers(
         &self,
-        input: &TestRepositoryTriggersInput,
+        input: TestRepositoryTriggersInput,
     ) -> RusotoFuture<TestRepositoryTriggersOutput, TestRepositoryTriggersError> {
         let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeCommit_20150413.TestRepositoryTriggers");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -8444,13 +8450,13 @@ where
     /// <p>Replaces the contents of a comment.</p>
     fn update_comment(
         &self,
-        input: &UpdateCommentInput,
+        input: UpdateCommentInput,
     ) -> RusotoFuture<UpdateCommentOutput, UpdateCommentError> {
         let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeCommit_20150413.UpdateComment");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -8481,13 +8487,13 @@ where
     /// <p><p>Sets or changes the default branch name for the specified repository.</p> <note> <p>If you use this operation to change the default branch name to the current default branch name, a success message is returned even though the default branch did not change.</p> </note></p>
     fn update_default_branch(
         &self,
-        input: &UpdateDefaultBranchInput,
+        input: UpdateDefaultBranchInput,
     ) -> RusotoFuture<(), UpdateDefaultBranchError> {
         let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeCommit_20150413.UpdateDefaultBranch");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -8508,7 +8514,7 @@ where
     /// <p>Replaces the contents of the description of a pull request.</p>
     fn update_pull_request_description(
         &self,
-        input: &UpdatePullRequestDescriptionInput,
+        input: UpdatePullRequestDescriptionInput,
     ) -> RusotoFuture<UpdatePullRequestDescriptionOutput, UpdatePullRequestDescriptionError> {
         let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
 
@@ -8517,7 +8523,7 @@ where
             "x-amz-target",
             "CodeCommit_20150413.UpdatePullRequestDescription",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -8548,7 +8554,7 @@ where
     /// <p>Updates the status of a pull request. </p>
     fn update_pull_request_status(
         &self,
-        input: &UpdatePullRequestStatusInput,
+        input: UpdatePullRequestStatusInput,
     ) -> RusotoFuture<UpdatePullRequestStatusOutput, UpdatePullRequestStatusError> {
         let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
 
@@ -8557,7 +8563,7 @@ where
             "x-amz-target",
             "CodeCommit_20150413.UpdatePullRequestStatus",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -8588,13 +8594,13 @@ where
     /// <p>Replaces the title of a pull request.</p>
     fn update_pull_request_title(
         &self,
-        input: &UpdatePullRequestTitleInput,
+        input: UpdatePullRequestTitleInput,
     ) -> RusotoFuture<UpdatePullRequestTitleOutput, UpdatePullRequestTitleError> {
         let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeCommit_20150413.UpdatePullRequestTitle");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -8625,7 +8631,7 @@ where
     /// <p><p>Sets or changes the comment or description for a repository.</p> <note> <p>The description field for a repository accepts all HTML characters and all valid Unicode characters. Applications that do not HTML-encode the description and display it in a web page could expose users to potentially malicious code. Make sure that you HTML-encode the description field in any application that uses this API to display the repository description on a web page.</p> </note></p>
     fn update_repository_description(
         &self,
-        input: &UpdateRepositoryDescriptionInput,
+        input: UpdateRepositoryDescriptionInput,
     ) -> RusotoFuture<(), UpdateRepositoryDescriptionError> {
         let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
 
@@ -8634,7 +8640,7 @@ where
             "x-amz-target",
             "CodeCommit_20150413.UpdateRepositoryDescription",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -8655,13 +8661,13 @@ where
     /// <p>Renames a repository. The repository name must be unique across the calling AWS account. In addition, repository names are limited to 100 alphanumeric, dash, and underscore characters, and cannot include certain characters. The suffix ".git" is prohibited. For a full description of the limits on repository names, see <a href="http://docs.aws.amazon.com/codecommit/latest/userguide/limits.html">Limits</a> in the AWS CodeCommit User Guide.</p>
     fn update_repository_name(
         &self,
-        input: &UpdateRepositoryNameInput,
+        input: UpdateRepositoryNameInput,
     ) -> RusotoFuture<(), UpdateRepositoryNameError> {
         let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeCommit_20150413.UpdateRepositoryName");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {

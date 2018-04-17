@@ -12,7 +12,7 @@ fn should_serialize_complex_metric_data_params() {
         .with_request_checker(|request: &SignedRequest| {
             assert_eq!("POST", request.method);
             assert_eq!("/", request.path);
-            assert_eq!(None, request.payload);
+            assert!(request.payload.is_none());
             assert_eq!(request.params.get("Namespace"),
                         Some(&Some("TestNamespace".to_owned())));
             assert_eq!(request.params.get("MetricData.member.1.MetricName"),
@@ -45,6 +45,6 @@ fn should_serialize_complex_metric_data_params() {
     };
 
     let client = CloudWatchClient::new(mock, MockCredentialsProvider, Region::UsEast1);
-    let response = client.put_metric_data(&request).sync().unwrap();
+    let response = client.put_metric_data(request).sync().unwrap();
     println!("{:#?}", response);
 }

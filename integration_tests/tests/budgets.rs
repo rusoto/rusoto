@@ -14,6 +14,6 @@ fn should_describe_budgets() {
     // This request needs the accountId set:
     let request = DescribeBudgetsRequest::default();
 
-    let response = client.describe_budgets(&request).sync().unwrap();
+    let response = client.describe_budgets(request).sync().unwrap();
     println!("response: {:?}", response);
 }

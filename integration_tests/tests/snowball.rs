@@ -11,6 +11,6 @@ fn should_describe_addresses() {
     let client = SnowballClient::simple(Region::UsEast1);
     let request = DescribeAddressesRequest::default();
 
-    let result = client.describe_addresses(&request).sync().unwrap();
+    let result = client.describe_addresses(request).sync().unwrap();
     println!("{:#?}", result);
 }

@@ -11,7 +11,7 @@ fn should_describe_stacks() {
     let client = OpsWorksClient::simple(Region::UsEast1);
     let request = DescribeStacksRequest::default();
 
-    client.describe_stacks(&request).sync().unwrap();
+    client.describe_stacks(request).sync().unwrap();
 }
 
 #[test]

@@ -11,6 +11,6 @@ fn should_list_topics() {
     let client = SnsClient::simple(Region::UsEast1);
     let request = ListTopicsInput::default();
 
-    let result = client.list_topics(&request).sync().unwrap();
+    let result = client.list_topics(request).sync().unwrap();
     println!("{:#?}", result);
 }

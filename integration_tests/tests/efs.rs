@@ -11,6 +11,6 @@ fn should_describe_filesystems() {
     let client = EfsClient::simple(Region::UsEast1);
     let request = DescribeFileSystemsRequest::default();
 
-    let result = client.describe_file_systems(&request).sync().unwrap();
+    let result = client.describe_file_systems(request).sync().unwrap();
     println!("{:#?}", result);
 }

@@ -40,47 +40,47 @@ impl NewAwsCredsForStsCreds for AwsCredentials {
 // Trait that defines the STS Client API without any type parameters or assumptions about implementation.
 // This is an internal type used to box the [StsClient](struct.StsClient.html) provided in the session token providers' constructors.
 pub trait StsSessionCredentialsClient {
-    fn assume_role(&self, input: &AssumeRoleRequest) -> RusotoFuture<AssumeRoleResponse, AssumeRoleError>;
+    fn assume_role(&self, input: AssumeRoleRequest) -> RusotoFuture<AssumeRoleResponse, AssumeRoleError>;
 
-    fn assume_role_with_saml(&self, input: &AssumeRoleWithSAMLRequest) -> RusotoFuture<AssumeRoleWithSAMLResponse, AssumeRoleWithSAMLError>;
+    fn assume_role_with_saml(&self, input: AssumeRoleWithSAMLRequest) -> RusotoFuture<AssumeRoleWithSAMLResponse, AssumeRoleWithSAMLError>;
 
-    fn assume_role_with_web_identity(&self, input: &AssumeRoleWithWebIdentityRequest) -> RusotoFuture<AssumeRoleWithWebIdentityResponse, AssumeRoleWithWebIdentityError>;
+    fn assume_role_with_web_identity(&self, input: AssumeRoleWithWebIdentityRequest) -> RusotoFuture<AssumeRoleWithWebIdentityResponse, AssumeRoleWithWebIdentityError>;
 
-    fn decode_authorization_message(&self, input: &DecodeAuthorizationMessageRequest) -> RusotoFuture<DecodeAuthorizationMessageResponse, DecodeAuthorizationMessageError>;
+    fn decode_authorization_message(&self, input: DecodeAuthorizationMessageRequest) -> RusotoFuture<DecodeAuthorizationMessageResponse, DecodeAuthorizationMessageError>;
 
-    fn get_caller_identity(&self, input: &GetCallerIdentityRequest) -> RusotoFuture<GetCallerIdentityResponse, GetCallerIdentityError> ;
+    fn get_caller_identity(&self, input: GetCallerIdentityRequest) -> RusotoFuture<GetCallerIdentityResponse, GetCallerIdentityError> ;
 
-    fn get_federation_token(&self, input: &GetFederationTokenRequest) -> RusotoFuture<GetFederationTokenResponse, GetFederationTokenError>;
+    fn get_federation_token(&self, input: GetFederationTokenRequest) -> RusotoFuture<GetFederationTokenResponse, GetFederationTokenError>;
 
-    fn get_session_token(&self, input: &GetSessionTokenRequest) -> RusotoFuture<GetSessionTokenResponse, GetSessionTokenError>;
+    fn get_session_token(&self, input: GetSessionTokenRequest) -> RusotoFuture<GetSessionTokenResponse, GetSessionTokenError>;
 }
 
 impl<T> StsSessionCredentialsClient for T where T: Sts {
-    fn assume_role(&self, input: &AssumeRoleRequest) -> RusotoFuture<AssumeRoleResponse, AssumeRoleError> {
+    fn assume_role(&self, input: AssumeRoleRequest) -> RusotoFuture<AssumeRoleResponse, AssumeRoleError> {
         T::assume_role(self, input)
     }
 
-    fn assume_role_with_saml(&self, input: &AssumeRoleWithSAMLRequest) -> RusotoFuture<AssumeRoleWithSAMLResponse, AssumeRoleWithSAMLError> {
+    fn assume_role_with_saml(&self, input: AssumeRoleWithSAMLRequest) -> RusotoFuture<AssumeRoleWithSAMLResponse, AssumeRoleWithSAMLError> {
         T::assume_role_with_saml(self, input)
     }
 
-    fn assume_role_with_web_identity(&self, input: &AssumeRoleWithWebIdentityRequest) -> RusotoFuture<AssumeRoleWithWebIdentityResponse, AssumeRoleWithWebIdentityError> {
+    fn assume_role_with_web_identity(&self, input: AssumeRoleWithWebIdentityRequest) -> RusotoFuture<AssumeRoleWithWebIdentityResponse, AssumeRoleWithWebIdentityError> {
         T::assume_role_with_web_identity(self, input)
     }
 
-    fn decode_authorization_message(&self, input: &DecodeAuthorizationMessageRequest) -> RusotoFuture<DecodeAuthorizationMessageResponse, DecodeAuthorizationMessageError> {
+    fn decode_authorization_message(&self, input: DecodeAuthorizationMessageRequest) -> RusotoFuture<DecodeAuthorizationMessageResponse, DecodeAuthorizationMessageError> {
         T::decode_authorization_message(self, input)
     }
 
-    fn get_caller_identity(&self, input: &GetCallerIdentityRequest) -> RusotoFuture<GetCallerIdentityResponse, GetCallerIdentityError> {
+    fn get_caller_identity(&self, input: GetCallerIdentityRequest) -> RusotoFuture<GetCallerIdentityResponse, GetCallerIdentityError> {
         T::get_caller_identity(self, input)
     }
 
-    fn get_federation_token(&self, input: &GetFederationTokenRequest) -> RusotoFuture<GetFederationTokenResponse, GetFederationTokenError> {
+    fn get_federation_token(&self, input: GetFederationTokenRequest) -> RusotoFuture<GetFederationTokenResponse, GetFederationTokenError> {
         T::get_federation_token(self, input)
     }
 
-    fn get_session_token(&self, input: &GetSessionTokenRequest) -> RusotoFuture<GetSessionTokenResponse, GetSessionTokenError> {
+    fn get_session_token(&self, input: GetSessionTokenRequest) -> RusotoFuture<GetSessionTokenResponse, GetSessionTokenError> {
         T::get_session_token(self, input)
     }
 }
@@ -137,7 +137,7 @@ impl StsSessionCredentialsProvider {
             ..Default::default()
         };
         StsSessionCredentialsProviderFuture {
-            inner: self.sts_client.get_session_token(&request)
+            inner: self.sts_client.get_session_token(request)
         }
     }
 }
@@ -246,7 +246,7 @@ impl StsAssumeRoleSessionCredentialsProvider {
             ..Default::default()
         };
         StsAssumeRoleSessionCredentialsProviderFuture {
-            inner: self.sts_client.assume_role(&request)
+            inner: self.sts_client.assume_role(request)
         }
     }
 }
@@ -337,7 +337,7 @@ impl StsWebIdentityFederationSessionCredentialsProvider {
             ..Default::default()
         };
         StsWebIdentityFederationSessionCredentialsProviderFuture {
-            inner: self.sts_client.assume_role_with_web_identity(&request)
+            inner: self.sts_client.assume_role_with_web_identity(request)
         }
     }
 }
