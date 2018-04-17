@@ -18,18 +18,18 @@ use std::io;
 use futures::future;
 use futures::Future;
 use rusoto_core::reactor::{CredentialsProvider, RequestDispatcher};
-use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::region;
+use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::{ClientInner, RusotoFuture};
 
-use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
+use rusoto_core::request::HttpDispatchError;
 
-use serde_json;
-use rusoto_core::signature::SignedRequest;
-use serde_json::Value as SerdeJsonValue;
-use serde_json::from_str;
 use hyper::StatusCode;
+use rusoto_core::signature::SignedRequest;
+use serde_json;
+use serde_json::from_str;
+use serde_json::Value as SerdeJsonValue;
 /// <p>The DeploymentSpecification contains an envelope for the generic client metadata, and if there is variant-specific metadata, the ID of the variant for the host and the envelope containing that variant&#39;s metadata. All fields are optional, though an empty DeploymentSpecification is likely indicative of an error.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct DeploymentSpecification {
@@ -580,31 +580,31 @@ pub trait CodeDeployCommands {
     /// <p>Retrieve the deployment specification for the deployment and host, consisting of the client metadata provided when the deployment was created. The generic client metadata will be provided, as well as the client metadata for the host&#39;s variant (if variant-specific metadata was provided). Throws DeploymentNotFoundException if the DeploymentExecutionId does not identify a current deployment. Throws HostNotFoundException if the host is not recognized by the deployment engine. Throws ServerException for failures caused by the deployment system or its dependencies.</p>
     fn get_deployment_specification(
         &self,
-        input: &GetDeploymentSpecificationInput,
+        input: GetDeploymentSpecificationInput,
     ) -> RusotoFuture<GetDeploymentSpecificationOutput, GetDeploymentSpecificationError>;
 
     /// <p>This requests a command from the deployment workflow engine. If no command is ready to be dispatched, the output will be empty (HostCommand will be null). Throws HostNotFoundException if the host is not recognized by the deployment engine. Throws ServerException for failures caused by the deployment system or its dependencies.</p>
     fn poll_host_command(
         &self,
-        input: &PollHostCommandInput,
+        input: PollHostCommandInput,
     ) -> RusotoFuture<PollHostCommandOutput, PollHostCommandError>;
 
     /// <p>This updates the central workflow engine with the current progress of the host command. This will also return the status of the host command centrally if possible, so agents can skip processing the command if it has been aborted / timed out. However, the status is optional, so if no status is returned the agent should treat it as if it was ok to continue. Throws ClientException for an invalid HostCommandIdentifier or Diagnostics. Throws ServerException for failures caused by the deployment system or its dependencies.</p>
     fn post_host_command_update(
         &self,
-        input: &PostHostCommandUpdateInput,
+        input: PostHostCommandUpdateInput,
     ) -> RusotoFuture<PostHostCommandUpdateOutput, PostHostCommandUpdateError>;
 
     /// <p>This notifies the central workflow engine that the agent has received the specified command and is ready to start execution. This will also return the status of the host command centrally if possible, so agents can skip processing the command if it has been aborted / timed out. However, the status is optional, so if no status is returned the agent should treat it as if it was ok to continue. Throws ClientException for an invalid HostCommandIdentifier or Diagnostics. Throws ServerException for failures caused by the deployment system or its dependencies.</p>
     fn put_host_command_acknowledgement(
         &self,
-        input: &PutHostCommandAcknowledgementInput,
+        input: PutHostCommandAcknowledgementInput,
     ) -> RusotoFuture<PutHostCommandAcknowledgementOutput, PutHostCommandAcknowledgementError>;
 
     /// <p>This reports completion of the command back to the workflow engine. Throws ClientException for an invalid HostCommandIdentifier or Diagnostics. Throws ServerException for failures caused by the deployment system or its dependencies.</p>
     fn put_host_command_complete(
         &self,
-        input: &PutHostCommandCompleteInput,
+        input: PutHostCommandCompleteInput,
     ) -> RusotoFuture<(), PutHostCommandCompleteError>;
 }
 /// A client for the CodeDeployCommand API.
@@ -653,7 +653,7 @@ where
     /// <p>Retrieve the deployment specification for the deployment and host, consisting of the client metadata provided when the deployment was created. The generic client metadata will be provided, as well as the client metadata for the host&#39;s variant (if variant-specific metadata was provided). Throws DeploymentNotFoundException if the DeploymentExecutionId does not identify a current deployment. Throws HostNotFoundException if the host is not recognized by the deployment engine. Throws ServerException for failures caused by the deployment system or its dependencies.</p>
     fn get_deployment_specification(
         &self,
-        input: &GetDeploymentSpecificationInput,
+        input: GetDeploymentSpecificationInput,
     ) -> RusotoFuture<GetDeploymentSpecificationOutput, GetDeploymentSpecificationError> {
         let mut request = SignedRequest::new("POST", "codedeploy-commands", &self.region, "/");
 
@@ -662,7 +662,7 @@ where
             "x-amz-target",
             "CodeDeployCommandService_v20141006.GetDeploymentSpecification",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -693,7 +693,7 @@ where
     /// <p>This requests a command from the deployment workflow engine. If no command is ready to be dispatched, the output will be empty (HostCommand will be null). Throws HostNotFoundException if the host is not recognized by the deployment engine. Throws ServerException for failures caused by the deployment system or its dependencies.</p>
     fn poll_host_command(
         &self,
-        input: &PollHostCommandInput,
+        input: PollHostCommandInput,
     ) -> RusotoFuture<PollHostCommandOutput, PollHostCommandError> {
         let mut request = SignedRequest::new("POST", "codedeploy-commands", &self.region, "/");
 
@@ -702,7 +702,7 @@ where
             "x-amz-target",
             "CodeDeployCommandService_v20141006.PollHostCommand",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -733,7 +733,7 @@ where
     /// <p>This updates the central workflow engine with the current progress of the host command. This will also return the status of the host command centrally if possible, so agents can skip processing the command if it has been aborted / timed out. However, the status is optional, so if no status is returned the agent should treat it as if it was ok to continue. Throws ClientException for an invalid HostCommandIdentifier or Diagnostics. Throws ServerException for failures caused by the deployment system or its dependencies.</p>
     fn post_host_command_update(
         &self,
-        input: &PostHostCommandUpdateInput,
+        input: PostHostCommandUpdateInput,
     ) -> RusotoFuture<PostHostCommandUpdateOutput, PostHostCommandUpdateError> {
         let mut request = SignedRequest::new("POST", "codedeploy-commands", &self.region, "/");
 
@@ -742,7 +742,7 @@ where
             "x-amz-target",
             "CodeDeployCommandService_v20141006.PostHostCommandUpdate",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -773,7 +773,7 @@ where
     /// <p>This notifies the central workflow engine that the agent has received the specified command and is ready to start execution. This will also return the status of the host command centrally if possible, so agents can skip processing the command if it has been aborted / timed out. However, the status is optional, so if no status is returned the agent should treat it as if it was ok to continue. Throws ClientException for an invalid HostCommandIdentifier or Diagnostics. Throws ServerException for failures caused by the deployment system or its dependencies.</p>
     fn put_host_command_acknowledgement(
         &self,
-        input: &PutHostCommandAcknowledgementInput,
+        input: PutHostCommandAcknowledgementInput,
     ) -> RusotoFuture<PutHostCommandAcknowledgementOutput, PutHostCommandAcknowledgementError> {
         let mut request = SignedRequest::new("POST", "codedeploy-commands", &self.region, "/");
 
@@ -782,7 +782,7 @@ where
             "x-amz-target",
             "CodeDeployCommandService_v20141006.PutHostCommandAcknowledgement",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -813,7 +813,7 @@ where
     /// <p>This reports completion of the command back to the workflow engine. Throws ClientException for an invalid HostCommandIdentifier or Diagnostics. Throws ServerException for failures caused by the deployment system or its dependencies.</p>
     fn put_host_command_complete(
         &self,
-        input: &PutHostCommandCompleteInput,
+        input: PutHostCommandCompleteInput,
     ) -> RusotoFuture<(), PutHostCommandCompleteError> {
         let mut request = SignedRequest::new("POST", "codedeploy-commands", &self.region, "/");
 
@@ -822,7 +822,7 @@ where
             "x-amz-target",
             "CodeDeployCommandService_v20141006.PutHostCommandComplete",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
