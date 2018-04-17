@@ -13,6 +13,7 @@
 - Add [Secrets Manager](https://docs.aws.amazon.com/secretsmanager/latest/userguide/intro.html) service
 - Support streaming uploads for services like S3
 - Implement `DispatchSignedRequest` and `ProvideAwsCredentials` for `Arc<>` and `Rc<>` wrapped types
+- Add CodeDeploy Commands service.
 
 ## [0.32.0] - 2018-03-03
 
