@@ -6,13 +6,9 @@ extern crate rusoto_codedeploy;
 extern crate rusoto_codedeploy_commands;
 extern crate rusoto_iam;
 extern crate rusoto_sts;
-extern crate uuid;
+extern crate uuid; 
 
-use rusoto_iam::{Iam, IamClient};
-use rusoto_sts::{Sts, StsClient};
-use rusoto_codedeploy::{CodeDeploy, CodeDeployClient};
-use rusoto_core::{ProvideAwsCredentials, Region};
-use rusoto_codedeploy_commands::{CodeDeployCommands, CodeDeployCommandsClient};
+use rusoto_core::Region;
 use std::fmt::Write;
 
 /// The domain component for the current ARN partition. Currently this test will only succeed in 
@@ -45,17 +41,19 @@ const COMMAND_NAMES: &'static [&'static str; 7] = &[
 /// - A CodeDeploy on-premise instance registration.
 /// - A CodeDeploy application and deployment group.
 ///
-/// All of the resources are deleted if the test succeeds. If the test fails, some resources
-/// may remain in the account. The resources are created with deterministic names, so if the
-/// test is subsequently run successfully, it will detect the existing resources and clean
+/// The CodeDeploy resources are deleted if the test succeeds. The IAM roles are not deleted, to
+/// make successive runs of the test less flaky in the presence of IAM propagation delays. However
+/// the roles created have a constant name, so multiple test runs will always use the same role and
+/// will not result in more than two roles ever being created. If the test fails, some CodeDeploy resources
+/// may remain in the account. Subsequent runs of the test will detect these stale resources and clean
 /// them up.
 #[test]
 fn successful_deployment_to_host() {
     const ON_PREMISE_INSTANCE_ROLE_NAME: &'static str = "rusoto-cd-commands-test-succ-dep";
     const ON_PREMISE_INSTANCE_SESSION_NAME_BASE: &'static str = "simulated-instance-";
     const ON_PREMISE_INSTANCE_POLICY_NAME: &'static str = "integration-test-policy";
-    const CODEDEPLOY_SERVICE_ROLE_NAME: &'static str = "rusot-cd-commands-test-svc-role";
-    const APPLICATION_NAME: &'static str = "rusoto-cd-commands-test-succ-app";
+    const CODEDEPLOY_SERVICE_ROLE_NAME: &'static str = "rusoto-cd-commands-test-svc-role";
+    const APPLICATION_NAME_BASE: &'static str = "rusoto-cd-commands-test-succ-app-";
     const DEPLOYMENT_GROUP_NAME: &'static str = "rusoto-cd-commands-test-succ-depgroup";
     const ON_PREMISE_INSTANCE_NAME_BASE: &'static str = "simulated-instance-";
     const ON_PREMISE_TAG_KEY: &'static str = "rusoto-cd-commands-test-run";
@@ -71,11 +69,13 @@ fn successful_deployment_to_host() {
     write!(on_premise_instance_name, "{}", run_uuid).unwrap();
     let mut on_premise_tag_value = ON_PREMISE_TAG_VALUE_BASE.to_owned();
     write!(on_premise_tag_value, "{}", run_uuid).unwrap();
+    let mut application_name = APPLICATION_NAME_BASE.to_owned();
+    write!(application_name, "{}", run_uuid).unwrap();
 
     let region = Region::UsEast1;
-    let iam = IamClient::simple(region.clone());
-    let sts = StsClient::simple(region.clone());
-    let cd = CodeDeployClient::simple(region.clone());
+    let iam = rusoto_iam::IamClient::simple(region.clone());
+    let sts = rusoto_sts::StsClient::simple(region.clone());
+    let cd = rusoto_codedeploy::CodeDeployClient::simple(region.clone());
 
     // Get identity information for integration test credentials.
     println!("Getting integration test identity");
@@ -87,15 +87,23 @@ fn successful_deployment_to_host() {
 
     // Create CodeDeploy service role with AWSCodeDeployRole managed policy.
     println!("Creating CodeDeploy service IAM role");
-    let (codedeploy_service_role, codedeploy_policy_arn) = create_codedeploy_service_iam_role(&iam, CODEDEPLOY_SERVICE_ROLE_NAME);
+    let codedeploy_service_role = create_codedeploy_service_iam_role(&iam, CODEDEPLOY_SERVICE_ROLE_NAME);
 
     // Assume role to get on-premise session credentials.
     println!("Retrieving on-premise session credentials for simulated instance");
     let (on_premise_credentials, on_premise_session_arn) = assume_on_premise_session_credentials(&sts, &on_premise_role.arn, &on_premise_instance_session_name);
+    println!("On-premise session ARN for simulated instance is {}", on_premise_session_arn);
+
+    // Clean up any existing CodeDeploy applications created by previous runs of this test
+    // that may be lingering due to past failures.
+    delete_stale_codedeploy_state(&cd, APPLICATION_NAME_BASE);
+
+    // Clean up any existing CodeDeploy on-premise instances previously created by this test.
+    deregister_stale_on_premise_instances(&cd, ON_PREMISE_TAG_KEY);
 
     // Create CodeDeploy application and deployment group.
     println!("Creating CodeDeploy application state");
-    let (application_id, deployment_group_id) = create_codedeploy_state(&cd, APPLICATION_NAME, DEPLOYMENT_GROUP_NAME, &codedeploy_service_role.arn, ON_PREMISE_TAG_KEY, &on_premise_tag_value);
+    create_codedeploy_state(&cd, &application_name, DEPLOYMENT_GROUP_NAME, &codedeploy_service_role.arn, ON_PREMISE_TAG_KEY, &on_premise_tag_value);
 
     // Register and tag the on-premise instance.
     println!("Registering simulated host as CodeDeploy on-premise instance");
@@ -103,7 +111,8 @@ fn successful_deployment_to_host() {
 
     // Start a CodeDeploy deployment.
     println!("Starting deployment to simulated on-premise instance");
-    let deployment_id = start_deployment_to_on_premise_instance(&cd, APPLICATION_NAME, DEPLOYMENT_GROUP_NAME);
+    let deployment_id = start_deployment_to_on_premise_instance(&cd, &application_name, DEPLOYMENT_GROUP_NAME);
+    println!("Deployment id is {}", deployment_id);
 
     // Process each command sequentially, returning success for each.
     println!("Processing all deployment commands for simulated instance");
@@ -119,11 +128,7 @@ fn successful_deployment_to_host() {
 
     // Delete Codedeploy deployment group and application.
     println!("Deleting CodeDeploy application state");
-    delete_codedeploy_state(&cd, APPLICATION_NAME, DEPLOYMENT_GROUP_NAME);
-
-    // Delete CodeDeploy service role.
-    println!("Deleting CodeDeploy service IAM role");
-    delete_codedeploy_service_iam_role(&iam, CODEDEPLOY_SERVICE_ROLE_NAME, &codedeploy_policy_arn);
+    delete_codedeploy_state(&cd, &application_name, DEPLOYMENT_GROUP_NAME);
 
     // Delete on-premise IAM role.
     println!("Deleting on-premise IAM role");
@@ -131,18 +136,14 @@ fn successful_deployment_to_host() {
 }
 
 struct IntegrationTestIdentity {
-    account_id: String,
-    arn: String,
-    user_id: String
+    account_id: String
 }
 
 fn get_integration_test_identity<Sts: rusoto_sts::Sts>(sts: &Sts) -> IntegrationTestIdentity {
     let response = sts.get_caller_identity(rusoto_sts::GetCallerIdentityRequest {}).sync()
         .expect("Failed to invoke STS::GetCallerIdentity for the integration test identity");
     IntegrationTestIdentity {
-        account_id: response.account.expect("STS::GetCallerIdentity did not return an AWS account id for the integration test identity"),
-        arn: response.arn.expect("STS::GetCallerIdentity did not return an ARN for the integration test identity"),
-        user_id: response.user_id.expect("STS::GetCallerIdentity did not return a user id for the integration test identity")
+        account_id: response.account.expect("STS::GetCallerIdentity did not return an AWS account id for the integration test identity")
     }
 }
 
@@ -156,10 +157,11 @@ fn create_on_premise_iam_role<Iam: rusoto_iam::Iam>(
         test_identity: &IntegrationTestIdentity,
         policy_name: &str) -> rusoto_iam::Role {
     let create_request = rusoto_iam::CreateRoleRequest {
-        assume_role_policy_document: format!(r#"{{ "Version":"2012-10-17", "Statement": [ {{ "Effect":"Allow", "Principal": {{ "AWS": "{account_id}" }}, "Action":"sts:AssumeRole", "Condition": {{ "StringEquals": {{ "aws:userid":"{user_id}" }} }} }} ] }}"#,
-            account_id = test_identity.account_id,
-            user_id = test_identity.user_id)
-            .to_owned(),
+        // I originally had a StringEquals condition in this policy on aws:userid equaling the test_identity's user id,
+        // but removed it after I switched the test to using persistent IAM roles because otherwise any change on the
+        // Rusoto maintainer's part to use a different user for the automated builds would break the test.
+        assume_role_policy_document: format!(r#"{{ "Version":"2012-10-17", "Statement": [ {{ "Effect":"Allow", "Principal": {{ "AWS": "{account_id}" }}, "Action":"sts:AssumeRole" }} ] }}"#,
+            account_id = test_identity.account_id).to_owned(),
         description: Some("Represents an on-premise CodeDeploy instance for Rusoto codedeploy-commands integration test".to_owned()),
         max_session_duration: None,
         path: None,
@@ -172,7 +174,7 @@ fn create_on_premise_iam_role<Iam: rusoto_iam::Iam>(
         Err(err) => {
             match err {
                 // If the role already exists, then we assume it was left over from a previous unsuccessful test run.
-                rusoto_iam::CreateRoleError::EntityAlreadyExists(msg) => {
+                rusoto_iam::CreateRoleError::EntityAlreadyExists(_) => {
                     let response = iam.get_role(rusoto_iam::GetRoleRequest { role_name: role_name.to_owned() }).sync()
                         .expect("Failed to invoke IAM::GetRole to retrieve information about an existing on-premise instance role");
                     response.role
@@ -227,7 +229,7 @@ fn assume_on_premise_session_credentials<Sts: rusoto_sts::Sts>(sts: &Sts, role_a
                     }
                     // Otherwise do nothing and allow the loop to retry the authorization error.
                 },
-                other => { panic!(); }
+                other => { panic!("Failed to invoke STS::AssumeRole to assume on-premise instance role: {:?}", other); }
             }
         }
         i += 1;
@@ -255,24 +257,13 @@ fn create_codedeploy_state<CodeDeploy: rusoto_codedeploy::CodeDeploy>(
         deployment_group_name: &str,
         service_role_arn: &str,
         tag_key: &str,
-        tag_value: &str) -> (String, String) {
+        tag_value: &str)  {
     let application_request = rusoto_codedeploy::CreateApplicationInput {
         application_name: application_name.to_owned(),
         compute_platform: Some("Server".to_owned())
     };
-    let application_id = match cd.create_application(application_request).sync() {
-        Ok(output) => output.application_id.expect("CodeDeploy::CreateApplication succeeded but did not return an application id"),
-        Err(err) => match err {
-            rusoto_codedeploy::CreateApplicationError::ApplicationAlreadyExists(_) => {
-                let response = cd.get_application(rusoto_codedeploy::GetApplicationInput { application_name: application_name.to_owned() }).sync()
-                    .expect("Failed to invoke CodeDeploy::GetApplication to retrieve information about an existing application");
-                response
-                    .application.expect("CodeDeploy::GetApplication succeeded but did not return any application information")
-                    .application_id.expect("CodeDeploy::GetApplication succeeded but did not return the application id")
-            },
-            other => { panic!("Failed to invoke CodeDeploy::CreateApplication while setting up CodeDeploy state: {}", other); }
-        }
-    };
+    cd.create_application(application_request).sync()
+        .expect("Failed to invoke CodeDeploy::CreateApplication while setting up CodeDeploy state");
 
     let deployment_group_request = rusoto_codedeploy::CreateDeploymentGroupInput {
         alarm_configuration: Some(rusoto_codedeploy::AlarmConfiguration {
@@ -305,9 +296,7 @@ fn create_codedeploy_state<CodeDeploy: rusoto_codedeploy::CodeDeploy>(
         service_role_arn: service_role_arn.to_string(),
         trigger_configurations: None
     };
-    let deployment_group_id = create_deployment_group(cd, &deployment_group_request, application_name, deployment_group_name);
-
-    (application_id, deployment_group_id)
+    create_deployment_group(cd, &deployment_group_request);
 }
 
 // HACK: CodeDeploy attempts to assume the service role provided when CreateDeploymentGroup is called,
@@ -317,31 +306,19 @@ fn create_codedeploy_state<CodeDeploy: rusoto_codedeploy::CodeDeploy>(
 // between attempts.
 fn create_deployment_group<CodeDeploy: rusoto_codedeploy::CodeDeploy>(
         cd: &CodeDeploy,
-        request: &rusoto_codedeploy::CreateDeploymentGroupInput,
-        application_name: &str,
-        deployment_group_name: &str) -> String {
+        request: &rusoto_codedeploy::CreateDeploymentGroupInput) {
     let mut i = 0;
     loop {
         ::std::thread::sleep(::std::time::Duration::from_millis(1000));
-        match cd.create_deployment_group(request.clone()).sync() {
-            Ok(output) => return output.deployment_group_id.expect("CodeDeploy::CreateDeploymentGroup succeeded but did not return a deployment group id"),
-            Err(err) => match err {
-                rusoto_codedeploy::CreateDeploymentGroupError::DeploymentGroupAlreadyExists(_) => {
-                    let request = rusoto_codedeploy::GetDeploymentGroupInput { 
-                        application_name: application_name.to_owned(),
-                        deployment_group_name: deployment_group_name.to_owned()
-                    };
-                    let response = cd.get_deployment_group(request).sync()
-                        .expect("Failed to invoke CodeDeploy::GetDeploymentGroup to retrieve information about an existing deployment group");
-                    return response
-                        .deployment_group_info.expect("CodeDeploy::GetDeploymentGroup succeeded but did not return deployment group info")
-                        .deployment_group_id.expect("CodeDeploy::GetDeploymentGroup succeeded but did not return the deployment group's id")
-                },
+        if let Err(err) = cd.create_deployment_group(request.clone()).sync() {
+            match err {
                 rusoto_codedeploy::CreateDeploymentGroupError::InvalidRole(_) => {
                     // No-op
                 },
                 other => { panic!("Failed to invoke CodeDeploy::CreateDeploymentGroup while setting up CodeDeploy state: {:?}", other); }
             }
+        } else {
+            return;
         }
         i += 1;
         if i >= 30 {
@@ -372,7 +349,7 @@ fn delete_codedeploy_state<CodeDeploy: rusoto_codedeploy::CodeDeploy>(
 /// on our behalf, and return the ARN of the created role. If a role with the same name already exists then
 /// this function will assume that the role was previously created with the correct permissions and will return
 /// the existing role's ARN instead of creating a new one.
-fn create_codedeploy_service_iam_role<Iam: rusoto_iam::Iam>(iam: &Iam, role_name: &str) -> (rusoto_iam::Role, String) {
+fn create_codedeploy_service_iam_role<Iam: rusoto_iam::Iam>(iam: &Iam, role_name: &str) -> rusoto_iam::Role {
     // Call IAM::ListPolicies to find the AWSCodeDeployRole (failing if it cannot be found).
     let codedeploy_policy_arn = find_codedeploy_managed_policy_arn(iam);
 
@@ -391,7 +368,7 @@ fn create_codedeploy_service_iam_role<Iam: rusoto_iam::Iam>(iam: &Iam, role_name
         Err(err) => {
             match err {
                 // If the role already exists, then we assume it was left over from a previous unsuccessful test run.
-                rusoto_iam::CreateRoleError::EntityAlreadyExists(msg) => {
+                rusoto_iam::CreateRoleError::EntityAlreadyExists(_) => {
                     let response = iam.get_role(rusoto_iam::GetRoleRequest { role_name: role_name.to_owned() }).sync()
                         .expect("Failed to invoke IAM::GetRole to retrieve information about an existing CodeDeploy service role");
                     response.role
@@ -409,7 +386,7 @@ fn create_codedeploy_service_iam_role<Iam: rusoto_iam::Iam>(iam: &Iam, role_name
     iam.attach_role_policy(attach_request).sync()
         .expect("Failed to invoke IAM::AttachRolePolicy to attach AWSCodeDeployRole managed policy to CodeDeploy service role");
 
-    (role, codedeploy_policy_arn)
+    role
 }
 
 fn find_codedeploy_managed_policy_arn<Iam: rusoto_iam::Iam>(iam: &Iam) -> String {
@@ -437,14 +414,6 @@ fn find_codedeploy_managed_policy_arn<Iam: rusoto_iam::Iam>(iam: &Iam) -> String
     }
 
     panic!("Did not find the AWSCodeDeployRole managed policy among all the managed policies available to the integration test account");
-}
-
-/// Deletes an IAM role.
-fn delete_codedeploy_service_iam_role<Iam: rusoto_iam::Iam>(iam: &Iam, role_name: &str, codedeploy_policy_arn: &str) {
-    iam.detach_role_policy(rusoto_iam::DetachRolePolicyRequest { role_name: role_name.to_owned(), policy_arn: codedeploy_policy_arn.to_owned() }).sync()
-        .expect("Failed to invoke IAM::DetachRolePolicy while deleting the CodeDeploy service role");
-    iam.delete_role(rusoto_iam::DeleteRoleRequest { role_name: role_name.to_owned() }).sync()
-        .expect("Failed to invoke IAM::DeleteRole to CodeDeploy service role");
 }
 
 fn register_and_tag_on_premise_instance<CodeDeploy: rusoto_codedeploy::CodeDeploy>(
@@ -547,6 +516,7 @@ fn process_single_instance_command<CodeDeployCommands: rusoto_codedeploy_command
         expected_command_name: &str,
         session_arn: &str) {
     // Poll.
+    println!("Polling with host_identifier = {}", session_arn);
     let poll_request = rusoto_codedeploy_commands::PollHostCommandInput {
         host_identifier: session_arn.to_owned()
     };
@@ -616,6 +586,93 @@ fn wait_for_successful_deployment_completion<CodeDeploy: rusoto_codedeploy::Code
         i += 1;
         if i >= 30 {
             panic!("The deployment failed to transition to the Succeeded state even after waiting 30 seconds");
+        }
+    }
+}
+
+/// Iterate over all CodeDeploy applications within the account and deletes any whose name begins with
+/// the given prefix.
+fn delete_stale_codedeploy_state<CodeDeploy: rusoto_codedeploy::CodeDeploy>(cd: &CodeDeploy, application_name_prefix: &str) {
+    let mut next_token = None;
+    loop {
+        let request = rusoto_codedeploy::ListApplicationsInput {
+            next_token
+        };
+        let response = cd.list_applications(request).sync()
+            .expect("Failed to invoke CodeDeploy::ListApplications while deleting stale CodeDeploy state");
+        next_token = response.next_token;
+
+        if let Some(applications) = response.applications {
+            for application_name in applications {
+                if !application_name.starts_with(application_name_prefix) {
+                    continue;
+                }
+                let delete_request = rusoto_codedeploy::DeleteApplicationInput {
+                    application_name: application_name
+                };
+                cd.delete_application(delete_request).sync()
+                    .expect("Failed to invoke CodeDeploy::CreateApplication to delete stale application");
+            }
+        }
+
+        if next_token.is_none() {
+            break;
+        }
+    }
+}
+
+/// Iterate over all CodeDeploy on-premise instances currently registered and deregister any whose name
+/// starts with the given prefix.
+fn deregister_stale_on_premise_instances<CodeDeploy: rusoto_codedeploy::CodeDeploy>(
+        cd: &CodeDeploy,
+        tag_key: &str) {
+    let mut next_token = None;
+    loop {
+        let list_request = rusoto_codedeploy::ListOnPremisesInstancesInput {
+            next_token,
+            registration_status: Some("Registered".to_owned()),
+            tag_filters: Some(vec![rusoto_codedeploy::TagFilter {
+                key: Some(tag_key.to_owned()),
+                value: None,
+                type_: Some("KEY_ONLY".to_owned())
+            }])
+        };
+        let list_response = cd.list_on_premises_instances(list_request).sync()
+            .expect("Failed to invoke CodeDeploy::ListOnPremisesInstances while cleaning up stale on-premise instances");
+        next_token = list_response.next_token;
+
+        if let Some(instance_names) = list_response.instance_names {
+            if instance_names.is_empty() {
+                break;
+            }
+
+            let get_request = rusoto_codedeploy::BatchGetOnPremisesInstancesInput {
+                instance_names
+            };
+            let get_response = cd.batch_get_on_premises_instances(get_request).sync()
+                .expect("Failed to invoke CodeDeploy::BatchGetOnPremisesInstances while cleaning up stale on-premise instances");
+
+            if let Some(instance_infos) = get_response.instance_infos {
+                for instance_info in instance_infos {
+                    let mut tags: Vec<rusoto_codedeploy::Tag> = instance_info.tags.unwrap();
+                    let mut tag: rusoto_codedeploy::Tag = tags.into_iter()
+                        .filter(|tag| {
+                            tag.key.as_ref().map_or(false, |key| key == tag_key)
+                        })
+                        .nth(0).unwrap();
+                    let tag_value = tag.value.unwrap();
+
+                    // CodeDeploy has very strict throttle limits on deregistering instances. This sleep acts as a primitive rate limiter.
+                    ::std::thread::sleep(::std::time::Duration::from_millis(1000));
+
+                    println!("Deregistering stale on-premise instance {}", instance_info.instance_name.as_ref().unwrap());
+                    untag_and_deregister_on_premise_instance(cd, &instance_info.instance_name.unwrap(), tag_key, &tag_value);
+                }
+            }
+        }
+
+        if next_token.is_none() {
+            break;
         }
     }
 }
