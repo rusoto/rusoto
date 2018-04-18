@@ -96,9 +96,11 @@ fn successful_deployment_to_host() {
 
     // Clean up any existing CodeDeploy applications created by previous runs of this test
     // that may be lingering due to past failures.
+    println!("Deleting stale CodeDeploy applications");
     delete_stale_codedeploy_state(&cd, APPLICATION_NAME_BASE);
 
     // Clean up any existing CodeDeploy on-premise instances previously created by this test.
+    println!("Deregistering stale CodeDeploy on-premise instances");
     deregister_stale_on_premise_instances(&cd, ON_PREMISE_TAG_KEY);
 
     // Create CodeDeploy application and deployment group.
