@@ -17,6 +17,12 @@ You can install Rust nightly easily via [`rustup`](https://www.rustup.rs/):
 $ rustup install nightly
 ```
 
+You'll also need to install the `rustfmt` component via `rustup`:
+
+```bash
+$ rustup component add rustfmt-preview --toolchain nightly
+```
+
 Finally, from the `service_crategen` directory, call:
 
 ```bash
