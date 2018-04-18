@@ -14,6 +14,12 @@ use ::{AssumeRoleRequest, AssumeRoleResponse, AssumeRoleError,
     GetFederationTokenRequest, GetFederationTokenResponse, GetFederationTokenError,
     GetSessionTokenRequest, GetSessionTokenResponse, GetSessionTokenError, Sts,
     StsClient};
+use rusoto_core::reactor::{CredentialsProvider, CredentialsProviderFuture};
+use rusoto_core::credential::{ChainProvider, ChainProviderFuture,
+                              EnvironmentProvider, EnvironmentProviderFuture,
+                              InstanceMetadataProvider, InstanceMetadataProviderFuture,
+                              ProfileProvider, ProfileProviderFuture,
+                              ContainerProvider, ContainerProviderFuture};
 
 pub const DEFAULT_DURATION_SECONDS: i32 = 3600;
 pub const DEFAULT_ROLE_DURATION_SECONDS: i32 = 900;
@@ -384,5 +390,177 @@ impl ProvideAwsCredentials for StsWebIdentityFederationSessionCredentialsProvide
 
     fn credentials(&self) -> Self::Future {
         self.assume_role_with_web_identity()
+    }
+}
+
+/// A wrapper that can hold arbitrary credential providers
+pub enum GenericCredentialProvider {
+    Chain(ChainProvider),
+    Environment(EnvironmentProvider),
+    InstanceMetadata(InstanceMetadataProvider),
+    Profile(ProfileProvider),
+    Container(ContainerProvider),
+    Credentials(CredentialsProvider),
+    StsSessionCredentials(StsSessionCredentialsProvider),
+    StsAssumeRoleSessionCredentials(StsAssumeRoleSessionCredentialsProvider),
+    StsWebIdentityFederationSessionCredentials(StsWebIdentityFederationSessionCredentialsProvider),
+}
+
+impl From<ChainProvider> for GenericCredentialProvider {
+    fn from(provider: ChainProvider) -> GenericCredentialProvider {
+        GenericCredentialProvider::Chain(provider)
+    }
+}
+
+impl From<EnvironmentProvider> for GenericCredentialProvider {
+    fn from(provider: EnvironmentProvider) -> GenericCredentialProvider {
+        GenericCredentialProvider::Environment(provider)
+    }
+}
+
+impl From<InstanceMetadataProvider> for GenericCredentialProvider {
+    fn from(provider: InstanceMetadataProvider) -> GenericCredentialProvider {
+        GenericCredentialProvider::InstanceMetadata(provider)
+    }
+}
+
+impl From<ProfileProvider> for GenericCredentialProvider {
+    fn from(provider: ProfileProvider) -> GenericCredentialProvider {
+        GenericCredentialProvider::Profile(provider)
+    }
+}
+
+impl From<ContainerProvider> for GenericCredentialProvider {
+    fn from(provider: ContainerProvider) -> GenericCredentialProvider {
+        GenericCredentialProvider::Container(provider)
+    }
+}
+
+impl From<CredentialsProvider> for GenericCredentialProvider {
+    fn from(provider: CredentialsProvider) -> GenericCredentialProvider {
+        GenericCredentialProvider::Credentials(provider)
+    }
+}
+
+impl From<StsSessionCredentialsProvider> for GenericCredentialProvider {
+    fn from(provider: StsSessionCredentialsProvider) -> GenericCredentialProvider {
+        GenericCredentialProvider::StsSessionCredentials(provider)
+    }
+}
+
+impl From<StsAssumeRoleSessionCredentialsProvider> for GenericCredentialProvider {
+    fn from(provider: StsAssumeRoleSessionCredentialsProvider) -> GenericCredentialProvider {
+        GenericCredentialProvider::StsAssumeRoleSessionCredentials(provider)
+    }
+}
+
+impl From<StsWebIdentityFederationSessionCredentialsProvider> for GenericCredentialProvider {
+    fn from(provider: StsWebIdentityFederationSessionCredentialsProvider) -> GenericCredentialProvider {
+        GenericCredentialProvider::StsWebIdentityFederationSessionCredentials(provider)
+    }
+}
+
+impl ProvideAwsCredentials for GenericCredentialProvider {
+    type Future = GenericCredentialProviderFuture;
+
+    fn credentials(&self) -> Self::Future {
+        use self::GenericCredentialProvider::*;
+        match *self {
+            Chain(ref p) => p.credentials().into(),
+            Environment(ref p) => p.credentials().into(),
+            InstanceMetadata(ref p) => p.credentials().into(),
+            Profile(ref p) => p.credentials().into(),
+            Container(ref p) => p.credentials().into(),
+            Credentials(ref p) => p.credentials().into(),
+            StsSessionCredentials(ref p) => p.credentials().into(),
+            StsAssumeRoleSessionCredentials(ref p) => p.credentials().into(),
+            StsWebIdentityFederationSessionCredentials(ref p) => p.credentials().into(),
+        }
+    }
+}
+
+pub enum GenericCredentialProviderFuture {
+    Chain(ChainProviderFuture),
+    Environment(EnvironmentProviderFuture),
+    InstanceMetadata(InstanceMetadataProviderFuture),
+    Profile(ProfileProviderFuture),
+    Container(ContainerProviderFuture),
+    Credentials(CredentialsProviderFuture),
+    StsSessionCredentials(StsSessionCredentialsProviderFuture),
+    StsAssumeRoleSessionCredentials(StsAssumeRoleSessionCredentialsProviderFuture),
+    StsWebIdentityFederationSessionCredentials(StsWebIdentityFederationSessionCredentialsProviderFuture),
+}
+
+impl Future for GenericCredentialProviderFuture {
+    type Item = AwsCredentials;
+    type Error = CredentialsError;
+
+    fn poll(&mut self) -> Poll<Self::Item, Self::Error> {
+        use self::GenericCredentialProviderFuture::*;
+        match *self {
+            Chain(ref mut f) => f.poll(),
+            Environment(ref mut f) => f.poll(),
+            InstanceMetadata(ref mut f) => f.poll(),
+            Profile(ref mut f) => f.poll(),
+            Container(ref mut f) => f.poll(),
+            Credentials(ref mut f) => f.poll(),
+            StsSessionCredentials(ref mut f) => f.poll(),
+            StsAssumeRoleSessionCredentials(ref mut f) => f.poll(),
+            StsWebIdentityFederationSessionCredentials(ref mut f) => f.poll(),
+        }
+    }
+}
+
+impl From<ChainProviderFuture> for GenericCredentialProviderFuture {
+    fn from(future: ChainProviderFuture) -> GenericCredentialProviderFuture {
+        GenericCredentialProviderFuture::Chain(future)
+    }
+}
+
+impl From<EnvironmentProviderFuture> for GenericCredentialProviderFuture {
+    fn from(future: EnvironmentProviderFuture) -> GenericCredentialProviderFuture {
+        GenericCredentialProviderFuture::Environment(future)
+    }
+}
+
+impl From<InstanceMetadataProviderFuture> for GenericCredentialProviderFuture {
+    fn from(future: InstanceMetadataProviderFuture) -> GenericCredentialProviderFuture {
+        GenericCredentialProviderFuture::InstanceMetadata(future)
+    }
+}
+
+impl From<ProfileProviderFuture> for GenericCredentialProviderFuture {
+    fn from(future: ProfileProviderFuture) -> GenericCredentialProviderFuture {
+        GenericCredentialProviderFuture::Profile(future)
+    }
+}
+
+impl From<ContainerProviderFuture> for GenericCredentialProviderFuture {
+    fn from(future: ContainerProviderFuture) -> GenericCredentialProviderFuture {
+        GenericCredentialProviderFuture::Container(future)
+    }
+}
+
+impl From<CredentialsProviderFuture> for GenericCredentialProviderFuture {
+    fn from(future: CredentialsProviderFuture) -> GenericCredentialProviderFuture {
+        GenericCredentialProviderFuture::Credentials(future)
+    }
+}
+
+impl From<StsSessionCredentialsProviderFuture> for GenericCredentialProviderFuture {
+    fn from(future: StsSessionCredentialsProviderFuture) -> GenericCredentialProviderFuture {
+        GenericCredentialProviderFuture::StsSessionCredentials(future)
+    }
+}
+
+impl From<StsAssumeRoleSessionCredentialsProviderFuture> for GenericCredentialProviderFuture {
+    fn from(future: StsAssumeRoleSessionCredentialsProviderFuture) -> GenericCredentialProviderFuture {
+        GenericCredentialProviderFuture::StsAssumeRoleSessionCredentials(future)
+    }
+}
+
+impl From<StsWebIdentityFederationSessionCredentialsProviderFuture> for GenericCredentialProviderFuture {
+    fn from(future: StsWebIdentityFederationSessionCredentialsProviderFuture) -> GenericCredentialProviderFuture {
+        GenericCredentialProviderFuture::StsWebIdentityFederationSessionCredentials(future)
     }
 }

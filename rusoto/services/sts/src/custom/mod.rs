@@ -5,4 +5,6 @@ pub use self::credential::{
     StsAssumeRoleSessionCredentialsProvider,
     StsWebIdentityFederationSessionCredentialsProvider,
     NewAwsCredsForStsCreds,
+    GenericCredentialProvider,
+    GenericCredentialProviderFuture,
 };
