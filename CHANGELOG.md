@@ -3,6 +3,7 @@
 ## [Unreleased]
 (Please put an entry here in each PR)
 
+- Remove `impl Display for Region` since it was of little use and confusingly similar to `Region::name()`.
 - More efficiently and correctly remove scheme from `Region::Custom` endpoints
 - Prevent reactor from hanging indefinitely when using the new tokio release
 - Fix deserialization for empty JSON responses
