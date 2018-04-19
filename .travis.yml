@@ -18,24 +18,24 @@ before_install:
   - if [ "$TRAVIS_OS_NAME" = "osx" ]; then ulimit -n 1024; fi
 script:
   - |
-      if [ "$JOB" = "a" ]; then
+      if [ "$JOB" = "unit_tests" ]; then
         echo "Running Rusoto tests" && cargo update && cargo test --all -v
       fi
   - |
-      if [ "$JOB" = "b" ]; then
+      if [ "$JOB" = "integration_tests_and_docs" ]; then
         echo "Building integration tests" &&
         ( cd integration_tests && \
           cargo check --tests --features "all" )
       fi
   - |
-      if [[ "$TRAVIS_OS_NAME" == "linux" && "$TRAVIS_RUST_VERSION" == "stable" && "$JOB" == "b" ]]; then
+      if [[ "$TRAVIS_OS_NAME" == "linux" && "$TRAVIS_RUST_VERSION" == "stable" && "$JOB" == "integration_tests_and_docs" ]]; then
         echo "Running cargo docs on stable Rust on Linux" &&
         cargo doc --all --no-deps
       fi
 after_success:
   # upload the documentation from the build if it's from Rust stable, Linux and not a pull request:
   - |
-      if [[ "$TRAVIS_OS_NAME" == "linux" && "$TRAVIS_RUST_VERSION" == "stable" && "$TRAVIS_PULL_REQUEST" == false && "$JOB" == "b" ]]; then
+      if [[ "$TRAVIS_OS_NAME" == "linux" && "$TRAVIS_RUST_VERSION" == "stable" && "$TRAVIS_PULL_REQUEST" == false && "$JOB" == "integration_tests_and_docs" ]]; then
         echo '<meta http-equiv=refresh content=0;url=rusoto_core/index.html>' > target/doc/index.html \
         && mkdir target/doc/rusoto/ && echo '<meta http-equiv=refresh content=0;url=../rusoto_core/index.html>' > target/doc/rusoto/index.html \
         && sudo pip install ghp-import && ghp-import -n target/doc \
@@ -47,8 +47,8 @@ env:
     - RUST_BACKTRACE=1
     - CARGO_INCREMENTAL=0
   matrix:
-    - JOB=a
-    - JOB=b
+    - JOB=unit_tests
+    - JOB=integration_tests_and_docs
 branches:
   only:
     - master
