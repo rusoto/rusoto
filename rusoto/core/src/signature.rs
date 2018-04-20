@@ -261,7 +261,7 @@ impl SignedRequest {
         self.add_header("content-type", "");
 
         self.params.put("X-Amz-Algorithm", "AWS4-HMAC-SHA256");
-        self.params.put("X-Amz-Credential", format!("{}/{}/{}/{}/aws4_request", &creds.aws_access_key_id(), &current_date, self.region, self.service));
+        self.params.put("X-Amz-Credential", format!("{}/{}/{:?}/{}/aws4_request", &creds.aws_access_key_id(), &current_date, self.region, self.service));
         let expiration_time = {
             let default_expiration_time = "3600";
             self.params.get("response-expires")
