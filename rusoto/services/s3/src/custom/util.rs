@@ -114,6 +114,7 @@ impl PreSignedRequest for PutObjectRequest {
             content_length, "Content-Length";
             content_md5, "Content-MD5";
             content_type, "Content-Type";
+            // AWS document has Expect parameter but PutObjectRequest does'nt have it.
             //expect, "Expect";
             expires, "Expires";
             storage_class, "x-amz-storage-class";
@@ -121,12 +122,14 @@ impl PreSignedRequest for PutObjectRequest {
             website_redirect_location, "x-amz-website-redirect-location";
             acl, "x-amz-acl";
             grant_read, "x-amz-grant-read";
+            // AWS document has x-amz-grant-write parameter but PutObjectRequest does'nt have it.
             //grant_write, "x-amz-grant-write";
             grant_read_acp, "x-amz-grant-read-acp";
             grant_write_acp, "x-amz-grant-write-acp";
             grant_full_control, "x-amz-grant-full-control";
             server_side_encryption, "x-amz-server-side-encryption";
             ssekms_key_id, "x-amz-server-side-encryption-aws-kms-key-id";
+            // AWS document has x-amz-server-side-encryption-context parameter but PutObjectRequest does'nt have it.
             //kms_context, "x-amz-server-side-encryption-context";
             sse_customer_algorithm, "x-amz-server-side-encryption-customer-algorithm";
             sse_customer_key, "x-amz-server-side-encryption-customer-key";
