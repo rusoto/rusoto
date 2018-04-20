@@ -41,21 +41,18 @@ const COMMAND_NAMES: &'static [&'static str; 7] = &[
 /// - A CodeDeploy on-premise instance registration.
 /// - A CodeDeploy application and deployment group.
 ///
-/// The CodeDeploy resources are deleted if the test succeeds. The IAM roles are not deleted, to
-/// make successive runs of the test less flaky in the presence of IAM propagation delays. However
-/// the roles created have a constant name, so multiple test runs will always use the same role and
-/// will not result in more than two roles ever being created. If the test fails, some CodeDeploy resources
-/// may remain in the account. Subsequent runs of the test will detect these stale resources and clean
+/// All resources are deleted if the test succeeds. If the test fails, some resources may remain
+/// in the account. Subsequent runs of the test will detect these stale resources and clean
 /// them up.
 #[test]
 fn successful_deployment_to_host() {
     const ON_PREMISE_INSTANCE_ROLE_NAME: &'static str = "rusoto-cd-commands-test-succ-dep";
-    const ON_PREMISE_INSTANCE_SESSION_NAME_BASE: &'static str = "simulated-instance-";
+    const ON_PREMISE_INSTANCE_SESSION_NAME_BASE: &'static str = "simulated-instance";
     const ON_PREMISE_INSTANCE_POLICY_NAME: &'static str = "integration-test-policy";
-    const CODEDEPLOY_SERVICE_ROLE_NAME: &'static str = "rusoto-cd-commands-test-svc-role";
-    const APPLICATION_NAME_BASE: &'static str = "rusoto-cd-commands-test-succ-app-";
+    const CODEDEPLOY_SERVICE_ROLE_NAME_BASE: &'static str = "rusoto-cd-commands-test-svc-role";
+    const APPLICATION_NAME_BASE: &'static str = "rusoto-cd-commands-test-succ-app";
     const DEPLOYMENT_GROUP_NAME: &'static str = "rusoto-cd-commands-test-succ-depgroup";
-    const ON_PREMISE_INSTANCE_NAME_BASE: &'static str = "simulated-instance-";
+    const ON_PREMISE_INSTANCE_NAME_BASE: &'static str = "simulated-instance";
     const ON_PREMISE_TAG_KEY: &'static str = "rusoto-cd-commands-test-run";
     const ON_PREMISE_TAG_VALUE_BASE: &'static str = "succ-dep-";
 
@@ -64,13 +61,16 @@ fn successful_deployment_to_host() {
     // the name is unusable.
     let run_uuid = uuid::Uuid::new_v4();
     let mut on_premise_instance_session_name = ON_PREMISE_INSTANCE_SESSION_NAME_BASE.to_owned();
-    write!(on_premise_instance_session_name, "{}", run_uuid).unwrap();
+    write!(on_premise_instance_session_name, "-{}", run_uuid).unwrap();
     let mut on_premise_instance_name = ON_PREMISE_INSTANCE_NAME_BASE.to_owned();
-    write!(on_premise_instance_name, "{}", run_uuid).unwrap();
+    write!(on_premise_instance_name, "-{}", run_uuid).unwrap();
     let mut on_premise_tag_value = ON_PREMISE_TAG_VALUE_BASE.to_owned();
-    write!(on_premise_tag_value, "{}", run_uuid).unwrap();
+    write!(on_premise_tag_value, "-{}", run_uuid).unwrap();
     let mut application_name = APPLICATION_NAME_BASE.to_owned();
-    write!(application_name, "{}", run_uuid).unwrap();
+    write!(application_name, "-{}", run_uuid).unwrap();
+    let mut codedeploy_service_role_name = CODEDEPLOY_SERVICE_ROLE_NAME_BASE.to_owned();
+    write!(codedeploy_service_role_name, "-{}", run_uuid).unwrap();
+    codedeploy_service_role_name.truncate(64);
 
     let region = Region::UsEast1;
     let iam = rusoto_iam::IamClient::simple(region.clone());
@@ -85,9 +85,22 @@ fn successful_deployment_to_host() {
     println!("Creating on premise IAM role");
     let on_premise_role = create_on_premise_iam_role(&iam, ON_PREMISE_INSTANCE_ROLE_NAME, &test_identity, ON_PREMISE_INSTANCE_POLICY_NAME);
 
+    // We need to know the ARN for the "AWSCodeDeployRole" managed policy.
+    println!("Finding CodeDeploy's managed policy ARN");
+    let codedeploy_policy_arn = find_codedeploy_managed_policy_arn(&iam);
+
+    // Clean up any existing CodeDeploy service roles created by previous runs of this test
+    // that may be lingering due to past failures.
+    println!("Deleting stale CodeDeploy service IAM roles");
+    delete_stale_codedeploy_service_roles(&iam, CODEDEPLOY_SERVICE_ROLE_NAME_BASE, &codedeploy_policy_arn);
+
     // Create CodeDeploy service role with AWSCodeDeployRole managed policy.
     println!("Creating CodeDeploy service IAM role");
-    let codedeploy_service_role = create_codedeploy_service_iam_role(&iam, CODEDEPLOY_SERVICE_ROLE_NAME);
+    let codedeploy_service_role = create_codedeploy_service_iam_role(&iam, &codedeploy_service_role_name, &codedeploy_policy_arn, &test_identity);
+
+    // Wait until we've been able to assume the role 30 times, waiting one second between attempts.
+    println!("Waiting for CodeDeploy service role to be consistently assumable");
+    wait_for_consistently_assumable_codedeploy_service_role(&sts, &codedeploy_service_role.arn, 30, 120);
 
     // Assume role to get on-premise session credentials.
     println!("Retrieving on-premise session credentials for simulated instance");
@@ -131,6 +144,10 @@ fn successful_deployment_to_host() {
     // Delete Codedeploy deployment group and application.
     println!("Deleting CodeDeploy application state");
     delete_codedeploy_state(&cd, &application_name, DEPLOYMENT_GROUP_NAME);
+
+    // Delete CodeDeploy service role.
+    println!("Deleting CodeDeploy service IAM role");
+    delete_codedeploy_service_iam_role(&iam, &codedeploy_service_role_name, &codedeploy_policy_arn);
 
     // Delete on-premise IAM role.
     println!("Deleting on-premise IAM role");
@@ -351,13 +368,14 @@ fn delete_codedeploy_state<CodeDeploy: rusoto_codedeploy::CodeDeploy>(
 /// on our behalf, and return the ARN of the created role. If a role with the same name already exists then
 /// this function will assume that the role was previously created with the correct permissions and will return
 /// the existing role's ARN instead of creating a new one.
-fn create_codedeploy_service_iam_role<Iam: rusoto_iam::Iam>(iam: &Iam, role_name: &str) -> rusoto_iam::Role {
-    // Call IAM::ListPolicies to find the AWSCodeDeployRole (failing if it cannot be found).
-    let codedeploy_policy_arn = find_codedeploy_managed_policy_arn(iam);
-
+fn create_codedeploy_service_iam_role<Iam: rusoto_iam::Iam>(
+        iam: &Iam,
+        role_name: &str,
+        codedeploy_policy_arn: &str,
+        test_identity: &IntegrationTestIdentity) -> rusoto_iam::Role {
     let create_request = rusoto_iam::CreateRoleRequest {
         // Allow CodeDeploy service principal to assume role.
-        assume_role_policy_document: format!(r#"{{ "Version":"2012-10-17", "Statement": [ {{ "Effect":"Allow", "Principal": {{ "Service":"codedeploy.{arn_partition_domain}" }}, "Action": ["sts:AssumeRole"] }} ] }}"#, arn_partition_domain = ARN_PARTITION_DOMAIN).to_owned(),
+        assume_role_policy_document: format!(r#"{{ "Version":"2012-10-17", "Statement": [ {{ "Effect":"Allow", "Principal": {{ "Service":"codedeploy.{arn_partition_domain}" }}, "Action": ["sts:AssumeRole"] }}, {{ "Effect":"Allow", "Principal": {{ "AWS":"{test_account_id}" }}, "Action": ["sts:AssumeRole"] }} ] }}"#, arn_partition_domain = ARN_PARTITION_DOMAIN, test_account_id = test_identity.account_id).to_owned(),
         description: Some("CodeDeploy service role for Rusoto codedeploy-commands integration test".to_owned()),
         max_session_duration: None,
         path: None,
@@ -382,7 +400,7 @@ fn create_codedeploy_service_iam_role<Iam: rusoto_iam::Iam>(iam: &Iam, role_name
 
     // Attach the managed policy to the role.
     let attach_request = rusoto_iam::AttachRolePolicyRequest {
-        policy_arn: codedeploy_policy_arn.clone(),
+        policy_arn: codedeploy_policy_arn.to_owned(),
         role_name: role_name.to_owned()
     };
     iam.attach_role_policy(attach_request).sync()
@@ -416,6 +434,96 @@ fn find_codedeploy_managed_policy_arn<Iam: rusoto_iam::Iam>(iam: &Iam) -> String
     }
 
     panic!("Did not find the AWSCodeDeployRole managed policy among all the managed policies available to the integration test account");
+}
+
+/// Tries to assume the role every second until it has seen 30 consecutive successes in a row. Any failed AssumeRole
+/// requests will result in the counter being reset. Fails if it hasn't been able to get 30 consecutive successes
+/// for 120 seconds.
+fn wait_for_consistently_assumable_codedeploy_service_role<Sts: rusoto_sts::Sts>(
+        sts: &Sts,
+        service_role_arn: &str,
+        required_successes: u32,
+        max_attempts: u32) {
+    let session_name = uuid::Uuid::new_v4().hyphenated().to_string();
+    let mut total_attempts = 0;
+    let mut consecutive_successes = 0;
+    loop {
+        ::std::thread::sleep(::std::time::Duration::from_millis(1000));
+        let request = rusoto_sts::AssumeRoleRequest {
+            duration_seconds: None,
+            external_id: None,
+            policy: Some(r#"{ "Version":"2012-10-17", "Statement": [ { "Action":"*", "Effect":"Deny", "Resource":"*" } ] }"#.to_owned()),
+            role_arn: service_role_arn.to_owned(),
+            role_session_name: session_name.clone(),
+            serial_number: None,
+            token_code: None
+        };
+        match sts.assume_role(request).sync() {
+            Ok(_) => { 
+                consecutive_successes += 1;
+            },
+            Err(err) => {
+                consecutive_successes = 0;
+                println!("Assume role failed: {:?}", err);
+            }
+        }
+
+        if consecutive_successes >= required_successes {
+            println!("Saw {} consecutive AssumeRole successes after {} total attempts", consecutive_successes, total_attempts);
+            return;
+        }
+
+        total_attempts += 1;
+        if total_attempts >= max_attempts {
+            panic!("CodeDeploy service role {} failed to become consistently assumable within {} seconds", service_role_arn, max_attempts);
+        }
+    }
+}
+
+/// Iterates over all roles in the account, deleting any which share the given prefix.
+fn delete_stale_codedeploy_service_roles<Iam: rusoto_iam::Iam>(
+        iam: &Iam,
+        role_name_prefix: &str,
+        codedeploy_policy_arn: &str) {
+    let mut marker = None;
+    loop {
+        let list_request = rusoto_iam::ListRolesRequest {
+            marker,
+            max_items: Some(25),
+            path_prefix: None
+        };
+        let list_response = iam.list_roles(list_request).sync()
+            .expect("Failed to invoke IAM::ListRoles as part of cleaning up stale CodeDeploy service IAM roles");
+        marker = list_response.marker;
+
+        for role in &list_response.roles {
+            // Only delete roles whose names start with the prefix.
+            if !role.role_name.starts_with(role_name_prefix) {
+                continue;
+            }
+
+            // Primitive rate limiting.
+            ::std::thread::sleep(::std::time::Duration::from_millis(1000));
+
+            println!("Deleting stale CodeDeploy service role {}", role.role_name);
+            iam.detach_role_policy(rusoto_iam::DetachRolePolicyRequest { role_name: role.role_name.clone(), policy_arn: codedeploy_policy_arn.to_owned() }).sync()
+                .expect("Failed to invoke IAM::DetachRolePolicy while deleting a stale CodeDeploy service role");
+            iam.delete_role(rusoto_iam::DeleteRoleRequest { role_name: role.role_name.clone() }).sync()
+                .expect("Failed to invoke IAM::DeleteRole to delete stale CodeDeploy service role");
+        }
+
+        if !list_response.is_truncated.unwrap_or(false) {
+            break;
+        }
+    }
+}
+
+/// Deletes the CodeDeploy IAM service role.
+fn delete_codedeploy_service_iam_role<Iam: rusoto_iam::Iam>(iam: &Iam, role_name: &str, codedeploy_policy_arn: &str) {
+    iam.detach_role_policy(rusoto_iam::DetachRolePolicyRequest { role_name: role_name.to_owned(), policy_arn: codedeploy_policy_arn.to_owned() }).sync()
+        .expect("Failed to invoke IAM::DetachRolePolicy while deleting the CodeDeploy service role");
+    iam.delete_role(rusoto_iam::DeleteRoleRequest { role_name: role_name.to_owned() }).sync()
+        .expect("Failed to invoke IAM::DeleteRole to CodeDeploy service role");
 }
 
 fn register_and_tag_on_premise_instance<CodeDeploy: rusoto_codedeploy::CodeDeploy>(
