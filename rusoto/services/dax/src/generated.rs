@@ -18,18 +18,18 @@ use std::io;
 use futures::future;
 use futures::Future;
 use rusoto_core::reactor::{CredentialsProvider, RequestDispatcher};
-use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::region;
+use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::{ClientInner, RusotoFuture};
 
-use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
+use rusoto_core::request::HttpDispatchError;
 
-use serde_json;
-use rusoto_core::signature::SignedRequest;
-use serde_json::Value as SerdeJsonValue;
-use serde_json::from_str;
 use hyper::StatusCode;
+use rusoto_core::signature::SignedRequest;
+use serde_json;
+use serde_json::from_str;
+use serde_json::Value as SerdeJsonValue;
 /// <p>Contains all of the attributes of a specific DAX cluster.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct Cluster {
@@ -3055,124 +3055,124 @@ pub trait DynamodbAccelerator {
     /// <p>Creates a DAX cluster. All nodes in the cluster run the same DAX caching software.</p>
     fn create_cluster(
         &self,
-        input: &CreateClusterRequest,
+        input: CreateClusterRequest,
     ) -> RusotoFuture<CreateClusterResponse, CreateClusterError>;
 
     /// <p>Creates a new parameter group. A parameter group is a collection of parameters that you apply to all of the nodes in a DAX cluster.</p>
     fn create_parameter_group(
         &self,
-        input: &CreateParameterGroupRequest,
+        input: CreateParameterGroupRequest,
     ) -> RusotoFuture<CreateParameterGroupResponse, CreateParameterGroupError>;
 
     /// <p>Creates a new subnet group.</p>
     fn create_subnet_group(
         &self,
-        input: &CreateSubnetGroupRequest,
+        input: CreateSubnetGroupRequest,
     ) -> RusotoFuture<CreateSubnetGroupResponse, CreateSubnetGroupError>;
 
     /// <p><p>Removes one or more nodes from a DAX cluster.</p> <note> <p>You cannot use <code>DecreaseReplicationFactor</code> to remove the last node in a DAX cluster. If you need to do this, use <code>DeleteCluster</code> instead.</p> </note></p>
     fn decrease_replication_factor(
         &self,
-        input: &DecreaseReplicationFactorRequest,
+        input: DecreaseReplicationFactorRequest,
     ) -> RusotoFuture<DecreaseReplicationFactorResponse, DecreaseReplicationFactorError>;
 
     /// <p>Deletes a previously provisioned DAX cluster. <i>DeleteCluster</i> deletes all associated nodes, node endpoints and the DAX cluster itself. When you receive a successful response from this action, DAX immediately begins deleting the cluster; you cannot cancel or revert this action.</p>
     fn delete_cluster(
         &self,
-        input: &DeleteClusterRequest,
+        input: DeleteClusterRequest,
     ) -> RusotoFuture<DeleteClusterResponse, DeleteClusterError>;
 
     /// <p>Deletes the specified parameter group. You cannot delete a parameter group if it is associated with any DAX clusters.</p>
     fn delete_parameter_group(
         &self,
-        input: &DeleteParameterGroupRequest,
+        input: DeleteParameterGroupRequest,
     ) -> RusotoFuture<DeleteParameterGroupResponse, DeleteParameterGroupError>;
 
     /// <p><p>Deletes a subnet group.</p> <note> <p>You cannot delete a subnet group if it is associated with any DAX clusters.</p> </note></p>
     fn delete_subnet_group(
         &self,
-        input: &DeleteSubnetGroupRequest,
+        input: DeleteSubnetGroupRequest,
     ) -> RusotoFuture<DeleteSubnetGroupResponse, DeleteSubnetGroupError>;
 
     /// <p>Returns information about all provisioned DAX clusters if no cluster identifier is specified, or about a specific DAX cluster if a cluster identifier is supplied.</p> <p>If the cluster is in the CREATING state, only cluster level information will be displayed until all of the nodes are successfully provisioned.</p> <p>If the cluster is in the DELETING state, only cluster level information will be displayed.</p> <p>If nodes are currently being added to the DAX cluster, node endpoint information and creation time for the additional nodes will not be displayed until they are completely provisioned. When the DAX cluster state is <i>available</i>, the cluster is ready for use.</p> <p>If nodes are currently being removed from the DAX cluster, no endpoint information for the removed nodes is displayed.</p>
     fn describe_clusters(
         &self,
-        input: &DescribeClustersRequest,
+        input: DescribeClustersRequest,
     ) -> RusotoFuture<DescribeClustersResponse, DescribeClustersError>;
 
     /// <p>Returns the default system parameter information for the DAX caching software.</p>
     fn describe_default_parameters(
         &self,
-        input: &DescribeDefaultParametersRequest,
+        input: DescribeDefaultParametersRequest,
     ) -> RusotoFuture<DescribeDefaultParametersResponse, DescribeDefaultParametersError>;
 
     /// <p>Returns events related to DAX clusters and parameter groups. You can obtain events specific to a particular DAX cluster or parameter group by providing the name as a parameter.</p> <p>By default, only the events occurring within the last hour are returned; however, you can retrieve up to 14 days' worth of events if necessary.</p>
     fn describe_events(
         &self,
-        input: &DescribeEventsRequest,
+        input: DescribeEventsRequest,
     ) -> RusotoFuture<DescribeEventsResponse, DescribeEventsError>;
 
     /// <p>Returns a list of parameter group descriptions. If a parameter group name is specified, the list will contain only the descriptions for that group.</p>
     fn describe_parameter_groups(
         &self,
-        input: &DescribeParameterGroupsRequest,
+        input: DescribeParameterGroupsRequest,
     ) -> RusotoFuture<DescribeParameterGroupsResponse, DescribeParameterGroupsError>;
 
     /// <p>Returns the detailed parameter list for a particular parameter group.</p>
     fn describe_parameters(
         &self,
-        input: &DescribeParametersRequest,
+        input: DescribeParametersRequest,
     ) -> RusotoFuture<DescribeParametersResponse, DescribeParametersError>;
 
     /// <p>Returns a list of subnet group descriptions. If a subnet group name is specified, the list will contain only the description of that group.</p>
     fn describe_subnet_groups(
         &self,
-        input: &DescribeSubnetGroupsRequest,
+        input: DescribeSubnetGroupsRequest,
     ) -> RusotoFuture<DescribeSubnetGroupsResponse, DescribeSubnetGroupsError>;
 
     /// <p>Adds one or more nodes to a DAX cluster.</p>
     fn increase_replication_factor(
         &self,
-        input: &IncreaseReplicationFactorRequest,
+        input: IncreaseReplicationFactorRequest,
     ) -> RusotoFuture<IncreaseReplicationFactorResponse, IncreaseReplicationFactorError>;
 
     /// <p>List all of the tags for a DAX cluster. You can call <code>ListTags</code> up to 10 times per second, per account.</p>
-    fn list_tags(&self, input: &ListTagsRequest) -> RusotoFuture<ListTagsResponse, ListTagsError>;
+    fn list_tags(&self, input: ListTagsRequest) -> RusotoFuture<ListTagsResponse, ListTagsError>;
 
     /// <p>Reboots a single node of a DAX cluster. The reboot action takes place as soon as possible. During the reboot, the node status is set to REBOOTING.</p>
     fn reboot_node(
         &self,
-        input: &RebootNodeRequest,
+        input: RebootNodeRequest,
     ) -> RusotoFuture<RebootNodeResponse, RebootNodeError>;
 
     /// <p>Associates a set of tags with a DAX resource. You can call <code>TagResource</code> up to 5 times per second, per account. </p>
     fn tag_resource(
         &self,
-        input: &TagResourceRequest,
+        input: TagResourceRequest,
     ) -> RusotoFuture<TagResourceResponse, TagResourceError>;
 
     /// <p>Removes the association of tags from a DAX resource. You can call <code>UntagResource</code> up to 5 times per second, per account. </p>
     fn untag_resource(
         &self,
-        input: &UntagResourceRequest,
+        input: UntagResourceRequest,
     ) -> RusotoFuture<UntagResourceResponse, UntagResourceError>;
 
     /// <p>Modifies the settings for a DAX cluster. You can use this action to change one or more cluster configuration parameters by specifying the parameters and the new values.</p>
     fn update_cluster(
         &self,
-        input: &UpdateClusterRequest,
+        input: UpdateClusterRequest,
     ) -> RusotoFuture<UpdateClusterResponse, UpdateClusterError>;
 
     /// <p>Modifies the parameters of a parameter group. You can modify up to 20 parameters in a single request by submitting a list parameter name and value pairs.</p>
     fn update_parameter_group(
         &self,
-        input: &UpdateParameterGroupRequest,
+        input: UpdateParameterGroupRequest,
     ) -> RusotoFuture<UpdateParameterGroupResponse, UpdateParameterGroupError>;
 
     /// <p>Modifies an existing subnet group.</p>
     fn update_subnet_group(
         &self,
-        input: &UpdateSubnetGroupRequest,
+        input: UpdateSubnetGroupRequest,
     ) -> RusotoFuture<UpdateSubnetGroupResponse, UpdateSubnetGroupError>;
 }
 /// A client for the Amazon DAX API.
@@ -3221,13 +3221,13 @@ where
     /// <p>Creates a DAX cluster. All nodes in the cluster run the same DAX caching software.</p>
     fn create_cluster(
         &self,
-        input: &CreateClusterRequest,
+        input: CreateClusterRequest,
     ) -> RusotoFuture<CreateClusterResponse, CreateClusterError> {
         let mut request = SignedRequest::new("POST", "dax", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonDAXV3.CreateCluster");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -3235,7 +3235,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -3258,13 +3258,13 @@ where
     /// <p>Creates a new parameter group. A parameter group is a collection of parameters that you apply to all of the nodes in a DAX cluster.</p>
     fn create_parameter_group(
         &self,
-        input: &CreateParameterGroupRequest,
+        input: CreateParameterGroupRequest,
     ) -> RusotoFuture<CreateParameterGroupResponse, CreateParameterGroupError> {
         let mut request = SignedRequest::new("POST", "dax", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonDAXV3.CreateParameterGroup");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -3272,7 +3272,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -3295,13 +3295,13 @@ where
     /// <p>Creates a new subnet group.</p>
     fn create_subnet_group(
         &self,
-        input: &CreateSubnetGroupRequest,
+        input: CreateSubnetGroupRequest,
     ) -> RusotoFuture<CreateSubnetGroupResponse, CreateSubnetGroupError> {
         let mut request = SignedRequest::new("POST", "dax", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonDAXV3.CreateSubnetGroup");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -3309,7 +3309,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -3332,13 +3332,13 @@ where
     /// <p><p>Removes one or more nodes from a DAX cluster.</p> <note> <p>You cannot use <code>DecreaseReplicationFactor</code> to remove the last node in a DAX cluster. If you need to do this, use <code>DeleteCluster</code> instead.</p> </note></p>
     fn decrease_replication_factor(
         &self,
-        input: &DecreaseReplicationFactorRequest,
+        input: DecreaseReplicationFactorRequest,
     ) -> RusotoFuture<DecreaseReplicationFactorResponse, DecreaseReplicationFactorError> {
         let mut request = SignedRequest::new("POST", "dax", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonDAXV3.DecreaseReplicationFactor");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -3346,7 +3346,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -3369,13 +3369,13 @@ where
     /// <p>Deletes a previously provisioned DAX cluster. <i>DeleteCluster</i> deletes all associated nodes, node endpoints and the DAX cluster itself. When you receive a successful response from this action, DAX immediately begins deleting the cluster; you cannot cancel or revert this action.</p>
     fn delete_cluster(
         &self,
-        input: &DeleteClusterRequest,
+        input: DeleteClusterRequest,
     ) -> RusotoFuture<DeleteClusterResponse, DeleteClusterError> {
         let mut request = SignedRequest::new("POST", "dax", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonDAXV3.DeleteCluster");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -3383,7 +3383,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -3406,13 +3406,13 @@ where
     /// <p>Deletes the specified parameter group. You cannot delete a parameter group if it is associated with any DAX clusters.</p>
     fn delete_parameter_group(
         &self,
-        input: &DeleteParameterGroupRequest,
+        input: DeleteParameterGroupRequest,
     ) -> RusotoFuture<DeleteParameterGroupResponse, DeleteParameterGroupError> {
         let mut request = SignedRequest::new("POST", "dax", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonDAXV3.DeleteParameterGroup");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -3420,7 +3420,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -3443,13 +3443,13 @@ where
     /// <p><p>Deletes a subnet group.</p> <note> <p>You cannot delete a subnet group if it is associated with any DAX clusters.</p> </note></p>
     fn delete_subnet_group(
         &self,
-        input: &DeleteSubnetGroupRequest,
+        input: DeleteSubnetGroupRequest,
     ) -> RusotoFuture<DeleteSubnetGroupResponse, DeleteSubnetGroupError> {
         let mut request = SignedRequest::new("POST", "dax", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonDAXV3.DeleteSubnetGroup");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -3457,7 +3457,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -3480,13 +3480,13 @@ where
     /// <p>Returns information about all provisioned DAX clusters if no cluster identifier is specified, or about a specific DAX cluster if a cluster identifier is supplied.</p> <p>If the cluster is in the CREATING state, only cluster level information will be displayed until all of the nodes are successfully provisioned.</p> <p>If the cluster is in the DELETING state, only cluster level information will be displayed.</p> <p>If nodes are currently being added to the DAX cluster, node endpoint information and creation time for the additional nodes will not be displayed until they are completely provisioned. When the DAX cluster state is <i>available</i>, the cluster is ready for use.</p> <p>If nodes are currently being removed from the DAX cluster, no endpoint information for the removed nodes is displayed.</p>
     fn describe_clusters(
         &self,
-        input: &DescribeClustersRequest,
+        input: DescribeClustersRequest,
     ) -> RusotoFuture<DescribeClustersResponse, DescribeClustersError> {
         let mut request = SignedRequest::new("POST", "dax", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonDAXV3.DescribeClusters");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -3494,7 +3494,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -3517,13 +3517,13 @@ where
     /// <p>Returns the default system parameter information for the DAX caching software.</p>
     fn describe_default_parameters(
         &self,
-        input: &DescribeDefaultParametersRequest,
+        input: DescribeDefaultParametersRequest,
     ) -> RusotoFuture<DescribeDefaultParametersResponse, DescribeDefaultParametersError> {
         let mut request = SignedRequest::new("POST", "dax", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonDAXV3.DescribeDefaultParameters");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -3531,7 +3531,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -3554,13 +3554,13 @@ where
     /// <p>Returns events related to DAX clusters and parameter groups. You can obtain events specific to a particular DAX cluster or parameter group by providing the name as a parameter.</p> <p>By default, only the events occurring within the last hour are returned; however, you can retrieve up to 14 days' worth of events if necessary.</p>
     fn describe_events(
         &self,
-        input: &DescribeEventsRequest,
+        input: DescribeEventsRequest,
     ) -> RusotoFuture<DescribeEventsResponse, DescribeEventsError> {
         let mut request = SignedRequest::new("POST", "dax", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonDAXV3.DescribeEvents");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -3568,7 +3568,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -3591,13 +3591,13 @@ where
     /// <p>Returns a list of parameter group descriptions. If a parameter group name is specified, the list will contain only the descriptions for that group.</p>
     fn describe_parameter_groups(
         &self,
-        input: &DescribeParameterGroupsRequest,
+        input: DescribeParameterGroupsRequest,
     ) -> RusotoFuture<DescribeParameterGroupsResponse, DescribeParameterGroupsError> {
         let mut request = SignedRequest::new("POST", "dax", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonDAXV3.DescribeParameterGroups");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -3605,7 +3605,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -3628,13 +3628,13 @@ where
     /// <p>Returns the detailed parameter list for a particular parameter group.</p>
     fn describe_parameters(
         &self,
-        input: &DescribeParametersRequest,
+        input: DescribeParametersRequest,
     ) -> RusotoFuture<DescribeParametersResponse, DescribeParametersError> {
         let mut request = SignedRequest::new("POST", "dax", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonDAXV3.DescribeParameters");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -3642,7 +3642,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -3665,13 +3665,13 @@ where
     /// <p>Returns a list of subnet group descriptions. If a subnet group name is specified, the list will contain only the description of that group.</p>
     fn describe_subnet_groups(
         &self,
-        input: &DescribeSubnetGroupsRequest,
+        input: DescribeSubnetGroupsRequest,
     ) -> RusotoFuture<DescribeSubnetGroupsResponse, DescribeSubnetGroupsError> {
         let mut request = SignedRequest::new("POST", "dax", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonDAXV3.DescribeSubnetGroups");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -3679,7 +3679,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -3702,13 +3702,13 @@ where
     /// <p>Adds one or more nodes to a DAX cluster.</p>
     fn increase_replication_factor(
         &self,
-        input: &IncreaseReplicationFactorRequest,
+        input: IncreaseReplicationFactorRequest,
     ) -> RusotoFuture<IncreaseReplicationFactorResponse, IncreaseReplicationFactorError> {
         let mut request = SignedRequest::new("POST", "dax", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonDAXV3.IncreaseReplicationFactor");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -3716,7 +3716,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -3737,12 +3737,12 @@ where
     }
 
     /// <p>List all of the tags for a DAX cluster. You can call <code>ListTags</code> up to 10 times per second, per account.</p>
-    fn list_tags(&self, input: &ListTagsRequest) -> RusotoFuture<ListTagsResponse, ListTagsError> {
+    fn list_tags(&self, input: ListTagsRequest) -> RusotoFuture<ListTagsResponse, ListTagsError> {
         let mut request = SignedRequest::new("POST", "dax", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonDAXV3.ListTags");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -3750,7 +3750,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -3773,13 +3773,13 @@ where
     /// <p>Reboots a single node of a DAX cluster. The reboot action takes place as soon as possible. During the reboot, the node status is set to REBOOTING.</p>
     fn reboot_node(
         &self,
-        input: &RebootNodeRequest,
+        input: RebootNodeRequest,
     ) -> RusotoFuture<RebootNodeResponse, RebootNodeError> {
         let mut request = SignedRequest::new("POST", "dax", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonDAXV3.RebootNode");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -3787,7 +3787,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -3810,13 +3810,13 @@ where
     /// <p>Associates a set of tags with a DAX resource. You can call <code>TagResource</code> up to 5 times per second, per account. </p>
     fn tag_resource(
         &self,
-        input: &TagResourceRequest,
+        input: TagResourceRequest,
     ) -> RusotoFuture<TagResourceResponse, TagResourceError> {
         let mut request = SignedRequest::new("POST", "dax", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonDAXV3.TagResource");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -3824,7 +3824,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -3847,13 +3847,13 @@ where
     /// <p>Removes the association of tags from a DAX resource. You can call <code>UntagResource</code> up to 5 times per second, per account. </p>
     fn untag_resource(
         &self,
-        input: &UntagResourceRequest,
+        input: UntagResourceRequest,
     ) -> RusotoFuture<UntagResourceResponse, UntagResourceError> {
         let mut request = SignedRequest::new("POST", "dax", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonDAXV3.UntagResource");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -3861,7 +3861,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -3884,13 +3884,13 @@ where
     /// <p>Modifies the settings for a DAX cluster. You can use this action to change one or more cluster configuration parameters by specifying the parameters and the new values.</p>
     fn update_cluster(
         &self,
-        input: &UpdateClusterRequest,
+        input: UpdateClusterRequest,
     ) -> RusotoFuture<UpdateClusterResponse, UpdateClusterError> {
         let mut request = SignedRequest::new("POST", "dax", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonDAXV3.UpdateCluster");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -3898,7 +3898,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -3921,13 +3921,13 @@ where
     /// <p>Modifies the parameters of a parameter group. You can modify up to 20 parameters in a single request by submitting a list parameter name and value pairs.</p>
     fn update_parameter_group(
         &self,
-        input: &UpdateParameterGroupRequest,
+        input: UpdateParameterGroupRequest,
     ) -> RusotoFuture<UpdateParameterGroupResponse, UpdateParameterGroupError> {
         let mut request = SignedRequest::new("POST", "dax", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonDAXV3.UpdateParameterGroup");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -3935,7 +3935,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -3958,13 +3958,13 @@ where
     /// <p>Modifies an existing subnet group.</p>
     fn update_subnet_group(
         &self,
-        input: &UpdateSubnetGroupRequest,
+        input: UpdateSubnetGroupRequest,
     ) -> RusotoFuture<UpdateSubnetGroupResponse, UpdateSubnetGroupError> {
         let mut request = SignedRequest::new("POST", "dax", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonDAXV3.UpdateSubnetGroup");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -3972,7 +3972,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 

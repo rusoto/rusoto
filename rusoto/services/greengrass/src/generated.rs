@@ -18,16 +18,16 @@ use std::io;
 use futures::future;
 use futures::Future;
 use rusoto_core::reactor::{CredentialsProvider, RequestDispatcher};
-use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::region;
+use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::{ClientInner, RusotoFuture};
 
-use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
+use rusoto_core::request::HttpDispatchError;
 
-use serde_json;
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::signature::SignedRequest;
+use serde_json;
 use serde_json::from_str;
 use serde_json::Value as SerdeJsonValue;
 #[derive(Default, Debug, Clone, Serialize)]
@@ -8592,115 +8592,115 @@ pub trait GreenGrass {
     /// <p>Associates a role with a group. Your AWS Greengrass core will use the role to access AWS cloud services. The role&#39;s permissions should allow Greengrass core Lambda functions to perform actions against the cloud.</p>
     fn associate_role_to_group(
         &self,
-        input: &AssociateRoleToGroupRequest,
+        input: AssociateRoleToGroupRequest,
     ) -> RusotoFuture<AssociateRoleToGroupResponse, AssociateRoleToGroupError>;
 
     /// <p>Associates a role with your account. AWS Greengrass will use the role to access your Lambda functions and AWS IoT resources. This is necessary for deployments to succeed. The role must have at least minimum permissions in the policy &#39;&#39;AWSGreengrassResourceAccessRolePolicy&#39;&#39;.</p>
     fn associate_service_role_to_account(
         &self,
-        input: &AssociateServiceRoleToAccountRequest,
+        input: AssociateServiceRoleToAccountRequest,
     ) -> RusotoFuture<AssociateServiceRoleToAccountResponse, AssociateServiceRoleToAccountError>;
 
     /// <p>Creates a core definition. You may provide the initial version of the core definition now or use &#39;&#39;CreateCoreDefinitionVersion&#39;&#39; at a later time. AWS Greengrass groups must each contain exactly one AWS Greengrass core.</p>
     fn create_core_definition(
         &self,
-        input: &CreateCoreDefinitionRequest,
+        input: CreateCoreDefinitionRequest,
     ) -> RusotoFuture<CreateCoreDefinitionResponse, CreateCoreDefinitionError>;
 
     /// <p>Creates a version of a core definition that has already been defined. AWS Greengrass groups must each contain exactly one AWS Greengrass core.</p>
     fn create_core_definition_version(
         &self,
-        input: &CreateCoreDefinitionVersionRequest,
+        input: CreateCoreDefinitionVersionRequest,
     ) -> RusotoFuture<CreateCoreDefinitionVersionResponse, CreateCoreDefinitionVersionError>;
 
     /// <p>Creates a deployment.</p>
     fn create_deployment(
         &self,
-        input: &CreateDeploymentRequest,
+        input: CreateDeploymentRequest,
     ) -> RusotoFuture<CreateDeploymentResponse, CreateDeploymentError>;
 
     /// <p>Creates a device definition. You may provide the initial version of the device definition now or use &#39;&#39;CreateDeviceDefinitionVersion&#39;&#39; at a later time.</p>
     fn create_device_definition(
         &self,
-        input: &CreateDeviceDefinitionRequest,
+        input: CreateDeviceDefinitionRequest,
     ) -> RusotoFuture<CreateDeviceDefinitionResponse, CreateDeviceDefinitionError>;
 
     /// <p>Creates a version of a device definition that has already been defined.</p>
     fn create_device_definition_version(
         &self,
-        input: &CreateDeviceDefinitionVersionRequest,
+        input: CreateDeviceDefinitionVersionRequest,
     ) -> RusotoFuture<CreateDeviceDefinitionVersionResponse, CreateDeviceDefinitionVersionError>;
 
     /// <p>Creates a Lambda function definition which contains a list of Lambda functions and their configurations to be used in a group. You can create an initial version of the definition by providing a list of Lambda functions and their configurations now, or use &#39;&#39;CreateFunctionDefinitionVersion&#39;&#39; later.</p>
     fn create_function_definition(
         &self,
-        input: &CreateFunctionDefinitionRequest,
+        input: CreateFunctionDefinitionRequest,
     ) -> RusotoFuture<CreateFunctionDefinitionResponse, CreateFunctionDefinitionError>;
 
     /// <p>Creates a version of a Lambda function definition that has already been defined.</p>
     fn create_function_definition_version(
         &self,
-        input: &CreateFunctionDefinitionVersionRequest,
+        input: CreateFunctionDefinitionVersionRequest,
     ) -> RusotoFuture<CreateFunctionDefinitionVersionResponse, CreateFunctionDefinitionVersionError>;
 
     /// <p>Creates a group. You may provide the initial version of the group or use &#39;&#39;CreateGroupVersion&#39;&#39; at a later time.</p>
     fn create_group(
         &self,
-        input: &CreateGroupRequest,
+        input: CreateGroupRequest,
     ) -> RusotoFuture<CreateGroupResponse, CreateGroupError>;
 
     /// <p>Creates a CA for the group. If a CA already exists, it will rotate the existing CA.</p>
     fn create_group_certificate_authority(
         &self,
-        input: &CreateGroupCertificateAuthorityRequest,
+        input: CreateGroupCertificateAuthorityRequest,
     ) -> RusotoFuture<CreateGroupCertificateAuthorityResponse, CreateGroupCertificateAuthorityError>;
 
     /// <p>Creates a version of a group which has already been defined.</p>
     fn create_group_version(
         &self,
-        input: &CreateGroupVersionRequest,
+        input: CreateGroupVersionRequest,
     ) -> RusotoFuture<CreateGroupVersionResponse, CreateGroupVersionError>;
 
     /// <p>Creates a logger definition. You may provide the initial version of the logger definition now or use &#39;&#39;CreateLoggerDefinitionVersion&#39;&#39; at a later time.</p>
     fn create_logger_definition(
         &self,
-        input: &CreateLoggerDefinitionRequest,
+        input: CreateLoggerDefinitionRequest,
     ) -> RusotoFuture<CreateLoggerDefinitionResponse, CreateLoggerDefinitionError>;
 
     /// <p>Creates a version of a logger definition that has already been defined.</p>
     fn create_logger_definition_version(
         &self,
-        input: &CreateLoggerDefinitionVersionRequest,
+        input: CreateLoggerDefinitionVersionRequest,
     ) -> RusotoFuture<CreateLoggerDefinitionVersionResponse, CreateLoggerDefinitionVersionError>;
 
     /// <p>Creates a resource definition which contains a list of resources to be used in a group. You can create an initial version of the definition by providing a list of resources now, or use &#39;&#39;CreateResourceDefinitionVersion&#39;&#39; later.</p>
     fn create_resource_definition(
         &self,
-        input: &CreateResourceDefinitionRequest,
+        input: CreateResourceDefinitionRequest,
     ) -> RusotoFuture<CreateResourceDefinitionResponse, CreateResourceDefinitionError>;
 
     /// <p>Creates a version of a resource definition that has already been defined.</p>
     fn create_resource_definition_version(
         &self,
-        input: &CreateResourceDefinitionVersionRequest,
+        input: CreateResourceDefinitionVersionRequest,
     ) -> RusotoFuture<CreateResourceDefinitionVersionResponse, CreateResourceDefinitionVersionError>;
 
     /// <p>Creates a software update for a core or group of cores (specified as an IoT thing group.) Use this to update the OTA Agent as well as the Greengrass core software. It makes use of the IoT Jobs feature which provides additional commands to manage a Greengrass core software update job.</p>
     fn create_software_update_job(
         &self,
-        input: &CreateSoftwareUpdateJobRequest,
+        input: CreateSoftwareUpdateJobRequest,
     ) -> RusotoFuture<CreateSoftwareUpdateJobResponse, CreateSoftwareUpdateJobError>;
 
     /// <p>Creates a subscription definition. You may provide the initial version of the subscription definition now or use &#39;&#39;CreateSubscriptionDefinitionVersion&#39;&#39; at a later time.</p>
     fn create_subscription_definition(
         &self,
-        input: &CreateSubscriptionDefinitionRequest,
+        input: CreateSubscriptionDefinitionRequest,
     ) -> RusotoFuture<CreateSubscriptionDefinitionResponse, CreateSubscriptionDefinitionError>;
 
     /// <p>Creates a version of a subscription definition which has already been defined.</p>
     fn create_subscription_definition_version(
         &self,
-        input: &CreateSubscriptionDefinitionVersionRequest,
+        input: CreateSubscriptionDefinitionVersionRequest,
     ) -> RusotoFuture<
         CreateSubscriptionDefinitionVersionResponse,
         CreateSubscriptionDefinitionVersionError,
@@ -8709,49 +8709,49 @@ pub trait GreenGrass {
     /// <p>Deletes a core definition.</p>
     fn delete_core_definition(
         &self,
-        input: &DeleteCoreDefinitionRequest,
+        input: DeleteCoreDefinitionRequest,
     ) -> RusotoFuture<DeleteCoreDefinitionResponse, DeleteCoreDefinitionError>;
 
     /// <p>Deletes a device definition.</p>
     fn delete_device_definition(
         &self,
-        input: &DeleteDeviceDefinitionRequest,
+        input: DeleteDeviceDefinitionRequest,
     ) -> RusotoFuture<DeleteDeviceDefinitionResponse, DeleteDeviceDefinitionError>;
 
     /// <p>Deletes a Lambda function definition.</p>
     fn delete_function_definition(
         &self,
-        input: &DeleteFunctionDefinitionRequest,
+        input: DeleteFunctionDefinitionRequest,
     ) -> RusotoFuture<DeleteFunctionDefinitionResponse, DeleteFunctionDefinitionError>;
 
     /// <p>Deletes a group.</p>
     fn delete_group(
         &self,
-        input: &DeleteGroupRequest,
+        input: DeleteGroupRequest,
     ) -> RusotoFuture<DeleteGroupResponse, DeleteGroupError>;
 
     /// <p>Deletes a logger definition.</p>
     fn delete_logger_definition(
         &self,
-        input: &DeleteLoggerDefinitionRequest,
+        input: DeleteLoggerDefinitionRequest,
     ) -> RusotoFuture<DeleteLoggerDefinitionResponse, DeleteLoggerDefinitionError>;
 
     /// <p>Deletes a resource definition.</p>
     fn delete_resource_definition(
         &self,
-        input: &DeleteResourceDefinitionRequest,
+        input: DeleteResourceDefinitionRequest,
     ) -> RusotoFuture<DeleteResourceDefinitionResponse, DeleteResourceDefinitionError>;
 
     /// <p>Deletes a subscription definition.</p>
     fn delete_subscription_definition(
         &self,
-        input: &DeleteSubscriptionDefinitionRequest,
+        input: DeleteSubscriptionDefinitionRequest,
     ) -> RusotoFuture<DeleteSubscriptionDefinitionResponse, DeleteSubscriptionDefinitionError>;
 
     /// <p>Disassociates the role from a group.</p>
     fn disassociate_role_from_group(
         &self,
-        input: &DisassociateRoleFromGroupRequest,
+        input: DisassociateRoleFromGroupRequest,
     ) -> RusotoFuture<DisassociateRoleFromGroupResponse, DisassociateRoleFromGroupError>;
 
     /// <p>Disassociates the service role from your account. Without a service role, deployments will not work.</p>
@@ -8765,100 +8765,100 @@ pub trait GreenGrass {
     /// <p>Retrieves the role associated with a particular group.</p>
     fn get_associated_role(
         &self,
-        input: &GetAssociatedRoleRequest,
+        input: GetAssociatedRoleRequest,
     ) -> RusotoFuture<GetAssociatedRoleResponse, GetAssociatedRoleError>;
 
     /// <p>Retrieves the connectivity information for a core.</p>
     fn get_connectivity_info(
         &self,
-        input: &GetConnectivityInfoRequest,
+        input: GetConnectivityInfoRequest,
     ) -> RusotoFuture<GetConnectivityInfoResponse, GetConnectivityInfoError>;
 
     /// <p>Retrieves information about a core definition version.</p>
     fn get_core_definition(
         &self,
-        input: &GetCoreDefinitionRequest,
+        input: GetCoreDefinitionRequest,
     ) -> RusotoFuture<GetCoreDefinitionResponse, GetCoreDefinitionError>;
 
     /// <p>Retrieves information about a core definition version.</p>
     fn get_core_definition_version(
         &self,
-        input: &GetCoreDefinitionVersionRequest,
+        input: GetCoreDefinitionVersionRequest,
     ) -> RusotoFuture<GetCoreDefinitionVersionResponse, GetCoreDefinitionVersionError>;
 
     /// <p>Returns the status of a deployment.</p>
     fn get_deployment_status(
         &self,
-        input: &GetDeploymentStatusRequest,
+        input: GetDeploymentStatusRequest,
     ) -> RusotoFuture<GetDeploymentStatusResponse, GetDeploymentStatusError>;
 
     /// <p>Retrieves information about a device definition.</p>
     fn get_device_definition(
         &self,
-        input: &GetDeviceDefinitionRequest,
+        input: GetDeviceDefinitionRequest,
     ) -> RusotoFuture<GetDeviceDefinitionResponse, GetDeviceDefinitionError>;
 
     /// <p>Retrieves information about a device definition version.</p>
     fn get_device_definition_version(
         &self,
-        input: &GetDeviceDefinitionVersionRequest,
+        input: GetDeviceDefinitionVersionRequest,
     ) -> RusotoFuture<GetDeviceDefinitionVersionResponse, GetDeviceDefinitionVersionError>;
 
     /// <p>Retrieves information about a Lambda function definition, including its creation time and latest version.</p>
     fn get_function_definition(
         &self,
-        input: &GetFunctionDefinitionRequest,
+        input: GetFunctionDefinitionRequest,
     ) -> RusotoFuture<GetFunctionDefinitionResponse, GetFunctionDefinitionError>;
 
     /// <p>Retrieves information about a Lambda function definition version, including which Lambda functions are included in the version and their configurations.</p>
     fn get_function_definition_version(
         &self,
-        input: &GetFunctionDefinitionVersionRequest,
+        input: GetFunctionDefinitionVersionRequest,
     ) -> RusotoFuture<GetFunctionDefinitionVersionResponse, GetFunctionDefinitionVersionError>;
 
     /// <p>Retrieves information about a group.</p>
-    fn get_group(&self, input: &GetGroupRequest) -> RusotoFuture<GetGroupResponse, GetGroupError>;
+    fn get_group(&self, input: GetGroupRequest) -> RusotoFuture<GetGroupResponse, GetGroupError>;
 
     /// <p>Retreives the CA associated with a group. Returns the public key of the CA.</p>
     fn get_group_certificate_authority(
         &self,
-        input: &GetGroupCertificateAuthorityRequest,
+        input: GetGroupCertificateAuthorityRequest,
     ) -> RusotoFuture<GetGroupCertificateAuthorityResponse, GetGroupCertificateAuthorityError>;
 
     /// <p>Retrieves the current configuration for the CA used by the group.</p>
     fn get_group_certificate_configuration(
         &self,
-        input: &GetGroupCertificateConfigurationRequest,
+        input: GetGroupCertificateConfigurationRequest,
     ) -> RusotoFuture<GetGroupCertificateConfigurationResponse, GetGroupCertificateConfigurationError>;
 
     /// <p>Retrieves information about a group version.</p>
     fn get_group_version(
         &self,
-        input: &GetGroupVersionRequest,
+        input: GetGroupVersionRequest,
     ) -> RusotoFuture<GetGroupVersionResponse, GetGroupVersionError>;
 
     /// <p>Retrieves information about a logger definition.</p>
     fn get_logger_definition(
         &self,
-        input: &GetLoggerDefinitionRequest,
+        input: GetLoggerDefinitionRequest,
     ) -> RusotoFuture<GetLoggerDefinitionResponse, GetLoggerDefinitionError>;
 
     /// <p>Retrieves information about a logger definition version.</p>
     fn get_logger_definition_version(
         &self,
-        input: &GetLoggerDefinitionVersionRequest,
+        input: GetLoggerDefinitionVersionRequest,
     ) -> RusotoFuture<GetLoggerDefinitionVersionResponse, GetLoggerDefinitionVersionError>;
 
     /// <p>Retrieves information about a resource definition, including its creation time and latest version.</p>
     fn get_resource_definition(
         &self,
-        input: &GetResourceDefinitionRequest,
+        input: GetResourceDefinitionRequest,
     ) -> RusotoFuture<GetResourceDefinitionResponse, GetResourceDefinitionError>;
 
     /// <p>Retrieves information about a resource definition version, including which resources are included in the version.</p>
     fn get_resource_definition_version(
         &self,
-        input: &GetResourceDefinitionVersionRequest,
+        input: GetResourceDefinitionVersionRequest,
     ) -> RusotoFuture<GetResourceDefinitionVersionResponse, GetResourceDefinitionVersionError>;
 
     /// <p>Retrieves the service role that is attached to your account.</p>
@@ -8869,103 +8869,103 @@ pub trait GreenGrass {
     /// <p>Retrieves information about a subscription definition.</p>
     fn get_subscription_definition(
         &self,
-        input: &GetSubscriptionDefinitionRequest,
+        input: GetSubscriptionDefinitionRequest,
     ) -> RusotoFuture<GetSubscriptionDefinitionResponse, GetSubscriptionDefinitionError>;
 
     /// <p>Retrieves information about a subscription definition version.</p>
     fn get_subscription_definition_version(
         &self,
-        input: &GetSubscriptionDefinitionVersionRequest,
+        input: GetSubscriptionDefinitionVersionRequest,
     ) -> RusotoFuture<GetSubscriptionDefinitionVersionResponse, GetSubscriptionDefinitionVersionError>;
 
     /// <p>Lists the versions of a core definition.</p>
     fn list_core_definition_versions(
         &self,
-        input: &ListCoreDefinitionVersionsRequest,
+        input: ListCoreDefinitionVersionsRequest,
     ) -> RusotoFuture<ListCoreDefinitionVersionsResponse, ListCoreDefinitionVersionsError>;
 
     /// <p>Retrieves a list of core definitions.</p>
     fn list_core_definitions(
         &self,
-        input: &ListCoreDefinitionsRequest,
+        input: ListCoreDefinitionsRequest,
     ) -> RusotoFuture<ListCoreDefinitionsResponse, ListCoreDefinitionsError>;
 
     /// <p>Returns a history of deployments for the group.</p>
     fn list_deployments(
         &self,
-        input: &ListDeploymentsRequest,
+        input: ListDeploymentsRequest,
     ) -> RusotoFuture<ListDeploymentsResponse, ListDeploymentsError>;
 
     /// <p>Lists the versions of a device definition.</p>
     fn list_device_definition_versions(
         &self,
-        input: &ListDeviceDefinitionVersionsRequest,
+        input: ListDeviceDefinitionVersionsRequest,
     ) -> RusotoFuture<ListDeviceDefinitionVersionsResponse, ListDeviceDefinitionVersionsError>;
 
     /// <p>Retrieves a list of device definitions.</p>
     fn list_device_definitions(
         &self,
-        input: &ListDeviceDefinitionsRequest,
+        input: ListDeviceDefinitionsRequest,
     ) -> RusotoFuture<ListDeviceDefinitionsResponse, ListDeviceDefinitionsError>;
 
     /// <p>Lists the versions of a Lambda function definition.</p>
     fn list_function_definition_versions(
         &self,
-        input: &ListFunctionDefinitionVersionsRequest,
+        input: ListFunctionDefinitionVersionsRequest,
     ) -> RusotoFuture<ListFunctionDefinitionVersionsResponse, ListFunctionDefinitionVersionsError>;
 
     /// <p>Retrieves a list of Lambda function definitions.</p>
     fn list_function_definitions(
         &self,
-        input: &ListFunctionDefinitionsRequest,
+        input: ListFunctionDefinitionsRequest,
     ) -> RusotoFuture<ListFunctionDefinitionsResponse, ListFunctionDefinitionsError>;
 
     /// <p>Retrieves the current CAs for a group.</p>
     fn list_group_certificate_authorities(
         &self,
-        input: &ListGroupCertificateAuthoritiesRequest,
+        input: ListGroupCertificateAuthoritiesRequest,
     ) -> RusotoFuture<ListGroupCertificateAuthoritiesResponse, ListGroupCertificateAuthoritiesError>;
 
     /// <p>Lists the versions of a group.</p>
     fn list_group_versions(
         &self,
-        input: &ListGroupVersionsRequest,
+        input: ListGroupVersionsRequest,
     ) -> RusotoFuture<ListGroupVersionsResponse, ListGroupVersionsError>;
 
     /// <p>Retrieves a list of groups.</p>
     fn list_groups(
         &self,
-        input: &ListGroupsRequest,
+        input: ListGroupsRequest,
     ) -> RusotoFuture<ListGroupsResponse, ListGroupsError>;
 
     /// <p>Lists the versions of a logger definition.</p>
     fn list_logger_definition_versions(
         &self,
-        input: &ListLoggerDefinitionVersionsRequest,
+        input: ListLoggerDefinitionVersionsRequest,
     ) -> RusotoFuture<ListLoggerDefinitionVersionsResponse, ListLoggerDefinitionVersionsError>;
 
     /// <p>Retrieves a list of logger definitions.</p>
     fn list_logger_definitions(
         &self,
-        input: &ListLoggerDefinitionsRequest,
+        input: ListLoggerDefinitionsRequest,
     ) -> RusotoFuture<ListLoggerDefinitionsResponse, ListLoggerDefinitionsError>;
 
     /// <p>Lists the versions of a resource definition.</p>
     fn list_resource_definition_versions(
         &self,
-        input: &ListResourceDefinitionVersionsRequest,
+        input: ListResourceDefinitionVersionsRequest,
     ) -> RusotoFuture<ListResourceDefinitionVersionsResponse, ListResourceDefinitionVersionsError>;
 
     /// <p>Retrieves a list of resource definitions.</p>
     fn list_resource_definitions(
         &self,
-        input: &ListResourceDefinitionsRequest,
+        input: ListResourceDefinitionsRequest,
     ) -> RusotoFuture<ListResourceDefinitionsResponse, ListResourceDefinitionsError>;
 
     /// <p>Lists the versions of a subscription definition.</p>
     fn list_subscription_definition_versions(
         &self,
-        input: &ListSubscriptionDefinitionVersionsRequest,
+        input: ListSubscriptionDefinitionVersionsRequest,
     ) -> RusotoFuture<
         ListSubscriptionDefinitionVersionsResponse,
         ListSubscriptionDefinitionVersionsError,
@@ -8974,49 +8974,49 @@ pub trait GreenGrass {
     /// <p>Retrieves a list of subscription definitions.</p>
     fn list_subscription_definitions(
         &self,
-        input: &ListSubscriptionDefinitionsRequest,
+        input: ListSubscriptionDefinitionsRequest,
     ) -> RusotoFuture<ListSubscriptionDefinitionsResponse, ListSubscriptionDefinitionsError>;
 
     /// <p>Resets a group&#39;s deployments.</p>
     fn reset_deployments(
         &self,
-        input: &ResetDeploymentsRequest,
+        input: ResetDeploymentsRequest,
     ) -> RusotoFuture<ResetDeploymentsResponse, ResetDeploymentsError>;
 
     /// <p>Updates the connectivity information for the core. Any devices that belong to the group which has this core will receive this information in order to find the location of the core and connect to it.</p>
     fn update_connectivity_info(
         &self,
-        input: &UpdateConnectivityInfoRequest,
+        input: UpdateConnectivityInfoRequest,
     ) -> RusotoFuture<UpdateConnectivityInfoResponse, UpdateConnectivityInfoError>;
 
     /// <p>Updates a core definition.</p>
     fn update_core_definition(
         &self,
-        input: &UpdateCoreDefinitionRequest,
+        input: UpdateCoreDefinitionRequest,
     ) -> RusotoFuture<UpdateCoreDefinitionResponse, UpdateCoreDefinitionError>;
 
     /// <p>Updates a device definition.</p>
     fn update_device_definition(
         &self,
-        input: &UpdateDeviceDefinitionRequest,
+        input: UpdateDeviceDefinitionRequest,
     ) -> RusotoFuture<UpdateDeviceDefinitionResponse, UpdateDeviceDefinitionError>;
 
     /// <p>Updates a Lambda function definition.</p>
     fn update_function_definition(
         &self,
-        input: &UpdateFunctionDefinitionRequest,
+        input: UpdateFunctionDefinitionRequest,
     ) -> RusotoFuture<UpdateFunctionDefinitionResponse, UpdateFunctionDefinitionError>;
 
     /// <p>Updates a group.</p>
     fn update_group(
         &self,
-        input: &UpdateGroupRequest,
+        input: UpdateGroupRequest,
     ) -> RusotoFuture<UpdateGroupResponse, UpdateGroupError>;
 
     /// <p>Updates the Certificate expiry time for a group.</p>
     fn update_group_certificate_configuration(
         &self,
-        input: &UpdateGroupCertificateConfigurationRequest,
+        input: UpdateGroupCertificateConfigurationRequest,
     ) -> RusotoFuture<
         UpdateGroupCertificateConfigurationResponse,
         UpdateGroupCertificateConfigurationError,
@@ -9025,19 +9025,19 @@ pub trait GreenGrass {
     /// <p>Updates a logger definition.</p>
     fn update_logger_definition(
         &self,
-        input: &UpdateLoggerDefinitionRequest,
+        input: UpdateLoggerDefinitionRequest,
     ) -> RusotoFuture<UpdateLoggerDefinitionResponse, UpdateLoggerDefinitionError>;
 
     /// <p>Updates a resource definition.</p>
     fn update_resource_definition(
         &self,
-        input: &UpdateResourceDefinitionRequest,
+        input: UpdateResourceDefinitionRequest,
     ) -> RusotoFuture<UpdateResourceDefinitionResponse, UpdateResourceDefinitionError>;
 
     /// <p>Updates a subscription definition.</p>
     fn update_subscription_definition(
         &self,
-        input: &UpdateSubscriptionDefinitionRequest,
+        input: UpdateSubscriptionDefinitionRequest,
     ) -> RusotoFuture<UpdateSubscriptionDefinitionResponse, UpdateSubscriptionDefinitionError>;
 }
 /// A client for the AWS Greengrass API.
@@ -9086,7 +9086,7 @@ where
     /// <p>Associates a role with a group. Your AWS Greengrass core will use the role to access AWS cloud services. The role&#39;s permissions should allow Greengrass core Lambda functions to perform actions against the cloud.</p>
     fn associate_role_to_group(
         &self,
-        input: &AssociateRoleToGroupRequest,
+        input: AssociateRoleToGroupRequest,
     ) -> RusotoFuture<AssociateRoleToGroupResponse, AssociateRoleToGroupError> {
         let request_uri = format!(
             "/greengrass/groups/{group_id}/role",
@@ -9096,7 +9096,7 @@ where
         let mut request = SignedRequest::new("PUT", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(input).unwrap());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -9130,7 +9130,7 @@ where
     /// <p>Associates a role with your account. AWS Greengrass will use the role to access your Lambda functions and AWS IoT resources. This is necessary for deployments to succeed. The role must have at least minimum permissions in the policy &#39;&#39;AWSGreengrassResourceAccessRolePolicy&#39;&#39;.</p>
     fn associate_service_role_to_account(
         &self,
-        input: &AssociateServiceRoleToAccountRequest,
+        input: AssociateServiceRoleToAccountRequest,
     ) -> RusotoFuture<AssociateServiceRoleToAccountResponse, AssociateServiceRoleToAccountError>
     {
         let request_uri = "/greengrass/servicerole";
@@ -9138,7 +9138,7 @@ where
         let mut request = SignedRequest::new("PUT", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(input).unwrap());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -9173,14 +9173,14 @@ where
     /// <p>Creates a core definition. You may provide the initial version of the core definition now or use &#39;&#39;CreateCoreDefinitionVersion&#39;&#39; at a later time. AWS Greengrass groups must each contain exactly one AWS Greengrass core.</p>
     fn create_core_definition(
         &self,
-        input: &CreateCoreDefinitionRequest,
+        input: CreateCoreDefinitionRequest,
     ) -> RusotoFuture<CreateCoreDefinitionResponse, CreateCoreDefinitionError> {
         let request_uri = "/greengrass/definition/cores";
 
         let mut request = SignedRequest::new("POST", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(input).unwrap());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
         if let Some(ref amzn_client_token) = input.amzn_client_token {
@@ -9218,7 +9218,7 @@ where
     /// <p>Creates a version of a core definition that has already been defined. AWS Greengrass groups must each contain exactly one AWS Greengrass core.</p>
     fn create_core_definition_version(
         &self,
-        input: &CreateCoreDefinitionVersionRequest,
+        input: CreateCoreDefinitionVersionRequest,
     ) -> RusotoFuture<CreateCoreDefinitionVersionResponse, CreateCoreDefinitionVersionError> {
         let request_uri = format!(
             "/greengrass/definition/cores/{core_definition_id}/versions",
@@ -9228,7 +9228,7 @@ where
         let mut request = SignedRequest::new("POST", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(input).unwrap());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
         if let Some(ref amzn_client_token) = input.amzn_client_token {
@@ -9267,7 +9267,7 @@ where
     /// <p>Creates a deployment.</p>
     fn create_deployment(
         &self,
-        input: &CreateDeploymentRequest,
+        input: CreateDeploymentRequest,
     ) -> RusotoFuture<CreateDeploymentResponse, CreateDeploymentError> {
         let request_uri = format!(
             "/greengrass/groups/{group_id}/deployments",
@@ -9277,7 +9277,7 @@ where
         let mut request = SignedRequest::new("POST", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(input).unwrap());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
         if let Some(ref amzn_client_token) = input.amzn_client_token {
@@ -9314,14 +9314,14 @@ where
     /// <p>Creates a device definition. You may provide the initial version of the device definition now or use &#39;&#39;CreateDeviceDefinitionVersion&#39;&#39; at a later time.</p>
     fn create_device_definition(
         &self,
-        input: &CreateDeviceDefinitionRequest,
+        input: CreateDeviceDefinitionRequest,
     ) -> RusotoFuture<CreateDeviceDefinitionResponse, CreateDeviceDefinitionError> {
         let request_uri = "/greengrass/definition/devices";
 
         let mut request = SignedRequest::new("POST", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(input).unwrap());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
         if let Some(ref amzn_client_token) = input.amzn_client_token {
@@ -9359,7 +9359,7 @@ where
     /// <p>Creates a version of a device definition that has already been defined.</p>
     fn create_device_definition_version(
         &self,
-        input: &CreateDeviceDefinitionVersionRequest,
+        input: CreateDeviceDefinitionVersionRequest,
     ) -> RusotoFuture<CreateDeviceDefinitionVersionResponse, CreateDeviceDefinitionVersionError>
     {
         let request_uri = format!(
@@ -9370,7 +9370,7 @@ where
         let mut request = SignedRequest::new("POST", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(input).unwrap());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
         if let Some(ref amzn_client_token) = input.amzn_client_token {
@@ -9409,14 +9409,14 @@ where
     /// <p>Creates a Lambda function definition which contains a list of Lambda functions and their configurations to be used in a group. You can create an initial version of the definition by providing a list of Lambda functions and their configurations now, or use &#39;&#39;CreateFunctionDefinitionVersion&#39;&#39; later.</p>
     fn create_function_definition(
         &self,
-        input: &CreateFunctionDefinitionRequest,
+        input: CreateFunctionDefinitionRequest,
     ) -> RusotoFuture<CreateFunctionDefinitionResponse, CreateFunctionDefinitionError> {
         let request_uri = "/greengrass/definition/functions";
 
         let mut request = SignedRequest::new("POST", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(input).unwrap());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
         if let Some(ref amzn_client_token) = input.amzn_client_token {
@@ -9454,7 +9454,7 @@ where
     /// <p>Creates a version of a Lambda function definition that has already been defined.</p>
     fn create_function_definition_version(
         &self,
-        input: &CreateFunctionDefinitionVersionRequest,
+        input: CreateFunctionDefinitionVersionRequest,
     ) -> RusotoFuture<CreateFunctionDefinitionVersionResponse, CreateFunctionDefinitionVersionError>
     {
         let request_uri = format!(
@@ -9465,7 +9465,7 @@ where
         let mut request = SignedRequest::new("POST", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(input).unwrap());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
         if let Some(ref amzn_client_token) = input.amzn_client_token {
@@ -9504,14 +9504,14 @@ where
     /// <p>Creates a group. You may provide the initial version of the group or use &#39;&#39;CreateGroupVersion&#39;&#39; at a later time.</p>
     fn create_group(
         &self,
-        input: &CreateGroupRequest,
+        input: CreateGroupRequest,
     ) -> RusotoFuture<CreateGroupResponse, CreateGroupError> {
         let request_uri = "/greengrass/groups";
 
         let mut request = SignedRequest::new("POST", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(input).unwrap());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
         if let Some(ref amzn_client_token) = input.amzn_client_token {
@@ -9548,7 +9548,7 @@ where
     /// <p>Creates a CA for the group. If a CA already exists, it will rotate the existing CA.</p>
     fn create_group_certificate_authority(
         &self,
-        input: &CreateGroupCertificateAuthorityRequest,
+        input: CreateGroupCertificateAuthorityRequest,
     ) -> RusotoFuture<CreateGroupCertificateAuthorityResponse, CreateGroupCertificateAuthorityError>
     {
         let request_uri = format!(
@@ -9595,7 +9595,7 @@ where
     /// <p>Creates a version of a group which has already been defined.</p>
     fn create_group_version(
         &self,
-        input: &CreateGroupVersionRequest,
+        input: CreateGroupVersionRequest,
     ) -> RusotoFuture<CreateGroupVersionResponse, CreateGroupVersionError> {
         let request_uri = format!(
             "/greengrass/groups/{group_id}/versions",
@@ -9605,7 +9605,7 @@ where
         let mut request = SignedRequest::new("POST", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(input).unwrap());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
         if let Some(ref amzn_client_token) = input.amzn_client_token {
@@ -9643,14 +9643,14 @@ where
     /// <p>Creates a logger definition. You may provide the initial version of the logger definition now or use &#39;&#39;CreateLoggerDefinitionVersion&#39;&#39; at a later time.</p>
     fn create_logger_definition(
         &self,
-        input: &CreateLoggerDefinitionRequest,
+        input: CreateLoggerDefinitionRequest,
     ) -> RusotoFuture<CreateLoggerDefinitionResponse, CreateLoggerDefinitionError> {
         let request_uri = "/greengrass/definition/loggers";
 
         let mut request = SignedRequest::new("POST", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(input).unwrap());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
         if let Some(ref amzn_client_token) = input.amzn_client_token {
@@ -9688,7 +9688,7 @@ where
     /// <p>Creates a version of a logger definition that has already been defined.</p>
     fn create_logger_definition_version(
         &self,
-        input: &CreateLoggerDefinitionVersionRequest,
+        input: CreateLoggerDefinitionVersionRequest,
     ) -> RusotoFuture<CreateLoggerDefinitionVersionResponse, CreateLoggerDefinitionVersionError>
     {
         let request_uri = format!(
@@ -9699,7 +9699,7 @@ where
         let mut request = SignedRequest::new("POST", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(input).unwrap());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
         if let Some(ref amzn_client_token) = input.amzn_client_token {
@@ -9738,14 +9738,14 @@ where
     /// <p>Creates a resource definition which contains a list of resources to be used in a group. You can create an initial version of the definition by providing a list of resources now, or use &#39;&#39;CreateResourceDefinitionVersion&#39;&#39; later.</p>
     fn create_resource_definition(
         &self,
-        input: &CreateResourceDefinitionRequest,
+        input: CreateResourceDefinitionRequest,
     ) -> RusotoFuture<CreateResourceDefinitionResponse, CreateResourceDefinitionError> {
         let request_uri = "/greengrass/definition/resources";
 
         let mut request = SignedRequest::new("POST", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(input).unwrap());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
         if let Some(ref amzn_client_token) = input.amzn_client_token {
@@ -9783,7 +9783,7 @@ where
     /// <p>Creates a version of a resource definition that has already been defined.</p>
     fn create_resource_definition_version(
         &self,
-        input: &CreateResourceDefinitionVersionRequest,
+        input: CreateResourceDefinitionVersionRequest,
     ) -> RusotoFuture<CreateResourceDefinitionVersionResponse, CreateResourceDefinitionVersionError>
     {
         let request_uri = format!(
@@ -9794,7 +9794,7 @@ where
         let mut request = SignedRequest::new("POST", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(input).unwrap());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
         if let Some(ref amzn_client_token) = input.amzn_client_token {
@@ -9833,14 +9833,14 @@ where
     /// <p>Creates a software update for a core or group of cores (specified as an IoT thing group.) Use this to update the OTA Agent as well as the Greengrass core software. It makes use of the IoT Jobs feature which provides additional commands to manage a Greengrass core software update job.</p>
     fn create_software_update_job(
         &self,
-        input: &CreateSoftwareUpdateJobRequest,
+        input: CreateSoftwareUpdateJobRequest,
     ) -> RusotoFuture<CreateSoftwareUpdateJobResponse, CreateSoftwareUpdateJobError> {
         let request_uri = "/greengrass/updates";
 
         let mut request = SignedRequest::new("POST", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(input).unwrap());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
         if let Some(ref amzn_client_token) = input.amzn_client_token {
@@ -9878,14 +9878,14 @@ where
     /// <p>Creates a subscription definition. You may provide the initial version of the subscription definition now or use &#39;&#39;CreateSubscriptionDefinitionVersion&#39;&#39; at a later time.</p>
     fn create_subscription_definition(
         &self,
-        input: &CreateSubscriptionDefinitionRequest,
+        input: CreateSubscriptionDefinitionRequest,
     ) -> RusotoFuture<CreateSubscriptionDefinitionResponse, CreateSubscriptionDefinitionError> {
         let request_uri = "/greengrass/definition/subscriptions";
 
         let mut request = SignedRequest::new("POST", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(input).unwrap());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
         if let Some(ref amzn_client_token) = input.amzn_client_token {
@@ -9924,7 +9924,7 @@ where
     /// <p>Creates a version of a subscription definition which has already been defined.</p>
     fn create_subscription_definition_version(
         &self,
-        input: &CreateSubscriptionDefinitionVersionRequest,
+        input: CreateSubscriptionDefinitionVersionRequest,
     ) -> RusotoFuture<
         CreateSubscriptionDefinitionVersionResponse,
         CreateSubscriptionDefinitionVersionError,
@@ -9937,7 +9937,7 @@ where
         let mut request = SignedRequest::new("POST", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(input).unwrap());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
         if let Some(ref amzn_client_token) = input.amzn_client_token {
@@ -9977,7 +9977,7 @@ where
     /// <p>Deletes a core definition.</p>
     fn delete_core_definition(
         &self,
-        input: &DeleteCoreDefinitionRequest,
+        input: DeleteCoreDefinitionRequest,
     ) -> RusotoFuture<DeleteCoreDefinitionResponse, DeleteCoreDefinitionError> {
         let request_uri = format!(
             "/greengrass/definition/cores/{core_definition_id}",
@@ -10018,7 +10018,7 @@ where
     /// <p>Deletes a device definition.</p>
     fn delete_device_definition(
         &self,
-        input: &DeleteDeviceDefinitionRequest,
+        input: DeleteDeviceDefinitionRequest,
     ) -> RusotoFuture<DeleteDeviceDefinitionResponse, DeleteDeviceDefinitionError> {
         let request_uri = format!(
             "/greengrass/definition/devices/{device_definition_id}",
@@ -10059,7 +10059,7 @@ where
     /// <p>Deletes a Lambda function definition.</p>
     fn delete_function_definition(
         &self,
-        input: &DeleteFunctionDefinitionRequest,
+        input: DeleteFunctionDefinitionRequest,
     ) -> RusotoFuture<DeleteFunctionDefinitionResponse, DeleteFunctionDefinitionError> {
         let request_uri = format!(
             "/greengrass/definition/functions/{function_definition_id}",
@@ -10100,7 +10100,7 @@ where
     /// <p>Deletes a group.</p>
     fn delete_group(
         &self,
-        input: &DeleteGroupRequest,
+        input: DeleteGroupRequest,
     ) -> RusotoFuture<DeleteGroupResponse, DeleteGroupError> {
         let request_uri = format!("/greengrass/groups/{group_id}", group_id = input.group_id);
 
@@ -10137,7 +10137,7 @@ where
     /// <p>Deletes a logger definition.</p>
     fn delete_logger_definition(
         &self,
-        input: &DeleteLoggerDefinitionRequest,
+        input: DeleteLoggerDefinitionRequest,
     ) -> RusotoFuture<DeleteLoggerDefinitionResponse, DeleteLoggerDefinitionError> {
         let request_uri = format!(
             "/greengrass/definition/loggers/{logger_definition_id}",
@@ -10178,7 +10178,7 @@ where
     /// <p>Deletes a resource definition.</p>
     fn delete_resource_definition(
         &self,
-        input: &DeleteResourceDefinitionRequest,
+        input: DeleteResourceDefinitionRequest,
     ) -> RusotoFuture<DeleteResourceDefinitionResponse, DeleteResourceDefinitionError> {
         let request_uri = format!(
             "/greengrass/definition/resources/{resource_definition_id}",
@@ -10219,7 +10219,7 @@ where
     /// <p>Deletes a subscription definition.</p>
     fn delete_subscription_definition(
         &self,
-        input: &DeleteSubscriptionDefinitionRequest,
+        input: DeleteSubscriptionDefinitionRequest,
     ) -> RusotoFuture<DeleteSubscriptionDefinitionResponse, DeleteSubscriptionDefinitionError> {
         let request_uri = format!(
             "/greengrass/definition/subscriptions/{subscription_definition_id}",
@@ -10261,7 +10261,7 @@ where
     /// <p>Disassociates the role from a group.</p>
     fn disassociate_role_from_group(
         &self,
-        input: &DisassociateRoleFromGroupRequest,
+        input: DisassociateRoleFromGroupRequest,
     ) -> RusotoFuture<DisassociateRoleFromGroupResponse, DisassociateRoleFromGroupError> {
         let request_uri = format!(
             "/greengrass/groups/{group_id}/role",
@@ -10343,7 +10343,7 @@ where
     /// <p>Retrieves the role associated with a particular group.</p>
     fn get_associated_role(
         &self,
-        input: &GetAssociatedRoleRequest,
+        input: GetAssociatedRoleRequest,
     ) -> RusotoFuture<GetAssociatedRoleResponse, GetAssociatedRoleError> {
         let request_uri = format!(
             "/greengrass/groups/{group_id}/role",
@@ -10384,7 +10384,7 @@ where
     /// <p>Retrieves the connectivity information for a core.</p>
     fn get_connectivity_info(
         &self,
-        input: &GetConnectivityInfoRequest,
+        input: GetConnectivityInfoRequest,
     ) -> RusotoFuture<GetConnectivityInfoResponse, GetConnectivityInfoError> {
         let request_uri = format!(
             "/greengrass/things/{thing_name}/connectivityInfo",
@@ -10425,7 +10425,7 @@ where
     /// <p>Retrieves information about a core definition version.</p>
     fn get_core_definition(
         &self,
-        input: &GetCoreDefinitionRequest,
+        input: GetCoreDefinitionRequest,
     ) -> RusotoFuture<GetCoreDefinitionResponse, GetCoreDefinitionError> {
         let request_uri = format!(
             "/greengrass/definition/cores/{core_definition_id}",
@@ -10466,7 +10466,7 @@ where
     /// <p>Retrieves information about a core definition version.</p>
     fn get_core_definition_version(
         &self,
-        input: &GetCoreDefinitionVersionRequest,
+        input: GetCoreDefinitionVersionRequest,
     ) -> RusotoFuture<GetCoreDefinitionVersionResponse, GetCoreDefinitionVersionError> {
         let request_uri = format!("/greengrass/definition/cores/{core_definition_id}/versions/{core_definition_version_id}", core_definition_id = input.core_definition_id, core_definition_version_id = input.core_definition_version_id);
 
@@ -10504,7 +10504,7 @@ where
     /// <p>Returns the status of a deployment.</p>
     fn get_deployment_status(
         &self,
-        input: &GetDeploymentStatusRequest,
+        input: GetDeploymentStatusRequest,
     ) -> RusotoFuture<GetDeploymentStatusResponse, GetDeploymentStatusError> {
         let request_uri = format!(
             "/greengrass/groups/{group_id}/deployments/{deployment_id}/status",
@@ -10546,7 +10546,7 @@ where
     /// <p>Retrieves information about a device definition.</p>
     fn get_device_definition(
         &self,
-        input: &GetDeviceDefinitionRequest,
+        input: GetDeviceDefinitionRequest,
     ) -> RusotoFuture<GetDeviceDefinitionResponse, GetDeviceDefinitionError> {
         let request_uri = format!(
             "/greengrass/definition/devices/{device_definition_id}",
@@ -10587,7 +10587,7 @@ where
     /// <p>Retrieves information about a device definition version.</p>
     fn get_device_definition_version(
         &self,
-        input: &GetDeviceDefinitionVersionRequest,
+        input: GetDeviceDefinitionVersionRequest,
     ) -> RusotoFuture<GetDeviceDefinitionVersionResponse, GetDeviceDefinitionVersionError> {
         let request_uri = format!("/greengrass/definition/devices/{device_definition_id}/versions/{device_definition_version_id}", device_definition_id = input.device_definition_id, device_definition_version_id = input.device_definition_version_id);
 
@@ -10626,7 +10626,7 @@ where
     /// <p>Retrieves information about a Lambda function definition, including its creation time and latest version.</p>
     fn get_function_definition(
         &self,
-        input: &GetFunctionDefinitionRequest,
+        input: GetFunctionDefinitionRequest,
     ) -> RusotoFuture<GetFunctionDefinitionResponse, GetFunctionDefinitionError> {
         let request_uri = format!(
             "/greengrass/definition/functions/{function_definition_id}",
@@ -10667,7 +10667,7 @@ where
     /// <p>Retrieves information about a Lambda function definition version, including which Lambda functions are included in the version and their configurations.</p>
     fn get_function_definition_version(
         &self,
-        input: &GetFunctionDefinitionVersionRequest,
+        input: GetFunctionDefinitionVersionRequest,
     ) -> RusotoFuture<GetFunctionDefinitionVersionResponse, GetFunctionDefinitionVersionError> {
         let request_uri = format!("/greengrass/definition/functions/{function_definition_id}/versions/{function_definition_version_id}", function_definition_id = input.function_definition_id, function_definition_version_id = input.function_definition_version_id);
 
@@ -10704,7 +10704,7 @@ where
     }
 
     /// <p>Retrieves information about a group.</p>
-    fn get_group(&self, input: &GetGroupRequest) -> RusotoFuture<GetGroupResponse, GetGroupError> {
+    fn get_group(&self, input: GetGroupRequest) -> RusotoFuture<GetGroupResponse, GetGroupError> {
         let request_uri = format!("/greengrass/groups/{group_id}", group_id = input.group_id);
 
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
@@ -10740,7 +10740,7 @@ where
     /// <p>Retreives the CA associated with a group. Returns the public key of the CA.</p>
     fn get_group_certificate_authority(
         &self,
-        input: &GetGroupCertificateAuthorityRequest,
+        input: GetGroupCertificateAuthorityRequest,
     ) -> RusotoFuture<GetGroupCertificateAuthorityResponse, GetGroupCertificateAuthorityError> {
         let request_uri = format!(
             "/greengrass/groups/{group_id}/certificateauthorities/{certificate_authority_id}",
@@ -10783,7 +10783,7 @@ where
     /// <p>Retrieves the current configuration for the CA used by the group.</p>
     fn get_group_certificate_configuration(
         &self,
-        input: &GetGroupCertificateConfigurationRequest,
+        input: GetGroupCertificateConfigurationRequest,
     ) -> RusotoFuture<GetGroupCertificateConfigurationResponse, GetGroupCertificateConfigurationError>
     {
         let request_uri = format!(
@@ -10826,7 +10826,7 @@ where
     /// <p>Retrieves information about a group version.</p>
     fn get_group_version(
         &self,
-        input: &GetGroupVersionRequest,
+        input: GetGroupVersionRequest,
     ) -> RusotoFuture<GetGroupVersionResponse, GetGroupVersionError> {
         let request_uri = format!(
             "/greengrass/groups/{group_id}/versions/{group_version_id}",
@@ -10867,7 +10867,7 @@ where
     /// <p>Retrieves information about a logger definition.</p>
     fn get_logger_definition(
         &self,
-        input: &GetLoggerDefinitionRequest,
+        input: GetLoggerDefinitionRequest,
     ) -> RusotoFuture<GetLoggerDefinitionResponse, GetLoggerDefinitionError> {
         let request_uri = format!(
             "/greengrass/definition/loggers/{logger_definition_id}",
@@ -10908,7 +10908,7 @@ where
     /// <p>Retrieves information about a logger definition version.</p>
     fn get_logger_definition_version(
         &self,
-        input: &GetLoggerDefinitionVersionRequest,
+        input: GetLoggerDefinitionVersionRequest,
     ) -> RusotoFuture<GetLoggerDefinitionVersionResponse, GetLoggerDefinitionVersionError> {
         let request_uri = format!("/greengrass/definition/loggers/{logger_definition_id}/versions/{logger_definition_version_id}", logger_definition_id = input.logger_definition_id, logger_definition_version_id = input.logger_definition_version_id);
 
@@ -10947,7 +10947,7 @@ where
     /// <p>Retrieves information about a resource definition, including its creation time and latest version.</p>
     fn get_resource_definition(
         &self,
-        input: &GetResourceDefinitionRequest,
+        input: GetResourceDefinitionRequest,
     ) -> RusotoFuture<GetResourceDefinitionResponse, GetResourceDefinitionError> {
         let request_uri = format!(
             "/greengrass/definition/resources/{resource_definition_id}",
@@ -10988,7 +10988,7 @@ where
     /// <p>Retrieves information about a resource definition version, including which resources are included in the version.</p>
     fn get_resource_definition_version(
         &self,
-        input: &GetResourceDefinitionVersionRequest,
+        input: GetResourceDefinitionVersionRequest,
     ) -> RusotoFuture<GetResourceDefinitionVersionResponse, GetResourceDefinitionVersionError> {
         let request_uri = format!("/greengrass/definition/resources/{resource_definition_id}/versions/{resource_definition_version_id}", resource_definition_id = input.resource_definition_id, resource_definition_version_id = input.resource_definition_version_id);
 
@@ -11064,7 +11064,7 @@ where
     /// <p>Retrieves information about a subscription definition.</p>
     fn get_subscription_definition(
         &self,
-        input: &GetSubscriptionDefinitionRequest,
+        input: GetSubscriptionDefinitionRequest,
     ) -> RusotoFuture<GetSubscriptionDefinitionResponse, GetSubscriptionDefinitionError> {
         let request_uri = format!(
             "/greengrass/definition/subscriptions/{subscription_definition_id}",
@@ -11105,7 +11105,7 @@ where
     /// <p>Retrieves information about a subscription definition version.</p>
     fn get_subscription_definition_version(
         &self,
-        input: &GetSubscriptionDefinitionVersionRequest,
+        input: GetSubscriptionDefinitionVersionRequest,
     ) -> RusotoFuture<GetSubscriptionDefinitionVersionResponse, GetSubscriptionDefinitionVersionError>
     {
         let request_uri = format!("/greengrass/definition/subscriptions/{subscription_definition_id}/versions/{subscription_definition_version_id}", subscription_definition_id = input.subscription_definition_id, subscription_definition_version_id = input.subscription_definition_version_id);
@@ -11145,7 +11145,7 @@ where
     /// <p>Lists the versions of a core definition.</p>
     fn list_core_definition_versions(
         &self,
-        input: &ListCoreDefinitionVersionsRequest,
+        input: ListCoreDefinitionVersionsRequest,
     ) -> RusotoFuture<ListCoreDefinitionVersionsResponse, ListCoreDefinitionVersionsError> {
         let request_uri = format!(
             "/greengrass/definition/cores/{core_definition_id}/versions",
@@ -11196,7 +11196,7 @@ where
     /// <p>Retrieves a list of core definitions.</p>
     fn list_core_definitions(
         &self,
-        input: &ListCoreDefinitionsRequest,
+        input: ListCoreDefinitionsRequest,
     ) -> RusotoFuture<ListCoreDefinitionsResponse, ListCoreDefinitionsError> {
         let request_uri = "/greengrass/definition/cores";
 
@@ -11243,7 +11243,7 @@ where
     /// <p>Returns a history of deployments for the group.</p>
     fn list_deployments(
         &self,
-        input: &ListDeploymentsRequest,
+        input: ListDeploymentsRequest,
     ) -> RusotoFuture<ListDeploymentsResponse, ListDeploymentsError> {
         let request_uri = format!(
             "/greengrass/groups/{group_id}/deployments",
@@ -11292,7 +11292,7 @@ where
     /// <p>Lists the versions of a device definition.</p>
     fn list_device_definition_versions(
         &self,
-        input: &ListDeviceDefinitionVersionsRequest,
+        input: ListDeviceDefinitionVersionsRequest,
     ) -> RusotoFuture<ListDeviceDefinitionVersionsResponse, ListDeviceDefinitionVersionsError> {
         let request_uri = format!(
             "/greengrass/definition/devices/{device_definition_id}/versions",
@@ -11343,7 +11343,7 @@ where
     /// <p>Retrieves a list of device definitions.</p>
     fn list_device_definitions(
         &self,
-        input: &ListDeviceDefinitionsRequest,
+        input: ListDeviceDefinitionsRequest,
     ) -> RusotoFuture<ListDeviceDefinitionsResponse, ListDeviceDefinitionsError> {
         let request_uri = "/greengrass/definition/devices";
 
@@ -11390,7 +11390,7 @@ where
     /// <p>Lists the versions of a Lambda function definition.</p>
     fn list_function_definition_versions(
         &self,
-        input: &ListFunctionDefinitionVersionsRequest,
+        input: ListFunctionDefinitionVersionsRequest,
     ) -> RusotoFuture<ListFunctionDefinitionVersionsResponse, ListFunctionDefinitionVersionsError>
     {
         let request_uri = format!(
@@ -11442,7 +11442,7 @@ where
     /// <p>Retrieves a list of Lambda function definitions.</p>
     fn list_function_definitions(
         &self,
-        input: &ListFunctionDefinitionsRequest,
+        input: ListFunctionDefinitionsRequest,
     ) -> RusotoFuture<ListFunctionDefinitionsResponse, ListFunctionDefinitionsError> {
         let request_uri = "/greengrass/definition/functions";
 
@@ -11489,7 +11489,7 @@ where
     /// <p>Retrieves the current CAs for a group.</p>
     fn list_group_certificate_authorities(
         &self,
-        input: &ListGroupCertificateAuthoritiesRequest,
+        input: ListGroupCertificateAuthoritiesRequest,
     ) -> RusotoFuture<ListGroupCertificateAuthoritiesResponse, ListGroupCertificateAuthoritiesError>
     {
         let request_uri = format!(
@@ -11532,7 +11532,7 @@ where
     /// <p>Lists the versions of a group.</p>
     fn list_group_versions(
         &self,
-        input: &ListGroupVersionsRequest,
+        input: ListGroupVersionsRequest,
     ) -> RusotoFuture<ListGroupVersionsResponse, ListGroupVersionsError> {
         let request_uri = format!(
             "/greengrass/groups/{group_id}/versions",
@@ -11582,7 +11582,7 @@ where
     /// <p>Retrieves a list of groups.</p>
     fn list_groups(
         &self,
-        input: &ListGroupsRequest,
+        input: ListGroupsRequest,
     ) -> RusotoFuture<ListGroupsResponse, ListGroupsError> {
         let request_uri = "/greengrass/groups";
 
@@ -11628,7 +11628,7 @@ where
     /// <p>Lists the versions of a logger definition.</p>
     fn list_logger_definition_versions(
         &self,
-        input: &ListLoggerDefinitionVersionsRequest,
+        input: ListLoggerDefinitionVersionsRequest,
     ) -> RusotoFuture<ListLoggerDefinitionVersionsResponse, ListLoggerDefinitionVersionsError> {
         let request_uri = format!(
             "/greengrass/definition/loggers/{logger_definition_id}/versions",
@@ -11679,7 +11679,7 @@ where
     /// <p>Retrieves a list of logger definitions.</p>
     fn list_logger_definitions(
         &self,
-        input: &ListLoggerDefinitionsRequest,
+        input: ListLoggerDefinitionsRequest,
     ) -> RusotoFuture<ListLoggerDefinitionsResponse, ListLoggerDefinitionsError> {
         let request_uri = "/greengrass/definition/loggers";
 
@@ -11726,7 +11726,7 @@ where
     /// <p>Lists the versions of a resource definition.</p>
     fn list_resource_definition_versions(
         &self,
-        input: &ListResourceDefinitionVersionsRequest,
+        input: ListResourceDefinitionVersionsRequest,
     ) -> RusotoFuture<ListResourceDefinitionVersionsResponse, ListResourceDefinitionVersionsError>
     {
         let request_uri = format!(
@@ -11778,7 +11778,7 @@ where
     /// <p>Retrieves a list of resource definitions.</p>
     fn list_resource_definitions(
         &self,
-        input: &ListResourceDefinitionsRequest,
+        input: ListResourceDefinitionsRequest,
     ) -> RusotoFuture<ListResourceDefinitionsResponse, ListResourceDefinitionsError> {
         let request_uri = "/greengrass/definition/resources";
 
@@ -11825,7 +11825,7 @@ where
     /// <p>Lists the versions of a subscription definition.</p>
     fn list_subscription_definition_versions(
         &self,
-        input: &ListSubscriptionDefinitionVersionsRequest,
+        input: ListSubscriptionDefinitionVersionsRequest,
     ) -> RusotoFuture<
         ListSubscriptionDefinitionVersionsResponse,
         ListSubscriptionDefinitionVersionsError,
@@ -11879,7 +11879,7 @@ where
     /// <p>Retrieves a list of subscription definitions.</p>
     fn list_subscription_definitions(
         &self,
-        input: &ListSubscriptionDefinitionsRequest,
+        input: ListSubscriptionDefinitionsRequest,
     ) -> RusotoFuture<ListSubscriptionDefinitionsResponse, ListSubscriptionDefinitionsError> {
         let request_uri = "/greengrass/definition/subscriptions";
 
@@ -11927,7 +11927,7 @@ where
     /// <p>Resets a group&#39;s deployments.</p>
     fn reset_deployments(
         &self,
-        input: &ResetDeploymentsRequest,
+        input: ResetDeploymentsRequest,
     ) -> RusotoFuture<ResetDeploymentsResponse, ResetDeploymentsError> {
         let request_uri = format!(
             "/greengrass/groups/{group_id}/deployments/$reset",
@@ -11937,7 +11937,7 @@ where
         let mut request = SignedRequest::new("POST", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(input).unwrap());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
         if let Some(ref amzn_client_token) = input.amzn_client_token {
@@ -11974,7 +11974,7 @@ where
     /// <p>Updates the connectivity information for the core. Any devices that belong to the group which has this core will receive this information in order to find the location of the core and connect to it.</p>
     fn update_connectivity_info(
         &self,
-        input: &UpdateConnectivityInfoRequest,
+        input: UpdateConnectivityInfoRequest,
     ) -> RusotoFuture<UpdateConnectivityInfoResponse, UpdateConnectivityInfoError> {
         let request_uri = format!(
             "/greengrass/things/{thing_name}/connectivityInfo",
@@ -11984,7 +11984,7 @@ where
         let mut request = SignedRequest::new("PUT", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(input).unwrap());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -12018,7 +12018,7 @@ where
     /// <p>Updates a core definition.</p>
     fn update_core_definition(
         &self,
-        input: &UpdateCoreDefinitionRequest,
+        input: UpdateCoreDefinitionRequest,
     ) -> RusotoFuture<UpdateCoreDefinitionResponse, UpdateCoreDefinitionError> {
         let request_uri = format!(
             "/greengrass/definition/cores/{core_definition_id}",
@@ -12028,7 +12028,7 @@ where
         let mut request = SignedRequest::new("PUT", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(input).unwrap());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -12062,7 +12062,7 @@ where
     /// <p>Updates a device definition.</p>
     fn update_device_definition(
         &self,
-        input: &UpdateDeviceDefinitionRequest,
+        input: UpdateDeviceDefinitionRequest,
     ) -> RusotoFuture<UpdateDeviceDefinitionResponse, UpdateDeviceDefinitionError> {
         let request_uri = format!(
             "/greengrass/definition/devices/{device_definition_id}",
@@ -12072,7 +12072,7 @@ where
         let mut request = SignedRequest::new("PUT", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(input).unwrap());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -12106,7 +12106,7 @@ where
     /// <p>Updates a Lambda function definition.</p>
     fn update_function_definition(
         &self,
-        input: &UpdateFunctionDefinitionRequest,
+        input: UpdateFunctionDefinitionRequest,
     ) -> RusotoFuture<UpdateFunctionDefinitionResponse, UpdateFunctionDefinitionError> {
         let request_uri = format!(
             "/greengrass/definition/functions/{function_definition_id}",
@@ -12116,7 +12116,7 @@ where
         let mut request = SignedRequest::new("PUT", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(input).unwrap());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -12150,14 +12150,14 @@ where
     /// <p>Updates a group.</p>
     fn update_group(
         &self,
-        input: &UpdateGroupRequest,
+        input: UpdateGroupRequest,
     ) -> RusotoFuture<UpdateGroupResponse, UpdateGroupError> {
         let request_uri = format!("/greengrass/groups/{group_id}", group_id = input.group_id);
 
         let mut request = SignedRequest::new("PUT", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(input).unwrap());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -12190,7 +12190,7 @@ where
     /// <p>Updates the Certificate expiry time for a group.</p>
     fn update_group_certificate_configuration(
         &self,
-        input: &UpdateGroupCertificateConfigurationRequest,
+        input: UpdateGroupCertificateConfigurationRequest,
     ) -> RusotoFuture<
         UpdateGroupCertificateConfigurationResponse,
         UpdateGroupCertificateConfigurationError,
@@ -12203,7 +12203,7 @@ where
         let mut request = SignedRequest::new("PUT", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(input).unwrap());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -12239,7 +12239,7 @@ where
     /// <p>Updates a logger definition.</p>
     fn update_logger_definition(
         &self,
-        input: &UpdateLoggerDefinitionRequest,
+        input: UpdateLoggerDefinitionRequest,
     ) -> RusotoFuture<UpdateLoggerDefinitionResponse, UpdateLoggerDefinitionError> {
         let request_uri = format!(
             "/greengrass/definition/loggers/{logger_definition_id}",
@@ -12249,7 +12249,7 @@ where
         let mut request = SignedRequest::new("PUT", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(input).unwrap());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -12283,7 +12283,7 @@ where
     /// <p>Updates a resource definition.</p>
     fn update_resource_definition(
         &self,
-        input: &UpdateResourceDefinitionRequest,
+        input: UpdateResourceDefinitionRequest,
     ) -> RusotoFuture<UpdateResourceDefinitionResponse, UpdateResourceDefinitionError> {
         let request_uri = format!(
             "/greengrass/definition/resources/{resource_definition_id}",
@@ -12293,7 +12293,7 @@ where
         let mut request = SignedRequest::new("PUT", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(input).unwrap());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -12327,7 +12327,7 @@ where
     /// <p>Updates a subscription definition.</p>
     fn update_subscription_definition(
         &self,
-        input: &UpdateSubscriptionDefinitionRequest,
+        input: UpdateSubscriptionDefinitionRequest,
     ) -> RusotoFuture<UpdateSubscriptionDefinitionResponse, UpdateSubscriptionDefinitionError> {
         let request_uri = format!(
             "/greengrass/definition/subscriptions/{subscription_definition_id}",
@@ -12337,7 +12337,7 @@ where
         let mut request = SignedRequest::new("PUT", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(input).unwrap());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
         let future = self.inner.sign_and_dispatch(request, |response| {

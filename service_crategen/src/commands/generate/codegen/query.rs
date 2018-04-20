@@ -379,7 +379,7 @@ fn generate_documentation(operation: &Operation) -> String {
 fn generate_method_signature(operation_name: &str, operation: &Operation, service: &Service) -> String {
     if operation.input.is_some() {
         format!(
-            "fn {operation_name}(&self, input: &{input_type}) -> RusotoFuture<{output_type}, {error_type}>",
+            "fn {operation_name}(&self, input: {input_type}) -> RusotoFuture<{output_type}, {error_type}>",
             input_type = operation.input.as_ref().unwrap().shape,
             operation_name = operation.name.to_snake_case(),
             output_type = &operation.output_shape_or("()"),

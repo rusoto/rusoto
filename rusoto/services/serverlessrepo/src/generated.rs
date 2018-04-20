@@ -18,16 +18,16 @@ use std::io;
 use futures::future;
 use futures::Future;
 use rusoto_core::reactor::{CredentialsProvider, RequestDispatcher};
-use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::region;
+use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::{ClientInner, RusotoFuture};
 
-use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
+use rusoto_core::request::HttpDispatchError;
 
-use serde_json;
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::signature::SignedRequest;
+use serde_json;
 use serde_json::from_str;
 use serde_json::Value as SerdeJsonValue;
 /// <p>Details about the application.</p>
@@ -1857,61 +1857,61 @@ pub trait ServerlessRepo {
     /// <p>Creates an application, optionally including an AWS SAM file to create the first application version in the same call.</p>
     fn create_application(
         &self,
-        input: &CreateApplicationRequest,
+        input: CreateApplicationRequest,
     ) -> RusotoFuture<CreateApplicationResponse, CreateApplicationError>;
 
     /// <p>Creates an application version.</p>
     fn create_application_version(
         &self,
-        input: &CreateApplicationVersionRequest,
+        input: CreateApplicationVersionRequest,
     ) -> RusotoFuture<CreateApplicationVersionResponse, CreateApplicationVersionError>;
 
     /// <p>Creates an AWS CloudFormation ChangeSet for the given application.</p>
     fn create_cloud_formation_change_set(
         &self,
-        input: &CreateCloudFormationChangeSetRequest,
+        input: CreateCloudFormationChangeSetRequest,
     ) -> RusotoFuture<CreateCloudFormationChangeSetResponse, CreateCloudFormationChangeSetError>;
 
     /// <p>Deletes the specified application.</p>
     fn delete_application(
         &self,
-        input: &DeleteApplicationRequest,
+        input: DeleteApplicationRequest,
     ) -> RusotoFuture<(), DeleteApplicationError>;
 
     /// <p>Gets the specified application.</p>
     fn get_application(
         &self,
-        input: &GetApplicationRequest,
+        input: GetApplicationRequest,
     ) -> RusotoFuture<GetApplicationResponse, GetApplicationError>;
 
     /// <p>Gets the policy for the specified application.</p>
     fn get_application_policy(
         &self,
-        input: &GetApplicationPolicyRequest,
+        input: GetApplicationPolicyRequest,
     ) -> RusotoFuture<GetApplicationPolicyResponse, GetApplicationPolicyError>;
 
     /// <p>Lists versions for the specified application.</p>
     fn list_application_versions(
         &self,
-        input: &ListApplicationVersionsRequest,
+        input: ListApplicationVersionsRequest,
     ) -> RusotoFuture<ListApplicationVersionsResponse, ListApplicationVersionsError>;
 
     /// <p>Lists applications owned by the requester.</p>
     fn list_applications(
         &self,
-        input: &ListApplicationsRequest,
+        input: ListApplicationsRequest,
     ) -> RusotoFuture<ListApplicationsResponse, ListApplicationsError>;
 
     /// <p>Puts the policy for the specified application.</p>
     fn put_application_policy(
         &self,
-        input: &PutApplicationPolicyRequest,
+        input: PutApplicationPolicyRequest,
     ) -> RusotoFuture<PutApplicationPolicyResponse, PutApplicationPolicyError>;
 
     /// <p>Updates the specified application.</p>
     fn update_application(
         &self,
-        input: &UpdateApplicationRequest,
+        input: UpdateApplicationRequest,
     ) -> RusotoFuture<UpdateApplicationResponse, UpdateApplicationError>;
 }
 /// A client for the AWSServerlessApplicationRepository API.
@@ -1960,14 +1960,14 @@ where
     /// <p>Creates an application, optionally including an AWS SAM file to create the first application version in the same call.</p>
     fn create_application(
         &self,
-        input: &CreateApplicationRequest,
+        input: CreateApplicationRequest,
     ) -> RusotoFuture<CreateApplicationResponse, CreateApplicationError> {
         let request_uri = "/applications";
 
         let mut request = SignedRequest::new("POST", "serverlessrepo", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(input).unwrap());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -2001,7 +2001,7 @@ where
     /// <p>Creates an application version.</p>
     fn create_application_version(
         &self,
-        input: &CreateApplicationVersionRequest,
+        input: CreateApplicationVersionRequest,
     ) -> RusotoFuture<CreateApplicationVersionResponse, CreateApplicationVersionError> {
         let request_uri = format!(
             "/applications/{application_id}/versions/{semantic_version}",
@@ -2012,7 +2012,7 @@ where
         let mut request = SignedRequest::new("PUT", "serverlessrepo", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(input).unwrap());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -2046,7 +2046,7 @@ where
     /// <p>Creates an AWS CloudFormation ChangeSet for the given application.</p>
     fn create_cloud_formation_change_set(
         &self,
-        input: &CreateCloudFormationChangeSetRequest,
+        input: CreateCloudFormationChangeSetRequest,
     ) -> RusotoFuture<CreateCloudFormationChangeSetResponse, CreateCloudFormationChangeSetError>
     {
         let request_uri = format!(
@@ -2057,7 +2057,7 @@ where
         let mut request = SignedRequest::new("POST", "serverlessrepo", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(input).unwrap());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -2092,7 +2092,7 @@ where
     /// <p>Deletes the specified application.</p>
     fn delete_application(
         &self,
-        input: &DeleteApplicationRequest,
+        input: DeleteApplicationRequest,
     ) -> RusotoFuture<(), DeleteApplicationError> {
         let request_uri = format!(
             "/applications/{application_id}",
@@ -2125,7 +2125,7 @@ where
     /// <p>Gets the specified application.</p>
     fn get_application(
         &self,
-        input: &GetApplicationRequest,
+        input: GetApplicationRequest,
     ) -> RusotoFuture<GetApplicationResponse, GetApplicationError> {
         let request_uri = format!(
             "/applications/{application_id}",
@@ -2171,7 +2171,7 @@ where
     /// <p>Gets the policy for the specified application.</p>
     fn get_application_policy(
         &self,
-        input: &GetApplicationPolicyRequest,
+        input: GetApplicationPolicyRequest,
     ) -> RusotoFuture<GetApplicationPolicyResponse, GetApplicationPolicyError> {
         let request_uri = format!(
             "/applications/{application_id}/policy",
@@ -2212,7 +2212,7 @@ where
     /// <p>Lists versions for the specified application.</p>
     fn list_application_versions(
         &self,
-        input: &ListApplicationVersionsRequest,
+        input: ListApplicationVersionsRequest,
     ) -> RusotoFuture<ListApplicationVersionsResponse, ListApplicationVersionsError> {
         let request_uri = format!(
             "/applications/{application_id}/versions",
@@ -2262,7 +2262,7 @@ where
     /// <p>Lists applications owned by the requester.</p>
     fn list_applications(
         &self,
-        input: &ListApplicationsRequest,
+        input: ListApplicationsRequest,
     ) -> RusotoFuture<ListApplicationsResponse, ListApplicationsError> {
         let request_uri = "/applications";
 
@@ -2308,7 +2308,7 @@ where
     /// <p>Puts the policy for the specified application.</p>
     fn put_application_policy(
         &self,
-        input: &PutApplicationPolicyRequest,
+        input: PutApplicationPolicyRequest,
     ) -> RusotoFuture<PutApplicationPolicyResponse, PutApplicationPolicyError> {
         let request_uri = format!(
             "/applications/{application_id}/policy",
@@ -2318,7 +2318,7 @@ where
         let mut request = SignedRequest::new("PUT", "serverlessrepo", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(input).unwrap());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -2352,7 +2352,7 @@ where
     /// <p>Updates the specified application.</p>
     fn update_application(
         &self,
-        input: &UpdateApplicationRequest,
+        input: UpdateApplicationRequest,
     ) -> RusotoFuture<UpdateApplicationResponse, UpdateApplicationError> {
         let request_uri = format!(
             "/applications/{application_id}",
@@ -2362,7 +2362,7 @@ where
         let mut request = SignedRequest::new("PATCH", "serverlessrepo", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(input).unwrap());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
 
         let future = self.inner.sign_and_dispatch(request, |response| {

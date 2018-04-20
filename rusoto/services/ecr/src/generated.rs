@@ -18,18 +18,18 @@ use std::io;
 use futures::future;
 use futures::Future;
 use rusoto_core::reactor::{CredentialsProvider, RequestDispatcher};
-use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::region;
+use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::{ClientInner, RusotoFuture};
 
-use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
+use rusoto_core::request::HttpDispatchError;
 
-use serde_json;
-use rusoto_core::signature::SignedRequest;
-use serde_json::Value as SerdeJsonValue;
-use serde_json::from_str;
 use hyper::StatusCode;
+use rusoto_core::signature::SignedRequest;
+use serde_json;
+use serde_json::from_str;
+use serde_json::Value as SerdeJsonValue;
 /// <p>An object representing authorization data for an Amazon ECR registry.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct AuthorizationData {
@@ -893,8 +893,11 @@ pub struct StartLifecyclePolicyPreviewResponse {
 pub struct UploadLayerPartRequest {
     /// <p>The base64-encoded layer part payload.</p>
     #[serde(rename = "layerPartBlob")]
-    #[serde(deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
-            serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob", default)]
+    #[serde(
+        deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
+        serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
+        default
+    )]
     pub layer_part_blob: Vec<u8>,
     /// <p>The integer value of the first byte of the layer part.</p>
     #[serde(rename = "partFirstByte")]
@@ -3085,130 +3088,130 @@ pub trait Ecr {
     /// <p><p>Check the availability of multiple image layers in a specified registry and repository.</p> <note> <p>This operation is used by the Amazon ECR proxy, and it is not intended for general use by customers for pulling and pushing images. In most cases, you should use the <code>docker</code> CLI to pull, tag, and push images.</p> </note></p>
     fn batch_check_layer_availability(
         &self,
-        input: &BatchCheckLayerAvailabilityRequest,
+        input: BatchCheckLayerAvailabilityRequest,
     ) -> RusotoFuture<BatchCheckLayerAvailabilityResponse, BatchCheckLayerAvailabilityError>;
 
     /// <p>Deletes a list of specified images within a specified repository. Images are specified with either <code>imageTag</code> or <code>imageDigest</code>.</p> <p>You can remove a tag from an image by specifying the image's tag in your request. When you remove the last tag from an image, the image is deleted from your repository.</p> <p>You can completely delete an image (and all of its tags) by specifying the image's digest in your request.</p>
     fn batch_delete_image(
         &self,
-        input: &BatchDeleteImageRequest,
+        input: BatchDeleteImageRequest,
     ) -> RusotoFuture<BatchDeleteImageResponse, BatchDeleteImageError>;
 
     /// <p>Gets detailed information for specified images within a specified repository. Images are specified with either <code>imageTag</code> or <code>imageDigest</code>.</p>
     fn batch_get_image(
         &self,
-        input: &BatchGetImageRequest,
+        input: BatchGetImageRequest,
     ) -> RusotoFuture<BatchGetImageResponse, BatchGetImageError>;
 
     /// <p><p>Informs Amazon ECR that the image layer upload has completed for a specified registry, repository name, and upload ID. You can optionally provide a <code>sha256</code> digest of the image layer for data validation purposes.</p> <note> <p>This operation is used by the Amazon ECR proxy, and it is not intended for general use by customers for pulling and pushing images. In most cases, you should use the <code>docker</code> CLI to pull, tag, and push images.</p> </note></p>
     fn complete_layer_upload(
         &self,
-        input: &CompleteLayerUploadRequest,
+        input: CompleteLayerUploadRequest,
     ) -> RusotoFuture<CompleteLayerUploadResponse, CompleteLayerUploadError>;
 
     /// <p>Creates an image repository.</p>
     fn create_repository(
         &self,
-        input: &CreateRepositoryRequest,
+        input: CreateRepositoryRequest,
     ) -> RusotoFuture<CreateRepositoryResponse, CreateRepositoryError>;
 
     /// <p>Deletes the specified lifecycle policy.</p>
     fn delete_lifecycle_policy(
         &self,
-        input: &DeleteLifecyclePolicyRequest,
+        input: DeleteLifecyclePolicyRequest,
     ) -> RusotoFuture<DeleteLifecyclePolicyResponse, DeleteLifecyclePolicyError>;
 
     /// <p>Deletes an existing image repository. If a repository contains images, you must use the <code>force</code> option to delete it.</p>
     fn delete_repository(
         &self,
-        input: &DeleteRepositoryRequest,
+        input: DeleteRepositoryRequest,
     ) -> RusotoFuture<DeleteRepositoryResponse, DeleteRepositoryError>;
 
     /// <p>Deletes the repository policy from a specified repository.</p>
     fn delete_repository_policy(
         &self,
-        input: &DeleteRepositoryPolicyRequest,
+        input: DeleteRepositoryPolicyRequest,
     ) -> RusotoFuture<DeleteRepositoryPolicyResponse, DeleteRepositoryPolicyError>;
 
     /// <p><p>Returns metadata about the images in a repository, including image size, image tags, and creation date.</p> <note> <p>Beginning with Docker version 1.9, the Docker client compresses image layers before pushing them to a V2 Docker registry. The output of the <code>docker images</code> command shows the uncompressed image size, so it may return a larger image size than the image sizes returned by <a>DescribeImages</a>.</p> </note></p>
     fn describe_images(
         &self,
-        input: &DescribeImagesRequest,
+        input: DescribeImagesRequest,
     ) -> RusotoFuture<DescribeImagesResponse, DescribeImagesError>;
 
     /// <p>Describes image repositories in a registry.</p>
     fn describe_repositories(
         &self,
-        input: &DescribeRepositoriesRequest,
+        input: DescribeRepositoriesRequest,
     ) -> RusotoFuture<DescribeRepositoriesResponse, DescribeRepositoriesError>;
 
     /// <p>Retrieves a token that is valid for a specified registry for 12 hours. This command allows you to use the <code>docker</code> CLI to push and pull images with Amazon ECR. If you do not specify a registry, the default registry is assumed.</p> <p>The <code>authorizationToken</code> returned for each registry specified is a base64 encoded string that can be decoded and used in a <code>docker login</code> command to authenticate to a registry. The AWS CLI offers an <code>aws ecr get-login</code> command that simplifies the login process.</p>
     fn get_authorization_token(
         &self,
-        input: &GetAuthorizationTokenRequest,
+        input: GetAuthorizationTokenRequest,
     ) -> RusotoFuture<GetAuthorizationTokenResponse, GetAuthorizationTokenError>;
 
     /// <p><p>Retrieves the pre-signed Amazon S3 download URL corresponding to an image layer. You can only get URLs for image layers that are referenced in an image.</p> <note> <p>This operation is used by the Amazon ECR proxy, and it is not intended for general use by customers for pulling and pushing images. In most cases, you should use the <code>docker</code> CLI to pull, tag, and push images.</p> </note></p>
     fn get_download_url_for_layer(
         &self,
-        input: &GetDownloadUrlForLayerRequest,
+        input: GetDownloadUrlForLayerRequest,
     ) -> RusotoFuture<GetDownloadUrlForLayerResponse, GetDownloadUrlForLayerError>;
 
     /// <p>Retrieves the specified lifecycle policy.</p>
     fn get_lifecycle_policy(
         &self,
-        input: &GetLifecyclePolicyRequest,
+        input: GetLifecyclePolicyRequest,
     ) -> RusotoFuture<GetLifecyclePolicyResponse, GetLifecyclePolicyError>;
 
     /// <p>Retrieves the results of the specified lifecycle policy preview request.</p>
     fn get_lifecycle_policy_preview(
         &self,
-        input: &GetLifecyclePolicyPreviewRequest,
+        input: GetLifecyclePolicyPreviewRequest,
     ) -> RusotoFuture<GetLifecyclePolicyPreviewResponse, GetLifecyclePolicyPreviewError>;
 
     /// <p>Retrieves the repository policy for a specified repository.</p>
     fn get_repository_policy(
         &self,
-        input: &GetRepositoryPolicyRequest,
+        input: GetRepositoryPolicyRequest,
     ) -> RusotoFuture<GetRepositoryPolicyResponse, GetRepositoryPolicyError>;
 
     /// <p><p>Notify Amazon ECR that you intend to upload an image layer.</p> <note> <p>This operation is used by the Amazon ECR proxy, and it is not intended for general use by customers for pulling and pushing images. In most cases, you should use the <code>docker</code> CLI to pull, tag, and push images.</p> </note></p>
     fn initiate_layer_upload(
         &self,
-        input: &InitiateLayerUploadRequest,
+        input: InitiateLayerUploadRequest,
     ) -> RusotoFuture<InitiateLayerUploadResponse, InitiateLayerUploadError>;
 
     /// <p>Lists all the image IDs for a given repository.</p> <p>You can filter images based on whether or not they are tagged by setting the <code>tagStatus</code> parameter to <code>TAGGED</code> or <code>UNTAGGED</code>. For example, you can filter your results to return only <code>UNTAGGED</code> images and then pipe that result to a <a>BatchDeleteImage</a> operation to delete them. Or, you can filter your results to return only <code>TAGGED</code> images to list all of the tags in your repository.</p>
     fn list_images(
         &self,
-        input: &ListImagesRequest,
+        input: ListImagesRequest,
     ) -> RusotoFuture<ListImagesResponse, ListImagesError>;
 
     /// <p><p>Creates or updates the image manifest and tags associated with an image.</p> <note> <p>This operation is used by the Amazon ECR proxy, and it is not intended for general use by customers for pulling and pushing images. In most cases, you should use the <code>docker</code> CLI to pull, tag, and push images.</p> </note></p>
-    fn put_image(&self, input: &PutImageRequest) -> RusotoFuture<PutImageResponse, PutImageError>;
+    fn put_image(&self, input: PutImageRequest) -> RusotoFuture<PutImageResponse, PutImageError>;
 
     /// <p>Creates or updates a lifecycle policy. For information about lifecycle policy syntax, see <a href="http://docs.aws.amazon.com/AmazonECR/latest/userguide/LifecyclePolicies.html">Lifecycle Policy Template</a>.</p>
     fn put_lifecycle_policy(
         &self,
-        input: &PutLifecyclePolicyRequest,
+        input: PutLifecyclePolicyRequest,
     ) -> RusotoFuture<PutLifecyclePolicyResponse, PutLifecyclePolicyError>;
 
     /// <p>Applies a repository policy on a specified repository to control access permissions.</p>
     fn set_repository_policy(
         &self,
-        input: &SetRepositoryPolicyRequest,
+        input: SetRepositoryPolicyRequest,
     ) -> RusotoFuture<SetRepositoryPolicyResponse, SetRepositoryPolicyError>;
 
     /// <p>Starts a preview of the specified lifecycle policy. This allows you to see the results before creating the lifecycle policy.</p>
     fn start_lifecycle_policy_preview(
         &self,
-        input: &StartLifecyclePolicyPreviewRequest,
+        input: StartLifecyclePolicyPreviewRequest,
     ) -> RusotoFuture<StartLifecyclePolicyPreviewResponse, StartLifecyclePolicyPreviewError>;
 
     /// <p><p>Uploads an image layer part to Amazon ECR.</p> <note> <p>This operation is used by the Amazon ECR proxy, and it is not intended for general use by customers for pulling and pushing images. In most cases, you should use the <code>docker</code> CLI to pull, tag, and push images.</p> </note></p>
     fn upload_layer_part(
         &self,
-        input: &UploadLayerPartRequest,
+        input: UploadLayerPartRequest,
     ) -> RusotoFuture<UploadLayerPartResponse, UploadLayerPartError>;
 }
 /// A client for the Amazon ECR API.
@@ -3257,7 +3260,7 @@ where
     /// <p><p>Check the availability of multiple image layers in a specified registry and repository.</p> <note> <p>This operation is used by the Amazon ECR proxy, and it is not intended for general use by customers for pulling and pushing images. In most cases, you should use the <code>docker</code> CLI to pull, tag, and push images.</p> </note></p>
     fn batch_check_layer_availability(
         &self,
-        input: &BatchCheckLayerAvailabilityRequest,
+        input: BatchCheckLayerAvailabilityRequest,
     ) -> RusotoFuture<BatchCheckLayerAvailabilityResponse, BatchCheckLayerAvailabilityError> {
         let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
 
@@ -3266,7 +3269,7 @@ where
             "x-amz-target",
             "AmazonEC2ContainerRegistry_V20150921.BatchCheckLayerAvailability",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -3274,7 +3277,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -3297,7 +3300,7 @@ where
     /// <p>Deletes a list of specified images within a specified repository. Images are specified with either <code>imageTag</code> or <code>imageDigest</code>.</p> <p>You can remove a tag from an image by specifying the image's tag in your request. When you remove the last tag from an image, the image is deleted from your repository.</p> <p>You can completely delete an image (and all of its tags) by specifying the image's digest in your request.</p>
     fn batch_delete_image(
         &self,
-        input: &BatchDeleteImageRequest,
+        input: BatchDeleteImageRequest,
     ) -> RusotoFuture<BatchDeleteImageResponse, BatchDeleteImageError> {
         let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
 
@@ -3306,7 +3309,7 @@ where
             "x-amz-target",
             "AmazonEC2ContainerRegistry_V20150921.BatchDeleteImage",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -3314,7 +3317,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -3337,7 +3340,7 @@ where
     /// <p>Gets detailed information for specified images within a specified repository. Images are specified with either <code>imageTag</code> or <code>imageDigest</code>.</p>
     fn batch_get_image(
         &self,
-        input: &BatchGetImageRequest,
+        input: BatchGetImageRequest,
     ) -> RusotoFuture<BatchGetImageResponse, BatchGetImageError> {
         let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
 
@@ -3346,7 +3349,7 @@ where
             "x-amz-target",
             "AmazonEC2ContainerRegistry_V20150921.BatchGetImage",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -3354,7 +3357,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -3377,7 +3380,7 @@ where
     /// <p><p>Informs Amazon ECR that the image layer upload has completed for a specified registry, repository name, and upload ID. You can optionally provide a <code>sha256</code> digest of the image layer for data validation purposes.</p> <note> <p>This operation is used by the Amazon ECR proxy, and it is not intended for general use by customers for pulling and pushing images. In most cases, you should use the <code>docker</code> CLI to pull, tag, and push images.</p> </note></p>
     fn complete_layer_upload(
         &self,
-        input: &CompleteLayerUploadRequest,
+        input: CompleteLayerUploadRequest,
     ) -> RusotoFuture<CompleteLayerUploadResponse, CompleteLayerUploadError> {
         let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
 
@@ -3386,7 +3389,7 @@ where
             "x-amz-target",
             "AmazonEC2ContainerRegistry_V20150921.CompleteLayerUpload",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -3394,7 +3397,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -3417,7 +3420,7 @@ where
     /// <p>Creates an image repository.</p>
     fn create_repository(
         &self,
-        input: &CreateRepositoryRequest,
+        input: CreateRepositoryRequest,
     ) -> RusotoFuture<CreateRepositoryResponse, CreateRepositoryError> {
         let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
 
@@ -3426,7 +3429,7 @@ where
             "x-amz-target",
             "AmazonEC2ContainerRegistry_V20150921.CreateRepository",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -3434,7 +3437,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -3457,7 +3460,7 @@ where
     /// <p>Deletes the specified lifecycle policy.</p>
     fn delete_lifecycle_policy(
         &self,
-        input: &DeleteLifecyclePolicyRequest,
+        input: DeleteLifecyclePolicyRequest,
     ) -> RusotoFuture<DeleteLifecyclePolicyResponse, DeleteLifecyclePolicyError> {
         let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
 
@@ -3466,7 +3469,7 @@ where
             "x-amz-target",
             "AmazonEC2ContainerRegistry_V20150921.DeleteLifecyclePolicy",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -3474,7 +3477,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -3497,7 +3500,7 @@ where
     /// <p>Deletes an existing image repository. If a repository contains images, you must use the <code>force</code> option to delete it.</p>
     fn delete_repository(
         &self,
-        input: &DeleteRepositoryRequest,
+        input: DeleteRepositoryRequest,
     ) -> RusotoFuture<DeleteRepositoryResponse, DeleteRepositoryError> {
         let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
 
@@ -3506,7 +3509,7 @@ where
             "x-amz-target",
             "AmazonEC2ContainerRegistry_V20150921.DeleteRepository",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -3514,7 +3517,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -3537,7 +3540,7 @@ where
     /// <p>Deletes the repository policy from a specified repository.</p>
     fn delete_repository_policy(
         &self,
-        input: &DeleteRepositoryPolicyRequest,
+        input: DeleteRepositoryPolicyRequest,
     ) -> RusotoFuture<DeleteRepositoryPolicyResponse, DeleteRepositoryPolicyError> {
         let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
 
@@ -3546,7 +3549,7 @@ where
             "x-amz-target",
             "AmazonEC2ContainerRegistry_V20150921.DeleteRepositoryPolicy",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -3554,7 +3557,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -3577,7 +3580,7 @@ where
     /// <p><p>Returns metadata about the images in a repository, including image size, image tags, and creation date.</p> <note> <p>Beginning with Docker version 1.9, the Docker client compresses image layers before pushing them to a V2 Docker registry. The output of the <code>docker images</code> command shows the uncompressed image size, so it may return a larger image size than the image sizes returned by <a>DescribeImages</a>.</p> </note></p>
     fn describe_images(
         &self,
-        input: &DescribeImagesRequest,
+        input: DescribeImagesRequest,
     ) -> RusotoFuture<DescribeImagesResponse, DescribeImagesError> {
         let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
 
@@ -3586,7 +3589,7 @@ where
             "x-amz-target",
             "AmazonEC2ContainerRegistry_V20150921.DescribeImages",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -3594,7 +3597,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -3617,7 +3620,7 @@ where
     /// <p>Describes image repositories in a registry.</p>
     fn describe_repositories(
         &self,
-        input: &DescribeRepositoriesRequest,
+        input: DescribeRepositoriesRequest,
     ) -> RusotoFuture<DescribeRepositoriesResponse, DescribeRepositoriesError> {
         let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
 
@@ -3626,7 +3629,7 @@ where
             "x-amz-target",
             "AmazonEC2ContainerRegistry_V20150921.DescribeRepositories",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -3634,7 +3637,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -3657,7 +3660,7 @@ where
     /// <p>Retrieves a token that is valid for a specified registry for 12 hours. This command allows you to use the <code>docker</code> CLI to push and pull images with Amazon ECR. If you do not specify a registry, the default registry is assumed.</p> <p>The <code>authorizationToken</code> returned for each registry specified is a base64 encoded string that can be decoded and used in a <code>docker login</code> command to authenticate to a registry. The AWS CLI offers an <code>aws ecr get-login</code> command that simplifies the login process.</p>
     fn get_authorization_token(
         &self,
-        input: &GetAuthorizationTokenRequest,
+        input: GetAuthorizationTokenRequest,
     ) -> RusotoFuture<GetAuthorizationTokenResponse, GetAuthorizationTokenError> {
         let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
 
@@ -3666,7 +3669,7 @@ where
             "x-amz-target",
             "AmazonEC2ContainerRegistry_V20150921.GetAuthorizationToken",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -3674,7 +3677,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -3697,7 +3700,7 @@ where
     /// <p><p>Retrieves the pre-signed Amazon S3 download URL corresponding to an image layer. You can only get URLs for image layers that are referenced in an image.</p> <note> <p>This operation is used by the Amazon ECR proxy, and it is not intended for general use by customers for pulling and pushing images. In most cases, you should use the <code>docker</code> CLI to pull, tag, and push images.</p> </note></p>
     fn get_download_url_for_layer(
         &self,
-        input: &GetDownloadUrlForLayerRequest,
+        input: GetDownloadUrlForLayerRequest,
     ) -> RusotoFuture<GetDownloadUrlForLayerResponse, GetDownloadUrlForLayerError> {
         let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
 
@@ -3706,7 +3709,7 @@ where
             "x-amz-target",
             "AmazonEC2ContainerRegistry_V20150921.GetDownloadUrlForLayer",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -3714,7 +3717,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -3737,7 +3740,7 @@ where
     /// <p>Retrieves the specified lifecycle policy.</p>
     fn get_lifecycle_policy(
         &self,
-        input: &GetLifecyclePolicyRequest,
+        input: GetLifecyclePolicyRequest,
     ) -> RusotoFuture<GetLifecyclePolicyResponse, GetLifecyclePolicyError> {
         let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
 
@@ -3746,7 +3749,7 @@ where
             "x-amz-target",
             "AmazonEC2ContainerRegistry_V20150921.GetLifecyclePolicy",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -3754,7 +3757,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -3777,7 +3780,7 @@ where
     /// <p>Retrieves the results of the specified lifecycle policy preview request.</p>
     fn get_lifecycle_policy_preview(
         &self,
-        input: &GetLifecyclePolicyPreviewRequest,
+        input: GetLifecyclePolicyPreviewRequest,
     ) -> RusotoFuture<GetLifecyclePolicyPreviewResponse, GetLifecyclePolicyPreviewError> {
         let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
 
@@ -3786,7 +3789,7 @@ where
             "x-amz-target",
             "AmazonEC2ContainerRegistry_V20150921.GetLifecyclePolicyPreview",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -3794,7 +3797,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -3817,7 +3820,7 @@ where
     /// <p>Retrieves the repository policy for a specified repository.</p>
     fn get_repository_policy(
         &self,
-        input: &GetRepositoryPolicyRequest,
+        input: GetRepositoryPolicyRequest,
     ) -> RusotoFuture<GetRepositoryPolicyResponse, GetRepositoryPolicyError> {
         let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
 
@@ -3826,7 +3829,7 @@ where
             "x-amz-target",
             "AmazonEC2ContainerRegistry_V20150921.GetRepositoryPolicy",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -3834,7 +3837,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -3857,7 +3860,7 @@ where
     /// <p><p>Notify Amazon ECR that you intend to upload an image layer.</p> <note> <p>This operation is used by the Amazon ECR proxy, and it is not intended for general use by customers for pulling and pushing images. In most cases, you should use the <code>docker</code> CLI to pull, tag, and push images.</p> </note></p>
     fn initiate_layer_upload(
         &self,
-        input: &InitiateLayerUploadRequest,
+        input: InitiateLayerUploadRequest,
     ) -> RusotoFuture<InitiateLayerUploadResponse, InitiateLayerUploadError> {
         let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
 
@@ -3866,7 +3869,7 @@ where
             "x-amz-target",
             "AmazonEC2ContainerRegistry_V20150921.InitiateLayerUpload",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -3874,7 +3877,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -3897,7 +3900,7 @@ where
     /// <p>Lists all the image IDs for a given repository.</p> <p>You can filter images based on whether or not they are tagged by setting the <code>tagStatus</code> parameter to <code>TAGGED</code> or <code>UNTAGGED</code>. For example, you can filter your results to return only <code>UNTAGGED</code> images and then pipe that result to a <a>BatchDeleteImage</a> operation to delete them. Or, you can filter your results to return only <code>TAGGED</code> images to list all of the tags in your repository.</p>
     fn list_images(
         &self,
-        input: &ListImagesRequest,
+        input: ListImagesRequest,
     ) -> RusotoFuture<ListImagesResponse, ListImagesError> {
         let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
 
@@ -3906,7 +3909,7 @@ where
             "x-amz-target",
             "AmazonEC2ContainerRegistry_V20150921.ListImages",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -3914,7 +3917,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -3935,7 +3938,7 @@ where
     }
 
     /// <p><p>Creates or updates the image manifest and tags associated with an image.</p> <note> <p>This operation is used by the Amazon ECR proxy, and it is not intended for general use by customers for pulling and pushing images. In most cases, you should use the <code>docker</code> CLI to pull, tag, and push images.</p> </note></p>
-    fn put_image(&self, input: &PutImageRequest) -> RusotoFuture<PutImageResponse, PutImageError> {
+    fn put_image(&self, input: PutImageRequest) -> RusotoFuture<PutImageResponse, PutImageError> {
         let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3943,7 +3946,7 @@ where
             "x-amz-target",
             "AmazonEC2ContainerRegistry_V20150921.PutImage",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -3951,7 +3954,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -3974,7 +3977,7 @@ where
     /// <p>Creates or updates a lifecycle policy. For information about lifecycle policy syntax, see <a href="http://docs.aws.amazon.com/AmazonECR/latest/userguide/LifecyclePolicies.html">Lifecycle Policy Template</a>.</p>
     fn put_lifecycle_policy(
         &self,
-        input: &PutLifecyclePolicyRequest,
+        input: PutLifecyclePolicyRequest,
     ) -> RusotoFuture<PutLifecyclePolicyResponse, PutLifecyclePolicyError> {
         let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
 
@@ -3983,7 +3986,7 @@ where
             "x-amz-target",
             "AmazonEC2ContainerRegistry_V20150921.PutLifecyclePolicy",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -3991,7 +3994,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -4014,7 +4017,7 @@ where
     /// <p>Applies a repository policy on a specified repository to control access permissions.</p>
     fn set_repository_policy(
         &self,
-        input: &SetRepositoryPolicyRequest,
+        input: SetRepositoryPolicyRequest,
     ) -> RusotoFuture<SetRepositoryPolicyResponse, SetRepositoryPolicyError> {
         let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
 
@@ -4023,7 +4026,7 @@ where
             "x-amz-target",
             "AmazonEC2ContainerRegistry_V20150921.SetRepositoryPolicy",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -4031,7 +4034,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -4054,7 +4057,7 @@ where
     /// <p>Starts a preview of the specified lifecycle policy. This allows you to see the results before creating the lifecycle policy.</p>
     fn start_lifecycle_policy_preview(
         &self,
-        input: &StartLifecyclePolicyPreviewRequest,
+        input: StartLifecyclePolicyPreviewRequest,
     ) -> RusotoFuture<StartLifecyclePolicyPreviewResponse, StartLifecyclePolicyPreviewError> {
         let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
 
@@ -4063,7 +4066,7 @@ where
             "x-amz-target",
             "AmazonEC2ContainerRegistry_V20150921.StartLifecyclePolicyPreview",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -4071,7 +4074,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -4094,7 +4097,7 @@ where
     /// <p><p>Uploads an image layer part to Amazon ECR.</p> <note> <p>This operation is used by the Amazon ECR proxy, and it is not intended for general use by customers for pulling and pushing images. In most cases, you should use the <code>docker</code> CLI to pull, tag, and push images.</p> </note></p>
     fn upload_layer_part(
         &self,
-        input: &UploadLayerPartRequest,
+        input: UploadLayerPartRequest,
     ) -> RusotoFuture<UploadLayerPartResponse, UploadLayerPartError> {
         let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
 
@@ -4103,7 +4106,7 @@ where
             "x-amz-target",
             "AmazonEC2ContainerRegistry_V20150921.UploadLayerPart",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -4111,7 +4114,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 

@@ -94,7 +94,7 @@ fn payload_body_parser(payload_type: ShapeType,
         ShapeType::Blob if streaming => {
             format!("
                 let mut result = {output_shape}::default();
-                result.{payload_member} = Some({streaming_constructor} {{ inner: response.body }});
+                result.{payload_member} = Some({streaming_constructor} {{ len: None, inner: response.body }});
                 {parse_non_payload}
                 future::Either::A(future::ok(result))
                 ",

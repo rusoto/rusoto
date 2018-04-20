@@ -11,6 +11,6 @@ fn should_describe_cache_clusters() {
     let client = ElastiCacheClient::simple(Region::UsEast1);
     let request = DescribeCacheClustersMessage::default();
 
-    let response = client.describe_cache_clusters(&request).sync().unwrap();
+    let response = client.describe_cache_clusters(request).sync().unwrap();
     println!("{:#?}", response);
 }

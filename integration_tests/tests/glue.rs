@@ -11,6 +11,6 @@ fn should_get_databases() {
     let client = GlueClient::simple(Region::UsWest2);
     let request = GetDatabasesRequest::default();
 
-    let result = client.get_databases(&request).sync().unwrap();
+    let result = client.get_databases(request).sync().unwrap();
 	println!("{:#?}", result);
 }

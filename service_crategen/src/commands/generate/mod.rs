@@ -5,10 +5,10 @@ use std::collections::BTreeMap;
 use std::fs::{self, OpenOptions};
 use std::io::{BufWriter, Read, Write};
 use std::path::Path;
+use std::process::Command;
 
 use self::stopwatch::Stopwatch;
 use rayon::prelude::*;
-use rustfmt_nightly;
 use toml;
 
 mod codegen;
@@ -287,10 +287,15 @@ pub use custom::*;
             let src_dir = crate_dir.join("src");
             let gen_file_path = src_dir.join("generated.rs");
 
-            let mut fmt_config = rustfmt_nightly::config::Config::default();
-            fmt_config.set().write_mode(rustfmt_nightly::config::WriteMode::Overwrite);
-            fmt_config.set().error_on_line_overflow(false);
-            let _ = rustfmt_nightly::run(rustfmt_nightly::Input::File(gen_file_path), &fmt_config);
+            let status = Command::new("rustfmt")
+                .args(&["--write-mode", "overwrite"])
+                .args(&["--config-path", "rustfmt.toml"])
+                .arg(gen_file_path)
+                .status()
+                .expect("rustfmt command failed to start");
+            if !status.success() {
+                panic!("rustfmt failed");
+            }
             debug!("Rustfmt of {} took {}ms", service.full_name(), sw.elapsed_ms());
         }
 

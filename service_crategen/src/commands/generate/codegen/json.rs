@@ -104,7 +104,7 @@ fn generate_endpoint_modification(service: &Service) -> Option<String> {
 
 fn generate_method_signature(service: &Service, operation: &Operation) -> String {
     if operation.input.is_some() && service.get_shape(operation.input_shape()).as_ref().and_then(|s| s.members.as_ref()).map(|m| !m.is_empty()).unwrap_or(false) {
-        format!("fn {method_name}(&self, input: &{input_type}) ",
+        format!("fn {method_name}(&self, input: {input_type}) ",
                 input_type = operation.input_shape(),
                 method_name = operation.name.to_snake_case())
     } else {
@@ -115,7 +115,7 @@ fn generate_method_signature(service: &Service, operation: &Operation) -> String
 
 fn generate_payload(service: &Service, operation: &Operation) -> String {
     if operation.input.is_some() && service.get_shape(operation.input_shape()).as_ref().and_then(|s| s.members.as_ref()).map(|m| !m.is_empty()).unwrap_or(false) {
-        "let encoded = serde_json::to_string(input).unwrap();
+        "let encoded = serde_json::to_string(&input).unwrap();
          request.set_payload(Some(encoded.into_bytes()));
          "
             .to_owned()
@@ -136,7 +136,7 @@ fn generate_ok_response(operation: &Operation, output_type: &str) -> String {
         format!("future::Either::A(response.buffer().from_err().map(|response| {{
                     let mut body = response.body;
 
-                    if body == b\"null\" {{
+                    if body.is_empty() || body == b\"null\" {{
                         body = b\"{{}}\".to_vec();
                     }}
 

@@ -18,18 +18,18 @@ use std::io;
 use futures::future;
 use futures::Future;
 use rusoto_core::reactor::{CredentialsProvider, RequestDispatcher};
-use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::region;
+use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::{ClientInner, RusotoFuture};
 
-use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
+use rusoto_core::request::HttpDispatchError;
 
-use serde_json;
-use rusoto_core::signature::SignedRequest;
-use serde_json::Value as SerdeJsonValue;
-use serde_json::from_str;
 use hyper::StatusCode;
+use rusoto_core::signature::SignedRequest;
+use serde_json;
+use serde_json::from_str;
+use serde_json::Value as SerdeJsonValue;
 /// <p>Object representing a Connector</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct Connector {
@@ -1525,13 +1525,13 @@ pub trait ServerMigrationService {
     /// <p>The CreateReplicationJob API is used to create a ReplicationJob to replicate a server on AWS. Call this API to first create a ReplicationJob, which will then schedule periodic ReplicationRuns to replicate your server to AWS. Each ReplicationRun will result in the creation of an AWS AMI.</p>
     fn create_replication_job(
         &self,
-        input: &CreateReplicationJobRequest,
+        input: CreateReplicationJobRequest,
     ) -> RusotoFuture<CreateReplicationJobResponse, CreateReplicationJobError>;
 
     /// <p>The DeleteReplicationJob API is used to delete a ReplicationJob, resulting in no further ReplicationRuns. This will delete the contents of the S3 bucket used to store SMS artifacts, but will not delete any AMIs created by the SMS service.</p>
     fn delete_replication_job(
         &self,
-        input: &DeleteReplicationJobRequest,
+        input: DeleteReplicationJobRequest,
     ) -> RusotoFuture<DeleteReplicationJobResponse, DeleteReplicationJobError>;
 
     /// <p>The DeleteServerCatalog API clears all servers from your server catalog. This means that these servers will no longer be accessible to the Server Migration Service.</p>
@@ -1542,31 +1542,31 @@ pub trait ServerMigrationService {
     /// <p>The DisassociateConnector API will disassociate a connector from the Server Migration Service, rendering it unavailable to support replication jobs.</p>
     fn disassociate_connector(
         &self,
-        input: &DisassociateConnectorRequest,
+        input: DisassociateConnectorRequest,
     ) -> RusotoFuture<DisassociateConnectorResponse, DisassociateConnectorError>;
 
     /// <p>The GetConnectors API returns a list of connectors that are registered with the Server Migration Service.</p>
     fn get_connectors(
         &self,
-        input: &GetConnectorsRequest,
+        input: GetConnectorsRequest,
     ) -> RusotoFuture<GetConnectorsResponse, GetConnectorsError>;
 
     /// <p>The GetReplicationJobs API will return all of your ReplicationJobs and their details. This API returns a paginated list, that may be consecutively called with nextToken to retrieve all ReplicationJobs.</p>
     fn get_replication_jobs(
         &self,
-        input: &GetReplicationJobsRequest,
+        input: GetReplicationJobsRequest,
     ) -> RusotoFuture<GetReplicationJobsResponse, GetReplicationJobsError>;
 
     /// <p>The GetReplicationRuns API will return all ReplicationRuns for a given ReplicationJob. This API returns a paginated list, that may be consecutively called with nextToken to retrieve all ReplicationRuns for a ReplicationJob.</p>
     fn get_replication_runs(
         &self,
-        input: &GetReplicationRunsRequest,
+        input: GetReplicationRunsRequest,
     ) -> RusotoFuture<GetReplicationRunsResponse, GetReplicationRunsError>;
 
     /// <p>The GetServers API returns a list of all servers in your server catalog. For this call to succeed, you must previously have called ImportServerCatalog.</p>
     fn get_servers(
         &self,
-        input: &GetServersRequest,
+        input: GetServersRequest,
     ) -> RusotoFuture<GetServersResponse, GetServersError>;
 
     /// <p>The ImportServerCatalog API is used to gather the complete list of on-premises servers on your premises. This API call requires connectors to be installed and monitoring all servers you would like imported. This API call returns immediately, but may take some time to retrieve all of the servers.</p>
@@ -1577,13 +1577,13 @@ pub trait ServerMigrationService {
     /// <p>The StartOnDemandReplicationRun API is used to start a ReplicationRun on demand (in addition to those that are scheduled based on your frequency). This ReplicationRun will start immediately. StartOnDemandReplicationRun is subject to limits on how many on demand ReplicationRuns you may call per 24-hour period.</p>
     fn start_on_demand_replication_run(
         &self,
-        input: &StartOnDemandReplicationRunRequest,
+        input: StartOnDemandReplicationRunRequest,
     ) -> RusotoFuture<StartOnDemandReplicationRunResponse, StartOnDemandReplicationRunError>;
 
     /// <p>The UpdateReplicationJob API is used to change the settings of your existing ReplicationJob created using CreateReplicationJob. Calling this API will affect the next scheduled ReplicationRun.</p>
     fn update_replication_job(
         &self,
-        input: &UpdateReplicationJobRequest,
+        input: UpdateReplicationJobRequest,
     ) -> RusotoFuture<UpdateReplicationJobResponse, UpdateReplicationJobError>;
 }
 /// A client for the SMS API.
@@ -1632,7 +1632,7 @@ where
     /// <p>The CreateReplicationJob API is used to create a ReplicationJob to replicate a server on AWS. Call this API to first create a ReplicationJob, which will then schedule periodic ReplicationRuns to replicate your server to AWS. Each ReplicationRun will result in the creation of an AWS AMI.</p>
     fn create_replication_job(
         &self,
-        input: &CreateReplicationJobRequest,
+        input: CreateReplicationJobRequest,
     ) -> RusotoFuture<CreateReplicationJobResponse, CreateReplicationJobError> {
         let mut request = SignedRequest::new("POST", "sms", &self.region, "/");
 
@@ -1641,7 +1641,7 @@ where
             "x-amz-target",
             "AWSServerMigrationService_V2016_10_24.CreateReplicationJob",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -1649,7 +1649,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -1672,7 +1672,7 @@ where
     /// <p>The DeleteReplicationJob API is used to delete a ReplicationJob, resulting in no further ReplicationRuns. This will delete the contents of the S3 bucket used to store SMS artifacts, but will not delete any AMIs created by the SMS service.</p>
     fn delete_replication_job(
         &self,
-        input: &DeleteReplicationJobRequest,
+        input: DeleteReplicationJobRequest,
     ) -> RusotoFuture<DeleteReplicationJobResponse, DeleteReplicationJobError> {
         let mut request = SignedRequest::new("POST", "sms", &self.region, "/");
 
@@ -1681,7 +1681,7 @@ where
             "x-amz-target",
             "AWSServerMigrationService_V2016_10_24.DeleteReplicationJob",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -1689,7 +1689,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -1727,7 +1727,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -1750,7 +1750,7 @@ where
     /// <p>The DisassociateConnector API will disassociate a connector from the Server Migration Service, rendering it unavailable to support replication jobs.</p>
     fn disassociate_connector(
         &self,
-        input: &DisassociateConnectorRequest,
+        input: DisassociateConnectorRequest,
     ) -> RusotoFuture<DisassociateConnectorResponse, DisassociateConnectorError> {
         let mut request = SignedRequest::new("POST", "sms", &self.region, "/");
 
@@ -1759,7 +1759,7 @@ where
             "x-amz-target",
             "AWSServerMigrationService_V2016_10_24.DisassociateConnector",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -1767,7 +1767,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -1790,7 +1790,7 @@ where
     /// <p>The GetConnectors API returns a list of connectors that are registered with the Server Migration Service.</p>
     fn get_connectors(
         &self,
-        input: &GetConnectorsRequest,
+        input: GetConnectorsRequest,
     ) -> RusotoFuture<GetConnectorsResponse, GetConnectorsError> {
         let mut request = SignedRequest::new("POST", "sms", &self.region, "/");
 
@@ -1799,7 +1799,7 @@ where
             "x-amz-target",
             "AWSServerMigrationService_V2016_10_24.GetConnectors",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -1807,7 +1807,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -1830,7 +1830,7 @@ where
     /// <p>The GetReplicationJobs API will return all of your ReplicationJobs and their details. This API returns a paginated list, that may be consecutively called with nextToken to retrieve all ReplicationJobs.</p>
     fn get_replication_jobs(
         &self,
-        input: &GetReplicationJobsRequest,
+        input: GetReplicationJobsRequest,
     ) -> RusotoFuture<GetReplicationJobsResponse, GetReplicationJobsError> {
         let mut request = SignedRequest::new("POST", "sms", &self.region, "/");
 
@@ -1839,7 +1839,7 @@ where
             "x-amz-target",
             "AWSServerMigrationService_V2016_10_24.GetReplicationJobs",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -1847,7 +1847,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -1870,7 +1870,7 @@ where
     /// <p>The GetReplicationRuns API will return all ReplicationRuns for a given ReplicationJob. This API returns a paginated list, that may be consecutively called with nextToken to retrieve all ReplicationRuns for a ReplicationJob.</p>
     fn get_replication_runs(
         &self,
-        input: &GetReplicationRunsRequest,
+        input: GetReplicationRunsRequest,
     ) -> RusotoFuture<GetReplicationRunsResponse, GetReplicationRunsError> {
         let mut request = SignedRequest::new("POST", "sms", &self.region, "/");
 
@@ -1879,7 +1879,7 @@ where
             "x-amz-target",
             "AWSServerMigrationService_V2016_10_24.GetReplicationRuns",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -1887,7 +1887,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -1910,7 +1910,7 @@ where
     /// <p>The GetServers API returns a list of all servers in your server catalog. For this call to succeed, you must previously have called ImportServerCatalog.</p>
     fn get_servers(
         &self,
-        input: &GetServersRequest,
+        input: GetServersRequest,
     ) -> RusotoFuture<GetServersResponse, GetServersError> {
         let mut request = SignedRequest::new("POST", "sms", &self.region, "/");
 
@@ -1919,7 +1919,7 @@ where
             "x-amz-target",
             "AWSServerMigrationService_V2016_10_24.GetServers",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -1927,7 +1927,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -1965,7 +1965,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -1988,7 +1988,7 @@ where
     /// <p>The StartOnDemandReplicationRun API is used to start a ReplicationRun on demand (in addition to those that are scheduled based on your frequency). This ReplicationRun will start immediately. StartOnDemandReplicationRun is subject to limits on how many on demand ReplicationRuns you may call per 24-hour period.</p>
     fn start_on_demand_replication_run(
         &self,
-        input: &StartOnDemandReplicationRunRequest,
+        input: StartOnDemandReplicationRunRequest,
     ) -> RusotoFuture<StartOnDemandReplicationRunResponse, StartOnDemandReplicationRunError> {
         let mut request = SignedRequest::new("POST", "sms", &self.region, "/");
 
@@ -1997,7 +1997,7 @@ where
             "x-amz-target",
             "AWSServerMigrationService_V2016_10_24.StartOnDemandReplicationRun",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -2005,7 +2005,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -2028,7 +2028,7 @@ where
     /// <p>The UpdateReplicationJob API is used to change the settings of your existing ReplicationJob created using CreateReplicationJob. Calling this API will affect the next scheduled ReplicationRun.</p>
     fn update_replication_job(
         &self,
-        input: &UpdateReplicationJobRequest,
+        input: UpdateReplicationJobRequest,
     ) -> RusotoFuture<UpdateReplicationJobResponse, UpdateReplicationJobError> {
         let mut request = SignedRequest::new("POST", "sms", &self.region, "/");
 
@@ -2037,7 +2037,7 @@ where
             "x-amz-target",
             "AWSServerMigrationService_V2016_10_24.UpdateReplicationJob",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -2045,7 +2045,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 

@@ -11,5 +11,5 @@ fn should_list_streams() {
     let client = KinesisClient::simple(Region::UsEast1);
     let request = ListStreamsInput::default();
 
-    client.list_streams(&request).sync().unwrap();
+    client.list_streams(request).sync().unwrap();
 }

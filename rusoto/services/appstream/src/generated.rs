@@ -18,18 +18,18 @@ use std::io;
 use futures::future;
 use futures::Future;
 use rusoto_core::reactor::{CredentialsProvider, RequestDispatcher};
-use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::region;
+use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::{ClientInner, RusotoFuture};
 
-use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
+use rusoto_core::request::HttpDispatchError;
 
-use serde_json;
-use rusoto_core::signature::SignedRequest;
-use serde_json::Value as SerdeJsonValue;
-use serde_json::from_str;
 use hyper::StatusCode;
+use rusoto_core::signature::SignedRequest;
+use serde_json;
+use serde_json::from_str;
+use serde_json::Value as SerdeJsonValue;
 /// <p>Describes an application in the application catalog.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct Application {
@@ -4317,197 +4317,196 @@ pub trait AppStream {
     /// <p>Associates the specified fleet with the specified stack.</p>
     fn associate_fleet(
         &self,
-        input: &AssociateFleetRequest,
+        input: AssociateFleetRequest,
     ) -> RusotoFuture<AssociateFleetResult, AssociateFleetError>;
 
     /// <p>Copies the image within the same region or to a new region within the same AWS account. Note that any tags you added to the image will not be copied.</p>
     fn copy_image(
         &self,
-        input: &CopyImageRequest,
+        input: CopyImageRequest,
     ) -> RusotoFuture<CopyImageResponse, CopyImageError>;
 
     /// <p>Creates a directory configuration.</p>
     fn create_directory_config(
         &self,
-        input: &CreateDirectoryConfigRequest,
+        input: CreateDirectoryConfigRequest,
     ) -> RusotoFuture<CreateDirectoryConfigResult, CreateDirectoryConfigError>;
 
     /// <p>Creates a fleet.</p>
     fn create_fleet(
         &self,
-        input: &CreateFleetRequest,
+        input: CreateFleetRequest,
     ) -> RusotoFuture<CreateFleetResult, CreateFleetError>;
 
     /// <p>Creates an image builder.</p> <p>The initial state of the builder is <code>PENDING</code>. When it is ready, the state is <code>RUNNING</code>.</p>
     fn create_image_builder(
         &self,
-        input: &CreateImageBuilderRequest,
+        input: CreateImageBuilderRequest,
     ) -> RusotoFuture<CreateImageBuilderResult, CreateImageBuilderError>;
 
     /// <p>Creates a URL to start an image builder streaming session.</p>
     fn create_image_builder_streaming_url(
         &self,
-        input: &CreateImageBuilderStreamingURLRequest,
+        input: CreateImageBuilderStreamingURLRequest,
     ) -> RusotoFuture<CreateImageBuilderStreamingURLResult, CreateImageBuilderStreamingURLError>;
 
     /// <p>Creates a stack.</p>
     fn create_stack(
         &self,
-        input: &CreateStackRequest,
+        input: CreateStackRequest,
     ) -> RusotoFuture<CreateStackResult, CreateStackError>;
 
     /// <p>Creates a URL to start a streaming session for the specified user.</p>
     fn create_streaming_url(
         &self,
-        input: &CreateStreamingURLRequest,
+        input: CreateStreamingURLRequest,
     ) -> RusotoFuture<CreateStreamingURLResult, CreateStreamingURLError>;
 
     /// <p>Deletes the specified directory configuration.</p>
     fn delete_directory_config(
         &self,
-        input: &DeleteDirectoryConfigRequest,
+        input: DeleteDirectoryConfigRequest,
     ) -> RusotoFuture<DeleteDirectoryConfigResult, DeleteDirectoryConfigError>;
 
     /// <p>Deletes the specified fleet.</p>
     fn delete_fleet(
         &self,
-        input: &DeleteFleetRequest,
+        input: DeleteFleetRequest,
     ) -> RusotoFuture<DeleteFleetResult, DeleteFleetError>;
 
     /// <p>Deletes the specified image. You cannot delete an image that is currently in use. After you delete an image, you cannot provision new capacity using the image.</p>
     fn delete_image(
         &self,
-        input: &DeleteImageRequest,
+        input: DeleteImageRequest,
     ) -> RusotoFuture<DeleteImageResult, DeleteImageError>;
 
     /// <p>Deletes the specified image builder and releases the capacity.</p>
     fn delete_image_builder(
         &self,
-        input: &DeleteImageBuilderRequest,
+        input: DeleteImageBuilderRequest,
     ) -> RusotoFuture<DeleteImageBuilderResult, DeleteImageBuilderError>;
 
     /// <p>Deletes the specified stack. After this operation completes, the environment can no longer be activated and any reservations made for the stack are released.</p>
     fn delete_stack(
         &self,
-        input: &DeleteStackRequest,
+        input: DeleteStackRequest,
     ) -> RusotoFuture<DeleteStackResult, DeleteStackError>;
 
     /// <p>Describes the specified directory configurations. Note that although the response syntax in this topic includes the account password, this password is not returned in the actual response. </p>
     fn describe_directory_configs(
         &self,
-        input: &DescribeDirectoryConfigsRequest,
+        input: DescribeDirectoryConfigsRequest,
     ) -> RusotoFuture<DescribeDirectoryConfigsResult, DescribeDirectoryConfigsError>;
 
     /// <p>Describes the specified fleets or all fleets in the account.</p>
     fn describe_fleets(
         &self,
-        input: &DescribeFleetsRequest,
+        input: DescribeFleetsRequest,
     ) -> RusotoFuture<DescribeFleetsResult, DescribeFleetsError>;
 
     /// <p>Describes the specified image builders or all image builders in the account.</p>
     fn describe_image_builders(
         &self,
-        input: &DescribeImageBuildersRequest,
+        input: DescribeImageBuildersRequest,
     ) -> RusotoFuture<DescribeImageBuildersResult, DescribeImageBuildersError>;
 
     /// <p>Describes the specified images or all images in the account.</p>
     fn describe_images(
         &self,
-        input: &DescribeImagesRequest,
+        input: DescribeImagesRequest,
     ) -> RusotoFuture<DescribeImagesResult, DescribeImagesError>;
 
     /// <p>Describes the streaming sessions for the specified stack and fleet. If a user ID is provided, only the streaming sessions for only that user are returned. If an authentication type is not provided, the default is to authenticate users using a streaming URL.</p>
     fn describe_sessions(
         &self,
-        input: &DescribeSessionsRequest,
+        input: DescribeSessionsRequest,
     ) -> RusotoFuture<DescribeSessionsResult, DescribeSessionsError>;
 
     /// <p>Describes the specified stacks or all stacks in the account.</p>
     fn describe_stacks(
         &self,
-        input: &DescribeStacksRequest,
+        input: DescribeStacksRequest,
     ) -> RusotoFuture<DescribeStacksResult, DescribeStacksError>;
 
     /// <p>Disassociates the specified fleet from the specified stack.</p>
     fn disassociate_fleet(
         &self,
-        input: &DisassociateFleetRequest,
+        input: DisassociateFleetRequest,
     ) -> RusotoFuture<DisassociateFleetResult, DisassociateFleetError>;
 
     /// <p>Stops the specified streaming session.</p>
     fn expire_session(
         &self,
-        input: &ExpireSessionRequest,
+        input: ExpireSessionRequest,
     ) -> RusotoFuture<ExpireSessionResult, ExpireSessionError>;
 
     /// <p>Lists the fleets associated with the specified stack.</p>
     fn list_associated_fleets(
         &self,
-        input: &ListAssociatedFleetsRequest,
+        input: ListAssociatedFleetsRequest,
     ) -> RusotoFuture<ListAssociatedFleetsResult, ListAssociatedFleetsError>;
 
     /// <p>Lists the stacks associated with the specified fleet.</p>
     fn list_associated_stacks(
         &self,
-        input: &ListAssociatedStacksRequest,
+        input: ListAssociatedStacksRequest,
     ) -> RusotoFuture<ListAssociatedStacksResult, ListAssociatedStacksError>;
 
     /// <p>Lists the tags for the specified AppStream 2.0 resource. You can tag AppStream 2.0 image builders, images, fleets, and stacks.</p> <p>For more information about tags, see <a href="http://docs.aws.amazon.com/appstream2/latest/developerguide/tagging-basic.html">Tagging Your Resources</a> in the <i>Amazon AppStream 2.0 Developer Guide</i>.</p>
     fn list_tags_for_resource(
         &self,
-        input: &ListTagsForResourceRequest,
+        input: ListTagsForResourceRequest,
     ) -> RusotoFuture<ListTagsForResourceResponse, ListTagsForResourceError>;
 
     /// <p>Starts the specified fleet.</p>
     fn start_fleet(
         &self,
-        input: &StartFleetRequest,
+        input: StartFleetRequest,
     ) -> RusotoFuture<StartFleetResult, StartFleetError>;
 
     /// <p>Starts the specified image builder.</p>
     fn start_image_builder(
         &self,
-        input: &StartImageBuilderRequest,
+        input: StartImageBuilderRequest,
     ) -> RusotoFuture<StartImageBuilderResult, StartImageBuilderError>;
 
     /// <p>Stops the specified fleet.</p>
-    fn stop_fleet(&self, input: &StopFleetRequest)
-        -> RusotoFuture<StopFleetResult, StopFleetError>;
+    fn stop_fleet(&self, input: StopFleetRequest) -> RusotoFuture<StopFleetResult, StopFleetError>;
 
     /// <p>Stops the specified image builder.</p>
     fn stop_image_builder(
         &self,
-        input: &StopImageBuilderRequest,
+        input: StopImageBuilderRequest,
     ) -> RusotoFuture<StopImageBuilderResult, StopImageBuilderError>;
 
     /// <p>Adds or overwrites one or more tags for the specified AppStream 2.0 resource. You can tag AppStream 2.0 image builders, images, fleets, and stacks.</p> <p>Each tag consists of a key and an optional value. If a resource already has a tag with the same key, this operation updates its value.</p> <p>To list the current tags for your resources, use <a>ListTagsForResource</a>. To disassociate tags from your resources, use <a>UntagResource</a>.</p> <p>For more information about tags, see <a href="http://docs.aws.amazon.com/appstream2/latest/developerguide/tagging-basic.html">Tagging Your Resources</a> in the <i>Amazon AppStream 2.0 Developer Guide</i>.</p>
     fn tag_resource(
         &self,
-        input: &TagResourceRequest,
+        input: TagResourceRequest,
     ) -> RusotoFuture<TagResourceResponse, TagResourceError>;
 
     /// <p>Disassociates the specified tags from the specified AppStream 2.0 resource.</p> <p>To list the current tags for your resources, use <a>ListTagsForResource</a>.</p> <p>For more information about tags, see <a href="http://docs.aws.amazon.com/appstream2/latest/developerguide/tagging-basic.html">Tagging Your Resources</a> in the <i>Amazon AppStream 2.0 Developer Guide</i>.</p>
     fn untag_resource(
         &self,
-        input: &UntagResourceRequest,
+        input: UntagResourceRequest,
     ) -> RusotoFuture<UntagResourceResponse, UntagResourceError>;
 
     /// <p>Updates the specified directory configuration.</p>
     fn update_directory_config(
         &self,
-        input: &UpdateDirectoryConfigRequest,
+        input: UpdateDirectoryConfigRequest,
     ) -> RusotoFuture<UpdateDirectoryConfigResult, UpdateDirectoryConfigError>;
 
     /// <p>Updates the specified fleet.</p> <p>If the fleet is in the <code>STOPPED</code> state, you can update any attribute except the fleet name. If the fleet is in the <code>RUNNING</code> state, you can update the <code>DisplayName</code> and <code>ComputeCapacity</code> attributes. If the fleet is in the <code>STARTING</code> or <code>STOPPING</code> state, you can't update it.</p>
     fn update_fleet(
         &self,
-        input: &UpdateFleetRequest,
+        input: UpdateFleetRequest,
     ) -> RusotoFuture<UpdateFleetResult, UpdateFleetError>;
 
     /// <p>Updates the specified stack.</p>
     fn update_stack(
         &self,
-        input: &UpdateStackRequest,
+        input: UpdateStackRequest,
     ) -> RusotoFuture<UpdateStackResult, UpdateStackError>;
 }
 /// A client for the Amazon AppStream API.
@@ -4556,13 +4555,13 @@ where
     /// <p>Associates the specified fleet with the specified stack.</p>
     fn associate_fleet(
         &self,
-        input: &AssociateFleetRequest,
+        input: AssociateFleetRequest,
     ) -> RusotoFuture<AssociateFleetResult, AssociateFleetError> {
         let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "PhotonAdminProxyService.AssociateFleet");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -4570,7 +4569,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -4593,13 +4592,13 @@ where
     /// <p>Copies the image within the same region or to a new region within the same AWS account. Note that any tags you added to the image will not be copied.</p>
     fn copy_image(
         &self,
-        input: &CopyImageRequest,
+        input: CopyImageRequest,
     ) -> RusotoFuture<CopyImageResponse, CopyImageError> {
         let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "PhotonAdminProxyService.CopyImage");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -4607,7 +4606,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -4630,7 +4629,7 @@ where
     /// <p>Creates a directory configuration.</p>
     fn create_directory_config(
         &self,
-        input: &CreateDirectoryConfigRequest,
+        input: CreateDirectoryConfigRequest,
     ) -> RusotoFuture<CreateDirectoryConfigResult, CreateDirectoryConfigError> {
         let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
@@ -4639,7 +4638,7 @@ where
             "x-amz-target",
             "PhotonAdminProxyService.CreateDirectoryConfig",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -4647,7 +4646,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -4670,13 +4669,13 @@ where
     /// <p>Creates a fleet.</p>
     fn create_fleet(
         &self,
-        input: &CreateFleetRequest,
+        input: CreateFleetRequest,
     ) -> RusotoFuture<CreateFleetResult, CreateFleetError> {
         let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "PhotonAdminProxyService.CreateFleet");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -4684,7 +4683,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -4707,13 +4706,13 @@ where
     /// <p>Creates an image builder.</p> <p>The initial state of the builder is <code>PENDING</code>. When it is ready, the state is <code>RUNNING</code>.</p>
     fn create_image_builder(
         &self,
-        input: &CreateImageBuilderRequest,
+        input: CreateImageBuilderRequest,
     ) -> RusotoFuture<CreateImageBuilderResult, CreateImageBuilderError> {
         let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "PhotonAdminProxyService.CreateImageBuilder");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -4721,7 +4720,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -4744,7 +4743,7 @@ where
     /// <p>Creates a URL to start an image builder streaming session.</p>
     fn create_image_builder_streaming_url(
         &self,
-        input: &CreateImageBuilderStreamingURLRequest,
+        input: CreateImageBuilderStreamingURLRequest,
     ) -> RusotoFuture<CreateImageBuilderStreamingURLResult, CreateImageBuilderStreamingURLError>
     {
         let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
@@ -4754,7 +4753,7 @@ where
             "x-amz-target",
             "PhotonAdminProxyService.CreateImageBuilderStreamingURL",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -4762,7 +4761,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -4785,13 +4784,13 @@ where
     /// <p>Creates a stack.</p>
     fn create_stack(
         &self,
-        input: &CreateStackRequest,
+        input: CreateStackRequest,
     ) -> RusotoFuture<CreateStackResult, CreateStackError> {
         let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "PhotonAdminProxyService.CreateStack");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -4799,7 +4798,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -4822,13 +4821,13 @@ where
     /// <p>Creates a URL to start a streaming session for the specified user.</p>
     fn create_streaming_url(
         &self,
-        input: &CreateStreamingURLRequest,
+        input: CreateStreamingURLRequest,
     ) -> RusotoFuture<CreateStreamingURLResult, CreateStreamingURLError> {
         let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "PhotonAdminProxyService.CreateStreamingURL");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -4836,7 +4835,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -4859,7 +4858,7 @@ where
     /// <p>Deletes the specified directory configuration.</p>
     fn delete_directory_config(
         &self,
-        input: &DeleteDirectoryConfigRequest,
+        input: DeleteDirectoryConfigRequest,
     ) -> RusotoFuture<DeleteDirectoryConfigResult, DeleteDirectoryConfigError> {
         let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
@@ -4868,7 +4867,7 @@ where
             "x-amz-target",
             "PhotonAdminProxyService.DeleteDirectoryConfig",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -4876,7 +4875,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -4899,13 +4898,13 @@ where
     /// <p>Deletes the specified fleet.</p>
     fn delete_fleet(
         &self,
-        input: &DeleteFleetRequest,
+        input: DeleteFleetRequest,
     ) -> RusotoFuture<DeleteFleetResult, DeleteFleetError> {
         let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "PhotonAdminProxyService.DeleteFleet");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -4913,7 +4912,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -4936,13 +4935,13 @@ where
     /// <p>Deletes the specified image. You cannot delete an image that is currently in use. After you delete an image, you cannot provision new capacity using the image.</p>
     fn delete_image(
         &self,
-        input: &DeleteImageRequest,
+        input: DeleteImageRequest,
     ) -> RusotoFuture<DeleteImageResult, DeleteImageError> {
         let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "PhotonAdminProxyService.DeleteImage");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -4950,7 +4949,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -4973,13 +4972,13 @@ where
     /// <p>Deletes the specified image builder and releases the capacity.</p>
     fn delete_image_builder(
         &self,
-        input: &DeleteImageBuilderRequest,
+        input: DeleteImageBuilderRequest,
     ) -> RusotoFuture<DeleteImageBuilderResult, DeleteImageBuilderError> {
         let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "PhotonAdminProxyService.DeleteImageBuilder");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -4987,7 +4986,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -5010,13 +5009,13 @@ where
     /// <p>Deletes the specified stack. After this operation completes, the environment can no longer be activated and any reservations made for the stack are released.</p>
     fn delete_stack(
         &self,
-        input: &DeleteStackRequest,
+        input: DeleteStackRequest,
     ) -> RusotoFuture<DeleteStackResult, DeleteStackError> {
         let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "PhotonAdminProxyService.DeleteStack");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -5024,7 +5023,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -5047,7 +5046,7 @@ where
     /// <p>Describes the specified directory configurations. Note that although the response syntax in this topic includes the account password, this password is not returned in the actual response. </p>
     fn describe_directory_configs(
         &self,
-        input: &DescribeDirectoryConfigsRequest,
+        input: DescribeDirectoryConfigsRequest,
     ) -> RusotoFuture<DescribeDirectoryConfigsResult, DescribeDirectoryConfigsError> {
         let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
@@ -5056,7 +5055,7 @@ where
             "x-amz-target",
             "PhotonAdminProxyService.DescribeDirectoryConfigs",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -5064,7 +5063,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -5087,13 +5086,13 @@ where
     /// <p>Describes the specified fleets or all fleets in the account.</p>
     fn describe_fleets(
         &self,
-        input: &DescribeFleetsRequest,
+        input: DescribeFleetsRequest,
     ) -> RusotoFuture<DescribeFleetsResult, DescribeFleetsError> {
         let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "PhotonAdminProxyService.DescribeFleets");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -5101,7 +5100,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -5124,7 +5123,7 @@ where
     /// <p>Describes the specified image builders or all image builders in the account.</p>
     fn describe_image_builders(
         &self,
-        input: &DescribeImageBuildersRequest,
+        input: DescribeImageBuildersRequest,
     ) -> RusotoFuture<DescribeImageBuildersResult, DescribeImageBuildersError> {
         let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
@@ -5133,7 +5132,7 @@ where
             "x-amz-target",
             "PhotonAdminProxyService.DescribeImageBuilders",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -5141,7 +5140,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -5164,13 +5163,13 @@ where
     /// <p>Describes the specified images or all images in the account.</p>
     fn describe_images(
         &self,
-        input: &DescribeImagesRequest,
+        input: DescribeImagesRequest,
     ) -> RusotoFuture<DescribeImagesResult, DescribeImagesError> {
         let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "PhotonAdminProxyService.DescribeImages");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -5178,7 +5177,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -5201,13 +5200,13 @@ where
     /// <p>Describes the streaming sessions for the specified stack and fleet. If a user ID is provided, only the streaming sessions for only that user are returned. If an authentication type is not provided, the default is to authenticate users using a streaming URL.</p>
     fn describe_sessions(
         &self,
-        input: &DescribeSessionsRequest,
+        input: DescribeSessionsRequest,
     ) -> RusotoFuture<DescribeSessionsResult, DescribeSessionsError> {
         let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "PhotonAdminProxyService.DescribeSessions");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -5215,7 +5214,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -5238,13 +5237,13 @@ where
     /// <p>Describes the specified stacks or all stacks in the account.</p>
     fn describe_stacks(
         &self,
-        input: &DescribeStacksRequest,
+        input: DescribeStacksRequest,
     ) -> RusotoFuture<DescribeStacksResult, DescribeStacksError> {
         let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "PhotonAdminProxyService.DescribeStacks");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -5252,7 +5251,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -5275,13 +5274,13 @@ where
     /// <p>Disassociates the specified fleet from the specified stack.</p>
     fn disassociate_fleet(
         &self,
-        input: &DisassociateFleetRequest,
+        input: DisassociateFleetRequest,
     ) -> RusotoFuture<DisassociateFleetResult, DisassociateFleetError> {
         let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "PhotonAdminProxyService.DisassociateFleet");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -5289,7 +5288,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -5312,13 +5311,13 @@ where
     /// <p>Stops the specified streaming session.</p>
     fn expire_session(
         &self,
-        input: &ExpireSessionRequest,
+        input: ExpireSessionRequest,
     ) -> RusotoFuture<ExpireSessionResult, ExpireSessionError> {
         let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "PhotonAdminProxyService.ExpireSession");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -5326,7 +5325,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -5349,7 +5348,7 @@ where
     /// <p>Lists the fleets associated with the specified stack.</p>
     fn list_associated_fleets(
         &self,
-        input: &ListAssociatedFleetsRequest,
+        input: ListAssociatedFleetsRequest,
     ) -> RusotoFuture<ListAssociatedFleetsResult, ListAssociatedFleetsError> {
         let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
@@ -5358,7 +5357,7 @@ where
             "x-amz-target",
             "PhotonAdminProxyService.ListAssociatedFleets",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -5366,7 +5365,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -5389,7 +5388,7 @@ where
     /// <p>Lists the stacks associated with the specified fleet.</p>
     fn list_associated_stacks(
         &self,
-        input: &ListAssociatedStacksRequest,
+        input: ListAssociatedStacksRequest,
     ) -> RusotoFuture<ListAssociatedStacksResult, ListAssociatedStacksError> {
         let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
@@ -5398,7 +5397,7 @@ where
             "x-amz-target",
             "PhotonAdminProxyService.ListAssociatedStacks",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -5406,7 +5405,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -5429,7 +5428,7 @@ where
     /// <p>Lists the tags for the specified AppStream 2.0 resource. You can tag AppStream 2.0 image builders, images, fleets, and stacks.</p> <p>For more information about tags, see <a href="http://docs.aws.amazon.com/appstream2/latest/developerguide/tagging-basic.html">Tagging Your Resources</a> in the <i>Amazon AppStream 2.0 Developer Guide</i>.</p>
     fn list_tags_for_resource(
         &self,
-        input: &ListTagsForResourceRequest,
+        input: ListTagsForResourceRequest,
     ) -> RusotoFuture<ListTagsForResourceResponse, ListTagsForResourceError> {
         let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
@@ -5438,7 +5437,7 @@ where
             "x-amz-target",
             "PhotonAdminProxyService.ListTagsForResource",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -5446,7 +5445,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -5469,13 +5468,13 @@ where
     /// <p>Starts the specified fleet.</p>
     fn start_fleet(
         &self,
-        input: &StartFleetRequest,
+        input: StartFleetRequest,
     ) -> RusotoFuture<StartFleetResult, StartFleetError> {
         let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "PhotonAdminProxyService.StartFleet");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -5483,7 +5482,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -5506,13 +5505,13 @@ where
     /// <p>Starts the specified image builder.</p>
     fn start_image_builder(
         &self,
-        input: &StartImageBuilderRequest,
+        input: StartImageBuilderRequest,
     ) -> RusotoFuture<StartImageBuilderResult, StartImageBuilderError> {
         let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "PhotonAdminProxyService.StartImageBuilder");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -5520,7 +5519,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -5541,15 +5540,12 @@ where
     }
 
     /// <p>Stops the specified fleet.</p>
-    fn stop_fleet(
-        &self,
-        input: &StopFleetRequest,
-    ) -> RusotoFuture<StopFleetResult, StopFleetError> {
+    fn stop_fleet(&self, input: StopFleetRequest) -> RusotoFuture<StopFleetResult, StopFleetError> {
         let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "PhotonAdminProxyService.StopFleet");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -5557,7 +5553,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -5580,13 +5576,13 @@ where
     /// <p>Stops the specified image builder.</p>
     fn stop_image_builder(
         &self,
-        input: &StopImageBuilderRequest,
+        input: StopImageBuilderRequest,
     ) -> RusotoFuture<StopImageBuilderResult, StopImageBuilderError> {
         let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "PhotonAdminProxyService.StopImageBuilder");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -5594,7 +5590,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -5617,13 +5613,13 @@ where
     /// <p>Adds or overwrites one or more tags for the specified AppStream 2.0 resource. You can tag AppStream 2.0 image builders, images, fleets, and stacks.</p> <p>Each tag consists of a key and an optional value. If a resource already has a tag with the same key, this operation updates its value.</p> <p>To list the current tags for your resources, use <a>ListTagsForResource</a>. To disassociate tags from your resources, use <a>UntagResource</a>.</p> <p>For more information about tags, see <a href="http://docs.aws.amazon.com/appstream2/latest/developerguide/tagging-basic.html">Tagging Your Resources</a> in the <i>Amazon AppStream 2.0 Developer Guide</i>.</p>
     fn tag_resource(
         &self,
-        input: &TagResourceRequest,
+        input: TagResourceRequest,
     ) -> RusotoFuture<TagResourceResponse, TagResourceError> {
         let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "PhotonAdminProxyService.TagResource");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -5631,7 +5627,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -5654,13 +5650,13 @@ where
     /// <p>Disassociates the specified tags from the specified AppStream 2.0 resource.</p> <p>To list the current tags for your resources, use <a>ListTagsForResource</a>.</p> <p>For more information about tags, see <a href="http://docs.aws.amazon.com/appstream2/latest/developerguide/tagging-basic.html">Tagging Your Resources</a> in the <i>Amazon AppStream 2.0 Developer Guide</i>.</p>
     fn untag_resource(
         &self,
-        input: &UntagResourceRequest,
+        input: UntagResourceRequest,
     ) -> RusotoFuture<UntagResourceResponse, UntagResourceError> {
         let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "PhotonAdminProxyService.UntagResource");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -5668,7 +5664,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -5691,7 +5687,7 @@ where
     /// <p>Updates the specified directory configuration.</p>
     fn update_directory_config(
         &self,
-        input: &UpdateDirectoryConfigRequest,
+        input: UpdateDirectoryConfigRequest,
     ) -> RusotoFuture<UpdateDirectoryConfigResult, UpdateDirectoryConfigError> {
         let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
@@ -5700,7 +5696,7 @@ where
             "x-amz-target",
             "PhotonAdminProxyService.UpdateDirectoryConfig",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -5708,7 +5704,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -5731,13 +5727,13 @@ where
     /// <p>Updates the specified fleet.</p> <p>If the fleet is in the <code>STOPPED</code> state, you can update any attribute except the fleet name. If the fleet is in the <code>RUNNING</code> state, you can update the <code>DisplayName</code> and <code>ComputeCapacity</code> attributes. If the fleet is in the <code>STARTING</code> or <code>STOPPING</code> state, you can't update it.</p>
     fn update_fleet(
         &self,
-        input: &UpdateFleetRequest,
+        input: UpdateFleetRequest,
     ) -> RusotoFuture<UpdateFleetResult, UpdateFleetError> {
         let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "PhotonAdminProxyService.UpdateFleet");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -5745,7 +5741,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -5768,13 +5764,13 @@ where
     /// <p>Updates the specified stack.</p>
     fn update_stack(
         &self,
-        input: &UpdateStackRequest,
+        input: UpdateStackRequest,
     ) -> RusotoFuture<UpdateStackResult, UpdateStackError> {
         let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "PhotonAdminProxyService.UpdateStack");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -5782,7 +5778,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 

@@ -18,18 +18,18 @@ use std::io;
 use futures::future;
 use futures::Future;
 use rusoto_core::reactor::{CredentialsProvider, RequestDispatcher};
-use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::region;
+use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::{ClientInner, RusotoFuture};
 
-use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
+use rusoto_core::request::HttpDispatchError;
 
-use serde_json;
-use rusoto_core::signature::SignedRequest;
-use serde_json::Value as SerdeJsonValue;
-use serde_json::from_str;
 use hyper::StatusCode;
+use rusoto_core::signature::SignedRequest;
+use serde_json;
+use serde_json::from_str;
+use serde_json::Value as SerdeJsonValue;
 /// <p>Represents the input of, and adds tags to, an on-premises instance operation.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct AddTagsToOnPremisesInstancesInput {
@@ -6692,199 +6692,199 @@ pub trait CodeDeploy {
     /// <p>Adds tags to on-premises instances.</p>
     fn add_tags_to_on_premises_instances(
         &self,
-        input: &AddTagsToOnPremisesInstancesInput,
+        input: AddTagsToOnPremisesInstancesInput,
     ) -> RusotoFuture<(), AddTagsToOnPremisesInstancesError>;
 
     /// <p>Gets information about one or more application revisions.</p>
     fn batch_get_application_revisions(
         &self,
-        input: &BatchGetApplicationRevisionsInput,
+        input: BatchGetApplicationRevisionsInput,
     ) -> RusotoFuture<BatchGetApplicationRevisionsOutput, BatchGetApplicationRevisionsError>;
 
     /// <p>Gets information about one or more applications.</p>
     fn batch_get_applications(
         &self,
-        input: &BatchGetApplicationsInput,
+        input: BatchGetApplicationsInput,
     ) -> RusotoFuture<BatchGetApplicationsOutput, BatchGetApplicationsError>;
 
     /// <p>Gets information about one or more deployment groups.</p>
     fn batch_get_deployment_groups(
         &self,
-        input: &BatchGetDeploymentGroupsInput,
+        input: BatchGetDeploymentGroupsInput,
     ) -> RusotoFuture<BatchGetDeploymentGroupsOutput, BatchGetDeploymentGroupsError>;
 
     /// <p>Gets information about one or more instance that are part of a deployment group.</p>
     fn batch_get_deployment_instances(
         &self,
-        input: &BatchGetDeploymentInstancesInput,
+        input: BatchGetDeploymentInstancesInput,
     ) -> RusotoFuture<BatchGetDeploymentInstancesOutput, BatchGetDeploymentInstancesError>;
 
     /// <p>Gets information about one or more deployments.</p>
     fn batch_get_deployments(
         &self,
-        input: &BatchGetDeploymentsInput,
+        input: BatchGetDeploymentsInput,
     ) -> RusotoFuture<BatchGetDeploymentsOutput, BatchGetDeploymentsError>;
 
     /// <p>Gets information about one or more on-premises instances.</p>
     fn batch_get_on_premises_instances(
         &self,
-        input: &BatchGetOnPremisesInstancesInput,
+        input: BatchGetOnPremisesInstancesInput,
     ) -> RusotoFuture<BatchGetOnPremisesInstancesOutput, BatchGetOnPremisesInstancesError>;
 
     /// <p>For a blue/green deployment, starts the process of rerouting traffic from instances in the original environment to instances in the replacement environment without waiting for a specified wait time to elapse. (Traffic rerouting, which is achieved by registering instances in the replacement environment with the load balancer, can start as soon as all instances have a status of Ready.) </p>
     fn continue_deployment(
         &self,
-        input: &ContinueDeploymentInput,
+        input: ContinueDeploymentInput,
     ) -> RusotoFuture<(), ContinueDeploymentError>;
 
     /// <p>Creates an application.</p>
     fn create_application(
         &self,
-        input: &CreateApplicationInput,
+        input: CreateApplicationInput,
     ) -> RusotoFuture<CreateApplicationOutput, CreateApplicationError>;
 
     /// <p>Deploys an application revision through the specified deployment group.</p>
     fn create_deployment(
         &self,
-        input: &CreateDeploymentInput,
+        input: CreateDeploymentInput,
     ) -> RusotoFuture<CreateDeploymentOutput, CreateDeploymentError>;
 
     /// <p>Creates a deployment configuration.</p>
     fn create_deployment_config(
         &self,
-        input: &CreateDeploymentConfigInput,
+        input: CreateDeploymentConfigInput,
     ) -> RusotoFuture<CreateDeploymentConfigOutput, CreateDeploymentConfigError>;
 
     /// <p>Creates a deployment group to which application revisions will be deployed.</p>
     fn create_deployment_group(
         &self,
-        input: &CreateDeploymentGroupInput,
+        input: CreateDeploymentGroupInput,
     ) -> RusotoFuture<CreateDeploymentGroupOutput, CreateDeploymentGroupError>;
 
     /// <p>Deletes an application.</p>
     fn delete_application(
         &self,
-        input: &DeleteApplicationInput,
+        input: DeleteApplicationInput,
     ) -> RusotoFuture<(), DeleteApplicationError>;
 
     /// <p><p>Deletes a deployment configuration.</p> <note> <p>A deployment configuration cannot be deleted if it is currently in use. Predefined configurations cannot be deleted.</p> </note></p>
     fn delete_deployment_config(
         &self,
-        input: &DeleteDeploymentConfigInput,
+        input: DeleteDeploymentConfigInput,
     ) -> RusotoFuture<(), DeleteDeploymentConfigError>;
 
     /// <p>Deletes a deployment group.</p>
     fn delete_deployment_group(
         &self,
-        input: &DeleteDeploymentGroupInput,
+        input: DeleteDeploymentGroupInput,
     ) -> RusotoFuture<DeleteDeploymentGroupOutput, DeleteDeploymentGroupError>;
 
     /// <p>Deletes a GitHub account connection.</p>
     fn delete_git_hub_account_token(
         &self,
-        input: &DeleteGitHubAccountTokenInput,
+        input: DeleteGitHubAccountTokenInput,
     ) -> RusotoFuture<DeleteGitHubAccountTokenOutput, DeleteGitHubAccountTokenError>;
 
     /// <p>Deregisters an on-premises instance.</p>
     fn deregister_on_premises_instance(
         &self,
-        input: &DeregisterOnPremisesInstanceInput,
+        input: DeregisterOnPremisesInstanceInput,
     ) -> RusotoFuture<(), DeregisterOnPremisesInstanceError>;
 
     /// <p>Gets information about an application.</p>
     fn get_application(
         &self,
-        input: &GetApplicationInput,
+        input: GetApplicationInput,
     ) -> RusotoFuture<GetApplicationOutput, GetApplicationError>;
 
     /// <p>Gets information about an application revision.</p>
     fn get_application_revision(
         &self,
-        input: &GetApplicationRevisionInput,
+        input: GetApplicationRevisionInput,
     ) -> RusotoFuture<GetApplicationRevisionOutput, GetApplicationRevisionError>;
 
     /// <p>Gets information about a deployment.</p>
     fn get_deployment(
         &self,
-        input: &GetDeploymentInput,
+        input: GetDeploymentInput,
     ) -> RusotoFuture<GetDeploymentOutput, GetDeploymentError>;
 
     /// <p>Gets information about a deployment configuration.</p>
     fn get_deployment_config(
         &self,
-        input: &GetDeploymentConfigInput,
+        input: GetDeploymentConfigInput,
     ) -> RusotoFuture<GetDeploymentConfigOutput, GetDeploymentConfigError>;
 
     /// <p>Gets information about a deployment group.</p>
     fn get_deployment_group(
         &self,
-        input: &GetDeploymentGroupInput,
+        input: GetDeploymentGroupInput,
     ) -> RusotoFuture<GetDeploymentGroupOutput, GetDeploymentGroupError>;
 
     /// <p>Gets information about an instance as part of a deployment.</p>
     fn get_deployment_instance(
         &self,
-        input: &GetDeploymentInstanceInput,
+        input: GetDeploymentInstanceInput,
     ) -> RusotoFuture<GetDeploymentInstanceOutput, GetDeploymentInstanceError>;
 
     /// <p>Gets information about an on-premises instance.</p>
     fn get_on_premises_instance(
         &self,
-        input: &GetOnPremisesInstanceInput,
+        input: GetOnPremisesInstanceInput,
     ) -> RusotoFuture<GetOnPremisesInstanceOutput, GetOnPremisesInstanceError>;
 
     /// <p>Lists information about revisions for an application.</p>
     fn list_application_revisions(
         &self,
-        input: &ListApplicationRevisionsInput,
+        input: ListApplicationRevisionsInput,
     ) -> RusotoFuture<ListApplicationRevisionsOutput, ListApplicationRevisionsError>;
 
     /// <p>Lists the applications registered with the applicable IAM user or AWS account.</p>
     fn list_applications(
         &self,
-        input: &ListApplicationsInput,
+        input: ListApplicationsInput,
     ) -> RusotoFuture<ListApplicationsOutput, ListApplicationsError>;
 
     /// <p>Lists the deployment configurations with the applicable IAM user or AWS account.</p>
     fn list_deployment_configs(
         &self,
-        input: &ListDeploymentConfigsInput,
+        input: ListDeploymentConfigsInput,
     ) -> RusotoFuture<ListDeploymentConfigsOutput, ListDeploymentConfigsError>;
 
     /// <p>Lists the deployment groups for an application registered with the applicable IAM user or AWS account.</p>
     fn list_deployment_groups(
         &self,
-        input: &ListDeploymentGroupsInput,
+        input: ListDeploymentGroupsInput,
     ) -> RusotoFuture<ListDeploymentGroupsOutput, ListDeploymentGroupsError>;
 
     /// <p>Lists the instance for a deployment associated with the applicable IAM user or AWS account.</p>
     fn list_deployment_instances(
         &self,
-        input: &ListDeploymentInstancesInput,
+        input: ListDeploymentInstancesInput,
     ) -> RusotoFuture<ListDeploymentInstancesOutput, ListDeploymentInstancesError>;
 
     /// <p>Lists the deployments in a deployment group for an application registered with the applicable IAM user or AWS account.</p>
     fn list_deployments(
         &self,
-        input: &ListDeploymentsInput,
+        input: ListDeploymentsInput,
     ) -> RusotoFuture<ListDeploymentsOutput, ListDeploymentsError>;
 
     /// <p>Lists the names of stored connections to GitHub accounts.</p>
     fn list_git_hub_account_token_names(
         &self,
-        input: &ListGitHubAccountTokenNamesInput,
+        input: ListGitHubAccountTokenNamesInput,
     ) -> RusotoFuture<ListGitHubAccountTokenNamesOutput, ListGitHubAccountTokenNamesError>;
 
     /// <p>Gets a list of names for one or more on-premises instances.</p> <p>Unless otherwise specified, both registered and deregistered on-premises instance names will be listed. To list only registered or deregistered on-premises instance names, use the registration status parameter.</p>
     fn list_on_premises_instances(
         &self,
-        input: &ListOnPremisesInstancesInput,
+        input: ListOnPremisesInstancesInput,
     ) -> RusotoFuture<ListOnPremisesInstancesOutput, ListOnPremisesInstancesError>;
 
     /// <p>Sets the result of a Lambda validation function. The function validates one or both lifecycle events (<code>BeforeAllowTraffic</code> and <code>AfterAllowTraffic</code>) and returns <code>Succeeded</code> or <code>Failed</code>.</p>
     fn put_lifecycle_event_hook_execution_status(
         &self,
-        input: &PutLifecycleEventHookExecutionStatusInput,
+        input: PutLifecycleEventHookExecutionStatusInput,
     ) -> RusotoFuture<
         PutLifecycleEventHookExecutionStatusOutput,
         PutLifecycleEventHookExecutionStatusError,
@@ -6893,43 +6893,43 @@ pub trait CodeDeploy {
     /// <p>Registers with AWS CodeDeploy a revision for the specified application.</p>
     fn register_application_revision(
         &self,
-        input: &RegisterApplicationRevisionInput,
+        input: RegisterApplicationRevisionInput,
     ) -> RusotoFuture<(), RegisterApplicationRevisionError>;
 
     /// <p><p>Registers an on-premises instance.</p> <note> <p>Only one IAM ARN (an IAM session ARN or IAM user ARN) is supported in the request. You cannot use both.</p> </note></p>
     fn register_on_premises_instance(
         &self,
-        input: &RegisterOnPremisesInstanceInput,
+        input: RegisterOnPremisesInstanceInput,
     ) -> RusotoFuture<(), RegisterOnPremisesInstanceError>;
 
     /// <p>Removes one or more tags from one or more on-premises instances.</p>
     fn remove_tags_from_on_premises_instances(
         &self,
-        input: &RemoveTagsFromOnPremisesInstancesInput,
+        input: RemoveTagsFromOnPremisesInstancesInput,
     ) -> RusotoFuture<(), RemoveTagsFromOnPremisesInstancesError>;
 
     /// <p>In a blue/green deployment, overrides any specified wait time and starts terminating instances immediately after the traffic routing is completed.</p>
     fn skip_wait_time_for_instance_termination(
         &self,
-        input: &SkipWaitTimeForInstanceTerminationInput,
+        input: SkipWaitTimeForInstanceTerminationInput,
     ) -> RusotoFuture<(), SkipWaitTimeForInstanceTerminationError>;
 
     /// <p>Attempts to stop an ongoing deployment.</p>
     fn stop_deployment(
         &self,
-        input: &StopDeploymentInput,
+        input: StopDeploymentInput,
     ) -> RusotoFuture<StopDeploymentOutput, StopDeploymentError>;
 
     /// <p>Changes the name of an application.</p>
     fn update_application(
         &self,
-        input: &UpdateApplicationInput,
+        input: UpdateApplicationInput,
     ) -> RusotoFuture<(), UpdateApplicationError>;
 
     /// <p>Changes information about a deployment group.</p>
     fn update_deployment_group(
         &self,
-        input: &UpdateDeploymentGroupInput,
+        input: UpdateDeploymentGroupInput,
     ) -> RusotoFuture<UpdateDeploymentGroupOutput, UpdateDeploymentGroupError>;
 }
 /// A client for the CodeDeploy API.
@@ -6978,7 +6978,7 @@ where
     /// <p>Adds tags to on-premises instances.</p>
     fn add_tags_to_on_premises_instances(
         &self,
-        input: &AddTagsToOnPremisesInstancesInput,
+        input: AddTagsToOnPremisesInstancesInput,
     ) -> RusotoFuture<(), AddTagsToOnPremisesInstancesError> {
         let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
 
@@ -6987,7 +6987,7 @@ where
             "x-amz-target",
             "CodeDeploy_20141006.AddTagsToOnPremisesInstances",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -7008,7 +7008,7 @@ where
     /// <p>Gets information about one or more application revisions.</p>
     fn batch_get_application_revisions(
         &self,
-        input: &BatchGetApplicationRevisionsInput,
+        input: BatchGetApplicationRevisionsInput,
     ) -> RusotoFuture<BatchGetApplicationRevisionsOutput, BatchGetApplicationRevisionsError> {
         let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
 
@@ -7017,7 +7017,7 @@ where
             "x-amz-target",
             "CodeDeploy_20141006.BatchGetApplicationRevisions",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -7025,7 +7025,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -7048,13 +7048,13 @@ where
     /// <p>Gets information about one or more applications.</p>
     fn batch_get_applications(
         &self,
-        input: &BatchGetApplicationsInput,
+        input: BatchGetApplicationsInput,
     ) -> RusotoFuture<BatchGetApplicationsOutput, BatchGetApplicationsError> {
         let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeDeploy_20141006.BatchGetApplications");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -7062,7 +7062,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -7085,7 +7085,7 @@ where
     /// <p>Gets information about one or more deployment groups.</p>
     fn batch_get_deployment_groups(
         &self,
-        input: &BatchGetDeploymentGroupsInput,
+        input: BatchGetDeploymentGroupsInput,
     ) -> RusotoFuture<BatchGetDeploymentGroupsOutput, BatchGetDeploymentGroupsError> {
         let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
 
@@ -7094,7 +7094,7 @@ where
             "x-amz-target",
             "CodeDeploy_20141006.BatchGetDeploymentGroups",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -7102,7 +7102,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -7125,7 +7125,7 @@ where
     /// <p>Gets information about one or more instance that are part of a deployment group.</p>
     fn batch_get_deployment_instances(
         &self,
-        input: &BatchGetDeploymentInstancesInput,
+        input: BatchGetDeploymentInstancesInput,
     ) -> RusotoFuture<BatchGetDeploymentInstancesOutput, BatchGetDeploymentInstancesError> {
         let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
 
@@ -7134,7 +7134,7 @@ where
             "x-amz-target",
             "CodeDeploy_20141006.BatchGetDeploymentInstances",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -7142,7 +7142,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -7165,13 +7165,13 @@ where
     /// <p>Gets information about one or more deployments.</p>
     fn batch_get_deployments(
         &self,
-        input: &BatchGetDeploymentsInput,
+        input: BatchGetDeploymentsInput,
     ) -> RusotoFuture<BatchGetDeploymentsOutput, BatchGetDeploymentsError> {
         let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeDeploy_20141006.BatchGetDeployments");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -7179,7 +7179,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -7202,7 +7202,7 @@ where
     /// <p>Gets information about one or more on-premises instances.</p>
     fn batch_get_on_premises_instances(
         &self,
-        input: &BatchGetOnPremisesInstancesInput,
+        input: BatchGetOnPremisesInstancesInput,
     ) -> RusotoFuture<BatchGetOnPremisesInstancesOutput, BatchGetOnPremisesInstancesError> {
         let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
 
@@ -7211,7 +7211,7 @@ where
             "x-amz-target",
             "CodeDeploy_20141006.BatchGetOnPremisesInstances",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -7219,7 +7219,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -7242,13 +7242,13 @@ where
     /// <p>For a blue/green deployment, starts the process of rerouting traffic from instances in the original environment to instances in the replacement environment without waiting for a specified wait time to elapse. (Traffic rerouting, which is achieved by registering instances in the replacement environment with the load balancer, can start as soon as all instances have a status of Ready.) </p>
     fn continue_deployment(
         &self,
-        input: &ContinueDeploymentInput,
+        input: ContinueDeploymentInput,
     ) -> RusotoFuture<(), ContinueDeploymentError> {
         let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeDeploy_20141006.ContinueDeployment");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -7269,13 +7269,13 @@ where
     /// <p>Creates an application.</p>
     fn create_application(
         &self,
-        input: &CreateApplicationInput,
+        input: CreateApplicationInput,
     ) -> RusotoFuture<CreateApplicationOutput, CreateApplicationError> {
         let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeDeploy_20141006.CreateApplication");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -7283,7 +7283,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -7306,13 +7306,13 @@ where
     /// <p>Deploys an application revision through the specified deployment group.</p>
     fn create_deployment(
         &self,
-        input: &CreateDeploymentInput,
+        input: CreateDeploymentInput,
     ) -> RusotoFuture<CreateDeploymentOutput, CreateDeploymentError> {
         let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeDeploy_20141006.CreateDeployment");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -7320,7 +7320,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -7343,13 +7343,13 @@ where
     /// <p>Creates a deployment configuration.</p>
     fn create_deployment_config(
         &self,
-        input: &CreateDeploymentConfigInput,
+        input: CreateDeploymentConfigInput,
     ) -> RusotoFuture<CreateDeploymentConfigOutput, CreateDeploymentConfigError> {
         let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeDeploy_20141006.CreateDeploymentConfig");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -7357,7 +7357,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -7380,13 +7380,13 @@ where
     /// <p>Creates a deployment group to which application revisions will be deployed.</p>
     fn create_deployment_group(
         &self,
-        input: &CreateDeploymentGroupInput,
+        input: CreateDeploymentGroupInput,
     ) -> RusotoFuture<CreateDeploymentGroupOutput, CreateDeploymentGroupError> {
         let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeDeploy_20141006.CreateDeploymentGroup");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -7394,7 +7394,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -7417,13 +7417,13 @@ where
     /// <p>Deletes an application.</p>
     fn delete_application(
         &self,
-        input: &DeleteApplicationInput,
+        input: DeleteApplicationInput,
     ) -> RusotoFuture<(), DeleteApplicationError> {
         let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeDeploy_20141006.DeleteApplication");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -7444,13 +7444,13 @@ where
     /// <p><p>Deletes a deployment configuration.</p> <note> <p>A deployment configuration cannot be deleted if it is currently in use. Predefined configurations cannot be deleted.</p> </note></p>
     fn delete_deployment_config(
         &self,
-        input: &DeleteDeploymentConfigInput,
+        input: DeleteDeploymentConfigInput,
     ) -> RusotoFuture<(), DeleteDeploymentConfigError> {
         let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeDeploy_20141006.DeleteDeploymentConfig");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -7471,13 +7471,13 @@ where
     /// <p>Deletes a deployment group.</p>
     fn delete_deployment_group(
         &self,
-        input: &DeleteDeploymentGroupInput,
+        input: DeleteDeploymentGroupInput,
     ) -> RusotoFuture<DeleteDeploymentGroupOutput, DeleteDeploymentGroupError> {
         let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeDeploy_20141006.DeleteDeploymentGroup");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -7485,7 +7485,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -7508,7 +7508,7 @@ where
     /// <p>Deletes a GitHub account connection.</p>
     fn delete_git_hub_account_token(
         &self,
-        input: &DeleteGitHubAccountTokenInput,
+        input: DeleteGitHubAccountTokenInput,
     ) -> RusotoFuture<DeleteGitHubAccountTokenOutput, DeleteGitHubAccountTokenError> {
         let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
 
@@ -7517,7 +7517,7 @@ where
             "x-amz-target",
             "CodeDeploy_20141006.DeleteGitHubAccountToken",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -7525,7 +7525,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -7548,7 +7548,7 @@ where
     /// <p>Deregisters an on-premises instance.</p>
     fn deregister_on_premises_instance(
         &self,
-        input: &DeregisterOnPremisesInstanceInput,
+        input: DeregisterOnPremisesInstanceInput,
     ) -> RusotoFuture<(), DeregisterOnPremisesInstanceError> {
         let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
 
@@ -7557,7 +7557,7 @@ where
             "x-amz-target",
             "CodeDeploy_20141006.DeregisterOnPremisesInstance",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -7578,13 +7578,13 @@ where
     /// <p>Gets information about an application.</p>
     fn get_application(
         &self,
-        input: &GetApplicationInput,
+        input: GetApplicationInput,
     ) -> RusotoFuture<GetApplicationOutput, GetApplicationError> {
         let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeDeploy_20141006.GetApplication");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -7592,7 +7592,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -7615,13 +7615,13 @@ where
     /// <p>Gets information about an application revision.</p>
     fn get_application_revision(
         &self,
-        input: &GetApplicationRevisionInput,
+        input: GetApplicationRevisionInput,
     ) -> RusotoFuture<GetApplicationRevisionOutput, GetApplicationRevisionError> {
         let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeDeploy_20141006.GetApplicationRevision");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -7629,7 +7629,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -7652,13 +7652,13 @@ where
     /// <p>Gets information about a deployment.</p>
     fn get_deployment(
         &self,
-        input: &GetDeploymentInput,
+        input: GetDeploymentInput,
     ) -> RusotoFuture<GetDeploymentOutput, GetDeploymentError> {
         let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeDeploy_20141006.GetDeployment");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -7666,7 +7666,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -7689,13 +7689,13 @@ where
     /// <p>Gets information about a deployment configuration.</p>
     fn get_deployment_config(
         &self,
-        input: &GetDeploymentConfigInput,
+        input: GetDeploymentConfigInput,
     ) -> RusotoFuture<GetDeploymentConfigOutput, GetDeploymentConfigError> {
         let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeDeploy_20141006.GetDeploymentConfig");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -7703,7 +7703,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -7726,13 +7726,13 @@ where
     /// <p>Gets information about a deployment group.</p>
     fn get_deployment_group(
         &self,
-        input: &GetDeploymentGroupInput,
+        input: GetDeploymentGroupInput,
     ) -> RusotoFuture<GetDeploymentGroupOutput, GetDeploymentGroupError> {
         let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeDeploy_20141006.GetDeploymentGroup");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -7740,7 +7740,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -7763,13 +7763,13 @@ where
     /// <p>Gets information about an instance as part of a deployment.</p>
     fn get_deployment_instance(
         &self,
-        input: &GetDeploymentInstanceInput,
+        input: GetDeploymentInstanceInput,
     ) -> RusotoFuture<GetDeploymentInstanceOutput, GetDeploymentInstanceError> {
         let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeDeploy_20141006.GetDeploymentInstance");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -7777,7 +7777,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -7800,13 +7800,13 @@ where
     /// <p>Gets information about an on-premises instance.</p>
     fn get_on_premises_instance(
         &self,
-        input: &GetOnPremisesInstanceInput,
+        input: GetOnPremisesInstanceInput,
     ) -> RusotoFuture<GetOnPremisesInstanceOutput, GetOnPremisesInstanceError> {
         let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeDeploy_20141006.GetOnPremisesInstance");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -7814,7 +7814,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -7837,7 +7837,7 @@ where
     /// <p>Lists information about revisions for an application.</p>
     fn list_application_revisions(
         &self,
-        input: &ListApplicationRevisionsInput,
+        input: ListApplicationRevisionsInput,
     ) -> RusotoFuture<ListApplicationRevisionsOutput, ListApplicationRevisionsError> {
         let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
 
@@ -7846,7 +7846,7 @@ where
             "x-amz-target",
             "CodeDeploy_20141006.ListApplicationRevisions",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -7854,7 +7854,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -7877,13 +7877,13 @@ where
     /// <p>Lists the applications registered with the applicable IAM user or AWS account.</p>
     fn list_applications(
         &self,
-        input: &ListApplicationsInput,
+        input: ListApplicationsInput,
     ) -> RusotoFuture<ListApplicationsOutput, ListApplicationsError> {
         let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeDeploy_20141006.ListApplications");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -7891,7 +7891,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -7914,13 +7914,13 @@ where
     /// <p>Lists the deployment configurations with the applicable IAM user or AWS account.</p>
     fn list_deployment_configs(
         &self,
-        input: &ListDeploymentConfigsInput,
+        input: ListDeploymentConfigsInput,
     ) -> RusotoFuture<ListDeploymentConfigsOutput, ListDeploymentConfigsError> {
         let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeDeploy_20141006.ListDeploymentConfigs");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -7928,7 +7928,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -7951,13 +7951,13 @@ where
     /// <p>Lists the deployment groups for an application registered with the applicable IAM user or AWS account.</p>
     fn list_deployment_groups(
         &self,
-        input: &ListDeploymentGroupsInput,
+        input: ListDeploymentGroupsInput,
     ) -> RusotoFuture<ListDeploymentGroupsOutput, ListDeploymentGroupsError> {
         let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeDeploy_20141006.ListDeploymentGroups");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -7965,7 +7965,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -7988,7 +7988,7 @@ where
     /// <p>Lists the instance for a deployment associated with the applicable IAM user or AWS account.</p>
     fn list_deployment_instances(
         &self,
-        input: &ListDeploymentInstancesInput,
+        input: ListDeploymentInstancesInput,
     ) -> RusotoFuture<ListDeploymentInstancesOutput, ListDeploymentInstancesError> {
         let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
 
@@ -7997,7 +7997,7 @@ where
             "x-amz-target",
             "CodeDeploy_20141006.ListDeploymentInstances",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -8005,7 +8005,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -8028,13 +8028,13 @@ where
     /// <p>Lists the deployments in a deployment group for an application registered with the applicable IAM user or AWS account.</p>
     fn list_deployments(
         &self,
-        input: &ListDeploymentsInput,
+        input: ListDeploymentsInput,
     ) -> RusotoFuture<ListDeploymentsOutput, ListDeploymentsError> {
         let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeDeploy_20141006.ListDeployments");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -8042,7 +8042,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -8065,7 +8065,7 @@ where
     /// <p>Lists the names of stored connections to GitHub accounts.</p>
     fn list_git_hub_account_token_names(
         &self,
-        input: &ListGitHubAccountTokenNamesInput,
+        input: ListGitHubAccountTokenNamesInput,
     ) -> RusotoFuture<ListGitHubAccountTokenNamesOutput, ListGitHubAccountTokenNamesError> {
         let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
 
@@ -8074,7 +8074,7 @@ where
             "x-amz-target",
             "CodeDeploy_20141006.ListGitHubAccountTokenNames",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -8082,7 +8082,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -8105,7 +8105,7 @@ where
     /// <p>Gets a list of names for one or more on-premises instances.</p> <p>Unless otherwise specified, both registered and deregistered on-premises instance names will be listed. To list only registered or deregistered on-premises instance names, use the registration status parameter.</p>
     fn list_on_premises_instances(
         &self,
-        input: &ListOnPremisesInstancesInput,
+        input: ListOnPremisesInstancesInput,
     ) -> RusotoFuture<ListOnPremisesInstancesOutput, ListOnPremisesInstancesError> {
         let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
 
@@ -8114,7 +8114,7 @@ where
             "x-amz-target",
             "CodeDeploy_20141006.ListOnPremisesInstances",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -8122,7 +8122,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -8145,7 +8145,7 @@ where
     /// <p>Sets the result of a Lambda validation function. The function validates one or both lifecycle events (<code>BeforeAllowTraffic</code> and <code>AfterAllowTraffic</code>) and returns <code>Succeeded</code> or <code>Failed</code>.</p>
     fn put_lifecycle_event_hook_execution_status(
         &self,
-        input: &PutLifecycleEventHookExecutionStatusInput,
+        input: PutLifecycleEventHookExecutionStatusInput,
     ) -> RusotoFuture<
         PutLifecycleEventHookExecutionStatusOutput,
         PutLifecycleEventHookExecutionStatusError,
@@ -8157,7 +8157,7 @@ where
             "x-amz-target",
             "CodeDeploy_20141006.PutLifecycleEventHookExecutionStatus",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -8165,7 +8165,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -8188,7 +8188,7 @@ where
     /// <p>Registers with AWS CodeDeploy a revision for the specified application.</p>
     fn register_application_revision(
         &self,
-        input: &RegisterApplicationRevisionInput,
+        input: RegisterApplicationRevisionInput,
     ) -> RusotoFuture<(), RegisterApplicationRevisionError> {
         let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
 
@@ -8197,7 +8197,7 @@ where
             "x-amz-target",
             "CodeDeploy_20141006.RegisterApplicationRevision",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -8218,7 +8218,7 @@ where
     /// <p><p>Registers an on-premises instance.</p> <note> <p>Only one IAM ARN (an IAM session ARN or IAM user ARN) is supported in the request. You cannot use both.</p> </note></p>
     fn register_on_premises_instance(
         &self,
-        input: &RegisterOnPremisesInstanceInput,
+        input: RegisterOnPremisesInstanceInput,
     ) -> RusotoFuture<(), RegisterOnPremisesInstanceError> {
         let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
 
@@ -8227,7 +8227,7 @@ where
             "x-amz-target",
             "CodeDeploy_20141006.RegisterOnPremisesInstance",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -8248,7 +8248,7 @@ where
     /// <p>Removes one or more tags from one or more on-premises instances.</p>
     fn remove_tags_from_on_premises_instances(
         &self,
-        input: &RemoveTagsFromOnPremisesInstancesInput,
+        input: RemoveTagsFromOnPremisesInstancesInput,
     ) -> RusotoFuture<(), RemoveTagsFromOnPremisesInstancesError> {
         let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
 
@@ -8257,7 +8257,7 @@ where
             "x-amz-target",
             "CodeDeploy_20141006.RemoveTagsFromOnPremisesInstances",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -8278,7 +8278,7 @@ where
     /// <p>In a blue/green deployment, overrides any specified wait time and starts terminating instances immediately after the traffic routing is completed.</p>
     fn skip_wait_time_for_instance_termination(
         &self,
-        input: &SkipWaitTimeForInstanceTerminationInput,
+        input: SkipWaitTimeForInstanceTerminationInput,
     ) -> RusotoFuture<(), SkipWaitTimeForInstanceTerminationError> {
         let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
 
@@ -8287,7 +8287,7 @@ where
             "x-amz-target",
             "CodeDeploy_20141006.SkipWaitTimeForInstanceTermination",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -8308,13 +8308,13 @@ where
     /// <p>Attempts to stop an ongoing deployment.</p>
     fn stop_deployment(
         &self,
-        input: &StopDeploymentInput,
+        input: StopDeploymentInput,
     ) -> RusotoFuture<StopDeploymentOutput, StopDeploymentError> {
         let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeDeploy_20141006.StopDeployment");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -8322,7 +8322,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -8345,13 +8345,13 @@ where
     /// <p>Changes the name of an application.</p>
     fn update_application(
         &self,
-        input: &UpdateApplicationInput,
+        input: UpdateApplicationInput,
     ) -> RusotoFuture<(), UpdateApplicationError> {
         let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeDeploy_20141006.UpdateApplication");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -8372,13 +8372,13 @@ where
     /// <p>Changes information about a deployment group.</p>
     fn update_deployment_group(
         &self,
-        input: &UpdateDeploymentGroupInput,
+        input: UpdateDeploymentGroupInput,
     ) -> RusotoFuture<UpdateDeploymentGroupOutput, UpdateDeploymentGroupError> {
         let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeDeploy_20141006.UpdateDeploymentGroup");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -8386,7 +8386,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 

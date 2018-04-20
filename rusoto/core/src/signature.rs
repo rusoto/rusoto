@@ -8,18 +8,42 @@
 
 use std::collections::BTreeMap;
 use std::collections::btree_map::Entry;
+use std::fmt;
+use std::io;
 use std::str;
 
+use futures::Stream;
 use hmac::{Hmac, Mac};
 use sha2::{Digest, Sha256};
 use time::Tm;
 use time::now_utc;
 use url::percent_encoding::{utf8_percent_encode, percent_decode, EncodeSet};
 use hex;
+use md5;
+use base64;
 
 use param::{Params, ServiceParams};
 use region::Region;
 use credential::AwsCredentials;
+
+/// Possible payloads included in a `SignedRequest`.
+pub enum SignedRequestPayload {
+    /// Transfer payload in a single chunk
+    Buffer(Vec<u8>),
+    /// Transfer payload in multiple chunks
+    Stream(usize, Box<Stream<Item=Vec<u8>, Error=io::Error> + Send>)
+}
+
+impl fmt::Debug for SignedRequestPayload {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match self {
+            &SignedRequestPayload::Buffer(ref buf) =>
+                write!(f, "SignedRequestPayload::Buffer(len = {})", buf.len()),
+            &SignedRequestPayload::Stream(len, _) =>
+                write!(f, "SignedRequestPayload::Stream(len = {})", len),
+        }
+    }
+}
 
 /// A data structure for all the elements of an HTTP request that are involved in
 /// the Amazon Signature Version 4 signing process
@@ -42,7 +66,7 @@ pub struct SignedRequest {
     /// The AWS hostname
     pub hostname: Option<String>,
     /// The HTTP Content
-    pub payload: Option<Vec<u8>>,
+    pub payload: Option<SignedRequestPayload>,
     /// The Standardised query string
     pub canonical_query_string: String,
     /// The Standardised URI
@@ -86,7 +110,28 @@ impl SignedRequest {
 
     /// Sets the new body (payload)
     pub fn set_payload(&mut self, payload: Option<Vec<u8>>) {
-        self.payload = payload;
+        self.payload = payload.map(SignedRequestPayload::Buffer);
+    }
+
+    /// Sets the new body (payload) as a stream
+    pub fn set_payload_stream(&mut self, len: usize, stream: Box<Stream<Item=Vec<u8>, Error=io::Error> + Send>) {
+        self.payload = Some(SignedRequestPayload::Stream(len, stream));
+    }
+
+    /// Computes and sets the Content-MD5 header based on the current payload.
+    ///
+    /// Has no effect if the payload is not set, or is not a buffer.
+    pub fn set_content_md5_header(&mut self) {
+        let digest;
+        if let Some(SignedRequestPayload::Buffer(ref payload)) = self.payload {
+            digest = Some(md5::compute(payload));
+        } else {
+            digest = None;
+        }
+        if let Some(digest) = digest {
+            // need to deref digest and then pass that reference:
+            self.add_header("Content-MD5", &base64::encode(&(*digest)));
+        }
     }
 
     /// Returns the current HTTP method
@@ -318,28 +363,47 @@ impl SignedRequest {
 
         let canonical_request: String;
 
-        if self.payload.is_none() {
-            canonical_request = format!("{}\n{}\n{}\n{}\n{}\n{}",
-                                        &self.method,
-                                        self.canonical_uri,
-                                        self.canonical_query_string,
-                                        canonical_headers,
-                                        signed_headers,
-                                        &to_hexdigest(""));
-            self.remove_header("x-amz-content-sha256");
-            self.add_header("x-amz-content-sha256", &to_hexdigest(""));
-        } else {
-            let (digest, len) = digest_payload(&self.payload);
-            canonical_request = format!("{}\n{}\n{}\n{}\n{}\n{}",
-                                        &self.method,
-                                        self.canonical_uri,
-                                        self.canonical_query_string,
-                                        canonical_headers,
-                                        signed_headers,
-                                        &digest);
-            self.remove_header("x-amz-content-sha256");
+        let (digest, len) = match self.payload {
+            None => {
+                canonical_request = format!("{}\n{}\n{}\n{}\n{}\n{}",
+                                            &self.method,
+                                            self.canonical_uri,
+                                            self.canonical_query_string,
+                                            canonical_headers,
+                                            signed_headers,
+                                            &to_hexdigest(""));
+                (Some(to_hexdigest("")), None)
+            }
+            Some(SignedRequestPayload::Buffer(ref payload)) => {
+                let (digest, len) = digest_payload(&payload);
+                canonical_request = format!("{}\n{}\n{}\n{}\n{}\n{}",
+                                            &self.method,
+                                            self.canonical_uri,
+                                            self.canonical_query_string,
+                                            canonical_headers,
+                                            signed_headers,
+                                            &digest);
+                (Some(digest), Some(len))
+            }
+            Some(SignedRequestPayload::Stream(len, _)) => {
+                canonical_request = format!("{}\n{}\n{}\n{}\n{}\n{}",
+                                            &self.method,
+                                            self.canonical_uri,
+                                            self.canonical_query_string,
+                                            canonical_headers,
+                                            signed_headers,
+                                            "UNSIGNED-PAYLOAD");
+                (Some("UNSIGNED-PAYLOAD".to_owned()), Some(len))
+            }
+        };
+
+        self.remove_header("x-amz-content-sha256");
+        if let Some(digest) = digest {
             self.add_header("x-amz-content-sha256", &digest);
-            self.remove_header("content-length");
+        }
+
+        self.remove_header("content-length");
+        if let Some(len) = len {
             self.add_header("content-length", &format!("{}", len));
         }
 
@@ -370,8 +434,7 @@ impl SignedRequest {
 }
 
 /// Convert payload from Char array to useable <payload, len> format.
-fn digest_payload(payload: &Option<Vec<u8>>) -> (String, usize) {
-    let payload = payload.as_ref().unwrap();
+fn digest_payload(payload: &[u8]) -> (String, usize) {
     let digest = to_hexdigest(payload);
     let len = payload.len();
     (digest, len)

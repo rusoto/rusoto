@@ -12,7 +12,7 @@ fn should_describe_trusts() {
     let client = DirectoryServiceClient::simple(Region::UsEast1);
     let request = DescribeTrustsRequest::default();
 
-    client.describe_trusts(&request).sync().unwrap();
+    client.describe_trusts(request).sync().unwrap();
 }
 
 #[test]
@@ -20,5 +20,5 @@ fn should_describe_directories() {
     let client = DirectoryServiceClient::simple(Region::UsEast1);
     let request = DescribeDirectoriesRequest::default();
 
-    client.describe_directories(&request).sync().unwrap();
+    client.describe_directories(request).sync().unwrap();
 }

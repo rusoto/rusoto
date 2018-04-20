@@ -160,7 +160,7 @@ fn generate_endpoint_modification(service: &Service) -> Option<String> {
 // don't clutter method signatures with them
 fn generate_method_signature(operation: &Operation, shape: &Shape) -> String {
     if shape.members.is_some() && !shape.members.as_ref().unwrap().is_empty() {
-        format!("fn {method_name}(&self, input: &{input_type})",
+        format!("fn {method_name}(&self, input: {input_type})",
                 method_name = operation.name.to_snake_case(),
                 input_type = operation.input_shape())
     } else {
@@ -187,7 +187,7 @@ fn generate_payload(service: &Service, input_shape: &Shape) -> Option<String> {
                 .unwrap()
                 .iter()
                 .any(|(_, member)| member.location.is_none()) {
-                Some("let encoded = Some(serde_json::to_vec(input).unwrap());".to_owned())
+                Some("let encoded = Some(serde_json::to_vec(&input).unwrap());".to_owned())
             } else {
                 None
             }

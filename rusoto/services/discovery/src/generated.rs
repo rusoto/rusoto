@@ -18,18 +18,18 @@ use std::io;
 use futures::future;
 use futures::Future;
 use rusoto_core::reactor::{CredentialsProvider, RequestDispatcher};
-use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::region;
+use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::{ClientInner, RusotoFuture};
 
-use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
+use rusoto_core::request::HttpDispatchError;
 
-use serde_json;
-use rusoto_core::signature::SignedRequest;
-use serde_json::Value as SerdeJsonValue;
-use serde_json::from_str;
 use hyper::StatusCode;
+use rusoto_core::signature::SignedRequest;
+use serde_json;
+use serde_json::from_str;
+use serde_json::Value as SerdeJsonValue;
 /// <p>Information about agents or connectors that were instructed to start collecting data. Information includes the agent/connector ID, a description of the operation, and whether the agent/connector configuration was updated.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct AgentConfigurationStatus {
@@ -2673,7 +2673,7 @@ pub trait Discovery {
     /// <p>Associates one or more configuration items with an application.</p>
     fn associate_configuration_items_to_application(
         &self,
-        input: &AssociateConfigurationItemsToApplicationRequest,
+        input: AssociateConfigurationItemsToApplicationRequest,
     ) -> RusotoFuture<
         AssociateConfigurationItemsToApplicationResponse,
         AssociateConfigurationItemsToApplicationError,
@@ -2682,61 +2682,61 @@ pub trait Discovery {
     /// <p>Creates an application with the given name and description.</p>
     fn create_application(
         &self,
-        input: &CreateApplicationRequest,
+        input: CreateApplicationRequest,
     ) -> RusotoFuture<CreateApplicationResponse, CreateApplicationError>;
 
     /// <p>Creates one or more tags for configuration items. Tags are metadata that help you categorize IT assets. This API accepts a list of multiple configuration items.</p>
     fn create_tags(
         &self,
-        input: &CreateTagsRequest,
+        input: CreateTagsRequest,
     ) -> RusotoFuture<CreateTagsResponse, CreateTagsError>;
 
     /// <p>Deletes a list of applications and their associations with configuration items.</p>
     fn delete_applications(
         &self,
-        input: &DeleteApplicationsRequest,
+        input: DeleteApplicationsRequest,
     ) -> RusotoFuture<DeleteApplicationsResponse, DeleteApplicationsError>;
 
     /// <p>Deletes the association between configuration items and one or more tags. This API accepts a list of multiple configuration items.</p>
     fn delete_tags(
         &self,
-        input: &DeleteTagsRequest,
+        input: DeleteTagsRequest,
     ) -> RusotoFuture<DeleteTagsResponse, DeleteTagsError>;
 
     /// <p>Lists agents or the Connector by ID or lists all agents/Connectors associated with your user account if you did not specify an ID.</p>
     fn describe_agents(
         &self,
-        input: &DescribeAgentsRequest,
+        input: DescribeAgentsRequest,
     ) -> RusotoFuture<DescribeAgentsResponse, DescribeAgentsError>;
 
     /// <p>Retrieves attributes for a list of configuration item IDs. All of the supplied IDs must be for the same asset type (server, application, process, or connection). Output fields are specific to the asset type selected. For example, the output for a <i>server</i> configuration item includes a list of attributes about the server, such as host name, operating system, and number of network cards.</p> <p>For a complete list of outputs for each asset type, see <a href="http://docs.aws.amazon.com/application-discovery/latest/APIReference/discovery-api-queries.html#DescribeConfigurations">Using the DescribeConfigurations Action</a>.</p>
     fn describe_configurations(
         &self,
-        input: &DescribeConfigurationsRequest,
+        input: DescribeConfigurationsRequest,
     ) -> RusotoFuture<DescribeConfigurationsResponse, DescribeConfigurationsError>;
 
     /// <p>Deprecated. Use <code>DescribeExportTasks</code> instead.</p> <p>Retrieves the status of a given export process. You can retrieve status from a maximum of 100 processes.</p>
     fn describe_export_configurations(
         &self,
-        input: &DescribeExportConfigurationsRequest,
+        input: DescribeExportConfigurationsRequest,
     ) -> RusotoFuture<DescribeExportConfigurationsResponse, DescribeExportConfigurationsError>;
 
     /// <p>Retrieve status of one or more export tasks. You can retrieve the status of up to 100 export tasks.</p>
     fn describe_export_tasks(
         &self,
-        input: &DescribeExportTasksRequest,
+        input: DescribeExportTasksRequest,
     ) -> RusotoFuture<DescribeExportTasksResponse, DescribeExportTasksError>;
 
     /// <p>Retrieves a list of configuration items that are tagged with a specific tag. Or retrieves a list of all tags assigned to a specific configuration item.</p>
     fn describe_tags(
         &self,
-        input: &DescribeTagsRequest,
+        input: DescribeTagsRequest,
     ) -> RusotoFuture<DescribeTagsResponse, DescribeTagsError>;
 
     /// <p>Disassociates one or more configuration items from an application.</p>
     fn disassociate_configuration_items_from_application(
         &self,
-        input: &DisassociateConfigurationItemsFromApplicationRequest,
+        input: DisassociateConfigurationItemsFromApplicationRequest,
     ) -> RusotoFuture<
         DisassociateConfigurationItemsFromApplicationResponse,
         DisassociateConfigurationItemsFromApplicationError,
@@ -2755,37 +2755,37 @@ pub trait Discovery {
     /// <p>Retrieves a list of configuration items according to criteria that you specify in a filter. The filter criteria identifies the relationship requirements.</p>
     fn list_configurations(
         &self,
-        input: &ListConfigurationsRequest,
+        input: ListConfigurationsRequest,
     ) -> RusotoFuture<ListConfigurationsResponse, ListConfigurationsError>;
 
     /// <p>Retrieves a list of servers that are one network hop away from a specified server.</p>
     fn list_server_neighbors(
         &self,
-        input: &ListServerNeighborsRequest,
+        input: ListServerNeighborsRequest,
     ) -> RusotoFuture<ListServerNeighborsResponse, ListServerNeighborsError>;
 
     /// <p>Instructs the specified agents or connectors to start collecting data.</p>
     fn start_data_collection_by_agent_ids(
         &self,
-        input: &StartDataCollectionByAgentIdsRequest,
+        input: StartDataCollectionByAgentIdsRequest,
     ) -> RusotoFuture<StartDataCollectionByAgentIdsResponse, StartDataCollectionByAgentIdsError>;
 
     /// <p> Begins the export of discovered data to an S3 bucket.</p> <p> If you specify <code>agentIds</code> in a filter, the task exports up to 72 hours of detailed data collected by the identified Application Discovery Agent, including network, process, and performance details. A time range for exported agent data may be set by using <code>startTime</code> and <code>endTime</code>. Export of detailed agent data is limited to five concurrently running exports. </p> <p> If you do not include an <code>agentIds</code> filter, summary data is exported that includes both AWS Agentless Discovery Connector data and summary data from AWS Discovery Agents. Export of summary data is limited to two exports per day. </p>
     fn start_export_task(
         &self,
-        input: &StartExportTaskRequest,
+        input: StartExportTaskRequest,
     ) -> RusotoFuture<StartExportTaskResponse, StartExportTaskError>;
 
     /// <p>Instructs the specified agents or connectors to stop collecting data.</p>
     fn stop_data_collection_by_agent_ids(
         &self,
-        input: &StopDataCollectionByAgentIdsRequest,
+        input: StopDataCollectionByAgentIdsRequest,
     ) -> RusotoFuture<StopDataCollectionByAgentIdsResponse, StopDataCollectionByAgentIdsError>;
 
     /// <p>Updates metadata about an application.</p>
     fn update_application(
         &self,
-        input: &UpdateApplicationRequest,
+        input: UpdateApplicationRequest,
     ) -> RusotoFuture<UpdateApplicationResponse, UpdateApplicationError>;
 }
 /// A client for the AWS Application Discovery Service API.
@@ -2834,7 +2834,7 @@ where
     /// <p>Associates one or more configuration items with an application.</p>
     fn associate_configuration_items_to_application(
         &self,
-        input: &AssociateConfigurationItemsToApplicationRequest,
+        input: AssociateConfigurationItemsToApplicationRequest,
     ) -> RusotoFuture<
         AssociateConfigurationItemsToApplicationResponse,
         AssociateConfigurationItemsToApplicationError,
@@ -2846,7 +2846,7 @@ where
             "x-amz-target",
             "AWSPoseidonService_V2015_11_01.AssociateConfigurationItemsToApplication",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -2854,7 +2854,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -2877,7 +2877,7 @@ where
     /// <p>Creates an application with the given name and description.</p>
     fn create_application(
         &self,
-        input: &CreateApplicationRequest,
+        input: CreateApplicationRequest,
     ) -> RusotoFuture<CreateApplicationResponse, CreateApplicationError> {
         let mut request = SignedRequest::new("POST", "discovery", &self.region, "/");
 
@@ -2886,7 +2886,7 @@ where
             "x-amz-target",
             "AWSPoseidonService_V2015_11_01.CreateApplication",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -2894,7 +2894,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -2917,13 +2917,13 @@ where
     /// <p>Creates one or more tags for configuration items. Tags are metadata that help you categorize IT assets. This API accepts a list of multiple configuration items.</p>
     fn create_tags(
         &self,
-        input: &CreateTagsRequest,
+        input: CreateTagsRequest,
     ) -> RusotoFuture<CreateTagsResponse, CreateTagsError> {
         let mut request = SignedRequest::new("POST", "discovery", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSPoseidonService_V2015_11_01.CreateTags");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -2931,7 +2931,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -2954,7 +2954,7 @@ where
     /// <p>Deletes a list of applications and their associations with configuration items.</p>
     fn delete_applications(
         &self,
-        input: &DeleteApplicationsRequest,
+        input: DeleteApplicationsRequest,
     ) -> RusotoFuture<DeleteApplicationsResponse, DeleteApplicationsError> {
         let mut request = SignedRequest::new("POST", "discovery", &self.region, "/");
 
@@ -2963,7 +2963,7 @@ where
             "x-amz-target",
             "AWSPoseidonService_V2015_11_01.DeleteApplications",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -2971,7 +2971,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -2994,13 +2994,13 @@ where
     /// <p>Deletes the association between configuration items and one or more tags. This API accepts a list of multiple configuration items.</p>
     fn delete_tags(
         &self,
-        input: &DeleteTagsRequest,
+        input: DeleteTagsRequest,
     ) -> RusotoFuture<DeleteTagsResponse, DeleteTagsError> {
         let mut request = SignedRequest::new("POST", "discovery", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSPoseidonService_V2015_11_01.DeleteTags");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -3008,7 +3008,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -3031,7 +3031,7 @@ where
     /// <p>Lists agents or the Connector by ID or lists all agents/Connectors associated with your user account if you did not specify an ID.</p>
     fn describe_agents(
         &self,
-        input: &DescribeAgentsRequest,
+        input: DescribeAgentsRequest,
     ) -> RusotoFuture<DescribeAgentsResponse, DescribeAgentsError> {
         let mut request = SignedRequest::new("POST", "discovery", &self.region, "/");
 
@@ -3040,7 +3040,7 @@ where
             "x-amz-target",
             "AWSPoseidonService_V2015_11_01.DescribeAgents",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -3048,7 +3048,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -3071,7 +3071,7 @@ where
     /// <p>Retrieves attributes for a list of configuration item IDs. All of the supplied IDs must be for the same asset type (server, application, process, or connection). Output fields are specific to the asset type selected. For example, the output for a <i>server</i> configuration item includes a list of attributes about the server, such as host name, operating system, and number of network cards.</p> <p>For a complete list of outputs for each asset type, see <a href="http://docs.aws.amazon.com/application-discovery/latest/APIReference/discovery-api-queries.html#DescribeConfigurations">Using the DescribeConfigurations Action</a>.</p>
     fn describe_configurations(
         &self,
-        input: &DescribeConfigurationsRequest,
+        input: DescribeConfigurationsRequest,
     ) -> RusotoFuture<DescribeConfigurationsResponse, DescribeConfigurationsError> {
         let mut request = SignedRequest::new("POST", "discovery", &self.region, "/");
 
@@ -3080,7 +3080,7 @@ where
             "x-amz-target",
             "AWSPoseidonService_V2015_11_01.DescribeConfigurations",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -3088,7 +3088,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -3111,7 +3111,7 @@ where
     /// <p>Deprecated. Use <code>DescribeExportTasks</code> instead.</p> <p>Retrieves the status of a given export process. You can retrieve status from a maximum of 100 processes.</p>
     fn describe_export_configurations(
         &self,
-        input: &DescribeExportConfigurationsRequest,
+        input: DescribeExportConfigurationsRequest,
     ) -> RusotoFuture<DescribeExportConfigurationsResponse, DescribeExportConfigurationsError> {
         let mut request = SignedRequest::new("POST", "discovery", &self.region, "/");
 
@@ -3120,7 +3120,7 @@ where
             "x-amz-target",
             "AWSPoseidonService_V2015_11_01.DescribeExportConfigurations",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -3128,7 +3128,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -3151,7 +3151,7 @@ where
     /// <p>Retrieve status of one or more export tasks. You can retrieve the status of up to 100 export tasks.</p>
     fn describe_export_tasks(
         &self,
-        input: &DescribeExportTasksRequest,
+        input: DescribeExportTasksRequest,
     ) -> RusotoFuture<DescribeExportTasksResponse, DescribeExportTasksError> {
         let mut request = SignedRequest::new("POST", "discovery", &self.region, "/");
 
@@ -3160,7 +3160,7 @@ where
             "x-amz-target",
             "AWSPoseidonService_V2015_11_01.DescribeExportTasks",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -3168,7 +3168,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -3191,7 +3191,7 @@ where
     /// <p>Retrieves a list of configuration items that are tagged with a specific tag. Or retrieves a list of all tags assigned to a specific configuration item.</p>
     fn describe_tags(
         &self,
-        input: &DescribeTagsRequest,
+        input: DescribeTagsRequest,
     ) -> RusotoFuture<DescribeTagsResponse, DescribeTagsError> {
         let mut request = SignedRequest::new("POST", "discovery", &self.region, "/");
 
@@ -3200,7 +3200,7 @@ where
             "x-amz-target",
             "AWSPoseidonService_V2015_11_01.DescribeTags",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -3208,7 +3208,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -3231,7 +3231,7 @@ where
     /// <p>Disassociates one or more configuration items from an application.</p>
     fn disassociate_configuration_items_from_application(
         &self,
-        input: &DisassociateConfigurationItemsFromApplicationRequest,
+        input: DisassociateConfigurationItemsFromApplicationRequest,
     ) -> RusotoFuture<
         DisassociateConfigurationItemsFromApplicationResponse,
         DisassociateConfigurationItemsFromApplicationError,
@@ -3243,7 +3243,7 @@ where
             "x-amz-target",
             "AWSPoseidonService_V2015_11_01.DisassociateConfigurationItemsFromApplication",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -3251,7 +3251,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -3291,7 +3291,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -3329,7 +3329,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -3352,7 +3352,7 @@ where
     /// <p>Retrieves a list of configuration items according to criteria that you specify in a filter. The filter criteria identifies the relationship requirements.</p>
     fn list_configurations(
         &self,
-        input: &ListConfigurationsRequest,
+        input: ListConfigurationsRequest,
     ) -> RusotoFuture<ListConfigurationsResponse, ListConfigurationsError> {
         let mut request = SignedRequest::new("POST", "discovery", &self.region, "/");
 
@@ -3361,7 +3361,7 @@ where
             "x-amz-target",
             "AWSPoseidonService_V2015_11_01.ListConfigurations",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -3369,7 +3369,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -3392,7 +3392,7 @@ where
     /// <p>Retrieves a list of servers that are one network hop away from a specified server.</p>
     fn list_server_neighbors(
         &self,
-        input: &ListServerNeighborsRequest,
+        input: ListServerNeighborsRequest,
     ) -> RusotoFuture<ListServerNeighborsResponse, ListServerNeighborsError> {
         let mut request = SignedRequest::new("POST", "discovery", &self.region, "/");
 
@@ -3401,7 +3401,7 @@ where
             "x-amz-target",
             "AWSPoseidonService_V2015_11_01.ListServerNeighbors",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -3409,7 +3409,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -3432,7 +3432,7 @@ where
     /// <p>Instructs the specified agents or connectors to start collecting data.</p>
     fn start_data_collection_by_agent_ids(
         &self,
-        input: &StartDataCollectionByAgentIdsRequest,
+        input: StartDataCollectionByAgentIdsRequest,
     ) -> RusotoFuture<StartDataCollectionByAgentIdsResponse, StartDataCollectionByAgentIdsError>
     {
         let mut request = SignedRequest::new("POST", "discovery", &self.region, "/");
@@ -3442,7 +3442,7 @@ where
             "x-amz-target",
             "AWSPoseidonService_V2015_11_01.StartDataCollectionByAgentIds",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -3450,7 +3450,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -3473,7 +3473,7 @@ where
     /// <p> Begins the export of discovered data to an S3 bucket.</p> <p> If you specify <code>agentIds</code> in a filter, the task exports up to 72 hours of detailed data collected by the identified Application Discovery Agent, including network, process, and performance details. A time range for exported agent data may be set by using <code>startTime</code> and <code>endTime</code>. Export of detailed agent data is limited to five concurrently running exports. </p> <p> If you do not include an <code>agentIds</code> filter, summary data is exported that includes both AWS Agentless Discovery Connector data and summary data from AWS Discovery Agents. Export of summary data is limited to two exports per day. </p>
     fn start_export_task(
         &self,
-        input: &StartExportTaskRequest,
+        input: StartExportTaskRequest,
     ) -> RusotoFuture<StartExportTaskResponse, StartExportTaskError> {
         let mut request = SignedRequest::new("POST", "discovery", &self.region, "/");
 
@@ -3482,7 +3482,7 @@ where
             "x-amz-target",
             "AWSPoseidonService_V2015_11_01.StartExportTask",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -3490,7 +3490,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -3513,7 +3513,7 @@ where
     /// <p>Instructs the specified agents or connectors to stop collecting data.</p>
     fn stop_data_collection_by_agent_ids(
         &self,
-        input: &StopDataCollectionByAgentIdsRequest,
+        input: StopDataCollectionByAgentIdsRequest,
     ) -> RusotoFuture<StopDataCollectionByAgentIdsResponse, StopDataCollectionByAgentIdsError> {
         let mut request = SignedRequest::new("POST", "discovery", &self.region, "/");
 
@@ -3522,7 +3522,7 @@ where
             "x-amz-target",
             "AWSPoseidonService_V2015_11_01.StopDataCollectionByAgentIds",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -3530,7 +3530,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -3553,7 +3553,7 @@ where
     /// <p>Updates metadata about an application.</p>
     fn update_application(
         &self,
-        input: &UpdateApplicationRequest,
+        input: UpdateApplicationRequest,
     ) -> RusotoFuture<UpdateApplicationResponse, UpdateApplicationError> {
         let mut request = SignedRequest::new("POST", "discovery", &self.region, "/");
 
@@ -3562,7 +3562,7 @@ where
             "x-amz-target",
             "AWSPoseidonService_V2015_11_01.UpdateApplication",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -3570,7 +3570,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 

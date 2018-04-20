@@ -18,18 +18,18 @@ use std::io;
 use futures::future;
 use futures::Future;
 use rusoto_core::reactor::{CredentialsProvider, RequestDispatcher};
-use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::region;
+use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::{ClientInner, RusotoFuture};
 
-use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
+use rusoto_core::request::HttpDispatchError;
 
-use serde_json;
-use rusoto_core::signature::SignedRequest;
-use serde_json::Value as SerdeJsonValue;
-use serde_json::from_str;
 use hyper::StatusCode;
+use rusoto_core::signature::SignedRequest;
+use serde_json;
+use serde_json::from_str;
+use serde_json::Value as SerdeJsonValue;
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct BatchGetNamedQueryInput {
     /// <p>An array of query IDs.</p>
@@ -1430,67 +1430,67 @@ pub trait Athena {
     /// <p>Returns the details of a single named query or a list of up to 50 queries, which you provide as an array of query ID strings. Use <a>ListNamedQueries</a> to get the list of named query IDs. If information could not be retrieved for a submitted query ID, information about the query ID submitted is listed under <a>UnprocessedNamedQueryId</a>. Named queries are different from executed queries. Use <a>BatchGetQueryExecution</a> to get details about each unique query execution, and <a>ListQueryExecutions</a> to get a list of query execution IDs.</p>
     fn batch_get_named_query(
         &self,
-        input: &BatchGetNamedQueryInput,
+        input: BatchGetNamedQueryInput,
     ) -> RusotoFuture<BatchGetNamedQueryOutput, BatchGetNamedQueryError>;
 
     /// <p>Returns the details of a single query execution or a list of up to 50 query executions, which you provide as an array of query execution ID strings. To get a list of query execution IDs, use <a>ListQueryExecutions</a>. Query executions are different from named (saved) queries. Use <a>BatchGetNamedQuery</a> to get details about named queries.</p>
     fn batch_get_query_execution(
         &self,
-        input: &BatchGetQueryExecutionInput,
+        input: BatchGetQueryExecutionInput,
     ) -> RusotoFuture<BatchGetQueryExecutionOutput, BatchGetQueryExecutionError>;
 
     /// <p>Creates a named query.</p> <p>For code samples using the AWS SDK for Java, see <a href="http://docs.aws.amazon.com/athena/latest/ug/code-samples.html">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>
     fn create_named_query(
         &self,
-        input: &CreateNamedQueryInput,
+        input: CreateNamedQueryInput,
     ) -> RusotoFuture<CreateNamedQueryOutput, CreateNamedQueryError>;
 
     /// <p>Deletes a named query.</p> <p>For code samples using the AWS SDK for Java, see <a href="http://docs.aws.amazon.com/athena/latest/ug/code-samples.html">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>
     fn delete_named_query(
         &self,
-        input: &DeleteNamedQueryInput,
+        input: DeleteNamedQueryInput,
     ) -> RusotoFuture<DeleteNamedQueryOutput, DeleteNamedQueryError>;
 
     /// <p>Returns information about a single query.</p>
     fn get_named_query(
         &self,
-        input: &GetNamedQueryInput,
+        input: GetNamedQueryInput,
     ) -> RusotoFuture<GetNamedQueryOutput, GetNamedQueryError>;
 
     /// <p>Returns information about a single execution of a query. Each time a query executes, information about the query execution is saved with a unique ID.</p>
     fn get_query_execution(
         &self,
-        input: &GetQueryExecutionInput,
+        input: GetQueryExecutionInput,
     ) -> RusotoFuture<GetQueryExecutionOutput, GetQueryExecutionError>;
 
     /// <p>Returns the results of a single query execution specified by <code>QueryExecutionId</code>. This request does not execute the query but returns results. Use <a>StartQueryExecution</a> to run a query.</p>
     fn get_query_results(
         &self,
-        input: &GetQueryResultsInput,
+        input: GetQueryResultsInput,
     ) -> RusotoFuture<GetQueryResultsOutput, GetQueryResultsError>;
 
     /// <p>Provides a list of all available query IDs.</p> <p>For code samples using the AWS SDK for Java, see <a href="http://docs.aws.amazon.com/athena/latest/ug/code-samples.html">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>
     fn list_named_queries(
         &self,
-        input: &ListNamedQueriesInput,
+        input: ListNamedQueriesInput,
     ) -> RusotoFuture<ListNamedQueriesOutput, ListNamedQueriesError>;
 
     /// <p>Provides a list of all available query execution IDs.</p> <p>For code samples using the AWS SDK for Java, see <a href="http://docs.aws.amazon.com/athena/latest/ug/code-samples.html">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>
     fn list_query_executions(
         &self,
-        input: &ListQueryExecutionsInput,
+        input: ListQueryExecutionsInput,
     ) -> RusotoFuture<ListQueryExecutionsOutput, ListQueryExecutionsError>;
 
     /// <p>Runs (executes) the SQL query statements contained in the <code>Query</code> string.</p> <p>For code samples using the AWS SDK for Java, see <a href="http://docs.aws.amazon.com/athena/latest/ug/code-samples.html">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>
     fn start_query_execution(
         &self,
-        input: &StartQueryExecutionInput,
+        input: StartQueryExecutionInput,
     ) -> RusotoFuture<StartQueryExecutionOutput, StartQueryExecutionError>;
 
     /// <p>Stops a query execution.</p> <p>For code samples using the AWS SDK for Java, see <a href="http://docs.aws.amazon.com/athena/latest/ug/code-samples.html">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>
     fn stop_query_execution(
         &self,
-        input: &StopQueryExecutionInput,
+        input: StopQueryExecutionInput,
     ) -> RusotoFuture<StopQueryExecutionOutput, StopQueryExecutionError>;
 }
 /// A client for the Amazon Athena API.
@@ -1539,13 +1539,13 @@ where
     /// <p>Returns the details of a single named query or a list of up to 50 queries, which you provide as an array of query ID strings. Use <a>ListNamedQueries</a> to get the list of named query IDs. If information could not be retrieved for a submitted query ID, information about the query ID submitted is listed under <a>UnprocessedNamedQueryId</a>. Named queries are different from executed queries. Use <a>BatchGetQueryExecution</a> to get details about each unique query execution, and <a>ListQueryExecutions</a> to get a list of query execution IDs.</p>
     fn batch_get_named_query(
         &self,
-        input: &BatchGetNamedQueryInput,
+        input: BatchGetNamedQueryInput,
     ) -> RusotoFuture<BatchGetNamedQueryOutput, BatchGetNamedQueryError> {
         let mut request = SignedRequest::new("POST", "athena", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonAthena.BatchGetNamedQuery");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -1553,7 +1553,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -1576,13 +1576,13 @@ where
     /// <p>Returns the details of a single query execution or a list of up to 50 query executions, which you provide as an array of query execution ID strings. To get a list of query execution IDs, use <a>ListQueryExecutions</a>. Query executions are different from named (saved) queries. Use <a>BatchGetNamedQuery</a> to get details about named queries.</p>
     fn batch_get_query_execution(
         &self,
-        input: &BatchGetQueryExecutionInput,
+        input: BatchGetQueryExecutionInput,
     ) -> RusotoFuture<BatchGetQueryExecutionOutput, BatchGetQueryExecutionError> {
         let mut request = SignedRequest::new("POST", "athena", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonAthena.BatchGetQueryExecution");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -1590,7 +1590,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -1613,13 +1613,13 @@ where
     /// <p>Creates a named query.</p> <p>For code samples using the AWS SDK for Java, see <a href="http://docs.aws.amazon.com/athena/latest/ug/code-samples.html">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>
     fn create_named_query(
         &self,
-        input: &CreateNamedQueryInput,
+        input: CreateNamedQueryInput,
     ) -> RusotoFuture<CreateNamedQueryOutput, CreateNamedQueryError> {
         let mut request = SignedRequest::new("POST", "athena", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonAthena.CreateNamedQuery");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -1627,7 +1627,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -1650,13 +1650,13 @@ where
     /// <p>Deletes a named query.</p> <p>For code samples using the AWS SDK for Java, see <a href="http://docs.aws.amazon.com/athena/latest/ug/code-samples.html">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>
     fn delete_named_query(
         &self,
-        input: &DeleteNamedQueryInput,
+        input: DeleteNamedQueryInput,
     ) -> RusotoFuture<DeleteNamedQueryOutput, DeleteNamedQueryError> {
         let mut request = SignedRequest::new("POST", "athena", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonAthena.DeleteNamedQuery");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -1664,7 +1664,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -1687,13 +1687,13 @@ where
     /// <p>Returns information about a single query.</p>
     fn get_named_query(
         &self,
-        input: &GetNamedQueryInput,
+        input: GetNamedQueryInput,
     ) -> RusotoFuture<GetNamedQueryOutput, GetNamedQueryError> {
         let mut request = SignedRequest::new("POST", "athena", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonAthena.GetNamedQuery");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -1701,7 +1701,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -1724,13 +1724,13 @@ where
     /// <p>Returns information about a single execution of a query. Each time a query executes, information about the query execution is saved with a unique ID.</p>
     fn get_query_execution(
         &self,
-        input: &GetQueryExecutionInput,
+        input: GetQueryExecutionInput,
     ) -> RusotoFuture<GetQueryExecutionOutput, GetQueryExecutionError> {
         let mut request = SignedRequest::new("POST", "athena", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonAthena.GetQueryExecution");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -1738,7 +1738,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -1761,13 +1761,13 @@ where
     /// <p>Returns the results of a single query execution specified by <code>QueryExecutionId</code>. This request does not execute the query but returns results. Use <a>StartQueryExecution</a> to run a query.</p>
     fn get_query_results(
         &self,
-        input: &GetQueryResultsInput,
+        input: GetQueryResultsInput,
     ) -> RusotoFuture<GetQueryResultsOutput, GetQueryResultsError> {
         let mut request = SignedRequest::new("POST", "athena", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonAthena.GetQueryResults");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -1775,7 +1775,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -1798,13 +1798,13 @@ where
     /// <p>Provides a list of all available query IDs.</p> <p>For code samples using the AWS SDK for Java, see <a href="http://docs.aws.amazon.com/athena/latest/ug/code-samples.html">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>
     fn list_named_queries(
         &self,
-        input: &ListNamedQueriesInput,
+        input: ListNamedQueriesInput,
     ) -> RusotoFuture<ListNamedQueriesOutput, ListNamedQueriesError> {
         let mut request = SignedRequest::new("POST", "athena", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonAthena.ListNamedQueries");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -1812,7 +1812,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -1835,13 +1835,13 @@ where
     /// <p>Provides a list of all available query execution IDs.</p> <p>For code samples using the AWS SDK for Java, see <a href="http://docs.aws.amazon.com/athena/latest/ug/code-samples.html">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>
     fn list_query_executions(
         &self,
-        input: &ListQueryExecutionsInput,
+        input: ListQueryExecutionsInput,
     ) -> RusotoFuture<ListQueryExecutionsOutput, ListQueryExecutionsError> {
         let mut request = SignedRequest::new("POST", "athena", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonAthena.ListQueryExecutions");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -1849,7 +1849,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -1872,13 +1872,13 @@ where
     /// <p>Runs (executes) the SQL query statements contained in the <code>Query</code> string.</p> <p>For code samples using the AWS SDK for Java, see <a href="http://docs.aws.amazon.com/athena/latest/ug/code-samples.html">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>
     fn start_query_execution(
         &self,
-        input: &StartQueryExecutionInput,
+        input: StartQueryExecutionInput,
     ) -> RusotoFuture<StartQueryExecutionOutput, StartQueryExecutionError> {
         let mut request = SignedRequest::new("POST", "athena", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonAthena.StartQueryExecution");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -1886,7 +1886,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -1909,13 +1909,13 @@ where
     /// <p>Stops a query execution.</p> <p>For code samples using the AWS SDK for Java, see <a href="http://docs.aws.amazon.com/athena/latest/ug/code-samples.html">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>
     fn stop_query_execution(
         &self,
-        input: &StopQueryExecutionInput,
+        input: StopQueryExecutionInput,
     ) -> RusotoFuture<StopQueryExecutionOutput, StopQueryExecutionError> {
         let mut request = SignedRequest::new("POST", "athena", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonAthena.StopQueryExecution");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -1923,7 +1923,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 

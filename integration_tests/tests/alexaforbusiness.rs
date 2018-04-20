@@ -11,7 +11,7 @@ fn should_list_skills() {
     let client = AlexaForBusinessClient::simple(Region::UsEast1);
     let request = ListSkillsRequest::default();
 
-    let response = client.list_skills(&request).sync();
+    let response = client.list_skills(request).sync();
     println!("response is {:#?}", response);
     // expected failure for accounts without access to Alexa for Business:
     match response {

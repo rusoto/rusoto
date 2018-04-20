@@ -13,7 +13,7 @@ fn should_describe_config_rules() {
 
     let request = DescribeConfigRulesRequest::default();
 
-    match client.describe_config_rules(&request).sync() {
+    match client.describe_config_rules(request).sync() {
         Ok(response) => {
             println!("{:#?}", response);
             assert!(true)
@@ -28,7 +28,7 @@ fn should_describe_delivery_channels() {
 
     let request = DescribeDeliveryChannelsRequest::default();
 
-    match client.describe_delivery_channels(&request).sync() {
+    match client.describe_delivery_channels(request).sync() {
         Ok(response) => {
             println!("{:#?}", response);
             assert!(true)
