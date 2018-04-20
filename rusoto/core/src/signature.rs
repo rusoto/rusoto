@@ -31,7 +31,7 @@ pub enum SignedRequestPayload {
     /// Transfer payload in a single chunk
     Buffer(Vec<u8>),
     /// Transfer payload in multiple chunks
-    Stream(usize, Box<Stream<Item=Vec<u8>, Error=io::Error> + Send>)
+    Stream(Option<usize>, Box<Stream<Item=Vec<u8>, Error=io::Error> + Send>)
 }
 
 impl fmt::Debug for SignedRequestPayload {
@@ -40,7 +40,7 @@ impl fmt::Debug for SignedRequestPayload {
             &SignedRequestPayload::Buffer(ref buf) =>
                 write!(f, "SignedRequestPayload::Buffer(len = {})", buf.len()),
             &SignedRequestPayload::Stream(len, _) =>
-                write!(f, "SignedRequestPayload::Stream(len = {})", len),
+                write!(f, "SignedRequestPayload::Stream(len_hint = {:?})", len),
         }
     }
 }
@@ -114,8 +114,8 @@ impl SignedRequest {
     }
 
     /// Sets the new body (payload) as a stream
-    pub fn set_payload_stream(&mut self, len: usize, stream: Box<Stream<Item=Vec<u8>, Error=io::Error> + Send>) {
-        self.payload = Some(SignedRequestPayload::Stream(len, stream));
+    pub fn set_payload_stream(&mut self, len_hint: Option<usize>, stream: Box<Stream<Item=Vec<u8>, Error=io::Error> + Send>) {
+        self.payload = Some(SignedRequestPayload::Stream(len_hint, stream));
     }
 
     /// Computes and sets the Content-MD5 header based on the current payload.
@@ -305,17 +305,17 @@ impl SignedRequest {
                                             canonical_headers,
                                             signed_headers,
                                             "UNSIGNED-PAYLOAD");
-                (Some("UNSIGNED-PAYLOAD".to_owned()), Some(len))
+                (Some("UNSIGNED-PAYLOAD".to_owned()), len)
             }
         };
 
-        self.remove_header("x-amz-content-sha256");
         if let Some(digest) = digest {
+            self.remove_header("x-amz-content-sha256");
             self.add_header("x-amz-content-sha256", &digest);
         }
 
-        self.remove_header("content-length");
         if let Some(len) = len {
+            self.remove_header("content-length");
             self.add_header("content-length", &format!("{}", len));
         }
 

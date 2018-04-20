@@ -330,7 +330,7 @@ impl DispatchSignedRequest for HttpClient {
                         .unwrap_or_else(|_| String::from("<non-UTF-8 data>"))
                 },
                 Some(SignedRequestPayload::Stream(len, _)) =>
-                    format!("<stream len={}>", len),
+                    format!("<stream len_hint={:?}>", len),
                 None => "".to_owned(),
             };
 
