@@ -262,4 +262,19 @@ mod tests {
         assert_eq!(creds.expires_at(), &Some(now));
     }
 
+    #[test]
+    fn regression_test_rfc_3339_compat() {
+        let _guard = lock(&ENV_MUTEX);
+        // RFC 3339 expiration times with lower case 't' could not be parsed by earlier
+        // implementations.
+        env::set_var(AWS_CREDENTIAL_EXPIRATION, "1996-12-19t16:39:57-08:00");
+        env::set_var(AWS_ACCESS_KEY_ID, "id");
+        env::set_var(AWS_SECRET_ACCESS_KEY, "secret");
+        let result = EnvironmentProvider.credentials().wait();
+        env::remove_var(AWS_CREDENTIAL_EXPIRATION);
+        env::remove_var(AWS_ACCESS_KEY_ID);
+        env::remove_var(AWS_SECRET_ACCESS_KEY);
+
+        assert_eq!(result.unwrap().expires_at().unwrap().to_rfc3339(), "1996-12-20T00:39:57+00:00");
+    }
 }
