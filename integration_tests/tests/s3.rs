@@ -497,7 +497,7 @@ fn test_get_object_with_presigned_url(region: &Region, credentials: &AwsCredenti
     };
     let presigned_url = req.get_presigned_url(region, credentials);
     println!("get object presigned url: {:#?}", presigned_url);
-    let res = reqwest::get(&presigned_url).unwrap();
+    let mut res = reqwest::get(&presigned_url).unwrap();
     assert_eq!(res.status(), reqwest::StatusCode::Ok);
     let size = res.headers().get::<reqwest::header::ContentLength>().map(|ct_len| **ct_len).unwrap_or(0);
     assert!(size > 0);
