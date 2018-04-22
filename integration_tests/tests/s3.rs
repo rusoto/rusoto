@@ -149,9 +149,9 @@ fn test_all_the_things() {
                                   &filename,
                                   &"tests/sample-data/no_credentials");
     // generate a presigned url
-    test_get_object_with_presigned_url(&region, &credentials, &test_bucket, &utf8_filename);
-    test_put_object_with_presigned_url(&region, &credentials, &test_bucket, &utf8_filename);
-    test_delete_object_with_presigned_url(&region, &credentials, &test_bucket, &utf8_filename);
+    test_get_object_with_presigned_url(&region, &credentials, &test_bucket, &filename);
+    test_put_object_with_presigned_url(&region, &credentials, &test_bucket, &filename);
+    test_delete_object_with_presigned_url(&region, &credentials, &test_bucket, &filename);
 
     // UTF8 filenames for presigned url
     test_put_object_with_filename(&client,
