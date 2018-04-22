@@ -140,6 +140,9 @@ fn test_all_the_things() {
     test_delete_object(&client, &test_bucket, &binary_filename);
     test_delete_object(&client, &test_bucket, &another_filename);
 
+    // DELETE the object
+    test_delete_object(&client, &test_bucket, &filename);
+
     // PUT an object for presigned url
     test_put_object_with_filename(&client,
                                   &test_bucket,
@@ -159,9 +162,6 @@ fn test_all_the_things() {
     test_get_object_with_presigned_url(&region, &credentials, &test_bucket, &utf8_filename);
     test_put_object_with_presigned_url(&region, &credentials, &test_bucket, &utf8_filename);
     test_delete_object_with_presigned_url(&region, &credentials, &test_bucket, &utf8_filename);
-
-    // DELETE the object
-    test_delete_object(&client, &test_bucket, &filename);
 
     // delete the test bucket
     test_delete_bucket(&client, &test_bucket);
