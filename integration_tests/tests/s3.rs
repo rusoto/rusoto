@@ -23,7 +23,7 @@ use rusoto_s3::{S3, S3Client, HeadObjectRequest, CopyObjectRequest, GetObjectErr
                  CORSRule, CreateBucketRequest, DeleteBucketRequest, CreateMultipartUploadRequest,
                  UploadPartRequest, CompleteMultipartUploadRequest, CompletedMultipartUpload,
                  CompletedPart, ListObjectsRequest, ListObjectsV2Request};
-
+use rusoto_s3::util::PreSignedRequest;
 type TestClient = S3Client;
 
 // Rust is in bad need of an integration test harness
