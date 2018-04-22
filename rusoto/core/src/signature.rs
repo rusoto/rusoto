@@ -242,26 +242,28 @@ impl SignedRequest {
 
         let current_time = now_utc();
         let current_time_fmted = current_time.strftime("%Y%m%dT%H%M%SZ").unwrap();
+        let current_time_fmted = format!("{}", &current_time_fmted);
         let current_date = current_time.strftime("%Y%m%d").unwrap();
 
-        let signed_headers = signed_headers(&self.headers);
-        self.canonical_uri = canonical_uri(&self.path);
-
         self.remove_header("x-amz-content-sha256");
-        self.add_header("X-Amz-Content-Sha256", "");
+        self.remove_header("X-Amz-Content-Sha256");
+
         self.remove_header("X-Amz-Date");
-        {
-            let current_time_fmted = format!("{}", &current_time_fmted);
-            self.add_header("X-Amz-Date", &current_time_fmted);
-            self.params.put("X-Amz-Date", current_time_fmted);
-        }
+        self.remove_header("x-amz-date");
 
-        self.params.put("x-amz-content-sha256", "");
         self.remove_header("content-type");
-        self.add_header("content-type", "");
+        self.remove_header("Content-Type");
 
+        self.remove_header("X-Amz-Algorithm");
+        self.remove_header("x-amz-algorithm");
         self.params.put("X-Amz-Algorithm", "AWS4-HMAC-SHA256");
-        self.params.put("X-Amz-Credential", format!("{}/{}/{:?}/{}/aws4_request", &creds.aws_access_key_id(), &current_date, self.region, self.service));
+
+        self.remove_header("X-Amz-Credential");
+        self.remove_header("x-amz-credential");
+        self.params.put("X-Amz-Credential", format!("{}/{}/{}/{}/aws4_request", &creds.aws_access_key_id(), &current_date, self.region.name(), self.service));
+
+        self.remove_header("X-Amz-Expires");
+        self.remove_header("x-amz-expires");
         let expiration_time = {
             let default_expiration_time = "3600";
             self.params.get("response-expires")
@@ -271,15 +273,21 @@ impl SignedRequest {
                 .unwrap_or(default_expiration_time.to_string())
         };
         self.params.put("X-Amz-Expires", expiration_time);
-        self.params.put("X-Amz-SignedHeaders", &signed_headers);
-
-        self.canonical_query_string = build_canonical_query_string(&self.params);
 
         self.canonical_uri = canonical_uri(&self.path);
         let canonical_headers = canonical_headers(&self.headers);
 
-        debug!("canonical_query_string: {:?}", self.canonical_query_string);
+        let signed_headers = signed_headers(&self.headers);
+        self.params.put("X-Amz-SignedHeaders", &signed_headers);
 
+        self.params.put("X-Amz-Date", current_time_fmted);
+
+        self.canonical_query_string = build_canonical_query_string(&self.params);
+        
+        debug!("canonical_uri: {:?}", self.canonical_uri);
+        debug!("canonical_headers: {:?}", canonical_headers);
+        debug!("signed_headers: {:?}", signed_headers);
+        debug!("canonical_query_string: {:?}", self.canonical_query_string);
 
         let canonical_request = format!("{}\n{}\n{}\n{}\n{}\n{}",
                                         &self.method,
