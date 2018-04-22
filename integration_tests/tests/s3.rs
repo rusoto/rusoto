@@ -143,6 +143,7 @@ fn test_all_the_things() {
     // DELETE the object
     test_delete_object(&client, &test_bucket, &filename);
 
+    let filename = format!("{}_for_presigned", filename);
     // PUT an object for presigned url
     test_put_object_with_filename(&client,
                                   &test_bucket,
@@ -153,6 +154,7 @@ fn test_all_the_things() {
     test_put_object_with_presigned_url(&region, &credentials, &test_bucket, &filename);
     test_delete_object_with_presigned_url(&region, &credentials, &test_bucket, &filename);
 
+    let utf8_filename = format!("{}_for_presigned", utf8_filename);
     // UTF8 filenames for presigned url
     test_put_object_with_filename(&client,
                                   &test_bucket,
