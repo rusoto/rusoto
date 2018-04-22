@@ -81,8 +81,6 @@ fn test_all_the_things() {
     // GET the object
     test_get_object(&client, &test_bucket, &filename);
     test_get_object_range(&client, &test_bucket, &filename);
-    // generate a presigned url
-    test_generate_presigned_url(&region, &credentials, &test_bucket, &filename);
 
     // copy the object to change its settings
     test_copy_object(&client, &test_bucket, &filename);
@@ -141,6 +139,26 @@ fn test_all_the_things() {
     test_delete_object(&client, &test_bucket, &metadata_filename);
     test_delete_object(&client, &test_bucket, &binary_filename);
     test_delete_object(&client, &test_bucket, &another_filename);
+
+    // PUT an object for presigned url
+    test_put_object_with_filename(&client,
+                                  &test_bucket,
+                                  &filename,
+                                  &"tests/sample-data/no_credentials");
+    // generate a presigned url
+    test_get_object_with_presigned_url(&region, &credentials, &utf8_filename);
+    test_put_object_with_presigned_url(&region, &credentials, &utf8_filename);
+    test_delete_object_with_presigned_url(&region, &credentials, &utf8_filename);
+
+    // UTF8 filenames for presigned url
+    test_put_object_with_filename(&client,
+                                  &test_bucket,
+                                  &utf8_filename,
+                                  &"tests/sample-data/no_credentials");
+    // generate a presigned url
+    test_get_object_with_presigned_url(&region, &credentials, &utf8_filename);
+    test_put_object_with_presigned_url(&region, &credentials, &utf8_filename);
+    test_delete_object_with_presigned_url(&region, &credentials, &utf8_filename);
 
     // DELETE the object
     test_delete_object(&client, &test_bucket, &filename);
@@ -471,48 +489,47 @@ fn test_get_object_with_metadata(client: &TestClient, bucket: &str, filename: &s
     assert_eq!(metadata, head_metadata);
 }
 
-fn test_generate_presigned_url(region: &Region, credentials: &AwsCredentials, bucket: &str, filename: &str) {
-    use reqwest::header::ContentLength;
-    use rusoto_s3::util::PreSignedRequest;
-    fn check(mut res: reqwest::Response){
-        assert!(&res.status().is_success());
-        let size = res.headers().get::<ContentLength>().map(|ct_len| **ct_len).unwrap_or(0);
-        assert!(size > 0);
-        let mut buf: Vec<u8> = vec![];
-        res.copy_to(&mut buf).unwrap();
-        assert!(buf.len() > 0);
-    }
-    {
-        let req = GetObjectRequest {
-            bucket: bucket.to_owned(),
-            key: filename.to_owned(),
-            ..Default::default()
-        };
-        let presigned_url = req.get_presigned_url(region, credentials);
-        println!("get object presigned url: {:#?}", presigned_url);
-        let res = reqwest::get(&presigned_url).unwrap();
-        check(res);
-    }
-    {
-        let req = PutObjectRequest {
-            bucket: bucket.to_owned(),
-            key: filename.to_owned(),
-            ..Default::default()
-        };
-        let presigned_url = req.get_presigned_url(region, credentials);
-        println!("put object presigned url: {:#?}", presigned_url);
-        let res = reqwest::get(&presigned_url).unwrap();
-        check(res);
-    }
-    {
-        let req = DeleteObjectRequest {
-            bucket: bucket.to_owned(),
-            key: filename.to_owned(),
-            ..Default::default()
-        };
-        let presigned_url = req.get_presigned_url(region, credentials);
-        println!("delete object presigned url: {:#?}", presigned_url);
-        let res = reqwest::get(&presigned_url).unwrap();
-        check(res);
-    }
+fn test_get_object_with_presigned_url(region: &Region, credentials: &AwsCredentials, bucket: &str, filename: &str) {
+    let req = GetObjectRequest {
+        bucket: bucket.to_owned(),
+        key: filename.to_owned(),
+        ..Default::default()
+    };
+    let presigned_url = req.get_presigned_url(region, credentials);
+    println!("get object presigned url: {:#?}", presigned_url);
+    let res = reqwest::get(&presigned_url).unwrap();
+    assert_eq!(&res.status(), reqwest::StatusCode::Ok);
+    let size = res.headers().get::<reqwest::header::ContentLength>().map(|ct_len| **ct_len).unwrap_or(0);
+    assert!(size > 0);
+    let mut buf: Vec<u8> = vec![];
+    res.copy_to(&mut buf).unwrap();
+    assert!(buf.len() > 0);
+}
+
+fn test_put_object_with_presigned_url(region: &Region, credentials: &AwsCredentials, bucket: &str, filename: &str) {
+    let req = PutObjectRequest {
+        bucket: bucket.to_owned(),
+        key: filename.to_owned(),
+        ..Default::default()
+    };
+    let presigned_url = req.get_presigned_url(region, credentials);
+    println!("put object presigned url: {:#?}", presigned_url);
+    let mut map = HashMap::new();
+    map.insert("test", "data");
+    let client = reqwest::Client::new();
+    let res = client.put(&presigned_url).json(&map).send().unwrap();
+    assert_eq!(&res.status(), reqwest::StatusCode::Ok);
+}
+
+fn test_delete_object_with_presigned_url(region: &Region, credentials: &AwsCredentials, bucket: &str, filename: &str) {
+    let req = DeleteObjectRequest {
+        bucket: bucket.to_owned(),
+        key: filename.to_owned(),
+        ..Default::default()
+    };
+    let presigned_url = req.get_presigned_url(region, credentials);
+    println!("delete object presigned url: {:#?}", presigned_url);
+    let client = reqwest::Client::new();
+    let res = client.delete(&presigned_url).send().unwrap();
+    assert_eq!(&res.status(), reqwest::StatusCode::NoContent);
 }
