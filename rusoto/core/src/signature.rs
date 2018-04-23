@@ -259,7 +259,7 @@ impl SignedRequest {
 
         self.remove_header("X-Amz-Expires");
         let expiration_time = match self.params.get("response-expires") {
-            Some(Some(value)) => value.to_string(),
+            Some(&Some(ref value)) => value.to_string(),
             _ => "3600".to_string(),
         };
         self.params.put("X-Amz-Expires", expiration_time);
