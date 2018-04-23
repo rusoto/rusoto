@@ -245,32 +245,22 @@ impl SignedRequest {
         let current_time_fmted = format!("{}", &current_time_fmted);
         let current_date = current_time.strftime("%Y%m%d").unwrap();
 
-        self.remove_header("x-amz-content-sha256");
         self.remove_header("X-Amz-Content-Sha256");
 
         self.remove_header("X-Amz-Date");
-        self.remove_header("x-amz-date");
-
-        self.remove_header("content-type");
+        
         self.remove_header("Content-Type");
 
         self.remove_header("X-Amz-Algorithm");
-        self.remove_header("x-amz-algorithm");
         self.params.put("X-Amz-Algorithm", "AWS4-HMAC-SHA256");
 
         self.remove_header("X-Amz-Credential");
-        self.remove_header("x-amz-credential");
         self.params.put("X-Amz-Credential", format!("{}/{}/{}/{}/aws4_request", &creds.aws_access_key_id(), &current_date, self.region.name(), self.service));
 
         self.remove_header("X-Amz-Expires");
-        self.remove_header("x-amz-expires");
-        let expiration_time = {
-            let default_expiration_time = "3600";
-            self.params.get("response-expires")
-                .clone()
-                .unwrap_or(&Some(default_expiration_time.to_string()))
-                .clone()
-                .unwrap_or(default_expiration_time.to_string())
+        let expiration_time = match self.params.get("response-expires") {
+            Some(Some(value)) => value.to_string(),
+            _ => "3600".to_string(),
         };
         self.params.put("X-Amz-Expires", expiration_time);
 
