@@ -211,8 +211,7 @@ fn generate_payload_member_serialization(shape: &Shape) -> String {
     // if the member is 'streaming', it's a boxed stream that should just be delivered as the body
     if payload_member.streaming() {
         format!("if let Some(__body) = input.{} {{
-                     let __body_len = __body.len.expect(\"no length specified for streaming body\");
-                     request.set_payload_stream(__body_len, __body.inner);
+                     request.set_payload_stream(__body.len, __body.inner);
                  }}", payload_field.to_snake_case())
     }
     // otherwise serialize the object to XML and use that as the payload

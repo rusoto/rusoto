@@ -337,11 +337,11 @@ fn generate_types<P>(writer: &mut FileWriter, service: &Service, protocol_genera
                      }}
 
                      impl {streaming_name} {{
-                         pub fn new<S>(len: usize, stream: S) -> {streaming_name}
+                         pub fn new<S>(stream: S) -> {streaming_name}
                              where S: ::futures::Stream<Item=Vec<u8>, Error=::std::io::Error> + Send + 'static
                          {{
                              {streaming_name} {{
-                                 len: Some(len),
+                                 len: None,
                                  inner: Box::new(stream)
                              }}
                          }}
@@ -349,7 +349,10 @@ fn generate_types<P>(writer: &mut FileWriter, service: &Service, protocol_genera
 
                      impl From<Vec<u8>> for {streaming_name} {{
                          fn from(buf: Vec<u8>) -> {streaming_name} {{
-                             {streaming_name}::new(buf.len(), ::futures::stream::once(Ok(buf)))
+                             {streaming_name} {{
+                                 len: Some(buf.len()),
+                                 inner: Box::new(::futures::stream::once(Ok(buf)))
+                             }}
                          }}
                      }}
 
