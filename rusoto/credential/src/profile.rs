@@ -167,7 +167,7 @@ fn parse_credentials_file(
 
     let file = try!(File::open(file_path));
 
-    let profile_regex = Regex::new(r"^\[([^\]]+)\]$").expect("Failed to compile regex");
+    let profile_regex = Regex::new(r"^\[(profile )?([^\]]+)\]$").expect("Failed to compile regex");
     let mut profiles: HashMap<String, AwsCredentials> = HashMap::new();
     let mut access_key: Option<String> = None;
     let mut secret_key: Option<String> = None;
@@ -208,7 +208,7 @@ fn parse_credentials_file(
             token = None;
 
             let caps = profile_regex.captures(&unwrapped_line).unwrap();
-            profile_name = Some(caps.get(1).unwrap().as_str().to_string());
+            profile_name = Some(caps.get(2).unwrap().as_str().to_string());
             continue;
         }
 
