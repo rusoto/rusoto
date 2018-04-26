@@ -4,6 +4,8 @@
 - Add example to Rusoto Logs documentation
 - Add custom dev dependency capability to services crategen
 
+- Allow replacing OpenSSL with rustls by adding `features = ["rustls"], default_features=false` to your Cargo.toml
+
 ## [0.33.1] - 2018-08-07
 
 - Fix `rusoto_mock` versions available

@@ -26,6 +26,7 @@ version = "0.0"
 [dependencies.rusoto_core]
 version = "> 0.25.0"
 path = "../rusoto/core"
+default_features = false
 
 [features]
 nightly-testing = ["clippy", "rusoto_core/nightly-testing"]

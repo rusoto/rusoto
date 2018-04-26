@@ -79,6 +79,11 @@ pub fn generate_services(services: &BTreeMap<String, ServiceConfig>, out_dir: &P
             fs::create_dir(&crate_dir).expect(&format!("Unable to create directory at {}", crate_dir.display()));
         }
 
+        let mut features = BTreeMap::new();
+        features.insert("default".into(), vec!["native-tls".into()]);
+        features.insert("native-tls".into(), vec!["rusoto_core/native-tls".into()]);
+        features.insert("rustls".into(), vec!["rusoto_core/rustls".into()]);
+
         let service_dependencies = service.get_dependencies();
         let service_dev_dependencies = service.get_dev_dependencies();
 
@@ -126,6 +131,7 @@ pub fn generate_services(services: &BTreeMap<String, ServiceConfig>, out_dir: &P
                 version: service_config.version.clone(),
                 homepage: Some("https://www.rusoto.org/".into())
             },
+            features: Some(features),
             dependencies: service_dependencies,
             dev_dependencies: service_dev_dependencies,
             ..cargo::Manifest::default()
