@@ -17,9 +17,8 @@ use std::mem;
 
 use futures::{Async, Future, Poll, Stream};
 use futures::future::{Either, Select2};
-use hyper::Client as HyperClient;
-use hyper::client::{FutureResponse as HyperFutureResponse};
-use hyper::{Request as HyperRequest, Response as HyperResponse};
+use hyper::client::{Connect, FutureResponse as HyperFutureResponse};
+use hyper::{Client as HyperClient, Request as HyperRequest, Response as HyperResponse};
 use hyper::Error as HyperError;
 use hyper::header::{Headers as HyperHeaders, UserAgent};
 use hyper::StatusCode;
@@ -268,14 +267,14 @@ impl Stream for HttpClientPayload {
 }
 
 /// Http client for use with AWS services.
-pub struct HttpClient {
-    inner: HyperClient<HttpsConnector<HttpConnector>, HttpClientPayload>,
-    handle: Handle
+pub struct HttpClient<C = HttpsConnector<HttpConnector>> {
+    inner: HyperClient<C, HttpClientPayload>,
+    handle: Handle,
 }
 
 impl HttpClient {
     /// Create a tls-enabled http client.
-    pub fn new(handle: &Handle) -> Result<HttpClient, TlsError> {
+    pub fn new(handle: &Handle) -> Result<Self, TlsError> {
         let connector = match HttpsConnector::new(4, handle) {
             Ok(connector) => connector,
             Err(tls_error) => {
@@ -284,15 +283,30 @@ impl HttpClient {
                 })
             }
         };
-        let inner = HyperClient::configure().body().connector(connector).build(handle);
-        Ok(HttpClient {
-            inner: inner,
-            handle: handle.clone()
-        })
+
+        Ok(Self::from_connector(connector, handle))
     }
 }
 
-impl DispatchSignedRequest for HttpClient {
+impl<C> HttpClient<C>
+where
+    C: Connect,
+{
+    /// Allows for a custom connector to be used with the HttpClient
+    pub fn from_connector(connector: C, handle: &Handle) -> Self {
+        let inner = HyperClient::configure()
+            .body()
+            .connector(connector)
+            .build(handle);
+
+        HttpClient {
+            inner,
+            handle: handle.clone(),
+        }
+    }
+}
+
+impl<C: Connect> DispatchSignedRequest for HttpClient<C> {
     type Future = HttpClientFuture;
 
     fn dispatch(&self, request: SignedRequest, timeout: Option<Duration>) -> Self::Future {
@@ -330,7 +344,7 @@ impl DispatchSignedRequest for HttpClient {
                         .unwrap_or_else(|_| String::from("<non-UTF-8 data>"))
                 },
                 Some(SignedRequestPayload::Stream(len, _)) =>
-                    format!("<stream len={}>", len),
+                    format!("<stream len_hint={:?}>", len),
                 None => "".to_owned(),
             };
 

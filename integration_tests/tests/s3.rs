@@ -1,5 +1,6 @@
 #![cfg(feature = "s3")]
 extern crate futures;
+extern crate futures_fs;
 extern crate rusoto_core;
 extern crate rusoto_s3;
 extern crate time;
@@ -13,12 +14,13 @@ use std::io::Read;
 use time::get_time;
 
 use futures::{Future, Stream};
+use futures_fs::FsPool;
 use rusoto_core::Region;
 use rusoto_s3::{S3, S3Client, HeadObjectRequest, CopyObjectRequest, GetObjectError, GetObjectRequest,
                  PutObjectRequest, DeleteObjectRequest, PutBucketCorsRequest, CORSConfiguration,
                  CORSRule, CreateBucketRequest, DeleteBucketRequest, CreateMultipartUploadRequest,
                  UploadPartRequest, CompleteMultipartUploadRequest, CompletedMultipartUpload,
-                 CompletedPart, ListObjectsRequest, ListObjectsV2Request};
+                 CompletedPart, ListObjectsRequest, ListObjectsV2Request, StreamingBody};
 
 type TestClient = S3Client;
 
@@ -64,7 +66,7 @@ fn test_all_the_things() {
         test_put_bucket_cors(&client, &test_bucket);
     }
 
-    // PUT an object (no_credentials is an arbitrary choice)
+    // PUT an object via buffer (no_credentials is an arbitrary choice)
     test_put_object_with_filename(&client,
                                   &test_bucket,
                                   &filename,
@@ -99,13 +101,12 @@ fn test_all_the_things() {
                                   &"tests/sample-data/binary-file");
     test_get_object(&client, &test_bucket, &binary_filename);
 
-    // paging test requires three items in the bucket, put another item there:
-    // PUT an object (no_credentials is an arbitrary choice)
-    let another_filename = format!("foo{}", filename);
-    test_put_object_with_filename(&client,
-                                  &test_bucket,
-                                  &another_filename,
-                                  &"tests/sample-data/no_credentials");
+    // PUT an object via stream
+    let another_filename = format!("streaming{}", filename);
+    test_put_object_stream_with_filename(&client,
+                                         &test_bucket,
+                                         &another_filename,
+                                         &"tests/sample-data/binary-file");
 
     // metadata tests
     let mut metadata = HashMap::<String, String>::new();
@@ -232,6 +233,24 @@ fn test_put_object_with_filename(client: &TestClient,
             println!("{:#?}", result);
         }
     }
+}
+
+fn test_put_object_stream_with_filename(client: &TestClient,
+                                        bucket: &str,
+                                        dest_filename: &str,
+                                        local_filename: &str) {
+    let meta = ::std::fs::metadata(local_filename).unwrap();
+    let fs = FsPool::default();
+    let read_stream = fs.read(local_filename.to_owned());
+    let req = PutObjectRequest {
+        bucket: bucket.to_owned(),
+        key: dest_filename.to_owned(),
+        content_length: Some(meta.len() as i64),
+        body: Some(StreamingBody::new(read_stream.map(|bytes| bytes.to_vec()))),
+        ..Default::default()
+    };
+    let result = client.put_object(req).sync().expect("Couldn't PUT object");
+    println!("{:#?}", result);
 }
 
 fn test_head_object(client: &TestClient, bucket: &str, filename: &str) {

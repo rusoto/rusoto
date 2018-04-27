@@ -7,3 +7,4 @@ venv
 *.rs.bk
 .idea
 rusoto.iml
+.vscode

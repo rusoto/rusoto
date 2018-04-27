@@ -1096,12 +1096,12 @@ pub struct StreamingBody {
 }
 
 impl StreamingBody {
-    pub fn new<S>(len: usize, stream: S) -> StreamingBody
+    pub fn new<S>(stream: S) -> StreamingBody
     where
         S: ::futures::Stream<Item = Vec<u8>, Error = ::std::io::Error> + Send + 'static,
     {
         StreamingBody {
-            len: Some(len),
+            len: None,
             inner: Box::new(stream),
         }
     }
@@ -1109,7 +1109,10 @@ impl StreamingBody {
 
 impl From<Vec<u8>> for StreamingBody {
     fn from(buf: Vec<u8>) -> StreamingBody {
-        StreamingBody::new(buf.len(), ::futures::stream::once(Ok(buf)))
+        StreamingBody {
+            len: Some(buf.len()),
+            inner: Box::new(::futures::stream::once(Ok(buf))),
+        }
     }
 }
 
@@ -26559,8 +26562,7 @@ where
         }
 
         if let Some(__body) = input.body {
-            let __body_len = __body.len.expect("no length specified for streaming body");
-            request.set_payload_stream(__body_len, __body.inner);
+            request.set_payload_stream(__body.len, __body.inner);
         }
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -27010,8 +27012,7 @@ where
         params.put("uploadId", &input.upload_id);
         request.set_params(params);
         if let Some(__body) = input.body {
-            let __body_len = __body.len.expect("no length specified for streaming body");
-            request.set_payload_stream(__body_len, __body.inner);
+            request.set_payload_stream(__body.len, __body.inner);
         }
 
         let future = self.inner.sign_and_dispatch(request, |response| {
