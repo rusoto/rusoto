@@ -434,6 +434,7 @@ path = "../rusoto/services/xray"
 [dev-dependencies]
 env_logger = "0.5"
 futures = "0.1.16"
+futures-fs = "0.0.3"
 log = "0.4.1"
 rand = "^0.3.14"
 time = "0.1.37"
