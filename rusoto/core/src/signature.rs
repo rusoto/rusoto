@@ -251,6 +251,11 @@ impl SignedRequest {
         
         self.remove_header("Content-Type");
 
+        if let Some(ref token) = *creds.token() {
+            self.remove_header("x-amz-security-token");
+            self.params.put("x-amz-security-token", encode_uri_strict(token));
+        }
+
         self.remove_header("X-Amz-Algorithm");
         self.params.put("X-Amz-Algorithm", "AWS4-HMAC-SHA256");
 
