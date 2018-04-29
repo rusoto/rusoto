@@ -1461,5 +1461,169 @@ where
     }
 }
 
+// Struct for iterating over a paginated API
+pub struct BatchGetTracesResultTracesNextTokenIterator {
+    // Client for making the request
+    client: XRayClient,
+    // Parameters for the request
+    req: BatchGetTracesRequest,
+    // All the items we have downloaded but not tried to yield yet
+    buffered_items: Vec<BatchGetTracesResult>,
+}
+
+impl Iterator for BatchGetTracesResultTracesNextTokenIterator {
+    type Item = BatchGetTracesResult;
+
+    fn next(&mut self) -> Option<BatchGetTracesResult> {
+        // Return the next item in the buffer if there is one
+        if self.buffered_items.len() > 0 {
+            return self.buffered_items.pop();
+        }
+
+        // Request the next batch of items from the API when out of buffered ones
+        let res = self.client.batch_get_traces(self.req).sync();
+        match res {
+            Ok(output) => {
+                // Add downloaded items to the buffer
+                let mut new_items = &mut (output.traces.unwrap_or(Vec::new()));
+                new_items.reverse();
+                self.buffered_items.append(new_items);
+
+                // Update the next_token for the next API request
+                if output.next_token.is_some() {
+                    self.req.next_token = output.next_token;
+                }
+
+                // Return the first newly downloaded item if there is one
+                self.buffered_items.pop()
+            }
+            Err(error) => None,
+        }
+    }
+}
+
+// Struct for iterating over a paginated API
+pub struct GetServiceGraphResultServicesNextTokenIterator {
+    // Client for making the request
+    client: XRayClient,
+    // Parameters for the request
+    req: GetServiceGraphRequest,
+    // All the items we have downloaded but not tried to yield yet
+    buffered_items: Vec<GetServiceGraphResult>,
+}
+
+impl Iterator for GetServiceGraphResultServicesNextTokenIterator {
+    type Item = GetServiceGraphResult;
+
+    fn next(&mut self) -> Option<GetServiceGraphResult> {
+        // Return the next item in the buffer if there is one
+        if self.buffered_items.len() > 0 {
+            return self.buffered_items.pop();
+        }
+
+        // Request the next batch of items from the API when out of buffered ones
+        let res = self.client.get_service_graph(self.req).sync();
+        match res {
+            Ok(output) => {
+                // Add downloaded items to the buffer
+                let mut new_items = &mut (output.services.unwrap_or(Vec::new()));
+                new_items.reverse();
+                self.buffered_items.append(new_items);
+
+                // Update the next_token for the next API request
+                if output.next_token.is_some() {
+                    self.req.next_token = output.next_token;
+                }
+
+                // Return the first newly downloaded item if there is one
+                self.buffered_items.pop()
+            }
+            Err(error) => None,
+        }
+    }
+}
+
+// Struct for iterating over a paginated API
+pub struct GetTraceGraphResultServicesNextTokenIterator {
+    // Client for making the request
+    client: XRayClient,
+    // Parameters for the request
+    req: GetTraceGraphRequest,
+    // All the items we have downloaded but not tried to yield yet
+    buffered_items: Vec<GetTraceGraphResult>,
+}
+
+impl Iterator for GetTraceGraphResultServicesNextTokenIterator {
+    type Item = GetTraceGraphResult;
+
+    fn next(&mut self) -> Option<GetTraceGraphResult> {
+        // Return the next item in the buffer if there is one
+        if self.buffered_items.len() > 0 {
+            return self.buffered_items.pop();
+        }
+
+        // Request the next batch of items from the API when out of buffered ones
+        let res = self.client.get_trace_graph(self.req).sync();
+        match res {
+            Ok(output) => {
+                // Add downloaded items to the buffer
+                let mut new_items = &mut (output.services.unwrap_or(Vec::new()));
+                new_items.reverse();
+                self.buffered_items.append(new_items);
+
+                // Update the next_token for the next API request
+                if output.next_token.is_some() {
+                    self.req.next_token = output.next_token;
+                }
+
+                // Return the first newly downloaded item if there is one
+                self.buffered_items.pop()
+            }
+            Err(error) => None,
+        }
+    }
+}
+
+// Struct for iterating over a paginated API
+pub struct GetTraceSummariesResultTraceSummariesNextTokenIterator {
+    // Client for making the request
+    client: XRayClient,
+    // Parameters for the request
+    req: GetTraceSummariesRequest,
+    // All the items we have downloaded but not tried to yield yet
+    buffered_items: Vec<GetTraceSummariesResult>,
+}
+
+impl Iterator for GetTraceSummariesResultTraceSummariesNextTokenIterator {
+    type Item = GetTraceSummariesResult;
+
+    fn next(&mut self) -> Option<GetTraceSummariesResult> {
+        // Return the next item in the buffer if there is one
+        if self.buffered_items.len() > 0 {
+            return self.buffered_items.pop();
+        }
+
+        // Request the next batch of items from the API when out of buffered ones
+        let res = self.client.get_trace_summaries(self.req).sync();
+        match res {
+            Ok(output) => {
+                // Add downloaded items to the buffer
+                let mut new_items = &mut (output.trace_summaries.unwrap_or(Vec::new()));
+                new_items.reverse();
+                self.buffered_items.append(new_items);
+
+                // Update the next_token for the next API request
+                if output.next_token.is_some() {
+                    self.req.next_token = output.next_token;
+                }
+
+                // Return the first newly downloaded item if there is one
+                self.buffered_items.pop()
+            }
+            Err(error) => None,
+        }
+    }
+}
+
 #[cfg(test)]
 mod protocol_tests {}

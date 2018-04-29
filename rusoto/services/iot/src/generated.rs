@@ -23616,5 +23616,456 @@ where
     }
 }
 
+// Struct for iterating over a paginated API
+pub struct ListCACertificatesResponseCertificatesMarkerIterator {
+    // Client for making the request
+    client: IotClient,
+    // Parameters for the request
+    req: ListCACertificatesRequest,
+    // All the items we have downloaded but not tried to yield yet
+    buffered_items: Vec<ListCACertificatesResponse>,
+}
+
+impl Iterator for ListCACertificatesResponseCertificatesMarkerIterator {
+    type Item = ListCACertificatesResponse;
+
+    fn next(&mut self) -> Option<ListCACertificatesResponse> {
+        // Return the next item in the buffer if there is one
+        if self.buffered_items.len() > 0 {
+            return self.buffered_items.pop();
+        }
+
+        // Request the next batch of items from the API when out of buffered ones
+        let res = self.client.list_ca_certificates(self.req).sync();
+        match res {
+            Ok(output) => {
+                // Add downloaded items to the buffer
+                let mut new_items = &mut (output.certificates.unwrap_or(Vec::new()));
+                new_items.reverse();
+                self.buffered_items.append(new_items);
+
+                // Update the next_token for the next API request
+                if output.next_marker.is_some() {
+                    self.req.marker = output.next_marker;
+                }
+
+                // Return the first newly downloaded item if there is one
+                self.buffered_items.pop()
+            }
+            Err(error) => None,
+        }
+    }
+}
+
+// Struct for iterating over a paginated API
+pub struct ListCertificatesResponseCertificatesMarkerIterator {
+    // Client for making the request
+    client: IotClient,
+    // Parameters for the request
+    req: ListCertificatesRequest,
+    // All the items we have downloaded but not tried to yield yet
+    buffered_items: Vec<ListCertificatesResponse>,
+}
+
+impl Iterator for ListCertificatesResponseCertificatesMarkerIterator {
+    type Item = ListCertificatesResponse;
+
+    fn next(&mut self) -> Option<ListCertificatesResponse> {
+        // Return the next item in the buffer if there is one
+        if self.buffered_items.len() > 0 {
+            return self.buffered_items.pop();
+        }
+
+        // Request the next batch of items from the API when out of buffered ones
+        let res = self.client.list_certificates(self.req).sync();
+        match res {
+            Ok(output) => {
+                // Add downloaded items to the buffer
+                let mut new_items = &mut (output.certificates.unwrap_or(Vec::new()));
+                new_items.reverse();
+                self.buffered_items.append(new_items);
+
+                // Update the next_token for the next API request
+                if output.next_marker.is_some() {
+                    self.req.marker = output.next_marker;
+                }
+
+                // Return the first newly downloaded item if there is one
+                self.buffered_items.pop()
+            }
+            Err(error) => None,
+        }
+    }
+}
+
+// Struct for iterating over a paginated API
+pub struct ListCertificatesByCAResponseCertificatesMarkerIterator {
+    // Client for making the request
+    client: IotClient,
+    // Parameters for the request
+    req: ListCertificatesByCARequest,
+    // All the items we have downloaded but not tried to yield yet
+    buffered_items: Vec<ListCertificatesByCAResponse>,
+}
+
+impl Iterator for ListCertificatesByCAResponseCertificatesMarkerIterator {
+    type Item = ListCertificatesByCAResponse;
+
+    fn next(&mut self) -> Option<ListCertificatesByCAResponse> {
+        // Return the next item in the buffer if there is one
+        if self.buffered_items.len() > 0 {
+            return self.buffered_items.pop();
+        }
+
+        // Request the next batch of items from the API when out of buffered ones
+        let res = self.client.list_certificates_by_ca(self.req).sync();
+        match res {
+            Ok(output) => {
+                // Add downloaded items to the buffer
+                let mut new_items = &mut (output.certificates.unwrap_or(Vec::new()));
+                new_items.reverse();
+                self.buffered_items.append(new_items);
+
+                // Update the next_token for the next API request
+                if output.next_marker.is_some() {
+                    self.req.marker = output.next_marker;
+                }
+
+                // Return the first newly downloaded item if there is one
+                self.buffered_items.pop()
+            }
+            Err(error) => None,
+        }
+    }
+}
+
+// Struct for iterating over a paginated API
+pub struct ListOutgoingCertificatesResponseOutgoingCertificatesMarkerIterator {
+    // Client for making the request
+    client: IotClient,
+    // Parameters for the request
+    req: ListOutgoingCertificatesRequest,
+    // All the items we have downloaded but not tried to yield yet
+    buffered_items: Vec<ListOutgoingCertificatesResponse>,
+}
+
+impl Iterator for ListOutgoingCertificatesResponseOutgoingCertificatesMarkerIterator {
+    type Item = ListOutgoingCertificatesResponse;
+
+    fn next(&mut self) -> Option<ListOutgoingCertificatesResponse> {
+        // Return the next item in the buffer if there is one
+        if self.buffered_items.len() > 0 {
+            return self.buffered_items.pop();
+        }
+
+        // Request the next batch of items from the API when out of buffered ones
+        let res = self.client.list_outgoing_certificates(self.req).sync();
+        match res {
+            Ok(output) => {
+                // Add downloaded items to the buffer
+                let mut new_items = &mut (output.outgoing_certificates.unwrap_or(Vec::new()));
+                new_items.reverse();
+                self.buffered_items.append(new_items);
+
+                // Update the next_token for the next API request
+                if output.next_marker.is_some() {
+                    self.req.marker = output.next_marker;
+                }
+
+                // Return the first newly downloaded item if there is one
+                self.buffered_items.pop()
+            }
+            Err(error) => None,
+        }
+    }
+}
+
+// Struct for iterating over a paginated API
+pub struct ListPoliciesResponsePoliciesMarkerIterator {
+    // Client for making the request
+    client: IotClient,
+    // Parameters for the request
+    req: ListPoliciesRequest,
+    // All the items we have downloaded but not tried to yield yet
+    buffered_items: Vec<ListPoliciesResponse>,
+}
+
+impl Iterator for ListPoliciesResponsePoliciesMarkerIterator {
+    type Item = ListPoliciesResponse;
+
+    fn next(&mut self) -> Option<ListPoliciesResponse> {
+        // Return the next item in the buffer if there is one
+        if self.buffered_items.len() > 0 {
+            return self.buffered_items.pop();
+        }
+
+        // Request the next batch of items from the API when out of buffered ones
+        let res = self.client.list_policies(self.req).sync();
+        match res {
+            Ok(output) => {
+                // Add downloaded items to the buffer
+                let mut new_items = &mut (output.policies.unwrap_or(Vec::new()));
+                new_items.reverse();
+                self.buffered_items.append(new_items);
+
+                // Update the next_token for the next API request
+                if output.next_marker.is_some() {
+                    self.req.marker = output.next_marker;
+                }
+
+                // Return the first newly downloaded item if there is one
+                self.buffered_items.pop()
+            }
+            Err(error) => None,
+        }
+    }
+}
+
+// Struct for iterating over a paginated API
+pub struct ListPolicyPrincipalsResponsePrincipalsMarkerIterator {
+    // Client for making the request
+    client: IotClient,
+    // Parameters for the request
+    req: ListPolicyPrincipalsRequest,
+    // All the items we have downloaded but not tried to yield yet
+    buffered_items: Vec<ListPolicyPrincipalsResponse>,
+}
+
+impl Iterator for ListPolicyPrincipalsResponsePrincipalsMarkerIterator {
+    type Item = ListPolicyPrincipalsResponse;
+
+    fn next(&mut self) -> Option<ListPolicyPrincipalsResponse> {
+        // Return the next item in the buffer if there is one
+        if self.buffered_items.len() > 0 {
+            return self.buffered_items.pop();
+        }
+
+        // Request the next batch of items from the API when out of buffered ones
+        let res = self.client.list_policy_principals(self.req).sync();
+        match res {
+            Ok(output) => {
+                // Add downloaded items to the buffer
+                let mut new_items = &mut (output.principals.unwrap_or(Vec::new()));
+                new_items.reverse();
+                self.buffered_items.append(new_items);
+
+                // Update the next_token for the next API request
+                if output.next_marker.is_some() {
+                    self.req.marker = output.next_marker;
+                }
+
+                // Return the first newly downloaded item if there is one
+                self.buffered_items.pop()
+            }
+            Err(error) => None,
+        }
+    }
+}
+
+// Struct for iterating over a paginated API
+pub struct ListPrincipalPoliciesResponsePoliciesMarkerIterator {
+    // Client for making the request
+    client: IotClient,
+    // Parameters for the request
+    req: ListPrincipalPoliciesRequest,
+    // All the items we have downloaded but not tried to yield yet
+    buffered_items: Vec<ListPrincipalPoliciesResponse>,
+}
+
+impl Iterator for ListPrincipalPoliciesResponsePoliciesMarkerIterator {
+    type Item = ListPrincipalPoliciesResponse;
+
+    fn next(&mut self) -> Option<ListPrincipalPoliciesResponse> {
+        // Return the next item in the buffer if there is one
+        if self.buffered_items.len() > 0 {
+            return self.buffered_items.pop();
+        }
+
+        // Request the next batch of items from the API when out of buffered ones
+        let res = self.client.list_principal_policies(self.req).sync();
+        match res {
+            Ok(output) => {
+                // Add downloaded items to the buffer
+                let mut new_items = &mut (output.policies.unwrap_or(Vec::new()));
+                new_items.reverse();
+                self.buffered_items.append(new_items);
+
+                // Update the next_token for the next API request
+                if output.next_marker.is_some() {
+                    self.req.marker = output.next_marker;
+                }
+
+                // Return the first newly downloaded item if there is one
+                self.buffered_items.pop()
+            }
+            Err(error) => None,
+        }
+    }
+}
+
+// Struct for iterating over a paginated API
+pub struct ListPrincipalThingsResponseThingsNextTokenIterator {
+    // Client for making the request
+    client: IotClient,
+    // Parameters for the request
+    req: ListPrincipalThingsRequest,
+    // All the items we have downloaded but not tried to yield yet
+    buffered_items: Vec<ListPrincipalThingsResponse>,
+}
+
+impl Iterator for ListPrincipalThingsResponseThingsNextTokenIterator {
+    type Item = ListPrincipalThingsResponse;
+
+    fn next(&mut self) -> Option<ListPrincipalThingsResponse> {
+        // Return the next item in the buffer if there is one
+        if self.buffered_items.len() > 0 {
+            return self.buffered_items.pop();
+        }
+
+        // Request the next batch of items from the API when out of buffered ones
+        let res = self.client.list_principal_things(self.req).sync();
+        match res {
+            Ok(output) => {
+                // Add downloaded items to the buffer
+                let mut new_items = &mut (output.things.unwrap_or(Vec::new()));
+                new_items.reverse();
+                self.buffered_items.append(new_items);
+
+                // Update the next_token for the next API request
+                if output.next_token.is_some() {
+                    self.req.next_token = output.next_token;
+                }
+
+                // Return the first newly downloaded item if there is one
+                self.buffered_items.pop()
+            }
+            Err(error) => None,
+        }
+    }
+}
+
+// Struct for iterating over a paginated API
+pub struct ListThingTypesResponseThingTypesNextTokenIterator {
+    // Client for making the request
+    client: IotClient,
+    // Parameters for the request
+    req: ListThingTypesRequest,
+    // All the items we have downloaded but not tried to yield yet
+    buffered_items: Vec<ListThingTypesResponse>,
+}
+
+impl Iterator for ListThingTypesResponseThingTypesNextTokenIterator {
+    type Item = ListThingTypesResponse;
+
+    fn next(&mut self) -> Option<ListThingTypesResponse> {
+        // Return the next item in the buffer if there is one
+        if self.buffered_items.len() > 0 {
+            return self.buffered_items.pop();
+        }
+
+        // Request the next batch of items from the API when out of buffered ones
+        let res = self.client.list_thing_types(self.req).sync();
+        match res {
+            Ok(output) => {
+                // Add downloaded items to the buffer
+                let mut new_items = &mut (output.thing_types.unwrap_or(Vec::new()));
+                new_items.reverse();
+                self.buffered_items.append(new_items);
+
+                // Update the next_token for the next API request
+                if output.next_token.is_some() {
+                    self.req.next_token = output.next_token;
+                }
+
+                // Return the first newly downloaded item if there is one
+                self.buffered_items.pop()
+            }
+            Err(error) => None,
+        }
+    }
+}
+
+// Struct for iterating over a paginated API
+pub struct ListThingsResponseThingsNextTokenIterator {
+    // Client for making the request
+    client: IotClient,
+    // Parameters for the request
+    req: ListThingsRequest,
+    // All the items we have downloaded but not tried to yield yet
+    buffered_items: Vec<ListThingsResponse>,
+}
+
+impl Iterator for ListThingsResponseThingsNextTokenIterator {
+    type Item = ListThingsResponse;
+
+    fn next(&mut self) -> Option<ListThingsResponse> {
+        // Return the next item in the buffer if there is one
+        if self.buffered_items.len() > 0 {
+            return self.buffered_items.pop();
+        }
+
+        // Request the next batch of items from the API when out of buffered ones
+        let res = self.client.list_things(self.req).sync();
+        match res {
+            Ok(output) => {
+                // Add downloaded items to the buffer
+                let mut new_items = &mut (output.things.unwrap_or(Vec::new()));
+                new_items.reverse();
+                self.buffered_items.append(new_items);
+
+                // Update the next_token for the next API request
+                if output.next_token.is_some() {
+                    self.req.next_token = output.next_token;
+                }
+
+                // Return the first newly downloaded item if there is one
+                self.buffered_items.pop()
+            }
+            Err(error) => None,
+        }
+    }
+}
+
+// Struct for iterating over a paginated API
+pub struct ListTopicRulesResponseRulesNextTokenIterator {
+    // Client for making the request
+    client: IotClient,
+    // Parameters for the request
+    req: ListTopicRulesRequest,
+    // All the items we have downloaded but not tried to yield yet
+    buffered_items: Vec<ListTopicRulesResponse>,
+}
+
+impl Iterator for ListTopicRulesResponseRulesNextTokenIterator {
+    type Item = ListTopicRulesResponse;
+
+    fn next(&mut self) -> Option<ListTopicRulesResponse> {
+        // Return the next item in the buffer if there is one
+        if self.buffered_items.len() > 0 {
+            return self.buffered_items.pop();
+        }
+
+        // Request the next batch of items from the API when out of buffered ones
+        let res = self.client.list_topic_rules(self.req).sync();
+        match res {
+            Ok(output) => {
+                // Add downloaded items to the buffer
+                let mut new_items = &mut (output.rules.unwrap_or(Vec::new()));
+                new_items.reverse();
+                self.buffered_items.append(new_items);
+
+                // Update the next_token for the next API request
+                if output.next_token.is_some() {
+                    self.req.next_token = output.next_token;
+                }
+
+                // Return the first newly downloaded item if there is one
+                self.buffered_items.pop()
+            }
+            Err(error) => None,
+        }
+    }
+}
+
 #[cfg(test)]
 mod protocol_tests {}

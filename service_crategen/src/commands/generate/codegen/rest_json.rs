@@ -32,6 +32,77 @@ impl GenerateProtocol for RestJsonGenerator {
         Ok(())
     }
 
+    fn generate_pagination_iters(&self, writer: &mut FileWriter, service: &Service) -> IoResult {
+        for (operation_name, operation) in service.operations().iter() {
+            if service.paginators().is_some() {
+                let paginators = &service.paginators().unwrap().pagination;
+                if paginators.get(operation_name).is_some() {
+                    let paginator = paginators.get(operation_name).unwrap();
+
+                    for result_key in paginator.result_key.iter() {
+                        for (input_token, output_token) in paginator.input_token.iter().zip(paginator.output_token.iter()) {
+                            writeln!(writer, "
+                                // Struct for iterating over a paginated API
+                                pub struct {item_type}{result_key_name}{input_token_name}Iterator {{
+                                    // Client for making the request
+                                    client: {client_type},
+                                    // Parameters for the request
+                                    req: {req_type},
+                                    // All the items we have downloaded but not tried to yield yet
+                                    buffered_items: Vec<{item_type}>,
+                                }}
+
+                                impl Iterator for {item_type}{result_key_name}{input_token_name}Iterator {{
+                                    type Item = {item_type};
+
+                                    fn next(&mut self) -> Option<{item_type}> {{
+
+                                        // Return the next item in the buffer if there is one
+                                        if self.buffered_items.len() > 0 {{
+                                            return self.buffered_items.pop();
+                                        }}
+
+                                        // Request the next batch of items from the API when out of buffered ones
+                                        let res = self.client.{method_name}(self.req).sync();
+                                        match res {{
+                                            Ok(output) => {{
+
+                                                // Add downloaded items to the buffer
+                                                let mut new_items = &mut (output.{result_key}.unwrap_or(Vec::new()));
+                                                new_items.reverse();
+                                                self.buffered_items.append(new_items);
+
+                                                // Update the next_token for the next API request
+                                                if output.{output_token}.is_some() {{
+                                                    self.req.{input_token} = output.{output_token};
+                                                }}
+
+                                                // Return the first newly downloaded item if there is one
+                                                self.buffered_items.pop()
+                                            }},
+                                            Err(error) => None
+                                        }}
+                                    }}
+                                }}
+                            ",
+                             client_type = service.client_type_name(),
+                             req_type = operation.input_shape(),
+                             item_type = operation.output_shape_or("()"),
+                             input_token = input_token.clone().to_snake_case(),
+                             input_token_name = input_token.clone().to_pascal_case(),
+                             output_token = output_token.clone().to_snake_case(),
+                             result_key = result_key.clone().to_snake_case(),
+                             result_key_name = result_key.clone().to_pascal_case(),
+                             method_name = operation_name.clone().to_snake_case(),
+                            )?;
+                        }
+                    }
+                }
+            }
+        }
+        Ok(())
+    }
+
     fn generate_method_impls(&self, writer: &mut FileWriter, service: &Service) -> IoResult {
         for (operation_name, operation) in service.operations().iter() {
             let input_type = operation.input_shape();

@@ -7,7 +7,7 @@ use std::marker::PhantomData;
 use std::path::Path;
 
 use serde_json;
-use serde::{Deserialize, Deserializer, Serialize};
+use serde::{Deserialize, Deserializer};
 use serde::de::{Error as SerdeError, Visitor, MapAccess, SeqAccess, value as SerdeValue};
 
 use util;
@@ -34,9 +34,11 @@ pub struct PaginatorsDefinition {
 
 #[derive(Debug, Deserialize, Serialize)]
 pub struct PaginatorDefinition {
-    pub input_token: String,
-    pub output_token: String,
-    pub limit_key: String,
+    #[serde(deserialize_with = "string_or_seq_string")]
+    pub input_token: BTreeSet<String>,
+    #[serde(deserialize_with = "string_or_seq_string")]
+    pub output_token: BTreeSet<String>,
+    pub limit_key: Option<String>,
     #[serde(deserialize_with = "string_or_seq_string")]
     pub result_key: BTreeSet<String>
 }
@@ -86,19 +88,17 @@ impl ServiceDefinition {
                 let paginator_input_file = BufReader::new(paginator_raw_file);
                 service.paginators = Some(match serde_json::from_reader(paginator_input_file) {
                     Ok(paginators) => {
-                        println!("Success!");
+                        // println!("Success!");
                         paginators
                     },
-                    Err(err) => {
-                        println!("{}", err);
+                    Err(_) => {
+                        // println!("{}", err);
                         PaginatorsDefinition { pagination: BTreeMap::new() }
                     }
                 })
             },
-            Err(err) => {}
+            Err(_) => {}
         };
-
-        println!("{:?}", serde_json::to_string(&service.paginators));
 
         Ok(service)
     }

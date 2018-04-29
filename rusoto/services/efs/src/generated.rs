@@ -2006,5 +2006,128 @@ where
     }
 }
 
+// Struct for iterating over a paginated API
+pub struct DescribeFileSystemsResponseFileSystemsMarkerIterator {
+    // Client for making the request
+    client: EfsClient,
+    // Parameters for the request
+    req: DescribeFileSystemsRequest,
+    // All the items we have downloaded but not tried to yield yet
+    buffered_items: Vec<DescribeFileSystemsResponse>,
+}
+
+impl Iterator for DescribeFileSystemsResponseFileSystemsMarkerIterator {
+    type Item = DescribeFileSystemsResponse;
+
+    fn next(&mut self) -> Option<DescribeFileSystemsResponse> {
+        // Return the next item in the buffer if there is one
+        if self.buffered_items.len() > 0 {
+            return self.buffered_items.pop();
+        }
+
+        // Request the next batch of items from the API when out of buffered ones
+        let res = self.client.describe_file_systems(self.req).sync();
+        match res {
+            Ok(output) => {
+                // Add downloaded items to the buffer
+                let mut new_items = &mut (output.file_systems.unwrap_or(Vec::new()));
+                new_items.reverse();
+                self.buffered_items.append(new_items);
+
+                // Update the next_token for the next API request
+                if output.next_marker.is_some() {
+                    self.req.marker = output.next_marker;
+                }
+
+                // Return the first newly downloaded item if there is one
+                self.buffered_items.pop()
+            }
+            Err(error) => None,
+        }
+    }
+}
+
+// Struct for iterating over a paginated API
+pub struct DescribeMountTargetsResponseMountTargetsMarkerIterator {
+    // Client for making the request
+    client: EfsClient,
+    // Parameters for the request
+    req: DescribeMountTargetsRequest,
+    // All the items we have downloaded but not tried to yield yet
+    buffered_items: Vec<DescribeMountTargetsResponse>,
+}
+
+impl Iterator for DescribeMountTargetsResponseMountTargetsMarkerIterator {
+    type Item = DescribeMountTargetsResponse;
+
+    fn next(&mut self) -> Option<DescribeMountTargetsResponse> {
+        // Return the next item in the buffer if there is one
+        if self.buffered_items.len() > 0 {
+            return self.buffered_items.pop();
+        }
+
+        // Request the next batch of items from the API when out of buffered ones
+        let res = self.client.describe_mount_targets(self.req).sync();
+        match res {
+            Ok(output) => {
+                // Add downloaded items to the buffer
+                let mut new_items = &mut (output.mount_targets.unwrap_or(Vec::new()));
+                new_items.reverse();
+                self.buffered_items.append(new_items);
+
+                // Update the next_token for the next API request
+                if output.next_marker.is_some() {
+                    self.req.marker = output.next_marker;
+                }
+
+                // Return the first newly downloaded item if there is one
+                self.buffered_items.pop()
+            }
+            Err(error) => None,
+        }
+    }
+}
+
+// Struct for iterating over a paginated API
+pub struct DescribeTagsResponseTagsMarkerIterator {
+    // Client for making the request
+    client: EfsClient,
+    // Parameters for the request
+    req: DescribeTagsRequest,
+    // All the items we have downloaded but not tried to yield yet
+    buffered_items: Vec<DescribeTagsResponse>,
+}
+
+impl Iterator for DescribeTagsResponseTagsMarkerIterator {
+    type Item = DescribeTagsResponse;
+
+    fn next(&mut self) -> Option<DescribeTagsResponse> {
+        // Return the next item in the buffer if there is one
+        if self.buffered_items.len() > 0 {
+            return self.buffered_items.pop();
+        }
+
+        // Request the next batch of items from the API when out of buffered ones
+        let res = self.client.describe_tags(self.req).sync();
+        match res {
+            Ok(output) => {
+                // Add downloaded items to the buffer
+                let mut new_items = &mut (output.tags.unwrap_or(Vec::new()));
+                new_items.reverse();
+                self.buffered_items.append(new_items);
+
+                // Update the next_token for the next API request
+                if output.next_marker.is_some() {
+                    self.req.marker = output.next_marker;
+                }
+
+                // Return the first newly downloaded item if there is one
+                self.buffered_items.pop()
+            }
+            Err(error) => None,
+        }
+    }
+}
+
 #[cfg(test)]
 mod protocol_tests {}

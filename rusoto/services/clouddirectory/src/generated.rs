@@ -13146,5 +13146,664 @@ where
     }
 }
 
+// Struct for iterating over a paginated API
+pub struct ListAppliedSchemaArnsResponseSchemaArnsNextTokenIterator {
+    // Client for making the request
+    client: CloudDirectoryClient,
+    // Parameters for the request
+    req: ListAppliedSchemaArnsRequest,
+    // All the items we have downloaded but not tried to yield yet
+    buffered_items: Vec<ListAppliedSchemaArnsResponse>,
+}
+
+impl Iterator for ListAppliedSchemaArnsResponseSchemaArnsNextTokenIterator {
+    type Item = ListAppliedSchemaArnsResponse;
+
+    fn next(&mut self) -> Option<ListAppliedSchemaArnsResponse> {
+        // Return the next item in the buffer if there is one
+        if self.buffered_items.len() > 0 {
+            return self.buffered_items.pop();
+        }
+
+        // Request the next batch of items from the API when out of buffered ones
+        let res = self.client.list_applied_schema_arns(self.req).sync();
+        match res {
+            Ok(output) => {
+                // Add downloaded items to the buffer
+                let mut new_items = &mut (output.schema_arns.unwrap_or(Vec::new()));
+                new_items.reverse();
+                self.buffered_items.append(new_items);
+
+                // Update the next_token for the next API request
+                if output.next_token.is_some() {
+                    self.req.next_token = output.next_token;
+                }
+
+                // Return the first newly downloaded item if there is one
+                self.buffered_items.pop()
+            }
+            Err(error) => None,
+        }
+    }
+}
+
+// Struct for iterating over a paginated API
+pub struct ListAttachedIndicesResponseIndexAttachmentsNextTokenIterator {
+    // Client for making the request
+    client: CloudDirectoryClient,
+    // Parameters for the request
+    req: ListAttachedIndicesRequest,
+    // All the items we have downloaded but not tried to yield yet
+    buffered_items: Vec<ListAttachedIndicesResponse>,
+}
+
+impl Iterator for ListAttachedIndicesResponseIndexAttachmentsNextTokenIterator {
+    type Item = ListAttachedIndicesResponse;
+
+    fn next(&mut self) -> Option<ListAttachedIndicesResponse> {
+        // Return the next item in the buffer if there is one
+        if self.buffered_items.len() > 0 {
+            return self.buffered_items.pop();
+        }
+
+        // Request the next batch of items from the API when out of buffered ones
+        let res = self.client.list_attached_indices(self.req).sync();
+        match res {
+            Ok(output) => {
+                // Add downloaded items to the buffer
+                let mut new_items = &mut (output.index_attachments.unwrap_or(Vec::new()));
+                new_items.reverse();
+                self.buffered_items.append(new_items);
+
+                // Update the next_token for the next API request
+                if output.next_token.is_some() {
+                    self.req.next_token = output.next_token;
+                }
+
+                // Return the first newly downloaded item if there is one
+                self.buffered_items.pop()
+            }
+            Err(error) => None,
+        }
+    }
+}
+
+// Struct for iterating over a paginated API
+pub struct ListDevelopmentSchemaArnsResponseSchemaArnsNextTokenIterator {
+    // Client for making the request
+    client: CloudDirectoryClient,
+    // Parameters for the request
+    req: ListDevelopmentSchemaArnsRequest,
+    // All the items we have downloaded but not tried to yield yet
+    buffered_items: Vec<ListDevelopmentSchemaArnsResponse>,
+}
+
+impl Iterator for ListDevelopmentSchemaArnsResponseSchemaArnsNextTokenIterator {
+    type Item = ListDevelopmentSchemaArnsResponse;
+
+    fn next(&mut self) -> Option<ListDevelopmentSchemaArnsResponse> {
+        // Return the next item in the buffer if there is one
+        if self.buffered_items.len() > 0 {
+            return self.buffered_items.pop();
+        }
+
+        // Request the next batch of items from the API when out of buffered ones
+        let res = self.client.list_development_schema_arns(self.req).sync();
+        match res {
+            Ok(output) => {
+                // Add downloaded items to the buffer
+                let mut new_items = &mut (output.schema_arns.unwrap_or(Vec::new()));
+                new_items.reverse();
+                self.buffered_items.append(new_items);
+
+                // Update the next_token for the next API request
+                if output.next_token.is_some() {
+                    self.req.next_token = output.next_token;
+                }
+
+                // Return the first newly downloaded item if there is one
+                self.buffered_items.pop()
+            }
+            Err(error) => None,
+        }
+    }
+}
+
+// Struct for iterating over a paginated API
+pub struct ListDirectoriesResponseDirectoriesNextTokenIterator {
+    // Client for making the request
+    client: CloudDirectoryClient,
+    // Parameters for the request
+    req: ListDirectoriesRequest,
+    // All the items we have downloaded but not tried to yield yet
+    buffered_items: Vec<ListDirectoriesResponse>,
+}
+
+impl Iterator for ListDirectoriesResponseDirectoriesNextTokenIterator {
+    type Item = ListDirectoriesResponse;
+
+    fn next(&mut self) -> Option<ListDirectoriesResponse> {
+        // Return the next item in the buffer if there is one
+        if self.buffered_items.len() > 0 {
+            return self.buffered_items.pop();
+        }
+
+        // Request the next batch of items from the API when out of buffered ones
+        let res = self.client.list_directories(self.req).sync();
+        match res {
+            Ok(output) => {
+                // Add downloaded items to the buffer
+                let mut new_items = &mut (output.directories.unwrap_or(Vec::new()));
+                new_items.reverse();
+                self.buffered_items.append(new_items);
+
+                // Update the next_token for the next API request
+                if output.next_token.is_some() {
+                    self.req.next_token = output.next_token;
+                }
+
+                // Return the first newly downloaded item if there is one
+                self.buffered_items.pop()
+            }
+            Err(error) => None,
+        }
+    }
+}
+
+// Struct for iterating over a paginated API
+pub struct ListFacetAttributesResponseAttributesNextTokenIterator {
+    // Client for making the request
+    client: CloudDirectoryClient,
+    // Parameters for the request
+    req: ListFacetAttributesRequest,
+    // All the items we have downloaded but not tried to yield yet
+    buffered_items: Vec<ListFacetAttributesResponse>,
+}
+
+impl Iterator for ListFacetAttributesResponseAttributesNextTokenIterator {
+    type Item = ListFacetAttributesResponse;
+
+    fn next(&mut self) -> Option<ListFacetAttributesResponse> {
+        // Return the next item in the buffer if there is one
+        if self.buffered_items.len() > 0 {
+            return self.buffered_items.pop();
+        }
+
+        // Request the next batch of items from the API when out of buffered ones
+        let res = self.client.list_facet_attributes(self.req).sync();
+        match res {
+            Ok(output) => {
+                // Add downloaded items to the buffer
+                let mut new_items = &mut (output.attributes.unwrap_or(Vec::new()));
+                new_items.reverse();
+                self.buffered_items.append(new_items);
+
+                // Update the next_token for the next API request
+                if output.next_token.is_some() {
+                    self.req.next_token = output.next_token;
+                }
+
+                // Return the first newly downloaded item if there is one
+                self.buffered_items.pop()
+            }
+            Err(error) => None,
+        }
+    }
+}
+
+// Struct for iterating over a paginated API
+pub struct ListFacetNamesResponseFacetNamesNextTokenIterator {
+    // Client for making the request
+    client: CloudDirectoryClient,
+    // Parameters for the request
+    req: ListFacetNamesRequest,
+    // All the items we have downloaded but not tried to yield yet
+    buffered_items: Vec<ListFacetNamesResponse>,
+}
+
+impl Iterator for ListFacetNamesResponseFacetNamesNextTokenIterator {
+    type Item = ListFacetNamesResponse;
+
+    fn next(&mut self) -> Option<ListFacetNamesResponse> {
+        // Return the next item in the buffer if there is one
+        if self.buffered_items.len() > 0 {
+            return self.buffered_items.pop();
+        }
+
+        // Request the next batch of items from the API when out of buffered ones
+        let res = self.client.list_facet_names(self.req).sync();
+        match res {
+            Ok(output) => {
+                // Add downloaded items to the buffer
+                let mut new_items = &mut (output.facet_names.unwrap_or(Vec::new()));
+                new_items.reverse();
+                self.buffered_items.append(new_items);
+
+                // Update the next_token for the next API request
+                if output.next_token.is_some() {
+                    self.req.next_token = output.next_token;
+                }
+
+                // Return the first newly downloaded item if there is one
+                self.buffered_items.pop()
+            }
+            Err(error) => None,
+        }
+    }
+}
+
+// Struct for iterating over a paginated API
+pub struct ListIndexResponseIndexAttachmentsNextTokenIterator {
+    // Client for making the request
+    client: CloudDirectoryClient,
+    // Parameters for the request
+    req: ListIndexRequest,
+    // All the items we have downloaded but not tried to yield yet
+    buffered_items: Vec<ListIndexResponse>,
+}
+
+impl Iterator for ListIndexResponseIndexAttachmentsNextTokenIterator {
+    type Item = ListIndexResponse;
+
+    fn next(&mut self) -> Option<ListIndexResponse> {
+        // Return the next item in the buffer if there is one
+        if self.buffered_items.len() > 0 {
+            return self.buffered_items.pop();
+        }
+
+        // Request the next batch of items from the API when out of buffered ones
+        let res = self.client.list_index(self.req).sync();
+        match res {
+            Ok(output) => {
+                // Add downloaded items to the buffer
+                let mut new_items = &mut (output.index_attachments.unwrap_or(Vec::new()));
+                new_items.reverse();
+                self.buffered_items.append(new_items);
+
+                // Update the next_token for the next API request
+                if output.next_token.is_some() {
+                    self.req.next_token = output.next_token;
+                }
+
+                // Return the first newly downloaded item if there is one
+                self.buffered_items.pop()
+            }
+            Err(error) => None,
+        }
+    }
+}
+
+// Struct for iterating over a paginated API
+pub struct ListObjectAttributesResponseAttributesNextTokenIterator {
+    // Client for making the request
+    client: CloudDirectoryClient,
+    // Parameters for the request
+    req: ListObjectAttributesRequest,
+    // All the items we have downloaded but not tried to yield yet
+    buffered_items: Vec<ListObjectAttributesResponse>,
+}
+
+impl Iterator for ListObjectAttributesResponseAttributesNextTokenIterator {
+    type Item = ListObjectAttributesResponse;
+
+    fn next(&mut self) -> Option<ListObjectAttributesResponse> {
+        // Return the next item in the buffer if there is one
+        if self.buffered_items.len() > 0 {
+            return self.buffered_items.pop();
+        }
+
+        // Request the next batch of items from the API when out of buffered ones
+        let res = self.client.list_object_attributes(self.req).sync();
+        match res {
+            Ok(output) => {
+                // Add downloaded items to the buffer
+                let mut new_items = &mut (output.attributes.unwrap_or(Vec::new()));
+                new_items.reverse();
+                self.buffered_items.append(new_items);
+
+                // Update the next_token for the next API request
+                if output.next_token.is_some() {
+                    self.req.next_token = output.next_token;
+                }
+
+                // Return the first newly downloaded item if there is one
+                self.buffered_items.pop()
+            }
+            Err(error) => None,
+        }
+    }
+}
+
+// Struct for iterating over a paginated API
+pub struct ListObjectParentPathsResponsePathToObjectIdentifiersListNextTokenIterator {
+    // Client for making the request
+    client: CloudDirectoryClient,
+    // Parameters for the request
+    req: ListObjectParentPathsRequest,
+    // All the items we have downloaded but not tried to yield yet
+    buffered_items: Vec<ListObjectParentPathsResponse>,
+}
+
+impl Iterator for ListObjectParentPathsResponsePathToObjectIdentifiersListNextTokenIterator {
+    type Item = ListObjectParentPathsResponse;
+
+    fn next(&mut self) -> Option<ListObjectParentPathsResponse> {
+        // Return the next item in the buffer if there is one
+        if self.buffered_items.len() > 0 {
+            return self.buffered_items.pop();
+        }
+
+        // Request the next batch of items from the API when out of buffered ones
+        let res = self.client.list_object_parent_paths(self.req).sync();
+        match res {
+            Ok(output) => {
+                // Add downloaded items to the buffer
+                let mut new_items =
+                    &mut (output.path_to_object_identifiers_list.unwrap_or(Vec::new()));
+                new_items.reverse();
+                self.buffered_items.append(new_items);
+
+                // Update the next_token for the next API request
+                if output.next_token.is_some() {
+                    self.req.next_token = output.next_token;
+                }
+
+                // Return the first newly downloaded item if there is one
+                self.buffered_items.pop()
+            }
+            Err(error) => None,
+        }
+    }
+}
+
+// Struct for iterating over a paginated API
+pub struct ListObjectPoliciesResponseAttachedPolicyIdsNextTokenIterator {
+    // Client for making the request
+    client: CloudDirectoryClient,
+    // Parameters for the request
+    req: ListObjectPoliciesRequest,
+    // All the items we have downloaded but not tried to yield yet
+    buffered_items: Vec<ListObjectPoliciesResponse>,
+}
+
+impl Iterator for ListObjectPoliciesResponseAttachedPolicyIdsNextTokenIterator {
+    type Item = ListObjectPoliciesResponse;
+
+    fn next(&mut self) -> Option<ListObjectPoliciesResponse> {
+        // Return the next item in the buffer if there is one
+        if self.buffered_items.len() > 0 {
+            return self.buffered_items.pop();
+        }
+
+        // Request the next batch of items from the API when out of buffered ones
+        let res = self.client.list_object_policies(self.req).sync();
+        match res {
+            Ok(output) => {
+                // Add downloaded items to the buffer
+                let mut new_items = &mut (output.attached_policy_ids.unwrap_or(Vec::new()));
+                new_items.reverse();
+                self.buffered_items.append(new_items);
+
+                // Update the next_token for the next API request
+                if output.next_token.is_some() {
+                    self.req.next_token = output.next_token;
+                }
+
+                // Return the first newly downloaded item if there is one
+                self.buffered_items.pop()
+            }
+            Err(error) => None,
+        }
+    }
+}
+
+// Struct for iterating over a paginated API
+pub struct ListPolicyAttachmentsResponseObjectIdentifiersNextTokenIterator {
+    // Client for making the request
+    client: CloudDirectoryClient,
+    // Parameters for the request
+    req: ListPolicyAttachmentsRequest,
+    // All the items we have downloaded but not tried to yield yet
+    buffered_items: Vec<ListPolicyAttachmentsResponse>,
+}
+
+impl Iterator for ListPolicyAttachmentsResponseObjectIdentifiersNextTokenIterator {
+    type Item = ListPolicyAttachmentsResponse;
+
+    fn next(&mut self) -> Option<ListPolicyAttachmentsResponse> {
+        // Return the next item in the buffer if there is one
+        if self.buffered_items.len() > 0 {
+            return self.buffered_items.pop();
+        }
+
+        // Request the next batch of items from the API when out of buffered ones
+        let res = self.client.list_policy_attachments(self.req).sync();
+        match res {
+            Ok(output) => {
+                // Add downloaded items to the buffer
+                let mut new_items = &mut (output.object_identifiers.unwrap_or(Vec::new()));
+                new_items.reverse();
+                self.buffered_items.append(new_items);
+
+                // Update the next_token for the next API request
+                if output.next_token.is_some() {
+                    self.req.next_token = output.next_token;
+                }
+
+                // Return the first newly downloaded item if there is one
+                self.buffered_items.pop()
+            }
+            Err(error) => None,
+        }
+    }
+}
+
+// Struct for iterating over a paginated API
+pub struct ListPublishedSchemaArnsResponseSchemaArnsNextTokenIterator {
+    // Client for making the request
+    client: CloudDirectoryClient,
+    // Parameters for the request
+    req: ListPublishedSchemaArnsRequest,
+    // All the items we have downloaded but not tried to yield yet
+    buffered_items: Vec<ListPublishedSchemaArnsResponse>,
+}
+
+impl Iterator for ListPublishedSchemaArnsResponseSchemaArnsNextTokenIterator {
+    type Item = ListPublishedSchemaArnsResponse;
+
+    fn next(&mut self) -> Option<ListPublishedSchemaArnsResponse> {
+        // Return the next item in the buffer if there is one
+        if self.buffered_items.len() > 0 {
+            return self.buffered_items.pop();
+        }
+
+        // Request the next batch of items from the API when out of buffered ones
+        let res = self.client.list_published_schema_arns(self.req).sync();
+        match res {
+            Ok(output) => {
+                // Add downloaded items to the buffer
+                let mut new_items = &mut (output.schema_arns.unwrap_or(Vec::new()));
+                new_items.reverse();
+                self.buffered_items.append(new_items);
+
+                // Update the next_token for the next API request
+                if output.next_token.is_some() {
+                    self.req.next_token = output.next_token;
+                }
+
+                // Return the first newly downloaded item if there is one
+                self.buffered_items.pop()
+            }
+            Err(error) => None,
+        }
+    }
+}
+
+// Struct for iterating over a paginated API
+pub struct ListTagsForResourceResponseTagsNextTokenIterator {
+    // Client for making the request
+    client: CloudDirectoryClient,
+    // Parameters for the request
+    req: ListTagsForResourceRequest,
+    // All the items we have downloaded but not tried to yield yet
+    buffered_items: Vec<ListTagsForResourceResponse>,
+}
+
+impl Iterator for ListTagsForResourceResponseTagsNextTokenIterator {
+    type Item = ListTagsForResourceResponse;
+
+    fn next(&mut self) -> Option<ListTagsForResourceResponse> {
+        // Return the next item in the buffer if there is one
+        if self.buffered_items.len() > 0 {
+            return self.buffered_items.pop();
+        }
+
+        // Request the next batch of items from the API when out of buffered ones
+        let res = self.client.list_tags_for_resource(self.req).sync();
+        match res {
+            Ok(output) => {
+                // Add downloaded items to the buffer
+                let mut new_items = &mut (output.tags.unwrap_or(Vec::new()));
+                new_items.reverse();
+                self.buffered_items.append(new_items);
+
+                // Update the next_token for the next API request
+                if output.next_token.is_some() {
+                    self.req.next_token = output.next_token;
+                }
+
+                // Return the first newly downloaded item if there is one
+                self.buffered_items.pop()
+            }
+            Err(error) => None,
+        }
+    }
+}
+
+// Struct for iterating over a paginated API
+pub struct ListTypedLinkFacetAttributesResponseAttributesNextTokenIterator {
+    // Client for making the request
+    client: CloudDirectoryClient,
+    // Parameters for the request
+    req: ListTypedLinkFacetAttributesRequest,
+    // All the items we have downloaded but not tried to yield yet
+    buffered_items: Vec<ListTypedLinkFacetAttributesResponse>,
+}
+
+impl Iterator for ListTypedLinkFacetAttributesResponseAttributesNextTokenIterator {
+    type Item = ListTypedLinkFacetAttributesResponse;
+
+    fn next(&mut self) -> Option<ListTypedLinkFacetAttributesResponse> {
+        // Return the next item in the buffer if there is one
+        if self.buffered_items.len() > 0 {
+            return self.buffered_items.pop();
+        }
+
+        // Request the next batch of items from the API when out of buffered ones
+        let res = self.client
+            .list_typed_link_facet_attributes(self.req)
+            .sync();
+        match res {
+            Ok(output) => {
+                // Add downloaded items to the buffer
+                let mut new_items = &mut (output.attributes.unwrap_or(Vec::new()));
+                new_items.reverse();
+                self.buffered_items.append(new_items);
+
+                // Update the next_token for the next API request
+                if output.next_token.is_some() {
+                    self.req.next_token = output.next_token;
+                }
+
+                // Return the first newly downloaded item if there is one
+                self.buffered_items.pop()
+            }
+            Err(error) => None,
+        }
+    }
+}
+
+// Struct for iterating over a paginated API
+pub struct ListTypedLinkFacetNamesResponseFacetNamesNextTokenIterator {
+    // Client for making the request
+    client: CloudDirectoryClient,
+    // Parameters for the request
+    req: ListTypedLinkFacetNamesRequest,
+    // All the items we have downloaded but not tried to yield yet
+    buffered_items: Vec<ListTypedLinkFacetNamesResponse>,
+}
+
+impl Iterator for ListTypedLinkFacetNamesResponseFacetNamesNextTokenIterator {
+    type Item = ListTypedLinkFacetNamesResponse;
+
+    fn next(&mut self) -> Option<ListTypedLinkFacetNamesResponse> {
+        // Return the next item in the buffer if there is one
+        if self.buffered_items.len() > 0 {
+            return self.buffered_items.pop();
+        }
+
+        // Request the next batch of items from the API when out of buffered ones
+        let res = self.client.list_typed_link_facet_names(self.req).sync();
+        match res {
+            Ok(output) => {
+                // Add downloaded items to the buffer
+                let mut new_items = &mut (output.facet_names.unwrap_or(Vec::new()));
+                new_items.reverse();
+                self.buffered_items.append(new_items);
+
+                // Update the next_token for the next API request
+                if output.next_token.is_some() {
+                    self.req.next_token = output.next_token;
+                }
+
+                // Return the first newly downloaded item if there is one
+                self.buffered_items.pop()
+            }
+            Err(error) => None,
+        }
+    }
+}
+
+// Struct for iterating over a paginated API
+pub struct LookupPolicyResponsePolicyToPathListNextTokenIterator {
+    // Client for making the request
+    client: CloudDirectoryClient,
+    // Parameters for the request
+    req: LookupPolicyRequest,
+    // All the items we have downloaded but not tried to yield yet
+    buffered_items: Vec<LookupPolicyResponse>,
+}
+
+impl Iterator for LookupPolicyResponsePolicyToPathListNextTokenIterator {
+    type Item = LookupPolicyResponse;
+
+    fn next(&mut self) -> Option<LookupPolicyResponse> {
+        // Return the next item in the buffer if there is one
+        if self.buffered_items.len() > 0 {
+            return self.buffered_items.pop();
+        }
+
+        // Request the next batch of items from the API when out of buffered ones
+        let res = self.client.lookup_policy(self.req).sync();
+        match res {
+            Ok(output) => {
+                // Add downloaded items to the buffer
+                let mut new_items = &mut (output.policy_to_path_list.unwrap_or(Vec::new()));
+                new_items.reverse();
+                self.buffered_items.append(new_items);
+
+                // Update the next_token for the next API request
+                if output.next_token.is_some() {
+                    self.req.next_token = output.next_token;
+                }
+
+                // Return the first newly downloaded item if there is one
+                self.buffered_items.pop()
+            }
+            Err(error) => None,
+        }
+    }
+}
+
 #[cfg(test)]
 mod protocol_tests {}

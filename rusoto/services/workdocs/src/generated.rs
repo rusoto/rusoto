@@ -8217,5 +8217,169 @@ where
     }
 }
 
+// Struct for iterating over a paginated API
+pub struct DescribeDocumentVersionsResponseDocumentVersionsMarkerIterator {
+    // Client for making the request
+    client: WorkdocsClient,
+    // Parameters for the request
+    req: DescribeDocumentVersionsRequest,
+    // All the items we have downloaded but not tried to yield yet
+    buffered_items: Vec<DescribeDocumentVersionsResponse>,
+}
+
+impl Iterator for DescribeDocumentVersionsResponseDocumentVersionsMarkerIterator {
+    type Item = DescribeDocumentVersionsResponse;
+
+    fn next(&mut self) -> Option<DescribeDocumentVersionsResponse> {
+        // Return the next item in the buffer if there is one
+        if self.buffered_items.len() > 0 {
+            return self.buffered_items.pop();
+        }
+
+        // Request the next batch of items from the API when out of buffered ones
+        let res = self.client.describe_document_versions(self.req).sync();
+        match res {
+            Ok(output) => {
+                // Add downloaded items to the buffer
+                let mut new_items = &mut (output.document_versions.unwrap_or(Vec::new()));
+                new_items.reverse();
+                self.buffered_items.append(new_items);
+
+                // Update the next_token for the next API request
+                if output.marker.is_some() {
+                    self.req.marker = output.marker;
+                }
+
+                // Return the first newly downloaded item if there is one
+                self.buffered_items.pop()
+            }
+            Err(error) => None,
+        }
+    }
+}
+
+// Struct for iterating over a paginated API
+pub struct DescribeFolderContentsResponseDocumentsMarkerIterator {
+    // Client for making the request
+    client: WorkdocsClient,
+    // Parameters for the request
+    req: DescribeFolderContentsRequest,
+    // All the items we have downloaded but not tried to yield yet
+    buffered_items: Vec<DescribeFolderContentsResponse>,
+}
+
+impl Iterator for DescribeFolderContentsResponseDocumentsMarkerIterator {
+    type Item = DescribeFolderContentsResponse;
+
+    fn next(&mut self) -> Option<DescribeFolderContentsResponse> {
+        // Return the next item in the buffer if there is one
+        if self.buffered_items.len() > 0 {
+            return self.buffered_items.pop();
+        }
+
+        // Request the next batch of items from the API when out of buffered ones
+        let res = self.client.describe_folder_contents(self.req).sync();
+        match res {
+            Ok(output) => {
+                // Add downloaded items to the buffer
+                let mut new_items = &mut (output.documents.unwrap_or(Vec::new()));
+                new_items.reverse();
+                self.buffered_items.append(new_items);
+
+                // Update the next_token for the next API request
+                if output.marker.is_some() {
+                    self.req.marker = output.marker;
+                }
+
+                // Return the first newly downloaded item if there is one
+                self.buffered_items.pop()
+            }
+            Err(error) => None,
+        }
+    }
+}
+
+// Struct for iterating over a paginated API
+pub struct DescribeFolderContentsResponseFoldersMarkerIterator {
+    // Client for making the request
+    client: WorkdocsClient,
+    // Parameters for the request
+    req: DescribeFolderContentsRequest,
+    // All the items we have downloaded but not tried to yield yet
+    buffered_items: Vec<DescribeFolderContentsResponse>,
+}
+
+impl Iterator for DescribeFolderContentsResponseFoldersMarkerIterator {
+    type Item = DescribeFolderContentsResponse;
+
+    fn next(&mut self) -> Option<DescribeFolderContentsResponse> {
+        // Return the next item in the buffer if there is one
+        if self.buffered_items.len() > 0 {
+            return self.buffered_items.pop();
+        }
+
+        // Request the next batch of items from the API when out of buffered ones
+        let res = self.client.describe_folder_contents(self.req).sync();
+        match res {
+            Ok(output) => {
+                // Add downloaded items to the buffer
+                let mut new_items = &mut (output.folders.unwrap_or(Vec::new()));
+                new_items.reverse();
+                self.buffered_items.append(new_items);
+
+                // Update the next_token for the next API request
+                if output.marker.is_some() {
+                    self.req.marker = output.marker;
+                }
+
+                // Return the first newly downloaded item if there is one
+                self.buffered_items.pop()
+            }
+            Err(error) => None,
+        }
+    }
+}
+
+// Struct for iterating over a paginated API
+pub struct DescribeUsersResponseUsersMarkerIterator {
+    // Client for making the request
+    client: WorkdocsClient,
+    // Parameters for the request
+    req: DescribeUsersRequest,
+    // All the items we have downloaded but not tried to yield yet
+    buffered_items: Vec<DescribeUsersResponse>,
+}
+
+impl Iterator for DescribeUsersResponseUsersMarkerIterator {
+    type Item = DescribeUsersResponse;
+
+    fn next(&mut self) -> Option<DescribeUsersResponse> {
+        // Return the next item in the buffer if there is one
+        if self.buffered_items.len() > 0 {
+            return self.buffered_items.pop();
+        }
+
+        // Request the next batch of items from the API when out of buffered ones
+        let res = self.client.describe_users(self.req).sync();
+        match res {
+            Ok(output) => {
+                // Add downloaded items to the buffer
+                let mut new_items = &mut (output.users.unwrap_or(Vec::new()));
+                new_items.reverse();
+                self.buffered_items.append(new_items);
+
+                // Update the next_token for the next API request
+                if output.marker.is_some() {
+                    self.req.marker = output.marker;
+                }
+
+                // Return the first newly downloaded item if there is one
+                self.buffered_items.pop()
+            }
+            Err(error) => None,
+        }
+    }
+}
+
 #[cfg(test)]
 mod protocol_tests {}

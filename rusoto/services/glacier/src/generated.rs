@@ -6276,5 +6276,169 @@ where
     }
 }
 
+// Struct for iterating over a paginated API
+pub struct ListJobsOutputJobListMarkerIterator {
+    // Client for making the request
+    client: GlacierClient,
+    // Parameters for the request
+    req: ListJobsInput,
+    // All the items we have downloaded but not tried to yield yet
+    buffered_items: Vec<ListJobsOutput>,
+}
+
+impl Iterator for ListJobsOutputJobListMarkerIterator {
+    type Item = ListJobsOutput;
+
+    fn next(&mut self) -> Option<ListJobsOutput> {
+        // Return the next item in the buffer if there is one
+        if self.buffered_items.len() > 0 {
+            return self.buffered_items.pop();
+        }
+
+        // Request the next batch of items from the API when out of buffered ones
+        let res = self.client.list_jobs(self.req).sync();
+        match res {
+            Ok(output) => {
+                // Add downloaded items to the buffer
+                let mut new_items = &mut (output.job_list.unwrap_or(Vec::new()));
+                new_items.reverse();
+                self.buffered_items.append(new_items);
+
+                // Update the next_token for the next API request
+                if output.marker.is_some() {
+                    self.req.marker = output.marker;
+                }
+
+                // Return the first newly downloaded item if there is one
+                self.buffered_items.pop()
+            }
+            Err(error) => None,
+        }
+    }
+}
+
+// Struct for iterating over a paginated API
+pub struct ListMultipartUploadsOutputUploadsListMarkerIterator {
+    // Client for making the request
+    client: GlacierClient,
+    // Parameters for the request
+    req: ListMultipartUploadsInput,
+    // All the items we have downloaded but not tried to yield yet
+    buffered_items: Vec<ListMultipartUploadsOutput>,
+}
+
+impl Iterator for ListMultipartUploadsOutputUploadsListMarkerIterator {
+    type Item = ListMultipartUploadsOutput;
+
+    fn next(&mut self) -> Option<ListMultipartUploadsOutput> {
+        // Return the next item in the buffer if there is one
+        if self.buffered_items.len() > 0 {
+            return self.buffered_items.pop();
+        }
+
+        // Request the next batch of items from the API when out of buffered ones
+        let res = self.client.list_multipart_uploads(self.req).sync();
+        match res {
+            Ok(output) => {
+                // Add downloaded items to the buffer
+                let mut new_items = &mut (output.uploads_list.unwrap_or(Vec::new()));
+                new_items.reverse();
+                self.buffered_items.append(new_items);
+
+                // Update the next_token for the next API request
+                if output.marker.is_some() {
+                    self.req.marker = output.marker;
+                }
+
+                // Return the first newly downloaded item if there is one
+                self.buffered_items.pop()
+            }
+            Err(error) => None,
+        }
+    }
+}
+
+// Struct for iterating over a paginated API
+pub struct ListPartsOutputPartsMarkerIterator {
+    // Client for making the request
+    client: GlacierClient,
+    // Parameters for the request
+    req: ListPartsInput,
+    // All the items we have downloaded but not tried to yield yet
+    buffered_items: Vec<ListPartsOutput>,
+}
+
+impl Iterator for ListPartsOutputPartsMarkerIterator {
+    type Item = ListPartsOutput;
+
+    fn next(&mut self) -> Option<ListPartsOutput> {
+        // Return the next item in the buffer if there is one
+        if self.buffered_items.len() > 0 {
+            return self.buffered_items.pop();
+        }
+
+        // Request the next batch of items from the API when out of buffered ones
+        let res = self.client.list_parts(self.req).sync();
+        match res {
+            Ok(output) => {
+                // Add downloaded items to the buffer
+                let mut new_items = &mut (output.parts.unwrap_or(Vec::new()));
+                new_items.reverse();
+                self.buffered_items.append(new_items);
+
+                // Update the next_token for the next API request
+                if output.marker.is_some() {
+                    self.req.marker = output.marker;
+                }
+
+                // Return the first newly downloaded item if there is one
+                self.buffered_items.pop()
+            }
+            Err(error) => None,
+        }
+    }
+}
+
+// Struct for iterating over a paginated API
+pub struct ListVaultsOutputVaultListMarkerIterator {
+    // Client for making the request
+    client: GlacierClient,
+    // Parameters for the request
+    req: ListVaultsInput,
+    // All the items we have downloaded but not tried to yield yet
+    buffered_items: Vec<ListVaultsOutput>,
+}
+
+impl Iterator for ListVaultsOutputVaultListMarkerIterator {
+    type Item = ListVaultsOutput;
+
+    fn next(&mut self) -> Option<ListVaultsOutput> {
+        // Return the next item in the buffer if there is one
+        if self.buffered_items.len() > 0 {
+            return self.buffered_items.pop();
+        }
+
+        // Request the next batch of items from the API when out of buffered ones
+        let res = self.client.list_vaults(self.req).sync();
+        match res {
+            Ok(output) => {
+                // Add downloaded items to the buffer
+                let mut new_items = &mut (output.vault_list.unwrap_or(Vec::new()));
+                new_items.reverse();
+                self.buffered_items.append(new_items);
+
+                // Update the next_token for the next API request
+                if output.marker.is_some() {
+                    self.req.marker = output.marker;
+                }
+
+                // Return the first newly downloaded item if there is one
+                self.buffered_items.pop()
+            }
+            Err(error) => None,
+        }
+    }
+}
+
 #[cfg(test)]
 mod protocol_tests {}

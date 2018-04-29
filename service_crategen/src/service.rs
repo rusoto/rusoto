@@ -2,7 +2,7 @@ use std::collections::BTreeMap;
 
 use cargo;
 use config::ServiceConfig;
-use botocore::{ServiceDefinition, Value, Member, Shape, ShapeType, Operation};
+use botocore::{ServiceDefinition, Value, Member, Shape, ShapeType, Operation, PaginatorsDefinition};
 
 #[derive(Debug)]
 pub struct Service<'a> {
@@ -39,6 +39,10 @@ impl <'b> Service <'b> {
 
     pub fn protocol(&self) -> &str {
         &self.definition.metadata.protocol
+    }
+
+    pub fn paginators(&self) -> Option<&PaginatorsDefinition> {
+        self.definition.paginators.as_ref()
     }
 
     pub fn client_type_name(&self) -> String {
