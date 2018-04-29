@@ -7,8 +7,8 @@ use std::marker::PhantomData;
 use std::path::Path;
 
 use serde_json;
-use serde::{Deserialize, Deserializer};
-use serde::de::{Error as SerdeError, Visitor, MapAccess};
+use serde::{Deserialize, Deserializer, Serialize};
+use serde::de::{Error as SerdeError, Visitor, MapAccess, SeqAccess, value as SerdeValue};
 
 use util;
 
@@ -23,16 +23,82 @@ pub struct ServiceDefinition {
     #[serde(deserialize_with="ShapesMap::deserialize_shapes_map")]
     pub shapes: BTreeMap<String, Shape>,
     pub version: Option<String>,
+    pub paginators: Option<PaginatorsDefinition>
+}
+
+#[derive(Debug, Deserialize, Serialize)]
+pub struct PaginatorsDefinition {
+    #[serde(default)]
+    pub pagination: BTreeMap<String, PaginatorDefinition>
+}
+
+#[derive(Debug, Deserialize, Serialize)]
+pub struct PaginatorDefinition {
+    pub input_token: String,
+    pub output_token: String,
+    pub limit_key: String,
+    #[serde(deserialize_with = "string_or_seq_string")]
+    pub result_key: BTreeSet<String>
+}
+
+fn string_or_seq_string<'de, D>(deserializer: D) -> Result<BTreeSet<String>, D::Error>
+    where D: Deserializer<'de>
+{
+    struct StringOrVec(PhantomData<BTreeSet<String>>);
+
+    impl<'de> Visitor<'de> for StringOrVec {
+        type Value = BTreeSet<String>;
+
+        fn expecting(&self, formatter: &mut Formatter) -> FmtResult {
+            formatter.write_str("string or list of strings")
+        }
+
+        fn visit_str<E>(self, value: &str) -> Result<Self::Value, E>
+            where E: SerdeError
+        {
+            let mut set = BTreeSet::new();
+            set.insert(value.to_owned());
+            Ok(set)
+        }
+
+        fn visit_seq<S>(self, visitor: S) -> Result<Self::Value, S::Error>
+            where S: SeqAccess<'de>
+        {
+            Deserialize::deserialize(SerdeValue::SeqAccessDeserializer::new(visitor))
+        }
+    }
+
+    deserializer.deserialize_any(StringOrVec(PhantomData))
 }
 
 impl ServiceDefinition {
     pub fn load(name: &str, protocol_version: &str) -> Result<Self, Box<error::Error>> {
-        let input_path = Path::new(BOTOCORE_DIR)
+        let service_input_path = Path::new(BOTOCORE_DIR)
             .join(format!("{}/{}/service-2.json", name, protocol_version));
+        let service_input_file = BufReader::new(File::open(&service_input_path)?);
+        let mut service: ServiceDefinition = serde_json::from_reader(service_input_file)?;
 
-        let input_file = BufReader::new(File::open(&input_path)?);
+        let paginator_input_path = Path::new(BOTOCORE_DIR)
+            .join(format!("{}/{}/paginators-1.json", name, protocol_version));
+            
+        match File::open(&paginator_input_path) {
+            Ok(paginator_raw_file) => {
+                let paginator_input_file = BufReader::new(paginator_raw_file);
+                service.paginators = Some(match serde_json::from_reader(paginator_input_file) {
+                    Ok(paginators) => {
+                        println!("Success!");
+                        paginators
+                    },
+                    Err(err) => {
+                        println!("{}", err);
+                        PaginatorsDefinition { pagination: BTreeMap::new() }
+                    }
+                })
+            },
+            Err(err) => {}
+        };
 
-        let service: ServiceDefinition = serde_json::from_reader(input_file)?;
+        println!("{:?}", serde_json::to_string(&service.paginators));
 
         Ok(service)
     }
@@ -63,9 +129,14 @@ impl ServiceDefinition {
                 })
             })
             .map(|(service_name, path)| {
-                let input_file = BufReader::new(File::open(&format!("{}/service-2.json", path.display()))?);
+                let service_input_file =
+                    BufReader::new(File::open(&format!("{}/service-2.json", path.display()))?);
+                let service: ServiceDefinition = serde_json::from_reader(service_input_file)?;
 
-                let service: ServiceDefinition = serde_json::from_reader(input_file)?;
+//                 let paginator_input_path = &format!("{}/paginators-1.json", path.display());
+//                 let paginator_input_file = BufReader::new(File::open(paginator_input_path)?);
+//                 let paginator: PaginatorDefinition = serde_json::from_reader(paginator_input_file)?;
+//                 service.paginator = Some(paginator);
 
                 Ok((service_name, service))
             })
