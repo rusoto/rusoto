@@ -1462,7 +1462,7 @@ where
 }
 
 // Struct for iterating over a paginated API
-pub struct BatchGetTracesResultTracesNextTokenIterator {
+pub struct TOTOTracesNextTokenIterator {
     // Client for making the request
     client: XRayClient,
     // Parameters for the request
@@ -1471,10 +1471,10 @@ pub struct BatchGetTracesResultTracesNextTokenIterator {
     buffered_items: Vec<BatchGetTracesResult>,
 }
 
-impl Iterator for BatchGetTracesResultTracesNextTokenIterator {
-    type Item = BatchGetTracesResult;
+impl Iterator for TOTOTracesNextTokenIterator {
+    type Item = TOTO;
 
-    fn next(&mut self) -> Option<BatchGetTracesResult> {
+    fn next(&mut self) -> Option<TOTO> {
         // Return the next item in the buffer if there is one
         if self.buffered_items.len() > 0 {
             return self.buffered_items.pop();
@@ -1503,7 +1503,7 @@ impl Iterator for BatchGetTracesResultTracesNextTokenIterator {
 }
 
 // Struct for iterating over a paginated API
-pub struct GetServiceGraphResultServicesNextTokenIterator {
+pub struct TOTOServicesNextTokenIterator {
     // Client for making the request
     client: XRayClient,
     // Parameters for the request
@@ -1512,10 +1512,10 @@ pub struct GetServiceGraphResultServicesNextTokenIterator {
     buffered_items: Vec<GetServiceGraphResult>,
 }
 
-impl Iterator for GetServiceGraphResultServicesNextTokenIterator {
-    type Item = GetServiceGraphResult;
+impl Iterator for TOTOServicesNextTokenIterator {
+    type Item = TOTO;
 
-    fn next(&mut self) -> Option<GetServiceGraphResult> {
+    fn next(&mut self) -> Option<TOTO> {
         // Return the next item in the buffer if there is one
         if self.buffered_items.len() > 0 {
             return self.buffered_items.pop();
@@ -1544,7 +1544,7 @@ impl Iterator for GetServiceGraphResultServicesNextTokenIterator {
 }
 
 // Struct for iterating over a paginated API
-pub struct GetTraceGraphResultServicesNextTokenIterator {
+pub struct TOTOServicesNextTokenIterator {
     // Client for making the request
     client: XRayClient,
     // Parameters for the request
@@ -1553,10 +1553,10 @@ pub struct GetTraceGraphResultServicesNextTokenIterator {
     buffered_items: Vec<GetTraceGraphResult>,
 }
 
-impl Iterator for GetTraceGraphResultServicesNextTokenIterator {
-    type Item = GetTraceGraphResult;
+impl Iterator for TOTOServicesNextTokenIterator {
+    type Item = TOTO;
 
-    fn next(&mut self) -> Option<GetTraceGraphResult> {
+    fn next(&mut self) -> Option<TOTO> {
         // Return the next item in the buffer if there is one
         if self.buffered_items.len() > 0 {
             return self.buffered_items.pop();
@@ -1585,7 +1585,7 @@ impl Iterator for GetTraceGraphResultServicesNextTokenIterator {
 }
 
 // Struct for iterating over a paginated API
-pub struct GetTraceSummariesResultTraceSummariesNextTokenIterator {
+pub struct TOTOTraceSummariesNextTokenIterator {
     // Client for making the request
     client: XRayClient,
     // Parameters for the request
@@ -1594,10 +1594,10 @@ pub struct GetTraceSummariesResultTraceSummariesNextTokenIterator {
     buffered_items: Vec<GetTraceSummariesResult>,
 }
 
-impl Iterator for GetTraceSummariesResultTraceSummariesNextTokenIterator {
-    type Item = GetTraceSummariesResult;
+impl Iterator for TOTOTraceSummariesNextTokenIterator {
+    type Item = TOTO;
 
-    fn next(&mut self) -> Option<GetTraceSummariesResult> {
+    fn next(&mut self) -> Option<TOTO> {
         // Return the next item in the buffer if there is one
         if self.buffered_items.len() > 0 {
             return self.buffered_items.pop();

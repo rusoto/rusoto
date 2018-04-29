@@ -41,6 +41,26 @@ impl GenerateProtocol for RestJsonGenerator {
 
                     for result_key in paginator.result_key.iter() {
                         for (input_token, output_token) in paginator.input_token.iter().zip(paginator.output_token.iter()) {
+
+                            // operation.output .members .result_key .member.shape
+                            let operation_shape = service
+                                .get_shape(operation.output_shape_or("()")).unwrap();
+
+                            let list_shape_name = operation_shape
+                                .get_sub_member_shape(&result_key.clone().to_snake_case())
+                                .unwrap_or("TODO".to_string());
+
+                            let item_type = service
+                                .get_shape(&list_shape_name)
+                                .and_then(| shape | {
+                                    println!("------ {:?}", shape.member);
+                                    shape.member.clone()
+                                })
+                                .and_then(| member | {
+                                    Some(member.shape)
+                                })
+                                .unwrap_or("TOTO".to_string());
+
                             writeln!(writer, "
                                 // Struct for iterating over a paginated API
                                 pub struct {item_type}{result_key_name}{input_token_name}Iterator {{
@@ -49,7 +69,7 @@ impl GenerateProtocol for RestJsonGenerator {
                                     // Parameters for the request
                                     req: {req_type},
                                     // All the items we have downloaded but not tried to yield yet
-                                    buffered_items: Vec<{item_type}>,
+                                    buffered_items: Vec<{output_type}>,
                                 }}
 
                                 impl Iterator for {item_type}{result_key_name}{input_token_name}Iterator {{
@@ -87,7 +107,8 @@ impl GenerateProtocol for RestJsonGenerator {
                             ",
                              client_type = service.client_type_name(),
                              req_type = operation.input_shape(),
-                             item_type = operation.output_shape_or("()"),
+                             output_type = operation.output_shape_or("()"),
+                             item_type = item_type,
                              input_token = input_token.clone().to_snake_case(),
                              input_token_name = input_token.clone().to_pascal_case(),
                              output_token = output_token.clone().to_snake_case(),

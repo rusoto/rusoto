@@ -191,7 +191,7 @@ pub struct HttpError {
     pub sender_fault: Option<bool>,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, Clone)]
 pub struct Member {
     pub deprecated: Option<bool>,
     pub documentation: Option<String>,
@@ -218,7 +218,7 @@ impl Member {
     }
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, Clone)]
 pub struct XmlNamespace {
     pub prefix: Option<String>,
     pub uri: String,
@@ -291,6 +291,25 @@ impl Shape {
         match self.shape_type {
             ShapeType::Structure | ShapeType::Map | ShapeType::List => false,
             _ => true,
+        }
+    }
+
+    pub fn get_sub_member_shape(&self, member_name: &str) -> Option<String> {
+        let lst = self.members
+            .clone()
+            .and_then(| mem | {
+                mem.get(member_name)
+                    .map(| inner | {
+                        inner.clone().shape
+                    })
+            });
+
+        // println!("{:?} \\ {:?}", lst, self.members);
+        match lst {
+            Some(res) => Some(res),
+            None => self.member.clone().map(| inner | {
+                inner.clone().shape
+            })
         }
     }
 

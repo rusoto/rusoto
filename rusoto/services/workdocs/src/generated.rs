@@ -8218,7 +8218,7 @@ where
 }
 
 // Struct for iterating over a paginated API
-pub struct DescribeDocumentVersionsResponseDocumentVersionsMarkerIterator {
+pub struct TOTODocumentVersionsMarkerIterator {
     // Client for making the request
     client: WorkdocsClient,
     // Parameters for the request
@@ -8227,10 +8227,10 @@ pub struct DescribeDocumentVersionsResponseDocumentVersionsMarkerIterator {
     buffered_items: Vec<DescribeDocumentVersionsResponse>,
 }
 
-impl Iterator for DescribeDocumentVersionsResponseDocumentVersionsMarkerIterator {
-    type Item = DescribeDocumentVersionsResponse;
+impl Iterator for TOTODocumentVersionsMarkerIterator {
+    type Item = TOTO;
 
-    fn next(&mut self) -> Option<DescribeDocumentVersionsResponse> {
+    fn next(&mut self) -> Option<TOTO> {
         // Return the next item in the buffer if there is one
         if self.buffered_items.len() > 0 {
             return self.buffered_items.pop();
@@ -8259,7 +8259,7 @@ impl Iterator for DescribeDocumentVersionsResponseDocumentVersionsMarkerIterator
 }
 
 // Struct for iterating over a paginated API
-pub struct DescribeFolderContentsResponseDocumentsMarkerIterator {
+pub struct TOTODocumentsMarkerIterator {
     // Client for making the request
     client: WorkdocsClient,
     // Parameters for the request
@@ -8268,10 +8268,10 @@ pub struct DescribeFolderContentsResponseDocumentsMarkerIterator {
     buffered_items: Vec<DescribeFolderContentsResponse>,
 }
 
-impl Iterator for DescribeFolderContentsResponseDocumentsMarkerIterator {
-    type Item = DescribeFolderContentsResponse;
+impl Iterator for TOTODocumentsMarkerIterator {
+    type Item = TOTO;
 
-    fn next(&mut self) -> Option<DescribeFolderContentsResponse> {
+    fn next(&mut self) -> Option<TOTO> {
         // Return the next item in the buffer if there is one
         if self.buffered_items.len() > 0 {
             return self.buffered_items.pop();
@@ -8300,7 +8300,7 @@ impl Iterator for DescribeFolderContentsResponseDocumentsMarkerIterator {
 }
 
 // Struct for iterating over a paginated API
-pub struct DescribeFolderContentsResponseFoldersMarkerIterator {
+pub struct TOTOFoldersMarkerIterator {
     // Client for making the request
     client: WorkdocsClient,
     // Parameters for the request
@@ -8309,10 +8309,10 @@ pub struct DescribeFolderContentsResponseFoldersMarkerIterator {
     buffered_items: Vec<DescribeFolderContentsResponse>,
 }
 
-impl Iterator for DescribeFolderContentsResponseFoldersMarkerIterator {
-    type Item = DescribeFolderContentsResponse;
+impl Iterator for TOTOFoldersMarkerIterator {
+    type Item = TOTO;
 
-    fn next(&mut self) -> Option<DescribeFolderContentsResponse> {
+    fn next(&mut self) -> Option<TOTO> {
         // Return the next item in the buffer if there is one
         if self.buffered_items.len() > 0 {
             return self.buffered_items.pop();
@@ -8341,7 +8341,7 @@ impl Iterator for DescribeFolderContentsResponseFoldersMarkerIterator {
 }
 
 // Struct for iterating over a paginated API
-pub struct DescribeUsersResponseUsersMarkerIterator {
+pub struct TOTOUsersMarkerIterator {
     // Client for making the request
     client: WorkdocsClient,
     // Parameters for the request
@@ -8350,10 +8350,10 @@ pub struct DescribeUsersResponseUsersMarkerIterator {
     buffered_items: Vec<DescribeUsersResponse>,
 }
 
-impl Iterator for DescribeUsersResponseUsersMarkerIterator {
-    type Item = DescribeUsersResponse;
+impl Iterator for TOTOUsersMarkerIterator {
+    type Item = TOTO;
 
-    fn next(&mut self) -> Option<DescribeUsersResponse> {
+    fn next(&mut self) -> Option<TOTO> {
         // Return the next item in the buffer if there is one
         if self.buffered_items.len() > 0 {
             return self.buffered_items.pop();

@@ -3902,7 +3902,7 @@ where
 }
 
 // Struct for iterating over a paginated API
-pub struct ListJobsByPipelineResponseJobsPageTokenIterator {
+pub struct TOTOJobsPageTokenIterator {
     // Client for making the request
     client: EtsClient,
     // Parameters for the request
@@ -3911,10 +3911,10 @@ pub struct ListJobsByPipelineResponseJobsPageTokenIterator {
     buffered_items: Vec<ListJobsByPipelineResponse>,
 }
 
-impl Iterator for ListJobsByPipelineResponseJobsPageTokenIterator {
-    type Item = ListJobsByPipelineResponse;
+impl Iterator for TOTOJobsPageTokenIterator {
+    type Item = TOTO;
 
-    fn next(&mut self) -> Option<ListJobsByPipelineResponse> {
+    fn next(&mut self) -> Option<TOTO> {
         // Return the next item in the buffer if there is one
         if self.buffered_items.len() > 0 {
             return self.buffered_items.pop();
@@ -3943,7 +3943,7 @@ impl Iterator for ListJobsByPipelineResponseJobsPageTokenIterator {
 }
 
 // Struct for iterating over a paginated API
-pub struct ListJobsByStatusResponseJobsPageTokenIterator {
+pub struct TOTOJobsPageTokenIterator {
     // Client for making the request
     client: EtsClient,
     // Parameters for the request
@@ -3952,10 +3952,10 @@ pub struct ListJobsByStatusResponseJobsPageTokenIterator {
     buffered_items: Vec<ListJobsByStatusResponse>,
 }
 
-impl Iterator for ListJobsByStatusResponseJobsPageTokenIterator {
-    type Item = ListJobsByStatusResponse;
+impl Iterator for TOTOJobsPageTokenIterator {
+    type Item = TOTO;
 
-    fn next(&mut self) -> Option<ListJobsByStatusResponse> {
+    fn next(&mut self) -> Option<TOTO> {
         // Return the next item in the buffer if there is one
         if self.buffered_items.len() > 0 {
             return self.buffered_items.pop();
@@ -3984,7 +3984,7 @@ impl Iterator for ListJobsByStatusResponseJobsPageTokenIterator {
 }
 
 // Struct for iterating over a paginated API
-pub struct ListPipelinesResponsePipelinesPageTokenIterator {
+pub struct TOTOPipelinesPageTokenIterator {
     // Client for making the request
     client: EtsClient,
     // Parameters for the request
@@ -3993,10 +3993,10 @@ pub struct ListPipelinesResponsePipelinesPageTokenIterator {
     buffered_items: Vec<ListPipelinesResponse>,
 }
 
-impl Iterator for ListPipelinesResponsePipelinesPageTokenIterator {
-    type Item = ListPipelinesResponse;
+impl Iterator for TOTOPipelinesPageTokenIterator {
+    type Item = TOTO;
 
-    fn next(&mut self) -> Option<ListPipelinesResponse> {
+    fn next(&mut self) -> Option<TOTO> {
         // Return the next item in the buffer if there is one
         if self.buffered_items.len() > 0 {
             return self.buffered_items.pop();
@@ -4025,7 +4025,7 @@ impl Iterator for ListPipelinesResponsePipelinesPageTokenIterator {
 }
 
 // Struct for iterating over a paginated API
-pub struct ListPresetsResponsePresetsPageTokenIterator {
+pub struct TOTOPresetsPageTokenIterator {
     // Client for making the request
     client: EtsClient,
     // Parameters for the request
@@ -4034,10 +4034,10 @@ pub struct ListPresetsResponsePresetsPageTokenIterator {
     buffered_items: Vec<ListPresetsResponse>,
 }
 
-impl Iterator for ListPresetsResponsePresetsPageTokenIterator {
-    type Item = ListPresetsResponse;
+impl Iterator for TOTOPresetsPageTokenIterator {
+    type Item = TOTO;
 
-    fn next(&mut self) -> Option<ListPresetsResponse> {
+    fn next(&mut self) -> Option<TOTO> {
         // Return the next item in the buffer if there is one
         if self.buffered_items.len() > 0 {
             return self.buffered_items.pop();

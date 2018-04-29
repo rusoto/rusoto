@@ -7116,7 +7116,7 @@ where
 }
 
 // Struct for iterating over a paginated API
-pub struct GetBotAliasesResponseBotAliasesNextTokenIterator {
+pub struct TOTOBotAliasesNextTokenIterator {
     // Client for making the request
     client: LexModelsClient,
     // Parameters for the request
@@ -7125,10 +7125,10 @@ pub struct GetBotAliasesResponseBotAliasesNextTokenIterator {
     buffered_items: Vec<GetBotAliasesResponse>,
 }
 
-impl Iterator for GetBotAliasesResponseBotAliasesNextTokenIterator {
-    type Item = GetBotAliasesResponse;
+impl Iterator for TOTOBotAliasesNextTokenIterator {
+    type Item = TOTO;
 
-    fn next(&mut self) -> Option<GetBotAliasesResponse> {
+    fn next(&mut self) -> Option<TOTO> {
         // Return the next item in the buffer if there is one
         if self.buffered_items.len() > 0 {
             return self.buffered_items.pop();
@@ -7157,7 +7157,7 @@ impl Iterator for GetBotAliasesResponseBotAliasesNextTokenIterator {
 }
 
 // Struct for iterating over a paginated API
-pub struct GetBotChannelAssociationsResponseBotChannelAssociationsNextTokenIterator {
+pub struct TOTOBotChannelAssociationsNextTokenIterator {
     // Client for making the request
     client: LexModelsClient,
     // Parameters for the request
@@ -7166,10 +7166,10 @@ pub struct GetBotChannelAssociationsResponseBotChannelAssociationsNextTokenItera
     buffered_items: Vec<GetBotChannelAssociationsResponse>,
 }
 
-impl Iterator for GetBotChannelAssociationsResponseBotChannelAssociationsNextTokenIterator {
-    type Item = GetBotChannelAssociationsResponse;
+impl Iterator for TOTOBotChannelAssociationsNextTokenIterator {
+    type Item = TOTO;
 
-    fn next(&mut self) -> Option<GetBotChannelAssociationsResponse> {
+    fn next(&mut self) -> Option<TOTO> {
         // Return the next item in the buffer if there is one
         if self.buffered_items.len() > 0 {
             return self.buffered_items.pop();
@@ -7198,7 +7198,7 @@ impl Iterator for GetBotChannelAssociationsResponseBotChannelAssociationsNextTok
 }
 
 // Struct for iterating over a paginated API
-pub struct GetBotVersionsResponseBotsNextTokenIterator {
+pub struct BotMetadataBotsNextTokenIterator {
     // Client for making the request
     client: LexModelsClient,
     // Parameters for the request
@@ -7207,10 +7207,10 @@ pub struct GetBotVersionsResponseBotsNextTokenIterator {
     buffered_items: Vec<GetBotVersionsResponse>,
 }
 
-impl Iterator for GetBotVersionsResponseBotsNextTokenIterator {
-    type Item = GetBotVersionsResponse;
+impl Iterator for BotMetadataBotsNextTokenIterator {
+    type Item = BotMetadata;
 
-    fn next(&mut self) -> Option<GetBotVersionsResponse> {
+    fn next(&mut self) -> Option<BotMetadata> {
         // Return the next item in the buffer if there is one
         if self.buffered_items.len() > 0 {
             return self.buffered_items.pop();
@@ -7239,7 +7239,7 @@ impl Iterator for GetBotVersionsResponseBotsNextTokenIterator {
 }
 
 // Struct for iterating over a paginated API
-pub struct GetBotsResponseBotsNextTokenIterator {
+pub struct BotMetadataBotsNextTokenIterator {
     // Client for making the request
     client: LexModelsClient,
     // Parameters for the request
@@ -7248,10 +7248,10 @@ pub struct GetBotsResponseBotsNextTokenIterator {
     buffered_items: Vec<GetBotsResponse>,
 }
 
-impl Iterator for GetBotsResponseBotsNextTokenIterator {
-    type Item = GetBotsResponse;
+impl Iterator for BotMetadataBotsNextTokenIterator {
+    type Item = BotMetadata;
 
-    fn next(&mut self) -> Option<GetBotsResponse> {
+    fn next(&mut self) -> Option<BotMetadata> {
         // Return the next item in the buffer if there is one
         if self.buffered_items.len() > 0 {
             return self.buffered_items.pop();
@@ -7280,7 +7280,7 @@ impl Iterator for GetBotsResponseBotsNextTokenIterator {
 }
 
 // Struct for iterating over a paginated API
-pub struct GetBuiltinIntentsResponseIntentsNextTokenIterator {
+pub struct BuiltinIntentMetadataIntentsNextTokenIterator {
     // Client for making the request
     client: LexModelsClient,
     // Parameters for the request
@@ -7289,10 +7289,10 @@ pub struct GetBuiltinIntentsResponseIntentsNextTokenIterator {
     buffered_items: Vec<GetBuiltinIntentsResponse>,
 }
 
-impl Iterator for GetBuiltinIntentsResponseIntentsNextTokenIterator {
-    type Item = GetBuiltinIntentsResponse;
+impl Iterator for BuiltinIntentMetadataIntentsNextTokenIterator {
+    type Item = BuiltinIntentMetadata;
 
-    fn next(&mut self) -> Option<GetBuiltinIntentsResponse> {
+    fn next(&mut self) -> Option<BuiltinIntentMetadata> {
         // Return the next item in the buffer if there is one
         if self.buffered_items.len() > 0 {
             return self.buffered_items.pop();
@@ -7321,7 +7321,7 @@ impl Iterator for GetBuiltinIntentsResponseIntentsNextTokenIterator {
 }
 
 // Struct for iterating over a paginated API
-pub struct GetBuiltinSlotTypesResponseSlotTypesNextTokenIterator {
+pub struct TOTOSlotTypesNextTokenIterator {
     // Client for making the request
     client: LexModelsClient,
     // Parameters for the request
@@ -7330,10 +7330,10 @@ pub struct GetBuiltinSlotTypesResponseSlotTypesNextTokenIterator {
     buffered_items: Vec<GetBuiltinSlotTypesResponse>,
 }
 
-impl Iterator for GetBuiltinSlotTypesResponseSlotTypesNextTokenIterator {
-    type Item = GetBuiltinSlotTypesResponse;
+impl Iterator for TOTOSlotTypesNextTokenIterator {
+    type Item = TOTO;
 
-    fn next(&mut self) -> Option<GetBuiltinSlotTypesResponse> {
+    fn next(&mut self) -> Option<TOTO> {
         // Return the next item in the buffer if there is one
         if self.buffered_items.len() > 0 {
             return self.buffered_items.pop();
@@ -7362,7 +7362,7 @@ impl Iterator for GetBuiltinSlotTypesResponseSlotTypesNextTokenIterator {
 }
 
 // Struct for iterating over a paginated API
-pub struct GetIntentVersionsResponseIntentsNextTokenIterator {
+pub struct IntentMetadataIntentsNextTokenIterator {
     // Client for making the request
     client: LexModelsClient,
     // Parameters for the request
@@ -7371,10 +7371,10 @@ pub struct GetIntentVersionsResponseIntentsNextTokenIterator {
     buffered_items: Vec<GetIntentVersionsResponse>,
 }
 
-impl Iterator for GetIntentVersionsResponseIntentsNextTokenIterator {
-    type Item = GetIntentVersionsResponse;
+impl Iterator for IntentMetadataIntentsNextTokenIterator {
+    type Item = IntentMetadata;
 
-    fn next(&mut self) -> Option<GetIntentVersionsResponse> {
+    fn next(&mut self) -> Option<IntentMetadata> {
         // Return the next item in the buffer if there is one
         if self.buffered_items.len() > 0 {
             return self.buffered_items.pop();
@@ -7403,7 +7403,7 @@ impl Iterator for GetIntentVersionsResponseIntentsNextTokenIterator {
 }
 
 // Struct for iterating over a paginated API
-pub struct GetIntentsResponseIntentsNextTokenIterator {
+pub struct IntentMetadataIntentsNextTokenIterator {
     // Client for making the request
     client: LexModelsClient,
     // Parameters for the request
@@ -7412,10 +7412,10 @@ pub struct GetIntentsResponseIntentsNextTokenIterator {
     buffered_items: Vec<GetIntentsResponse>,
 }
 
-impl Iterator for GetIntentsResponseIntentsNextTokenIterator {
-    type Item = GetIntentsResponse;
+impl Iterator for IntentMetadataIntentsNextTokenIterator {
+    type Item = IntentMetadata;
 
-    fn next(&mut self) -> Option<GetIntentsResponse> {
+    fn next(&mut self) -> Option<IntentMetadata> {
         // Return the next item in the buffer if there is one
         if self.buffered_items.len() > 0 {
             return self.buffered_items.pop();
@@ -7444,7 +7444,7 @@ impl Iterator for GetIntentsResponseIntentsNextTokenIterator {
 }
 
 // Struct for iterating over a paginated API
-pub struct GetSlotTypeVersionsResponseSlotTypesNextTokenIterator {
+pub struct TOTOSlotTypesNextTokenIterator {
     // Client for making the request
     client: LexModelsClient,
     // Parameters for the request
@@ -7453,10 +7453,10 @@ pub struct GetSlotTypeVersionsResponseSlotTypesNextTokenIterator {
     buffered_items: Vec<GetSlotTypeVersionsResponse>,
 }
 
-impl Iterator for GetSlotTypeVersionsResponseSlotTypesNextTokenIterator {
-    type Item = GetSlotTypeVersionsResponse;
+impl Iterator for TOTOSlotTypesNextTokenIterator {
+    type Item = TOTO;
 
-    fn next(&mut self) -> Option<GetSlotTypeVersionsResponse> {
+    fn next(&mut self) -> Option<TOTO> {
         // Return the next item in the buffer if there is one
         if self.buffered_items.len() > 0 {
             return self.buffered_items.pop();
@@ -7485,7 +7485,7 @@ impl Iterator for GetSlotTypeVersionsResponseSlotTypesNextTokenIterator {
 }
 
 // Struct for iterating over a paginated API
-pub struct GetSlotTypesResponseSlotTypesNextTokenIterator {
+pub struct TOTOSlotTypesNextTokenIterator {
     // Client for making the request
     client: LexModelsClient,
     // Parameters for the request
@@ -7494,10 +7494,10 @@ pub struct GetSlotTypesResponseSlotTypesNextTokenIterator {
     buffered_items: Vec<GetSlotTypesResponse>,
 }
 
-impl Iterator for GetSlotTypesResponseSlotTypesNextTokenIterator {
-    type Item = GetSlotTypesResponse;
+impl Iterator for TOTOSlotTypesNextTokenIterator {
+    type Item = TOTO;
 
-    fn next(&mut self) -> Option<GetSlotTypesResponse> {
+    fn next(&mut self) -> Option<TOTO> {
         // Return the next item in the buffer if there is one
         if self.buffered_items.len() > 0 {
             return self.buffered_items.pop();

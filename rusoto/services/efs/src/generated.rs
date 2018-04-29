@@ -2007,7 +2007,7 @@ where
 }
 
 // Struct for iterating over a paginated API
-pub struct DescribeFileSystemsResponseFileSystemsMarkerIterator {
+pub struct TOTOFileSystemsMarkerIterator {
     // Client for making the request
     client: EfsClient,
     // Parameters for the request
@@ -2016,10 +2016,10 @@ pub struct DescribeFileSystemsResponseFileSystemsMarkerIterator {
     buffered_items: Vec<DescribeFileSystemsResponse>,
 }
 
-impl Iterator for DescribeFileSystemsResponseFileSystemsMarkerIterator {
-    type Item = DescribeFileSystemsResponse;
+impl Iterator for TOTOFileSystemsMarkerIterator {
+    type Item = TOTO;
 
-    fn next(&mut self) -> Option<DescribeFileSystemsResponse> {
+    fn next(&mut self) -> Option<TOTO> {
         // Return the next item in the buffer if there is one
         if self.buffered_items.len() > 0 {
             return self.buffered_items.pop();
@@ -2048,7 +2048,7 @@ impl Iterator for DescribeFileSystemsResponseFileSystemsMarkerIterator {
 }
 
 // Struct for iterating over a paginated API
-pub struct DescribeMountTargetsResponseMountTargetsMarkerIterator {
+pub struct TOTOMountTargetsMarkerIterator {
     // Client for making the request
     client: EfsClient,
     // Parameters for the request
@@ -2057,10 +2057,10 @@ pub struct DescribeMountTargetsResponseMountTargetsMarkerIterator {
     buffered_items: Vec<DescribeMountTargetsResponse>,
 }
 
-impl Iterator for DescribeMountTargetsResponseMountTargetsMarkerIterator {
-    type Item = DescribeMountTargetsResponse;
+impl Iterator for TOTOMountTargetsMarkerIterator {
+    type Item = TOTO;
 
-    fn next(&mut self) -> Option<DescribeMountTargetsResponse> {
+    fn next(&mut self) -> Option<TOTO> {
         // Return the next item in the buffer if there is one
         if self.buffered_items.len() > 0 {
             return self.buffered_items.pop();
@@ -2089,7 +2089,7 @@ impl Iterator for DescribeMountTargetsResponseMountTargetsMarkerIterator {
 }
 
 // Struct for iterating over a paginated API
-pub struct DescribeTagsResponseTagsMarkerIterator {
+pub struct TOTOTagsMarkerIterator {
     // Client for making the request
     client: EfsClient,
     // Parameters for the request
@@ -2098,10 +2098,10 @@ pub struct DescribeTagsResponseTagsMarkerIterator {
     buffered_items: Vec<DescribeTagsResponse>,
 }
 
-impl Iterator for DescribeTagsResponseTagsMarkerIterator {
-    type Item = DescribeTagsResponse;
+impl Iterator for TOTOTagsMarkerIterator {
+    type Item = TOTO;
 
-    fn next(&mut self) -> Option<DescribeTagsResponse> {
+    fn next(&mut self) -> Option<TOTO> {
         // Return the next item in the buffer if there is one
         if self.buffered_items.len() > 0 {
             return self.buffered_items.pop();

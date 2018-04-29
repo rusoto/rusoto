@@ -20613,7 +20613,7 @@ where
 }
 
 // Struct for iterating over a paginated API
-pub struct ApiKeysItemsPositionIterator {
+pub struct ApiKeyItemsPositionIterator {
     // Client for making the request
     client: ApiGatewayClient,
     // Parameters for the request
@@ -20622,10 +20622,10 @@ pub struct ApiKeysItemsPositionIterator {
     buffered_items: Vec<ApiKeys>,
 }
 
-impl Iterator for ApiKeysItemsPositionIterator {
-    type Item = ApiKeys;
+impl Iterator for ApiKeyItemsPositionIterator {
+    type Item = ApiKey;
 
-    fn next(&mut self) -> Option<ApiKeys> {
+    fn next(&mut self) -> Option<ApiKey> {
         // Return the next item in the buffer if there is one
         if self.buffered_items.len() > 0 {
             return self.buffered_items.pop();
@@ -20654,7 +20654,7 @@ impl Iterator for ApiKeysItemsPositionIterator {
 }
 
 // Struct for iterating over a paginated API
-pub struct BasePathMappingsItemsPositionIterator {
+pub struct BasePathMappingItemsPositionIterator {
     // Client for making the request
     client: ApiGatewayClient,
     // Parameters for the request
@@ -20663,10 +20663,10 @@ pub struct BasePathMappingsItemsPositionIterator {
     buffered_items: Vec<BasePathMappings>,
 }
 
-impl Iterator for BasePathMappingsItemsPositionIterator {
-    type Item = BasePathMappings;
+impl Iterator for BasePathMappingItemsPositionIterator {
+    type Item = BasePathMapping;
 
-    fn next(&mut self) -> Option<BasePathMappings> {
+    fn next(&mut self) -> Option<BasePathMapping> {
         // Return the next item in the buffer if there is one
         if self.buffered_items.len() > 0 {
             return self.buffered_items.pop();
@@ -20695,7 +20695,7 @@ impl Iterator for BasePathMappingsItemsPositionIterator {
 }
 
 // Struct for iterating over a paginated API
-pub struct ClientCertificatesItemsPositionIterator {
+pub struct ClientCertificateItemsPositionIterator {
     // Client for making the request
     client: ApiGatewayClient,
     // Parameters for the request
@@ -20704,10 +20704,10 @@ pub struct ClientCertificatesItemsPositionIterator {
     buffered_items: Vec<ClientCertificates>,
 }
 
-impl Iterator for ClientCertificatesItemsPositionIterator {
-    type Item = ClientCertificates;
+impl Iterator for ClientCertificateItemsPositionIterator {
+    type Item = ClientCertificate;
 
-    fn next(&mut self) -> Option<ClientCertificates> {
+    fn next(&mut self) -> Option<ClientCertificate> {
         // Return the next item in the buffer if there is one
         if self.buffered_items.len() > 0 {
             return self.buffered_items.pop();
@@ -20736,7 +20736,7 @@ impl Iterator for ClientCertificatesItemsPositionIterator {
 }
 
 // Struct for iterating over a paginated API
-pub struct DeploymentsItemsPositionIterator {
+pub struct DeploymentItemsPositionIterator {
     // Client for making the request
     client: ApiGatewayClient,
     // Parameters for the request
@@ -20745,10 +20745,10 @@ pub struct DeploymentsItemsPositionIterator {
     buffered_items: Vec<Deployments>,
 }
 
-impl Iterator for DeploymentsItemsPositionIterator {
-    type Item = Deployments;
+impl Iterator for DeploymentItemsPositionIterator {
+    type Item = Deployment;
 
-    fn next(&mut self) -> Option<Deployments> {
+    fn next(&mut self) -> Option<Deployment> {
         // Return the next item in the buffer if there is one
         if self.buffered_items.len() > 0 {
             return self.buffered_items.pop();
@@ -20777,7 +20777,7 @@ impl Iterator for DeploymentsItemsPositionIterator {
 }
 
 // Struct for iterating over a paginated API
-pub struct DomainNamesItemsPositionIterator {
+pub struct DomainNameItemsPositionIterator {
     // Client for making the request
     client: ApiGatewayClient,
     // Parameters for the request
@@ -20786,10 +20786,10 @@ pub struct DomainNamesItemsPositionIterator {
     buffered_items: Vec<DomainNames>,
 }
 
-impl Iterator for DomainNamesItemsPositionIterator {
-    type Item = DomainNames;
+impl Iterator for DomainNameItemsPositionIterator {
+    type Item = DomainName;
 
-    fn next(&mut self) -> Option<DomainNames> {
+    fn next(&mut self) -> Option<DomainName> {
         // Return the next item in the buffer if there is one
         if self.buffered_items.len() > 0 {
             return self.buffered_items.pop();
@@ -20818,7 +20818,7 @@ impl Iterator for DomainNamesItemsPositionIterator {
 }
 
 // Struct for iterating over a paginated API
-pub struct ModelsItemsPositionIterator {
+pub struct ModelItemsPositionIterator {
     // Client for making the request
     client: ApiGatewayClient,
     // Parameters for the request
@@ -20827,10 +20827,10 @@ pub struct ModelsItemsPositionIterator {
     buffered_items: Vec<Models>,
 }
 
-impl Iterator for ModelsItemsPositionIterator {
-    type Item = Models;
+impl Iterator for ModelItemsPositionIterator {
+    type Item = Model;
 
-    fn next(&mut self) -> Option<Models> {
+    fn next(&mut self) -> Option<Model> {
         // Return the next item in the buffer if there is one
         if self.buffered_items.len() > 0 {
             return self.buffered_items.pop();
@@ -20859,7 +20859,7 @@ impl Iterator for ModelsItemsPositionIterator {
 }
 
 // Struct for iterating over a paginated API
-pub struct ResourcesItemsPositionIterator {
+pub struct ResourceItemsPositionIterator {
     // Client for making the request
     client: ApiGatewayClient,
     // Parameters for the request
@@ -20868,10 +20868,10 @@ pub struct ResourcesItemsPositionIterator {
     buffered_items: Vec<Resources>,
 }
 
-impl Iterator for ResourcesItemsPositionIterator {
-    type Item = Resources;
+impl Iterator for ResourceItemsPositionIterator {
+    type Item = Resource;
 
-    fn next(&mut self) -> Option<Resources> {
+    fn next(&mut self) -> Option<Resource> {
         // Return the next item in the buffer if there is one
         if self.buffered_items.len() > 0 {
             return self.buffered_items.pop();
@@ -20900,7 +20900,7 @@ impl Iterator for ResourcesItemsPositionIterator {
 }
 
 // Struct for iterating over a paginated API
-pub struct RestApisItemsPositionIterator {
+pub struct RestApiItemsPositionIterator {
     // Client for making the request
     client: ApiGatewayClient,
     // Parameters for the request
@@ -20909,10 +20909,10 @@ pub struct RestApisItemsPositionIterator {
     buffered_items: Vec<RestApis>,
 }
 
-impl Iterator for RestApisItemsPositionIterator {
-    type Item = RestApis;
+impl Iterator for RestApiItemsPositionIterator {
+    type Item = RestApi;
 
-    fn next(&mut self) -> Option<RestApis> {
+    fn next(&mut self) -> Option<RestApi> {
         // Return the next item in the buffer if there is one
         if self.buffered_items.len() > 0 {
             return self.buffered_items.pop();
@@ -20941,7 +20941,7 @@ impl Iterator for RestApisItemsPositionIterator {
 }
 
 // Struct for iterating over a paginated API
-pub struct UsageItemsPositionIterator {
+pub struct TOTOItemsPositionIterator {
     // Client for making the request
     client: ApiGatewayClient,
     // Parameters for the request
@@ -20950,10 +20950,10 @@ pub struct UsageItemsPositionIterator {
     buffered_items: Vec<Usage>,
 }
 
-impl Iterator for UsageItemsPositionIterator {
-    type Item = Usage;
+impl Iterator for TOTOItemsPositionIterator {
+    type Item = TOTO;
 
-    fn next(&mut self) -> Option<Usage> {
+    fn next(&mut self) -> Option<TOTO> {
         // Return the next item in the buffer if there is one
         if self.buffered_items.len() > 0 {
             return self.buffered_items.pop();
@@ -20982,7 +20982,7 @@ impl Iterator for UsageItemsPositionIterator {
 }
 
 // Struct for iterating over a paginated API
-pub struct UsagePlanKeysItemsPositionIterator {
+pub struct UsagePlanKeyItemsPositionIterator {
     // Client for making the request
     client: ApiGatewayClient,
     // Parameters for the request
@@ -20991,10 +20991,10 @@ pub struct UsagePlanKeysItemsPositionIterator {
     buffered_items: Vec<UsagePlanKeys>,
 }
 
-impl Iterator for UsagePlanKeysItemsPositionIterator {
-    type Item = UsagePlanKeys;
+impl Iterator for UsagePlanKeyItemsPositionIterator {
+    type Item = UsagePlanKey;
 
-    fn next(&mut self) -> Option<UsagePlanKeys> {
+    fn next(&mut self) -> Option<UsagePlanKey> {
         // Return the next item in the buffer if there is one
         if self.buffered_items.len() > 0 {
             return self.buffered_items.pop();
@@ -21023,7 +21023,7 @@ impl Iterator for UsagePlanKeysItemsPositionIterator {
 }
 
 // Struct for iterating over a paginated API
-pub struct UsagePlansItemsPositionIterator {
+pub struct UsagePlanItemsPositionIterator {
     // Client for making the request
     client: ApiGatewayClient,
     // Parameters for the request
@@ -21032,10 +21032,10 @@ pub struct UsagePlansItemsPositionIterator {
     buffered_items: Vec<UsagePlans>,
 }
 
-impl Iterator for UsagePlansItemsPositionIterator {
-    type Item = UsagePlans;
+impl Iterator for UsagePlanItemsPositionIterator {
+    type Item = UsagePlan;
 
-    fn next(&mut self) -> Option<UsagePlans> {
+    fn next(&mut self) -> Option<UsagePlan> {
         // Return the next item in the buffer if there is one
         if self.buffered_items.len() > 0 {
             return self.buffered_items.pop();
@@ -21064,7 +21064,7 @@ impl Iterator for UsagePlansItemsPositionIterator {
 }
 
 // Struct for iterating over a paginated API
-pub struct VpcLinksItemsPositionIterator {
+pub struct VpcLinkItemsPositionIterator {
     // Client for making the request
     client: ApiGatewayClient,
     // Parameters for the request
@@ -21073,10 +21073,10 @@ pub struct VpcLinksItemsPositionIterator {
     buffered_items: Vec<VpcLinks>,
 }
 
-impl Iterator for VpcLinksItemsPositionIterator {
-    type Item = VpcLinks;
+impl Iterator for VpcLinkItemsPositionIterator {
+    type Item = VpcLink;
 
-    fn next(&mut self) -> Option<VpcLinks> {
+    fn next(&mut self) -> Option<VpcLink> {
         // Return the next item in the buffer if there is one
         if self.buffered_items.len() > 0 {
             return self.buffered_items.pop();

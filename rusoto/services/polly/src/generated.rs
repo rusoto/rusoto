@@ -1129,7 +1129,7 @@ where
 }
 
 // Struct for iterating over a paginated API
-pub struct DescribeVoicesOutputVoicesNextTokenIterator {
+pub struct TOTOVoicesNextTokenIterator {
     // Client for making the request
     client: PollyClient,
     // Parameters for the request
@@ -1138,10 +1138,10 @@ pub struct DescribeVoicesOutputVoicesNextTokenIterator {
     buffered_items: Vec<DescribeVoicesOutput>,
 }
 
-impl Iterator for DescribeVoicesOutputVoicesNextTokenIterator {
-    type Item = DescribeVoicesOutput;
+impl Iterator for TOTOVoicesNextTokenIterator {
+    type Item = TOTO;
 
-    fn next(&mut self) -> Option<DescribeVoicesOutput> {
+    fn next(&mut self) -> Option<TOTO> {
         // Return the next item in the buffer if there is one
         if self.buffered_items.len() > 0 {
             return self.buffered_items.pop();

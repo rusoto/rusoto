@@ -5626,7 +5626,7 @@ where
 }
 
 // Struct for iterating over a paginated API
-pub struct ListAliasesResponseAliasesMarkerIterator {
+pub struct TOTOAliasesMarkerIterator {
     // Client for making the request
     client: LambdaClient,
     // Parameters for the request
@@ -5635,10 +5635,10 @@ pub struct ListAliasesResponseAliasesMarkerIterator {
     buffered_items: Vec<ListAliasesResponse>,
 }
 
-impl Iterator for ListAliasesResponseAliasesMarkerIterator {
-    type Item = ListAliasesResponse;
+impl Iterator for TOTOAliasesMarkerIterator {
+    type Item = TOTO;
 
-    fn next(&mut self) -> Option<ListAliasesResponse> {
+    fn next(&mut self) -> Option<TOTO> {
         // Return the next item in the buffer if there is one
         if self.buffered_items.len() > 0 {
             return self.buffered_items.pop();
@@ -5667,7 +5667,7 @@ impl Iterator for ListAliasesResponseAliasesMarkerIterator {
 }
 
 // Struct for iterating over a paginated API
-pub struct ListEventSourceMappingsResponseEventSourceMappingsMarkerIterator {
+pub struct TOTOEventSourceMappingsMarkerIterator {
     // Client for making the request
     client: LambdaClient,
     // Parameters for the request
@@ -5676,10 +5676,10 @@ pub struct ListEventSourceMappingsResponseEventSourceMappingsMarkerIterator {
     buffered_items: Vec<ListEventSourceMappingsResponse>,
 }
 
-impl Iterator for ListEventSourceMappingsResponseEventSourceMappingsMarkerIterator {
-    type Item = ListEventSourceMappingsResponse;
+impl Iterator for TOTOEventSourceMappingsMarkerIterator {
+    type Item = TOTO;
 
-    fn next(&mut self) -> Option<ListEventSourceMappingsResponse> {
+    fn next(&mut self) -> Option<TOTO> {
         // Return the next item in the buffer if there is one
         if self.buffered_items.len() > 0 {
             return self.buffered_items.pop();
@@ -5708,7 +5708,7 @@ impl Iterator for ListEventSourceMappingsResponseEventSourceMappingsMarkerIterat
 }
 
 // Struct for iterating over a paginated API
-pub struct ListFunctionsResponseFunctionsMarkerIterator {
+pub struct TOTOFunctionsMarkerIterator {
     // Client for making the request
     client: LambdaClient,
     // Parameters for the request
@@ -5717,10 +5717,10 @@ pub struct ListFunctionsResponseFunctionsMarkerIterator {
     buffered_items: Vec<ListFunctionsResponse>,
 }
 
-impl Iterator for ListFunctionsResponseFunctionsMarkerIterator {
-    type Item = ListFunctionsResponse;
+impl Iterator for TOTOFunctionsMarkerIterator {
+    type Item = TOTO;
 
-    fn next(&mut self) -> Option<ListFunctionsResponse> {
+    fn next(&mut self) -> Option<TOTO> {
         // Return the next item in the buffer if there is one
         if self.buffered_items.len() > 0 {
             return self.buffered_items.pop();

@@ -23617,7 +23617,7 @@ where
 }
 
 // Struct for iterating over a paginated API
-pub struct ListCACertificatesResponseCertificatesMarkerIterator {
+pub struct CACertificateCertificatesMarkerIterator {
     // Client for making the request
     client: IotClient,
     // Parameters for the request
@@ -23626,10 +23626,10 @@ pub struct ListCACertificatesResponseCertificatesMarkerIterator {
     buffered_items: Vec<ListCACertificatesResponse>,
 }
 
-impl Iterator for ListCACertificatesResponseCertificatesMarkerIterator {
-    type Item = ListCACertificatesResponse;
+impl Iterator for CACertificateCertificatesMarkerIterator {
+    type Item = CACertificate;
 
-    fn next(&mut self) -> Option<ListCACertificatesResponse> {
+    fn next(&mut self) -> Option<CACertificate> {
         // Return the next item in the buffer if there is one
         if self.buffered_items.len() > 0 {
             return self.buffered_items.pop();
@@ -23658,7 +23658,7 @@ impl Iterator for ListCACertificatesResponseCertificatesMarkerIterator {
 }
 
 // Struct for iterating over a paginated API
-pub struct ListCertificatesResponseCertificatesMarkerIterator {
+pub struct CertificateCertificatesMarkerIterator {
     // Client for making the request
     client: IotClient,
     // Parameters for the request
@@ -23667,10 +23667,10 @@ pub struct ListCertificatesResponseCertificatesMarkerIterator {
     buffered_items: Vec<ListCertificatesResponse>,
 }
 
-impl Iterator for ListCertificatesResponseCertificatesMarkerIterator {
-    type Item = ListCertificatesResponse;
+impl Iterator for CertificateCertificatesMarkerIterator {
+    type Item = Certificate;
 
-    fn next(&mut self) -> Option<ListCertificatesResponse> {
+    fn next(&mut self) -> Option<Certificate> {
         // Return the next item in the buffer if there is one
         if self.buffered_items.len() > 0 {
             return self.buffered_items.pop();
@@ -23699,7 +23699,7 @@ impl Iterator for ListCertificatesResponseCertificatesMarkerIterator {
 }
 
 // Struct for iterating over a paginated API
-pub struct ListCertificatesByCAResponseCertificatesMarkerIterator {
+pub struct CertificateCertificatesMarkerIterator {
     // Client for making the request
     client: IotClient,
     // Parameters for the request
@@ -23708,10 +23708,10 @@ pub struct ListCertificatesByCAResponseCertificatesMarkerIterator {
     buffered_items: Vec<ListCertificatesByCAResponse>,
 }
 
-impl Iterator for ListCertificatesByCAResponseCertificatesMarkerIterator {
-    type Item = ListCertificatesByCAResponse;
+impl Iterator for CertificateCertificatesMarkerIterator {
+    type Item = Certificate;
 
-    fn next(&mut self) -> Option<ListCertificatesByCAResponse> {
+    fn next(&mut self) -> Option<Certificate> {
         // Return the next item in the buffer if there is one
         if self.buffered_items.len() > 0 {
             return self.buffered_items.pop();
@@ -23740,7 +23740,7 @@ impl Iterator for ListCertificatesByCAResponseCertificatesMarkerIterator {
 }
 
 // Struct for iterating over a paginated API
-pub struct ListOutgoingCertificatesResponseOutgoingCertificatesMarkerIterator {
+pub struct TOTOOutgoingCertificatesMarkerIterator {
     // Client for making the request
     client: IotClient,
     // Parameters for the request
@@ -23749,10 +23749,10 @@ pub struct ListOutgoingCertificatesResponseOutgoingCertificatesMarkerIterator {
     buffered_items: Vec<ListOutgoingCertificatesResponse>,
 }
 
-impl Iterator for ListOutgoingCertificatesResponseOutgoingCertificatesMarkerIterator {
-    type Item = ListOutgoingCertificatesResponse;
+impl Iterator for TOTOOutgoingCertificatesMarkerIterator {
+    type Item = TOTO;
 
-    fn next(&mut self) -> Option<ListOutgoingCertificatesResponse> {
+    fn next(&mut self) -> Option<TOTO> {
         // Return the next item in the buffer if there is one
         if self.buffered_items.len() > 0 {
             return self.buffered_items.pop();
@@ -23781,7 +23781,7 @@ impl Iterator for ListOutgoingCertificatesResponseOutgoingCertificatesMarkerIter
 }
 
 // Struct for iterating over a paginated API
-pub struct ListPoliciesResponsePoliciesMarkerIterator {
+pub struct PolicyPoliciesMarkerIterator {
     // Client for making the request
     client: IotClient,
     // Parameters for the request
@@ -23790,10 +23790,10 @@ pub struct ListPoliciesResponsePoliciesMarkerIterator {
     buffered_items: Vec<ListPoliciesResponse>,
 }
 
-impl Iterator for ListPoliciesResponsePoliciesMarkerIterator {
-    type Item = ListPoliciesResponse;
+impl Iterator for PolicyPoliciesMarkerIterator {
+    type Item = Policy;
 
-    fn next(&mut self) -> Option<ListPoliciesResponse> {
+    fn next(&mut self) -> Option<Policy> {
         // Return the next item in the buffer if there is one
         if self.buffered_items.len() > 0 {
             return self.buffered_items.pop();
@@ -23822,7 +23822,7 @@ impl Iterator for ListPoliciesResponsePoliciesMarkerIterator {
 }
 
 // Struct for iterating over a paginated API
-pub struct ListPolicyPrincipalsResponsePrincipalsMarkerIterator {
+pub struct PrincipalArnPrincipalsMarkerIterator {
     // Client for making the request
     client: IotClient,
     // Parameters for the request
@@ -23831,10 +23831,10 @@ pub struct ListPolicyPrincipalsResponsePrincipalsMarkerIterator {
     buffered_items: Vec<ListPolicyPrincipalsResponse>,
 }
 
-impl Iterator for ListPolicyPrincipalsResponsePrincipalsMarkerIterator {
-    type Item = ListPolicyPrincipalsResponse;
+impl Iterator for PrincipalArnPrincipalsMarkerIterator {
+    type Item = PrincipalArn;
 
-    fn next(&mut self) -> Option<ListPolicyPrincipalsResponse> {
+    fn next(&mut self) -> Option<PrincipalArn> {
         // Return the next item in the buffer if there is one
         if self.buffered_items.len() > 0 {
             return self.buffered_items.pop();
@@ -23863,7 +23863,7 @@ impl Iterator for ListPolicyPrincipalsResponsePrincipalsMarkerIterator {
 }
 
 // Struct for iterating over a paginated API
-pub struct ListPrincipalPoliciesResponsePoliciesMarkerIterator {
+pub struct PolicyPoliciesMarkerIterator {
     // Client for making the request
     client: IotClient,
     // Parameters for the request
@@ -23872,10 +23872,10 @@ pub struct ListPrincipalPoliciesResponsePoliciesMarkerIterator {
     buffered_items: Vec<ListPrincipalPoliciesResponse>,
 }
 
-impl Iterator for ListPrincipalPoliciesResponsePoliciesMarkerIterator {
-    type Item = ListPrincipalPoliciesResponse;
+impl Iterator for PolicyPoliciesMarkerIterator {
+    type Item = Policy;
 
-    fn next(&mut self) -> Option<ListPrincipalPoliciesResponse> {
+    fn next(&mut self) -> Option<Policy> {
         // Return the next item in the buffer if there is one
         if self.buffered_items.len() > 0 {
             return self.buffered_items.pop();
@@ -23904,7 +23904,7 @@ impl Iterator for ListPrincipalPoliciesResponsePoliciesMarkerIterator {
 }
 
 // Struct for iterating over a paginated API
-pub struct ListPrincipalThingsResponseThingsNextTokenIterator {
+pub struct ThingNameThingsNextTokenIterator {
     // Client for making the request
     client: IotClient,
     // Parameters for the request
@@ -23913,10 +23913,10 @@ pub struct ListPrincipalThingsResponseThingsNextTokenIterator {
     buffered_items: Vec<ListPrincipalThingsResponse>,
 }
 
-impl Iterator for ListPrincipalThingsResponseThingsNextTokenIterator {
-    type Item = ListPrincipalThingsResponse;
+impl Iterator for ThingNameThingsNextTokenIterator {
+    type Item = ThingName;
 
-    fn next(&mut self) -> Option<ListPrincipalThingsResponse> {
+    fn next(&mut self) -> Option<ThingName> {
         // Return the next item in the buffer if there is one
         if self.buffered_items.len() > 0 {
             return self.buffered_items.pop();
@@ -23945,7 +23945,7 @@ impl Iterator for ListPrincipalThingsResponseThingsNextTokenIterator {
 }
 
 // Struct for iterating over a paginated API
-pub struct ListThingTypesResponseThingTypesNextTokenIterator {
+pub struct TOTOThingTypesNextTokenIterator {
     // Client for making the request
     client: IotClient,
     // Parameters for the request
@@ -23954,10 +23954,10 @@ pub struct ListThingTypesResponseThingTypesNextTokenIterator {
     buffered_items: Vec<ListThingTypesResponse>,
 }
 
-impl Iterator for ListThingTypesResponseThingTypesNextTokenIterator {
-    type Item = ListThingTypesResponse;
+impl Iterator for TOTOThingTypesNextTokenIterator {
+    type Item = TOTO;
 
-    fn next(&mut self) -> Option<ListThingTypesResponse> {
+    fn next(&mut self) -> Option<TOTO> {
         // Return the next item in the buffer if there is one
         if self.buffered_items.len() > 0 {
             return self.buffered_items.pop();
@@ -23986,7 +23986,7 @@ impl Iterator for ListThingTypesResponseThingTypesNextTokenIterator {
 }
 
 // Struct for iterating over a paginated API
-pub struct ListThingsResponseThingsNextTokenIterator {
+pub struct ThingAttributeThingsNextTokenIterator {
     // Client for making the request
     client: IotClient,
     // Parameters for the request
@@ -23995,10 +23995,10 @@ pub struct ListThingsResponseThingsNextTokenIterator {
     buffered_items: Vec<ListThingsResponse>,
 }
 
-impl Iterator for ListThingsResponseThingsNextTokenIterator {
-    type Item = ListThingsResponse;
+impl Iterator for ThingAttributeThingsNextTokenIterator {
+    type Item = ThingAttribute;
 
-    fn next(&mut self) -> Option<ListThingsResponse> {
+    fn next(&mut self) -> Option<ThingAttribute> {
         // Return the next item in the buffer if there is one
         if self.buffered_items.len() > 0 {
             return self.buffered_items.pop();
@@ -24027,7 +24027,7 @@ impl Iterator for ListThingsResponseThingsNextTokenIterator {
 }
 
 // Struct for iterating over a paginated API
-pub struct ListTopicRulesResponseRulesNextTokenIterator {
+pub struct TopicRuleListItemRulesNextTokenIterator {
     // Client for making the request
     client: IotClient,
     // Parameters for the request
@@ -24036,10 +24036,10 @@ pub struct ListTopicRulesResponseRulesNextTokenIterator {
     buffered_items: Vec<ListTopicRulesResponse>,
 }
 
-impl Iterator for ListTopicRulesResponseRulesNextTokenIterator {
-    type Item = ListTopicRulesResponse;
+impl Iterator for TopicRuleListItemRulesNextTokenIterator {
+    type Item = TopicRuleListItem;
 
-    fn next(&mut self) -> Option<ListTopicRulesResponse> {
+    fn next(&mut self) -> Option<TopicRuleListItem> {
         // Return the next item in the buffer if there is one
         if self.buffered_items.len() > 0 {
             return self.buffered_items.pop();

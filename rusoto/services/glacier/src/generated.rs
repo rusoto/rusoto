@@ -6277,7 +6277,7 @@ where
 }
 
 // Struct for iterating over a paginated API
-pub struct ListJobsOutputJobListMarkerIterator {
+pub struct TOTOJobListMarkerIterator {
     // Client for making the request
     client: GlacierClient,
     // Parameters for the request
@@ -6286,10 +6286,10 @@ pub struct ListJobsOutputJobListMarkerIterator {
     buffered_items: Vec<ListJobsOutput>,
 }
 
-impl Iterator for ListJobsOutputJobListMarkerIterator {
-    type Item = ListJobsOutput;
+impl Iterator for TOTOJobListMarkerIterator {
+    type Item = TOTO;
 
-    fn next(&mut self) -> Option<ListJobsOutput> {
+    fn next(&mut self) -> Option<TOTO> {
         // Return the next item in the buffer if there is one
         if self.buffered_items.len() > 0 {
             return self.buffered_items.pop();
@@ -6318,7 +6318,7 @@ impl Iterator for ListJobsOutputJobListMarkerIterator {
 }
 
 // Struct for iterating over a paginated API
-pub struct ListMultipartUploadsOutputUploadsListMarkerIterator {
+pub struct TOTOUploadsListMarkerIterator {
     // Client for making the request
     client: GlacierClient,
     // Parameters for the request
@@ -6327,10 +6327,10 @@ pub struct ListMultipartUploadsOutputUploadsListMarkerIterator {
     buffered_items: Vec<ListMultipartUploadsOutput>,
 }
 
-impl Iterator for ListMultipartUploadsOutputUploadsListMarkerIterator {
-    type Item = ListMultipartUploadsOutput;
+impl Iterator for TOTOUploadsListMarkerIterator {
+    type Item = TOTO;
 
-    fn next(&mut self) -> Option<ListMultipartUploadsOutput> {
+    fn next(&mut self) -> Option<TOTO> {
         // Return the next item in the buffer if there is one
         if self.buffered_items.len() > 0 {
             return self.buffered_items.pop();
@@ -6359,7 +6359,7 @@ impl Iterator for ListMultipartUploadsOutputUploadsListMarkerIterator {
 }
 
 // Struct for iterating over a paginated API
-pub struct ListPartsOutputPartsMarkerIterator {
+pub struct TOTOPartsMarkerIterator {
     // Client for making the request
     client: GlacierClient,
     // Parameters for the request
@@ -6368,10 +6368,10 @@ pub struct ListPartsOutputPartsMarkerIterator {
     buffered_items: Vec<ListPartsOutput>,
 }
 
-impl Iterator for ListPartsOutputPartsMarkerIterator {
-    type Item = ListPartsOutput;
+impl Iterator for TOTOPartsMarkerIterator {
+    type Item = TOTO;
 
-    fn next(&mut self) -> Option<ListPartsOutput> {
+    fn next(&mut self) -> Option<TOTO> {
         // Return the next item in the buffer if there is one
         if self.buffered_items.len() > 0 {
             return self.buffered_items.pop();
@@ -6400,7 +6400,7 @@ impl Iterator for ListPartsOutputPartsMarkerIterator {
 }
 
 // Struct for iterating over a paginated API
-pub struct ListVaultsOutputVaultListMarkerIterator {
+pub struct TOTOVaultListMarkerIterator {
     // Client for making the request
     client: GlacierClient,
     // Parameters for the request
@@ -6409,10 +6409,10 @@ pub struct ListVaultsOutputVaultListMarkerIterator {
     buffered_items: Vec<ListVaultsOutput>,
 }
 
-impl Iterator for ListVaultsOutputVaultListMarkerIterator {
-    type Item = ListVaultsOutput;
+impl Iterator for TOTOVaultListMarkerIterator {
+    type Item = TOTO;
 
-    fn next(&mut self) -> Option<ListVaultsOutput> {
+    fn next(&mut self) -> Option<TOTO> {
         // Return the next item in the buffer if there is one
         if self.buffered_items.len() > 0 {
             return self.buffered_items.pop();

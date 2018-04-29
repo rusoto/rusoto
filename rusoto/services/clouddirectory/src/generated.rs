@@ -13147,7 +13147,7 @@ where
 }
 
 // Struct for iterating over a paginated API
-pub struct ListAppliedSchemaArnsResponseSchemaArnsNextTokenIterator {
+pub struct TOTOSchemaArnsNextTokenIterator {
     // Client for making the request
     client: CloudDirectoryClient,
     // Parameters for the request
@@ -13156,10 +13156,10 @@ pub struct ListAppliedSchemaArnsResponseSchemaArnsNextTokenIterator {
     buffered_items: Vec<ListAppliedSchemaArnsResponse>,
 }
 
-impl Iterator for ListAppliedSchemaArnsResponseSchemaArnsNextTokenIterator {
-    type Item = ListAppliedSchemaArnsResponse;
+impl Iterator for TOTOSchemaArnsNextTokenIterator {
+    type Item = TOTO;
 
-    fn next(&mut self) -> Option<ListAppliedSchemaArnsResponse> {
+    fn next(&mut self) -> Option<TOTO> {
         // Return the next item in the buffer if there is one
         if self.buffered_items.len() > 0 {
             return self.buffered_items.pop();
@@ -13188,7 +13188,7 @@ impl Iterator for ListAppliedSchemaArnsResponseSchemaArnsNextTokenIterator {
 }
 
 // Struct for iterating over a paginated API
-pub struct ListAttachedIndicesResponseIndexAttachmentsNextTokenIterator {
+pub struct TOTOIndexAttachmentsNextTokenIterator {
     // Client for making the request
     client: CloudDirectoryClient,
     // Parameters for the request
@@ -13197,10 +13197,10 @@ pub struct ListAttachedIndicesResponseIndexAttachmentsNextTokenIterator {
     buffered_items: Vec<ListAttachedIndicesResponse>,
 }
 
-impl Iterator for ListAttachedIndicesResponseIndexAttachmentsNextTokenIterator {
-    type Item = ListAttachedIndicesResponse;
+impl Iterator for TOTOIndexAttachmentsNextTokenIterator {
+    type Item = TOTO;
 
-    fn next(&mut self) -> Option<ListAttachedIndicesResponse> {
+    fn next(&mut self) -> Option<TOTO> {
         // Return the next item in the buffer if there is one
         if self.buffered_items.len() > 0 {
             return self.buffered_items.pop();
@@ -13229,7 +13229,7 @@ impl Iterator for ListAttachedIndicesResponseIndexAttachmentsNextTokenIterator {
 }
 
 // Struct for iterating over a paginated API
-pub struct ListDevelopmentSchemaArnsResponseSchemaArnsNextTokenIterator {
+pub struct TOTOSchemaArnsNextTokenIterator {
     // Client for making the request
     client: CloudDirectoryClient,
     // Parameters for the request
@@ -13238,10 +13238,10 @@ pub struct ListDevelopmentSchemaArnsResponseSchemaArnsNextTokenIterator {
     buffered_items: Vec<ListDevelopmentSchemaArnsResponse>,
 }
 
-impl Iterator for ListDevelopmentSchemaArnsResponseSchemaArnsNextTokenIterator {
-    type Item = ListDevelopmentSchemaArnsResponse;
+impl Iterator for TOTOSchemaArnsNextTokenIterator {
+    type Item = TOTO;
 
-    fn next(&mut self) -> Option<ListDevelopmentSchemaArnsResponse> {
+    fn next(&mut self) -> Option<TOTO> {
         // Return the next item in the buffer if there is one
         if self.buffered_items.len() > 0 {
             return self.buffered_items.pop();
@@ -13270,7 +13270,7 @@ impl Iterator for ListDevelopmentSchemaArnsResponseSchemaArnsNextTokenIterator {
 }
 
 // Struct for iterating over a paginated API
-pub struct ListDirectoriesResponseDirectoriesNextTokenIterator {
+pub struct TOTODirectoriesNextTokenIterator {
     // Client for making the request
     client: CloudDirectoryClient,
     // Parameters for the request
@@ -13279,10 +13279,10 @@ pub struct ListDirectoriesResponseDirectoriesNextTokenIterator {
     buffered_items: Vec<ListDirectoriesResponse>,
 }
 
-impl Iterator for ListDirectoriesResponseDirectoriesNextTokenIterator {
-    type Item = ListDirectoriesResponse;
+impl Iterator for TOTODirectoriesNextTokenIterator {
+    type Item = TOTO;
 
-    fn next(&mut self) -> Option<ListDirectoriesResponse> {
+    fn next(&mut self) -> Option<TOTO> {
         // Return the next item in the buffer if there is one
         if self.buffered_items.len() > 0 {
             return self.buffered_items.pop();
@@ -13311,7 +13311,7 @@ impl Iterator for ListDirectoriesResponseDirectoriesNextTokenIterator {
 }
 
 // Struct for iterating over a paginated API
-pub struct ListFacetAttributesResponseAttributesNextTokenIterator {
+pub struct TOTOAttributesNextTokenIterator {
     // Client for making the request
     client: CloudDirectoryClient,
     // Parameters for the request
@@ -13320,10 +13320,10 @@ pub struct ListFacetAttributesResponseAttributesNextTokenIterator {
     buffered_items: Vec<ListFacetAttributesResponse>,
 }
 
-impl Iterator for ListFacetAttributesResponseAttributesNextTokenIterator {
-    type Item = ListFacetAttributesResponse;
+impl Iterator for TOTOAttributesNextTokenIterator {
+    type Item = TOTO;
 
-    fn next(&mut self) -> Option<ListFacetAttributesResponse> {
+    fn next(&mut self) -> Option<TOTO> {
         // Return the next item in the buffer if there is one
         if self.buffered_items.len() > 0 {
             return self.buffered_items.pop();
@@ -13352,7 +13352,7 @@ impl Iterator for ListFacetAttributesResponseAttributesNextTokenIterator {
 }
 
 // Struct for iterating over a paginated API
-pub struct ListFacetNamesResponseFacetNamesNextTokenIterator {
+pub struct TOTOFacetNamesNextTokenIterator {
     // Client for making the request
     client: CloudDirectoryClient,
     // Parameters for the request
@@ -13361,10 +13361,10 @@ pub struct ListFacetNamesResponseFacetNamesNextTokenIterator {
     buffered_items: Vec<ListFacetNamesResponse>,
 }
 
-impl Iterator for ListFacetNamesResponseFacetNamesNextTokenIterator {
-    type Item = ListFacetNamesResponse;
+impl Iterator for TOTOFacetNamesNextTokenIterator {
+    type Item = TOTO;
 
-    fn next(&mut self) -> Option<ListFacetNamesResponse> {
+    fn next(&mut self) -> Option<TOTO> {
         // Return the next item in the buffer if there is one
         if self.buffered_items.len() > 0 {
             return self.buffered_items.pop();
@@ -13393,7 +13393,7 @@ impl Iterator for ListFacetNamesResponseFacetNamesNextTokenIterator {
 }
 
 // Struct for iterating over a paginated API
-pub struct ListIndexResponseIndexAttachmentsNextTokenIterator {
+pub struct TOTOIndexAttachmentsNextTokenIterator {
     // Client for making the request
     client: CloudDirectoryClient,
     // Parameters for the request
@@ -13402,10 +13402,10 @@ pub struct ListIndexResponseIndexAttachmentsNextTokenIterator {
     buffered_items: Vec<ListIndexResponse>,
 }
 
-impl Iterator for ListIndexResponseIndexAttachmentsNextTokenIterator {
-    type Item = ListIndexResponse;
+impl Iterator for TOTOIndexAttachmentsNextTokenIterator {
+    type Item = TOTO;
 
-    fn next(&mut self) -> Option<ListIndexResponse> {
+    fn next(&mut self) -> Option<TOTO> {
         // Return the next item in the buffer if there is one
         if self.buffered_items.len() > 0 {
             return self.buffered_items.pop();
@@ -13434,7 +13434,7 @@ impl Iterator for ListIndexResponseIndexAttachmentsNextTokenIterator {
 }
 
 // Struct for iterating over a paginated API
-pub struct ListObjectAttributesResponseAttributesNextTokenIterator {
+pub struct TOTOAttributesNextTokenIterator {
     // Client for making the request
     client: CloudDirectoryClient,
     // Parameters for the request
@@ -13443,10 +13443,10 @@ pub struct ListObjectAttributesResponseAttributesNextTokenIterator {
     buffered_items: Vec<ListObjectAttributesResponse>,
 }
 
-impl Iterator for ListObjectAttributesResponseAttributesNextTokenIterator {
-    type Item = ListObjectAttributesResponse;
+impl Iterator for TOTOAttributesNextTokenIterator {
+    type Item = TOTO;
 
-    fn next(&mut self) -> Option<ListObjectAttributesResponse> {
+    fn next(&mut self) -> Option<TOTO> {
         // Return the next item in the buffer if there is one
         if self.buffered_items.len() > 0 {
             return self.buffered_items.pop();
@@ -13475,7 +13475,7 @@ impl Iterator for ListObjectAttributesResponseAttributesNextTokenIterator {
 }
 
 // Struct for iterating over a paginated API
-pub struct ListObjectParentPathsResponsePathToObjectIdentifiersListNextTokenIterator {
+pub struct TOTOPathToObjectIdentifiersListNextTokenIterator {
     // Client for making the request
     client: CloudDirectoryClient,
     // Parameters for the request
@@ -13484,10 +13484,10 @@ pub struct ListObjectParentPathsResponsePathToObjectIdentifiersListNextTokenIter
     buffered_items: Vec<ListObjectParentPathsResponse>,
 }
 
-impl Iterator for ListObjectParentPathsResponsePathToObjectIdentifiersListNextTokenIterator {
-    type Item = ListObjectParentPathsResponse;
+impl Iterator for TOTOPathToObjectIdentifiersListNextTokenIterator {
+    type Item = TOTO;
 
-    fn next(&mut self) -> Option<ListObjectParentPathsResponse> {
+    fn next(&mut self) -> Option<TOTO> {
         // Return the next item in the buffer if there is one
         if self.buffered_items.len() > 0 {
             return self.buffered_items.pop();
@@ -13517,7 +13517,7 @@ impl Iterator for ListObjectParentPathsResponsePathToObjectIdentifiersListNextTo
 }
 
 // Struct for iterating over a paginated API
-pub struct ListObjectPoliciesResponseAttachedPolicyIdsNextTokenIterator {
+pub struct TOTOAttachedPolicyIdsNextTokenIterator {
     // Client for making the request
     client: CloudDirectoryClient,
     // Parameters for the request
@@ -13526,10 +13526,10 @@ pub struct ListObjectPoliciesResponseAttachedPolicyIdsNextTokenIterator {
     buffered_items: Vec<ListObjectPoliciesResponse>,
 }
 
-impl Iterator for ListObjectPoliciesResponseAttachedPolicyIdsNextTokenIterator {
-    type Item = ListObjectPoliciesResponse;
+impl Iterator for TOTOAttachedPolicyIdsNextTokenIterator {
+    type Item = TOTO;
 
-    fn next(&mut self) -> Option<ListObjectPoliciesResponse> {
+    fn next(&mut self) -> Option<TOTO> {
         // Return the next item in the buffer if there is one
         if self.buffered_items.len() > 0 {
             return self.buffered_items.pop();
@@ -13558,7 +13558,7 @@ impl Iterator for ListObjectPoliciesResponseAttachedPolicyIdsNextTokenIterator {
 }
 
 // Struct for iterating over a paginated API
-pub struct ListPolicyAttachmentsResponseObjectIdentifiersNextTokenIterator {
+pub struct TOTOObjectIdentifiersNextTokenIterator {
     // Client for making the request
     client: CloudDirectoryClient,
     // Parameters for the request
@@ -13567,10 +13567,10 @@ pub struct ListPolicyAttachmentsResponseObjectIdentifiersNextTokenIterator {
     buffered_items: Vec<ListPolicyAttachmentsResponse>,
 }
 
-impl Iterator for ListPolicyAttachmentsResponseObjectIdentifiersNextTokenIterator {
-    type Item = ListPolicyAttachmentsResponse;
+impl Iterator for TOTOObjectIdentifiersNextTokenIterator {
+    type Item = TOTO;
 
-    fn next(&mut self) -> Option<ListPolicyAttachmentsResponse> {
+    fn next(&mut self) -> Option<TOTO> {
         // Return the next item in the buffer if there is one
         if self.buffered_items.len() > 0 {
             return self.buffered_items.pop();
@@ -13599,7 +13599,7 @@ impl Iterator for ListPolicyAttachmentsResponseObjectIdentifiersNextTokenIterato
 }
 
 // Struct for iterating over a paginated API
-pub struct ListPublishedSchemaArnsResponseSchemaArnsNextTokenIterator {
+pub struct TOTOSchemaArnsNextTokenIterator {
     // Client for making the request
     client: CloudDirectoryClient,
     // Parameters for the request
@@ -13608,10 +13608,10 @@ pub struct ListPublishedSchemaArnsResponseSchemaArnsNextTokenIterator {
     buffered_items: Vec<ListPublishedSchemaArnsResponse>,
 }
 
-impl Iterator for ListPublishedSchemaArnsResponseSchemaArnsNextTokenIterator {
-    type Item = ListPublishedSchemaArnsResponse;
+impl Iterator for TOTOSchemaArnsNextTokenIterator {
+    type Item = TOTO;
 
-    fn next(&mut self) -> Option<ListPublishedSchemaArnsResponse> {
+    fn next(&mut self) -> Option<TOTO> {
         // Return the next item in the buffer if there is one
         if self.buffered_items.len() > 0 {
             return self.buffered_items.pop();
@@ -13640,7 +13640,7 @@ impl Iterator for ListPublishedSchemaArnsResponseSchemaArnsNextTokenIterator {
 }
 
 // Struct for iterating over a paginated API
-pub struct ListTagsForResourceResponseTagsNextTokenIterator {
+pub struct TOTOTagsNextTokenIterator {
     // Client for making the request
     client: CloudDirectoryClient,
     // Parameters for the request
@@ -13649,10 +13649,10 @@ pub struct ListTagsForResourceResponseTagsNextTokenIterator {
     buffered_items: Vec<ListTagsForResourceResponse>,
 }
 
-impl Iterator for ListTagsForResourceResponseTagsNextTokenIterator {
-    type Item = ListTagsForResourceResponse;
+impl Iterator for TOTOTagsNextTokenIterator {
+    type Item = TOTO;
 
-    fn next(&mut self) -> Option<ListTagsForResourceResponse> {
+    fn next(&mut self) -> Option<TOTO> {
         // Return the next item in the buffer if there is one
         if self.buffered_items.len() > 0 {
             return self.buffered_items.pop();
@@ -13681,7 +13681,7 @@ impl Iterator for ListTagsForResourceResponseTagsNextTokenIterator {
 }
 
 // Struct for iterating over a paginated API
-pub struct ListTypedLinkFacetAttributesResponseAttributesNextTokenIterator {
+pub struct TOTOAttributesNextTokenIterator {
     // Client for making the request
     client: CloudDirectoryClient,
     // Parameters for the request
@@ -13690,10 +13690,10 @@ pub struct ListTypedLinkFacetAttributesResponseAttributesNextTokenIterator {
     buffered_items: Vec<ListTypedLinkFacetAttributesResponse>,
 }
 
-impl Iterator for ListTypedLinkFacetAttributesResponseAttributesNextTokenIterator {
-    type Item = ListTypedLinkFacetAttributesResponse;
+impl Iterator for TOTOAttributesNextTokenIterator {
+    type Item = TOTO;
 
-    fn next(&mut self) -> Option<ListTypedLinkFacetAttributesResponse> {
+    fn next(&mut self) -> Option<TOTO> {
         // Return the next item in the buffer if there is one
         if self.buffered_items.len() > 0 {
             return self.buffered_items.pop();
@@ -13724,7 +13724,7 @@ impl Iterator for ListTypedLinkFacetAttributesResponseAttributesNextTokenIterato
 }
 
 // Struct for iterating over a paginated API
-pub struct ListTypedLinkFacetNamesResponseFacetNamesNextTokenIterator {
+pub struct TOTOFacetNamesNextTokenIterator {
     // Client for making the request
     client: CloudDirectoryClient,
     // Parameters for the request
@@ -13733,10 +13733,10 @@ pub struct ListTypedLinkFacetNamesResponseFacetNamesNextTokenIterator {
     buffered_items: Vec<ListTypedLinkFacetNamesResponse>,
 }
 
-impl Iterator for ListTypedLinkFacetNamesResponseFacetNamesNextTokenIterator {
-    type Item = ListTypedLinkFacetNamesResponse;
+impl Iterator for TOTOFacetNamesNextTokenIterator {
+    type Item = TOTO;
 
-    fn next(&mut self) -> Option<ListTypedLinkFacetNamesResponse> {
+    fn next(&mut self) -> Option<TOTO> {
         // Return the next item in the buffer if there is one
         if self.buffered_items.len() > 0 {
             return self.buffered_items.pop();
@@ -13765,7 +13765,7 @@ impl Iterator for ListTypedLinkFacetNamesResponseFacetNamesNextTokenIterator {
 }
 
 // Struct for iterating over a paginated API
-pub struct LookupPolicyResponsePolicyToPathListNextTokenIterator {
+pub struct TOTOPolicyToPathListNextTokenIterator {
     // Client for making the request
     client: CloudDirectoryClient,
     // Parameters for the request
@@ -13774,10 +13774,10 @@ pub struct LookupPolicyResponsePolicyToPathListNextTokenIterator {
     buffered_items: Vec<LookupPolicyResponse>,
 }
 
-impl Iterator for LookupPolicyResponsePolicyToPathListNextTokenIterator {
-    type Item = LookupPolicyResponse;
+impl Iterator for TOTOPolicyToPathListNextTokenIterator {
+    type Item = TOTO;
 
-    fn next(&mut self) -> Option<LookupPolicyResponse> {
+    fn next(&mut self) -> Option<TOTO> {
         // Return the next item in the buffer if there is one
         if self.buffered_items.len() > 0 {
             return self.buffered_items.pop();
