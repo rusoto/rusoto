@@ -18,18 +18,18 @@ use std::io;
 use futures::future;
 use futures::Future;
 use rusoto_core::reactor::{CredentialsProvider, RequestDispatcher};
-use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::region;
+use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::{ClientInner, RusotoFuture};
 
-use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
+use rusoto_core::request::HttpDispatchError;
 
-use serde_json;
-use rusoto_core::signature::SignedRequest;
-use serde_json::Value as SerdeJsonValue;
-use serde_json::from_str;
 use hyper::StatusCode;
+use rusoto_core::signature::SignedRequest;
+use serde_json;
+use serde_json::from_str;
+use serde_json::Value as SerdeJsonValue;
 /// <p>Represents an AWS session credentials object. These credentials are temporary credentials that are issued by AWS Secure Token Service (STS). They can be used to access input and output artifacts in the Amazon S3 bucket used to store artifact for the pipeline in AWS CodePipeline.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct AWSSessionCredentials {
@@ -3734,161 +3734,160 @@ pub trait CodePipeline {
     /// <p>Returns information about a specified job and whether that job has been received by the job worker. Only used for custom actions.</p>
     fn acknowledge_job(
         &self,
-        input: &AcknowledgeJobInput,
+        input: AcknowledgeJobInput,
     ) -> RusotoFuture<AcknowledgeJobOutput, AcknowledgeJobError>;
 
     /// <p>Confirms a job worker has received the specified job. Only used for partner actions.</p>
     fn acknowledge_third_party_job(
         &self,
-        input: &AcknowledgeThirdPartyJobInput,
+        input: AcknowledgeThirdPartyJobInput,
     ) -> RusotoFuture<AcknowledgeThirdPartyJobOutput, AcknowledgeThirdPartyJobError>;
 
     /// <p>Creates a new custom action that can be used in all pipelines associated with the AWS account. Only used for custom actions.</p>
     fn create_custom_action_type(
         &self,
-        input: &CreateCustomActionTypeInput,
+        input: CreateCustomActionTypeInput,
     ) -> RusotoFuture<CreateCustomActionTypeOutput, CreateCustomActionTypeError>;
 
     /// <p>Creates a pipeline.</p>
     fn create_pipeline(
         &self,
-        input: &CreatePipelineInput,
+        input: CreatePipelineInput,
     ) -> RusotoFuture<CreatePipelineOutput, CreatePipelineError>;
 
     /// <p><p>Marks a custom action as deleted. PollForJobs for the custom action will fail after the action is marked for deletion. Only used for custom actions.</p> <important> <p>You cannot recreate a custom action after it has been deleted unless you increase the version number of the action.</p> </important></p>
     fn delete_custom_action_type(
         &self,
-        input: &DeleteCustomActionTypeInput,
+        input: DeleteCustomActionTypeInput,
     ) -> RusotoFuture<(), DeleteCustomActionTypeError>;
 
     /// <p>Deletes the specified pipeline.</p>
-    fn delete_pipeline(&self, input: &DeletePipelineInput)
-        -> RusotoFuture<(), DeletePipelineError>;
+    fn delete_pipeline(&self, input: DeletePipelineInput) -> RusotoFuture<(), DeletePipelineError>;
 
     /// <p>Prevents artifacts in a pipeline from transitioning to the next stage in the pipeline.</p>
     fn disable_stage_transition(
         &self,
-        input: &DisableStageTransitionInput,
+        input: DisableStageTransitionInput,
     ) -> RusotoFuture<(), DisableStageTransitionError>;
 
     /// <p>Enables artifacts in a pipeline to transition to a stage in a pipeline.</p>
     fn enable_stage_transition(
         &self,
-        input: &EnableStageTransitionInput,
+        input: EnableStageTransitionInput,
     ) -> RusotoFuture<(), EnableStageTransitionError>;
 
     /// <p><p>Returns information about a job. Only used for custom actions.</p> <important> <p>When this API is called, AWS CodePipeline returns temporary credentials for the Amazon S3 bucket used to store artifacts for the pipeline, if the action requires access to that Amazon S3 bucket for input or output artifacts. Additionally, this API returns any secret values defined for the action.</p> </important></p>
     fn get_job_details(
         &self,
-        input: &GetJobDetailsInput,
+        input: GetJobDetailsInput,
     ) -> RusotoFuture<GetJobDetailsOutput, GetJobDetailsError>;
 
     /// <p>Returns the metadata, structure, stages, and actions of a pipeline. Can be used to return the entire structure of a pipeline in JSON format, which can then be modified and used to update the pipeline structure with <a>UpdatePipeline</a>.</p>
     fn get_pipeline(
         &self,
-        input: &GetPipelineInput,
+        input: GetPipelineInput,
     ) -> RusotoFuture<GetPipelineOutput, GetPipelineError>;
 
     /// <p>Returns information about an execution of a pipeline, including details about artifacts, the pipeline execution ID, and the name, version, and status of the pipeline.</p>
     fn get_pipeline_execution(
         &self,
-        input: &GetPipelineExecutionInput,
+        input: GetPipelineExecutionInput,
     ) -> RusotoFuture<GetPipelineExecutionOutput, GetPipelineExecutionError>;
 
     /// <p>Returns information about the state of a pipeline, including the stages and actions.</p>
     fn get_pipeline_state(
         &self,
-        input: &GetPipelineStateInput,
+        input: GetPipelineStateInput,
     ) -> RusotoFuture<GetPipelineStateOutput, GetPipelineStateError>;
 
     /// <p><p>Requests the details of a job for a third party action. Only used for partner actions.</p> <important> <p>When this API is called, AWS CodePipeline returns temporary credentials for the Amazon S3 bucket used to store artifacts for the pipeline, if the action requires access to that Amazon S3 bucket for input or output artifacts. Additionally, this API returns any secret values defined for the action.</p> </important></p>
     fn get_third_party_job_details(
         &self,
-        input: &GetThirdPartyJobDetailsInput,
+        input: GetThirdPartyJobDetailsInput,
     ) -> RusotoFuture<GetThirdPartyJobDetailsOutput, GetThirdPartyJobDetailsError>;
 
     /// <p>Gets a summary of all AWS CodePipeline action types associated with your account.</p>
     fn list_action_types(
         &self,
-        input: &ListActionTypesInput,
+        input: ListActionTypesInput,
     ) -> RusotoFuture<ListActionTypesOutput, ListActionTypesError>;
 
     /// <p>Gets a summary of the most recent executions for a pipeline.</p>
     fn list_pipeline_executions(
         &self,
-        input: &ListPipelineExecutionsInput,
+        input: ListPipelineExecutionsInput,
     ) -> RusotoFuture<ListPipelineExecutionsOutput, ListPipelineExecutionsError>;
 
     /// <p>Gets a summary of all of the pipelines associated with your account.</p>
     fn list_pipelines(
         &self,
-        input: &ListPipelinesInput,
+        input: ListPipelinesInput,
     ) -> RusotoFuture<ListPipelinesOutput, ListPipelinesError>;
 
     /// <p><p>Returns information about any jobs for AWS CodePipeline to act upon.</p> <important> <p>When this API is called, AWS CodePipeline returns temporary credentials for the Amazon S3 bucket used to store artifacts for the pipeline, if the action requires access to that Amazon S3 bucket for input or output artifacts. Additionally, this API returns any secret values defined for the action.</p> </important></p>
     fn poll_for_jobs(
         &self,
-        input: &PollForJobsInput,
+        input: PollForJobsInput,
     ) -> RusotoFuture<PollForJobsOutput, PollForJobsError>;
 
     /// <p><p>Determines whether there are any third party jobs for a job worker to act on. Only used for partner actions.</p> <important> <p>When this API is called, AWS CodePipeline returns temporary credentials for the Amazon S3 bucket used to store artifacts for the pipeline, if the action requires access to that Amazon S3 bucket for input or output artifacts.</p> </important></p>
     fn poll_for_third_party_jobs(
         &self,
-        input: &PollForThirdPartyJobsInput,
+        input: PollForThirdPartyJobsInput,
     ) -> RusotoFuture<PollForThirdPartyJobsOutput, PollForThirdPartyJobsError>;
 
     /// <p>Provides information to AWS CodePipeline about new revisions to a source.</p>
     fn put_action_revision(
         &self,
-        input: &PutActionRevisionInput,
+        input: PutActionRevisionInput,
     ) -> RusotoFuture<PutActionRevisionOutput, PutActionRevisionError>;
 
     /// <p>Provides the response to a manual approval request to AWS CodePipeline. Valid responses include Approved and Rejected.</p>
     fn put_approval_result(
         &self,
-        input: &PutApprovalResultInput,
+        input: PutApprovalResultInput,
     ) -> RusotoFuture<PutApprovalResultOutput, PutApprovalResultError>;
 
     /// <p>Represents the failure of a job as returned to the pipeline by a job worker. Only used for custom actions.</p>
     fn put_job_failure_result(
         &self,
-        input: &PutJobFailureResultInput,
+        input: PutJobFailureResultInput,
     ) -> RusotoFuture<(), PutJobFailureResultError>;
 
     /// <p>Represents the success of a job as returned to the pipeline by a job worker. Only used for custom actions.</p>
     fn put_job_success_result(
         &self,
-        input: &PutJobSuccessResultInput,
+        input: PutJobSuccessResultInput,
     ) -> RusotoFuture<(), PutJobSuccessResultError>;
 
     /// <p>Represents the failure of a third party job as returned to the pipeline by a job worker. Only used for partner actions.</p>
     fn put_third_party_job_failure_result(
         &self,
-        input: &PutThirdPartyJobFailureResultInput,
+        input: PutThirdPartyJobFailureResultInput,
     ) -> RusotoFuture<(), PutThirdPartyJobFailureResultError>;
 
     /// <p>Represents the success of a third party job as returned to the pipeline by a job worker. Only used for partner actions.</p>
     fn put_third_party_job_success_result(
         &self,
-        input: &PutThirdPartyJobSuccessResultInput,
+        input: PutThirdPartyJobSuccessResultInput,
     ) -> RusotoFuture<(), PutThirdPartyJobSuccessResultError>;
 
     /// <p>Resumes the pipeline execution by retrying the last failed actions in a stage.</p>
     fn retry_stage_execution(
         &self,
-        input: &RetryStageExecutionInput,
+        input: RetryStageExecutionInput,
     ) -> RusotoFuture<RetryStageExecutionOutput, RetryStageExecutionError>;
 
     /// <p>Starts the specified pipeline. Specifically, it begins processing the latest commit to the source location specified as part of the pipeline.</p>
     fn start_pipeline_execution(
         &self,
-        input: &StartPipelineExecutionInput,
+        input: StartPipelineExecutionInput,
     ) -> RusotoFuture<StartPipelineExecutionOutput, StartPipelineExecutionError>;
 
     /// <p>Updates a specified pipeline with edits or changes to its structure. Use a JSON file with the pipeline structure in conjunction with UpdatePipeline to provide the full structure of the pipeline. Updating the pipeline increases the version number of the pipeline by 1.</p>
     fn update_pipeline(
         &self,
-        input: &UpdatePipelineInput,
+        input: UpdatePipelineInput,
     ) -> RusotoFuture<UpdatePipelineOutput, UpdatePipelineError>;
 }
 /// A client for the CodePipeline API.
@@ -3937,13 +3936,13 @@ where
     /// <p>Returns information about a specified job and whether that job has been received by the job worker. Only used for custom actions.</p>
     fn acknowledge_job(
         &self,
-        input: &AcknowledgeJobInput,
+        input: AcknowledgeJobInput,
     ) -> RusotoFuture<AcknowledgeJobOutput, AcknowledgeJobError> {
         let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodePipeline_20150709.AcknowledgeJob");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -3951,7 +3950,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -3974,7 +3973,7 @@ where
     /// <p>Confirms a job worker has received the specified job. Only used for partner actions.</p>
     fn acknowledge_third_party_job(
         &self,
-        input: &AcknowledgeThirdPartyJobInput,
+        input: AcknowledgeThirdPartyJobInput,
     ) -> RusotoFuture<AcknowledgeThirdPartyJobOutput, AcknowledgeThirdPartyJobError> {
         let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
 
@@ -3983,7 +3982,7 @@ where
             "x-amz-target",
             "CodePipeline_20150709.AcknowledgeThirdPartyJob",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -3991,7 +3990,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -4014,7 +4013,7 @@ where
     /// <p>Creates a new custom action that can be used in all pipelines associated with the AWS account. Only used for custom actions.</p>
     fn create_custom_action_type(
         &self,
-        input: &CreateCustomActionTypeInput,
+        input: CreateCustomActionTypeInput,
     ) -> RusotoFuture<CreateCustomActionTypeOutput, CreateCustomActionTypeError> {
         let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
 
@@ -4023,7 +4022,7 @@ where
             "x-amz-target",
             "CodePipeline_20150709.CreateCustomActionType",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -4031,7 +4030,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -4054,13 +4053,13 @@ where
     /// <p>Creates a pipeline.</p>
     fn create_pipeline(
         &self,
-        input: &CreatePipelineInput,
+        input: CreatePipelineInput,
     ) -> RusotoFuture<CreatePipelineOutput, CreatePipelineError> {
         let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodePipeline_20150709.CreatePipeline");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -4068,7 +4067,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -4091,7 +4090,7 @@ where
     /// <p><p>Marks a custom action as deleted. PollForJobs for the custom action will fail after the action is marked for deletion. Only used for custom actions.</p> <important> <p>You cannot recreate a custom action after it has been deleted unless you increase the version number of the action.</p> </important></p>
     fn delete_custom_action_type(
         &self,
-        input: &DeleteCustomActionTypeInput,
+        input: DeleteCustomActionTypeInput,
     ) -> RusotoFuture<(), DeleteCustomActionTypeError> {
         let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
 
@@ -4100,7 +4099,7 @@ where
             "x-amz-target",
             "CodePipeline_20150709.DeleteCustomActionType",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -4119,15 +4118,12 @@ where
     }
 
     /// <p>Deletes the specified pipeline.</p>
-    fn delete_pipeline(
-        &self,
-        input: &DeletePipelineInput,
-    ) -> RusotoFuture<(), DeletePipelineError> {
+    fn delete_pipeline(&self, input: DeletePipelineInput) -> RusotoFuture<(), DeletePipelineError> {
         let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodePipeline_20150709.DeletePipeline");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -4148,7 +4144,7 @@ where
     /// <p>Prevents artifacts in a pipeline from transitioning to the next stage in the pipeline.</p>
     fn disable_stage_transition(
         &self,
-        input: &DisableStageTransitionInput,
+        input: DisableStageTransitionInput,
     ) -> RusotoFuture<(), DisableStageTransitionError> {
         let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
 
@@ -4157,7 +4153,7 @@ where
             "x-amz-target",
             "CodePipeline_20150709.DisableStageTransition",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -4178,7 +4174,7 @@ where
     /// <p>Enables artifacts in a pipeline to transition to a stage in a pipeline.</p>
     fn enable_stage_transition(
         &self,
-        input: &EnableStageTransitionInput,
+        input: EnableStageTransitionInput,
     ) -> RusotoFuture<(), EnableStageTransitionError> {
         let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
 
@@ -4187,7 +4183,7 @@ where
             "x-amz-target",
             "CodePipeline_20150709.EnableStageTransition",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -4208,13 +4204,13 @@ where
     /// <p><p>Returns information about a job. Only used for custom actions.</p> <important> <p>When this API is called, AWS CodePipeline returns temporary credentials for the Amazon S3 bucket used to store artifacts for the pipeline, if the action requires access to that Amazon S3 bucket for input or output artifacts. Additionally, this API returns any secret values defined for the action.</p> </important></p>
     fn get_job_details(
         &self,
-        input: &GetJobDetailsInput,
+        input: GetJobDetailsInput,
     ) -> RusotoFuture<GetJobDetailsOutput, GetJobDetailsError> {
         let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodePipeline_20150709.GetJobDetails");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -4222,7 +4218,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -4245,13 +4241,13 @@ where
     /// <p>Returns the metadata, structure, stages, and actions of a pipeline. Can be used to return the entire structure of a pipeline in JSON format, which can then be modified and used to update the pipeline structure with <a>UpdatePipeline</a>.</p>
     fn get_pipeline(
         &self,
-        input: &GetPipelineInput,
+        input: GetPipelineInput,
     ) -> RusotoFuture<GetPipelineOutput, GetPipelineError> {
         let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodePipeline_20150709.GetPipeline");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -4259,7 +4255,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -4282,13 +4278,13 @@ where
     /// <p>Returns information about an execution of a pipeline, including details about artifacts, the pipeline execution ID, and the name, version, and status of the pipeline.</p>
     fn get_pipeline_execution(
         &self,
-        input: &GetPipelineExecutionInput,
+        input: GetPipelineExecutionInput,
     ) -> RusotoFuture<GetPipelineExecutionOutput, GetPipelineExecutionError> {
         let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodePipeline_20150709.GetPipelineExecution");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -4296,7 +4292,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -4319,13 +4315,13 @@ where
     /// <p>Returns information about the state of a pipeline, including the stages and actions.</p>
     fn get_pipeline_state(
         &self,
-        input: &GetPipelineStateInput,
+        input: GetPipelineStateInput,
     ) -> RusotoFuture<GetPipelineStateOutput, GetPipelineStateError> {
         let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodePipeline_20150709.GetPipelineState");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -4333,7 +4329,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -4356,7 +4352,7 @@ where
     /// <p><p>Requests the details of a job for a third party action. Only used for partner actions.</p> <important> <p>When this API is called, AWS CodePipeline returns temporary credentials for the Amazon S3 bucket used to store artifacts for the pipeline, if the action requires access to that Amazon S3 bucket for input or output artifacts. Additionally, this API returns any secret values defined for the action.</p> </important></p>
     fn get_third_party_job_details(
         &self,
-        input: &GetThirdPartyJobDetailsInput,
+        input: GetThirdPartyJobDetailsInput,
     ) -> RusotoFuture<GetThirdPartyJobDetailsOutput, GetThirdPartyJobDetailsError> {
         let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
 
@@ -4365,7 +4361,7 @@ where
             "x-amz-target",
             "CodePipeline_20150709.GetThirdPartyJobDetails",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -4373,7 +4369,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -4396,13 +4392,13 @@ where
     /// <p>Gets a summary of all AWS CodePipeline action types associated with your account.</p>
     fn list_action_types(
         &self,
-        input: &ListActionTypesInput,
+        input: ListActionTypesInput,
     ) -> RusotoFuture<ListActionTypesOutput, ListActionTypesError> {
         let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodePipeline_20150709.ListActionTypes");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -4410,7 +4406,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -4433,7 +4429,7 @@ where
     /// <p>Gets a summary of the most recent executions for a pipeline.</p>
     fn list_pipeline_executions(
         &self,
-        input: &ListPipelineExecutionsInput,
+        input: ListPipelineExecutionsInput,
     ) -> RusotoFuture<ListPipelineExecutionsOutput, ListPipelineExecutionsError> {
         let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
 
@@ -4442,7 +4438,7 @@ where
             "x-amz-target",
             "CodePipeline_20150709.ListPipelineExecutions",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -4450,7 +4446,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -4473,13 +4469,13 @@ where
     /// <p>Gets a summary of all of the pipelines associated with your account.</p>
     fn list_pipelines(
         &self,
-        input: &ListPipelinesInput,
+        input: ListPipelinesInput,
     ) -> RusotoFuture<ListPipelinesOutput, ListPipelinesError> {
         let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodePipeline_20150709.ListPipelines");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -4487,7 +4483,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -4510,13 +4506,13 @@ where
     /// <p><p>Returns information about any jobs for AWS CodePipeline to act upon.</p> <important> <p>When this API is called, AWS CodePipeline returns temporary credentials for the Amazon S3 bucket used to store artifacts for the pipeline, if the action requires access to that Amazon S3 bucket for input or output artifacts. Additionally, this API returns any secret values defined for the action.</p> </important></p>
     fn poll_for_jobs(
         &self,
-        input: &PollForJobsInput,
+        input: PollForJobsInput,
     ) -> RusotoFuture<PollForJobsOutput, PollForJobsError> {
         let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodePipeline_20150709.PollForJobs");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -4524,7 +4520,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -4547,7 +4543,7 @@ where
     /// <p><p>Determines whether there are any third party jobs for a job worker to act on. Only used for partner actions.</p> <important> <p>When this API is called, AWS CodePipeline returns temporary credentials for the Amazon S3 bucket used to store artifacts for the pipeline, if the action requires access to that Amazon S3 bucket for input or output artifacts.</p> </important></p>
     fn poll_for_third_party_jobs(
         &self,
-        input: &PollForThirdPartyJobsInput,
+        input: PollForThirdPartyJobsInput,
     ) -> RusotoFuture<PollForThirdPartyJobsOutput, PollForThirdPartyJobsError> {
         let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
 
@@ -4556,7 +4552,7 @@ where
             "x-amz-target",
             "CodePipeline_20150709.PollForThirdPartyJobs",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -4564,7 +4560,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -4587,13 +4583,13 @@ where
     /// <p>Provides information to AWS CodePipeline about new revisions to a source.</p>
     fn put_action_revision(
         &self,
-        input: &PutActionRevisionInput,
+        input: PutActionRevisionInput,
     ) -> RusotoFuture<PutActionRevisionOutput, PutActionRevisionError> {
         let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodePipeline_20150709.PutActionRevision");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -4601,7 +4597,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -4624,13 +4620,13 @@ where
     /// <p>Provides the response to a manual approval request to AWS CodePipeline. Valid responses include Approved and Rejected.</p>
     fn put_approval_result(
         &self,
-        input: &PutApprovalResultInput,
+        input: PutApprovalResultInput,
     ) -> RusotoFuture<PutApprovalResultOutput, PutApprovalResultError> {
         let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodePipeline_20150709.PutApprovalResult");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -4638,7 +4634,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -4661,13 +4657,13 @@ where
     /// <p>Represents the failure of a job as returned to the pipeline by a job worker. Only used for custom actions.</p>
     fn put_job_failure_result(
         &self,
-        input: &PutJobFailureResultInput,
+        input: PutJobFailureResultInput,
     ) -> RusotoFuture<(), PutJobFailureResultError> {
         let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodePipeline_20150709.PutJobFailureResult");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -4688,13 +4684,13 @@ where
     /// <p>Represents the success of a job as returned to the pipeline by a job worker. Only used for custom actions.</p>
     fn put_job_success_result(
         &self,
-        input: &PutJobSuccessResultInput,
+        input: PutJobSuccessResultInput,
     ) -> RusotoFuture<(), PutJobSuccessResultError> {
         let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodePipeline_20150709.PutJobSuccessResult");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -4715,7 +4711,7 @@ where
     /// <p>Represents the failure of a third party job as returned to the pipeline by a job worker. Only used for partner actions.</p>
     fn put_third_party_job_failure_result(
         &self,
-        input: &PutThirdPartyJobFailureResultInput,
+        input: PutThirdPartyJobFailureResultInput,
     ) -> RusotoFuture<(), PutThirdPartyJobFailureResultError> {
         let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
 
@@ -4724,7 +4720,7 @@ where
             "x-amz-target",
             "CodePipeline_20150709.PutThirdPartyJobFailureResult",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -4745,7 +4741,7 @@ where
     /// <p>Represents the success of a third party job as returned to the pipeline by a job worker. Only used for partner actions.</p>
     fn put_third_party_job_success_result(
         &self,
-        input: &PutThirdPartyJobSuccessResultInput,
+        input: PutThirdPartyJobSuccessResultInput,
     ) -> RusotoFuture<(), PutThirdPartyJobSuccessResultError> {
         let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
 
@@ -4754,7 +4750,7 @@ where
             "x-amz-target",
             "CodePipeline_20150709.PutThirdPartyJobSuccessResult",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -4775,13 +4771,13 @@ where
     /// <p>Resumes the pipeline execution by retrying the last failed actions in a stage.</p>
     fn retry_stage_execution(
         &self,
-        input: &RetryStageExecutionInput,
+        input: RetryStageExecutionInput,
     ) -> RusotoFuture<RetryStageExecutionOutput, RetryStageExecutionError> {
         let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodePipeline_20150709.RetryStageExecution");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -4789,7 +4785,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -4812,7 +4808,7 @@ where
     /// <p>Starts the specified pipeline. Specifically, it begins processing the latest commit to the source location specified as part of the pipeline.</p>
     fn start_pipeline_execution(
         &self,
-        input: &StartPipelineExecutionInput,
+        input: StartPipelineExecutionInput,
     ) -> RusotoFuture<StartPipelineExecutionOutput, StartPipelineExecutionError> {
         let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
 
@@ -4821,7 +4817,7 @@ where
             "x-amz-target",
             "CodePipeline_20150709.StartPipelineExecution",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -4829,7 +4825,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -4852,13 +4848,13 @@ where
     /// <p>Updates a specified pipeline with edits or changes to its structure. Use a JSON file with the pipeline structure in conjunction with UpdatePipeline to provide the full structure of the pipeline. Updating the pipeline increases the version number of the pipeline by 1.</p>
     fn update_pipeline(
         &self,
-        input: &UpdatePipelineInput,
+        input: UpdatePipelineInput,
     ) -> RusotoFuture<UpdatePipelineOutput, UpdatePipelineError> {
         let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodePipeline_20150709.UpdatePipeline");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -4866,7 +4862,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 

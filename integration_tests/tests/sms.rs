@@ -10,6 +10,6 @@ use rusoto_core::Region;
 fn should_get_servers() {
     let client = ServerMigrationServiceClient::simple(Region::UsEast1);
 
-    let response = client.get_servers(&GetServersRequest::default()).sync().unwrap();
+    let response = client.get_servers(GetServersRequest::default()).sync().unwrap();
     println!("{:#?}", response);
 }

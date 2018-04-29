@@ -18,24 +18,24 @@ use std::io;
 use futures::future;
 use futures::Future;
 use rusoto_core::reactor::{CredentialsProvider, RequestDispatcher};
-use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::region;
+use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::{ClientInner, RusotoFuture};
 
-use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
+use rusoto_core::request::HttpDispatchError;
 
-use std::str::FromStr;
-use xml::EventReader;
-use xml::reader::ParserConfig;
+use hyper::StatusCode;
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::signature::SignedRequest;
-use xml::reader::XmlEvent;
-use rusoto_core::xmlutil::{Next, Peek, XmlParseError, XmlResponse};
+use rusoto_core::xmlerror::*;
 use rusoto_core::xmlutil::{characters, end_element, find_start_element, peek_at_name, skip_tree,
                            start_element};
-use rusoto_core::xmlerror::*;
-use hyper::StatusCode;
+use rusoto_core::xmlutil::{Next, Peek, XmlParseError, XmlResponse};
+use std::str::FromStr;
+use xml::reader::ParserConfig;
+use xml::reader::XmlEvent;
+use xml::EventReader;
 
 enum DeserializerNext {
     Close,
@@ -183,8 +183,7 @@ impl AlarmHistoryItemsDeserializer {
                 DeserializerNext::Element(name) => {
                     if name == "member" {
                         obj.push(try!(AlarmHistoryItemDeserializer::deserialize(
-                            "member",
-                            stack
+                            "member", stack
                         )));
                     } else {
                         skip_tree(stack);
@@ -294,8 +293,7 @@ impl DashboardEntriesDeserializer {
                 DeserializerNext::Element(name) => {
                     if name == "member" {
                         obj.push(try!(DashboardEntryDeserializer::deserialize(
-                            "member",
-                            stack
+                            "member", stack
                         )));
                     } else {
                         skip_tree(stack);
@@ -486,8 +484,7 @@ impl DashboardValidationMessagesDeserializer {
                 DeserializerNext::Element(name) => {
                     if name == "member" {
                         obj.push(try!(DashboardValidationMessageDeserializer::deserialize(
-                            "member",
-                            stack
+                            "member", stack
                         )));
                     } else {
                         skip_tree(stack);
@@ -565,8 +562,7 @@ impl DatapointDeserializer {
                 DeserializerNext::Element(name) => match &name[..] {
                     "Average" => {
                         obj.average = Some(try!(DatapointValueDeserializer::deserialize(
-                            "Average",
-                            stack
+                            "Average", stack
                         )));
                     }
                     "ExtendedStatistics" => {
@@ -576,14 +572,12 @@ impl DatapointDeserializer {
                     }
                     "Maximum" => {
                         obj.maximum = Some(try!(DatapointValueDeserializer::deserialize(
-                            "Maximum",
-                            stack
+                            "Maximum", stack
                         )));
                     }
                     "Minimum" => {
                         obj.minimum = Some(try!(DatapointValueDeserializer::deserialize(
-                            "Minimum",
-                            stack
+                            "Minimum", stack
                         )));
                     }
                     "SampleCount" => {
@@ -676,8 +670,7 @@ impl DatapointValuesDeserializer {
                 DeserializerNext::Element(name) => {
                     if name == "member" {
                         obj.push(try!(DatapointValueDeserializer::deserialize(
-                            "member",
-                            stack
+                            "member", stack
                         )));
                     } else {
                         skip_tree(stack);
@@ -2084,14 +2077,12 @@ impl MessageDataDeserializer {
                 DeserializerNext::Element(name) => match &name[..] {
                     "Code" => {
                         obj.code = Some(try!(MessageDataCodeDeserializer::deserialize(
-                            "Code",
-                            stack
+                            "Code", stack
                         )));
                     }
                     "Value" => {
                         obj.value = Some(try!(MessageDataValueDeserializer::deserialize(
-                            "Value",
-                            stack
+                            "Value", stack
                         )));
                     }
                     _ => skip_tree(stack),
@@ -2633,8 +2624,7 @@ impl MetricDataResultDeserializer {
                     }
                     "Values" => {
                         obj.values = Some(try!(DatapointValuesDeserializer::deserialize(
-                            "Values",
-                            stack
+                            "Values", stack
                         )));
                     }
                     _ => skip_tree(stack),
@@ -2714,8 +2704,7 @@ impl MetricDataResultsDeserializer {
                 DeserializerNext::Element(name) => {
                     if name == "member" {
                         obj.push(try!(MetricDataResultDeserializer::deserialize(
-                            "member",
-                            stack
+                            "member", stack
                         )));
                     } else {
                         skip_tree(stack);
@@ -4888,91 +4877,89 @@ impl Error for SetAlarmStateError {
 /// Trait representing the capabilities of the CloudWatch API. CloudWatch clients implement this trait.
 pub trait CloudWatch {
     /// <p>Deletes the specified alarms. In the event of an error, no alarms are deleted.</p>
-    fn delete_alarms(&self, input: &DeleteAlarmsInput) -> RusotoFuture<(), DeleteAlarmsError>;
+    fn delete_alarms(&self, input: DeleteAlarmsInput) -> RusotoFuture<(), DeleteAlarmsError>;
 
     /// <p>Deletes all dashboards that you specify. You may specify up to 100 dashboards to delete. If there is an error during this call, no dashboards are deleted.</p>
     fn delete_dashboards(
         &self,
-        input: &DeleteDashboardsInput,
+        input: DeleteDashboardsInput,
     ) -> RusotoFuture<DeleteDashboardsOutput, DeleteDashboardsError>;
 
     /// <p>Retrieves the history for the specified alarm. You can filter the results by date range or item type. If an alarm name is not specified, the histories for all alarms are returned.</p> <p>CloudWatch retains the history of an alarm even if you delete the alarm.</p>
     fn describe_alarm_history(
         &self,
-        input: &DescribeAlarmHistoryInput,
+        input: DescribeAlarmHistoryInput,
     ) -> RusotoFuture<DescribeAlarmHistoryOutput, DescribeAlarmHistoryError>;
 
     /// <p>Retrieves the specified alarms. If no alarms are specified, all alarms are returned. Alarms can be retrieved by using only a prefix for the alarm name, the alarm state, or a prefix for any action.</p>
     fn describe_alarms(
         &self,
-        input: &DescribeAlarmsInput,
+        input: DescribeAlarmsInput,
     ) -> RusotoFuture<DescribeAlarmsOutput, DescribeAlarmsError>;
 
     /// <p>Retrieves the alarms for the specified metric. To filter the results, specify a statistic, period, or unit.</p>
     fn describe_alarms_for_metric(
         &self,
-        input: &DescribeAlarmsForMetricInput,
+        input: DescribeAlarmsForMetricInput,
     ) -> RusotoFuture<DescribeAlarmsForMetricOutput, DescribeAlarmsForMetricError>;
 
     /// <p>Disables the actions for the specified alarms. When an alarm's actions are disabled, the alarm actions do not execute when the alarm state changes.</p>
     fn disable_alarm_actions(
         &self,
-        input: &DisableAlarmActionsInput,
+        input: DisableAlarmActionsInput,
     ) -> RusotoFuture<(), DisableAlarmActionsError>;
 
     /// <p>Enables the actions for the specified alarms.</p>
     fn enable_alarm_actions(
         &self,
-        input: &EnableAlarmActionsInput,
+        input: EnableAlarmActionsInput,
     ) -> RusotoFuture<(), EnableAlarmActionsError>;
 
     /// <p>Displays the details of the dashboard that you specify.</p> <p>To copy an existing dashboard, use <code>GetDashboard</code>, and then use the data returned within <code>DashboardBody</code> as the template for the new dashboard when you call <code>PutDashboard</code> to create the copy.</p>
     fn get_dashboard(
         &self,
-        input: &GetDashboardInput,
+        input: GetDashboardInput,
     ) -> RusotoFuture<GetDashboardOutput, GetDashboardError>;
 
     /// <p>You can use the <code>GetMetricData</code> API to retrieve as many as 100 different metrics in a single request, with a total of as many as 100,800 datapoints. You can also optionally perform math expressions on the values of the returned statistics, to create new time series that represent new insights into your data. For example, using Lambda metrics, you could divide the Errors metric by the Invocations metric to get an error rate time series. For more information about metric math expressions, see <a href="http://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/using-metric-math.html#metric-math-syntax">Metric Math Syntax and Functions</a> in the <i>Amazon CloudWatch User Guide</i>.</p> <p>Calls to the <code>GetMetricData</code> API have a different pricing structure than calls to <code>GetMetricStatistics</code>. For more information about pricing, see <a href="https://aws.amazon.com/cloudwatch/pricing/">Amazon CloudWatch Pricing</a>.</p>
     fn get_metric_data(
         &self,
-        input: &GetMetricDataInput,
+        input: GetMetricDataInput,
     ) -> RusotoFuture<GetMetricDataOutput, GetMetricDataError>;
 
     /// <p>Gets statistics for the specified metric.</p> <p>The maximum number of data points returned from a single call is 1,440. If you request more than 1,440 data points, CloudWatch returns an error. To reduce the number of data points, you can narrow the specified time range and make multiple requests across adjacent time ranges, or you can increase the specified period. Data points are not returned in chronological order.</p> <p>CloudWatch aggregates data points based on the length of the period that you specify. For example, if you request statistics with a one-hour period, CloudWatch aggregates all data points with time stamps that fall within each one-hour period. Therefore, the number of values aggregated by CloudWatch is larger than the number of data points returned.</p> <p>CloudWatch needs raw data points to calculate percentile statistics. If you publish data using a statistic set instead, you can only retrieve percentile statistics for this data if one of the following conditions is true:</p> <ul> <li> <p>The SampleCount value of the statistic set is 1.</p> </li> <li> <p>The Min and the Max values of the statistic set are equal.</p> </li> </ul> <p>Amazon CloudWatch retains metric data as follows:</p> <ul> <li> <p>Data points with a period of less than 60 seconds are available for 3 hours. These data points are high-resolution metrics and are available only for custom metrics that have been defined with a <code>StorageResolution</code> of 1.</p> </li> <li> <p>Data points with a period of 60 seconds (1-minute) are available for 15 days.</p> </li> <li> <p>Data points with a period of 300 seconds (5-minute) are available for 63 days.</p> </li> <li> <p>Data points with a period of 3600 seconds (1 hour) are available for 455 days (15 months).</p> </li> </ul> <p>Data points that are initially published with a shorter period are aggregated together for long-term storage. For example, if you collect data using a period of 1 minute, the data remains available for 15 days with 1-minute resolution. After 15 days, this data is still available, but is aggregated and retrievable only with a resolution of 5 minutes. After 63 days, the data is further aggregated and is available with a resolution of 1 hour.</p> <p>CloudWatch started retaining 5-minute and 1-hour metric data as of July 9, 2016.</p> <p>For information about metrics and dimensions supported by AWS services, see the <a href="http://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CW_Support_For_AWS.html">Amazon CloudWatch Metrics and Dimensions Reference</a> in the <i>Amazon CloudWatch User Guide</i>.</p>
     fn get_metric_statistics(
         &self,
-        input: &GetMetricStatisticsInput,
+        input: GetMetricStatisticsInput,
     ) -> RusotoFuture<GetMetricStatisticsOutput, GetMetricStatisticsError>;
 
     /// <p>Returns a list of the dashboards for your account. If you include <code>DashboardNamePrefix</code>, only those dashboards with names starting with the prefix are listed. Otherwise, all dashboards in your account are listed. </p>
     fn list_dashboards(
         &self,
-        input: &ListDashboardsInput,
+        input: ListDashboardsInput,
     ) -> RusotoFuture<ListDashboardsOutput, ListDashboardsError>;
 
     /// <p>List the specified metrics. You can use the returned metrics with <a>GetMetricStatistics</a> to obtain statistical data.</p> <p>Up to 500 results are returned for any one call. To retrieve additional results, use the returned token with subsequent calls.</p> <p>After you create a metric, allow up to fifteen minutes before the metric appears. Statistics about the metric, however, are available sooner using <a>GetMetricStatistics</a>.</p>
     fn list_metrics(
         &self,
-        input: &ListMetricsInput,
+        input: ListMetricsInput,
     ) -> RusotoFuture<ListMetricsOutput, ListMetricsError>;
 
     /// <p>Creates a dashboard if it does not already exist, or updates an existing dashboard. If you update a dashboard, the entire contents are replaced with what you specify here.</p> <p>You can have up to 500 dashboards per account. All dashboards in your account are global, not region-specific.</p> <p>A simple way to create a dashboard using <code>PutDashboard</code> is to copy an existing dashboard. To copy an existing dashboard using the console, you can load the dashboard and then use the View/edit source command in the Actions menu to display the JSON block for that dashboard. Another way to copy a dashboard is to use <code>GetDashboard</code>, and then use the data returned within <code>DashboardBody</code> as the template for the new dashboard when you call <code>PutDashboard</code>.</p> <p>When you create a dashboard with <code>PutDashboard</code>, a good practice is to add a text widget at the top of the dashboard with a message that the dashboard was created by script and should not be changed in the console. This message could also point console users to the location of the <code>DashboardBody</code> script or the CloudFormation template used to create the dashboard.</p>
     fn put_dashboard(
         &self,
-        input: &PutDashboardInput,
+        input: PutDashboardInput,
     ) -> RusotoFuture<PutDashboardOutput, PutDashboardError>;
 
     /// <p>Creates or updates an alarm and associates it with the specified metric. Optionally, this operation can associate one or more Amazon SNS resources with the alarm.</p> <p>When this operation creates an alarm, the alarm state is immediately set to <code>INSUFFICIENT_DATA</code>. The alarm is evaluated and its state is set appropriately. Any actions associated with the state are then executed.</p> <p>When you update an existing alarm, its state is left unchanged, but the update completely overwrites the previous configuration of the alarm.</p> <p>If you are an IAM user, you must have Amazon EC2 permissions for some operations:</p> <ul> <li> <p> <code>iam:CreateServiceLinkedRole</code> for all alarms with EC2 actions</p> </li> <li> <p> <code>ec2:DescribeInstanceStatus</code> and <code>ec2:DescribeInstances</code> for all alarms on EC2 instance status metrics</p> </li> <li> <p> <code>ec2:StopInstances</code> for alarms with stop actions</p> </li> <li> <p> <code>ec2:TerminateInstances</code> for alarms with terminate actions</p> </li> <li> <p> <code>ec2:DescribeInstanceRecoveryAttribute</code> and <code>ec2:RecoverInstances</code> for alarms with recover actions</p> </li> </ul> <p>If you have read/write permissions for Amazon CloudWatch but not for Amazon EC2, you can still create an alarm, but the stop or terminate actions are not performed. However, if you are later granted the required permissions, the alarm actions that you created earlier are performed.</p> <p>If you are using an IAM role (for example, an EC2 instance profile), you cannot stop or terminate the instance using alarm actions. However, you can still see the alarm state and perform any other actions such as Amazon SNS notifications or Auto Scaling policies.</p> <p>If you are using temporary security credentials granted using AWS STS, you cannot stop or terminate an EC2 instance using alarm actions.</p> <p>You must create at least one stop, terminate, or reboot alarm using either the Amazon EC2 or CloudWatch consoles to create the <b>EC2ActionsAccess</b> IAM role. After this IAM role is created, you can create stop, terminate, or reboot alarms using a command-line interface or API.</p>
-    fn put_metric_alarm(
-        &self,
-        input: &PutMetricAlarmInput,
-    ) -> RusotoFuture<(), PutMetricAlarmError>;
+    fn put_metric_alarm(&self, input: PutMetricAlarmInput)
+        -> RusotoFuture<(), PutMetricAlarmError>;
 
     /// <p><p>Publishes metric data points to Amazon CloudWatch. CloudWatch associates the data points with the specified metric. If the specified metric does not exist, CloudWatch creates the metric. When CloudWatch creates a metric, it can take up to fifteen minutes for the metric to appear in calls to <a>ListMetrics</a>.</p> <p>Each <code>PutMetricData</code> request is limited to 40 KB in size for HTTP POST requests.</p> <p>Although the <code>Value</code> parameter accepts numbers of type <code>Double</code>, CloudWatch rejects values that are either too small or too large. Values must be in the range of 8.515920e-109 to 1.174271e+108 (Base 10) or 2e-360 to 2e360 (Base 2). In addition, special values (for example, NaN, +Infinity, -Infinity) are not supported.</p> <p>You can use up to 10 dimensions per metric to further clarify what data the metric collects. For more information about specifying dimensions, see <a href="http://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/publishingMetrics.html">Publishing Metrics</a> in the <i>Amazon CloudWatch User Guide</i>.</p> <p>Data points with time stamps from 24 hours ago or longer can take at least 48 hours to become available for <a>GetMetricStatistics</a> from the time they are submitted.</p> <p>CloudWatch needs raw data points to calculate percentile statistics. If you publish data using a statistic set instead, you can only retrieve percentile statistics for this data if one of the following conditions is true:</p> <ul> <li> <p>The SampleCount value of the statistic set is 1</p> </li> <li> <p>The Min and the Max values of the statistic set are equal</p> </li> </ul></p>
-    fn put_metric_data(&self, input: &PutMetricDataInput) -> RusotoFuture<(), PutMetricDataError>;
+    fn put_metric_data(&self, input: PutMetricDataInput) -> RusotoFuture<(), PutMetricDataError>;
 
     /// <p>Temporarily sets the state of an alarm for testing purposes. When the updated state differs from the previous value, the action configured for the appropriate state is invoked. For example, if your alarm is configured to send an Amazon SNS message when an alarm is triggered, temporarily changing the alarm state to <code>ALARM</code> sends an SNS message. The alarm returns to its actual state (often within seconds). Because the alarm state change happens quickly, it is typically only visible in the alarm's <b>History</b> tab in the Amazon CloudWatch console or through <a>DescribeAlarmHistory</a>.</p>
-    fn set_alarm_state(&self, input: &SetAlarmStateInput) -> RusotoFuture<(), SetAlarmStateError>;
+    fn set_alarm_state(&self, input: SetAlarmStateInput) -> RusotoFuture<(), SetAlarmStateError>;
 }
 /// A client for the CloudWatch API.
 pub struct CloudWatchClient<P = CredentialsProvider, D = RequestDispatcher>
@@ -5018,7 +5005,7 @@ where
     D: DispatchSignedRequest + 'static,
 {
     /// <p>Deletes the specified alarms. In the event of an error, no alarms are deleted.</p>
-    fn delete_alarms(&self, input: &DeleteAlarmsInput) -> RusotoFuture<(), DeleteAlarmsError> {
+    fn delete_alarms(&self, input: DeleteAlarmsInput) -> RusotoFuture<(), DeleteAlarmsError> {
         let mut request = SignedRequest::new("POST", "monitoring", &self.region, "/");
         let mut params = Params::new();
 
@@ -5045,7 +5032,7 @@ where
     /// <p>Deletes all dashboards that you specify. You may specify up to 100 dashboards to delete. If there is an error during this call, no dashboards are deleted.</p>
     fn delete_dashboards(
         &self,
-        input: &DeleteDashboardsInput,
+        input: DeleteDashboardsInput,
     ) -> RusotoFuture<DeleteDashboardsOutput, DeleteDashboardsError> {
         let mut request = SignedRequest::new("POST", "monitoring", &self.region, "/");
         let mut params = Params::new();
@@ -5096,7 +5083,7 @@ where
     /// <p>Retrieves the history for the specified alarm. You can filter the results by date range or item type. If an alarm name is not specified, the histories for all alarms are returned.</p> <p>CloudWatch retains the history of an alarm even if you delete the alarm.</p>
     fn describe_alarm_history(
         &self,
-        input: &DescribeAlarmHistoryInput,
+        input: DescribeAlarmHistoryInput,
     ) -> RusotoFuture<DescribeAlarmHistoryOutput, DescribeAlarmHistoryError> {
         let mut request = SignedRequest::new("POST", "monitoring", &self.region, "/");
         let mut params = Params::new();
@@ -5147,7 +5134,7 @@ where
     /// <p>Retrieves the specified alarms. If no alarms are specified, all alarms are returned. Alarms can be retrieved by using only a prefix for the alarm name, the alarm state, or a prefix for any action.</p>
     fn describe_alarms(
         &self,
-        input: &DescribeAlarmsInput,
+        input: DescribeAlarmsInput,
     ) -> RusotoFuture<DescribeAlarmsOutput, DescribeAlarmsError> {
         let mut request = SignedRequest::new("POST", "monitoring", &self.region, "/");
         let mut params = Params::new();
@@ -5198,7 +5185,7 @@ where
     /// <p>Retrieves the alarms for the specified metric. To filter the results, specify a statistic, period, or unit.</p>
     fn describe_alarms_for_metric(
         &self,
-        input: &DescribeAlarmsForMetricInput,
+        input: DescribeAlarmsForMetricInput,
     ) -> RusotoFuture<DescribeAlarmsForMetricOutput, DescribeAlarmsForMetricError> {
         let mut request = SignedRequest::new("POST", "monitoring", &self.region, "/");
         let mut params = Params::new();
@@ -5249,7 +5236,7 @@ where
     /// <p>Disables the actions for the specified alarms. When an alarm's actions are disabled, the alarm actions do not execute when the alarm state changes.</p>
     fn disable_alarm_actions(
         &self,
-        input: &DisableAlarmActionsInput,
+        input: DisableAlarmActionsInput,
     ) -> RusotoFuture<(), DisableAlarmActionsError> {
         let mut request = SignedRequest::new("POST", "monitoring", &self.region, "/");
         let mut params = Params::new();
@@ -5277,7 +5264,7 @@ where
     /// <p>Enables the actions for the specified alarms.</p>
     fn enable_alarm_actions(
         &self,
-        input: &EnableAlarmActionsInput,
+        input: EnableAlarmActionsInput,
     ) -> RusotoFuture<(), EnableAlarmActionsError> {
         let mut request = SignedRequest::new("POST", "monitoring", &self.region, "/");
         let mut params = Params::new();
@@ -5305,7 +5292,7 @@ where
     /// <p>Displays the details of the dashboard that you specify.</p> <p>To copy an existing dashboard, use <code>GetDashboard</code>, and then use the data returned within <code>DashboardBody</code> as the template for the new dashboard when you call <code>PutDashboard</code> to create the copy.</p>
     fn get_dashboard(
         &self,
-        input: &GetDashboardInput,
+        input: GetDashboardInput,
     ) -> RusotoFuture<GetDashboardOutput, GetDashboardError> {
         let mut request = SignedRequest::new("POST", "monitoring", &self.region, "/");
         let mut params = Params::new();
@@ -5356,7 +5343,7 @@ where
     /// <p>You can use the <code>GetMetricData</code> API to retrieve as many as 100 different metrics in a single request, with a total of as many as 100,800 datapoints. You can also optionally perform math expressions on the values of the returned statistics, to create new time series that represent new insights into your data. For example, using Lambda metrics, you could divide the Errors metric by the Invocations metric to get an error rate time series. For more information about metric math expressions, see <a href="http://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/using-metric-math.html#metric-math-syntax">Metric Math Syntax and Functions</a> in the <i>Amazon CloudWatch User Guide</i>.</p> <p>Calls to the <code>GetMetricData</code> API have a different pricing structure than calls to <code>GetMetricStatistics</code>. For more information about pricing, see <a href="https://aws.amazon.com/cloudwatch/pricing/">Amazon CloudWatch Pricing</a>.</p>
     fn get_metric_data(
         &self,
-        input: &GetMetricDataInput,
+        input: GetMetricDataInput,
     ) -> RusotoFuture<GetMetricDataOutput, GetMetricDataError> {
         let mut request = SignedRequest::new("POST", "monitoring", &self.region, "/");
         let mut params = Params::new();
@@ -5407,7 +5394,7 @@ where
     /// <p>Gets statistics for the specified metric.</p> <p>The maximum number of data points returned from a single call is 1,440. If you request more than 1,440 data points, CloudWatch returns an error. To reduce the number of data points, you can narrow the specified time range and make multiple requests across adjacent time ranges, or you can increase the specified period. Data points are not returned in chronological order.</p> <p>CloudWatch aggregates data points based on the length of the period that you specify. For example, if you request statistics with a one-hour period, CloudWatch aggregates all data points with time stamps that fall within each one-hour period. Therefore, the number of values aggregated by CloudWatch is larger than the number of data points returned.</p> <p>CloudWatch needs raw data points to calculate percentile statistics. If you publish data using a statistic set instead, you can only retrieve percentile statistics for this data if one of the following conditions is true:</p> <ul> <li> <p>The SampleCount value of the statistic set is 1.</p> </li> <li> <p>The Min and the Max values of the statistic set are equal.</p> </li> </ul> <p>Amazon CloudWatch retains metric data as follows:</p> <ul> <li> <p>Data points with a period of less than 60 seconds are available for 3 hours. These data points are high-resolution metrics and are available only for custom metrics that have been defined with a <code>StorageResolution</code> of 1.</p> </li> <li> <p>Data points with a period of 60 seconds (1-minute) are available for 15 days.</p> </li> <li> <p>Data points with a period of 300 seconds (5-minute) are available for 63 days.</p> </li> <li> <p>Data points with a period of 3600 seconds (1 hour) are available for 455 days (15 months).</p> </li> </ul> <p>Data points that are initially published with a shorter period are aggregated together for long-term storage. For example, if you collect data using a period of 1 minute, the data remains available for 15 days with 1-minute resolution. After 15 days, this data is still available, but is aggregated and retrievable only with a resolution of 5 minutes. After 63 days, the data is further aggregated and is available with a resolution of 1 hour.</p> <p>CloudWatch started retaining 5-minute and 1-hour metric data as of July 9, 2016.</p> <p>For information about metrics and dimensions supported by AWS services, see the <a href="http://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CW_Support_For_AWS.html">Amazon CloudWatch Metrics and Dimensions Reference</a> in the <i>Amazon CloudWatch User Guide</i>.</p>
     fn get_metric_statistics(
         &self,
-        input: &GetMetricStatisticsInput,
+        input: GetMetricStatisticsInput,
     ) -> RusotoFuture<GetMetricStatisticsOutput, GetMetricStatisticsError> {
         let mut request = SignedRequest::new("POST", "monitoring", &self.region, "/");
         let mut params = Params::new();
@@ -5458,7 +5445,7 @@ where
     /// <p>Returns a list of the dashboards for your account. If you include <code>DashboardNamePrefix</code>, only those dashboards with names starting with the prefix are listed. Otherwise, all dashboards in your account are listed. </p>
     fn list_dashboards(
         &self,
-        input: &ListDashboardsInput,
+        input: ListDashboardsInput,
     ) -> RusotoFuture<ListDashboardsOutput, ListDashboardsError> {
         let mut request = SignedRequest::new("POST", "monitoring", &self.region, "/");
         let mut params = Params::new();
@@ -5509,7 +5496,7 @@ where
     /// <p>List the specified metrics. You can use the returned metrics with <a>GetMetricStatistics</a> to obtain statistical data.</p> <p>Up to 500 results are returned for any one call. To retrieve additional results, use the returned token with subsequent calls.</p> <p>After you create a metric, allow up to fifteen minutes before the metric appears. Statistics about the metric, however, are available sooner using <a>GetMetricStatistics</a>.</p>
     fn list_metrics(
         &self,
-        input: &ListMetricsInput,
+        input: ListMetricsInput,
     ) -> RusotoFuture<ListMetricsOutput, ListMetricsError> {
         let mut request = SignedRequest::new("POST", "monitoring", &self.region, "/");
         let mut params = Params::new();
@@ -5560,7 +5547,7 @@ where
     /// <p>Creates a dashboard if it does not already exist, or updates an existing dashboard. If you update a dashboard, the entire contents are replaced with what you specify here.</p> <p>You can have up to 500 dashboards per account. All dashboards in your account are global, not region-specific.</p> <p>A simple way to create a dashboard using <code>PutDashboard</code> is to copy an existing dashboard. To copy an existing dashboard using the console, you can load the dashboard and then use the View/edit source command in the Actions menu to display the JSON block for that dashboard. Another way to copy a dashboard is to use <code>GetDashboard</code>, and then use the data returned within <code>DashboardBody</code> as the template for the new dashboard when you call <code>PutDashboard</code>.</p> <p>When you create a dashboard with <code>PutDashboard</code>, a good practice is to add a text widget at the top of the dashboard with a message that the dashboard was created by script and should not be changed in the console. This message could also point console users to the location of the <code>DashboardBody</code> script or the CloudFormation template used to create the dashboard.</p>
     fn put_dashboard(
         &self,
-        input: &PutDashboardInput,
+        input: PutDashboardInput,
     ) -> RusotoFuture<PutDashboardOutput, PutDashboardError> {
         let mut request = SignedRequest::new("POST", "monitoring", &self.region, "/");
         let mut params = Params::new();
@@ -5611,7 +5598,7 @@ where
     /// <p>Creates or updates an alarm and associates it with the specified metric. Optionally, this operation can associate one or more Amazon SNS resources with the alarm.</p> <p>When this operation creates an alarm, the alarm state is immediately set to <code>INSUFFICIENT_DATA</code>. The alarm is evaluated and its state is set appropriately. Any actions associated with the state are then executed.</p> <p>When you update an existing alarm, its state is left unchanged, but the update completely overwrites the previous configuration of the alarm.</p> <p>If you are an IAM user, you must have Amazon EC2 permissions for some operations:</p> <ul> <li> <p> <code>iam:CreateServiceLinkedRole</code> for all alarms with EC2 actions</p> </li> <li> <p> <code>ec2:DescribeInstanceStatus</code> and <code>ec2:DescribeInstances</code> for all alarms on EC2 instance status metrics</p> </li> <li> <p> <code>ec2:StopInstances</code> for alarms with stop actions</p> </li> <li> <p> <code>ec2:TerminateInstances</code> for alarms with terminate actions</p> </li> <li> <p> <code>ec2:DescribeInstanceRecoveryAttribute</code> and <code>ec2:RecoverInstances</code> for alarms with recover actions</p> </li> </ul> <p>If you have read/write permissions for Amazon CloudWatch but not for Amazon EC2, you can still create an alarm, but the stop or terminate actions are not performed. However, if you are later granted the required permissions, the alarm actions that you created earlier are performed.</p> <p>If you are using an IAM role (for example, an EC2 instance profile), you cannot stop or terminate the instance using alarm actions. However, you can still see the alarm state and perform any other actions such as Amazon SNS notifications or Auto Scaling policies.</p> <p>If you are using temporary security credentials granted using AWS STS, you cannot stop or terminate an EC2 instance using alarm actions.</p> <p>You must create at least one stop, terminate, or reboot alarm using either the Amazon EC2 or CloudWatch consoles to create the <b>EC2ActionsAccess</b> IAM role. After this IAM role is created, you can create stop, terminate, or reboot alarms using a command-line interface or API.</p>
     fn put_metric_alarm(
         &self,
-        input: &PutMetricAlarmInput,
+        input: PutMetricAlarmInput,
     ) -> RusotoFuture<(), PutMetricAlarmError> {
         let mut request = SignedRequest::new("POST", "monitoring", &self.region, "/");
         let mut params = Params::new();
@@ -5637,7 +5624,7 @@ where
     }
 
     /// <p><p>Publishes metric data points to Amazon CloudWatch. CloudWatch associates the data points with the specified metric. If the specified metric does not exist, CloudWatch creates the metric. When CloudWatch creates a metric, it can take up to fifteen minutes for the metric to appear in calls to <a>ListMetrics</a>.</p> <p>Each <code>PutMetricData</code> request is limited to 40 KB in size for HTTP POST requests.</p> <p>Although the <code>Value</code> parameter accepts numbers of type <code>Double</code>, CloudWatch rejects values that are either too small or too large. Values must be in the range of 8.515920e-109 to 1.174271e+108 (Base 10) or 2e-360 to 2e360 (Base 2). In addition, special values (for example, NaN, +Infinity, -Infinity) are not supported.</p> <p>You can use up to 10 dimensions per metric to further clarify what data the metric collects. For more information about specifying dimensions, see <a href="http://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/publishingMetrics.html">Publishing Metrics</a> in the <i>Amazon CloudWatch User Guide</i>.</p> <p>Data points with time stamps from 24 hours ago or longer can take at least 48 hours to become available for <a>GetMetricStatistics</a> from the time they are submitted.</p> <p>CloudWatch needs raw data points to calculate percentile statistics. If you publish data using a statistic set instead, you can only retrieve percentile statistics for this data if one of the following conditions is true:</p> <ul> <li> <p>The SampleCount value of the statistic set is 1</p> </li> <li> <p>The Min and the Max values of the statistic set are equal</p> </li> </ul></p>
-    fn put_metric_data(&self, input: &PutMetricDataInput) -> RusotoFuture<(), PutMetricDataError> {
+    fn put_metric_data(&self, input: PutMetricDataInput) -> RusotoFuture<(), PutMetricDataError> {
         let mut request = SignedRequest::new("POST", "monitoring", &self.region, "/");
         let mut params = Params::new();
 
@@ -5662,7 +5649,7 @@ where
     }
 
     /// <p>Temporarily sets the state of an alarm for testing purposes. When the updated state differs from the previous value, the action configured for the appropriate state is invoked. For example, if your alarm is configured to send an Amazon SNS message when an alarm is triggered, temporarily changing the alarm state to <code>ALARM</code> sends an SNS message. The alarm returns to its actual state (often within seconds). Because the alarm state change happens quickly, it is typically only visible in the alarm's <b>History</b> tab in the Amazon CloudWatch console or through <a>DescribeAlarmHistory</a>.</p>
-    fn set_alarm_state(&self, input: &SetAlarmStateInput) -> RusotoFuture<(), SetAlarmStateError> {
+    fn set_alarm_state(&self, input: SetAlarmStateInput) -> RusotoFuture<(), SetAlarmStateError> {
         let mut request = SignedRequest::new("POST", "monitoring", &self.region, "/");
         let mut params = Params::new();
 
@@ -5692,8 +5679,8 @@ mod protocol_tests {
 
     extern crate rusoto_mock;
 
-    use super::*;
     use self::rusoto_mock::*;
+    use super::*;
     use rusoto_core::Region as rusoto_region;
 
     #[test]
@@ -5705,7 +5692,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(400).with_body(&mock_response);
         let client = CloudWatchClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = DescribeAlarmHistoryInput::default();
-        let result = client.describe_alarm_history(&request).sync();
+        let result = client.describe_alarm_history(request).sync();
         assert!(!result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -5718,7 +5705,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = CloudWatchClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = DescribeAlarmHistoryInput::default();
-        let result = client.describe_alarm_history(&request).sync();
+        let result = client.describe_alarm_history(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -5731,7 +5718,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = CloudWatchClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = DescribeAlarmsInput::default();
-        let result = client.describe_alarms(&request).sync();
+        let result = client.describe_alarms(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -5744,7 +5731,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = CloudWatchClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = ListMetricsInput::default();
-        let result = client.list_metrics(&request).sync();
+        let result = client.list_metrics(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 }

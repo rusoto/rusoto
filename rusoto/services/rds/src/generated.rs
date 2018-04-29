@@ -18,24 +18,24 @@ use std::io;
 use futures::future;
 use futures::Future;
 use rusoto_core::reactor::{CredentialsProvider, RequestDispatcher};
-use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::region;
+use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::{ClientInner, RusotoFuture};
 
-use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
+use rusoto_core::request::HttpDispatchError;
 
-use std::str::FromStr;
-use xml::EventReader;
-use xml::reader::ParserConfig;
+use hyper::StatusCode;
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::signature::SignedRequest;
-use xml::reader::XmlEvent;
-use rusoto_core::xmlutil::{Next, Peek, XmlParseError, XmlResponse};
+use rusoto_core::xmlerror::*;
 use rusoto_core::xmlutil::{characters, end_element, find_start_element, peek_at_name, skip_tree,
                            start_element};
-use rusoto_core::xmlerror::*;
-use hyper::StatusCode;
+use rusoto_core::xmlutil::{Next, Peek, XmlParseError, XmlResponse};
+use std::str::FromStr;
+use xml::reader::ParserConfig;
+use xml::reader::XmlEvent;
+use xml::EventReader;
 
 enum DeserializerNext {
     Close,
@@ -3295,8 +3295,7 @@ impl DBClusterDeserializer {
                     }
                     "Port" => {
                         obj.port = Some(try!(IntegerOptionalDeserializer::deserialize(
-                            "Port",
-                            stack
+                            "Port", stack
                         )));
                     }
                     "PreferredBackupWindow" => {
@@ -4977,8 +4976,7 @@ impl DBInstanceDeserializer {
                     }
                     "Iops" => {
                         obj.iops = Some(try!(IntegerOptionalDeserializer::deserialize(
-                            "Iops",
-                            stack
+                            "Iops", stack
                         )));
                     }
                     "KmsKeyId" => {
@@ -5780,8 +5778,7 @@ impl DBSecurityGroupDeserializer {
                     }
                     "IPRanges" => {
                         obj.ip_ranges = Some(try!(IPRangeListDeserializer::deserialize(
-                            "IPRanges",
-                            stack
+                            "IPRanges", stack
                         )));
                     }
                     "OwnerId" => {
@@ -6147,8 +6144,7 @@ impl DBSnapshotDeserializer {
                     }
                     "Iops" => {
                         obj.iops = Some(try!(IntegerOptionalDeserializer::deserialize(
-                            "Iops",
-                            stack
+                            "Iops", stack
                         )));
                     }
                     "KmsKeyId" => {
@@ -11924,8 +11920,7 @@ impl RDSOptionDeserializer {
                     }
                     "Port" => {
                         obj.port = Some(try!(IntegerOptionalDeserializer::deserialize(
-                            "Port",
-                            stack
+                            "Port", stack
                         )));
                     }
                     "VpcSecurityGroupMemberships" => {
@@ -14056,8 +14051,7 @@ impl PendingModifiedValuesDeserializer {
                     }
                     "Iops" => {
                         obj.iops = Some(try!(IntegerOptionalDeserializer::deserialize(
-                            "Iops",
-                            stack
+                            "Iops", stack
                         )));
                     }
                     "LicenseModel" => {
@@ -14072,8 +14066,7 @@ impl PendingModifiedValuesDeserializer {
                     }
                     "MultiAZ" => {
                         obj.multi_az = Some(try!(BooleanOptionalDeserializer::deserialize(
-                            "MultiAZ",
-                            stack
+                            "MultiAZ", stack
                         )));
                     }
                     "PendingCloudwatchLogsExports" => {
@@ -14085,8 +14078,7 @@ impl PendingModifiedValuesDeserializer {
                     }
                     "Port" => {
                         obj.port = Some(try!(IntegerOptionalDeserializer::deserialize(
-                            "Port",
-                            stack
+                            "Port", stack
                         )));
                     }
                     "StorageType" => {
@@ -14394,8 +14386,7 @@ impl RangeDeserializer {
                     }
                     "Step" => {
                         obj.step = Some(try!(IntegerOptionalDeserializer::deserialize(
-                            "Step",
-                            stack
+                            "Step", stack
                         )));
                     }
                     "To" => {
@@ -17911,8 +17902,7 @@ impl ValidDBInstanceModificationsMessageDeserializer {
                 DeserializerNext::Element(name) => match &name[..] {
                     "Storage" => {
                         obj.storage = Some(try!(ValidStorageOptionsListDeserializer::deserialize(
-                            "Storage",
-                            stack
+                            "Storage", stack
                         )));
                     }
                     _ => skip_tree(stack),
@@ -27452,217 +27442,217 @@ pub trait Rds {
     /// <p>Associates an Identity and Access Management (IAM) role from an Aurora DB cluster. For more information, see <a href="http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Aurora.Authorizing.AWSServices.html">Authorizing Amazon Aurora to Access Other AWS Services On Your Behalf</a>.</p>
     fn add_role_to_db_cluster(
         &self,
-        input: &AddRoleToDBClusterMessage,
+        input: AddRoleToDBClusterMessage,
     ) -> RusotoFuture<(), AddRoleToDBClusterError>;
 
     /// <p>Adds a source identifier to an existing RDS event notification subscription.</p>
     fn add_source_identifier_to_subscription(
         &self,
-        input: &AddSourceIdentifierToSubscriptionMessage,
+        input: AddSourceIdentifierToSubscriptionMessage,
     ) -> RusotoFuture<AddSourceIdentifierToSubscriptionResult, AddSourceIdentifierToSubscriptionError>;
 
     /// <p>Adds metadata tags to an Amazon RDS resource. These tags can also be used with cost allocation reporting to track cost associated with Amazon RDS resources, or used in a Condition statement in an IAM policy for Amazon RDS.</p> <p>For an overview on tagging Amazon RDS resources, see <a href="http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Overview.Tagging.html">Tagging Amazon RDS Resources</a>.</p>
     fn add_tags_to_resource(
         &self,
-        input: &AddTagsToResourceMessage,
+        input: AddTagsToResourceMessage,
     ) -> RusotoFuture<(), AddTagsToResourceError>;
 
     /// <p>Applies a pending maintenance action to a resource (for example, to a DB instance).</p>
     fn apply_pending_maintenance_action(
         &self,
-        input: &ApplyPendingMaintenanceActionMessage,
+        input: ApplyPendingMaintenanceActionMessage,
     ) -> RusotoFuture<ApplyPendingMaintenanceActionResult, ApplyPendingMaintenanceActionError>;
 
     /// <p>Enables ingress to a DBSecurityGroup using one of two forms of authorization. First, EC2 or VPC security groups can be added to the DBSecurityGroup if the application using the database is running on EC2 or VPC instances. Second, IP ranges are available if the application accessing your database is running on the Internet. Required parameters for this API are one of CIDR range, EC2SecurityGroupId for VPC, or (EC2SecurityGroupOwnerId and either EC2SecurityGroupName or EC2SecurityGroupId for non-VPC).</p> <note> <p>You can't authorize ingress from an EC2 security group in one AWS Region to an Amazon RDS DB instance in another. You can't authorize ingress from a VPC security group in one VPC to an Amazon RDS DB instance in another.</p> </note> <p>For an overview of CIDR ranges, go to the <a href="http://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing">Wikipedia Tutorial</a>. </p>
     fn authorize_db_security_group_ingress(
         &self,
-        input: &AuthorizeDBSecurityGroupIngressMessage,
+        input: AuthorizeDBSecurityGroupIngressMessage,
     ) -> RusotoFuture<AuthorizeDBSecurityGroupIngressResult, AuthorizeDBSecurityGroupIngressError>;
 
     /// <p>Copies the specified DB cluster parameter group.</p>
     fn copy_db_cluster_parameter_group(
         &self,
-        input: &CopyDBClusterParameterGroupMessage,
+        input: CopyDBClusterParameterGroupMessage,
     ) -> RusotoFuture<CopyDBClusterParameterGroupResult, CopyDBClusterParameterGroupError>;
 
     /// <p>Copies a snapshot of a DB cluster.</p> <p>To copy a DB cluster snapshot from a shared manual DB cluster snapshot, <code>SourceDBClusterSnapshotIdentifier</code> must be the Amazon Resource Name (ARN) of the shared DB cluster snapshot.</p> <p>You can copy an encrypted DB cluster snapshot from another AWS Region. In that case, the AWS Region where you call the <code>CopyDBClusterSnapshot</code> action is the destination AWS Region for the encrypted DB cluster snapshot to be copied to. To copy an encrypted DB cluster snapshot from another AWS Region, you must provide the following values:</p> <ul> <li> <p> <code>KmsKeyId</code> - The AWS Key Management System (AWS KMS) key identifier for the key to use to encrypt the copy of the DB cluster snapshot in the destination AWS Region.</p> </li> <li> <p> <code>PreSignedUrl</code> - A URL that contains a Signature Version 4 signed request for the <code>CopyDBClusterSnapshot</code> action to be called in the source AWS Region where the DB cluster snapshot is copied from. The pre-signed URL must be a valid request for the <code>CopyDBClusterSnapshot</code> API action that can be executed in the source AWS Region that contains the encrypted DB cluster snapshot to be copied.</p> <p>The pre-signed URL request must contain the following parameter values:</p> <ul> <li> <p> <code>KmsKeyId</code> - The KMS key identifier for the key to use to encrypt the copy of the DB cluster snapshot in the destination AWS Region. This is the same identifier for both the <code>CopyDBClusterSnapshot</code> action that is called in the destination AWS Region, and the action contained in the pre-signed URL.</p> </li> <li> <p> <code>DestinationRegion</code> - The name of the AWS Region that the DB cluster snapshot will be created in.</p> </li> <li> <p> <code>SourceDBClusterSnapshotIdentifier</code> - The DB cluster snapshot identifier for the encrypted DB cluster snapshot to be copied. This identifier must be in the Amazon Resource Name (ARN) format for the source AWS Region. For example, if you are copying an encrypted DB cluster snapshot from the us-west-2 AWS Region, then your <code>SourceDBClusterSnapshotIdentifier</code> looks like the following example: <code>arn:aws:rds:us-west-2:123456789012:cluster-snapshot:aurora-cluster1-snapshot-20161115</code>.</p> </li> </ul> <p>To learn how to generate a Signature Version 4 signed request, see <a href="http://docs.aws.amazon.com/AmazonS3/latest/API/sigv4-query-string-auth.html"> Authenticating Requests: Using Query Parameters (AWS Signature Version 4)</a> and <a href="http://docs.aws.amazon.com/general/latest/gr/signature-version-4.html"> Signature Version 4 Signing Process</a>.</p> </li> <li> <p> <code>TargetDBClusterSnapshotIdentifier</code> - The identifier for the new copy of the DB cluster snapshot in the destination AWS Region.</p> </li> <li> <p> <code>SourceDBClusterSnapshotIdentifier</code> - The DB cluster snapshot identifier for the encrypted DB cluster snapshot to be copied. This identifier must be in the ARN format for the source AWS Region and is the same value as the <code>SourceDBClusterSnapshotIdentifier</code> in the pre-signed URL. </p> </li> </ul> <p>To cancel the copy operation once it is in progress, delete the target DB cluster snapshot identified by <code>TargetDBClusterSnapshotIdentifier</code> while that DB cluster snapshot is in "copying" status.</p> <p>For more information on copying encrypted DB cluster snapshots from one AWS Region to another, see <a href="http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_CopySnapshot.html#USER_CopyDBClusterSnapshot.CrossRegion"> Copying a DB Cluster Snapshot in the Same Account, Either in the Same Region or Across Regions</a> in the Amazon RDS User Guide.</p> <p>For more information on Amazon Aurora, see <a href="http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Aurora.html">Aurora on Amazon RDS</a> in the <i>Amazon RDS User Guide.</i> </p>
     fn copy_db_cluster_snapshot(
         &self,
-        input: &CopyDBClusterSnapshotMessage,
+        input: CopyDBClusterSnapshotMessage,
     ) -> RusotoFuture<CopyDBClusterSnapshotResult, CopyDBClusterSnapshotError>;
 
     /// <p>Copies the specified DB parameter group.</p>
     fn copy_db_parameter_group(
         &self,
-        input: &CopyDBParameterGroupMessage,
+        input: CopyDBParameterGroupMessage,
     ) -> RusotoFuture<CopyDBParameterGroupResult, CopyDBParameterGroupError>;
 
     /// <p>Copies the specified DB snapshot. The source DB snapshot must be in the "available" state.</p> <p>You can copy a snapshot from one AWS Region to another. In that case, the AWS Region where you call the <code>CopyDBSnapshot</code> action is the destination AWS Region for the DB snapshot copy. </p> <p>For more information about copying snapshots, see <a href="http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_CopyDBSnapshot.html">Copying a DB Snapshot</a> in the Amazon RDS User Guide. </p>
     fn copy_db_snapshot(
         &self,
-        input: &CopyDBSnapshotMessage,
+        input: CopyDBSnapshotMessage,
     ) -> RusotoFuture<CopyDBSnapshotResult, CopyDBSnapshotError>;
 
     /// <p>Copies the specified option group.</p>
     fn copy_option_group(
         &self,
-        input: &CopyOptionGroupMessage,
+        input: CopyOptionGroupMessage,
     ) -> RusotoFuture<CopyOptionGroupResult, CopyOptionGroupError>;
 
     /// <p>Creates a new Amazon Aurora DB cluster.</p> <p>You can use the <code>ReplicationSourceIdentifier</code> parameter to create the DB cluster as a Read Replica of another DB cluster or Amazon RDS MySQL DB instance. For cross-region replication where the DB cluster identified by <code>ReplicationSourceIdentifier</code> is encrypted, you must also specify the <code>PreSignedUrl</code> parameter.</p> <p>For more information on Amazon Aurora, see <a href="http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Aurora.html">Aurora on Amazon RDS</a> in the <i>Amazon RDS User Guide.</i> </p>
     fn create_db_cluster(
         &self,
-        input: &CreateDBClusterMessage,
+        input: CreateDBClusterMessage,
     ) -> RusotoFuture<CreateDBClusterResult, CreateDBClusterError>;
 
     /// <p>Creates a new DB cluster parameter group.</p> <p>Parameters in a DB cluster parameter group apply to all of the instances in a DB cluster.</p> <p> A DB cluster parameter group is initially created with the default parameters for the database engine used by instances in the DB cluster. To provide custom values for any of the parameters, you must modify the group after creating it using <a>ModifyDBClusterParameterGroup</a>. Once you've created a DB cluster parameter group, you need to associate it with your DB cluster using <a>ModifyDBCluster</a>. When you associate a new DB cluster parameter group with a running DB cluster, you need to reboot the DB instances in the DB cluster without failover for the new DB cluster parameter group and associated settings to take effect. </p> <important> <p>After you create a DB cluster parameter group, you should wait at least 5 minutes before creating your first DB cluster that uses that DB cluster parameter group as the default parameter group. This allows Amazon RDS to fully complete the create action before the DB cluster parameter group is used as the default for a new DB cluster. This is especially important for parameters that are critical when creating the default database for a DB cluster, such as the character set for the default database defined by the <code>character_set_database</code> parameter. You can use the <i>Parameter Groups</i> option of the <a href="https://console.aws.amazon.com/rds/">Amazon RDS console</a> or the <a>DescribeDBClusterParameters</a> command to verify that your DB cluster parameter group has been created or modified.</p> </important> <p>For more information on Amazon Aurora, see <a href="http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Aurora.html">Aurora on Amazon RDS</a> in the <i>Amazon RDS User Guide.</i> </p>
     fn create_db_cluster_parameter_group(
         &self,
-        input: &CreateDBClusterParameterGroupMessage,
+        input: CreateDBClusterParameterGroupMessage,
     ) -> RusotoFuture<CreateDBClusterParameterGroupResult, CreateDBClusterParameterGroupError>;
 
     /// <p>Creates a snapshot of a DB cluster. For more information on Amazon Aurora, see <a href="http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Aurora.html">Aurora on Amazon RDS</a> in the <i>Amazon RDS User Guide.</i> </p>
     fn create_db_cluster_snapshot(
         &self,
-        input: &CreateDBClusterSnapshotMessage,
+        input: CreateDBClusterSnapshotMessage,
     ) -> RusotoFuture<CreateDBClusterSnapshotResult, CreateDBClusterSnapshotError>;
 
     /// <p>Creates a new DB instance.</p>
     fn create_db_instance(
         &self,
-        input: &CreateDBInstanceMessage,
+        input: CreateDBInstanceMessage,
     ) -> RusotoFuture<CreateDBInstanceResult, CreateDBInstanceError>;
 
     /// <p><p>Creates a new DB instance that acts as a Read Replica for an existing source DB instance. You can create a Read Replica for a DB instance running MySQL, MariaDB, or PostgreSQL. For more information, see <a href="http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_ReadRepl.html">Working with PostgreSQL, MySQL, and MariaDB Read Replicas</a>. </p> <p>Amazon Aurora doesn&#39;t support this action. You must call the <code>CreateDBInstance</code> action to create a DB instance for an Aurora DB cluster. </p> <p>All Read Replica DB instances are created with backups disabled. All other DB instance attributes (including DB security groups and DB parameter groups) are inherited from the source DB instance, except as specified following. </p> <important> <p>Your source DB instance must have backup retention enabled. </p> </important></p>
     fn create_db_instance_read_replica(
         &self,
-        input: &CreateDBInstanceReadReplicaMessage,
+        input: CreateDBInstanceReadReplicaMessage,
     ) -> RusotoFuture<CreateDBInstanceReadReplicaResult, CreateDBInstanceReadReplicaError>;
 
     /// <p><p>Creates a new DB parameter group.</p> <p> A DB parameter group is initially created with the default parameters for the database engine used by the DB instance. To provide custom values for any of the parameters, you must modify the group after creating it using <i>ModifyDBParameterGroup</i>. Once you&#39;ve created a DB parameter group, you need to associate it with your DB instance using <i>ModifyDBInstance</i>. When you associate a new DB parameter group with a running DB instance, you need to reboot the DB instance without failover for the new DB parameter group and associated settings to take effect. </p> <important> <p>After you create a DB parameter group, you should wait at least 5 minutes before creating your first DB instance that uses that DB parameter group as the default parameter group. This allows Amazon RDS to fully complete the create action before the parameter group is used as the default for a new DB instance. This is especially important for parameters that are critical when creating the default database for a DB instance, such as the character set for the default database defined by the <code>character<em>set</em>database</code> parameter. You can use the <i>Parameter Groups</i> option of the <a href="https://console.aws.amazon.com/rds/">Amazon RDS console</a> or the <i>DescribeDBParameters</i> command to verify that your DB parameter group has been created or modified.</p> </important></p>
     fn create_db_parameter_group(
         &self,
-        input: &CreateDBParameterGroupMessage,
+        input: CreateDBParameterGroupMessage,
     ) -> RusotoFuture<CreateDBParameterGroupResult, CreateDBParameterGroupError>;
 
     /// <p>Creates a new DB security group. DB security groups control access to a DB instance.</p>
     fn create_db_security_group(
         &self,
-        input: &CreateDBSecurityGroupMessage,
+        input: CreateDBSecurityGroupMessage,
     ) -> RusotoFuture<CreateDBSecurityGroupResult, CreateDBSecurityGroupError>;
 
     /// <p>Creates a DBSnapshot. The source DBInstance must be in "available" state.</p>
     fn create_db_snapshot(
         &self,
-        input: &CreateDBSnapshotMessage,
+        input: CreateDBSnapshotMessage,
     ) -> RusotoFuture<CreateDBSnapshotResult, CreateDBSnapshotError>;
 
     /// <p>Creates a new DB subnet group. DB subnet groups must contain at least one subnet in at least two AZs in the AWS Region.</p>
     fn create_db_subnet_group(
         &self,
-        input: &CreateDBSubnetGroupMessage,
+        input: CreateDBSubnetGroupMessage,
     ) -> RusotoFuture<CreateDBSubnetGroupResult, CreateDBSubnetGroupError>;
 
     /// <p>Creates an RDS event notification subscription. This action requires a topic ARN (Amazon Resource Name) created by either the RDS console, the SNS console, or the SNS API. To obtain an ARN with SNS, you must create a topic in Amazon SNS and subscribe to the topic. The ARN is displayed in the SNS console.</p> <p>You can specify the type of source (SourceType) you want to be notified of, provide a list of RDS sources (SourceIds) that triggers the events, and provide a list of event categories (EventCategories) for events you want to be notified of. For example, you can specify SourceType = db-instance, SourceIds = mydbinstance1, mydbinstance2 and EventCategories = Availability, Backup.</p> <p>If you specify both the SourceType and SourceIds, such as SourceType = db-instance and SourceIdentifier = myDBInstance1, you are notified of all the db-instance events for the specified source. If you specify a SourceType but do not specify a SourceIdentifier, you receive notice of the events for that source type for all your RDS sources. If you do not specify either the SourceType nor the SourceIdentifier, you are notified of events generated from all RDS sources belonging to your customer account.</p>
     fn create_event_subscription(
         &self,
-        input: &CreateEventSubscriptionMessage,
+        input: CreateEventSubscriptionMessage,
     ) -> RusotoFuture<CreateEventSubscriptionResult, CreateEventSubscriptionError>;
 
     /// <p>Creates a new option group. You can create up to 20 option groups.</p>
     fn create_option_group(
         &self,
-        input: &CreateOptionGroupMessage,
+        input: CreateOptionGroupMessage,
     ) -> RusotoFuture<CreateOptionGroupResult, CreateOptionGroupError>;
 
     /// <p>The DeleteDBCluster action deletes a previously provisioned DB cluster. When you delete a DB cluster, all automated backups for that DB cluster are deleted and can't be recovered. Manual DB cluster snapshots of the specified DB cluster are not deleted.</p> <p/> <p>For more information on Amazon Aurora, see <a href="http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Aurora.html">Aurora on Amazon RDS</a> in the <i>Amazon RDS User Guide.</i> </p>
     fn delete_db_cluster(
         &self,
-        input: &DeleteDBClusterMessage,
+        input: DeleteDBClusterMessage,
     ) -> RusotoFuture<DeleteDBClusterResult, DeleteDBClusterError>;
 
     /// <p>Deletes a specified DB cluster parameter group. The DB cluster parameter group to be deleted can't be associated with any DB clusters.</p> <p>For more information on Amazon Aurora, see <a href="http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Aurora.html">Aurora on Amazon RDS</a> in the <i>Amazon RDS User Guide.</i> </p>
     fn delete_db_cluster_parameter_group(
         &self,
-        input: &DeleteDBClusterParameterGroupMessage,
+        input: DeleteDBClusterParameterGroupMessage,
     ) -> RusotoFuture<(), DeleteDBClusterParameterGroupError>;
 
     /// <p>Deletes a DB cluster snapshot. If the snapshot is being copied, the copy operation is terminated.</p> <note> <p>The DB cluster snapshot must be in the <code>available</code> state to be deleted.</p> </note> <p>For more information on Amazon Aurora, see <a href="http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Aurora.html">Aurora on Amazon RDS</a> in the <i>Amazon RDS User Guide.</i> </p>
     fn delete_db_cluster_snapshot(
         &self,
-        input: &DeleteDBClusterSnapshotMessage,
+        input: DeleteDBClusterSnapshotMessage,
     ) -> RusotoFuture<DeleteDBClusterSnapshotResult, DeleteDBClusterSnapshotError>;
 
     /// <p>The DeleteDBInstance action deletes a previously provisioned DB instance. When you delete a DB instance, all automated backups for that instance are deleted and can't be recovered. Manual DB snapshots of the DB instance to be deleted by <code>DeleteDBInstance</code> are not deleted.</p> <p> If you request a final DB snapshot the status of the Amazon RDS DB instance is <code>deleting</code> until the DB snapshot is created. The API action <code>DescribeDBInstance</code> is used to monitor the status of this operation. The action can't be canceled or reverted once submitted. </p> <p>Note that when a DB instance is in a failure state and has a status of <code>failed</code>, <code>incompatible-restore</code>, or <code>incompatible-network</code>, you can only delete it when the <code>SkipFinalSnapshot</code> parameter is set to <code>true</code>.</p> <p>If the specified DB instance is part of an Amazon Aurora DB cluster, you can't delete the DB instance if both of the following conditions are true:</p> <ul> <li> <p>The DB cluster is a Read Replica of another Amazon Aurora DB cluster.</p> </li> <li> <p>The DB instance is the only instance in the DB cluster.</p> </li> </ul> <p>To delete a DB instance in this case, first call the <a>PromoteReadReplicaDBCluster</a> API action to promote the DB cluster so it's no longer a Read Replica. After the promotion completes, then call the <code>DeleteDBInstance</code> API action to delete the final instance in the DB cluster.</p>
     fn delete_db_instance(
         &self,
-        input: &DeleteDBInstanceMessage,
+        input: DeleteDBInstanceMessage,
     ) -> RusotoFuture<DeleteDBInstanceResult, DeleteDBInstanceError>;
 
     /// <p>Deletes a specified DBParameterGroup. The DBParameterGroup to be deleted can't be associated with any DB instances.</p>
     fn delete_db_parameter_group(
         &self,
-        input: &DeleteDBParameterGroupMessage,
+        input: DeleteDBParameterGroupMessage,
     ) -> RusotoFuture<(), DeleteDBParameterGroupError>;
 
     /// <p><p>Deletes a DB security group.</p> <note> <p>The specified DB security group must not be associated with any DB instances.</p> </note></p>
     fn delete_db_security_group(
         &self,
-        input: &DeleteDBSecurityGroupMessage,
+        input: DeleteDBSecurityGroupMessage,
     ) -> RusotoFuture<(), DeleteDBSecurityGroupError>;
 
     /// <p><p>Deletes a DBSnapshot. If the snapshot is being copied, the copy operation is terminated.</p> <note> <p>The DBSnapshot must be in the <code>available</code> state to be deleted.</p> </note></p>
     fn delete_db_snapshot(
         &self,
-        input: &DeleteDBSnapshotMessage,
+        input: DeleteDBSnapshotMessage,
     ) -> RusotoFuture<DeleteDBSnapshotResult, DeleteDBSnapshotError>;
 
     /// <p><p>Deletes a DB subnet group.</p> <note> <p>The specified database subnet group must not be associated with any DB instances.</p> </note></p>
     fn delete_db_subnet_group(
         &self,
-        input: &DeleteDBSubnetGroupMessage,
+        input: DeleteDBSubnetGroupMessage,
     ) -> RusotoFuture<(), DeleteDBSubnetGroupError>;
 
     /// <p>Deletes an RDS event notification subscription.</p>
     fn delete_event_subscription(
         &self,
-        input: &DeleteEventSubscriptionMessage,
+        input: DeleteEventSubscriptionMessage,
     ) -> RusotoFuture<DeleteEventSubscriptionResult, DeleteEventSubscriptionError>;
 
     /// <p>Deletes an existing option group.</p>
     fn delete_option_group(
         &self,
-        input: &DeleteOptionGroupMessage,
+        input: DeleteOptionGroupMessage,
     ) -> RusotoFuture<(), DeleteOptionGroupError>;
 
     /// <p>Lists all of the attributes for a customer account. The attributes include Amazon RDS quotas for the account, such as the number of DB instances allowed. The description for a quota includes the quota name, current usage toward that quota, and the quota's maximum value.</p> <p>This command doesn't take any parameters.</p>
     fn describe_account_attributes(
         &self,
-        input: &DescribeAccountAttributesMessage,
+        input: DescribeAccountAttributesMessage,
     ) -> RusotoFuture<AccountAttributesMessage, DescribeAccountAttributesError>;
 
     /// <p>Lists the set of CA certificates provided by Amazon RDS for this AWS account.</p>
     fn describe_certificates(
         &self,
-        input: &DescribeCertificatesMessage,
+        input: DescribeCertificatesMessage,
     ) -> RusotoFuture<CertificateMessage, DescribeCertificatesError>;
 
     /// <p> Returns a list of <code>DBClusterParameterGroup</code> descriptions. If a <code>DBClusterParameterGroupName</code> parameter is specified, the list will contain only the description of the specified DB cluster parameter group. </p> <p>For more information on Amazon Aurora, see <a href="http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Aurora.html">Aurora on Amazon RDS</a> in the <i>Amazon RDS User Guide.</i> </p>
     fn describe_db_cluster_parameter_groups(
         &self,
-        input: &DescribeDBClusterParameterGroupsMessage,
+        input: DescribeDBClusterParameterGroupsMessage,
     ) -> RusotoFuture<DBClusterParameterGroupsMessage, DescribeDBClusterParameterGroupsError>;
 
     /// <p>Returns the detailed parameter list for a particular DB cluster parameter group.</p> <p>For more information on Amazon Aurora, see <a href="http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Aurora.html">Aurora on Amazon RDS</a> in the <i>Amazon RDS User Guide.</i> </p>
     fn describe_db_cluster_parameters(
         &self,
-        input: &DescribeDBClusterParametersMessage,
+        input: DescribeDBClusterParametersMessage,
     ) -> RusotoFuture<DBClusterParameterGroupDetails, DescribeDBClusterParametersError>;
 
     /// <p>Returns a list of DB cluster snapshot attribute names and values for a manual DB cluster snapshot.</p> <p>When sharing snapshots with other AWS accounts, <code>DescribeDBClusterSnapshotAttributes</code> returns the <code>restore</code> attribute and a list of IDs for the AWS accounts that are authorized to copy or restore the manual DB cluster snapshot. If <code>all</code> is included in the list of values for the <code>restore</code> attribute, then the manual DB cluster snapshot is public and can be copied or restored by all AWS accounts.</p> <p>To add or remove access for an AWS account to copy or restore a manual DB cluster snapshot, or to make the manual DB cluster snapshot public or private, use the <a>ModifyDBClusterSnapshotAttribute</a> API action.</p>
     fn describe_db_cluster_snapshot_attributes(
         &self,
-        input: &DescribeDBClusterSnapshotAttributesMessage,
+        input: DescribeDBClusterSnapshotAttributesMessage,
     ) -> RusotoFuture<
         DescribeDBClusterSnapshotAttributesResult,
         DescribeDBClusterSnapshotAttributesError,
@@ -27671,73 +27661,73 @@ pub trait Rds {
     /// <p>Returns information about DB cluster snapshots. This API action supports pagination.</p> <p>For more information on Amazon Aurora, see <a href="http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Aurora.html">Aurora on Amazon RDS</a> in the <i>Amazon RDS User Guide.</i> </p>
     fn describe_db_cluster_snapshots(
         &self,
-        input: &DescribeDBClusterSnapshotsMessage,
+        input: DescribeDBClusterSnapshotsMessage,
     ) -> RusotoFuture<DBClusterSnapshotMessage, DescribeDBClusterSnapshotsError>;
 
     /// <p>Returns information about provisioned Aurora DB clusters. This API supports pagination.</p> <p>For more information on Amazon Aurora, see <a href="http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Aurora.html">Aurora on Amazon RDS</a> in the <i>Amazon RDS User Guide.</i> </p>
     fn describe_db_clusters(
         &self,
-        input: &DescribeDBClustersMessage,
+        input: DescribeDBClustersMessage,
     ) -> RusotoFuture<DBClusterMessage, DescribeDBClustersError>;
 
     /// <p>Returns a list of the available DB engines.</p>
     fn describe_db_engine_versions(
         &self,
-        input: &DescribeDBEngineVersionsMessage,
+        input: DescribeDBEngineVersionsMessage,
     ) -> RusotoFuture<DBEngineVersionMessage, DescribeDBEngineVersionsError>;
 
     /// <p>Returns information about provisioned RDS instances. This API supports pagination.</p>
     fn describe_db_instances(
         &self,
-        input: &DescribeDBInstancesMessage,
+        input: DescribeDBInstancesMessage,
     ) -> RusotoFuture<DBInstanceMessage, DescribeDBInstancesError>;
 
     /// <p>Returns a list of DB log files for the DB instance.</p>
     fn describe_db_log_files(
         &self,
-        input: &DescribeDBLogFilesMessage,
+        input: DescribeDBLogFilesMessage,
     ) -> RusotoFuture<DescribeDBLogFilesResponse, DescribeDBLogFilesError>;
 
     /// <p> Returns a list of <code>DBParameterGroup</code> descriptions. If a <code>DBParameterGroupName</code> is specified, the list will contain only the description of the specified DB parameter group. </p>
     fn describe_db_parameter_groups(
         &self,
-        input: &DescribeDBParameterGroupsMessage,
+        input: DescribeDBParameterGroupsMessage,
     ) -> RusotoFuture<DBParameterGroupsMessage, DescribeDBParameterGroupsError>;
 
     /// <p>Returns the detailed parameter list for a particular DB parameter group.</p>
     fn describe_db_parameters(
         &self,
-        input: &DescribeDBParametersMessage,
+        input: DescribeDBParametersMessage,
     ) -> RusotoFuture<DBParameterGroupDetails, DescribeDBParametersError>;
 
     /// <p> Returns a list of <code>DBSecurityGroup</code> descriptions. If a <code>DBSecurityGroupName</code> is specified, the list will contain only the descriptions of the specified DB security group. </p>
     fn describe_db_security_groups(
         &self,
-        input: &DescribeDBSecurityGroupsMessage,
+        input: DescribeDBSecurityGroupsMessage,
     ) -> RusotoFuture<DBSecurityGroupMessage, DescribeDBSecurityGroupsError>;
 
     /// <p>Returns a list of DB snapshot attribute names and values for a manual DB snapshot.</p> <p>When sharing snapshots with other AWS accounts, <code>DescribeDBSnapshotAttributes</code> returns the <code>restore</code> attribute and a list of IDs for the AWS accounts that are authorized to copy or restore the manual DB snapshot. If <code>all</code> is included in the list of values for the <code>restore</code> attribute, then the manual DB snapshot is public and can be copied or restored by all AWS accounts.</p> <p>To add or remove access for an AWS account to copy or restore a manual DB snapshot, or to make the manual DB snapshot public or private, use the <a>ModifyDBSnapshotAttribute</a> API action.</p>
     fn describe_db_snapshot_attributes(
         &self,
-        input: &DescribeDBSnapshotAttributesMessage,
+        input: DescribeDBSnapshotAttributesMessage,
     ) -> RusotoFuture<DescribeDBSnapshotAttributesResult, DescribeDBSnapshotAttributesError>;
 
     /// <p>Returns information about DB snapshots. This API action supports pagination.</p>
     fn describe_db_snapshots(
         &self,
-        input: &DescribeDBSnapshotsMessage,
+        input: DescribeDBSnapshotsMessage,
     ) -> RusotoFuture<DBSnapshotMessage, DescribeDBSnapshotsError>;
 
     /// <p>Returns a list of DBSubnetGroup descriptions. If a DBSubnetGroupName is specified, the list will contain only the descriptions of the specified DBSubnetGroup.</p> <p>For an overview of CIDR ranges, go to the <a href="http://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing">Wikipedia Tutorial</a>. </p>
     fn describe_db_subnet_groups(
         &self,
-        input: &DescribeDBSubnetGroupsMessage,
+        input: DescribeDBSubnetGroupsMessage,
     ) -> RusotoFuture<DBSubnetGroupMessage, DescribeDBSubnetGroupsError>;
 
     /// <p>Returns the default engine and system parameter information for the cluster database engine.</p> <p>For more information on Amazon Aurora, see <a href="http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Aurora.html">Aurora on Amazon RDS</a> in the <i>Amazon RDS User Guide.</i> </p>
     fn describe_engine_default_cluster_parameters(
         &self,
-        input: &DescribeEngineDefaultClusterParametersMessage,
+        input: DescribeEngineDefaultClusterParametersMessage,
     ) -> RusotoFuture<
         DescribeEngineDefaultClusterParametersResult,
         DescribeEngineDefaultClusterParametersError,
@@ -27746,73 +27736,73 @@ pub trait Rds {
     /// <p>Returns the default engine and system parameter information for the specified database engine.</p>
     fn describe_engine_default_parameters(
         &self,
-        input: &DescribeEngineDefaultParametersMessage,
+        input: DescribeEngineDefaultParametersMessage,
     ) -> RusotoFuture<DescribeEngineDefaultParametersResult, DescribeEngineDefaultParametersError>;
 
     /// <p>Displays a list of categories for all event source types, or, if specified, for a specified source type. You can see a list of the event categories and source types in the <a href="http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_Events.html"> Events</a> topic in the <i>Amazon RDS User Guide.</i> </p>
     fn describe_event_categories(
         &self,
-        input: &DescribeEventCategoriesMessage,
+        input: DescribeEventCategoriesMessage,
     ) -> RusotoFuture<EventCategoriesMessage, DescribeEventCategoriesError>;
 
     /// <p>Lists all the subscription descriptions for a customer account. The description for a subscription includes SubscriptionName, SNSTopicARN, CustomerID, SourceType, SourceID, CreationTime, and Status.</p> <p>If you specify a SubscriptionName, lists the description for that subscription.</p>
     fn describe_event_subscriptions(
         &self,
-        input: &DescribeEventSubscriptionsMessage,
+        input: DescribeEventSubscriptionsMessage,
     ) -> RusotoFuture<EventSubscriptionsMessage, DescribeEventSubscriptionsError>;
 
     /// <p>Returns events related to DB instances, DB security groups, DB snapshots, and DB parameter groups for the past 14 days. Events specific to a particular DB instance, DB security group, database snapshot, or DB parameter group can be obtained by providing the name as a parameter. By default, the past hour of events are returned.</p>
     fn describe_events(
         &self,
-        input: &DescribeEventsMessage,
+        input: DescribeEventsMessage,
     ) -> RusotoFuture<EventsMessage, DescribeEventsError>;
 
     /// <p>Describes all available options.</p>
     fn describe_option_group_options(
         &self,
-        input: &DescribeOptionGroupOptionsMessage,
+        input: DescribeOptionGroupOptionsMessage,
     ) -> RusotoFuture<OptionGroupOptionsMessage, DescribeOptionGroupOptionsError>;
 
     /// <p>Describes the available option groups.</p>
     fn describe_option_groups(
         &self,
-        input: &DescribeOptionGroupsMessage,
+        input: DescribeOptionGroupsMessage,
     ) -> RusotoFuture<OptionGroups, DescribeOptionGroupsError>;
 
     /// <p>Returns a list of orderable DB instance options for the specified engine.</p>
     fn describe_orderable_db_instance_options(
         &self,
-        input: &DescribeOrderableDBInstanceOptionsMessage,
+        input: DescribeOrderableDBInstanceOptionsMessage,
     ) -> RusotoFuture<OrderableDBInstanceOptionsMessage, DescribeOrderableDBInstanceOptionsError>;
 
     /// <p>Returns a list of resources (for example, DB instances) that have at least one pending maintenance action.</p>
     fn describe_pending_maintenance_actions(
         &self,
-        input: &DescribePendingMaintenanceActionsMessage,
+        input: DescribePendingMaintenanceActionsMessage,
     ) -> RusotoFuture<PendingMaintenanceActionsMessage, DescribePendingMaintenanceActionsError>;
 
     /// <p>Returns information about reserved DB instances for this account, or about a specified reserved DB instance.</p>
     fn describe_reserved_db_instances(
         &self,
-        input: &DescribeReservedDBInstancesMessage,
+        input: DescribeReservedDBInstancesMessage,
     ) -> RusotoFuture<ReservedDBInstanceMessage, DescribeReservedDBInstancesError>;
 
     /// <p>Lists available reserved DB instance offerings.</p>
     fn describe_reserved_db_instances_offerings(
         &self,
-        input: &DescribeReservedDBInstancesOfferingsMessage,
+        input: DescribeReservedDBInstancesOfferingsMessage,
     ) -> RusotoFuture<ReservedDBInstancesOfferingMessage, DescribeReservedDBInstancesOfferingsError>;
 
     /// <p>Returns a list of the source AWS Regions where the current AWS Region can create a Read Replica or copy a DB snapshot from. This API action supports pagination.</p>
     fn describe_source_regions(
         &self,
-        input: &DescribeSourceRegionsMessage,
+        input: DescribeSourceRegionsMessage,
     ) -> RusotoFuture<SourceRegionMessage, DescribeSourceRegionsError>;
 
     /// <p>You can call <a>DescribeValidDBInstanceModifications</a> to learn what modifications you can make to your DB instance. You can use this information when you call <a>ModifyDBInstance</a>. </p>
     fn describe_valid_db_instance_modifications(
         &self,
-        input: &DescribeValidDBInstanceModificationsMessage,
+        input: DescribeValidDBInstanceModificationsMessage,
     ) -> RusotoFuture<
         DescribeValidDBInstanceModificationsResult,
         DescribeValidDBInstanceModificationsError,
@@ -27821,97 +27811,97 @@ pub trait Rds {
     /// <p>Downloads all or a portion of the specified log file, up to 1 MB in size.</p>
     fn download_db_log_file_portion(
         &self,
-        input: &DownloadDBLogFilePortionMessage,
+        input: DownloadDBLogFilePortionMessage,
     ) -> RusotoFuture<DownloadDBLogFilePortionDetails, DownloadDBLogFilePortionError>;
 
     /// <p>Forces a failover for a DB cluster.</p> <p>A failover for a DB cluster promotes one of the Aurora Replicas (read-only instances) in the DB cluster to be the primary instance (the cluster writer).</p> <p>Amazon Aurora will automatically fail over to an Aurora Replica, if one exists, when the primary instance fails. You can force a failover when you want to simulate a failure of a primary instance for testing. Because each instance in a DB cluster has its own endpoint address, you will need to clean up and re-establish any existing connections that use those endpoint addresses when the failover is complete.</p> <p>For more information on Amazon Aurora, see <a href="http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Aurora.html">Aurora on Amazon RDS</a> in the <i>Amazon RDS User Guide.</i> </p>
     fn failover_db_cluster(
         &self,
-        input: &FailoverDBClusterMessage,
+        input: FailoverDBClusterMessage,
     ) -> RusotoFuture<FailoverDBClusterResult, FailoverDBClusterError>;
 
     /// <p>Lists all tags on an Amazon RDS resource.</p> <p>For an overview on tagging an Amazon RDS resource, see <a href="http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Overview.Tagging.html">Tagging Amazon RDS Resources</a>.</p>
     fn list_tags_for_resource(
         &self,
-        input: &ListTagsForResourceMessage,
+        input: ListTagsForResourceMessage,
     ) -> RusotoFuture<TagListMessage, ListTagsForResourceError>;
 
     /// <p>Modify a setting for an Amazon Aurora DB cluster. You can change one or more database configuration parameters by specifying these parameters and the new values in the request. For more information on Amazon Aurora, see <a href="http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Aurora.html">Aurora on Amazon RDS</a> in the <i>Amazon RDS User Guide.</i> </p>
     fn modify_db_cluster(
         &self,
-        input: &ModifyDBClusterMessage,
+        input: ModifyDBClusterMessage,
     ) -> RusotoFuture<ModifyDBClusterResult, ModifyDBClusterError>;
 
     /// <p><p> Modifies the parameters of a DB cluster parameter group. To modify more than one parameter, submit a list of the following: <code>ParameterName</code>, <code>ParameterValue</code>, and <code>ApplyMethod</code>. A maximum of 20 parameters can be modified in a single request. </p> <p>For more information on Amazon Aurora, see <a href="http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Aurora.html">Aurora on Amazon RDS</a> in the <i>Amazon RDS User Guide.</i> </p> <note> <p>Changes to dynamic parameters are applied immediately. Changes to static parameters require a reboot without failover to the DB cluster associated with the parameter group before the change can take effect.</p> </note> <important> <p>After you create a DB cluster parameter group, you should wait at least 5 minutes before creating your first DB cluster that uses that DB cluster parameter group as the default parameter group. This allows Amazon RDS to fully complete the create action before the parameter group is used as the default for a new DB cluster. This is especially important for parameters that are critical when creating the default database for a DB cluster, such as the character set for the default database defined by the <code>character<em>set</em>database</code> parameter. You can use the <i>Parameter Groups</i> option of the <a href="https://console.aws.amazon.com/rds/">Amazon RDS console</a> or the <a>DescribeDBClusterParameters</a> command to verify that your DB cluster parameter group has been created or modified.</p> </important></p>
     fn modify_db_cluster_parameter_group(
         &self,
-        input: &ModifyDBClusterParameterGroupMessage,
+        input: ModifyDBClusterParameterGroupMessage,
     ) -> RusotoFuture<DBClusterParameterGroupNameMessage, ModifyDBClusterParameterGroupError>;
 
     /// <p>Adds an attribute and values to, or removes an attribute and values from, a manual DB cluster snapshot.</p> <p>To share a manual DB cluster snapshot with other AWS accounts, specify <code>restore</code> as the <code>AttributeName</code> and use the <code>ValuesToAdd</code> parameter to add a list of IDs of the AWS accounts that are authorized to restore the manual DB cluster snapshot. Use the value <code>all</code> to make the manual DB cluster snapshot public, which means that it can be copied or restored by all AWS accounts. Do not add the <code>all</code> value for any manual DB cluster snapshots that contain private information that you don't want available to all AWS accounts. If a manual DB cluster snapshot is encrypted, it can be shared, but only by specifying a list of authorized AWS account IDs for the <code>ValuesToAdd</code> parameter. You can't use <code>all</code> as a value for that parameter in this case.</p> <p>To view which AWS accounts have access to copy or restore a manual DB cluster snapshot, or whether a manual DB cluster snapshot public or private, use the <a>DescribeDBClusterSnapshotAttributes</a> API action.</p>
     fn modify_db_cluster_snapshot_attribute(
         &self,
-        input: &ModifyDBClusterSnapshotAttributeMessage,
+        input: ModifyDBClusterSnapshotAttributeMessage,
     ) -> RusotoFuture<ModifyDBClusterSnapshotAttributeResult, ModifyDBClusterSnapshotAttributeError>;
 
     /// <p>Modifies settings for a DB instance. You can change one or more database configuration parameters by specifying these parameters and the new values in the request. To learn what modifications you can make to your DB instance, call <a>DescribeValidDBInstanceModifications</a> before you call <a>ModifyDBInstance</a>. </p>
     fn modify_db_instance(
         &self,
-        input: &ModifyDBInstanceMessage,
+        input: ModifyDBInstanceMessage,
     ) -> RusotoFuture<ModifyDBInstanceResult, ModifyDBInstanceError>;
 
     /// <p><p> Modifies the parameters of a DB parameter group. To modify more than one parameter, submit a list of the following: <code>ParameterName</code>, <code>ParameterValue</code>, and <code>ApplyMethod</code>. A maximum of 20 parameters can be modified in a single request. </p> <note> <p>Changes to dynamic parameters are applied immediately. Changes to static parameters require a reboot without failover to the DB instance associated with the parameter group before the change can take effect.</p> </note> <important> <p>After you modify a DB parameter group, you should wait at least 5 minutes before creating your first DB instance that uses that DB parameter group as the default parameter group. This allows Amazon RDS to fully complete the modify action before the parameter group is used as the default for a new DB instance. This is especially important for parameters that are critical when creating the default database for a DB instance, such as the character set for the default database defined by the <code>character<em>set</em>database</code> parameter. You can use the <i>Parameter Groups</i> option of the <a href="https://console.aws.amazon.com/rds/">Amazon RDS console</a> or the <i>DescribeDBParameters</i> command to verify that your DB parameter group has been created or modified.</p> </important></p>
     fn modify_db_parameter_group(
         &self,
-        input: &ModifyDBParameterGroupMessage,
+        input: ModifyDBParameterGroupMessage,
     ) -> RusotoFuture<DBParameterGroupNameMessage, ModifyDBParameterGroupError>;
 
     /// <p>Updates a manual DB snapshot, which can be encrypted or not encrypted, with a new engine version. </p> <p>Amazon RDS supports upgrading DB snapshots for MySQL and Oracle. </p>
     fn modify_db_snapshot(
         &self,
-        input: &ModifyDBSnapshotMessage,
+        input: ModifyDBSnapshotMessage,
     ) -> RusotoFuture<ModifyDBSnapshotResult, ModifyDBSnapshotError>;
 
     /// <p>Adds an attribute and values to, or removes an attribute and values from, a manual DB snapshot.</p> <p>To share a manual DB snapshot with other AWS accounts, specify <code>restore</code> as the <code>AttributeName</code> and use the <code>ValuesToAdd</code> parameter to add a list of IDs of the AWS accounts that are authorized to restore the manual DB snapshot. Uses the value <code>all</code> to make the manual DB snapshot public, which means it can be copied or restored by all AWS accounts. Do not add the <code>all</code> value for any manual DB snapshots that contain private information that you don't want available to all AWS accounts. If the manual DB snapshot is encrypted, it can be shared, but only by specifying a list of authorized AWS account IDs for the <code>ValuesToAdd</code> parameter. You can't use <code>all</code> as a value for that parameter in this case.</p> <p>To view which AWS accounts have access to copy or restore a manual DB snapshot, or whether a manual DB snapshot public or private, use the <a>DescribeDBSnapshotAttributes</a> API action.</p>
     fn modify_db_snapshot_attribute(
         &self,
-        input: &ModifyDBSnapshotAttributeMessage,
+        input: ModifyDBSnapshotAttributeMessage,
     ) -> RusotoFuture<ModifyDBSnapshotAttributeResult, ModifyDBSnapshotAttributeError>;
 
     /// <p>Modifies an existing DB subnet group. DB subnet groups must contain at least one subnet in at least two AZs in the AWS Region.</p>
     fn modify_db_subnet_group(
         &self,
-        input: &ModifyDBSubnetGroupMessage,
+        input: ModifyDBSubnetGroupMessage,
     ) -> RusotoFuture<ModifyDBSubnetGroupResult, ModifyDBSubnetGroupError>;
 
     /// <p>Modifies an existing RDS event notification subscription. Note that you can't modify the source identifiers using this call; to change source identifiers for a subscription, use the <a>AddSourceIdentifierToSubscription</a> and <a>RemoveSourceIdentifierFromSubscription</a> calls.</p> <p>You can see a list of the event categories for a given SourceType in the <a href="http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_Events.html">Events</a> topic in the Amazon RDS User Guide or by using the <b>DescribeEventCategories</b> action.</p>
     fn modify_event_subscription(
         &self,
-        input: &ModifyEventSubscriptionMessage,
+        input: ModifyEventSubscriptionMessage,
     ) -> RusotoFuture<ModifyEventSubscriptionResult, ModifyEventSubscriptionError>;
 
     /// <p>Modifies an existing option group.</p>
     fn modify_option_group(
         &self,
-        input: &ModifyOptionGroupMessage,
+        input: ModifyOptionGroupMessage,
     ) -> RusotoFuture<ModifyOptionGroupResult, ModifyOptionGroupError>;
 
     /// <p><p>Promotes a Read Replica DB instance to a standalone DB instance.</p> <note> <ul> <li> <p>Backup duration is a function of the amount of changes to the database since the previous backup. If you plan to promote a Read Replica to a standalone instance, we recommend that you enable backups and complete at least one backup prior to promotion. In addition, a Read Replica cannot be promoted to a standalone instance when it is in the <code>backing-up</code> status. If you have enabled backups on your Read Replica, configure the automated backup window so that daily backups do not interfere with Read Replica promotion.</p> </li> <li> <p>This command doesn&#39;t apply to Aurora MySQL and Aurora PostgreSQL.</p> </li> </ul> </note></p>
     fn promote_read_replica(
         &self,
-        input: &PromoteReadReplicaMessage,
+        input: PromoteReadReplicaMessage,
     ) -> RusotoFuture<PromoteReadReplicaResult, PromoteReadReplicaError>;
 
     /// <p>Promotes a Read Replica DB cluster to a standalone DB cluster.</p>
     fn promote_read_replica_db_cluster(
         &self,
-        input: &PromoteReadReplicaDBClusterMessage,
+        input: PromoteReadReplicaDBClusterMessage,
     ) -> RusotoFuture<PromoteReadReplicaDBClusterResult, PromoteReadReplicaDBClusterError>;
 
     /// <p>Purchases a reserved DB instance offering.</p>
     fn purchase_reserved_db_instances_offering(
         &self,
-        input: &PurchaseReservedDBInstancesOfferingMessage,
+        input: PurchaseReservedDBInstancesOfferingMessage,
     ) -> RusotoFuture<
         PurchaseReservedDBInstancesOfferingResult,
         PurchaseReservedDBInstancesOfferingError,
@@ -27920,19 +27910,19 @@ pub trait Rds {
     /// <p>You might need to reboot your DB instance, usually for maintenance reasons. For example, if you make certain modifications, or if you change the DB parameter group associated with the DB instance, you must reboot the instance for the changes to take effect. </p> <p>Rebooting a DB instance restarts the database engine service. Rebooting a DB instance results in a momentary outage, during which the DB instance status is set to rebooting. </p> <p>For more information about rebooting, see <a href="http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_RebootInstance.html">Rebooting a DB Instance</a>. </p>
     fn reboot_db_instance(
         &self,
-        input: &RebootDBInstanceMessage,
+        input: RebootDBInstanceMessage,
     ) -> RusotoFuture<RebootDBInstanceResult, RebootDBInstanceError>;
 
     /// <p>Disassociates an Identity and Access Management (IAM) role from an Aurora DB cluster. For more information, see <a href="http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Aurora.Authorizing.AWSServices.html">Authorizing Amazon Aurora to Access Other AWS Services On Your Behalf</a>.</p>
     fn remove_role_from_db_cluster(
         &self,
-        input: &RemoveRoleFromDBClusterMessage,
+        input: RemoveRoleFromDBClusterMessage,
     ) -> RusotoFuture<(), RemoveRoleFromDBClusterError>;
 
     /// <p>Removes a source identifier from an existing RDS event notification subscription.</p>
     fn remove_source_identifier_from_subscription(
         &self,
-        input: &RemoveSourceIdentifierFromSubscriptionMessage,
+        input: RemoveSourceIdentifierFromSubscriptionMessage,
     ) -> RusotoFuture<
         RemoveSourceIdentifierFromSubscriptionResult,
         RemoveSourceIdentifierFromSubscriptionError,
@@ -27941,73 +27931,73 @@ pub trait Rds {
     /// <p>Removes metadata tags from an Amazon RDS resource.</p> <p>For an overview on tagging an Amazon RDS resource, see <a href="http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Overview.Tagging.html">Tagging Amazon RDS Resources</a>.</p>
     fn remove_tags_from_resource(
         &self,
-        input: &RemoveTagsFromResourceMessage,
+        input: RemoveTagsFromResourceMessage,
     ) -> RusotoFuture<(), RemoveTagsFromResourceError>;
 
     /// <p> Modifies the parameters of a DB cluster parameter group to the default value. To reset specific parameters submit a list of the following: <code>ParameterName</code> and <code>ApplyMethod</code>. To reset the entire DB cluster parameter group, specify the <code>DBClusterParameterGroupName</code> and <code>ResetAllParameters</code> parameters. </p> <p> When resetting the entire group, dynamic parameters are updated immediately and static parameters are set to <code>pending-reboot</code> to take effect on the next DB instance restart or <a>RebootDBInstance</a> request. You must call <a>RebootDBInstance</a> for every DB instance in your DB cluster that you want the updated static parameter to apply to.</p> <p>For more information on Amazon Aurora, see <a href="http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Aurora.html">Aurora on Amazon RDS</a> in the <i>Amazon RDS User Guide.</i> </p>
     fn reset_db_cluster_parameter_group(
         &self,
-        input: &ResetDBClusterParameterGroupMessage,
+        input: ResetDBClusterParameterGroupMessage,
     ) -> RusotoFuture<DBClusterParameterGroupNameMessage, ResetDBClusterParameterGroupError>;
 
     /// <p>Modifies the parameters of a DB parameter group to the engine/system default value. To reset specific parameters, provide a list of the following: <code>ParameterName</code> and <code>ApplyMethod</code>. To reset the entire DB parameter group, specify the <code>DBParameterGroup</code> name and <code>ResetAllParameters</code> parameters. When resetting the entire group, dynamic parameters are updated immediately and static parameters are set to <code>pending-reboot</code> to take effect on the next DB instance restart or <code>RebootDBInstance</code> request. </p>
     fn reset_db_parameter_group(
         &self,
-        input: &ResetDBParameterGroupMessage,
+        input: ResetDBParameterGroupMessage,
     ) -> RusotoFuture<DBParameterGroupNameMessage, ResetDBParameterGroupError>;
 
     /// <p>Creates an Amazon Aurora DB cluster from data stored in an Amazon S3 bucket. Amazon RDS must be authorized to access the Amazon S3 bucket and the data must be created using the Percona XtraBackup utility as described in <a href="http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Aurora.Migrate.MySQL.html#Aurora.Migrate.MySQL.S3">Migrating Data from MySQL by Using an Amazon S3 Bucket</a>.</p>
     fn restore_db_cluster_from_s3(
         &self,
-        input: &RestoreDBClusterFromS3Message,
+        input: RestoreDBClusterFromS3Message,
     ) -> RusotoFuture<RestoreDBClusterFromS3Result, RestoreDBClusterFromS3Error>;
 
     /// <p>Creates a new DB cluster from a DB snapshot or DB cluster snapshot.</p> <p>If a DB snapshot is specified, the target DB cluster is created from the source DB snapshot with a default configuration and default security group.</p> <p>If a DB cluster snapshot is specified, the target DB cluster is created from the source DB cluster restore point with the same configuration as the original source DB cluster, except that the new DB cluster is created with the default security group.</p> <p>For more information on Amazon Aurora, see <a href="http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Aurora.html">Aurora on Amazon RDS</a> in the <i>Amazon RDS User Guide.</i> </p>
     fn restore_db_cluster_from_snapshot(
         &self,
-        input: &RestoreDBClusterFromSnapshotMessage,
+        input: RestoreDBClusterFromSnapshotMessage,
     ) -> RusotoFuture<RestoreDBClusterFromSnapshotResult, RestoreDBClusterFromSnapshotError>;
 
     /// <p>Restores a DB cluster to an arbitrary point in time. Users can restore to any point in time before <code>LatestRestorableTime</code> for up to <code>BackupRetentionPeriod</code> days. The target DB cluster is created from the source DB cluster with the same configuration as the original DB cluster, except that the new DB cluster is created with the default DB security group. </p> <note> <p>This action only restores the DB cluster, not the DB instances for that DB cluster. You must invoke the <a>CreateDBInstance</a> action to create DB instances for the restored DB cluster, specifying the identifier of the restored DB cluster in <code>DBClusterIdentifier</code>. You can create DB instances only after the <code>RestoreDBClusterToPointInTime</code> action has completed and the DB cluster is available.</p> </note> <p>For more information on Amazon Aurora, see <a href="http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Aurora.html">Aurora on Amazon RDS</a> in the <i>Amazon RDS User Guide.</i> </p>
     fn restore_db_cluster_to_point_in_time(
         &self,
-        input: &RestoreDBClusterToPointInTimeMessage,
+        input: RestoreDBClusterToPointInTimeMessage,
     ) -> RusotoFuture<RestoreDBClusterToPointInTimeResult, RestoreDBClusterToPointInTimeError>;
 
     /// <p><p>Creates a new DB instance from a DB snapshot. The target database is created from the source database restore point with the most of original configuration with the default security group and the default DB parameter group. By default, the new DB instance is created as a single-AZ deployment except when the instance is a SQL Server instance that has an option group that is associated with mirroring; in this case, the instance becomes a mirrored AZ deployment and not a single-AZ deployment.</p> <p>If your intent is to replace your original DB instance with the new, restored DB instance, then rename your original DB instance before you call the RestoreDBInstanceFromDBSnapshot action. RDS doesn&#39;t allow two DB instances with the same name. Once you have renamed your original DB instance with a different identifier, then you can pass the original name of the DB instance as the DBInstanceIdentifier in the call to the RestoreDBInstanceFromDBSnapshot action. The result is that you will replace the original DB instance with the DB instance created from the snapshot.</p> <p>If you are restoring from a shared manual DB snapshot, the <code>DBSnapshotIdentifier</code> must be the ARN of the shared DB snapshot.</p> <note> <p>This command doesn&#39;t apply to Aurora MySQL and Aurora PostgreSQL. For Aurora, use <a>RestoreDBClusterFromSnapshot</a>.</p> </note></p>
     fn restore_db_instance_from_db_snapshot(
         &self,
-        input: &RestoreDBInstanceFromDBSnapshotMessage,
+        input: RestoreDBInstanceFromDBSnapshotMessage,
     ) -> RusotoFuture<RestoreDBInstanceFromDBSnapshotResult, RestoreDBInstanceFromDBSnapshotError>;
 
     /// <p>Amazon Relational Database Service (Amazon RDS) supports importing MySQL databases by using backup files. You can create a backup of your on-premises database, store it on Amazon Simple Storage Service (Amazon S3), and then restore the backup file onto a new Amazon RDS DB instance running MySQL. For more information, see <a href="http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/MySQL.Procedural.Importing.html">Importing Data into an Amazon RDS MySQL DB Instance</a>. </p>
     fn restore_db_instance_from_s3(
         &self,
-        input: &RestoreDBInstanceFromS3Message,
+        input: RestoreDBInstanceFromS3Message,
     ) -> RusotoFuture<RestoreDBInstanceFromS3Result, RestoreDBInstanceFromS3Error>;
 
     /// <p><p>Restores a DB instance to an arbitrary point in time. You can restore to any point in time before the time identified by the LatestRestorableTime property. You can restore to a point up to the number of days specified by the BackupRetentionPeriod property.</p> <p>The target database is created with most of the original configuration, but in a system-selected availability zone, with the default security group, the default subnet group, and the default DB parameter group. By default, the new DB instance is created as a single-AZ deployment except when the instance is a SQL Server instance that has an option group that is associated with mirroring; in this case, the instance becomes a mirrored deployment and not a single-AZ deployment.</p> <note> <p>This command doesn&#39;t apply to Aurora MySQL and Aurora PostgreSQL. For Aurora, use <a>RestoreDBClusterToPointInTime</a>.</p> </note></p>
     fn restore_db_instance_to_point_in_time(
         &self,
-        input: &RestoreDBInstanceToPointInTimeMessage,
+        input: RestoreDBInstanceToPointInTimeMessage,
     ) -> RusotoFuture<RestoreDBInstanceToPointInTimeResult, RestoreDBInstanceToPointInTimeError>;
 
     /// <p>Revokes ingress from a DBSecurityGroup for previously authorized IP ranges or EC2 or VPC Security Groups. Required parameters for this API are one of CIDRIP, EC2SecurityGroupId for VPC, or (EC2SecurityGroupOwnerId and either EC2SecurityGroupName or EC2SecurityGroupId).</p>
     fn revoke_db_security_group_ingress(
         &self,
-        input: &RevokeDBSecurityGroupIngressMessage,
+        input: RevokeDBSecurityGroupIngressMessage,
     ) -> RusotoFuture<RevokeDBSecurityGroupIngressResult, RevokeDBSecurityGroupIngressError>;
 
     /// <p><p> Starts a DB instance that was stopped using the AWS console, the stop-db-instance AWS CLI command, or the StopDBInstance action. For more information, see Stopping and Starting a DB instance in the AWS RDS user guide. </p> <note> <p>This command doesn&#39;t apply to Aurora MySQL and Aurora PostgreSQL.</p> </note></p>
     fn start_db_instance(
         &self,
-        input: &StartDBInstanceMessage,
+        input: StartDBInstanceMessage,
     ) -> RusotoFuture<StartDBInstanceResult, StartDBInstanceError>;
 
     /// <p><p> Stops a DB instance. When you stop a DB instance, Amazon RDS retains the DB instance&#39;s metadata, including its endpoint, DB parameter group, and option group membership. Amazon RDS also retains the transaction logs so you can do a point-in-time restore if necessary. For more information, see Stopping and Starting a DB instance in the AWS RDS user guide. </p> <note> <p>This command doesn&#39;t apply to Aurora MySQL and Aurora PostgreSQL.</p> </note></p>
     fn stop_db_instance(
         &self,
-        input: &StopDBInstanceMessage,
+        input: StopDBInstanceMessage,
     ) -> RusotoFuture<StopDBInstanceResult, StopDBInstanceError>;
 }
 /// A client for the Amazon RDS API.
@@ -28056,7 +28046,7 @@ where
     /// <p>Associates an Identity and Access Management (IAM) role from an Aurora DB cluster. For more information, see <a href="http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Aurora.Authorizing.AWSServices.html">Authorizing Amazon Aurora to Access Other AWS Services On Your Behalf</a>.</p>
     fn add_role_to_db_cluster(
         &self,
-        input: &AddRoleToDBClusterMessage,
+        input: AddRoleToDBClusterMessage,
     ) -> RusotoFuture<(), AddRoleToDBClusterError> {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
@@ -28084,7 +28074,7 @@ where
     /// <p>Adds a source identifier to an existing RDS event notification subscription.</p>
     fn add_source_identifier_to_subscription(
         &self,
-        input: &AddSourceIdentifierToSubscriptionMessage,
+        input: AddSourceIdentifierToSubscriptionMessage,
     ) -> RusotoFuture<AddSourceIdentifierToSubscriptionResult, AddSourceIdentifierToSubscriptionError>
     {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
@@ -28138,7 +28128,7 @@ where
     /// <p>Adds metadata tags to an Amazon RDS resource. These tags can also be used with cost allocation reporting to track cost associated with Amazon RDS resources, or used in a Condition statement in an IAM policy for Amazon RDS.</p> <p>For an overview on tagging Amazon RDS resources, see <a href="http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Overview.Tagging.html">Tagging Amazon RDS Resources</a>.</p>
     fn add_tags_to_resource(
         &self,
-        input: &AddTagsToResourceMessage,
+        input: AddTagsToResourceMessage,
     ) -> RusotoFuture<(), AddTagsToResourceError> {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
@@ -28166,7 +28156,7 @@ where
     /// <p>Applies a pending maintenance action to a resource (for example, to a DB instance).</p>
     fn apply_pending_maintenance_action(
         &self,
-        input: &ApplyPendingMaintenanceActionMessage,
+        input: ApplyPendingMaintenanceActionMessage,
     ) -> RusotoFuture<ApplyPendingMaintenanceActionResult, ApplyPendingMaintenanceActionError> {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
@@ -28219,7 +28209,7 @@ where
     /// <p>Enables ingress to a DBSecurityGroup using one of two forms of authorization. First, EC2 or VPC security groups can be added to the DBSecurityGroup if the application using the database is running on EC2 or VPC instances. Second, IP ranges are available if the application accessing your database is running on the Internet. Required parameters for this API are one of CIDR range, EC2SecurityGroupId for VPC, or (EC2SecurityGroupOwnerId and either EC2SecurityGroupName or EC2SecurityGroupId for non-VPC).</p> <note> <p>You can't authorize ingress from an EC2 security group in one AWS Region to an Amazon RDS DB instance in another. You can't authorize ingress from a VPC security group in one VPC to an Amazon RDS DB instance in another.</p> </note> <p>For an overview of CIDR ranges, go to the <a href="http://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing">Wikipedia Tutorial</a>. </p>
     fn authorize_db_security_group_ingress(
         &self,
-        input: &AuthorizeDBSecurityGroupIngressMessage,
+        input: AuthorizeDBSecurityGroupIngressMessage,
     ) -> RusotoFuture<AuthorizeDBSecurityGroupIngressResult, AuthorizeDBSecurityGroupIngressError>
     {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
@@ -28273,7 +28263,7 @@ where
     /// <p>Copies the specified DB cluster parameter group.</p>
     fn copy_db_cluster_parameter_group(
         &self,
-        input: &CopyDBClusterParameterGroupMessage,
+        input: CopyDBClusterParameterGroupMessage,
     ) -> RusotoFuture<CopyDBClusterParameterGroupResult, CopyDBClusterParameterGroupError> {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
@@ -28324,7 +28314,7 @@ where
     /// <p>Copies a snapshot of a DB cluster.</p> <p>To copy a DB cluster snapshot from a shared manual DB cluster snapshot, <code>SourceDBClusterSnapshotIdentifier</code> must be the Amazon Resource Name (ARN) of the shared DB cluster snapshot.</p> <p>You can copy an encrypted DB cluster snapshot from another AWS Region. In that case, the AWS Region where you call the <code>CopyDBClusterSnapshot</code> action is the destination AWS Region for the encrypted DB cluster snapshot to be copied to. To copy an encrypted DB cluster snapshot from another AWS Region, you must provide the following values:</p> <ul> <li> <p> <code>KmsKeyId</code> - The AWS Key Management System (AWS KMS) key identifier for the key to use to encrypt the copy of the DB cluster snapshot in the destination AWS Region.</p> </li> <li> <p> <code>PreSignedUrl</code> - A URL that contains a Signature Version 4 signed request for the <code>CopyDBClusterSnapshot</code> action to be called in the source AWS Region where the DB cluster snapshot is copied from. The pre-signed URL must be a valid request for the <code>CopyDBClusterSnapshot</code> API action that can be executed in the source AWS Region that contains the encrypted DB cluster snapshot to be copied.</p> <p>The pre-signed URL request must contain the following parameter values:</p> <ul> <li> <p> <code>KmsKeyId</code> - The KMS key identifier for the key to use to encrypt the copy of the DB cluster snapshot in the destination AWS Region. This is the same identifier for both the <code>CopyDBClusterSnapshot</code> action that is called in the destination AWS Region, and the action contained in the pre-signed URL.</p> </li> <li> <p> <code>DestinationRegion</code> - The name of the AWS Region that the DB cluster snapshot will be created in.</p> </li> <li> <p> <code>SourceDBClusterSnapshotIdentifier</code> - The DB cluster snapshot identifier for the encrypted DB cluster snapshot to be copied. This identifier must be in the Amazon Resource Name (ARN) format for the source AWS Region. For example, if you are copying an encrypted DB cluster snapshot from the us-west-2 AWS Region, then your <code>SourceDBClusterSnapshotIdentifier</code> looks like the following example: <code>arn:aws:rds:us-west-2:123456789012:cluster-snapshot:aurora-cluster1-snapshot-20161115</code>.</p> </li> </ul> <p>To learn how to generate a Signature Version 4 signed request, see <a href="http://docs.aws.amazon.com/AmazonS3/latest/API/sigv4-query-string-auth.html"> Authenticating Requests: Using Query Parameters (AWS Signature Version 4)</a> and <a href="http://docs.aws.amazon.com/general/latest/gr/signature-version-4.html"> Signature Version 4 Signing Process</a>.</p> </li> <li> <p> <code>TargetDBClusterSnapshotIdentifier</code> - The identifier for the new copy of the DB cluster snapshot in the destination AWS Region.</p> </li> <li> <p> <code>SourceDBClusterSnapshotIdentifier</code> - The DB cluster snapshot identifier for the encrypted DB cluster snapshot to be copied. This identifier must be in the ARN format for the source AWS Region and is the same value as the <code>SourceDBClusterSnapshotIdentifier</code> in the pre-signed URL. </p> </li> </ul> <p>To cancel the copy operation once it is in progress, delete the target DB cluster snapshot identified by <code>TargetDBClusterSnapshotIdentifier</code> while that DB cluster snapshot is in "copying" status.</p> <p>For more information on copying encrypted DB cluster snapshots from one AWS Region to another, see <a href="http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_CopySnapshot.html#USER_CopyDBClusterSnapshot.CrossRegion"> Copying a DB Cluster Snapshot in the Same Account, Either in the Same Region or Across Regions</a> in the Amazon RDS User Guide.</p> <p>For more information on Amazon Aurora, see <a href="http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Aurora.html">Aurora on Amazon RDS</a> in the <i>Amazon RDS User Guide.</i> </p>
     fn copy_db_cluster_snapshot(
         &self,
-        input: &CopyDBClusterSnapshotMessage,
+        input: CopyDBClusterSnapshotMessage,
     ) -> RusotoFuture<CopyDBClusterSnapshotResult, CopyDBClusterSnapshotError> {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
@@ -28375,7 +28365,7 @@ where
     /// <p>Copies the specified DB parameter group.</p>
     fn copy_db_parameter_group(
         &self,
-        input: &CopyDBParameterGroupMessage,
+        input: CopyDBParameterGroupMessage,
     ) -> RusotoFuture<CopyDBParameterGroupResult, CopyDBParameterGroupError> {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
@@ -28426,7 +28416,7 @@ where
     /// <p>Copies the specified DB snapshot. The source DB snapshot must be in the "available" state.</p> <p>You can copy a snapshot from one AWS Region to another. In that case, the AWS Region where you call the <code>CopyDBSnapshot</code> action is the destination AWS Region for the DB snapshot copy. </p> <p>For more information about copying snapshots, see <a href="http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_CopyDBSnapshot.html">Copying a DB Snapshot</a> in the Amazon RDS User Guide. </p>
     fn copy_db_snapshot(
         &self,
-        input: &CopyDBSnapshotMessage,
+        input: CopyDBSnapshotMessage,
     ) -> RusotoFuture<CopyDBSnapshotResult, CopyDBSnapshotError> {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
@@ -28477,7 +28467,7 @@ where
     /// <p>Copies the specified option group.</p>
     fn copy_option_group(
         &self,
-        input: &CopyOptionGroupMessage,
+        input: CopyOptionGroupMessage,
     ) -> RusotoFuture<CopyOptionGroupResult, CopyOptionGroupError> {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
@@ -28528,7 +28518,7 @@ where
     /// <p>Creates a new Amazon Aurora DB cluster.</p> <p>You can use the <code>ReplicationSourceIdentifier</code> parameter to create the DB cluster as a Read Replica of another DB cluster or Amazon RDS MySQL DB instance. For cross-region replication where the DB cluster identified by <code>ReplicationSourceIdentifier</code> is encrypted, you must also specify the <code>PreSignedUrl</code> parameter.</p> <p>For more information on Amazon Aurora, see <a href="http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Aurora.html">Aurora on Amazon RDS</a> in the <i>Amazon RDS User Guide.</i> </p>
     fn create_db_cluster(
         &self,
-        input: &CreateDBClusterMessage,
+        input: CreateDBClusterMessage,
     ) -> RusotoFuture<CreateDBClusterResult, CreateDBClusterError> {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
@@ -28579,7 +28569,7 @@ where
     /// <p>Creates a new DB cluster parameter group.</p> <p>Parameters in a DB cluster parameter group apply to all of the instances in a DB cluster.</p> <p> A DB cluster parameter group is initially created with the default parameters for the database engine used by instances in the DB cluster. To provide custom values for any of the parameters, you must modify the group after creating it using <a>ModifyDBClusterParameterGroup</a>. Once you've created a DB cluster parameter group, you need to associate it with your DB cluster using <a>ModifyDBCluster</a>. When you associate a new DB cluster parameter group with a running DB cluster, you need to reboot the DB instances in the DB cluster without failover for the new DB cluster parameter group and associated settings to take effect. </p> <important> <p>After you create a DB cluster parameter group, you should wait at least 5 minutes before creating your first DB cluster that uses that DB cluster parameter group as the default parameter group. This allows Amazon RDS to fully complete the create action before the DB cluster parameter group is used as the default for a new DB cluster. This is especially important for parameters that are critical when creating the default database for a DB cluster, such as the character set for the default database defined by the <code>character_set_database</code> parameter. You can use the <i>Parameter Groups</i> option of the <a href="https://console.aws.amazon.com/rds/">Amazon RDS console</a> or the <a>DescribeDBClusterParameters</a> command to verify that your DB cluster parameter group has been created or modified.</p> </important> <p>For more information on Amazon Aurora, see <a href="http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Aurora.html">Aurora on Amazon RDS</a> in the <i>Amazon RDS User Guide.</i> </p>
     fn create_db_cluster_parameter_group(
         &self,
-        input: &CreateDBClusterParameterGroupMessage,
+        input: CreateDBClusterParameterGroupMessage,
     ) -> RusotoFuture<CreateDBClusterParameterGroupResult, CreateDBClusterParameterGroupError> {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
@@ -28632,7 +28622,7 @@ where
     /// <p>Creates a snapshot of a DB cluster. For more information on Amazon Aurora, see <a href="http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Aurora.html">Aurora on Amazon RDS</a> in the <i>Amazon RDS User Guide.</i> </p>
     fn create_db_cluster_snapshot(
         &self,
-        input: &CreateDBClusterSnapshotMessage,
+        input: CreateDBClusterSnapshotMessage,
     ) -> RusotoFuture<CreateDBClusterSnapshotResult, CreateDBClusterSnapshotError> {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
@@ -28683,7 +28673,7 @@ where
     /// <p>Creates a new DB instance.</p>
     fn create_db_instance(
         &self,
-        input: &CreateDBInstanceMessage,
+        input: CreateDBInstanceMessage,
     ) -> RusotoFuture<CreateDBInstanceResult, CreateDBInstanceError> {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
@@ -28734,7 +28724,7 @@ where
     /// <p><p>Creates a new DB instance that acts as a Read Replica for an existing source DB instance. You can create a Read Replica for a DB instance running MySQL, MariaDB, or PostgreSQL. For more information, see <a href="http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_ReadRepl.html">Working with PostgreSQL, MySQL, and MariaDB Read Replicas</a>. </p> <p>Amazon Aurora doesn&#39;t support this action. You must call the <code>CreateDBInstance</code> action to create a DB instance for an Aurora DB cluster. </p> <p>All Read Replica DB instances are created with backups disabled. All other DB instance attributes (including DB security groups and DB parameter groups) are inherited from the source DB instance, except as specified following. </p> <important> <p>Your source DB instance must have backup retention enabled. </p> </important></p>
     fn create_db_instance_read_replica(
         &self,
-        input: &CreateDBInstanceReadReplicaMessage,
+        input: CreateDBInstanceReadReplicaMessage,
     ) -> RusotoFuture<CreateDBInstanceReadReplicaResult, CreateDBInstanceReadReplicaError> {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
@@ -28785,7 +28775,7 @@ where
     /// <p><p>Creates a new DB parameter group.</p> <p> A DB parameter group is initially created with the default parameters for the database engine used by the DB instance. To provide custom values for any of the parameters, you must modify the group after creating it using <i>ModifyDBParameterGroup</i>. Once you&#39;ve created a DB parameter group, you need to associate it with your DB instance using <i>ModifyDBInstance</i>. When you associate a new DB parameter group with a running DB instance, you need to reboot the DB instance without failover for the new DB parameter group and associated settings to take effect. </p> <important> <p>After you create a DB parameter group, you should wait at least 5 minutes before creating your first DB instance that uses that DB parameter group as the default parameter group. This allows Amazon RDS to fully complete the create action before the parameter group is used as the default for a new DB instance. This is especially important for parameters that are critical when creating the default database for a DB instance, such as the character set for the default database defined by the <code>character<em>set</em>database</code> parameter. You can use the <i>Parameter Groups</i> option of the <a href="https://console.aws.amazon.com/rds/">Amazon RDS console</a> or the <i>DescribeDBParameters</i> command to verify that your DB parameter group has been created or modified.</p> </important></p>
     fn create_db_parameter_group(
         &self,
-        input: &CreateDBParameterGroupMessage,
+        input: CreateDBParameterGroupMessage,
     ) -> RusotoFuture<CreateDBParameterGroupResult, CreateDBParameterGroupError> {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
@@ -28836,7 +28826,7 @@ where
     /// <p>Creates a new DB security group. DB security groups control access to a DB instance.</p>
     fn create_db_security_group(
         &self,
-        input: &CreateDBSecurityGroupMessage,
+        input: CreateDBSecurityGroupMessage,
     ) -> RusotoFuture<CreateDBSecurityGroupResult, CreateDBSecurityGroupError> {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
@@ -28887,7 +28877,7 @@ where
     /// <p>Creates a DBSnapshot. The source DBInstance must be in "available" state.</p>
     fn create_db_snapshot(
         &self,
-        input: &CreateDBSnapshotMessage,
+        input: CreateDBSnapshotMessage,
     ) -> RusotoFuture<CreateDBSnapshotResult, CreateDBSnapshotError> {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
@@ -28938,7 +28928,7 @@ where
     /// <p>Creates a new DB subnet group. DB subnet groups must contain at least one subnet in at least two AZs in the AWS Region.</p>
     fn create_db_subnet_group(
         &self,
-        input: &CreateDBSubnetGroupMessage,
+        input: CreateDBSubnetGroupMessage,
     ) -> RusotoFuture<CreateDBSubnetGroupResult, CreateDBSubnetGroupError> {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
@@ -28989,7 +28979,7 @@ where
     /// <p>Creates an RDS event notification subscription. This action requires a topic ARN (Amazon Resource Name) created by either the RDS console, the SNS console, or the SNS API. To obtain an ARN with SNS, you must create a topic in Amazon SNS and subscribe to the topic. The ARN is displayed in the SNS console.</p> <p>You can specify the type of source (SourceType) you want to be notified of, provide a list of RDS sources (SourceIds) that triggers the events, and provide a list of event categories (EventCategories) for events you want to be notified of. For example, you can specify SourceType = db-instance, SourceIds = mydbinstance1, mydbinstance2 and EventCategories = Availability, Backup.</p> <p>If you specify both the SourceType and SourceIds, such as SourceType = db-instance and SourceIdentifier = myDBInstance1, you are notified of all the db-instance events for the specified source. If you specify a SourceType but do not specify a SourceIdentifier, you receive notice of the events for that source type for all your RDS sources. If you do not specify either the SourceType nor the SourceIdentifier, you are notified of events generated from all RDS sources belonging to your customer account.</p>
     fn create_event_subscription(
         &self,
-        input: &CreateEventSubscriptionMessage,
+        input: CreateEventSubscriptionMessage,
     ) -> RusotoFuture<CreateEventSubscriptionResult, CreateEventSubscriptionError> {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
@@ -29040,7 +29030,7 @@ where
     /// <p>Creates a new option group. You can create up to 20 option groups.</p>
     fn create_option_group(
         &self,
-        input: &CreateOptionGroupMessage,
+        input: CreateOptionGroupMessage,
     ) -> RusotoFuture<CreateOptionGroupResult, CreateOptionGroupError> {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
@@ -29091,7 +29081,7 @@ where
     /// <p>The DeleteDBCluster action deletes a previously provisioned DB cluster. When you delete a DB cluster, all automated backups for that DB cluster are deleted and can't be recovered. Manual DB cluster snapshots of the specified DB cluster are not deleted.</p> <p/> <p>For more information on Amazon Aurora, see <a href="http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Aurora.html">Aurora on Amazon RDS</a> in the <i>Amazon RDS User Guide.</i> </p>
     fn delete_db_cluster(
         &self,
-        input: &DeleteDBClusterMessage,
+        input: DeleteDBClusterMessage,
     ) -> RusotoFuture<DeleteDBClusterResult, DeleteDBClusterError> {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
@@ -29142,7 +29132,7 @@ where
     /// <p>Deletes a specified DB cluster parameter group. The DB cluster parameter group to be deleted can't be associated with any DB clusters.</p> <p>For more information on Amazon Aurora, see <a href="http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Aurora.html">Aurora on Amazon RDS</a> in the <i>Amazon RDS User Guide.</i> </p>
     fn delete_db_cluster_parameter_group(
         &self,
-        input: &DeleteDBClusterParameterGroupMessage,
+        input: DeleteDBClusterParameterGroupMessage,
     ) -> RusotoFuture<(), DeleteDBClusterParameterGroupError> {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
@@ -29170,7 +29160,7 @@ where
     /// <p>Deletes a DB cluster snapshot. If the snapshot is being copied, the copy operation is terminated.</p> <note> <p>The DB cluster snapshot must be in the <code>available</code> state to be deleted.</p> </note> <p>For more information on Amazon Aurora, see <a href="http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Aurora.html">Aurora on Amazon RDS</a> in the <i>Amazon RDS User Guide.</i> </p>
     fn delete_db_cluster_snapshot(
         &self,
-        input: &DeleteDBClusterSnapshotMessage,
+        input: DeleteDBClusterSnapshotMessage,
     ) -> RusotoFuture<DeleteDBClusterSnapshotResult, DeleteDBClusterSnapshotError> {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
@@ -29221,7 +29211,7 @@ where
     /// <p>The DeleteDBInstance action deletes a previously provisioned DB instance. When you delete a DB instance, all automated backups for that instance are deleted and can't be recovered. Manual DB snapshots of the DB instance to be deleted by <code>DeleteDBInstance</code> are not deleted.</p> <p> If you request a final DB snapshot the status of the Amazon RDS DB instance is <code>deleting</code> until the DB snapshot is created. The API action <code>DescribeDBInstance</code> is used to monitor the status of this operation. The action can't be canceled or reverted once submitted. </p> <p>Note that when a DB instance is in a failure state and has a status of <code>failed</code>, <code>incompatible-restore</code>, or <code>incompatible-network</code>, you can only delete it when the <code>SkipFinalSnapshot</code> parameter is set to <code>true</code>.</p> <p>If the specified DB instance is part of an Amazon Aurora DB cluster, you can't delete the DB instance if both of the following conditions are true:</p> <ul> <li> <p>The DB cluster is a Read Replica of another Amazon Aurora DB cluster.</p> </li> <li> <p>The DB instance is the only instance in the DB cluster.</p> </li> </ul> <p>To delete a DB instance in this case, first call the <a>PromoteReadReplicaDBCluster</a> API action to promote the DB cluster so it's no longer a Read Replica. After the promotion completes, then call the <code>DeleteDBInstance</code> API action to delete the final instance in the DB cluster.</p>
     fn delete_db_instance(
         &self,
-        input: &DeleteDBInstanceMessage,
+        input: DeleteDBInstanceMessage,
     ) -> RusotoFuture<DeleteDBInstanceResult, DeleteDBInstanceError> {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
@@ -29272,7 +29262,7 @@ where
     /// <p>Deletes a specified DBParameterGroup. The DBParameterGroup to be deleted can't be associated with any DB instances.</p>
     fn delete_db_parameter_group(
         &self,
-        input: &DeleteDBParameterGroupMessage,
+        input: DeleteDBParameterGroupMessage,
     ) -> RusotoFuture<(), DeleteDBParameterGroupError> {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
@@ -29300,7 +29290,7 @@ where
     /// <p><p>Deletes a DB security group.</p> <note> <p>The specified DB security group must not be associated with any DB instances.</p> </note></p>
     fn delete_db_security_group(
         &self,
-        input: &DeleteDBSecurityGroupMessage,
+        input: DeleteDBSecurityGroupMessage,
     ) -> RusotoFuture<(), DeleteDBSecurityGroupError> {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
@@ -29328,7 +29318,7 @@ where
     /// <p><p>Deletes a DBSnapshot. If the snapshot is being copied, the copy operation is terminated.</p> <note> <p>The DBSnapshot must be in the <code>available</code> state to be deleted.</p> </note></p>
     fn delete_db_snapshot(
         &self,
-        input: &DeleteDBSnapshotMessage,
+        input: DeleteDBSnapshotMessage,
     ) -> RusotoFuture<DeleteDBSnapshotResult, DeleteDBSnapshotError> {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
@@ -29379,7 +29369,7 @@ where
     /// <p><p>Deletes a DB subnet group.</p> <note> <p>The specified database subnet group must not be associated with any DB instances.</p> </note></p>
     fn delete_db_subnet_group(
         &self,
-        input: &DeleteDBSubnetGroupMessage,
+        input: DeleteDBSubnetGroupMessage,
     ) -> RusotoFuture<(), DeleteDBSubnetGroupError> {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
@@ -29407,7 +29397,7 @@ where
     /// <p>Deletes an RDS event notification subscription.</p>
     fn delete_event_subscription(
         &self,
-        input: &DeleteEventSubscriptionMessage,
+        input: DeleteEventSubscriptionMessage,
     ) -> RusotoFuture<DeleteEventSubscriptionResult, DeleteEventSubscriptionError> {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
@@ -29458,7 +29448,7 @@ where
     /// <p>Deletes an existing option group.</p>
     fn delete_option_group(
         &self,
-        input: &DeleteOptionGroupMessage,
+        input: DeleteOptionGroupMessage,
     ) -> RusotoFuture<(), DeleteOptionGroupError> {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
@@ -29486,7 +29476,7 @@ where
     /// <p>Lists all of the attributes for a customer account. The attributes include Amazon RDS quotas for the account, such as the number of DB instances allowed. The description for a quota includes the quota name, current usage toward that quota, and the quota's maximum value.</p> <p>This command doesn't take any parameters.</p>
     fn describe_account_attributes(
         &self,
-        input: &DescribeAccountAttributesMessage,
+        input: DescribeAccountAttributesMessage,
     ) -> RusotoFuture<AccountAttributesMessage, DescribeAccountAttributesError> {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
@@ -29537,7 +29527,7 @@ where
     /// <p>Lists the set of CA certificates provided by Amazon RDS for this AWS account.</p>
     fn describe_certificates(
         &self,
-        input: &DescribeCertificatesMessage,
+        input: DescribeCertificatesMessage,
     ) -> RusotoFuture<CertificateMessage, DescribeCertificatesError> {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
@@ -29588,7 +29578,7 @@ where
     /// <p> Returns a list of <code>DBClusterParameterGroup</code> descriptions. If a <code>DBClusterParameterGroupName</code> parameter is specified, the list will contain only the description of the specified DB cluster parameter group. </p> <p>For more information on Amazon Aurora, see <a href="http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Aurora.html">Aurora on Amazon RDS</a> in the <i>Amazon RDS User Guide.</i> </p>
     fn describe_db_cluster_parameter_groups(
         &self,
-        input: &DescribeDBClusterParameterGroupsMessage,
+        input: DescribeDBClusterParameterGroupsMessage,
     ) -> RusotoFuture<DBClusterParameterGroupsMessage, DescribeDBClusterParameterGroupsError> {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
@@ -29639,7 +29629,7 @@ where
     /// <p>Returns the detailed parameter list for a particular DB cluster parameter group.</p> <p>For more information on Amazon Aurora, see <a href="http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Aurora.html">Aurora on Amazon RDS</a> in the <i>Amazon RDS User Guide.</i> </p>
     fn describe_db_cluster_parameters(
         &self,
-        input: &DescribeDBClusterParametersMessage,
+        input: DescribeDBClusterParametersMessage,
     ) -> RusotoFuture<DBClusterParameterGroupDetails, DescribeDBClusterParametersError> {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
@@ -29690,7 +29680,7 @@ where
     /// <p>Returns a list of DB cluster snapshot attribute names and values for a manual DB cluster snapshot.</p> <p>When sharing snapshots with other AWS accounts, <code>DescribeDBClusterSnapshotAttributes</code> returns the <code>restore</code> attribute and a list of IDs for the AWS accounts that are authorized to copy or restore the manual DB cluster snapshot. If <code>all</code> is included in the list of values for the <code>restore</code> attribute, then the manual DB cluster snapshot is public and can be copied or restored by all AWS accounts.</p> <p>To add or remove access for an AWS account to copy or restore a manual DB cluster snapshot, or to make the manual DB cluster snapshot public or private, use the <a>ModifyDBClusterSnapshotAttribute</a> API action.</p>
     fn describe_db_cluster_snapshot_attributes(
         &self,
-        input: &DescribeDBClusterSnapshotAttributesMessage,
+        input: DescribeDBClusterSnapshotAttributesMessage,
     ) -> RusotoFuture<
         DescribeDBClusterSnapshotAttributesResult,
         DescribeDBClusterSnapshotAttributesError,
@@ -29746,7 +29736,7 @@ where
     /// <p>Returns information about DB cluster snapshots. This API action supports pagination.</p> <p>For more information on Amazon Aurora, see <a href="http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Aurora.html">Aurora on Amazon RDS</a> in the <i>Amazon RDS User Guide.</i> </p>
     fn describe_db_cluster_snapshots(
         &self,
-        input: &DescribeDBClusterSnapshotsMessage,
+        input: DescribeDBClusterSnapshotsMessage,
     ) -> RusotoFuture<DBClusterSnapshotMessage, DescribeDBClusterSnapshotsError> {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
@@ -29797,7 +29787,7 @@ where
     /// <p>Returns information about provisioned Aurora DB clusters. This API supports pagination.</p> <p>For more information on Amazon Aurora, see <a href="http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Aurora.html">Aurora on Amazon RDS</a> in the <i>Amazon RDS User Guide.</i> </p>
     fn describe_db_clusters(
         &self,
-        input: &DescribeDBClustersMessage,
+        input: DescribeDBClustersMessage,
     ) -> RusotoFuture<DBClusterMessage, DescribeDBClustersError> {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
@@ -29848,7 +29838,7 @@ where
     /// <p>Returns a list of the available DB engines.</p>
     fn describe_db_engine_versions(
         &self,
-        input: &DescribeDBEngineVersionsMessage,
+        input: DescribeDBEngineVersionsMessage,
     ) -> RusotoFuture<DBEngineVersionMessage, DescribeDBEngineVersionsError> {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
@@ -29899,7 +29889,7 @@ where
     /// <p>Returns information about provisioned RDS instances. This API supports pagination.</p>
     fn describe_db_instances(
         &self,
-        input: &DescribeDBInstancesMessage,
+        input: DescribeDBInstancesMessage,
     ) -> RusotoFuture<DBInstanceMessage, DescribeDBInstancesError> {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
@@ -29950,7 +29940,7 @@ where
     /// <p>Returns a list of DB log files for the DB instance.</p>
     fn describe_db_log_files(
         &self,
-        input: &DescribeDBLogFilesMessage,
+        input: DescribeDBLogFilesMessage,
     ) -> RusotoFuture<DescribeDBLogFilesResponse, DescribeDBLogFilesError> {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
@@ -30001,7 +29991,7 @@ where
     /// <p> Returns a list of <code>DBParameterGroup</code> descriptions. If a <code>DBParameterGroupName</code> is specified, the list will contain only the description of the specified DB parameter group. </p>
     fn describe_db_parameter_groups(
         &self,
-        input: &DescribeDBParameterGroupsMessage,
+        input: DescribeDBParameterGroupsMessage,
     ) -> RusotoFuture<DBParameterGroupsMessage, DescribeDBParameterGroupsError> {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
@@ -30052,7 +30042,7 @@ where
     /// <p>Returns the detailed parameter list for a particular DB parameter group.</p>
     fn describe_db_parameters(
         &self,
-        input: &DescribeDBParametersMessage,
+        input: DescribeDBParametersMessage,
     ) -> RusotoFuture<DBParameterGroupDetails, DescribeDBParametersError> {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
@@ -30103,7 +30093,7 @@ where
     /// <p> Returns a list of <code>DBSecurityGroup</code> descriptions. If a <code>DBSecurityGroupName</code> is specified, the list will contain only the descriptions of the specified DB security group. </p>
     fn describe_db_security_groups(
         &self,
-        input: &DescribeDBSecurityGroupsMessage,
+        input: DescribeDBSecurityGroupsMessage,
     ) -> RusotoFuture<DBSecurityGroupMessage, DescribeDBSecurityGroupsError> {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
@@ -30154,7 +30144,7 @@ where
     /// <p>Returns a list of DB snapshot attribute names and values for a manual DB snapshot.</p> <p>When sharing snapshots with other AWS accounts, <code>DescribeDBSnapshotAttributes</code> returns the <code>restore</code> attribute and a list of IDs for the AWS accounts that are authorized to copy or restore the manual DB snapshot. If <code>all</code> is included in the list of values for the <code>restore</code> attribute, then the manual DB snapshot is public and can be copied or restored by all AWS accounts.</p> <p>To add or remove access for an AWS account to copy or restore a manual DB snapshot, or to make the manual DB snapshot public or private, use the <a>ModifyDBSnapshotAttribute</a> API action.</p>
     fn describe_db_snapshot_attributes(
         &self,
-        input: &DescribeDBSnapshotAttributesMessage,
+        input: DescribeDBSnapshotAttributesMessage,
     ) -> RusotoFuture<DescribeDBSnapshotAttributesResult, DescribeDBSnapshotAttributesError> {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
@@ -30205,7 +30195,7 @@ where
     /// <p>Returns information about DB snapshots. This API action supports pagination.</p>
     fn describe_db_snapshots(
         &self,
-        input: &DescribeDBSnapshotsMessage,
+        input: DescribeDBSnapshotsMessage,
     ) -> RusotoFuture<DBSnapshotMessage, DescribeDBSnapshotsError> {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
@@ -30256,7 +30246,7 @@ where
     /// <p>Returns a list of DBSubnetGroup descriptions. If a DBSubnetGroupName is specified, the list will contain only the descriptions of the specified DBSubnetGroup.</p> <p>For an overview of CIDR ranges, go to the <a href="http://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing">Wikipedia Tutorial</a>. </p>
     fn describe_db_subnet_groups(
         &self,
-        input: &DescribeDBSubnetGroupsMessage,
+        input: DescribeDBSubnetGroupsMessage,
     ) -> RusotoFuture<DBSubnetGroupMessage, DescribeDBSubnetGroupsError> {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
@@ -30307,7 +30297,7 @@ where
     /// <p>Returns the default engine and system parameter information for the cluster database engine.</p> <p>For more information on Amazon Aurora, see <a href="http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Aurora.html">Aurora on Amazon RDS</a> in the <i>Amazon RDS User Guide.</i> </p>
     fn describe_engine_default_cluster_parameters(
         &self,
-        input: &DescribeEngineDefaultClusterParametersMessage,
+        input: DescribeEngineDefaultClusterParametersMessage,
     ) -> RusotoFuture<
         DescribeEngineDefaultClusterParametersResult,
         DescribeEngineDefaultClusterParametersError,
@@ -30363,7 +30353,7 @@ where
     /// <p>Returns the default engine and system parameter information for the specified database engine.</p>
     fn describe_engine_default_parameters(
         &self,
-        input: &DescribeEngineDefaultParametersMessage,
+        input: DescribeEngineDefaultParametersMessage,
     ) -> RusotoFuture<DescribeEngineDefaultParametersResult, DescribeEngineDefaultParametersError>
     {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
@@ -30417,7 +30407,7 @@ where
     /// <p>Displays a list of categories for all event source types, or, if specified, for a specified source type. You can see a list of the event categories and source types in the <a href="http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_Events.html"> Events</a> topic in the <i>Amazon RDS User Guide.</i> </p>
     fn describe_event_categories(
         &self,
-        input: &DescribeEventCategoriesMessage,
+        input: DescribeEventCategoriesMessage,
     ) -> RusotoFuture<EventCategoriesMessage, DescribeEventCategoriesError> {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
@@ -30468,7 +30458,7 @@ where
     /// <p>Lists all the subscription descriptions for a customer account. The description for a subscription includes SubscriptionName, SNSTopicARN, CustomerID, SourceType, SourceID, CreationTime, and Status.</p> <p>If you specify a SubscriptionName, lists the description for that subscription.</p>
     fn describe_event_subscriptions(
         &self,
-        input: &DescribeEventSubscriptionsMessage,
+        input: DescribeEventSubscriptionsMessage,
     ) -> RusotoFuture<EventSubscriptionsMessage, DescribeEventSubscriptionsError> {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
@@ -30519,7 +30509,7 @@ where
     /// <p>Returns events related to DB instances, DB security groups, DB snapshots, and DB parameter groups for the past 14 days. Events specific to a particular DB instance, DB security group, database snapshot, or DB parameter group can be obtained by providing the name as a parameter. By default, the past hour of events are returned.</p>
     fn describe_events(
         &self,
-        input: &DescribeEventsMessage,
+        input: DescribeEventsMessage,
     ) -> RusotoFuture<EventsMessage, DescribeEventsError> {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
@@ -30570,7 +30560,7 @@ where
     /// <p>Describes all available options.</p>
     fn describe_option_group_options(
         &self,
-        input: &DescribeOptionGroupOptionsMessage,
+        input: DescribeOptionGroupOptionsMessage,
     ) -> RusotoFuture<OptionGroupOptionsMessage, DescribeOptionGroupOptionsError> {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
@@ -30621,7 +30611,7 @@ where
     /// <p>Describes the available option groups.</p>
     fn describe_option_groups(
         &self,
-        input: &DescribeOptionGroupsMessage,
+        input: DescribeOptionGroupsMessage,
     ) -> RusotoFuture<OptionGroups, DescribeOptionGroupsError> {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
@@ -30672,7 +30662,7 @@ where
     /// <p>Returns a list of orderable DB instance options for the specified engine.</p>
     fn describe_orderable_db_instance_options(
         &self,
-        input: &DescribeOrderableDBInstanceOptionsMessage,
+        input: DescribeOrderableDBInstanceOptionsMessage,
     ) -> RusotoFuture<OrderableDBInstanceOptionsMessage, DescribeOrderableDBInstanceOptionsError>
     {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
@@ -30724,7 +30714,7 @@ where
     /// <p>Returns a list of resources (for example, DB instances) that have at least one pending maintenance action.</p>
     fn describe_pending_maintenance_actions(
         &self,
-        input: &DescribePendingMaintenanceActionsMessage,
+        input: DescribePendingMaintenanceActionsMessage,
     ) -> RusotoFuture<PendingMaintenanceActionsMessage, DescribePendingMaintenanceActionsError>
     {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
@@ -30776,7 +30766,7 @@ where
     /// <p>Returns information about reserved DB instances for this account, or about a specified reserved DB instance.</p>
     fn describe_reserved_db_instances(
         &self,
-        input: &DescribeReservedDBInstancesMessage,
+        input: DescribeReservedDBInstancesMessage,
     ) -> RusotoFuture<ReservedDBInstanceMessage, DescribeReservedDBInstancesError> {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
@@ -30827,7 +30817,7 @@ where
     /// <p>Lists available reserved DB instance offerings.</p>
     fn describe_reserved_db_instances_offerings(
         &self,
-        input: &DescribeReservedDBInstancesOfferingsMessage,
+        input: DescribeReservedDBInstancesOfferingsMessage,
     ) -> RusotoFuture<ReservedDBInstancesOfferingMessage, DescribeReservedDBInstancesOfferingsError>
     {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
@@ -30879,7 +30869,7 @@ where
     /// <p>Returns a list of the source AWS Regions where the current AWS Region can create a Read Replica or copy a DB snapshot from. This API action supports pagination.</p>
     fn describe_source_regions(
         &self,
-        input: &DescribeSourceRegionsMessage,
+        input: DescribeSourceRegionsMessage,
     ) -> RusotoFuture<SourceRegionMessage, DescribeSourceRegionsError> {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
@@ -30930,7 +30920,7 @@ where
     /// <p>You can call <a>DescribeValidDBInstanceModifications</a> to learn what modifications you can make to your DB instance. You can use this information when you call <a>ModifyDBInstance</a>. </p>
     fn describe_valid_db_instance_modifications(
         &self,
-        input: &DescribeValidDBInstanceModificationsMessage,
+        input: DescribeValidDBInstanceModificationsMessage,
     ) -> RusotoFuture<
         DescribeValidDBInstanceModificationsResult,
         DescribeValidDBInstanceModificationsError,
@@ -30986,7 +30976,7 @@ where
     /// <p>Downloads all or a portion of the specified log file, up to 1 MB in size.</p>
     fn download_db_log_file_portion(
         &self,
-        input: &DownloadDBLogFilePortionMessage,
+        input: DownloadDBLogFilePortionMessage,
     ) -> RusotoFuture<DownloadDBLogFilePortionDetails, DownloadDBLogFilePortionError> {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
@@ -31037,7 +31027,7 @@ where
     /// <p>Forces a failover for a DB cluster.</p> <p>A failover for a DB cluster promotes one of the Aurora Replicas (read-only instances) in the DB cluster to be the primary instance (the cluster writer).</p> <p>Amazon Aurora will automatically fail over to an Aurora Replica, if one exists, when the primary instance fails. You can force a failover when you want to simulate a failure of a primary instance for testing. Because each instance in a DB cluster has its own endpoint address, you will need to clean up and re-establish any existing connections that use those endpoint addresses when the failover is complete.</p> <p>For more information on Amazon Aurora, see <a href="http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Aurora.html">Aurora on Amazon RDS</a> in the <i>Amazon RDS User Guide.</i> </p>
     fn failover_db_cluster(
         &self,
-        input: &FailoverDBClusterMessage,
+        input: FailoverDBClusterMessage,
     ) -> RusotoFuture<FailoverDBClusterResult, FailoverDBClusterError> {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
@@ -31088,7 +31078,7 @@ where
     /// <p>Lists all tags on an Amazon RDS resource.</p> <p>For an overview on tagging an Amazon RDS resource, see <a href="http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Overview.Tagging.html">Tagging Amazon RDS Resources</a>.</p>
     fn list_tags_for_resource(
         &self,
-        input: &ListTagsForResourceMessage,
+        input: ListTagsForResourceMessage,
     ) -> RusotoFuture<TagListMessage, ListTagsForResourceError> {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
@@ -31139,7 +31129,7 @@ where
     /// <p>Modify a setting for an Amazon Aurora DB cluster. You can change one or more database configuration parameters by specifying these parameters and the new values in the request. For more information on Amazon Aurora, see <a href="http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Aurora.html">Aurora on Amazon RDS</a> in the <i>Amazon RDS User Guide.</i> </p>
     fn modify_db_cluster(
         &self,
-        input: &ModifyDBClusterMessage,
+        input: ModifyDBClusterMessage,
     ) -> RusotoFuture<ModifyDBClusterResult, ModifyDBClusterError> {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
@@ -31190,7 +31180,7 @@ where
     /// <p><p> Modifies the parameters of a DB cluster parameter group. To modify more than one parameter, submit a list of the following: <code>ParameterName</code>, <code>ParameterValue</code>, and <code>ApplyMethod</code>. A maximum of 20 parameters can be modified in a single request. </p> <p>For more information on Amazon Aurora, see <a href="http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Aurora.html">Aurora on Amazon RDS</a> in the <i>Amazon RDS User Guide.</i> </p> <note> <p>Changes to dynamic parameters are applied immediately. Changes to static parameters require a reboot without failover to the DB cluster associated with the parameter group before the change can take effect.</p> </note> <important> <p>After you create a DB cluster parameter group, you should wait at least 5 minutes before creating your first DB cluster that uses that DB cluster parameter group as the default parameter group. This allows Amazon RDS to fully complete the create action before the parameter group is used as the default for a new DB cluster. This is especially important for parameters that are critical when creating the default database for a DB cluster, such as the character set for the default database defined by the <code>character<em>set</em>database</code> parameter. You can use the <i>Parameter Groups</i> option of the <a href="https://console.aws.amazon.com/rds/">Amazon RDS console</a> or the <a>DescribeDBClusterParameters</a> command to verify that your DB cluster parameter group has been created or modified.</p> </important></p>
     fn modify_db_cluster_parameter_group(
         &self,
-        input: &ModifyDBClusterParameterGroupMessage,
+        input: ModifyDBClusterParameterGroupMessage,
     ) -> RusotoFuture<DBClusterParameterGroupNameMessage, ModifyDBClusterParameterGroupError> {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
@@ -31241,7 +31231,7 @@ where
     /// <p>Adds an attribute and values to, or removes an attribute and values from, a manual DB cluster snapshot.</p> <p>To share a manual DB cluster snapshot with other AWS accounts, specify <code>restore</code> as the <code>AttributeName</code> and use the <code>ValuesToAdd</code> parameter to add a list of IDs of the AWS accounts that are authorized to restore the manual DB cluster snapshot. Use the value <code>all</code> to make the manual DB cluster snapshot public, which means that it can be copied or restored by all AWS accounts. Do not add the <code>all</code> value for any manual DB cluster snapshots that contain private information that you don't want available to all AWS accounts. If a manual DB cluster snapshot is encrypted, it can be shared, but only by specifying a list of authorized AWS account IDs for the <code>ValuesToAdd</code> parameter. You can't use <code>all</code> as a value for that parameter in this case.</p> <p>To view which AWS accounts have access to copy or restore a manual DB cluster snapshot, or whether a manual DB cluster snapshot public or private, use the <a>DescribeDBClusterSnapshotAttributes</a> API action.</p>
     fn modify_db_cluster_snapshot_attribute(
         &self,
-        input: &ModifyDBClusterSnapshotAttributeMessage,
+        input: ModifyDBClusterSnapshotAttributeMessage,
     ) -> RusotoFuture<ModifyDBClusterSnapshotAttributeResult, ModifyDBClusterSnapshotAttributeError>
     {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
@@ -31295,7 +31285,7 @@ where
     /// <p>Modifies settings for a DB instance. You can change one or more database configuration parameters by specifying these parameters and the new values in the request. To learn what modifications you can make to your DB instance, call <a>DescribeValidDBInstanceModifications</a> before you call <a>ModifyDBInstance</a>. </p>
     fn modify_db_instance(
         &self,
-        input: &ModifyDBInstanceMessage,
+        input: ModifyDBInstanceMessage,
     ) -> RusotoFuture<ModifyDBInstanceResult, ModifyDBInstanceError> {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
@@ -31346,7 +31336,7 @@ where
     /// <p><p> Modifies the parameters of a DB parameter group. To modify more than one parameter, submit a list of the following: <code>ParameterName</code>, <code>ParameterValue</code>, and <code>ApplyMethod</code>. A maximum of 20 parameters can be modified in a single request. </p> <note> <p>Changes to dynamic parameters are applied immediately. Changes to static parameters require a reboot without failover to the DB instance associated with the parameter group before the change can take effect.</p> </note> <important> <p>After you modify a DB parameter group, you should wait at least 5 minutes before creating your first DB instance that uses that DB parameter group as the default parameter group. This allows Amazon RDS to fully complete the modify action before the parameter group is used as the default for a new DB instance. This is especially important for parameters that are critical when creating the default database for a DB instance, such as the character set for the default database defined by the <code>character<em>set</em>database</code> parameter. You can use the <i>Parameter Groups</i> option of the <a href="https://console.aws.amazon.com/rds/">Amazon RDS console</a> or the <i>DescribeDBParameters</i> command to verify that your DB parameter group has been created or modified.</p> </important></p>
     fn modify_db_parameter_group(
         &self,
-        input: &ModifyDBParameterGroupMessage,
+        input: ModifyDBParameterGroupMessage,
     ) -> RusotoFuture<DBParameterGroupNameMessage, ModifyDBParameterGroupError> {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
@@ -31397,7 +31387,7 @@ where
     /// <p>Updates a manual DB snapshot, which can be encrypted or not encrypted, with a new engine version. </p> <p>Amazon RDS supports upgrading DB snapshots for MySQL and Oracle. </p>
     fn modify_db_snapshot(
         &self,
-        input: &ModifyDBSnapshotMessage,
+        input: ModifyDBSnapshotMessage,
     ) -> RusotoFuture<ModifyDBSnapshotResult, ModifyDBSnapshotError> {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
@@ -31448,7 +31438,7 @@ where
     /// <p>Adds an attribute and values to, or removes an attribute and values from, a manual DB snapshot.</p> <p>To share a manual DB snapshot with other AWS accounts, specify <code>restore</code> as the <code>AttributeName</code> and use the <code>ValuesToAdd</code> parameter to add a list of IDs of the AWS accounts that are authorized to restore the manual DB snapshot. Uses the value <code>all</code> to make the manual DB snapshot public, which means it can be copied or restored by all AWS accounts. Do not add the <code>all</code> value for any manual DB snapshots that contain private information that you don't want available to all AWS accounts. If the manual DB snapshot is encrypted, it can be shared, but only by specifying a list of authorized AWS account IDs for the <code>ValuesToAdd</code> parameter. You can't use <code>all</code> as a value for that parameter in this case.</p> <p>To view which AWS accounts have access to copy or restore a manual DB snapshot, or whether a manual DB snapshot public or private, use the <a>DescribeDBSnapshotAttributes</a> API action.</p>
     fn modify_db_snapshot_attribute(
         &self,
-        input: &ModifyDBSnapshotAttributeMessage,
+        input: ModifyDBSnapshotAttributeMessage,
     ) -> RusotoFuture<ModifyDBSnapshotAttributeResult, ModifyDBSnapshotAttributeError> {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
@@ -31499,7 +31489,7 @@ where
     /// <p>Modifies an existing DB subnet group. DB subnet groups must contain at least one subnet in at least two AZs in the AWS Region.</p>
     fn modify_db_subnet_group(
         &self,
-        input: &ModifyDBSubnetGroupMessage,
+        input: ModifyDBSubnetGroupMessage,
     ) -> RusotoFuture<ModifyDBSubnetGroupResult, ModifyDBSubnetGroupError> {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
@@ -31550,7 +31540,7 @@ where
     /// <p>Modifies an existing RDS event notification subscription. Note that you can't modify the source identifiers using this call; to change source identifiers for a subscription, use the <a>AddSourceIdentifierToSubscription</a> and <a>RemoveSourceIdentifierFromSubscription</a> calls.</p> <p>You can see a list of the event categories for a given SourceType in the <a href="http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_Events.html">Events</a> topic in the Amazon RDS User Guide or by using the <b>DescribeEventCategories</b> action.</p>
     fn modify_event_subscription(
         &self,
-        input: &ModifyEventSubscriptionMessage,
+        input: ModifyEventSubscriptionMessage,
     ) -> RusotoFuture<ModifyEventSubscriptionResult, ModifyEventSubscriptionError> {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
@@ -31601,7 +31591,7 @@ where
     /// <p>Modifies an existing option group.</p>
     fn modify_option_group(
         &self,
-        input: &ModifyOptionGroupMessage,
+        input: ModifyOptionGroupMessage,
     ) -> RusotoFuture<ModifyOptionGroupResult, ModifyOptionGroupError> {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
@@ -31652,7 +31642,7 @@ where
     /// <p><p>Promotes a Read Replica DB instance to a standalone DB instance.</p> <note> <ul> <li> <p>Backup duration is a function of the amount of changes to the database since the previous backup. If you plan to promote a Read Replica to a standalone instance, we recommend that you enable backups and complete at least one backup prior to promotion. In addition, a Read Replica cannot be promoted to a standalone instance when it is in the <code>backing-up</code> status. If you have enabled backups on your Read Replica, configure the automated backup window so that daily backups do not interfere with Read Replica promotion.</p> </li> <li> <p>This command doesn&#39;t apply to Aurora MySQL and Aurora PostgreSQL.</p> </li> </ul> </note></p>
     fn promote_read_replica(
         &self,
-        input: &PromoteReadReplicaMessage,
+        input: PromoteReadReplicaMessage,
     ) -> RusotoFuture<PromoteReadReplicaResult, PromoteReadReplicaError> {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
@@ -31703,7 +31693,7 @@ where
     /// <p>Promotes a Read Replica DB cluster to a standalone DB cluster.</p>
     fn promote_read_replica_db_cluster(
         &self,
-        input: &PromoteReadReplicaDBClusterMessage,
+        input: PromoteReadReplicaDBClusterMessage,
     ) -> RusotoFuture<PromoteReadReplicaDBClusterResult, PromoteReadReplicaDBClusterError> {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
@@ -31754,7 +31744,7 @@ where
     /// <p>Purchases a reserved DB instance offering.</p>
     fn purchase_reserved_db_instances_offering(
         &self,
-        input: &PurchaseReservedDBInstancesOfferingMessage,
+        input: PurchaseReservedDBInstancesOfferingMessage,
     ) -> RusotoFuture<
         PurchaseReservedDBInstancesOfferingResult,
         PurchaseReservedDBInstancesOfferingError,
@@ -31810,7 +31800,7 @@ where
     /// <p>You might need to reboot your DB instance, usually for maintenance reasons. For example, if you make certain modifications, or if you change the DB parameter group associated with the DB instance, you must reboot the instance for the changes to take effect. </p> <p>Rebooting a DB instance restarts the database engine service. Rebooting a DB instance results in a momentary outage, during which the DB instance status is set to rebooting. </p> <p>For more information about rebooting, see <a href="http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_RebootInstance.html">Rebooting a DB Instance</a>. </p>
     fn reboot_db_instance(
         &self,
-        input: &RebootDBInstanceMessage,
+        input: RebootDBInstanceMessage,
     ) -> RusotoFuture<RebootDBInstanceResult, RebootDBInstanceError> {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
@@ -31861,7 +31851,7 @@ where
     /// <p>Disassociates an Identity and Access Management (IAM) role from an Aurora DB cluster. For more information, see <a href="http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Aurora.Authorizing.AWSServices.html">Authorizing Amazon Aurora to Access Other AWS Services On Your Behalf</a>.</p>
     fn remove_role_from_db_cluster(
         &self,
-        input: &RemoveRoleFromDBClusterMessage,
+        input: RemoveRoleFromDBClusterMessage,
     ) -> RusotoFuture<(), RemoveRoleFromDBClusterError> {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
@@ -31889,7 +31879,7 @@ where
     /// <p>Removes a source identifier from an existing RDS event notification subscription.</p>
     fn remove_source_identifier_from_subscription(
         &self,
-        input: &RemoveSourceIdentifierFromSubscriptionMessage,
+        input: RemoveSourceIdentifierFromSubscriptionMessage,
     ) -> RusotoFuture<
         RemoveSourceIdentifierFromSubscriptionResult,
         RemoveSourceIdentifierFromSubscriptionError,
@@ -31945,7 +31935,7 @@ where
     /// <p>Removes metadata tags from an Amazon RDS resource.</p> <p>For an overview on tagging an Amazon RDS resource, see <a href="http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Overview.Tagging.html">Tagging Amazon RDS Resources</a>.</p>
     fn remove_tags_from_resource(
         &self,
-        input: &RemoveTagsFromResourceMessage,
+        input: RemoveTagsFromResourceMessage,
     ) -> RusotoFuture<(), RemoveTagsFromResourceError> {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
@@ -31973,7 +31963,7 @@ where
     /// <p> Modifies the parameters of a DB cluster parameter group to the default value. To reset specific parameters submit a list of the following: <code>ParameterName</code> and <code>ApplyMethod</code>. To reset the entire DB cluster parameter group, specify the <code>DBClusterParameterGroupName</code> and <code>ResetAllParameters</code> parameters. </p> <p> When resetting the entire group, dynamic parameters are updated immediately and static parameters are set to <code>pending-reboot</code> to take effect on the next DB instance restart or <a>RebootDBInstance</a> request. You must call <a>RebootDBInstance</a> for every DB instance in your DB cluster that you want the updated static parameter to apply to.</p> <p>For more information on Amazon Aurora, see <a href="http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Aurora.html">Aurora on Amazon RDS</a> in the <i>Amazon RDS User Guide.</i> </p>
     fn reset_db_cluster_parameter_group(
         &self,
-        input: &ResetDBClusterParameterGroupMessage,
+        input: ResetDBClusterParameterGroupMessage,
     ) -> RusotoFuture<DBClusterParameterGroupNameMessage, ResetDBClusterParameterGroupError> {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
@@ -32024,7 +32014,7 @@ where
     /// <p>Modifies the parameters of a DB parameter group to the engine/system default value. To reset specific parameters, provide a list of the following: <code>ParameterName</code> and <code>ApplyMethod</code>. To reset the entire DB parameter group, specify the <code>DBParameterGroup</code> name and <code>ResetAllParameters</code> parameters. When resetting the entire group, dynamic parameters are updated immediately and static parameters are set to <code>pending-reboot</code> to take effect on the next DB instance restart or <code>RebootDBInstance</code> request. </p>
     fn reset_db_parameter_group(
         &self,
-        input: &ResetDBParameterGroupMessage,
+        input: ResetDBParameterGroupMessage,
     ) -> RusotoFuture<DBParameterGroupNameMessage, ResetDBParameterGroupError> {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
@@ -32075,7 +32065,7 @@ where
     /// <p>Creates an Amazon Aurora DB cluster from data stored in an Amazon S3 bucket. Amazon RDS must be authorized to access the Amazon S3 bucket and the data must be created using the Percona XtraBackup utility as described in <a href="http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Aurora.Migrate.MySQL.html#Aurora.Migrate.MySQL.S3">Migrating Data from MySQL by Using an Amazon S3 Bucket</a>.</p>
     fn restore_db_cluster_from_s3(
         &self,
-        input: &RestoreDBClusterFromS3Message,
+        input: RestoreDBClusterFromS3Message,
     ) -> RusotoFuture<RestoreDBClusterFromS3Result, RestoreDBClusterFromS3Error> {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
@@ -32126,7 +32116,7 @@ where
     /// <p>Creates a new DB cluster from a DB snapshot or DB cluster snapshot.</p> <p>If a DB snapshot is specified, the target DB cluster is created from the source DB snapshot with a default configuration and default security group.</p> <p>If a DB cluster snapshot is specified, the target DB cluster is created from the source DB cluster restore point with the same configuration as the original source DB cluster, except that the new DB cluster is created with the default security group.</p> <p>For more information on Amazon Aurora, see <a href="http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Aurora.html">Aurora on Amazon RDS</a> in the <i>Amazon RDS User Guide.</i> </p>
     fn restore_db_cluster_from_snapshot(
         &self,
-        input: &RestoreDBClusterFromSnapshotMessage,
+        input: RestoreDBClusterFromSnapshotMessage,
     ) -> RusotoFuture<RestoreDBClusterFromSnapshotResult, RestoreDBClusterFromSnapshotError> {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
@@ -32177,7 +32167,7 @@ where
     /// <p>Restores a DB cluster to an arbitrary point in time. Users can restore to any point in time before <code>LatestRestorableTime</code> for up to <code>BackupRetentionPeriod</code> days. The target DB cluster is created from the source DB cluster with the same configuration as the original DB cluster, except that the new DB cluster is created with the default DB security group. </p> <note> <p>This action only restores the DB cluster, not the DB instances for that DB cluster. You must invoke the <a>CreateDBInstance</a> action to create DB instances for the restored DB cluster, specifying the identifier of the restored DB cluster in <code>DBClusterIdentifier</code>. You can create DB instances only after the <code>RestoreDBClusterToPointInTime</code> action has completed and the DB cluster is available.</p> </note> <p>For more information on Amazon Aurora, see <a href="http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Aurora.html">Aurora on Amazon RDS</a> in the <i>Amazon RDS User Guide.</i> </p>
     fn restore_db_cluster_to_point_in_time(
         &self,
-        input: &RestoreDBClusterToPointInTimeMessage,
+        input: RestoreDBClusterToPointInTimeMessage,
     ) -> RusotoFuture<RestoreDBClusterToPointInTimeResult, RestoreDBClusterToPointInTimeError> {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
@@ -32230,7 +32220,7 @@ where
     /// <p><p>Creates a new DB instance from a DB snapshot. The target database is created from the source database restore point with the most of original configuration with the default security group and the default DB parameter group. By default, the new DB instance is created as a single-AZ deployment except when the instance is a SQL Server instance that has an option group that is associated with mirroring; in this case, the instance becomes a mirrored AZ deployment and not a single-AZ deployment.</p> <p>If your intent is to replace your original DB instance with the new, restored DB instance, then rename your original DB instance before you call the RestoreDBInstanceFromDBSnapshot action. RDS doesn&#39;t allow two DB instances with the same name. Once you have renamed your original DB instance with a different identifier, then you can pass the original name of the DB instance as the DBInstanceIdentifier in the call to the RestoreDBInstanceFromDBSnapshot action. The result is that you will replace the original DB instance with the DB instance created from the snapshot.</p> <p>If you are restoring from a shared manual DB snapshot, the <code>DBSnapshotIdentifier</code> must be the ARN of the shared DB snapshot.</p> <note> <p>This command doesn&#39;t apply to Aurora MySQL and Aurora PostgreSQL. For Aurora, use <a>RestoreDBClusterFromSnapshot</a>.</p> </note></p>
     fn restore_db_instance_from_db_snapshot(
         &self,
-        input: &RestoreDBInstanceFromDBSnapshotMessage,
+        input: RestoreDBInstanceFromDBSnapshotMessage,
     ) -> RusotoFuture<RestoreDBInstanceFromDBSnapshotResult, RestoreDBInstanceFromDBSnapshotError>
     {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
@@ -32284,7 +32274,7 @@ where
     /// <p>Amazon Relational Database Service (Amazon RDS) supports importing MySQL databases by using backup files. You can create a backup of your on-premises database, store it on Amazon Simple Storage Service (Amazon S3), and then restore the backup file onto a new Amazon RDS DB instance running MySQL. For more information, see <a href="http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/MySQL.Procedural.Importing.html">Importing Data into an Amazon RDS MySQL DB Instance</a>. </p>
     fn restore_db_instance_from_s3(
         &self,
-        input: &RestoreDBInstanceFromS3Message,
+        input: RestoreDBInstanceFromS3Message,
     ) -> RusotoFuture<RestoreDBInstanceFromS3Result, RestoreDBInstanceFromS3Error> {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
@@ -32335,7 +32325,7 @@ where
     /// <p><p>Restores a DB instance to an arbitrary point in time. You can restore to any point in time before the time identified by the LatestRestorableTime property. You can restore to a point up to the number of days specified by the BackupRetentionPeriod property.</p> <p>The target database is created with most of the original configuration, but in a system-selected availability zone, with the default security group, the default subnet group, and the default DB parameter group. By default, the new DB instance is created as a single-AZ deployment except when the instance is a SQL Server instance that has an option group that is associated with mirroring; in this case, the instance becomes a mirrored deployment and not a single-AZ deployment.</p> <note> <p>This command doesn&#39;t apply to Aurora MySQL and Aurora PostgreSQL. For Aurora, use <a>RestoreDBClusterToPointInTime</a>.</p> </note></p>
     fn restore_db_instance_to_point_in_time(
         &self,
-        input: &RestoreDBInstanceToPointInTimeMessage,
+        input: RestoreDBInstanceToPointInTimeMessage,
     ) -> RusotoFuture<RestoreDBInstanceToPointInTimeResult, RestoreDBInstanceToPointInTimeError>
     {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
@@ -32389,7 +32379,7 @@ where
     /// <p>Revokes ingress from a DBSecurityGroup for previously authorized IP ranges or EC2 or VPC Security Groups. Required parameters for this API are one of CIDRIP, EC2SecurityGroupId for VPC, or (EC2SecurityGroupOwnerId and either EC2SecurityGroupName or EC2SecurityGroupId).</p>
     fn revoke_db_security_group_ingress(
         &self,
-        input: &RevokeDBSecurityGroupIngressMessage,
+        input: RevokeDBSecurityGroupIngressMessage,
     ) -> RusotoFuture<RevokeDBSecurityGroupIngressResult, RevokeDBSecurityGroupIngressError> {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
@@ -32440,7 +32430,7 @@ where
     /// <p><p> Starts a DB instance that was stopped using the AWS console, the stop-db-instance AWS CLI command, or the StopDBInstance action. For more information, see Stopping and Starting a DB instance in the AWS RDS user guide. </p> <note> <p>This command doesn&#39;t apply to Aurora MySQL and Aurora PostgreSQL.</p> </note></p>
     fn start_db_instance(
         &self,
-        input: &StartDBInstanceMessage,
+        input: StartDBInstanceMessage,
     ) -> RusotoFuture<StartDBInstanceResult, StartDBInstanceError> {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
@@ -32491,7 +32481,7 @@ where
     /// <p><p> Stops a DB instance. When you stop a DB instance, Amazon RDS retains the DB instance&#39;s metadata, including its endpoint, DB parameter group, and option group membership. Amazon RDS also retains the transaction logs so you can do a point-in-time restore if necessary. For more information, see Stopping and Starting a DB instance in the AWS RDS user guide. </p> <note> <p>This command doesn&#39;t apply to Aurora MySQL and Aurora PostgreSQL.</p> </note></p>
     fn stop_db_instance(
         &self,
-        input: &StopDBInstanceMessage,
+        input: StopDBInstanceMessage,
     ) -> RusotoFuture<StopDBInstanceResult, StopDBInstanceError> {
         let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
         let mut params = Params::new();
@@ -32545,8 +32535,8 @@ mod protocol_tests {
 
     extern crate rusoto_mock;
 
-    use super::*;
     use self::rusoto_mock::*;
+    use super::*;
     use rusoto_core::Region as rusoto_region;
 
     #[test]
@@ -32558,7 +32548,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(400).with_body(&mock_response);
         let client = RdsClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = DescribeDBInstancesMessage::default();
-        let result = client.describe_db_instances(&request).sync();
+        let result = client.describe_db_instances(request).sync();
         assert!(!result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -32571,7 +32561,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = RdsClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = DescribeDBEngineVersionsMessage::default();
-        let result = client.describe_db_engine_versions(&request).sync();
+        let result = client.describe_db_engine_versions(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -32584,7 +32574,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = RdsClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = DescribeDBInstancesMessage::default();
-        let result = client.describe_db_instances(&request).sync();
+        let result = client.describe_db_instances(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -32597,7 +32587,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = RdsClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = DescribeDBParameterGroupsMessage::default();
-        let result = client.describe_db_parameter_groups(&request).sync();
+        let result = client.describe_db_parameter_groups(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -32610,7 +32600,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = RdsClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = DescribeDBSecurityGroupsMessage::default();
-        let result = client.describe_db_security_groups(&request).sync();
+        let result = client.describe_db_security_groups(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -32623,7 +32613,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = RdsClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = DescribeDBSnapshotsMessage::default();
-        let result = client.describe_db_snapshots(&request).sync();
+        let result = client.describe_db_snapshots(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -32636,7 +32626,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = RdsClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = DescribeDBSubnetGroupsMessage::default();
-        let result = client.describe_db_subnet_groups(&request).sync();
+        let result = client.describe_db_subnet_groups(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -32649,7 +32639,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = RdsClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = DescribeEventCategoriesMessage::default();
-        let result = client.describe_event_categories(&request).sync();
+        let result = client.describe_event_categories(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -32662,7 +32652,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = RdsClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = DescribeEventSubscriptionsMessage::default();
-        let result = client.describe_event_subscriptions(&request).sync();
+        let result = client.describe_event_subscriptions(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -32675,7 +32665,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = RdsClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = DescribeEventsMessage::default();
-        let result = client.describe_events(&request).sync();
+        let result = client.describe_events(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -32688,7 +32678,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = RdsClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = DescribeOptionGroupsMessage::default();
-        let result = client.describe_option_groups(&request).sync();
+        let result = client.describe_option_groups(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -32702,7 +32692,7 @@ mod protocol_tests {
         let client = RdsClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = DescribeReservedDBInstancesOfferingsMessage::default();
         let result = client
-            .describe_reserved_db_instances_offerings(&request)
+            .describe_reserved_db_instances_offerings(request)
             .sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
@@ -32716,7 +32706,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = RdsClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = DescribeReservedDBInstancesMessage::default();
-        let result = client.describe_reserved_db_instances(&request).sync();
+        let result = client.describe_reserved_db_instances(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 }

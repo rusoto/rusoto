@@ -8,15 +8,17 @@ use std::env;
 use std::io::Error as IoError;
 use std::error::Error;
 use std::fmt;
+use std::io;
 use std::collections::hash_map::{self, HashMap};
+use std::rc::Rc;
+use std::sync::Arc;
 use std::time::Duration;
 use std::mem;
 
 use futures::{Async, Future, Poll, Stream};
 use futures::future::{Either, Select2};
-use hyper::Client as HyperClient;
-use hyper::client::{FutureResponse as HyperFutureResponse};
-use hyper::{Request as HyperRequest, Response as HyperResponse};
+use hyper::client::{Connect, FutureResponse as HyperFutureResponse};
+use hyper::{Client as HyperClient, Request as HyperRequest, Response as HyperResponse};
 use hyper::Error as HyperError;
 use hyper::header::{Headers as HyperHeaders, UserAgent};
 use hyper::StatusCode;
@@ -27,7 +29,7 @@ use tokio_core::reactor::{Handle, Timeout};
 
 use log::Level::Debug;
 
-use signature::SignedRequest;
+use signature::{SignedRequest, SignedRequestPayload};
 
 // Pulls in the statically generated rustc version.
 include!(concat!(env!("OUT_DIR"), "/user_agent_vars.rs"));
@@ -84,7 +86,7 @@ pub struct HttpResponse {
     /// Status code of HTTP Request
     pub status: StatusCode,
     /// Contents of Response
-    pub body: Box<Stream<Item=Vec<u8>, Error=HttpDispatchError> + Send>,
+    pub body: Box<Stream<Item=Vec<u8>, Error=io::Error> + Send>,
     /// Response headers
     pub headers: Headers,
 }
@@ -103,7 +105,7 @@ pub struct BufferedHttpResponse {
 pub struct BufferedHttpResponseFuture {
     status: StatusCode,
     headers: HashMap<String, String>,
-    future: ::futures::stream::Concat2<Box<Stream<Item=Vec<u8>, Error=HttpDispatchError> + Send>>
+    future: ::futures::stream::Concat2<Box<Stream<Item=Vec<u8>, Error=io::Error> + Send>>
 }
 
 impl Future for BufferedHttpResponseFuture {
@@ -111,7 +113,7 @@ impl Future for BufferedHttpResponseFuture {
     type Error = HttpDispatchError;
 
     fn poll(&mut self) -> Poll<Self::Item, Self::Error> {
-        self.future.poll().map(|async| async.map(|body| {
+        self.future.poll().map_err(|err| err.into()).map(|async| async.map(|body| {
             BufferedHttpResponse {
                 status: self.status,
                 headers: Headers(mem::replace(&mut self.headers, HashMap::new())),
@@ -132,12 +134,21 @@ impl HttpResponse {
     }
 
     fn from_hyper(hyper_response: HyperResponse) -> HttpResponse {
+        let status = hyper_response.status();
         let headers = Headers::new(hyper_response.headers().iter().map(|h| (h.name(), h.value_string())));
+        let body = hyper_response.body()
+            .map(|chunk| chunk.as_ref().to_vec())
+            .map_err(|err| {
+                match err {
+                    HyperError::Io(io_err) => io_err,
+                    _ => io::Error::new(io::ErrorKind::Other, err)
+                }
+            });
 
         HttpResponse {
-            status: hyper_response.status(),
-            body: Box::new(hyper_response.body().from_err().map(|chunk| chunk.as_ref().to_vec())),
+            status: status,
             headers: headers,
+            body: Box::new(body),
         }
     }
 }
@@ -181,6 +192,20 @@ pub trait DispatchSignedRequest {
     fn dispatch(&self, request: SignedRequest, timeout: Option<Duration>) -> Self::Future;
 }
 
+impl<D: DispatchSignedRequest> DispatchSignedRequest for Rc<D> {
+    type Future = D::Future;
+    fn dispatch(&self, request: SignedRequest, timeout: Option<Duration>) -> Self::Future {
+        D::dispatch(&*self, request, timeout)
+    }
+}
+
+impl<D: DispatchSignedRequest> DispatchSignedRequest for Arc<D> {
+    type Future = D::Future;
+    fn dispatch(&self, request: SignedRequest, timeout: Option<Duration>) -> Self::Future {
+        D::dispatch(&*self, request, timeout)
+    }
+}
+
 /// A future that will resolve to an `HttpResponse`.
 pub struct HttpClientFuture(ClientFutureInner);
 
@@ -218,15 +243,38 @@ impl Future for HttpClientFuture {
     }
 }
 
+struct HttpClientPayload {
+    inner: SignedRequestPayload
+}
+
+impl Stream for HttpClientPayload {
+    type Item = Vec<u8>;
+    type Error = HyperError;
+
+    fn poll(&mut self) -> Poll<Option<Self::Item>, Self::Error> {
+        match self.inner {
+            SignedRequestPayload::Buffer(ref mut buffer) => {
+                if buffer.len() == 0 {
+                    Ok(Async::Ready(None))
+                } else {
+                    Ok(Async::Ready(Some(buffer.split_off(0))))
+                }
+            },
+            SignedRequestPayload::Stream(_, ref mut stream) =>
+                Ok(stream.poll()?)
+        }
+    }
+}
+
 /// Http client for use with AWS services.
-pub struct HttpClient {
-    inner: HyperClient<HttpsConnector<HttpConnector>>,
-    handle: Handle
+pub struct HttpClient<C = HttpsConnector<HttpConnector>> {
+    inner: HyperClient<C, HttpClientPayload>,
+    handle: Handle,
 }
 
 impl HttpClient {
     /// Create a tls-enabled http client.
-    pub fn new(handle: &Handle) -> Result<HttpClient, TlsError> {
+    pub fn new(handle: &Handle) -> Result<Self, TlsError> {
         let connector = match HttpsConnector::new(4, handle) {
             Ok(connector) => connector,
             Err(tls_error) => {
@@ -235,15 +283,30 @@ impl HttpClient {
                 })
             }
         };
-        let inner = HyperClient::configure().connector(connector).build(handle);
-        Ok(HttpClient {
-            inner: inner,
-            handle: handle.clone()
-        })
+
+        Ok(Self::from_connector(connector, handle))
     }
 }
 
-impl DispatchSignedRequest for HttpClient {
+impl<C> HttpClient<C>
+where
+    C: Connect,
+{
+    /// Allows for a custom connector to be used with the HttpClient
+    pub fn from_connector(connector: C, handle: &Handle) -> Self {
+        let inner = HyperClient::configure()
+            .body()
+            .connector(connector)
+            .build(handle);
+
+        HttpClient {
+            inner,
+            handle: handle.clone(),
+        }
+    }
+}
+
+impl<C: Connect> DispatchSignedRequest for HttpClient<C> {
     type Future = HttpClientFuture;
 
     fn dispatch(&self, request: SignedRequest, timeout: Option<Duration>) -> Self::Future {
@@ -276,11 +339,13 @@ impl DispatchSignedRequest for HttpClient {
 
         if log_enabled!(Debug) {
             let payload = match request.payload {
-                Some(ref payload_bytes) => {
+                Some(SignedRequestPayload::Buffer(ref payload_bytes)) => {
                     String::from_utf8(payload_bytes.to_owned())
                         .unwrap_or_else(|_| String::from("<non-UTF-8 data>"))
-                }
-                _ => "".to_owned(),
+                },
+                Some(SignedRequestPayload::Stream(len, _)) =>
+                    format!("<stream len_hint={:?}>", len),
+                None => "".to_owned(),
             };
 
             debug!("Full request: \n method: {}\n final_uri: {}\n payload: {}\nHeaders:\n",
@@ -296,7 +361,7 @@ impl DispatchSignedRequest for HttpClient {
         *hyper_request.headers_mut() = hyper_headers;
 
         if let Some(payload_contents) = request.payload {
-            hyper_request.set_body(payload_contents);
+            hyper_request.set_body(HttpClientPayload { inner: payload_contents });
         }
 
         let inner = match timeout {

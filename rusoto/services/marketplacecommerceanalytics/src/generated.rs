@@ -18,18 +18,18 @@ use std::io;
 use futures::future;
 use futures::Future;
 use rusoto_core::reactor::{CredentialsProvider, RequestDispatcher};
-use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::region;
+use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::{ClientInner, RusotoFuture};
 
-use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
+use rusoto_core::request::HttpDispatchError;
 
-use serde_json;
-use rusoto_core::signature::SignedRequest;
-use serde_json::Value as SerdeJsonValue;
-use serde_json::from_str;
 use hyper::StatusCode;
+use rusoto_core::signature::SignedRequest;
+use serde_json;
+use serde_json::from_str;
+use serde_json::Value as SerdeJsonValue;
 /// <p>Container for the parameters to the GenerateDataSet operation.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct GenerateDataSetRequest {
@@ -271,13 +271,13 @@ pub trait MarketplaceCommerceAnalytics {
     /// <p>Given a data set type and data set publication date, asynchronously publishes the requested data set to the specified S3 bucket and notifies the specified SNS topic once the data is available. Returns a unique request identifier that can be used to correlate requests with notifications from the SNS topic. Data sets will be published in comma-separated values (CSV) format with the file name {data<em>set</em>type}_YYYY-MM-DD.csv. If a file with the same name already exists (e.g. if the same data set is requested twice), the original file will be overwritten by the new file. Requires a Role with an attached permissions policy providing Allow permissions for the following actions: s3:PutObject, s3:GetBucketLocation, sns:GetTopicAttributes, sns:Publish, iam:GetRolePolicy.</p>
     fn generate_data_set(
         &self,
-        input: &GenerateDataSetRequest,
+        input: GenerateDataSetRequest,
     ) -> RusotoFuture<GenerateDataSetResult, GenerateDataSetError>;
 
     /// <p>Given a data set type and a from date, asynchronously publishes the requested customer support data to the specified S3 bucket and notifies the specified SNS topic once the data is available. Returns a unique request identifier that can be used to correlate requests with notifications from the SNS topic. Data sets will be published in comma-separated values (CSV) format with the file name {data<em>set</em>type}_YYYY-MM-DD&#39;T&#39;HH-mm-ss&#39;Z&#39;.csv. If a file with the same name already exists (e.g. if the same data set is requested twice), the original file will be overwritten by the new file. Requires a Role with an attached permissions policy providing Allow permissions for the following actions: s3:PutObject, s3:GetBucketLocation, sns:GetTopicAttributes, sns:Publish, iam:GetRolePolicy.</p>
     fn start_support_data_export(
         &self,
-        input: &StartSupportDataExportRequest,
+        input: StartSupportDataExportRequest,
     ) -> RusotoFuture<StartSupportDataExportResult, StartSupportDataExportError>;
 }
 /// A client for the AWS Marketplace Commerce Analytics API.
@@ -326,7 +326,7 @@ where
     /// <p>Given a data set type and data set publication date, asynchronously publishes the requested data set to the specified S3 bucket and notifies the specified SNS topic once the data is available. Returns a unique request identifier that can be used to correlate requests with notifications from the SNS topic. Data sets will be published in comma-separated values (CSV) format with the file name {data<em>set</em>type}_YYYY-MM-DD.csv. If a file with the same name already exists (e.g. if the same data set is requested twice), the original file will be overwritten by the new file. Requires a Role with an attached permissions policy providing Allow permissions for the following actions: s3:PutObject, s3:GetBucketLocation, sns:GetTopicAttributes, sns:Publish, iam:GetRolePolicy.</p>
     fn generate_data_set(
         &self,
-        input: &GenerateDataSetRequest,
+        input: GenerateDataSetRequest,
     ) -> RusotoFuture<GenerateDataSetResult, GenerateDataSetError> {
         let mut request =
             SignedRequest::new("POST", "marketplacecommerceanalytics", &self.region, "/");
@@ -336,7 +336,7 @@ where
             "x-amz-target",
             "MarketplaceCommerceAnalytics20150701.GenerateDataSet",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -344,7 +344,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -367,7 +367,7 @@ where
     /// <p>Given a data set type and a from date, asynchronously publishes the requested customer support data to the specified S3 bucket and notifies the specified SNS topic once the data is available. Returns a unique request identifier that can be used to correlate requests with notifications from the SNS topic. Data sets will be published in comma-separated values (CSV) format with the file name {data<em>set</em>type}_YYYY-MM-DD&#39;T&#39;HH-mm-ss&#39;Z&#39;.csv. If a file with the same name already exists (e.g. if the same data set is requested twice), the original file will be overwritten by the new file. Requires a Role with an attached permissions policy providing Allow permissions for the following actions: s3:PutObject, s3:GetBucketLocation, sns:GetTopicAttributes, sns:Publish, iam:GetRolePolicy.</p>
     fn start_support_data_export(
         &self,
-        input: &StartSupportDataExportRequest,
+        input: StartSupportDataExportRequest,
     ) -> RusotoFuture<StartSupportDataExportResult, StartSupportDataExportError> {
         let mut request =
             SignedRequest::new("POST", "marketplacecommerceanalytics", &self.region, "/");
@@ -377,7 +377,7 @@ where
             "x-amz-target",
             "MarketplaceCommerceAnalytics20150701.StartSupportDataExport",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -385,7 +385,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 

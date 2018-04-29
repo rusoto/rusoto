@@ -18,18 +18,18 @@ use std::io;
 use futures::future;
 use futures::Future;
 use rusoto_core::reactor::{CredentialsProvider, RequestDispatcher};
-use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::region;
+use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::{ClientInner, RusotoFuture};
 
-use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
+use rusoto_core::request::HttpDispatchError;
 
-use serde_json;
-use rusoto_core::signature::SignedRequest;
-use serde_json::Value as SerdeJsonValue;
-use serde_json::from_str;
 use hyper::StatusCode;
+use rusoto_core::signature::SignedRequest;
+use serde_json;
+use serde_json::from_str;
+use serde_json::Value as SerdeJsonValue;
 /// <p>Information about the compute type.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct ComputeType {
@@ -1839,49 +1839,49 @@ pub trait Workspaces {
     /// <p>Creates tags for the specified WorkSpace.</p>
     fn create_tags(
         &self,
-        input: &CreateTagsRequest,
+        input: CreateTagsRequest,
     ) -> RusotoFuture<CreateTagsResult, CreateTagsError>;
 
     /// <p>Creates one or more WorkSpaces.</p> <p>This operation is asynchronous and returns before the WorkSpaces are created.</p>
     fn create_workspaces(
         &self,
-        input: &CreateWorkspacesRequest,
+        input: CreateWorkspacesRequest,
     ) -> RusotoFuture<CreateWorkspacesResult, CreateWorkspacesError>;
 
     /// <p>Deletes the specified tags from a WorkSpace.</p>
     fn delete_tags(
         &self,
-        input: &DeleteTagsRequest,
+        input: DeleteTagsRequest,
     ) -> RusotoFuture<DeleteTagsResult, DeleteTagsError>;
 
     /// <p>Describes the tags for the specified WorkSpace.</p>
     fn describe_tags(
         &self,
-        input: &DescribeTagsRequest,
+        input: DescribeTagsRequest,
     ) -> RusotoFuture<DescribeTagsResult, DescribeTagsError>;
 
     /// <p>Describes the available WorkSpace bundles.</p> <p>You can filter the results using either bundle ID or owner, but not both.</p>
     fn describe_workspace_bundles(
         &self,
-        input: &DescribeWorkspaceBundlesRequest,
+        input: DescribeWorkspaceBundlesRequest,
     ) -> RusotoFuture<DescribeWorkspaceBundlesResult, DescribeWorkspaceBundlesError>;
 
     /// <p>Describes the available AWS Directory Service directories that are registered with Amazon WorkSpaces.</p>
     fn describe_workspace_directories(
         &self,
-        input: &DescribeWorkspaceDirectoriesRequest,
+        input: DescribeWorkspaceDirectoriesRequest,
     ) -> RusotoFuture<DescribeWorkspaceDirectoriesResult, DescribeWorkspaceDirectoriesError>;
 
     /// <p>Describes the specified WorkSpaces.</p> <p>You can filter the results using bundle ID, directory ID, or owner, but you can specify only one filter at a time.</p>
     fn describe_workspaces(
         &self,
-        input: &DescribeWorkspacesRequest,
+        input: DescribeWorkspacesRequest,
     ) -> RusotoFuture<DescribeWorkspacesResult, DescribeWorkspacesError>;
 
     /// <p>Describes the connection status of the specified WorkSpaces.</p>
     fn describe_workspaces_connection_status(
         &self,
-        input: &DescribeWorkspacesConnectionStatusRequest,
+        input: DescribeWorkspacesConnectionStatusRequest,
     ) -> RusotoFuture<
         DescribeWorkspacesConnectionStatusResult,
         DescribeWorkspacesConnectionStatusError,
@@ -1890,37 +1890,37 @@ pub trait Workspaces {
     /// <p>Modifies the specified WorkSpace properties.</p>
     fn modify_workspace_properties(
         &self,
-        input: &ModifyWorkspacePropertiesRequest,
+        input: ModifyWorkspacePropertiesRequest,
     ) -> RusotoFuture<ModifyWorkspacePropertiesResult, ModifyWorkspacePropertiesError>;
 
     /// <p>Reboots the specified WorkSpaces.</p> <p>You cannot reboot a WorkSpace unless its state is <code>AVAILABLE</code>, <code>IMPAIRED</code>, or <code>INOPERABLE</code>.</p> <p>This operation is asynchronous and returns before the WorkSpaces have rebooted.</p>
     fn reboot_workspaces(
         &self,
-        input: &RebootWorkspacesRequest,
+        input: RebootWorkspacesRequest,
     ) -> RusotoFuture<RebootWorkspacesResult, RebootWorkspacesError>;
 
     /// <p>Rebuilds the specified WorkSpaces.</p> <p>You cannot rebuild a WorkSpace unless its state is <code>AVAILABLE</code> or <code>ERROR</code>.</p> <p>Rebuilding a WorkSpace is a potentially destructive action that can result in the loss of data. For more information, see <a href="http://docs.aws.amazon.com/workspaces/latest/adminguide/reset-workspace.html">Rebuild a WorkSpace</a>.</p> <p>This operation is asynchronous and returns before the WorkSpaces have been completely rebuilt.</p>
     fn rebuild_workspaces(
         &self,
-        input: &RebuildWorkspacesRequest,
+        input: RebuildWorkspacesRequest,
     ) -> RusotoFuture<RebuildWorkspacesResult, RebuildWorkspacesError>;
 
     /// <p>Starts the specified WorkSpaces.</p> <p>You cannot start a WorkSpace unless it has a running mode of <code>AutoStop</code> and a state of <code>STOPPED</code>.</p>
     fn start_workspaces(
         &self,
-        input: &StartWorkspacesRequest,
+        input: StartWorkspacesRequest,
     ) -> RusotoFuture<StartWorkspacesResult, StartWorkspacesError>;
 
     /// <p> Stops the specified WorkSpaces.</p> <p>You cannot stop a WorkSpace unless it has a running mode of <code>AutoStop</code> and a state of <code>AVAILABLE</code>, <code>IMPAIRED</code>, <code>UNHEALTHY</code>, or <code>ERROR</code>.</p>
     fn stop_workspaces(
         &self,
-        input: &StopWorkspacesRequest,
+        input: StopWorkspacesRequest,
     ) -> RusotoFuture<StopWorkspacesResult, StopWorkspacesError>;
 
     /// <p>Terminates the specified WorkSpaces.</p> <p>Terminating a WorkSpace is a permanent action and cannot be undone. The user's data is destroyed. If you need to archive any user data, contact Amazon Web Services before terminating the WorkSpace.</p> <p>You can terminate a WorkSpace that is in any state except <code>SUSPENDED</code>.</p> <p>This operation is asynchronous and returns before the WorkSpaces have been completely terminated.</p>
     fn terminate_workspaces(
         &self,
-        input: &TerminateWorkspacesRequest,
+        input: TerminateWorkspacesRequest,
     ) -> RusotoFuture<TerminateWorkspacesResult, TerminateWorkspacesError>;
 }
 /// A client for the Amazon WorkSpaces API.
@@ -1969,13 +1969,13 @@ where
     /// <p>Creates tags for the specified WorkSpace.</p>
     fn create_tags(
         &self,
-        input: &CreateTagsRequest,
+        input: CreateTagsRequest,
     ) -> RusotoFuture<CreateTagsResult, CreateTagsError> {
         let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "WorkspacesService.CreateTags");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -1983,7 +1983,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -2006,13 +2006,13 @@ where
     /// <p>Creates one or more WorkSpaces.</p> <p>This operation is asynchronous and returns before the WorkSpaces are created.</p>
     fn create_workspaces(
         &self,
-        input: &CreateWorkspacesRequest,
+        input: CreateWorkspacesRequest,
     ) -> RusotoFuture<CreateWorkspacesResult, CreateWorkspacesError> {
         let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "WorkspacesService.CreateWorkspaces");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -2020,7 +2020,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -2043,13 +2043,13 @@ where
     /// <p>Deletes the specified tags from a WorkSpace.</p>
     fn delete_tags(
         &self,
-        input: &DeleteTagsRequest,
+        input: DeleteTagsRequest,
     ) -> RusotoFuture<DeleteTagsResult, DeleteTagsError> {
         let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "WorkspacesService.DeleteTags");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -2057,7 +2057,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -2080,13 +2080,13 @@ where
     /// <p>Describes the tags for the specified WorkSpace.</p>
     fn describe_tags(
         &self,
-        input: &DescribeTagsRequest,
+        input: DescribeTagsRequest,
     ) -> RusotoFuture<DescribeTagsResult, DescribeTagsError> {
         let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "WorkspacesService.DescribeTags");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -2094,7 +2094,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -2117,13 +2117,13 @@ where
     /// <p>Describes the available WorkSpace bundles.</p> <p>You can filter the results using either bundle ID or owner, but not both.</p>
     fn describe_workspace_bundles(
         &self,
-        input: &DescribeWorkspaceBundlesRequest,
+        input: DescribeWorkspaceBundlesRequest,
     ) -> RusotoFuture<DescribeWorkspaceBundlesResult, DescribeWorkspaceBundlesError> {
         let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "WorkspacesService.DescribeWorkspaceBundles");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -2131,7 +2131,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -2154,7 +2154,7 @@ where
     /// <p>Describes the available AWS Directory Service directories that are registered with Amazon WorkSpaces.</p>
     fn describe_workspace_directories(
         &self,
-        input: &DescribeWorkspaceDirectoriesRequest,
+        input: DescribeWorkspaceDirectoriesRequest,
     ) -> RusotoFuture<DescribeWorkspaceDirectoriesResult, DescribeWorkspaceDirectoriesError> {
         let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
 
@@ -2163,7 +2163,7 @@ where
             "x-amz-target",
             "WorkspacesService.DescribeWorkspaceDirectories",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -2171,7 +2171,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -2194,13 +2194,13 @@ where
     /// <p>Describes the specified WorkSpaces.</p> <p>You can filter the results using bundle ID, directory ID, or owner, but you can specify only one filter at a time.</p>
     fn describe_workspaces(
         &self,
-        input: &DescribeWorkspacesRequest,
+        input: DescribeWorkspacesRequest,
     ) -> RusotoFuture<DescribeWorkspacesResult, DescribeWorkspacesError> {
         let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "WorkspacesService.DescribeWorkspaces");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -2208,7 +2208,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -2231,7 +2231,7 @@ where
     /// <p>Describes the connection status of the specified WorkSpaces.</p>
     fn describe_workspaces_connection_status(
         &self,
-        input: &DescribeWorkspacesConnectionStatusRequest,
+        input: DescribeWorkspacesConnectionStatusRequest,
     ) -> RusotoFuture<
         DescribeWorkspacesConnectionStatusResult,
         DescribeWorkspacesConnectionStatusError,
@@ -2243,7 +2243,7 @@ where
             "x-amz-target",
             "WorkspacesService.DescribeWorkspacesConnectionStatus",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -2251,7 +2251,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -2274,7 +2274,7 @@ where
     /// <p>Modifies the specified WorkSpace properties.</p>
     fn modify_workspace_properties(
         &self,
-        input: &ModifyWorkspacePropertiesRequest,
+        input: ModifyWorkspacePropertiesRequest,
     ) -> RusotoFuture<ModifyWorkspacePropertiesResult, ModifyWorkspacePropertiesError> {
         let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
 
@@ -2283,7 +2283,7 @@ where
             "x-amz-target",
             "WorkspacesService.ModifyWorkspaceProperties",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -2291,7 +2291,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -2314,13 +2314,13 @@ where
     /// <p>Reboots the specified WorkSpaces.</p> <p>You cannot reboot a WorkSpace unless its state is <code>AVAILABLE</code>, <code>IMPAIRED</code>, or <code>INOPERABLE</code>.</p> <p>This operation is asynchronous and returns before the WorkSpaces have rebooted.</p>
     fn reboot_workspaces(
         &self,
-        input: &RebootWorkspacesRequest,
+        input: RebootWorkspacesRequest,
     ) -> RusotoFuture<RebootWorkspacesResult, RebootWorkspacesError> {
         let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "WorkspacesService.RebootWorkspaces");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -2328,7 +2328,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -2351,13 +2351,13 @@ where
     /// <p>Rebuilds the specified WorkSpaces.</p> <p>You cannot rebuild a WorkSpace unless its state is <code>AVAILABLE</code> or <code>ERROR</code>.</p> <p>Rebuilding a WorkSpace is a potentially destructive action that can result in the loss of data. For more information, see <a href="http://docs.aws.amazon.com/workspaces/latest/adminguide/reset-workspace.html">Rebuild a WorkSpace</a>.</p> <p>This operation is asynchronous and returns before the WorkSpaces have been completely rebuilt.</p>
     fn rebuild_workspaces(
         &self,
-        input: &RebuildWorkspacesRequest,
+        input: RebuildWorkspacesRequest,
     ) -> RusotoFuture<RebuildWorkspacesResult, RebuildWorkspacesError> {
         let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "WorkspacesService.RebuildWorkspaces");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -2365,7 +2365,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -2388,13 +2388,13 @@ where
     /// <p>Starts the specified WorkSpaces.</p> <p>You cannot start a WorkSpace unless it has a running mode of <code>AutoStop</code> and a state of <code>STOPPED</code>.</p>
     fn start_workspaces(
         &self,
-        input: &StartWorkspacesRequest,
+        input: StartWorkspacesRequest,
     ) -> RusotoFuture<StartWorkspacesResult, StartWorkspacesError> {
         let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "WorkspacesService.StartWorkspaces");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -2402,7 +2402,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -2425,13 +2425,13 @@ where
     /// <p> Stops the specified WorkSpaces.</p> <p>You cannot stop a WorkSpace unless it has a running mode of <code>AutoStop</code> and a state of <code>AVAILABLE</code>, <code>IMPAIRED</code>, <code>UNHEALTHY</code>, or <code>ERROR</code>.</p>
     fn stop_workspaces(
         &self,
-        input: &StopWorkspacesRequest,
+        input: StopWorkspacesRequest,
     ) -> RusotoFuture<StopWorkspacesResult, StopWorkspacesError> {
         let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "WorkspacesService.StopWorkspaces");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -2439,7 +2439,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -2462,13 +2462,13 @@ where
     /// <p>Terminates the specified WorkSpaces.</p> <p>Terminating a WorkSpace is a permanent action and cannot be undone. The user's data is destroyed. If you need to archive any user data, contact Amazon Web Services before terminating the WorkSpace.</p> <p>You can terminate a WorkSpace that is in any state except <code>SUSPENDED</code>.</p> <p>This operation is asynchronous and returns before the WorkSpaces have been completely terminated.</p>
     fn terminate_workspaces(
         &self,
-        input: &TerminateWorkspacesRequest,
+        input: TerminateWorkspacesRequest,
     ) -> RusotoFuture<TerminateWorkspacesResult, TerminateWorkspacesError> {
         let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "WorkspacesService.TerminateWorkspaces");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -2476,7 +2476,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 

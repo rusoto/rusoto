@@ -3,6 +3,7 @@
 ## [Unreleased]
 (Please put an entry here in each PR)
 
+- Remove `impl Display for Region` since it was of little use and confusingly similar to `Region::name()`.
 - More efficiently and correctly remove scheme from `Region::Custom` endpoints
 - Prevent reactor from hanging indefinitely when using the new tokio release
 - Fix deserialization for empty JSON responses
@@ -11,6 +12,9 @@
 - Adds Serverless Repo service
 - Add Alexa for Business service
 - Add [Secrets Manager](https://docs.aws.amazon.com/secretsmanager/latest/userguide/intro.html) service
+- Support streaming uploads for services like S3
+- Implement `DispatchSignedRequest` and `ProvideAwsCredentials` for `Arc<>` and `Rc<>` wrapped types
+- Changed HttpClient to be generic over hyper::Connect, default HttpClient<C = HttpsConnector<HttpConnector>>, see #1033
 
 ## [0.32.0] - 2018-03-03
 

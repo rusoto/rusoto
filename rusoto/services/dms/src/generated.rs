@@ -18,18 +18,18 @@ use std::io;
 use futures::future;
 use futures::Future;
 use rusoto_core::reactor::{CredentialsProvider, RequestDispatcher};
-use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::region;
+use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::{ClientInner, RusotoFuture};
 
-use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
+use rusoto_core::request::HttpDispatchError;
 
-use serde_json;
-use rusoto_core::signature::SignedRequest;
-use serde_json::Value as SerdeJsonValue;
-use serde_json::from_str;
 use hyper::StatusCode;
+use rusoto_core::signature::SignedRequest;
+use serde_json;
+use serde_json::from_str;
+use serde_json::Value as SerdeJsonValue;
 /// <p>Describes a quota for an AWS account, for example, the number of replication instances allowed.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct AccountQuota {
@@ -96,8 +96,11 @@ pub struct Certificate {
     pub certificate_pem: Option<String>,
     /// <p>The location of the imported Oracle Wallet certificate for use with SSL.</p>
     #[serde(rename = "CertificateWallet")]
-    #[serde(deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
-            serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob", default)]
+    #[serde(
+        deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
+        serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
+        default
+    )]
     pub certificate_wallet: Option<Vec<u8>>,
     /// <p>The key length of the cryptographic algorithm being used.</p>
     #[serde(rename = "KeyLength")]
@@ -1178,8 +1181,11 @@ pub struct ImportCertificateMessage {
     pub certificate_pem: Option<String>,
     /// <p>The location of the imported Oracle Wallet certificate for use with SSL.</p>
     #[serde(rename = "CertificateWallet")]
-    #[serde(deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
-            serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob", default)]
+    #[serde(
+        deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
+        serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
+        default
+    )]
     pub certificate_wallet: Option<Vec<u8>>,
     /// <p>The tags associated with the certificate.</p>
     #[serde(rename = "Tags")]
@@ -6124,73 +6130,73 @@ pub trait DatabaseMigrationService {
     /// <p>Adds metadata tags to a DMS resource, including replication instance, endpoint, security group, and migration task. These tags can also be used with cost allocation reporting to track cost associated with DMS resources, or used in a Condition statement in an IAM policy for DMS.</p>
     fn add_tags_to_resource(
         &self,
-        input: &AddTagsToResourceMessage,
+        input: AddTagsToResourceMessage,
     ) -> RusotoFuture<AddTagsToResourceResponse, AddTagsToResourceError>;
 
     /// <p>Creates an endpoint using the provided settings.</p>
     fn create_endpoint(
         &self,
-        input: &CreateEndpointMessage,
+        input: CreateEndpointMessage,
     ) -> RusotoFuture<CreateEndpointResponse, CreateEndpointError>;
 
     /// <p> Creates an AWS DMS event notification subscription. </p> <p>You can specify the type of source (<code>SourceType</code>) you want to be notified of, provide a list of AWS DMS source IDs (<code>SourceIds</code>) that triggers the events, and provide a list of event categories (<code>EventCategories</code>) for events you want to be notified of. If you specify both the <code>SourceType</code> and <code>SourceIds</code>, such as <code>SourceType = replication-instance</code> and <code>SourceIdentifier = my-replinstance</code>, you will be notified of all the replication instance events for the specified source. If you specify a <code>SourceType</code> but don't specify a <code>SourceIdentifier</code>, you receive notice of the events for that source type for all your AWS DMS sources. If you don't specify either <code>SourceType</code> nor <code>SourceIdentifier</code>, you will be notified of events generated from all AWS DMS sources belonging to your customer account.</p> <p>For more information about AWS DMS events, see <a href="http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Events.html"> Working with Events and Notifications </a> in the AWS Database MIgration Service User Guide.</p>
     fn create_event_subscription(
         &self,
-        input: &CreateEventSubscriptionMessage,
+        input: CreateEventSubscriptionMessage,
     ) -> RusotoFuture<CreateEventSubscriptionResponse, CreateEventSubscriptionError>;
 
     /// <p>Creates the replication instance using the specified parameters.</p>
     fn create_replication_instance(
         &self,
-        input: &CreateReplicationInstanceMessage,
+        input: CreateReplicationInstanceMessage,
     ) -> RusotoFuture<CreateReplicationInstanceResponse, CreateReplicationInstanceError>;
 
     /// <p>Creates a replication subnet group given a list of the subnet IDs in a VPC.</p>
     fn create_replication_subnet_group(
         &self,
-        input: &CreateReplicationSubnetGroupMessage,
+        input: CreateReplicationSubnetGroupMessage,
     ) -> RusotoFuture<CreateReplicationSubnetGroupResponse, CreateReplicationSubnetGroupError>;
 
     /// <p>Creates a replication task using the specified parameters.</p>
     fn create_replication_task(
         &self,
-        input: &CreateReplicationTaskMessage,
+        input: CreateReplicationTaskMessage,
     ) -> RusotoFuture<CreateReplicationTaskResponse, CreateReplicationTaskError>;
 
     /// <p>Deletes the specified certificate. </p>
     fn delete_certificate(
         &self,
-        input: &DeleteCertificateMessage,
+        input: DeleteCertificateMessage,
     ) -> RusotoFuture<DeleteCertificateResponse, DeleteCertificateError>;
 
     /// <p><p>Deletes the specified endpoint.</p> <note> <p>All tasks associated with the endpoint must be deleted before you can delete the endpoint.</p> </note> <p/></p>
     fn delete_endpoint(
         &self,
-        input: &DeleteEndpointMessage,
+        input: DeleteEndpointMessage,
     ) -> RusotoFuture<DeleteEndpointResponse, DeleteEndpointError>;
 
     /// <p> Deletes an AWS DMS event subscription. </p>
     fn delete_event_subscription(
         &self,
-        input: &DeleteEventSubscriptionMessage,
+        input: DeleteEventSubscriptionMessage,
     ) -> RusotoFuture<DeleteEventSubscriptionResponse, DeleteEventSubscriptionError>;
 
     /// <p><p>Deletes the specified replication instance.</p> <note> <p>You must delete any migration tasks that are associated with the replication instance before you can delete it.</p> </note> <p/></p>
     fn delete_replication_instance(
         &self,
-        input: &DeleteReplicationInstanceMessage,
+        input: DeleteReplicationInstanceMessage,
     ) -> RusotoFuture<DeleteReplicationInstanceResponse, DeleteReplicationInstanceError>;
 
     /// <p>Deletes a subnet group.</p>
     fn delete_replication_subnet_group(
         &self,
-        input: &DeleteReplicationSubnetGroupMessage,
+        input: DeleteReplicationSubnetGroupMessage,
     ) -> RusotoFuture<DeleteReplicationSubnetGroupResponse, DeleteReplicationSubnetGroupError>;
 
     /// <p>Deletes the specified replication task.</p>
     fn delete_replication_task(
         &self,
-        input: &DeleteReplicationTaskMessage,
+        input: DeleteReplicationTaskMessage,
     ) -> RusotoFuture<DeleteReplicationTaskResponse, DeleteReplicationTaskError>;
 
     /// <p>Lists all of the AWS DMS attributes for a customer account. The attributes include AWS DMS quotas for the account, such as the number of replication instances allowed. The description for a quota includes the quota name, current usage toward that quota, and the quota's maximum value.</p> <p>This command does not take any parameters.</p>
@@ -6201,49 +6207,49 @@ pub trait DatabaseMigrationService {
     /// <p>Provides a description of the certificate.</p>
     fn describe_certificates(
         &self,
-        input: &DescribeCertificatesMessage,
+        input: DescribeCertificatesMessage,
     ) -> RusotoFuture<DescribeCertificatesResponse, DescribeCertificatesError>;
 
     /// <p>Describes the status of the connections that have been made between the replication instance and an endpoint. Connections are created when you test an endpoint.</p>
     fn describe_connections(
         &self,
-        input: &DescribeConnectionsMessage,
+        input: DescribeConnectionsMessage,
     ) -> RusotoFuture<DescribeConnectionsResponse, DescribeConnectionsError>;
 
     /// <p>Returns information about the type of endpoints available.</p>
     fn describe_endpoint_types(
         &self,
-        input: &DescribeEndpointTypesMessage,
+        input: DescribeEndpointTypesMessage,
     ) -> RusotoFuture<DescribeEndpointTypesResponse, DescribeEndpointTypesError>;
 
     /// <p>Returns information about the endpoints for your account in the current region.</p>
     fn describe_endpoints(
         &self,
-        input: &DescribeEndpointsMessage,
+        input: DescribeEndpointsMessage,
     ) -> RusotoFuture<DescribeEndpointsResponse, DescribeEndpointsError>;
 
     /// <p>Lists categories for all event source types, or, if specified, for a specified source type. You can see a list of the event categories and source types in <a href="http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Events.html"> Working with Events and Notifications </a> in the AWS Database Migration Service User Guide. </p>
     fn describe_event_categories(
         &self,
-        input: &DescribeEventCategoriesMessage,
+        input: DescribeEventCategoriesMessage,
     ) -> RusotoFuture<DescribeEventCategoriesResponse, DescribeEventCategoriesError>;
 
     /// <p>Lists all the event subscriptions for a customer account. The description of a subscription includes <code>SubscriptionName</code>, <code>SNSTopicARN</code>, <code>CustomerID</code>, <code>SourceType</code>, <code>SourceID</code>, <code>CreationTime</code>, and <code>Status</code>. </p> <p>If you specify <code>SubscriptionName</code>, this action lists the description for that subscription.</p>
     fn describe_event_subscriptions(
         &self,
-        input: &DescribeEventSubscriptionsMessage,
+        input: DescribeEventSubscriptionsMessage,
     ) -> RusotoFuture<DescribeEventSubscriptionsResponse, DescribeEventSubscriptionsError>;
 
     /// <p> Lists events for a given source identifier and source type. You can also specify a start and end time. For more information on AWS DMS events, see <a href="http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Events.html"> Working with Events and Notifications </a>. </p>
     fn describe_events(
         &self,
-        input: &DescribeEventsMessage,
+        input: DescribeEventsMessage,
     ) -> RusotoFuture<DescribeEventsResponse, DescribeEventsError>;
 
     /// <p>Returns information about the replication instance types that can be created in the specified region.</p>
     fn describe_orderable_replication_instances(
         &self,
-        input: &DescribeOrderableReplicationInstancesMessage,
+        input: DescribeOrderableReplicationInstancesMessage,
     ) -> RusotoFuture<
         DescribeOrderableReplicationInstancesResponse,
         DescribeOrderableReplicationInstancesError,
@@ -6252,13 +6258,13 @@ pub trait DatabaseMigrationService {
     /// <p>Returns the status of the RefreshSchemas operation.</p>
     fn describe_refresh_schemas_status(
         &self,
-        input: &DescribeRefreshSchemasStatusMessage,
+        input: DescribeRefreshSchemasStatusMessage,
     ) -> RusotoFuture<DescribeRefreshSchemasStatusResponse, DescribeRefreshSchemasStatusError>;
 
     /// <p>Returns information about the task logs for the specified task.</p>
     fn describe_replication_instance_task_logs(
         &self,
-        input: &DescribeReplicationInstanceTaskLogsMessage,
+        input: DescribeReplicationInstanceTaskLogsMessage,
     ) -> RusotoFuture<
         DescribeReplicationInstanceTaskLogsResponse,
         DescribeReplicationInstanceTaskLogsError,
@@ -6267,19 +6273,19 @@ pub trait DatabaseMigrationService {
     /// <p>Returns information about replication instances for your account in the current region.</p>
     fn describe_replication_instances(
         &self,
-        input: &DescribeReplicationInstancesMessage,
+        input: DescribeReplicationInstancesMessage,
     ) -> RusotoFuture<DescribeReplicationInstancesResponse, DescribeReplicationInstancesError>;
 
     /// <p>Returns information about the replication subnet groups.</p>
     fn describe_replication_subnet_groups(
         &self,
-        input: &DescribeReplicationSubnetGroupsMessage,
+        input: DescribeReplicationSubnetGroupsMessage,
     ) -> RusotoFuture<DescribeReplicationSubnetGroupsResponse, DescribeReplicationSubnetGroupsError>;
 
     /// <p>Returns the task assessment results from Amazon S3. This action always returns the latest results.</p>
     fn describe_replication_task_assessment_results(
         &self,
-        input: &DescribeReplicationTaskAssessmentResultsMessage,
+        input: DescribeReplicationTaskAssessmentResultsMessage,
     ) -> RusotoFuture<
         DescribeReplicationTaskAssessmentResultsResponse,
         DescribeReplicationTaskAssessmentResultsError,
@@ -6288,109 +6294,109 @@ pub trait DatabaseMigrationService {
     /// <p>Returns information about replication tasks for your account in the current region.</p>
     fn describe_replication_tasks(
         &self,
-        input: &DescribeReplicationTasksMessage,
+        input: DescribeReplicationTasksMessage,
     ) -> RusotoFuture<DescribeReplicationTasksResponse, DescribeReplicationTasksError>;
 
     /// <p><p>Returns information about the schema for the specified endpoint.</p> <p/></p>
     fn describe_schemas(
         &self,
-        input: &DescribeSchemasMessage,
+        input: DescribeSchemasMessage,
     ) -> RusotoFuture<DescribeSchemasResponse, DescribeSchemasError>;
 
     /// <p>Returns table statistics on the database migration task, including table name, rows inserted, rows updated, and rows deleted.</p> <p>Note that the "last updated" column the DMS console only indicates the time that AWS DMS last updated the table statistics record for a table. It does not indicate the time of the last update to the table.</p>
     fn describe_table_statistics(
         &self,
-        input: &DescribeTableStatisticsMessage,
+        input: DescribeTableStatisticsMessage,
     ) -> RusotoFuture<DescribeTableStatisticsResponse, DescribeTableStatisticsError>;
 
     /// <p>Uploads the specified certificate.</p>
     fn import_certificate(
         &self,
-        input: &ImportCertificateMessage,
+        input: ImportCertificateMessage,
     ) -> RusotoFuture<ImportCertificateResponse, ImportCertificateError>;
 
     /// <p>Lists all tags for an AWS DMS resource.</p>
     fn list_tags_for_resource(
         &self,
-        input: &ListTagsForResourceMessage,
+        input: ListTagsForResourceMessage,
     ) -> RusotoFuture<ListTagsForResourceResponse, ListTagsForResourceError>;
 
     /// <p>Modifies the specified endpoint.</p>
     fn modify_endpoint(
         &self,
-        input: &ModifyEndpointMessage,
+        input: ModifyEndpointMessage,
     ) -> RusotoFuture<ModifyEndpointResponse, ModifyEndpointError>;
 
     /// <p>Modifies an existing AWS DMS event notification subscription. </p>
     fn modify_event_subscription(
         &self,
-        input: &ModifyEventSubscriptionMessage,
+        input: ModifyEventSubscriptionMessage,
     ) -> RusotoFuture<ModifyEventSubscriptionResponse, ModifyEventSubscriptionError>;
 
     /// <p><p>Modifies the replication instance to apply new settings. You can change one or more parameters by specifying these parameters and the new values in the request.</p> <p>Some settings are applied during the maintenance window.</p> <p/></p>
     fn modify_replication_instance(
         &self,
-        input: &ModifyReplicationInstanceMessage,
+        input: ModifyReplicationInstanceMessage,
     ) -> RusotoFuture<ModifyReplicationInstanceResponse, ModifyReplicationInstanceError>;
 
     /// <p>Modifies the settings for the specified replication subnet group.</p>
     fn modify_replication_subnet_group(
         &self,
-        input: &ModifyReplicationSubnetGroupMessage,
+        input: ModifyReplicationSubnetGroupMessage,
     ) -> RusotoFuture<ModifyReplicationSubnetGroupResponse, ModifyReplicationSubnetGroupError>;
 
     /// <p>Modifies the specified replication task.</p> <p>You can't modify the task endpoints. The task must be stopped before you can modify it. </p> <p>For more information about AWS DMS tasks, see the AWS DMS user guide at <a href="http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Tasks.html"> Working with Migration Tasks </a> </p>
     fn modify_replication_task(
         &self,
-        input: &ModifyReplicationTaskMessage,
+        input: ModifyReplicationTaskMessage,
     ) -> RusotoFuture<ModifyReplicationTaskResponse, ModifyReplicationTaskError>;
 
     /// <p>Reboots a replication instance. Rebooting results in a momentary outage, until the replication instance becomes available again.</p>
     fn reboot_replication_instance(
         &self,
-        input: &RebootReplicationInstanceMessage,
+        input: RebootReplicationInstanceMessage,
     ) -> RusotoFuture<RebootReplicationInstanceResponse, RebootReplicationInstanceError>;
 
     /// <p>Populates the schema for the specified endpoint. This is an asynchronous operation and can take several minutes. You can check the status of this operation by calling the DescribeRefreshSchemasStatus operation.</p>
     fn refresh_schemas(
         &self,
-        input: &RefreshSchemasMessage,
+        input: RefreshSchemasMessage,
     ) -> RusotoFuture<RefreshSchemasResponse, RefreshSchemasError>;
 
     /// <p>Reloads the target database table with the source data. </p>
     fn reload_tables(
         &self,
-        input: &ReloadTablesMessage,
+        input: ReloadTablesMessage,
     ) -> RusotoFuture<ReloadTablesResponse, ReloadTablesError>;
 
     /// <p>Removes metadata tags from a DMS resource.</p>
     fn remove_tags_from_resource(
         &self,
-        input: &RemoveTagsFromResourceMessage,
+        input: RemoveTagsFromResourceMessage,
     ) -> RusotoFuture<RemoveTagsFromResourceResponse, RemoveTagsFromResourceError>;
 
     /// <p>Starts the replication task.</p> <p>For more information about AWS DMS tasks, see the AWS DMS user guide at <a href="http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Tasks.html"> Working with Migration Tasks </a> </p>
     fn start_replication_task(
         &self,
-        input: &StartReplicationTaskMessage,
+        input: StartReplicationTaskMessage,
     ) -> RusotoFuture<StartReplicationTaskResponse, StartReplicationTaskError>;
 
     /// <p> Starts the replication task assessment for unsupported data types in the source database. </p>
     fn start_replication_task_assessment(
         &self,
-        input: &StartReplicationTaskAssessmentMessage,
+        input: StartReplicationTaskAssessmentMessage,
     ) -> RusotoFuture<StartReplicationTaskAssessmentResponse, StartReplicationTaskAssessmentError>;
 
     /// <p><p>Stops the replication task.</p> <p/></p>
     fn stop_replication_task(
         &self,
-        input: &StopReplicationTaskMessage,
+        input: StopReplicationTaskMessage,
     ) -> RusotoFuture<StopReplicationTaskResponse, StopReplicationTaskError>;
 
     /// <p>Tests the connection between the replication instance and the endpoint.</p>
     fn test_connection(
         &self,
-        input: &TestConnectionMessage,
+        input: TestConnectionMessage,
     ) -> RusotoFuture<TestConnectionResponse, TestConnectionError>;
 }
 /// A client for the AWS Database Migration Service API.
@@ -6439,13 +6445,13 @@ where
     /// <p>Adds metadata tags to a DMS resource, including replication instance, endpoint, security group, and migration task. These tags can also be used with cost allocation reporting to track cost associated with DMS resources, or used in a Condition statement in an IAM policy for DMS.</p>
     fn add_tags_to_resource(
         &self,
-        input: &AddTagsToResourceMessage,
+        input: AddTagsToResourceMessage,
     ) -> RusotoFuture<AddTagsToResourceResponse, AddTagsToResourceError> {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonDMSv20160101.AddTagsToResource");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -6453,7 +6459,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -6476,13 +6482,13 @@ where
     /// <p>Creates an endpoint using the provided settings.</p>
     fn create_endpoint(
         &self,
-        input: &CreateEndpointMessage,
+        input: CreateEndpointMessage,
     ) -> RusotoFuture<CreateEndpointResponse, CreateEndpointError> {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonDMSv20160101.CreateEndpoint");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -6490,7 +6496,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -6513,13 +6519,13 @@ where
     /// <p> Creates an AWS DMS event notification subscription. </p> <p>You can specify the type of source (<code>SourceType</code>) you want to be notified of, provide a list of AWS DMS source IDs (<code>SourceIds</code>) that triggers the events, and provide a list of event categories (<code>EventCategories</code>) for events you want to be notified of. If you specify both the <code>SourceType</code> and <code>SourceIds</code>, such as <code>SourceType = replication-instance</code> and <code>SourceIdentifier = my-replinstance</code>, you will be notified of all the replication instance events for the specified source. If you specify a <code>SourceType</code> but don't specify a <code>SourceIdentifier</code>, you receive notice of the events for that source type for all your AWS DMS sources. If you don't specify either <code>SourceType</code> nor <code>SourceIdentifier</code>, you will be notified of events generated from all AWS DMS sources belonging to your customer account.</p> <p>For more information about AWS DMS events, see <a href="http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Events.html"> Working with Events and Notifications </a> in the AWS Database MIgration Service User Guide.</p>
     fn create_event_subscription(
         &self,
-        input: &CreateEventSubscriptionMessage,
+        input: CreateEventSubscriptionMessage,
     ) -> RusotoFuture<CreateEventSubscriptionResponse, CreateEventSubscriptionError> {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonDMSv20160101.CreateEventSubscription");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -6527,7 +6533,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -6550,7 +6556,7 @@ where
     /// <p>Creates the replication instance using the specified parameters.</p>
     fn create_replication_instance(
         &self,
-        input: &CreateReplicationInstanceMessage,
+        input: CreateReplicationInstanceMessage,
     ) -> RusotoFuture<CreateReplicationInstanceResponse, CreateReplicationInstanceError> {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
@@ -6559,7 +6565,7 @@ where
             "x-amz-target",
             "AmazonDMSv20160101.CreateReplicationInstance",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -6567,7 +6573,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -6590,7 +6596,7 @@ where
     /// <p>Creates a replication subnet group given a list of the subnet IDs in a VPC.</p>
     fn create_replication_subnet_group(
         &self,
-        input: &CreateReplicationSubnetGroupMessage,
+        input: CreateReplicationSubnetGroupMessage,
     ) -> RusotoFuture<CreateReplicationSubnetGroupResponse, CreateReplicationSubnetGroupError> {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
@@ -6599,7 +6605,7 @@ where
             "x-amz-target",
             "AmazonDMSv20160101.CreateReplicationSubnetGroup",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -6607,7 +6613,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -6630,13 +6636,13 @@ where
     /// <p>Creates a replication task using the specified parameters.</p>
     fn create_replication_task(
         &self,
-        input: &CreateReplicationTaskMessage,
+        input: CreateReplicationTaskMessage,
     ) -> RusotoFuture<CreateReplicationTaskResponse, CreateReplicationTaskError> {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonDMSv20160101.CreateReplicationTask");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -6644,7 +6650,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -6667,13 +6673,13 @@ where
     /// <p>Deletes the specified certificate. </p>
     fn delete_certificate(
         &self,
-        input: &DeleteCertificateMessage,
+        input: DeleteCertificateMessage,
     ) -> RusotoFuture<DeleteCertificateResponse, DeleteCertificateError> {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonDMSv20160101.DeleteCertificate");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -6681,7 +6687,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -6704,13 +6710,13 @@ where
     /// <p><p>Deletes the specified endpoint.</p> <note> <p>All tasks associated with the endpoint must be deleted before you can delete the endpoint.</p> </note> <p/></p>
     fn delete_endpoint(
         &self,
-        input: &DeleteEndpointMessage,
+        input: DeleteEndpointMessage,
     ) -> RusotoFuture<DeleteEndpointResponse, DeleteEndpointError> {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonDMSv20160101.DeleteEndpoint");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -6718,7 +6724,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -6741,13 +6747,13 @@ where
     /// <p> Deletes an AWS DMS event subscription. </p>
     fn delete_event_subscription(
         &self,
-        input: &DeleteEventSubscriptionMessage,
+        input: DeleteEventSubscriptionMessage,
     ) -> RusotoFuture<DeleteEventSubscriptionResponse, DeleteEventSubscriptionError> {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonDMSv20160101.DeleteEventSubscription");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -6755,7 +6761,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -6778,7 +6784,7 @@ where
     /// <p><p>Deletes the specified replication instance.</p> <note> <p>You must delete any migration tasks that are associated with the replication instance before you can delete it.</p> </note> <p/></p>
     fn delete_replication_instance(
         &self,
-        input: &DeleteReplicationInstanceMessage,
+        input: DeleteReplicationInstanceMessage,
     ) -> RusotoFuture<DeleteReplicationInstanceResponse, DeleteReplicationInstanceError> {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
@@ -6787,7 +6793,7 @@ where
             "x-amz-target",
             "AmazonDMSv20160101.DeleteReplicationInstance",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -6795,7 +6801,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -6818,7 +6824,7 @@ where
     /// <p>Deletes a subnet group.</p>
     fn delete_replication_subnet_group(
         &self,
-        input: &DeleteReplicationSubnetGroupMessage,
+        input: DeleteReplicationSubnetGroupMessage,
     ) -> RusotoFuture<DeleteReplicationSubnetGroupResponse, DeleteReplicationSubnetGroupError> {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
@@ -6827,7 +6833,7 @@ where
             "x-amz-target",
             "AmazonDMSv20160101.DeleteReplicationSubnetGroup",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -6835,7 +6841,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -6858,13 +6864,13 @@ where
     /// <p>Deletes the specified replication task.</p>
     fn delete_replication_task(
         &self,
-        input: &DeleteReplicationTaskMessage,
+        input: DeleteReplicationTaskMessage,
     ) -> RusotoFuture<DeleteReplicationTaskResponse, DeleteReplicationTaskError> {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonDMSv20160101.DeleteReplicationTask");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -6872,7 +6878,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -6910,7 +6916,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -6933,13 +6939,13 @@ where
     /// <p>Provides a description of the certificate.</p>
     fn describe_certificates(
         &self,
-        input: &DescribeCertificatesMessage,
+        input: DescribeCertificatesMessage,
     ) -> RusotoFuture<DescribeCertificatesResponse, DescribeCertificatesError> {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonDMSv20160101.DescribeCertificates");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -6947,7 +6953,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -6970,13 +6976,13 @@ where
     /// <p>Describes the status of the connections that have been made between the replication instance and an endpoint. Connections are created when you test an endpoint.</p>
     fn describe_connections(
         &self,
-        input: &DescribeConnectionsMessage,
+        input: DescribeConnectionsMessage,
     ) -> RusotoFuture<DescribeConnectionsResponse, DescribeConnectionsError> {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonDMSv20160101.DescribeConnections");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -6984,7 +6990,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -7007,13 +7013,13 @@ where
     /// <p>Returns information about the type of endpoints available.</p>
     fn describe_endpoint_types(
         &self,
-        input: &DescribeEndpointTypesMessage,
+        input: DescribeEndpointTypesMessage,
     ) -> RusotoFuture<DescribeEndpointTypesResponse, DescribeEndpointTypesError> {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonDMSv20160101.DescribeEndpointTypes");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -7021,7 +7027,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -7044,13 +7050,13 @@ where
     /// <p>Returns information about the endpoints for your account in the current region.</p>
     fn describe_endpoints(
         &self,
-        input: &DescribeEndpointsMessage,
+        input: DescribeEndpointsMessage,
     ) -> RusotoFuture<DescribeEndpointsResponse, DescribeEndpointsError> {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonDMSv20160101.DescribeEndpoints");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -7058,7 +7064,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -7081,13 +7087,13 @@ where
     /// <p>Lists categories for all event source types, or, if specified, for a specified source type. You can see a list of the event categories and source types in <a href="http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Events.html"> Working with Events and Notifications </a> in the AWS Database Migration Service User Guide. </p>
     fn describe_event_categories(
         &self,
-        input: &DescribeEventCategoriesMessage,
+        input: DescribeEventCategoriesMessage,
     ) -> RusotoFuture<DescribeEventCategoriesResponse, DescribeEventCategoriesError> {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonDMSv20160101.DescribeEventCategories");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -7095,7 +7101,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -7118,7 +7124,7 @@ where
     /// <p>Lists all the event subscriptions for a customer account. The description of a subscription includes <code>SubscriptionName</code>, <code>SNSTopicARN</code>, <code>CustomerID</code>, <code>SourceType</code>, <code>SourceID</code>, <code>CreationTime</code>, and <code>Status</code>. </p> <p>If you specify <code>SubscriptionName</code>, this action lists the description for that subscription.</p>
     fn describe_event_subscriptions(
         &self,
-        input: &DescribeEventSubscriptionsMessage,
+        input: DescribeEventSubscriptionsMessage,
     ) -> RusotoFuture<DescribeEventSubscriptionsResponse, DescribeEventSubscriptionsError> {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
@@ -7127,7 +7133,7 @@ where
             "x-amz-target",
             "AmazonDMSv20160101.DescribeEventSubscriptions",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -7135,7 +7141,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -7158,13 +7164,13 @@ where
     /// <p> Lists events for a given source identifier and source type. You can also specify a start and end time. For more information on AWS DMS events, see <a href="http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Events.html"> Working with Events and Notifications </a>. </p>
     fn describe_events(
         &self,
-        input: &DescribeEventsMessage,
+        input: DescribeEventsMessage,
     ) -> RusotoFuture<DescribeEventsResponse, DescribeEventsError> {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonDMSv20160101.DescribeEvents");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -7172,7 +7178,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -7195,7 +7201,7 @@ where
     /// <p>Returns information about the replication instance types that can be created in the specified region.</p>
     fn describe_orderable_replication_instances(
         &self,
-        input: &DescribeOrderableReplicationInstancesMessage,
+        input: DescribeOrderableReplicationInstancesMessage,
     ) -> RusotoFuture<
         DescribeOrderableReplicationInstancesResponse,
         DescribeOrderableReplicationInstancesError,
@@ -7207,7 +7213,7 @@ where
             "x-amz-target",
             "AmazonDMSv20160101.DescribeOrderableReplicationInstances",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -7215,7 +7221,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -7238,7 +7244,7 @@ where
     /// <p>Returns the status of the RefreshSchemas operation.</p>
     fn describe_refresh_schemas_status(
         &self,
-        input: &DescribeRefreshSchemasStatusMessage,
+        input: DescribeRefreshSchemasStatusMessage,
     ) -> RusotoFuture<DescribeRefreshSchemasStatusResponse, DescribeRefreshSchemasStatusError> {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
@@ -7247,7 +7253,7 @@ where
             "x-amz-target",
             "AmazonDMSv20160101.DescribeRefreshSchemasStatus",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -7255,7 +7261,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -7278,7 +7284,7 @@ where
     /// <p>Returns information about the task logs for the specified task.</p>
     fn describe_replication_instance_task_logs(
         &self,
-        input: &DescribeReplicationInstanceTaskLogsMessage,
+        input: DescribeReplicationInstanceTaskLogsMessage,
     ) -> RusotoFuture<
         DescribeReplicationInstanceTaskLogsResponse,
         DescribeReplicationInstanceTaskLogsError,
@@ -7290,7 +7296,7 @@ where
             "x-amz-target",
             "AmazonDMSv20160101.DescribeReplicationInstanceTaskLogs",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -7298,7 +7304,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -7321,7 +7327,7 @@ where
     /// <p>Returns information about replication instances for your account in the current region.</p>
     fn describe_replication_instances(
         &self,
-        input: &DescribeReplicationInstancesMessage,
+        input: DescribeReplicationInstancesMessage,
     ) -> RusotoFuture<DescribeReplicationInstancesResponse, DescribeReplicationInstancesError> {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
@@ -7330,7 +7336,7 @@ where
             "x-amz-target",
             "AmazonDMSv20160101.DescribeReplicationInstances",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -7338,7 +7344,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -7361,7 +7367,7 @@ where
     /// <p>Returns information about the replication subnet groups.</p>
     fn describe_replication_subnet_groups(
         &self,
-        input: &DescribeReplicationSubnetGroupsMessage,
+        input: DescribeReplicationSubnetGroupsMessage,
     ) -> RusotoFuture<DescribeReplicationSubnetGroupsResponse, DescribeReplicationSubnetGroupsError>
     {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
@@ -7371,7 +7377,7 @@ where
             "x-amz-target",
             "AmazonDMSv20160101.DescribeReplicationSubnetGroups",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -7379,7 +7385,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -7402,7 +7408,7 @@ where
     /// <p>Returns the task assessment results from Amazon S3. This action always returns the latest results.</p>
     fn describe_replication_task_assessment_results(
         &self,
-        input: &DescribeReplicationTaskAssessmentResultsMessage,
+        input: DescribeReplicationTaskAssessmentResultsMessage,
     ) -> RusotoFuture<
         DescribeReplicationTaskAssessmentResultsResponse,
         DescribeReplicationTaskAssessmentResultsError,
@@ -7414,7 +7420,7 @@ where
             "x-amz-target",
             "AmazonDMSv20160101.DescribeReplicationTaskAssessmentResults",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -7422,7 +7428,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -7445,7 +7451,7 @@ where
     /// <p>Returns information about replication tasks for your account in the current region.</p>
     fn describe_replication_tasks(
         &self,
-        input: &DescribeReplicationTasksMessage,
+        input: DescribeReplicationTasksMessage,
     ) -> RusotoFuture<DescribeReplicationTasksResponse, DescribeReplicationTasksError> {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
@@ -7454,7 +7460,7 @@ where
             "x-amz-target",
             "AmazonDMSv20160101.DescribeReplicationTasks",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -7462,7 +7468,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -7485,13 +7491,13 @@ where
     /// <p><p>Returns information about the schema for the specified endpoint.</p> <p/></p>
     fn describe_schemas(
         &self,
-        input: &DescribeSchemasMessage,
+        input: DescribeSchemasMessage,
     ) -> RusotoFuture<DescribeSchemasResponse, DescribeSchemasError> {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonDMSv20160101.DescribeSchemas");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -7499,7 +7505,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -7522,13 +7528,13 @@ where
     /// <p>Returns table statistics on the database migration task, including table name, rows inserted, rows updated, and rows deleted.</p> <p>Note that the "last updated" column the DMS console only indicates the time that AWS DMS last updated the table statistics record for a table. It does not indicate the time of the last update to the table.</p>
     fn describe_table_statistics(
         &self,
-        input: &DescribeTableStatisticsMessage,
+        input: DescribeTableStatisticsMessage,
     ) -> RusotoFuture<DescribeTableStatisticsResponse, DescribeTableStatisticsError> {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonDMSv20160101.DescribeTableStatistics");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -7536,7 +7542,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -7559,13 +7565,13 @@ where
     /// <p>Uploads the specified certificate.</p>
     fn import_certificate(
         &self,
-        input: &ImportCertificateMessage,
+        input: ImportCertificateMessage,
     ) -> RusotoFuture<ImportCertificateResponse, ImportCertificateError> {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonDMSv20160101.ImportCertificate");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -7573,7 +7579,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -7596,13 +7602,13 @@ where
     /// <p>Lists all tags for an AWS DMS resource.</p>
     fn list_tags_for_resource(
         &self,
-        input: &ListTagsForResourceMessage,
+        input: ListTagsForResourceMessage,
     ) -> RusotoFuture<ListTagsForResourceResponse, ListTagsForResourceError> {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonDMSv20160101.ListTagsForResource");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -7610,7 +7616,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -7633,13 +7639,13 @@ where
     /// <p>Modifies the specified endpoint.</p>
     fn modify_endpoint(
         &self,
-        input: &ModifyEndpointMessage,
+        input: ModifyEndpointMessage,
     ) -> RusotoFuture<ModifyEndpointResponse, ModifyEndpointError> {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonDMSv20160101.ModifyEndpoint");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -7647,7 +7653,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -7670,13 +7676,13 @@ where
     /// <p>Modifies an existing AWS DMS event notification subscription. </p>
     fn modify_event_subscription(
         &self,
-        input: &ModifyEventSubscriptionMessage,
+        input: ModifyEventSubscriptionMessage,
     ) -> RusotoFuture<ModifyEventSubscriptionResponse, ModifyEventSubscriptionError> {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonDMSv20160101.ModifyEventSubscription");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -7684,7 +7690,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -7707,7 +7713,7 @@ where
     /// <p><p>Modifies the replication instance to apply new settings. You can change one or more parameters by specifying these parameters and the new values in the request.</p> <p>Some settings are applied during the maintenance window.</p> <p/></p>
     fn modify_replication_instance(
         &self,
-        input: &ModifyReplicationInstanceMessage,
+        input: ModifyReplicationInstanceMessage,
     ) -> RusotoFuture<ModifyReplicationInstanceResponse, ModifyReplicationInstanceError> {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
@@ -7716,7 +7722,7 @@ where
             "x-amz-target",
             "AmazonDMSv20160101.ModifyReplicationInstance",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -7724,7 +7730,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -7747,7 +7753,7 @@ where
     /// <p>Modifies the settings for the specified replication subnet group.</p>
     fn modify_replication_subnet_group(
         &self,
-        input: &ModifyReplicationSubnetGroupMessage,
+        input: ModifyReplicationSubnetGroupMessage,
     ) -> RusotoFuture<ModifyReplicationSubnetGroupResponse, ModifyReplicationSubnetGroupError> {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
@@ -7756,7 +7762,7 @@ where
             "x-amz-target",
             "AmazonDMSv20160101.ModifyReplicationSubnetGroup",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -7764,7 +7770,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -7787,13 +7793,13 @@ where
     /// <p>Modifies the specified replication task.</p> <p>You can't modify the task endpoints. The task must be stopped before you can modify it. </p> <p>For more information about AWS DMS tasks, see the AWS DMS user guide at <a href="http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Tasks.html"> Working with Migration Tasks </a> </p>
     fn modify_replication_task(
         &self,
-        input: &ModifyReplicationTaskMessage,
+        input: ModifyReplicationTaskMessage,
     ) -> RusotoFuture<ModifyReplicationTaskResponse, ModifyReplicationTaskError> {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonDMSv20160101.ModifyReplicationTask");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -7801,7 +7807,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -7824,7 +7830,7 @@ where
     /// <p>Reboots a replication instance. Rebooting results in a momentary outage, until the replication instance becomes available again.</p>
     fn reboot_replication_instance(
         &self,
-        input: &RebootReplicationInstanceMessage,
+        input: RebootReplicationInstanceMessage,
     ) -> RusotoFuture<RebootReplicationInstanceResponse, RebootReplicationInstanceError> {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
@@ -7833,7 +7839,7 @@ where
             "x-amz-target",
             "AmazonDMSv20160101.RebootReplicationInstance",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -7841,7 +7847,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -7864,13 +7870,13 @@ where
     /// <p>Populates the schema for the specified endpoint. This is an asynchronous operation and can take several minutes. You can check the status of this operation by calling the DescribeRefreshSchemasStatus operation.</p>
     fn refresh_schemas(
         &self,
-        input: &RefreshSchemasMessage,
+        input: RefreshSchemasMessage,
     ) -> RusotoFuture<RefreshSchemasResponse, RefreshSchemasError> {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonDMSv20160101.RefreshSchemas");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -7878,7 +7884,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -7901,13 +7907,13 @@ where
     /// <p>Reloads the target database table with the source data. </p>
     fn reload_tables(
         &self,
-        input: &ReloadTablesMessage,
+        input: ReloadTablesMessage,
     ) -> RusotoFuture<ReloadTablesResponse, ReloadTablesError> {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonDMSv20160101.ReloadTables");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -7915,7 +7921,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -7938,13 +7944,13 @@ where
     /// <p>Removes metadata tags from a DMS resource.</p>
     fn remove_tags_from_resource(
         &self,
-        input: &RemoveTagsFromResourceMessage,
+        input: RemoveTagsFromResourceMessage,
     ) -> RusotoFuture<RemoveTagsFromResourceResponse, RemoveTagsFromResourceError> {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonDMSv20160101.RemoveTagsFromResource");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -7952,7 +7958,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -7975,13 +7981,13 @@ where
     /// <p>Starts the replication task.</p> <p>For more information about AWS DMS tasks, see the AWS DMS user guide at <a href="http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Tasks.html"> Working with Migration Tasks </a> </p>
     fn start_replication_task(
         &self,
-        input: &StartReplicationTaskMessage,
+        input: StartReplicationTaskMessage,
     ) -> RusotoFuture<StartReplicationTaskResponse, StartReplicationTaskError> {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonDMSv20160101.StartReplicationTask");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -7989,7 +7995,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -8012,7 +8018,7 @@ where
     /// <p> Starts the replication task assessment for unsupported data types in the source database. </p>
     fn start_replication_task_assessment(
         &self,
-        input: &StartReplicationTaskAssessmentMessage,
+        input: StartReplicationTaskAssessmentMessage,
     ) -> RusotoFuture<StartReplicationTaskAssessmentResponse, StartReplicationTaskAssessmentError>
     {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
@@ -8022,7 +8028,7 @@ where
             "x-amz-target",
             "AmazonDMSv20160101.StartReplicationTaskAssessment",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -8030,7 +8036,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -8053,13 +8059,13 @@ where
     /// <p><p>Stops the replication task.</p> <p/></p>
     fn stop_replication_task(
         &self,
-        input: &StopReplicationTaskMessage,
+        input: StopReplicationTaskMessage,
     ) -> RusotoFuture<StopReplicationTaskResponse, StopReplicationTaskError> {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonDMSv20160101.StopReplicationTask");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -8067,7 +8073,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -8090,13 +8096,13 @@ where
     /// <p>Tests the connection between the replication instance and the endpoint.</p>
     fn test_connection(
         &self,
-        input: &TestConnectionMessage,
+        input: TestConnectionMessage,
     ) -> RusotoFuture<TestConnectionResponse, TestConnectionError> {
         let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonDMSv20160101.TestConnection");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -8104,7 +8110,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 

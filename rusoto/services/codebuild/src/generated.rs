@@ -18,18 +18,18 @@ use std::io;
 use futures::future;
 use futures::Future;
 use rusoto_core::reactor::{CredentialsProvider, RequestDispatcher};
-use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::region;
+use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::{ClientInner, RusotoFuture};
 
-use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
+use rusoto_core::request::HttpDispatchError;
 
-use serde_json;
-use rusoto_core::signature::SignedRequest;
-use serde_json::Value as SerdeJsonValue;
-use serde_json::from_str;
 use hyper::StatusCode;
+use rusoto_core::signature::SignedRequest;
+use serde_json;
+use serde_json::from_str;
+use serde_json::Value as SerdeJsonValue;
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct BatchDeleteBuildsInput {
     /// <p>The IDs of the builds to delete.</p>
@@ -2241,61 +2241,61 @@ pub trait CodeBuild {
     /// <p>Deletes one or more builds.</p>
     fn batch_delete_builds(
         &self,
-        input: &BatchDeleteBuildsInput,
+        input: BatchDeleteBuildsInput,
     ) -> RusotoFuture<BatchDeleteBuildsOutput, BatchDeleteBuildsError>;
 
     /// <p>Gets information about builds.</p>
     fn batch_get_builds(
         &self,
-        input: &BatchGetBuildsInput,
+        input: BatchGetBuildsInput,
     ) -> RusotoFuture<BatchGetBuildsOutput, BatchGetBuildsError>;
 
     /// <p>Gets information about build projects.</p>
     fn batch_get_projects(
         &self,
-        input: &BatchGetProjectsInput,
+        input: BatchGetProjectsInput,
     ) -> RusotoFuture<BatchGetProjectsOutput, BatchGetProjectsError>;
 
     /// <p>Creates a build project.</p>
     fn create_project(
         &self,
-        input: &CreateProjectInput,
+        input: CreateProjectInput,
     ) -> RusotoFuture<CreateProjectOutput, CreateProjectError>;
 
     /// <p><p>For an existing AWS CodeBuild build project that has its source code stored in a GitHub repository, enables AWS CodeBuild to begin automatically rebuilding the source code every time a code change is pushed to the repository.</p> <important> <p>If you enable webhooks for an AWS CodeBuild project, and the project is used as a build step in AWS CodePipeline, then two identical builds will be created for each commit. One build is triggered through webhooks, and one through AWS CodePipeline. Because billing is on a per-build basis, you will be billed for both builds. Therefore, if you are using AWS CodePipeline, we recommend that you disable webhooks in CodeBuild. In the AWS CodeBuild console, clear the Webhook box. For more information, see step 9 in <a href="http://docs.aws.amazon.com/codebuild/latest/userguide/change-project.html#change-project-console">Change a Build Project&#39;s Settings</a>.</p> </important></p>
     fn create_webhook(
         &self,
-        input: &CreateWebhookInput,
+        input: CreateWebhookInput,
     ) -> RusotoFuture<CreateWebhookOutput, CreateWebhookError>;
 
     /// <p>Deletes a build project.</p>
     fn delete_project(
         &self,
-        input: &DeleteProjectInput,
+        input: DeleteProjectInput,
     ) -> RusotoFuture<DeleteProjectOutput, DeleteProjectError>;
 
     /// <p>For an existing AWS CodeBuild build project that has its source code stored in a GitHub repository, stops AWS CodeBuild from automatically rebuilding the source code every time a code change is pushed to the repository.</p>
     fn delete_webhook(
         &self,
-        input: &DeleteWebhookInput,
+        input: DeleteWebhookInput,
     ) -> RusotoFuture<DeleteWebhookOutput, DeleteWebhookError>;
 
     /// <p>Resets the cache for a project.</p>
     fn invalidate_project_cache(
         &self,
-        input: &InvalidateProjectCacheInput,
+        input: InvalidateProjectCacheInput,
     ) -> RusotoFuture<InvalidateProjectCacheOutput, InvalidateProjectCacheError>;
 
     /// <p>Gets a list of build IDs, with each build ID representing a single build.</p>
     fn list_builds(
         &self,
-        input: &ListBuildsInput,
+        input: ListBuildsInput,
     ) -> RusotoFuture<ListBuildsOutput, ListBuildsError>;
 
     /// <p>Gets a list of build IDs for the specified build project, with each build ID representing a single build.</p>
     fn list_builds_for_project(
         &self,
-        input: &ListBuildsForProjectInput,
+        input: ListBuildsForProjectInput,
     ) -> RusotoFuture<ListBuildsForProjectOutput, ListBuildsForProjectError>;
 
     /// <p>Gets information about Docker images that are managed by AWS CodeBuild.</p>
@@ -2306,28 +2306,28 @@ pub trait CodeBuild {
     /// <p>Gets a list of build project names, with each build project name representing a single build project.</p>
     fn list_projects(
         &self,
-        input: &ListProjectsInput,
+        input: ListProjectsInput,
     ) -> RusotoFuture<ListProjectsOutput, ListProjectsError>;
 
     /// <p>Starts running a build.</p>
     fn start_build(
         &self,
-        input: &StartBuildInput,
+        input: StartBuildInput,
     ) -> RusotoFuture<StartBuildOutput, StartBuildError>;
 
     /// <p>Attempts to stop running a build.</p>
-    fn stop_build(&self, input: &StopBuildInput) -> RusotoFuture<StopBuildOutput, StopBuildError>;
+    fn stop_build(&self, input: StopBuildInput) -> RusotoFuture<StopBuildOutput, StopBuildError>;
 
     /// <p>Changes the settings of a build project.</p>
     fn update_project(
         &self,
-        input: &UpdateProjectInput,
+        input: UpdateProjectInput,
     ) -> RusotoFuture<UpdateProjectOutput, UpdateProjectError>;
 
     /// <p> Updates the webhook associated with an AWS CodeBuild build project. </p>
     fn update_webhook(
         &self,
-        input: &UpdateWebhookInput,
+        input: UpdateWebhookInput,
     ) -> RusotoFuture<UpdateWebhookOutput, UpdateWebhookError>;
 }
 /// A client for the AWS CodeBuild API.
@@ -2376,13 +2376,13 @@ where
     /// <p>Deletes one or more builds.</p>
     fn batch_delete_builds(
         &self,
-        input: &BatchDeleteBuildsInput,
+        input: BatchDeleteBuildsInput,
     ) -> RusotoFuture<BatchDeleteBuildsOutput, BatchDeleteBuildsError> {
         let mut request = SignedRequest::new("POST", "codebuild", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeBuild_20161006.BatchDeleteBuilds");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -2390,7 +2390,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -2413,13 +2413,13 @@ where
     /// <p>Gets information about builds.</p>
     fn batch_get_builds(
         &self,
-        input: &BatchGetBuildsInput,
+        input: BatchGetBuildsInput,
     ) -> RusotoFuture<BatchGetBuildsOutput, BatchGetBuildsError> {
         let mut request = SignedRequest::new("POST", "codebuild", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeBuild_20161006.BatchGetBuilds");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -2427,7 +2427,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -2450,13 +2450,13 @@ where
     /// <p>Gets information about build projects.</p>
     fn batch_get_projects(
         &self,
-        input: &BatchGetProjectsInput,
+        input: BatchGetProjectsInput,
     ) -> RusotoFuture<BatchGetProjectsOutput, BatchGetProjectsError> {
         let mut request = SignedRequest::new("POST", "codebuild", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeBuild_20161006.BatchGetProjects");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -2464,7 +2464,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -2487,13 +2487,13 @@ where
     /// <p>Creates a build project.</p>
     fn create_project(
         &self,
-        input: &CreateProjectInput,
+        input: CreateProjectInput,
     ) -> RusotoFuture<CreateProjectOutput, CreateProjectError> {
         let mut request = SignedRequest::new("POST", "codebuild", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeBuild_20161006.CreateProject");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -2501,7 +2501,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -2524,13 +2524,13 @@ where
     /// <p><p>For an existing AWS CodeBuild build project that has its source code stored in a GitHub repository, enables AWS CodeBuild to begin automatically rebuilding the source code every time a code change is pushed to the repository.</p> <important> <p>If you enable webhooks for an AWS CodeBuild project, and the project is used as a build step in AWS CodePipeline, then two identical builds will be created for each commit. One build is triggered through webhooks, and one through AWS CodePipeline. Because billing is on a per-build basis, you will be billed for both builds. Therefore, if you are using AWS CodePipeline, we recommend that you disable webhooks in CodeBuild. In the AWS CodeBuild console, clear the Webhook box. For more information, see step 9 in <a href="http://docs.aws.amazon.com/codebuild/latest/userguide/change-project.html#change-project-console">Change a Build Project&#39;s Settings</a>.</p> </important></p>
     fn create_webhook(
         &self,
-        input: &CreateWebhookInput,
+        input: CreateWebhookInput,
     ) -> RusotoFuture<CreateWebhookOutput, CreateWebhookError> {
         let mut request = SignedRequest::new("POST", "codebuild", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeBuild_20161006.CreateWebhook");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -2538,7 +2538,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -2561,13 +2561,13 @@ where
     /// <p>Deletes a build project.</p>
     fn delete_project(
         &self,
-        input: &DeleteProjectInput,
+        input: DeleteProjectInput,
     ) -> RusotoFuture<DeleteProjectOutput, DeleteProjectError> {
         let mut request = SignedRequest::new("POST", "codebuild", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeBuild_20161006.DeleteProject");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -2575,7 +2575,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -2598,13 +2598,13 @@ where
     /// <p>For an existing AWS CodeBuild build project that has its source code stored in a GitHub repository, stops AWS CodeBuild from automatically rebuilding the source code every time a code change is pushed to the repository.</p>
     fn delete_webhook(
         &self,
-        input: &DeleteWebhookInput,
+        input: DeleteWebhookInput,
     ) -> RusotoFuture<DeleteWebhookOutput, DeleteWebhookError> {
         let mut request = SignedRequest::new("POST", "codebuild", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeBuild_20161006.DeleteWebhook");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -2612,7 +2612,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -2635,13 +2635,13 @@ where
     /// <p>Resets the cache for a project.</p>
     fn invalidate_project_cache(
         &self,
-        input: &InvalidateProjectCacheInput,
+        input: InvalidateProjectCacheInput,
     ) -> RusotoFuture<InvalidateProjectCacheOutput, InvalidateProjectCacheError> {
         let mut request = SignedRequest::new("POST", "codebuild", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeBuild_20161006.InvalidateProjectCache");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -2649,7 +2649,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -2672,13 +2672,13 @@ where
     /// <p>Gets a list of build IDs, with each build ID representing a single build.</p>
     fn list_builds(
         &self,
-        input: &ListBuildsInput,
+        input: ListBuildsInput,
     ) -> RusotoFuture<ListBuildsOutput, ListBuildsError> {
         let mut request = SignedRequest::new("POST", "codebuild", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeBuild_20161006.ListBuilds");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -2686,7 +2686,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -2709,13 +2709,13 @@ where
     /// <p>Gets a list of build IDs for the specified build project, with each build ID representing a single build.</p>
     fn list_builds_for_project(
         &self,
-        input: &ListBuildsForProjectInput,
+        input: ListBuildsForProjectInput,
     ) -> RusotoFuture<ListBuildsForProjectOutput, ListBuildsForProjectError> {
         let mut request = SignedRequest::new("POST", "codebuild", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeBuild_20161006.ListBuildsForProject");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -2723,7 +2723,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -2761,7 +2761,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -2784,13 +2784,13 @@ where
     /// <p>Gets a list of build project names, with each build project name representing a single build project.</p>
     fn list_projects(
         &self,
-        input: &ListProjectsInput,
+        input: ListProjectsInput,
     ) -> RusotoFuture<ListProjectsOutput, ListProjectsError> {
         let mut request = SignedRequest::new("POST", "codebuild", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeBuild_20161006.ListProjects");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -2798,7 +2798,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -2821,13 +2821,13 @@ where
     /// <p>Starts running a build.</p>
     fn start_build(
         &self,
-        input: &StartBuildInput,
+        input: StartBuildInput,
     ) -> RusotoFuture<StartBuildOutput, StartBuildError> {
         let mut request = SignedRequest::new("POST", "codebuild", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeBuild_20161006.StartBuild");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -2835,7 +2835,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -2856,12 +2856,12 @@ where
     }
 
     /// <p>Attempts to stop running a build.</p>
-    fn stop_build(&self, input: &StopBuildInput) -> RusotoFuture<StopBuildOutput, StopBuildError> {
+    fn stop_build(&self, input: StopBuildInput) -> RusotoFuture<StopBuildOutput, StopBuildError> {
         let mut request = SignedRequest::new("POST", "codebuild", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeBuild_20161006.StopBuild");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -2869,7 +2869,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -2892,13 +2892,13 @@ where
     /// <p>Changes the settings of a build project.</p>
     fn update_project(
         &self,
-        input: &UpdateProjectInput,
+        input: UpdateProjectInput,
     ) -> RusotoFuture<UpdateProjectOutput, UpdateProjectError> {
         let mut request = SignedRequest::new("POST", "codebuild", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeBuild_20161006.UpdateProject");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -2906,7 +2906,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -2929,13 +2929,13 @@ where
     /// <p> Updates the webhook associated with an AWS CodeBuild build project. </p>
     fn update_webhook(
         &self,
-        input: &UpdateWebhookInput,
+        input: UpdateWebhookInput,
     ) -> RusotoFuture<UpdateWebhookOutput, UpdateWebhookError> {
         let mut request = SignedRequest::new("POST", "codebuild", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeBuild_20161006.UpdateWebhook");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -2943,7 +2943,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 

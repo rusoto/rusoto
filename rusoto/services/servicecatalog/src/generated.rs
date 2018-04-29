@@ -18,18 +18,18 @@ use std::io;
 use futures::future;
 use futures::Future;
 use rusoto_core::reactor::{CredentialsProvider, RequestDispatcher};
-use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::region;
+use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::{ClientInner, RusotoFuture};
 
-use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
+use rusoto_core::request::HttpDispatchError;
 
-use serde_json;
-use rusoto_core::signature::SignedRequest;
-use serde_json::Value as SerdeJsonValue;
-use serde_json::from_str;
 use hyper::StatusCode;
+use rusoto_core::signature::SignedRequest;
+use serde_json;
+use serde_json::from_str;
+use serde_json::Value as SerdeJsonValue;
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct AcceptPortfolioShareInput {
     /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
@@ -7939,193 +7939,193 @@ pub trait ServiceCatalog {
     /// <p>Accepts an offer to share the specified portfolio.</p>
     fn accept_portfolio_share(
         &self,
-        input: &AcceptPortfolioShareInput,
+        input: AcceptPortfolioShareInput,
     ) -> RusotoFuture<AcceptPortfolioShareOutput, AcceptPortfolioShareError>;
 
     /// <p>Associates the specified principal ARN with the specified portfolio.</p>
     fn associate_principal_with_portfolio(
         &self,
-        input: &AssociatePrincipalWithPortfolioInput,
+        input: AssociatePrincipalWithPortfolioInput,
     ) -> RusotoFuture<AssociatePrincipalWithPortfolioOutput, AssociatePrincipalWithPortfolioError>;
 
     /// <p>Associates the specified product with the specified portfolio.</p>
     fn associate_product_with_portfolio(
         &self,
-        input: &AssociateProductWithPortfolioInput,
+        input: AssociateProductWithPortfolioInput,
     ) -> RusotoFuture<AssociateProductWithPortfolioOutput, AssociateProductWithPortfolioError>;
 
     /// <p>Associate the specified TagOption with the specified portfolio or product.</p>
     fn associate_tag_option_with_resource(
         &self,
-        input: &AssociateTagOptionWithResourceInput,
+        input: AssociateTagOptionWithResourceInput,
     ) -> RusotoFuture<AssociateTagOptionWithResourceOutput, AssociateTagOptionWithResourceError>;
 
     /// <p>Copies the specified source product to the specified target product or a new product.</p> <p>You can copy a product to the same account or another account. You can copy a product to the same region or another region.</p> <p>This operation is performed asynchronously. To track the progress of the operation, use <a>DescribeCopyProductStatus</a>.</p>
     fn copy_product(
         &self,
-        input: &CopyProductInput,
+        input: CopyProductInput,
     ) -> RusotoFuture<CopyProductOutput, CopyProductError>;
 
     /// <p>Creates a constraint.</p>
     fn create_constraint(
         &self,
-        input: &CreateConstraintInput,
+        input: CreateConstraintInput,
     ) -> RusotoFuture<CreateConstraintOutput, CreateConstraintError>;
 
     /// <p>Creates a portfolio.</p>
     fn create_portfolio(
         &self,
-        input: &CreatePortfolioInput,
+        input: CreatePortfolioInput,
     ) -> RusotoFuture<CreatePortfolioOutput, CreatePortfolioError>;
 
     /// <p>Shares the specified portfolio with the specified account.</p>
     fn create_portfolio_share(
         &self,
-        input: &CreatePortfolioShareInput,
+        input: CreatePortfolioShareInput,
     ) -> RusotoFuture<CreatePortfolioShareOutput, CreatePortfolioShareError>;
 
     /// <p>Creates a product.</p>
     fn create_product(
         &self,
-        input: &CreateProductInput,
+        input: CreateProductInput,
     ) -> RusotoFuture<CreateProductOutput, CreateProductError>;
 
     /// <p>Creates a plan. A plan includes the list of resources to be created (when provisioning a new product) or modified (when updating a provisioned product) when the plan is executed.</p> <p>You can create one plan per provisioned product. To create a plan for an existing provisioned product, the product status must be AVAILBLE or TAINTED.</p> <p>To view the resource changes in the change set, use <a>DescribeProvisionedProductPlan</a>. To create or modify the provisioned product, use <a>ExecuteProvisionedProductPlan</a>.</p>
     fn create_provisioned_product_plan(
         &self,
-        input: &CreateProvisionedProductPlanInput,
+        input: CreateProvisionedProductPlanInput,
     ) -> RusotoFuture<CreateProvisionedProductPlanOutput, CreateProvisionedProductPlanError>;
 
     /// <p>Creates a provisioning artifact (also known as a version) for the specified product.</p> <p>You cannot create a provisioning artifact for a product that was shared with you.</p>
     fn create_provisioning_artifact(
         &self,
-        input: &CreateProvisioningArtifactInput,
+        input: CreateProvisioningArtifactInput,
     ) -> RusotoFuture<CreateProvisioningArtifactOutput, CreateProvisioningArtifactError>;
 
     /// <p>Creates a TagOption.</p>
     fn create_tag_option(
         &self,
-        input: &CreateTagOptionInput,
+        input: CreateTagOptionInput,
     ) -> RusotoFuture<CreateTagOptionOutput, CreateTagOptionError>;
 
     /// <p>Deletes the specified constraint.</p>
     fn delete_constraint(
         &self,
-        input: &DeleteConstraintInput,
+        input: DeleteConstraintInput,
     ) -> RusotoFuture<DeleteConstraintOutput, DeleteConstraintError>;
 
     /// <p>Deletes the specified portfolio.</p> <p>You cannot delete a portfolio if it was shared with you or if it has associated products, users, constraints, or shared accounts.</p>
     fn delete_portfolio(
         &self,
-        input: &DeletePortfolioInput,
+        input: DeletePortfolioInput,
     ) -> RusotoFuture<DeletePortfolioOutput, DeletePortfolioError>;
 
     /// <p>Stops sharing the specified portfolio with the specified account.</p>
     fn delete_portfolio_share(
         &self,
-        input: &DeletePortfolioShareInput,
+        input: DeletePortfolioShareInput,
     ) -> RusotoFuture<DeletePortfolioShareOutput, DeletePortfolioShareError>;
 
     /// <p>Deletes the specified product.</p> <p>You cannot delete a product if it was shared with you or is associated with a portfolio.</p>
     fn delete_product(
         &self,
-        input: &DeleteProductInput,
+        input: DeleteProductInput,
     ) -> RusotoFuture<DeleteProductOutput, DeleteProductError>;
 
     /// <p>Deletes the specified plan.</p>
     fn delete_provisioned_product_plan(
         &self,
-        input: &DeleteProvisionedProductPlanInput,
+        input: DeleteProvisionedProductPlanInput,
     ) -> RusotoFuture<DeleteProvisionedProductPlanOutput, DeleteProvisionedProductPlanError>;
 
     /// <p>Deletes the specified provisioning artifact (also known as a version) for the specified product.</p> <p>You cannot delete a provisioning artifact associated with a product that was shared with you. You cannot delete the last provisioning artifact for a product, because a product must have at least one provisioning artifact.</p>
     fn delete_provisioning_artifact(
         &self,
-        input: &DeleteProvisioningArtifactInput,
+        input: DeleteProvisioningArtifactInput,
     ) -> RusotoFuture<DeleteProvisioningArtifactOutput, DeleteProvisioningArtifactError>;
 
     /// <p>Deletes the specified TagOption.</p> <p>You cannot delete a TagOption if it is associated with a product or portfolio.</p>
     fn delete_tag_option(
         &self,
-        input: &DeleteTagOptionInput,
+        input: DeleteTagOptionInput,
     ) -> RusotoFuture<DeleteTagOptionOutput, DeleteTagOptionError>;
 
     /// <p>Gets information about the specified constraint.</p>
     fn describe_constraint(
         &self,
-        input: &DescribeConstraintInput,
+        input: DescribeConstraintInput,
     ) -> RusotoFuture<DescribeConstraintOutput, DescribeConstraintError>;
 
     /// <p>Gets the status of the specified copy product operation.</p>
     fn describe_copy_product_status(
         &self,
-        input: &DescribeCopyProductStatusInput,
+        input: DescribeCopyProductStatusInput,
     ) -> RusotoFuture<DescribeCopyProductStatusOutput, DescribeCopyProductStatusError>;
 
     /// <p>Gets information about the specified portfolio.</p>
     fn describe_portfolio(
         &self,
-        input: &DescribePortfolioInput,
+        input: DescribePortfolioInput,
     ) -> RusotoFuture<DescribePortfolioOutput, DescribePortfolioError>;
 
     /// <p>Gets information about the specified product.</p>
     fn describe_product(
         &self,
-        input: &DescribeProductInput,
+        input: DescribeProductInput,
     ) -> RusotoFuture<DescribeProductOutput, DescribeProductError>;
 
     /// <p>Gets information about the specified product. This operation is run with administrator access.</p>
     fn describe_product_as_admin(
         &self,
-        input: &DescribeProductAsAdminInput,
+        input: DescribeProductAsAdminInput,
     ) -> RusotoFuture<DescribeProductAsAdminOutput, DescribeProductAsAdminError>;
 
     /// <p>Gets information about the specified product.</p>
     fn describe_product_view(
         &self,
-        input: &DescribeProductViewInput,
+        input: DescribeProductViewInput,
     ) -> RusotoFuture<DescribeProductViewOutput, DescribeProductViewError>;
 
     /// <p>Gets information about the specified provisioned product.</p>
     fn describe_provisioned_product(
         &self,
-        input: &DescribeProvisionedProductInput,
+        input: DescribeProvisionedProductInput,
     ) -> RusotoFuture<DescribeProvisionedProductOutput, DescribeProvisionedProductError>;
 
     /// <p>Gets information about the resource changes for the specified plan.</p>
     fn describe_provisioned_product_plan(
         &self,
-        input: &DescribeProvisionedProductPlanInput,
+        input: DescribeProvisionedProductPlanInput,
     ) -> RusotoFuture<DescribeProvisionedProductPlanOutput, DescribeProvisionedProductPlanError>;
 
     /// <p>Gets information about the specified provisioning artifact (also known as a version) for the specified product.</p>
     fn describe_provisioning_artifact(
         &self,
-        input: &DescribeProvisioningArtifactInput,
+        input: DescribeProvisioningArtifactInput,
     ) -> RusotoFuture<DescribeProvisioningArtifactOutput, DescribeProvisioningArtifactError>;
 
     /// <p>Gets information about the configuration required to provision the specified product using the specified provisioning artifact.</p> <p>If the output contains a TagOption key with an empty list of values, there is a TagOption conflict for that key. The end user cannot take action to fix the conflict, and launch is not blocked. In subsequent calls to <a>ProvisionProduct</a>, do not include conflicted TagOption keys as tags, or this causes the error "Parameter validation failed: Missing required parameter in Tags[<i>N</i>]:<i>Value</i>". Tag the provisioned product with the value <code>sc-tagoption-conflict-portfolioId-productId</code>.</p>
     fn describe_provisioning_parameters(
         &self,
-        input: &DescribeProvisioningParametersInput,
+        input: DescribeProvisioningParametersInput,
     ) -> RusotoFuture<DescribeProvisioningParametersOutput, DescribeProvisioningParametersError>;
 
     /// <p>Gets information about the specified request operation.</p> <p>Use this operation after calling a request operation (for example, <a>ProvisionProduct</a>, <a>TerminateProvisionedProduct</a>, or <a>UpdateProvisionedProduct</a>). </p>
     fn describe_record(
         &self,
-        input: &DescribeRecordInput,
+        input: DescribeRecordInput,
     ) -> RusotoFuture<DescribeRecordOutput, DescribeRecordError>;
 
     /// <p>Gets information about the specified TagOption.</p>
     fn describe_tag_option(
         &self,
-        input: &DescribeTagOptionInput,
+        input: DescribeTagOptionInput,
     ) -> RusotoFuture<DescribeTagOptionOutput, DescribeTagOptionError>;
 
     /// <p>Disassociates a previously associated principal ARN from a specified portfolio.</p>
     fn disassociate_principal_from_portfolio(
         &self,
-        input: &DisassociatePrincipalFromPortfolioInput,
+        input: DisassociatePrincipalFromPortfolioInput,
     ) -> RusotoFuture<
         DisassociatePrincipalFromPortfolioOutput,
         DisassociatePrincipalFromPortfolioError,
@@ -8134,169 +8134,169 @@ pub trait ServiceCatalog {
     /// <p>Disassociates the specified product from the specified portfolio. </p>
     fn disassociate_product_from_portfolio(
         &self,
-        input: &DisassociateProductFromPortfolioInput,
+        input: DisassociateProductFromPortfolioInput,
     ) -> RusotoFuture<DisassociateProductFromPortfolioOutput, DisassociateProductFromPortfolioError>;
 
     /// <p>Disassociates the specified TagOption from the specified resource.</p>
     fn disassociate_tag_option_from_resource(
         &self,
-        input: &DisassociateTagOptionFromResourceInput,
+        input: DisassociateTagOptionFromResourceInput,
     ) -> RusotoFuture<DisassociateTagOptionFromResourceOutput, DisassociateTagOptionFromResourceError>;
 
     /// <p>Provisions or modifies a product based on the resource changes for the specified plan.</p>
     fn execute_provisioned_product_plan(
         &self,
-        input: &ExecuteProvisionedProductPlanInput,
+        input: ExecuteProvisionedProductPlanInput,
     ) -> RusotoFuture<ExecuteProvisionedProductPlanOutput, ExecuteProvisionedProductPlanError>;
 
     /// <p>Lists all portfolios for which sharing was accepted by this account.</p>
     fn list_accepted_portfolio_shares(
         &self,
-        input: &ListAcceptedPortfolioSharesInput,
+        input: ListAcceptedPortfolioSharesInput,
     ) -> RusotoFuture<ListAcceptedPortfolioSharesOutput, ListAcceptedPortfolioSharesError>;
 
     /// <p>Lists the constraints for the specified portfolio and product.</p>
     fn list_constraints_for_portfolio(
         &self,
-        input: &ListConstraintsForPortfolioInput,
+        input: ListConstraintsForPortfolioInput,
     ) -> RusotoFuture<ListConstraintsForPortfolioOutput, ListConstraintsForPortfolioError>;
 
     /// <p>Lists the paths to the specified product. A path is how the user has access to a specified product, and is necessary when provisioning a product. A path also determines the constraints put on the product.</p>
     fn list_launch_paths(
         &self,
-        input: &ListLaunchPathsInput,
+        input: ListLaunchPathsInput,
     ) -> RusotoFuture<ListLaunchPathsOutput, ListLaunchPathsError>;
 
     /// <p>Lists the account IDs that have access to the specified portfolio.</p>
     fn list_portfolio_access(
         &self,
-        input: &ListPortfolioAccessInput,
+        input: ListPortfolioAccessInput,
     ) -> RusotoFuture<ListPortfolioAccessOutput, ListPortfolioAccessError>;
 
     /// <p>Lists all portfolios in the catalog.</p>
     fn list_portfolios(
         &self,
-        input: &ListPortfoliosInput,
+        input: ListPortfoliosInput,
     ) -> RusotoFuture<ListPortfoliosOutput, ListPortfoliosError>;
 
     /// <p>Lists all portfolios that the specified product is associated with.</p>
     fn list_portfolios_for_product(
         &self,
-        input: &ListPortfoliosForProductInput,
+        input: ListPortfoliosForProductInput,
     ) -> RusotoFuture<ListPortfoliosForProductOutput, ListPortfoliosForProductError>;
 
     /// <p>Lists all principal ARNs associated with the specified portfolio.</p>
     fn list_principals_for_portfolio(
         &self,
-        input: &ListPrincipalsForPortfolioInput,
+        input: ListPrincipalsForPortfolioInput,
     ) -> RusotoFuture<ListPrincipalsForPortfolioOutput, ListPrincipalsForPortfolioError>;
 
     /// <p>Lists the plans for the specified provisioned product or all plans to which the user has access.</p>
     fn list_provisioned_product_plans(
         &self,
-        input: &ListProvisionedProductPlansInput,
+        input: ListProvisionedProductPlansInput,
     ) -> RusotoFuture<ListProvisionedProductPlansOutput, ListProvisionedProductPlansError>;
 
     /// <p>Lists all provisioning artifacts (also known as versions) for the specified product.</p>
     fn list_provisioning_artifacts(
         &self,
-        input: &ListProvisioningArtifactsInput,
+        input: ListProvisioningArtifactsInput,
     ) -> RusotoFuture<ListProvisioningArtifactsOutput, ListProvisioningArtifactsError>;
 
     /// <p>Lists the specified requests or all performed requests.</p>
     fn list_record_history(
         &self,
-        input: &ListRecordHistoryInput,
+        input: ListRecordHistoryInput,
     ) -> RusotoFuture<ListRecordHistoryOutput, ListRecordHistoryError>;
 
     /// <p>Lists the resources associated with the specified TagOption.</p>
     fn list_resources_for_tag_option(
         &self,
-        input: &ListResourcesForTagOptionInput,
+        input: ListResourcesForTagOptionInput,
     ) -> RusotoFuture<ListResourcesForTagOptionOutput, ListResourcesForTagOptionError>;
 
     /// <p>Lists the specified TagOptions or all TagOptions.</p>
     fn list_tag_options(
         &self,
-        input: &ListTagOptionsInput,
+        input: ListTagOptionsInput,
     ) -> RusotoFuture<ListTagOptionsOutput, ListTagOptionsError>;
 
     /// <p>Provisions the specified product.</p> <p>A provisioned product is a resourced instance of a product. For example, provisioning a product based on a CloudFormation template launches a CloudFormation stack and its underlying resources. You can check the status of this request using <a>DescribeRecord</a>.</p> <p>If the request contains a tag key with an empty list of values, there is a tag conflict for that key. Do not include conflicted keys as tags, or this causes the error "Parameter validation failed: Missing required parameter in Tags[<i>N</i>]:<i>Value</i>".</p>
     fn provision_product(
         &self,
-        input: &ProvisionProductInput,
+        input: ProvisionProductInput,
     ) -> RusotoFuture<ProvisionProductOutput, ProvisionProductError>;
 
     /// <p>Rejects an offer to share the specified portfolio.</p>
     fn reject_portfolio_share(
         &self,
-        input: &RejectPortfolioShareInput,
+        input: RejectPortfolioShareInput,
     ) -> RusotoFuture<RejectPortfolioShareOutput, RejectPortfolioShareError>;
 
     /// <p>Lists the provisioned products that are available (not terminated).</p> <p>To use additional filtering, see <a>SearchProvisionedProducts</a>.</p>
     fn scan_provisioned_products(
         &self,
-        input: &ScanProvisionedProductsInput,
+        input: ScanProvisionedProductsInput,
     ) -> RusotoFuture<ScanProvisionedProductsOutput, ScanProvisionedProductsError>;
 
     /// <p>Gets information about the products to which the caller has access.</p>
     fn search_products(
         &self,
-        input: &SearchProductsInput,
+        input: SearchProductsInput,
     ) -> RusotoFuture<SearchProductsOutput, SearchProductsError>;
 
     /// <p>Gets information about the products for the specified portfolio or all products.</p>
     fn search_products_as_admin(
         &self,
-        input: &SearchProductsAsAdminInput,
+        input: SearchProductsAsAdminInput,
     ) -> RusotoFuture<SearchProductsAsAdminOutput, SearchProductsAsAdminError>;
 
     /// <p>Gets information about the provisioned products that meet the specified criteria.</p>
     fn search_provisioned_products(
         &self,
-        input: &SearchProvisionedProductsInput,
+        input: SearchProvisionedProductsInput,
     ) -> RusotoFuture<SearchProvisionedProductsOutput, SearchProvisionedProductsError>;
 
     /// <p>Terminates the specified provisioned product.</p> <p>This operation does not delete any records associated with the provisioned product.</p> <p>You can check the status of this request using <a>DescribeRecord</a>.</p>
     fn terminate_provisioned_product(
         &self,
-        input: &TerminateProvisionedProductInput,
+        input: TerminateProvisionedProductInput,
     ) -> RusotoFuture<TerminateProvisionedProductOutput, TerminateProvisionedProductError>;
 
     /// <p>Updates the specified constraint.</p>
     fn update_constraint(
         &self,
-        input: &UpdateConstraintInput,
+        input: UpdateConstraintInput,
     ) -> RusotoFuture<UpdateConstraintOutput, UpdateConstraintError>;
 
     /// <p>Updates the specified portfolio.</p> <p>You cannot update a product that was shared with you.</p>
     fn update_portfolio(
         &self,
-        input: &UpdatePortfolioInput,
+        input: UpdatePortfolioInput,
     ) -> RusotoFuture<UpdatePortfolioOutput, UpdatePortfolioError>;
 
     /// <p>Updates the specified product.</p>
     fn update_product(
         &self,
-        input: &UpdateProductInput,
+        input: UpdateProductInput,
     ) -> RusotoFuture<UpdateProductOutput, UpdateProductError>;
 
     /// <p>Requests updates to the configuration of the specified provisioned product.</p> <p>If there are tags associated with the object, they cannot be updated or added. Depending on the specific updates requested, this operation can update with no interruption, with some interruption, or replace the provisioned product entirely.</p> <p>You can check the status of this request using <a>DescribeRecord</a>.</p>
     fn update_provisioned_product(
         &self,
-        input: &UpdateProvisionedProductInput,
+        input: UpdateProvisionedProductInput,
     ) -> RusotoFuture<UpdateProvisionedProductOutput, UpdateProvisionedProductError>;
 
     /// <p>Updates the specified provisioning artifact (also known as a version) for the specified product.</p> <p>You cannot update a provisioning artifact for a product that was shared with you.</p>
     fn update_provisioning_artifact(
         &self,
-        input: &UpdateProvisioningArtifactInput,
+        input: UpdateProvisioningArtifactInput,
     ) -> RusotoFuture<UpdateProvisioningArtifactOutput, UpdateProvisioningArtifactError>;
 
     /// <p>Updates the specified TagOption.</p>
     fn update_tag_option(
         &self,
-        input: &UpdateTagOptionInput,
+        input: UpdateTagOptionInput,
     ) -> RusotoFuture<UpdateTagOptionOutput, UpdateTagOptionError>;
 }
 /// A client for the AWS Service Catalog API.
@@ -8345,7 +8345,7 @@ where
     /// <p>Accepts an offer to share the specified portfolio.</p>
     fn accept_portfolio_share(
         &self,
-        input: &AcceptPortfolioShareInput,
+        input: AcceptPortfolioShareInput,
     ) -> RusotoFuture<AcceptPortfolioShareOutput, AcceptPortfolioShareError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
@@ -8354,7 +8354,7 @@ where
             "x-amz-target",
             "AWS242ServiceCatalogService.AcceptPortfolioShare",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -8362,7 +8362,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -8385,7 +8385,7 @@ where
     /// <p>Associates the specified principal ARN with the specified portfolio.</p>
     fn associate_principal_with_portfolio(
         &self,
-        input: &AssociatePrincipalWithPortfolioInput,
+        input: AssociatePrincipalWithPortfolioInput,
     ) -> RusotoFuture<AssociatePrincipalWithPortfolioOutput, AssociatePrincipalWithPortfolioError>
     {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
@@ -8395,7 +8395,7 @@ where
             "x-amz-target",
             "AWS242ServiceCatalogService.AssociatePrincipalWithPortfolio",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -8403,7 +8403,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -8426,7 +8426,7 @@ where
     /// <p>Associates the specified product with the specified portfolio.</p>
     fn associate_product_with_portfolio(
         &self,
-        input: &AssociateProductWithPortfolioInput,
+        input: AssociateProductWithPortfolioInput,
     ) -> RusotoFuture<AssociateProductWithPortfolioOutput, AssociateProductWithPortfolioError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
@@ -8435,7 +8435,7 @@ where
             "x-amz-target",
             "AWS242ServiceCatalogService.AssociateProductWithPortfolio",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -8443,7 +8443,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -8466,7 +8466,7 @@ where
     /// <p>Associate the specified TagOption with the specified portfolio or product.</p>
     fn associate_tag_option_with_resource(
         &self,
-        input: &AssociateTagOptionWithResourceInput,
+        input: AssociateTagOptionWithResourceInput,
     ) -> RusotoFuture<AssociateTagOptionWithResourceOutput, AssociateTagOptionWithResourceError>
     {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
@@ -8476,7 +8476,7 @@ where
             "x-amz-target",
             "AWS242ServiceCatalogService.AssociateTagOptionWithResource",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -8484,7 +8484,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -8507,13 +8507,13 @@ where
     /// <p>Copies the specified source product to the specified target product or a new product.</p> <p>You can copy a product to the same account or another account. You can copy a product to the same region or another region.</p> <p>This operation is performed asynchronously. To track the progress of the operation, use <a>DescribeCopyProductStatus</a>.</p>
     fn copy_product(
         &self,
-        input: &CopyProductInput,
+        input: CopyProductInput,
     ) -> RusotoFuture<CopyProductOutput, CopyProductError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWS242ServiceCatalogService.CopyProduct");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -8521,7 +8521,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -8544,7 +8544,7 @@ where
     /// <p>Creates a constraint.</p>
     fn create_constraint(
         &self,
-        input: &CreateConstraintInput,
+        input: CreateConstraintInput,
     ) -> RusotoFuture<CreateConstraintOutput, CreateConstraintError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
@@ -8553,7 +8553,7 @@ where
             "x-amz-target",
             "AWS242ServiceCatalogService.CreateConstraint",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -8561,7 +8561,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -8584,7 +8584,7 @@ where
     /// <p>Creates a portfolio.</p>
     fn create_portfolio(
         &self,
-        input: &CreatePortfolioInput,
+        input: CreatePortfolioInput,
     ) -> RusotoFuture<CreatePortfolioOutput, CreatePortfolioError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
@@ -8593,7 +8593,7 @@ where
             "x-amz-target",
             "AWS242ServiceCatalogService.CreatePortfolio",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -8601,7 +8601,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -8624,7 +8624,7 @@ where
     /// <p>Shares the specified portfolio with the specified account.</p>
     fn create_portfolio_share(
         &self,
-        input: &CreatePortfolioShareInput,
+        input: CreatePortfolioShareInput,
     ) -> RusotoFuture<CreatePortfolioShareOutput, CreatePortfolioShareError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
@@ -8633,7 +8633,7 @@ where
             "x-amz-target",
             "AWS242ServiceCatalogService.CreatePortfolioShare",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -8641,7 +8641,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -8664,13 +8664,13 @@ where
     /// <p>Creates a product.</p>
     fn create_product(
         &self,
-        input: &CreateProductInput,
+        input: CreateProductInput,
     ) -> RusotoFuture<CreateProductOutput, CreateProductError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWS242ServiceCatalogService.CreateProduct");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -8678,7 +8678,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -8701,7 +8701,7 @@ where
     /// <p>Creates a plan. A plan includes the list of resources to be created (when provisioning a new product) or modified (when updating a provisioned product) when the plan is executed.</p> <p>You can create one plan per provisioned product. To create a plan for an existing provisioned product, the product status must be AVAILBLE or TAINTED.</p> <p>To view the resource changes in the change set, use <a>DescribeProvisionedProductPlan</a>. To create or modify the provisioned product, use <a>ExecuteProvisionedProductPlan</a>.</p>
     fn create_provisioned_product_plan(
         &self,
-        input: &CreateProvisionedProductPlanInput,
+        input: CreateProvisionedProductPlanInput,
     ) -> RusotoFuture<CreateProvisionedProductPlanOutput, CreateProvisionedProductPlanError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
@@ -8710,7 +8710,7 @@ where
             "x-amz-target",
             "AWS242ServiceCatalogService.CreateProvisionedProductPlan",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -8718,7 +8718,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -8741,7 +8741,7 @@ where
     /// <p>Creates a provisioning artifact (also known as a version) for the specified product.</p> <p>You cannot create a provisioning artifact for a product that was shared with you.</p>
     fn create_provisioning_artifact(
         &self,
-        input: &CreateProvisioningArtifactInput,
+        input: CreateProvisioningArtifactInput,
     ) -> RusotoFuture<CreateProvisioningArtifactOutput, CreateProvisioningArtifactError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
@@ -8750,7 +8750,7 @@ where
             "x-amz-target",
             "AWS242ServiceCatalogService.CreateProvisioningArtifact",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -8758,7 +8758,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -8781,7 +8781,7 @@ where
     /// <p>Creates a TagOption.</p>
     fn create_tag_option(
         &self,
-        input: &CreateTagOptionInput,
+        input: CreateTagOptionInput,
     ) -> RusotoFuture<CreateTagOptionOutput, CreateTagOptionError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
@@ -8790,7 +8790,7 @@ where
             "x-amz-target",
             "AWS242ServiceCatalogService.CreateTagOption",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -8798,7 +8798,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -8821,7 +8821,7 @@ where
     /// <p>Deletes the specified constraint.</p>
     fn delete_constraint(
         &self,
-        input: &DeleteConstraintInput,
+        input: DeleteConstraintInput,
     ) -> RusotoFuture<DeleteConstraintOutput, DeleteConstraintError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
@@ -8830,7 +8830,7 @@ where
             "x-amz-target",
             "AWS242ServiceCatalogService.DeleteConstraint",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -8838,7 +8838,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -8861,7 +8861,7 @@ where
     /// <p>Deletes the specified portfolio.</p> <p>You cannot delete a portfolio if it was shared with you or if it has associated products, users, constraints, or shared accounts.</p>
     fn delete_portfolio(
         &self,
-        input: &DeletePortfolioInput,
+        input: DeletePortfolioInput,
     ) -> RusotoFuture<DeletePortfolioOutput, DeletePortfolioError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
@@ -8870,7 +8870,7 @@ where
             "x-amz-target",
             "AWS242ServiceCatalogService.DeletePortfolio",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -8878,7 +8878,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -8901,7 +8901,7 @@ where
     /// <p>Stops sharing the specified portfolio with the specified account.</p>
     fn delete_portfolio_share(
         &self,
-        input: &DeletePortfolioShareInput,
+        input: DeletePortfolioShareInput,
     ) -> RusotoFuture<DeletePortfolioShareOutput, DeletePortfolioShareError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
@@ -8910,7 +8910,7 @@ where
             "x-amz-target",
             "AWS242ServiceCatalogService.DeletePortfolioShare",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -8918,7 +8918,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -8941,13 +8941,13 @@ where
     /// <p>Deletes the specified product.</p> <p>You cannot delete a product if it was shared with you or is associated with a portfolio.</p>
     fn delete_product(
         &self,
-        input: &DeleteProductInput,
+        input: DeleteProductInput,
     ) -> RusotoFuture<DeleteProductOutput, DeleteProductError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWS242ServiceCatalogService.DeleteProduct");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -8955,7 +8955,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -8978,7 +8978,7 @@ where
     /// <p>Deletes the specified plan.</p>
     fn delete_provisioned_product_plan(
         &self,
-        input: &DeleteProvisionedProductPlanInput,
+        input: DeleteProvisionedProductPlanInput,
     ) -> RusotoFuture<DeleteProvisionedProductPlanOutput, DeleteProvisionedProductPlanError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
@@ -8987,7 +8987,7 @@ where
             "x-amz-target",
             "AWS242ServiceCatalogService.DeleteProvisionedProductPlan",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -8995,7 +8995,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -9018,7 +9018,7 @@ where
     /// <p>Deletes the specified provisioning artifact (also known as a version) for the specified product.</p> <p>You cannot delete a provisioning artifact associated with a product that was shared with you. You cannot delete the last provisioning artifact for a product, because a product must have at least one provisioning artifact.</p>
     fn delete_provisioning_artifact(
         &self,
-        input: &DeleteProvisioningArtifactInput,
+        input: DeleteProvisioningArtifactInput,
     ) -> RusotoFuture<DeleteProvisioningArtifactOutput, DeleteProvisioningArtifactError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
@@ -9027,7 +9027,7 @@ where
             "x-amz-target",
             "AWS242ServiceCatalogService.DeleteProvisioningArtifact",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -9035,7 +9035,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -9058,7 +9058,7 @@ where
     /// <p>Deletes the specified TagOption.</p> <p>You cannot delete a TagOption if it is associated with a product or portfolio.</p>
     fn delete_tag_option(
         &self,
-        input: &DeleteTagOptionInput,
+        input: DeleteTagOptionInput,
     ) -> RusotoFuture<DeleteTagOptionOutput, DeleteTagOptionError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
@@ -9067,7 +9067,7 @@ where
             "x-amz-target",
             "AWS242ServiceCatalogService.DeleteTagOption",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -9075,7 +9075,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -9098,7 +9098,7 @@ where
     /// <p>Gets information about the specified constraint.</p>
     fn describe_constraint(
         &self,
-        input: &DescribeConstraintInput,
+        input: DescribeConstraintInput,
     ) -> RusotoFuture<DescribeConstraintOutput, DescribeConstraintError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
@@ -9107,7 +9107,7 @@ where
             "x-amz-target",
             "AWS242ServiceCatalogService.DescribeConstraint",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -9115,7 +9115,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -9138,7 +9138,7 @@ where
     /// <p>Gets the status of the specified copy product operation.</p>
     fn describe_copy_product_status(
         &self,
-        input: &DescribeCopyProductStatusInput,
+        input: DescribeCopyProductStatusInput,
     ) -> RusotoFuture<DescribeCopyProductStatusOutput, DescribeCopyProductStatusError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
@@ -9147,7 +9147,7 @@ where
             "x-amz-target",
             "AWS242ServiceCatalogService.DescribeCopyProductStatus",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -9155,7 +9155,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -9178,7 +9178,7 @@ where
     /// <p>Gets information about the specified portfolio.</p>
     fn describe_portfolio(
         &self,
-        input: &DescribePortfolioInput,
+        input: DescribePortfolioInput,
     ) -> RusotoFuture<DescribePortfolioOutput, DescribePortfolioError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
@@ -9187,7 +9187,7 @@ where
             "x-amz-target",
             "AWS242ServiceCatalogService.DescribePortfolio",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -9195,7 +9195,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -9218,7 +9218,7 @@ where
     /// <p>Gets information about the specified product.</p>
     fn describe_product(
         &self,
-        input: &DescribeProductInput,
+        input: DescribeProductInput,
     ) -> RusotoFuture<DescribeProductOutput, DescribeProductError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
@@ -9227,7 +9227,7 @@ where
             "x-amz-target",
             "AWS242ServiceCatalogService.DescribeProduct",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -9235,7 +9235,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -9258,7 +9258,7 @@ where
     /// <p>Gets information about the specified product. This operation is run with administrator access.</p>
     fn describe_product_as_admin(
         &self,
-        input: &DescribeProductAsAdminInput,
+        input: DescribeProductAsAdminInput,
     ) -> RusotoFuture<DescribeProductAsAdminOutput, DescribeProductAsAdminError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
@@ -9267,7 +9267,7 @@ where
             "x-amz-target",
             "AWS242ServiceCatalogService.DescribeProductAsAdmin",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -9275,7 +9275,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -9298,7 +9298,7 @@ where
     /// <p>Gets information about the specified product.</p>
     fn describe_product_view(
         &self,
-        input: &DescribeProductViewInput,
+        input: DescribeProductViewInput,
     ) -> RusotoFuture<DescribeProductViewOutput, DescribeProductViewError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
@@ -9307,7 +9307,7 @@ where
             "x-amz-target",
             "AWS242ServiceCatalogService.DescribeProductView",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -9315,7 +9315,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -9338,7 +9338,7 @@ where
     /// <p>Gets information about the specified provisioned product.</p>
     fn describe_provisioned_product(
         &self,
-        input: &DescribeProvisionedProductInput,
+        input: DescribeProvisionedProductInput,
     ) -> RusotoFuture<DescribeProvisionedProductOutput, DescribeProvisionedProductError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
@@ -9347,7 +9347,7 @@ where
             "x-amz-target",
             "AWS242ServiceCatalogService.DescribeProvisionedProduct",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -9355,7 +9355,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -9378,7 +9378,7 @@ where
     /// <p>Gets information about the resource changes for the specified plan.</p>
     fn describe_provisioned_product_plan(
         &self,
-        input: &DescribeProvisionedProductPlanInput,
+        input: DescribeProvisionedProductPlanInput,
     ) -> RusotoFuture<DescribeProvisionedProductPlanOutput, DescribeProvisionedProductPlanError>
     {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
@@ -9388,7 +9388,7 @@ where
             "x-amz-target",
             "AWS242ServiceCatalogService.DescribeProvisionedProductPlan",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -9396,7 +9396,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -9419,7 +9419,7 @@ where
     /// <p>Gets information about the specified provisioning artifact (also known as a version) for the specified product.</p>
     fn describe_provisioning_artifact(
         &self,
-        input: &DescribeProvisioningArtifactInput,
+        input: DescribeProvisioningArtifactInput,
     ) -> RusotoFuture<DescribeProvisioningArtifactOutput, DescribeProvisioningArtifactError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
@@ -9428,7 +9428,7 @@ where
             "x-amz-target",
             "AWS242ServiceCatalogService.DescribeProvisioningArtifact",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -9436,7 +9436,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -9459,7 +9459,7 @@ where
     /// <p>Gets information about the configuration required to provision the specified product using the specified provisioning artifact.</p> <p>If the output contains a TagOption key with an empty list of values, there is a TagOption conflict for that key. The end user cannot take action to fix the conflict, and launch is not blocked. In subsequent calls to <a>ProvisionProduct</a>, do not include conflicted TagOption keys as tags, or this causes the error "Parameter validation failed: Missing required parameter in Tags[<i>N</i>]:<i>Value</i>". Tag the provisioned product with the value <code>sc-tagoption-conflict-portfolioId-productId</code>.</p>
     fn describe_provisioning_parameters(
         &self,
-        input: &DescribeProvisioningParametersInput,
+        input: DescribeProvisioningParametersInput,
     ) -> RusotoFuture<DescribeProvisioningParametersOutput, DescribeProvisioningParametersError>
     {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
@@ -9469,7 +9469,7 @@ where
             "x-amz-target",
             "AWS242ServiceCatalogService.DescribeProvisioningParameters",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -9477,7 +9477,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -9500,13 +9500,13 @@ where
     /// <p>Gets information about the specified request operation.</p> <p>Use this operation after calling a request operation (for example, <a>ProvisionProduct</a>, <a>TerminateProvisionedProduct</a>, or <a>UpdateProvisionedProduct</a>). </p>
     fn describe_record(
         &self,
-        input: &DescribeRecordInput,
+        input: DescribeRecordInput,
     ) -> RusotoFuture<DescribeRecordOutput, DescribeRecordError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWS242ServiceCatalogService.DescribeRecord");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -9514,7 +9514,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -9537,7 +9537,7 @@ where
     /// <p>Gets information about the specified TagOption.</p>
     fn describe_tag_option(
         &self,
-        input: &DescribeTagOptionInput,
+        input: DescribeTagOptionInput,
     ) -> RusotoFuture<DescribeTagOptionOutput, DescribeTagOptionError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
@@ -9546,7 +9546,7 @@ where
             "x-amz-target",
             "AWS242ServiceCatalogService.DescribeTagOption",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -9554,7 +9554,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -9577,7 +9577,7 @@ where
     /// <p>Disassociates a previously associated principal ARN from a specified portfolio.</p>
     fn disassociate_principal_from_portfolio(
         &self,
-        input: &DisassociatePrincipalFromPortfolioInput,
+        input: DisassociatePrincipalFromPortfolioInput,
     ) -> RusotoFuture<
         DisassociatePrincipalFromPortfolioOutput,
         DisassociatePrincipalFromPortfolioError,
@@ -9589,7 +9589,7 @@ where
             "x-amz-target",
             "AWS242ServiceCatalogService.DisassociatePrincipalFromPortfolio",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -9597,7 +9597,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -9620,7 +9620,7 @@ where
     /// <p>Disassociates the specified product from the specified portfolio. </p>
     fn disassociate_product_from_portfolio(
         &self,
-        input: &DisassociateProductFromPortfolioInput,
+        input: DisassociateProductFromPortfolioInput,
     ) -> RusotoFuture<DisassociateProductFromPortfolioOutput, DisassociateProductFromPortfolioError>
     {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
@@ -9630,7 +9630,7 @@ where
             "x-amz-target",
             "AWS242ServiceCatalogService.DisassociateProductFromPortfolio",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -9638,7 +9638,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -9661,7 +9661,7 @@ where
     /// <p>Disassociates the specified TagOption from the specified resource.</p>
     fn disassociate_tag_option_from_resource(
         &self,
-        input: &DisassociateTagOptionFromResourceInput,
+        input: DisassociateTagOptionFromResourceInput,
     ) -> RusotoFuture<DisassociateTagOptionFromResourceOutput, DisassociateTagOptionFromResourceError>
     {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
@@ -9671,7 +9671,7 @@ where
             "x-amz-target",
             "AWS242ServiceCatalogService.DisassociateTagOptionFromResource",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -9679,7 +9679,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -9702,7 +9702,7 @@ where
     /// <p>Provisions or modifies a product based on the resource changes for the specified plan.</p>
     fn execute_provisioned_product_plan(
         &self,
-        input: &ExecuteProvisionedProductPlanInput,
+        input: ExecuteProvisionedProductPlanInput,
     ) -> RusotoFuture<ExecuteProvisionedProductPlanOutput, ExecuteProvisionedProductPlanError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
@@ -9711,7 +9711,7 @@ where
             "x-amz-target",
             "AWS242ServiceCatalogService.ExecuteProvisionedProductPlan",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -9719,7 +9719,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -9742,7 +9742,7 @@ where
     /// <p>Lists all portfolios for which sharing was accepted by this account.</p>
     fn list_accepted_portfolio_shares(
         &self,
-        input: &ListAcceptedPortfolioSharesInput,
+        input: ListAcceptedPortfolioSharesInput,
     ) -> RusotoFuture<ListAcceptedPortfolioSharesOutput, ListAcceptedPortfolioSharesError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
@@ -9751,7 +9751,7 @@ where
             "x-amz-target",
             "AWS242ServiceCatalogService.ListAcceptedPortfolioShares",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -9759,7 +9759,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -9782,7 +9782,7 @@ where
     /// <p>Lists the constraints for the specified portfolio and product.</p>
     fn list_constraints_for_portfolio(
         &self,
-        input: &ListConstraintsForPortfolioInput,
+        input: ListConstraintsForPortfolioInput,
     ) -> RusotoFuture<ListConstraintsForPortfolioOutput, ListConstraintsForPortfolioError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
@@ -9791,7 +9791,7 @@ where
             "x-amz-target",
             "AWS242ServiceCatalogService.ListConstraintsForPortfolio",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -9799,7 +9799,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -9822,7 +9822,7 @@ where
     /// <p>Lists the paths to the specified product. A path is how the user has access to a specified product, and is necessary when provisioning a product. A path also determines the constraints put on the product.</p>
     fn list_launch_paths(
         &self,
-        input: &ListLaunchPathsInput,
+        input: ListLaunchPathsInput,
     ) -> RusotoFuture<ListLaunchPathsOutput, ListLaunchPathsError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
@@ -9831,7 +9831,7 @@ where
             "x-amz-target",
             "AWS242ServiceCatalogService.ListLaunchPaths",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -9839,7 +9839,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -9862,7 +9862,7 @@ where
     /// <p>Lists the account IDs that have access to the specified portfolio.</p>
     fn list_portfolio_access(
         &self,
-        input: &ListPortfolioAccessInput,
+        input: ListPortfolioAccessInput,
     ) -> RusotoFuture<ListPortfolioAccessOutput, ListPortfolioAccessError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
@@ -9871,7 +9871,7 @@ where
             "x-amz-target",
             "AWS242ServiceCatalogService.ListPortfolioAccess",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -9879,7 +9879,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -9902,13 +9902,13 @@ where
     /// <p>Lists all portfolios in the catalog.</p>
     fn list_portfolios(
         &self,
-        input: &ListPortfoliosInput,
+        input: ListPortfoliosInput,
     ) -> RusotoFuture<ListPortfoliosOutput, ListPortfoliosError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWS242ServiceCatalogService.ListPortfolios");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -9916,7 +9916,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -9939,7 +9939,7 @@ where
     /// <p>Lists all portfolios that the specified product is associated with.</p>
     fn list_portfolios_for_product(
         &self,
-        input: &ListPortfoliosForProductInput,
+        input: ListPortfoliosForProductInput,
     ) -> RusotoFuture<ListPortfoliosForProductOutput, ListPortfoliosForProductError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
@@ -9948,7 +9948,7 @@ where
             "x-amz-target",
             "AWS242ServiceCatalogService.ListPortfoliosForProduct",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -9956,7 +9956,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -9979,7 +9979,7 @@ where
     /// <p>Lists all principal ARNs associated with the specified portfolio.</p>
     fn list_principals_for_portfolio(
         &self,
-        input: &ListPrincipalsForPortfolioInput,
+        input: ListPrincipalsForPortfolioInput,
     ) -> RusotoFuture<ListPrincipalsForPortfolioOutput, ListPrincipalsForPortfolioError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
@@ -9988,7 +9988,7 @@ where
             "x-amz-target",
             "AWS242ServiceCatalogService.ListPrincipalsForPortfolio",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -9996,7 +9996,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -10019,7 +10019,7 @@ where
     /// <p>Lists the plans for the specified provisioned product or all plans to which the user has access.</p>
     fn list_provisioned_product_plans(
         &self,
-        input: &ListProvisionedProductPlansInput,
+        input: ListProvisionedProductPlansInput,
     ) -> RusotoFuture<ListProvisionedProductPlansOutput, ListProvisionedProductPlansError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
@@ -10028,7 +10028,7 @@ where
             "x-amz-target",
             "AWS242ServiceCatalogService.ListProvisionedProductPlans",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -10036,7 +10036,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -10059,7 +10059,7 @@ where
     /// <p>Lists all provisioning artifacts (also known as versions) for the specified product.</p>
     fn list_provisioning_artifacts(
         &self,
-        input: &ListProvisioningArtifactsInput,
+        input: ListProvisioningArtifactsInput,
     ) -> RusotoFuture<ListProvisioningArtifactsOutput, ListProvisioningArtifactsError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
@@ -10068,7 +10068,7 @@ where
             "x-amz-target",
             "AWS242ServiceCatalogService.ListProvisioningArtifacts",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -10076,7 +10076,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -10099,7 +10099,7 @@ where
     /// <p>Lists the specified requests or all performed requests.</p>
     fn list_record_history(
         &self,
-        input: &ListRecordHistoryInput,
+        input: ListRecordHistoryInput,
     ) -> RusotoFuture<ListRecordHistoryOutput, ListRecordHistoryError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
@@ -10108,7 +10108,7 @@ where
             "x-amz-target",
             "AWS242ServiceCatalogService.ListRecordHistory",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -10116,7 +10116,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -10139,7 +10139,7 @@ where
     /// <p>Lists the resources associated with the specified TagOption.</p>
     fn list_resources_for_tag_option(
         &self,
-        input: &ListResourcesForTagOptionInput,
+        input: ListResourcesForTagOptionInput,
     ) -> RusotoFuture<ListResourcesForTagOptionOutput, ListResourcesForTagOptionError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
@@ -10148,7 +10148,7 @@ where
             "x-amz-target",
             "AWS242ServiceCatalogService.ListResourcesForTagOption",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -10156,7 +10156,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -10179,13 +10179,13 @@ where
     /// <p>Lists the specified TagOptions or all TagOptions.</p>
     fn list_tag_options(
         &self,
-        input: &ListTagOptionsInput,
+        input: ListTagOptionsInput,
     ) -> RusotoFuture<ListTagOptionsOutput, ListTagOptionsError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWS242ServiceCatalogService.ListTagOptions");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -10193,7 +10193,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -10216,7 +10216,7 @@ where
     /// <p>Provisions the specified product.</p> <p>A provisioned product is a resourced instance of a product. For example, provisioning a product based on a CloudFormation template launches a CloudFormation stack and its underlying resources. You can check the status of this request using <a>DescribeRecord</a>.</p> <p>If the request contains a tag key with an empty list of values, there is a tag conflict for that key. Do not include conflicted keys as tags, or this causes the error "Parameter validation failed: Missing required parameter in Tags[<i>N</i>]:<i>Value</i>".</p>
     fn provision_product(
         &self,
-        input: &ProvisionProductInput,
+        input: ProvisionProductInput,
     ) -> RusotoFuture<ProvisionProductOutput, ProvisionProductError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
@@ -10225,7 +10225,7 @@ where
             "x-amz-target",
             "AWS242ServiceCatalogService.ProvisionProduct",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -10233,7 +10233,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -10256,7 +10256,7 @@ where
     /// <p>Rejects an offer to share the specified portfolio.</p>
     fn reject_portfolio_share(
         &self,
-        input: &RejectPortfolioShareInput,
+        input: RejectPortfolioShareInput,
     ) -> RusotoFuture<RejectPortfolioShareOutput, RejectPortfolioShareError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
@@ -10265,7 +10265,7 @@ where
             "x-amz-target",
             "AWS242ServiceCatalogService.RejectPortfolioShare",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -10273,7 +10273,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -10296,7 +10296,7 @@ where
     /// <p>Lists the provisioned products that are available (not terminated).</p> <p>To use additional filtering, see <a>SearchProvisionedProducts</a>.</p>
     fn scan_provisioned_products(
         &self,
-        input: &ScanProvisionedProductsInput,
+        input: ScanProvisionedProductsInput,
     ) -> RusotoFuture<ScanProvisionedProductsOutput, ScanProvisionedProductsError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
@@ -10305,7 +10305,7 @@ where
             "x-amz-target",
             "AWS242ServiceCatalogService.ScanProvisionedProducts",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -10313,7 +10313,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -10336,13 +10336,13 @@ where
     /// <p>Gets information about the products to which the caller has access.</p>
     fn search_products(
         &self,
-        input: &SearchProductsInput,
+        input: SearchProductsInput,
     ) -> RusotoFuture<SearchProductsOutput, SearchProductsError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWS242ServiceCatalogService.SearchProducts");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -10350,7 +10350,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -10373,7 +10373,7 @@ where
     /// <p>Gets information about the products for the specified portfolio or all products.</p>
     fn search_products_as_admin(
         &self,
-        input: &SearchProductsAsAdminInput,
+        input: SearchProductsAsAdminInput,
     ) -> RusotoFuture<SearchProductsAsAdminOutput, SearchProductsAsAdminError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
@@ -10382,7 +10382,7 @@ where
             "x-amz-target",
             "AWS242ServiceCatalogService.SearchProductsAsAdmin",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -10390,7 +10390,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -10413,7 +10413,7 @@ where
     /// <p>Gets information about the provisioned products that meet the specified criteria.</p>
     fn search_provisioned_products(
         &self,
-        input: &SearchProvisionedProductsInput,
+        input: SearchProvisionedProductsInput,
     ) -> RusotoFuture<SearchProvisionedProductsOutput, SearchProvisionedProductsError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
@@ -10422,7 +10422,7 @@ where
             "x-amz-target",
             "AWS242ServiceCatalogService.SearchProvisionedProducts",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -10430,7 +10430,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -10453,7 +10453,7 @@ where
     /// <p>Terminates the specified provisioned product.</p> <p>This operation does not delete any records associated with the provisioned product.</p> <p>You can check the status of this request using <a>DescribeRecord</a>.</p>
     fn terminate_provisioned_product(
         &self,
-        input: &TerminateProvisionedProductInput,
+        input: TerminateProvisionedProductInput,
     ) -> RusotoFuture<TerminateProvisionedProductOutput, TerminateProvisionedProductError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
@@ -10462,7 +10462,7 @@ where
             "x-amz-target",
             "AWS242ServiceCatalogService.TerminateProvisionedProduct",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -10470,7 +10470,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -10493,7 +10493,7 @@ where
     /// <p>Updates the specified constraint.</p>
     fn update_constraint(
         &self,
-        input: &UpdateConstraintInput,
+        input: UpdateConstraintInput,
     ) -> RusotoFuture<UpdateConstraintOutput, UpdateConstraintError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
@@ -10502,7 +10502,7 @@ where
             "x-amz-target",
             "AWS242ServiceCatalogService.UpdateConstraint",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -10510,7 +10510,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -10533,7 +10533,7 @@ where
     /// <p>Updates the specified portfolio.</p> <p>You cannot update a product that was shared with you.</p>
     fn update_portfolio(
         &self,
-        input: &UpdatePortfolioInput,
+        input: UpdatePortfolioInput,
     ) -> RusotoFuture<UpdatePortfolioOutput, UpdatePortfolioError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
@@ -10542,7 +10542,7 @@ where
             "x-amz-target",
             "AWS242ServiceCatalogService.UpdatePortfolio",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -10550,7 +10550,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -10573,13 +10573,13 @@ where
     /// <p>Updates the specified product.</p>
     fn update_product(
         &self,
-        input: &UpdateProductInput,
+        input: UpdateProductInput,
     ) -> RusotoFuture<UpdateProductOutput, UpdateProductError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWS242ServiceCatalogService.UpdateProduct");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -10587,7 +10587,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -10610,7 +10610,7 @@ where
     /// <p>Requests updates to the configuration of the specified provisioned product.</p> <p>If there are tags associated with the object, they cannot be updated or added. Depending on the specific updates requested, this operation can update with no interruption, with some interruption, or replace the provisioned product entirely.</p> <p>You can check the status of this request using <a>DescribeRecord</a>.</p>
     fn update_provisioned_product(
         &self,
-        input: &UpdateProvisionedProductInput,
+        input: UpdateProvisionedProductInput,
     ) -> RusotoFuture<UpdateProvisionedProductOutput, UpdateProvisionedProductError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
@@ -10619,7 +10619,7 @@ where
             "x-amz-target",
             "AWS242ServiceCatalogService.UpdateProvisionedProduct",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -10627,7 +10627,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -10650,7 +10650,7 @@ where
     /// <p>Updates the specified provisioning artifact (also known as a version) for the specified product.</p> <p>You cannot update a provisioning artifact for a product that was shared with you.</p>
     fn update_provisioning_artifact(
         &self,
-        input: &UpdateProvisioningArtifactInput,
+        input: UpdateProvisioningArtifactInput,
     ) -> RusotoFuture<UpdateProvisioningArtifactOutput, UpdateProvisioningArtifactError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
@@ -10659,7 +10659,7 @@ where
             "x-amz-target",
             "AWS242ServiceCatalogService.UpdateProvisioningArtifact",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -10667,7 +10667,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -10690,7 +10690,7 @@ where
     /// <p>Updates the specified TagOption.</p>
     fn update_tag_option(
         &self,
-        input: &UpdateTagOptionInput,
+        input: UpdateTagOptionInput,
     ) -> RusotoFuture<UpdateTagOptionOutput, UpdateTagOptionError> {
         let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
 
@@ -10699,7 +10699,7 @@ where
             "x-amz-target",
             "AWS242ServiceCatalogService.UpdateTagOption",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -10707,7 +10707,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 

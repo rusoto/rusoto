@@ -24,7 +24,7 @@ fn test_parse_no_such_hosted_zone_error() {
     };
 
     let client = Route53Client::new(mock, MockCredentialsProvider, Region::UsEast1);
-    let result = client.list_resource_record_sets(&request).sync();
+    let result = client.list_resource_record_sets(request).sync();
     assert!(result.is_err());
     let err = result.err().unwrap();
     assert_eq!(ListResourceRecordSetsError::NoSuchHostedZone("No hosted zone found with ID: NO-SUCH-ZONE".to_owned()), err);

@@ -17,6 +17,7 @@ extern crate hyper_tls;
 extern crate lazy_static;
 #[macro_use]
 extern crate log;
+extern crate md5;
 extern crate hex;
 extern crate hmac;
 extern crate base64;

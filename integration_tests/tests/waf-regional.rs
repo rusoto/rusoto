@@ -11,6 +11,6 @@ fn should_list_rules() {
     let client = WAFRegionalClient::simple(Region::UsEast1);
     let request = ListRulesRequest::default();
 
-    let result = client.list_rules(&request).sync().unwrap();
+    let result = client.list_rules(request).sync().unwrap();
     println!("{:#?}", result);
 }

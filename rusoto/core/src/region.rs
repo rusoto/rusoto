@@ -194,18 +194,6 @@ impl<'de> Deserialize<'de> for Region {
     }
 }
 
-impl Display for Region {
-    fn fmt(&self, f: &mut Formatter) -> Result<(), FmtError> {
-        match *self {
-            Region::Custom {
-                ref endpoint,
-                ref name,
-            } => write!(f, "{} with endpoint {}", &name, &endpoint),
-            ref r @ _ => write!(f, "{}", r.name()),
-        }
-    }
-}
-
 impl FromStr for Region {
     type Err = ParseRegionError;
 
@@ -296,39 +284,6 @@ mod tests {
         assert_eq!("us-gov-west-1".parse(), Ok(Region::UsGovWest1));
         assert_eq!("cn-north-1".parse(), Ok(Region::CnNorth1));
         assert_eq!("cn-northwest-1".parse(), Ok(Region::CnNorthwest1));
-    }
-
-    #[test]
-    fn region_display() {
-        assert_eq!(Region::ApNortheast1.to_string(),
-                   "ap-northeast-1".to_owned());
-        assert_eq!(Region::ApNortheast2.to_string(),
-                   "ap-northeast-2".to_owned());
-        assert_eq!(Region::ApSouth1.to_string(), "ap-south-1".to_owned());
-        assert_eq!(Region::ApSoutheast1.to_string(),
-                   "ap-southeast-1".to_owned());
-        assert_eq!(Region::ApSoutheast2.to_string(),
-                   "ap-southeast-2".to_owned());
-        assert_eq!(Region::CaCentral1.to_string(), "ca-central-1".to_owned());
-        assert_eq!(Region::EuCentral1.to_string(), "eu-central-1".to_owned());
-        assert_eq!(Region::EuWest1.to_string(), "eu-west-1".to_owned());
-        assert_eq!(Region::EuWest2.to_string(), "eu-west-2".to_owned());
-        assert_eq!(Region::EuWest3.to_string(), "eu-west-3".to_owned());
-        assert_eq!(Region::SaEast1.to_string(), "sa-east-1".to_owned());
-        assert_eq!(Region::UsEast1.to_string(), "us-east-1".to_owned());
-        assert_eq!(Region::UsEast2.to_string(), "us-east-2".to_owned());
-        assert_eq!(Region::UsWest1.to_string(), "us-west-1".to_owned());
-        assert_eq!(Region::UsWest2.to_string(), "us-west-2".to_owned());
-        assert_eq!(Region::UsGovWest1.to_string(), "us-gov-west-1".to_owned());
-        assert_eq!(Region::CnNorth1.to_string(), "cn-north-1".to_owned());
-        assert_eq!(Region::CnNorthwest1.to_string(), "cn-northwest-1".to_owned());
-        assert_eq!(
-            Region::Custom {
-                endpoint: "https://s3.provider.net".to_owned(),
-                name: "aa-south-1".to_owned(),
-            }.to_string(),
-            "aa-south-1 with endpoint https://s3.provider.net"
-        )
     }
 
     #[test]

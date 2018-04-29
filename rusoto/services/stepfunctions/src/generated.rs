@@ -18,18 +18,18 @@ use std::io;
 use futures::future;
 use futures::Future;
 use rusoto_core::reactor::{CredentialsProvider, RequestDispatcher};
-use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::region;
+use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::{ClientInner, RusotoFuture};
 
-use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
+use rusoto_core::request::HttpDispatchError;
 
-use serde_json;
-use rusoto_core::signature::SignedRequest;
-use serde_json::Value as SerdeJsonValue;
-use serde_json::from_str;
 use hyper::StatusCode;
+use rusoto_core::signature::SignedRequest;
+use serde_json;
+use serde_json::from_str;
+use serde_json::Value as SerdeJsonValue;
 /// <p>Contains details about an activity which failed during an execution.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct ActivityFailedEventDetails {
@@ -2517,115 +2517,115 @@ pub trait StepFunctions {
     /// <p>Creates an activity. An activity is a task which you write in any programming language and host on any machine which has access to AWS Step Functions. Activities must poll Step Functions using the <code>GetActivityTask</code> API action and respond using <code>SendTask*</code> API actions. This function lets Step Functions know the existence of your activity and returns an identifier for use in a state machine and when polling from the activity.</p>
     fn create_activity(
         &self,
-        input: &CreateActivityInput,
+        input: CreateActivityInput,
     ) -> RusotoFuture<CreateActivityOutput, CreateActivityError>;
 
     /// <p>Creates a state machine. A state machine consists of a collection of states that can do work (<code>Task</code> states), determine to which states to transition next (<code>Choice</code> states), stop an execution with an error (<code>Fail</code> states), and so on. State machines are specified using a JSON-based, structured language.</p>
     fn create_state_machine(
         &self,
-        input: &CreateStateMachineInput,
+        input: CreateStateMachineInput,
     ) -> RusotoFuture<CreateStateMachineOutput, CreateStateMachineError>;
 
     /// <p>Deletes an activity.</p>
     fn delete_activity(
         &self,
-        input: &DeleteActivityInput,
+        input: DeleteActivityInput,
     ) -> RusotoFuture<DeleteActivityOutput, DeleteActivityError>;
 
     /// <p><p>Deletes a state machine. This is an asynchronous operation: It sets the state machine&#39;s status to <code>DELETING</code> and begins the deletion process. Each state machine execution is deleted the next time it makes a state transition.</p> <note> <p>The state machine itself is deleted after all executions are completed or deleted.</p> </note></p>
     fn delete_state_machine(
         &self,
-        input: &DeleteStateMachineInput,
+        input: DeleteStateMachineInput,
     ) -> RusotoFuture<DeleteStateMachineOutput, DeleteStateMachineError>;
 
     /// <p>Describes an activity.</p>
     fn describe_activity(
         &self,
-        input: &DescribeActivityInput,
+        input: DescribeActivityInput,
     ) -> RusotoFuture<DescribeActivityOutput, DescribeActivityError>;
 
     /// <p>Describes an execution.</p>
     fn describe_execution(
         &self,
-        input: &DescribeExecutionInput,
+        input: DescribeExecutionInput,
     ) -> RusotoFuture<DescribeExecutionOutput, DescribeExecutionError>;
 
     /// <p>Describes a state machine.</p>
     fn describe_state_machine(
         &self,
-        input: &DescribeStateMachineInput,
+        input: DescribeStateMachineInput,
     ) -> RusotoFuture<DescribeStateMachineOutput, DescribeStateMachineError>;
 
     /// <p>Describes the state machine associated with a specific execution.</p>
     fn describe_state_machine_for_execution(
         &self,
-        input: &DescribeStateMachineForExecutionInput,
+        input: DescribeStateMachineForExecutionInput,
     ) -> RusotoFuture<DescribeStateMachineForExecutionOutput, DescribeStateMachineForExecutionError>;
 
     /// <p><p>Used by workers to retrieve a task (with the specified activity ARN) which has been scheduled for execution by a running state machine. This initiates a long poll, where the service holds the HTTP connection open and responds as soon as a task becomes available (i.e. an execution of a task of this type is needed.) The maximum time the service holds on to the request before responding is 60 seconds. If no task is available within 60 seconds, the poll returns a <code>taskToken</code> with a null string.</p> <important> <p>Workers should set their client side socket timeout to at least 65 seconds (5 seconds higher than the maximum time the service may hold the poll request).</p> </important></p>
     fn get_activity_task(
         &self,
-        input: &GetActivityTaskInput,
+        input: GetActivityTaskInput,
     ) -> RusotoFuture<GetActivityTaskOutput, GetActivityTaskError>;
 
     /// <p>Returns the history of the specified execution as a list of events. By default, the results are returned in ascending order of the <code>timeStamp</code> of the events. Use the <code>reverseOrder</code> parameter to get the latest events first.</p> <p>If a <code>nextToken</code> is returned by a previous call, there are more results available. To retrieve the next page of results, make the call again using the returned token in <code>nextToken</code>. Keep all other arguments unchanged.</p>
     fn get_execution_history(
         &self,
-        input: &GetExecutionHistoryInput,
+        input: GetExecutionHistoryInput,
     ) -> RusotoFuture<GetExecutionHistoryOutput, GetExecutionHistoryError>;
 
     /// <p>Lists the existing activities.</p> <p>If a <code>nextToken</code> is returned by a previous call, there are more results available. To retrieve the next page of results, make the call again using the returned token in <code>nextToken</code>. Keep all other arguments unchanged.</p>
     fn list_activities(
         &self,
-        input: &ListActivitiesInput,
+        input: ListActivitiesInput,
     ) -> RusotoFuture<ListActivitiesOutput, ListActivitiesError>;
 
     /// <p>Lists the executions of a state machine that meet the filtering criteria.</p> <p>If a <code>nextToken</code> is returned by a previous call, there are more results available. To retrieve the next page of results, make the call again using the returned token in <code>nextToken</code>. Keep all other arguments unchanged.</p>
     fn list_executions(
         &self,
-        input: &ListExecutionsInput,
+        input: ListExecutionsInput,
     ) -> RusotoFuture<ListExecutionsOutput, ListExecutionsError>;
 
     /// <p>Lists the existing state machines.</p> <p>If a <code>nextToken</code> is returned by a previous call, there are more results available. To retrieve the next page of results, make the call again using the returned token in <code>nextToken</code>. Keep all other arguments unchanged.</p>
     fn list_state_machines(
         &self,
-        input: &ListStateMachinesInput,
+        input: ListStateMachinesInput,
     ) -> RusotoFuture<ListStateMachinesOutput, ListStateMachinesError>;
 
     /// <p>Used by workers to report that the task identified by the <code>taskToken</code> failed.</p>
     fn send_task_failure(
         &self,
-        input: &SendTaskFailureInput,
+        input: SendTaskFailureInput,
     ) -> RusotoFuture<SendTaskFailureOutput, SendTaskFailureError>;
 
     /// <p><p>Used by workers to report to the service that the task represented by the specified <code>taskToken</code> is still making progress. This action resets the <code>Heartbeat</code> clock. The <code>Heartbeat</code> threshold is specified in the state machine&#39;s Amazon States Language definition. This action does not in itself create an event in the execution history. However, if the task times out, the execution history contains an <code>ActivityTimedOut</code> event.</p> <note> <p>The <code>Timeout</code> of a task, defined in the state machine&#39;s Amazon States Language definition, is its maximum allowed duration, regardless of the number of <a>SendTaskHeartbeat</a> requests received.</p> </note> <note> <p>This operation is only useful for long-lived tasks to report the liveliness of the task.</p> </note></p>
     fn send_task_heartbeat(
         &self,
-        input: &SendTaskHeartbeatInput,
+        input: SendTaskHeartbeatInput,
     ) -> RusotoFuture<SendTaskHeartbeatOutput, SendTaskHeartbeatError>;
 
     /// <p>Used by workers to report that the task identified by the <code>taskToken</code> completed successfully.</p>
     fn send_task_success(
         &self,
-        input: &SendTaskSuccessInput,
+        input: SendTaskSuccessInput,
     ) -> RusotoFuture<SendTaskSuccessOutput, SendTaskSuccessError>;
 
     /// <p>Starts a state machine execution.</p>
     fn start_execution(
         &self,
-        input: &StartExecutionInput,
+        input: StartExecutionInput,
     ) -> RusotoFuture<StartExecutionOutput, StartExecutionError>;
 
     /// <p>Stops an execution.</p>
     fn stop_execution(
         &self,
-        input: &StopExecutionInput,
+        input: StopExecutionInput,
     ) -> RusotoFuture<StopExecutionOutput, StopExecutionError>;
 
     /// <p><p>Updates an existing state machine by modifying its <code>definition</code> and/or <code>roleArn</code>. Running executions will continue to use the previous <code>definition</code> and <code>roleArn</code>.</p> <note> <p>All <code>StartExecution</code> calls within a few seconds will use the updated <code>definition</code> and <code>roleArn</code>. Executions started immediately after calling <code>UpdateStateMachine</code> may use the previous state machine <code>definition</code> and <code>roleArn</code>. You must include at least one of <code>definition</code> or <code>roleArn</code> or you will receive a <code>MissingRequiredParameter</code> error.</p> </note></p>
     fn update_state_machine(
         &self,
-        input: &UpdateStateMachineInput,
+        input: UpdateStateMachineInput,
     ) -> RusotoFuture<UpdateStateMachineOutput, UpdateStateMachineError>;
 }
 /// A client for the AWS SFN API.
@@ -2674,13 +2674,13 @@ where
     /// <p>Creates an activity. An activity is a task which you write in any programming language and host on any machine which has access to AWS Step Functions. Activities must poll Step Functions using the <code>GetActivityTask</code> API action and respond using <code>SendTask*</code> API actions. This function lets Step Functions know the existence of your activity and returns an identifier for use in a state machine and when polling from the activity.</p>
     fn create_activity(
         &self,
-        input: &CreateActivityInput,
+        input: CreateActivityInput,
     ) -> RusotoFuture<CreateActivityOutput, CreateActivityError> {
         let mut request = SignedRequest::new("POST", "states", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "AWSStepFunctions.CreateActivity");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -2688,7 +2688,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -2711,13 +2711,13 @@ where
     /// <p>Creates a state machine. A state machine consists of a collection of states that can do work (<code>Task</code> states), determine to which states to transition next (<code>Choice</code> states), stop an execution with an error (<code>Fail</code> states), and so on. State machines are specified using a JSON-based, structured language.</p>
     fn create_state_machine(
         &self,
-        input: &CreateStateMachineInput,
+        input: CreateStateMachineInput,
     ) -> RusotoFuture<CreateStateMachineOutput, CreateStateMachineError> {
         let mut request = SignedRequest::new("POST", "states", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "AWSStepFunctions.CreateStateMachine");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -2725,7 +2725,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -2748,13 +2748,13 @@ where
     /// <p>Deletes an activity.</p>
     fn delete_activity(
         &self,
-        input: &DeleteActivityInput,
+        input: DeleteActivityInput,
     ) -> RusotoFuture<DeleteActivityOutput, DeleteActivityError> {
         let mut request = SignedRequest::new("POST", "states", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "AWSStepFunctions.DeleteActivity");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -2762,7 +2762,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -2785,13 +2785,13 @@ where
     /// <p><p>Deletes a state machine. This is an asynchronous operation: It sets the state machine&#39;s status to <code>DELETING</code> and begins the deletion process. Each state machine execution is deleted the next time it makes a state transition.</p> <note> <p>The state machine itself is deleted after all executions are completed or deleted.</p> </note></p>
     fn delete_state_machine(
         &self,
-        input: &DeleteStateMachineInput,
+        input: DeleteStateMachineInput,
     ) -> RusotoFuture<DeleteStateMachineOutput, DeleteStateMachineError> {
         let mut request = SignedRequest::new("POST", "states", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "AWSStepFunctions.DeleteStateMachine");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -2799,7 +2799,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -2822,13 +2822,13 @@ where
     /// <p>Describes an activity.</p>
     fn describe_activity(
         &self,
-        input: &DescribeActivityInput,
+        input: DescribeActivityInput,
     ) -> RusotoFuture<DescribeActivityOutput, DescribeActivityError> {
         let mut request = SignedRequest::new("POST", "states", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "AWSStepFunctions.DescribeActivity");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -2836,7 +2836,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -2859,13 +2859,13 @@ where
     /// <p>Describes an execution.</p>
     fn describe_execution(
         &self,
-        input: &DescribeExecutionInput,
+        input: DescribeExecutionInput,
     ) -> RusotoFuture<DescribeExecutionOutput, DescribeExecutionError> {
         let mut request = SignedRequest::new("POST", "states", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "AWSStepFunctions.DescribeExecution");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -2873,7 +2873,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -2896,13 +2896,13 @@ where
     /// <p>Describes a state machine.</p>
     fn describe_state_machine(
         &self,
-        input: &DescribeStateMachineInput,
+        input: DescribeStateMachineInput,
     ) -> RusotoFuture<DescribeStateMachineOutput, DescribeStateMachineError> {
         let mut request = SignedRequest::new("POST", "states", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "AWSStepFunctions.DescribeStateMachine");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -2910,7 +2910,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -2933,7 +2933,7 @@ where
     /// <p>Describes the state machine associated with a specific execution.</p>
     fn describe_state_machine_for_execution(
         &self,
-        input: &DescribeStateMachineForExecutionInput,
+        input: DescribeStateMachineForExecutionInput,
     ) -> RusotoFuture<DescribeStateMachineForExecutionOutput, DescribeStateMachineForExecutionError>
     {
         let mut request = SignedRequest::new("POST", "states", &self.region, "/");
@@ -2943,7 +2943,7 @@ where
             "x-amz-target",
             "AWSStepFunctions.DescribeStateMachineForExecution",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -2951,7 +2951,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -2974,13 +2974,13 @@ where
     /// <p><p>Used by workers to retrieve a task (with the specified activity ARN) which has been scheduled for execution by a running state machine. This initiates a long poll, where the service holds the HTTP connection open and responds as soon as a task becomes available (i.e. an execution of a task of this type is needed.) The maximum time the service holds on to the request before responding is 60 seconds. If no task is available within 60 seconds, the poll returns a <code>taskToken</code> with a null string.</p> <important> <p>Workers should set their client side socket timeout to at least 65 seconds (5 seconds higher than the maximum time the service may hold the poll request).</p> </important></p>
     fn get_activity_task(
         &self,
-        input: &GetActivityTaskInput,
+        input: GetActivityTaskInput,
     ) -> RusotoFuture<GetActivityTaskOutput, GetActivityTaskError> {
         let mut request = SignedRequest::new("POST", "states", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "AWSStepFunctions.GetActivityTask");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -2988,7 +2988,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -3011,13 +3011,13 @@ where
     /// <p>Returns the history of the specified execution as a list of events. By default, the results are returned in ascending order of the <code>timeStamp</code> of the events. Use the <code>reverseOrder</code> parameter to get the latest events first.</p> <p>If a <code>nextToken</code> is returned by a previous call, there are more results available. To retrieve the next page of results, make the call again using the returned token in <code>nextToken</code>. Keep all other arguments unchanged.</p>
     fn get_execution_history(
         &self,
-        input: &GetExecutionHistoryInput,
+        input: GetExecutionHistoryInput,
     ) -> RusotoFuture<GetExecutionHistoryOutput, GetExecutionHistoryError> {
         let mut request = SignedRequest::new("POST", "states", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "AWSStepFunctions.GetExecutionHistory");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -3025,7 +3025,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -3048,13 +3048,13 @@ where
     /// <p>Lists the existing activities.</p> <p>If a <code>nextToken</code> is returned by a previous call, there are more results available. To retrieve the next page of results, make the call again using the returned token in <code>nextToken</code>. Keep all other arguments unchanged.</p>
     fn list_activities(
         &self,
-        input: &ListActivitiesInput,
+        input: ListActivitiesInput,
     ) -> RusotoFuture<ListActivitiesOutput, ListActivitiesError> {
         let mut request = SignedRequest::new("POST", "states", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "AWSStepFunctions.ListActivities");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -3062,7 +3062,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -3085,13 +3085,13 @@ where
     /// <p>Lists the executions of a state machine that meet the filtering criteria.</p> <p>If a <code>nextToken</code> is returned by a previous call, there are more results available. To retrieve the next page of results, make the call again using the returned token in <code>nextToken</code>. Keep all other arguments unchanged.</p>
     fn list_executions(
         &self,
-        input: &ListExecutionsInput,
+        input: ListExecutionsInput,
     ) -> RusotoFuture<ListExecutionsOutput, ListExecutionsError> {
         let mut request = SignedRequest::new("POST", "states", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "AWSStepFunctions.ListExecutions");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -3099,7 +3099,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -3122,13 +3122,13 @@ where
     /// <p>Lists the existing state machines.</p> <p>If a <code>nextToken</code> is returned by a previous call, there are more results available. To retrieve the next page of results, make the call again using the returned token in <code>nextToken</code>. Keep all other arguments unchanged.</p>
     fn list_state_machines(
         &self,
-        input: &ListStateMachinesInput,
+        input: ListStateMachinesInput,
     ) -> RusotoFuture<ListStateMachinesOutput, ListStateMachinesError> {
         let mut request = SignedRequest::new("POST", "states", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "AWSStepFunctions.ListStateMachines");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -3136,7 +3136,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -3159,13 +3159,13 @@ where
     /// <p>Used by workers to report that the task identified by the <code>taskToken</code> failed.</p>
     fn send_task_failure(
         &self,
-        input: &SendTaskFailureInput,
+        input: SendTaskFailureInput,
     ) -> RusotoFuture<SendTaskFailureOutput, SendTaskFailureError> {
         let mut request = SignedRequest::new("POST", "states", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "AWSStepFunctions.SendTaskFailure");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -3173,7 +3173,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -3196,13 +3196,13 @@ where
     /// <p><p>Used by workers to report to the service that the task represented by the specified <code>taskToken</code> is still making progress. This action resets the <code>Heartbeat</code> clock. The <code>Heartbeat</code> threshold is specified in the state machine&#39;s Amazon States Language definition. This action does not in itself create an event in the execution history. However, if the task times out, the execution history contains an <code>ActivityTimedOut</code> event.</p> <note> <p>The <code>Timeout</code> of a task, defined in the state machine&#39;s Amazon States Language definition, is its maximum allowed duration, regardless of the number of <a>SendTaskHeartbeat</a> requests received.</p> </note> <note> <p>This operation is only useful for long-lived tasks to report the liveliness of the task.</p> </note></p>
     fn send_task_heartbeat(
         &self,
-        input: &SendTaskHeartbeatInput,
+        input: SendTaskHeartbeatInput,
     ) -> RusotoFuture<SendTaskHeartbeatOutput, SendTaskHeartbeatError> {
         let mut request = SignedRequest::new("POST", "states", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "AWSStepFunctions.SendTaskHeartbeat");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -3210,7 +3210,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -3233,13 +3233,13 @@ where
     /// <p>Used by workers to report that the task identified by the <code>taskToken</code> completed successfully.</p>
     fn send_task_success(
         &self,
-        input: &SendTaskSuccessInput,
+        input: SendTaskSuccessInput,
     ) -> RusotoFuture<SendTaskSuccessOutput, SendTaskSuccessError> {
         let mut request = SignedRequest::new("POST", "states", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "AWSStepFunctions.SendTaskSuccess");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -3247,7 +3247,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -3270,13 +3270,13 @@ where
     /// <p>Starts a state machine execution.</p>
     fn start_execution(
         &self,
-        input: &StartExecutionInput,
+        input: StartExecutionInput,
     ) -> RusotoFuture<StartExecutionOutput, StartExecutionError> {
         let mut request = SignedRequest::new("POST", "states", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "AWSStepFunctions.StartExecution");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -3284,7 +3284,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -3307,13 +3307,13 @@ where
     /// <p>Stops an execution.</p>
     fn stop_execution(
         &self,
-        input: &StopExecutionInput,
+        input: StopExecutionInput,
     ) -> RusotoFuture<StopExecutionOutput, StopExecutionError> {
         let mut request = SignedRequest::new("POST", "states", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "AWSStepFunctions.StopExecution");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -3321,7 +3321,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -3344,13 +3344,13 @@ where
     /// <p><p>Updates an existing state machine by modifying its <code>definition</code> and/or <code>roleArn</code>. Running executions will continue to use the previous <code>definition</code> and <code>roleArn</code>.</p> <note> <p>All <code>StartExecution</code> calls within a few seconds will use the updated <code>definition</code> and <code>roleArn</code>. Executions started immediately after calling <code>UpdateStateMachine</code> may use the previous state machine <code>definition</code> and <code>roleArn</code>. You must include at least one of <code>definition</code> or <code>roleArn</code> or you will receive a <code>MissingRequiredParameter</code> error.</p> </note></p>
     fn update_state_machine(
         &self,
-        input: &UpdateStateMachineInput,
+        input: UpdateStateMachineInput,
     ) -> RusotoFuture<UpdateStateMachineOutput, UpdateStateMachineError> {
         let mut request = SignedRequest::new("POST", "states", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "AWSStepFunctions.UpdateStateMachine");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -3358,7 +3358,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 

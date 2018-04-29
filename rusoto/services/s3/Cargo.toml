@@ -13,11 +13,8 @@ homepage = "https://www.rusoto.org/"
 [build-dependencies]
 
 [dependencies]
-base64 = "0.9"
 futures = "0.1.16"
-hex = "0.3"
 hyper = "0.11.0"
-md5 = "0.3.6"
 tokio-core = "0.1.10"
 xml-rs = "0.7"
 

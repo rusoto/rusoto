@@ -18,18 +18,18 @@ use std::io;
 use futures::future;
 use futures::Future;
 use rusoto_core::reactor::{CredentialsProvider, RequestDispatcher};
-use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::region;
+use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::{ClientInner, RusotoFuture};
 
-use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
+use rusoto_core::request::HttpDispatchError;
 
-use serde_json;
-use rusoto_core::signature::SignedRequest;
-use serde_json::Value as SerdeJsonValue;
-use serde_json::from_str;
 use hyper::StatusCode;
+use rusoto_core::signature::SignedRequest;
+use serde_json;
+use serde_json::from_str;
+use serde_json::Value as SerdeJsonValue;
 /// <p>An entitlement represents capacity in a product owned by the customer. For example, a customer might own some number of users or seats in an SaaS application or some amount of data capacity in a multi-tenant database.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct Entitlement {
@@ -204,7 +204,7 @@ pub trait MarketplaceEntitlement {
     /// <p>GetEntitlements retrieves entitlement values for a given product. The results can be filtered based on customer identifier or product dimensions.</p>
     fn get_entitlements(
         &self,
-        input: &GetEntitlementsRequest,
+        input: GetEntitlementsRequest,
     ) -> RusotoFuture<GetEntitlementsResult, GetEntitlementsError>;
 }
 /// A client for the AWS Marketplace Entitlement Service API.
@@ -253,13 +253,13 @@ where
     /// <p>GetEntitlements retrieves entitlement values for a given product. The results can be filtered based on customer identifier or product dimensions.</p>
     fn get_entitlements(
         &self,
-        input: &GetEntitlementsRequest,
+        input: GetEntitlementsRequest,
     ) -> RusotoFuture<GetEntitlementsResult, GetEntitlementsError> {
         let mut request = SignedRequest::new("POST", "aws-marketplace", &self.region, "/");
         request.set_endpoint_prefix("entitlement.marketplace".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSMPEntitlementService.GetEntitlements");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -267,7 +267,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 

@@ -18,18 +18,18 @@ use std::io;
 use futures::future;
 use futures::Future;
 use rusoto_core::reactor::{CredentialsProvider, RequestDispatcher};
-use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::region;
+use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::{ClientInner, RusotoFuture};
 
-use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
+use rusoto_core::request::HttpDispatchError;
 
-use serde_json;
-use rusoto_core::signature::SignedRequest;
-use serde_json::Value as SerdeJsonValue;
-use serde_json::from_str;
 use hyper::StatusCode;
+use rusoto_core::signature::SignedRequest;
+use serde_json;
+use serde_json::from_str;
+use serde_json::Value as SerdeJsonValue;
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct AllocateStaticIpRequest {
     /// <p>The name of the static IP address.</p>
@@ -10511,175 +10511,175 @@ pub trait Lightsail {
     /// <p>Allocates a static IP address.</p>
     fn allocate_static_ip(
         &self,
-        input: &AllocateStaticIpRequest,
+        input: AllocateStaticIpRequest,
     ) -> RusotoFuture<AllocateStaticIpResult, AllocateStaticIpError>;
 
     /// <p>Attaches a block storage disk to a running or stopped Lightsail instance and exposes it to the instance with the specified disk name.</p>
     fn attach_disk(
         &self,
-        input: &AttachDiskRequest,
+        input: AttachDiskRequest,
     ) -> RusotoFuture<AttachDiskResult, AttachDiskError>;
 
     /// <p>Attaches one or more Lightsail instances to a load balancer.</p> <p>After some time, the instances are attached to the load balancer and the health check status is available.</p>
     fn attach_instances_to_load_balancer(
         &self,
-        input: &AttachInstancesToLoadBalancerRequest,
+        input: AttachInstancesToLoadBalancerRequest,
     ) -> RusotoFuture<AttachInstancesToLoadBalancerResult, AttachInstancesToLoadBalancerError>;
 
     /// <p>Attaches a Transport Layer Security (TLS) certificate to your load balancer. TLS is just an updated, more secure version of Secure Socket Layer (SSL).</p> <p>Once you create and validate your certificate, you can attach it to your load balancer. You can also use this API to rotate the certificates on your account. Use the <code>AttachLoadBalancerTlsCertificate</code> operation with the non-attached certificate, and it will replace the existing one and become the attached certificate.</p>
     fn attach_load_balancer_tls_certificate(
         &self,
-        input: &AttachLoadBalancerTlsCertificateRequest,
+        input: AttachLoadBalancerTlsCertificateRequest,
     ) -> RusotoFuture<AttachLoadBalancerTlsCertificateResult, AttachLoadBalancerTlsCertificateError>;
 
     /// <p>Attaches a static IP address to a specific Amazon Lightsail instance.</p>
     fn attach_static_ip(
         &self,
-        input: &AttachStaticIpRequest,
+        input: AttachStaticIpRequest,
     ) -> RusotoFuture<AttachStaticIpResult, AttachStaticIpError>;
 
     /// <p>Closes the public ports on a specific Amazon Lightsail instance.</p>
     fn close_instance_public_ports(
         &self,
-        input: &CloseInstancePublicPortsRequest,
+        input: CloseInstancePublicPortsRequest,
     ) -> RusotoFuture<CloseInstancePublicPortsResult, CloseInstancePublicPortsError>;
 
     /// <p>Creates a block storage disk that can be attached to a Lightsail instance in the same Availability Zone (e.g., <code>us-east-2a</code>). The disk is created in the regional endpoint that you send the HTTP request to. For more information, see <a href="https://lightsail.aws.amazon.com/ls/docs/overview/article/understanding-regions-and-availability-zones-in-amazon-lightsail">Regions and Availability Zones in Lightsail</a>.</p>
     fn create_disk(
         &self,
-        input: &CreateDiskRequest,
+        input: CreateDiskRequest,
     ) -> RusotoFuture<CreateDiskResult, CreateDiskError>;
 
     /// <p>Creates a block storage disk from a disk snapshot that can be attached to a Lightsail instance in the same Availability Zone (e.g., <code>us-east-2a</code>). The disk is created in the regional endpoint that you send the HTTP request to. For more information, see <a href="https://lightsail.aws.amazon.com/ls/docs/overview/article/understanding-regions-and-availability-zones-in-amazon-lightsail">Regions and Availability Zones in Lightsail</a>.</p>
     fn create_disk_from_snapshot(
         &self,
-        input: &CreateDiskFromSnapshotRequest,
+        input: CreateDiskFromSnapshotRequest,
     ) -> RusotoFuture<CreateDiskFromSnapshotResult, CreateDiskFromSnapshotError>;
 
     /// <p>Creates a snapshot of a block storage disk. You can use snapshots for backups, to make copies of disks, and to save data before shutting down a Lightsail instance.</p> <p>You can take a snapshot of an attached disk that is in use; however, snapshots only capture data that has been written to your disk at the time the snapshot command is issued. This may exclude any data that has been cached by any applications or the operating system. If you can pause any file systems on the disk long enough to take a snapshot, your snapshot should be complete. Nevertheless, if you cannot pause all file writes to the disk, you should unmount the disk from within the Lightsail instance, issue the create disk snapshot command, and then remount the disk to ensure a consistent and complete snapshot. You may remount and use your disk while the snapshot status is pending.</p>
     fn create_disk_snapshot(
         &self,
-        input: &CreateDiskSnapshotRequest,
+        input: CreateDiskSnapshotRequest,
     ) -> RusotoFuture<CreateDiskSnapshotResult, CreateDiskSnapshotError>;
 
     /// <p>Creates a domain resource for the specified domain (e.g., example.com).</p>
     fn create_domain(
         &self,
-        input: &CreateDomainRequest,
+        input: CreateDomainRequest,
     ) -> RusotoFuture<CreateDomainResult, CreateDomainError>;
 
     /// <p>Creates one of the following entry records associated with the domain: A record, CNAME record, TXT record, or MX record.</p>
     fn create_domain_entry(
         &self,
-        input: &CreateDomainEntryRequest,
+        input: CreateDomainEntryRequest,
     ) -> RusotoFuture<CreateDomainEntryResult, CreateDomainEntryError>;
 
     /// <p>Creates a snapshot of a specific virtual private server, or <i>instance</i>. You can use a snapshot to create a new instance that is based on that snapshot.</p>
     fn create_instance_snapshot(
         &self,
-        input: &CreateInstanceSnapshotRequest,
+        input: CreateInstanceSnapshotRequest,
     ) -> RusotoFuture<CreateInstanceSnapshotResult, CreateInstanceSnapshotError>;
 
     /// <p>Creates one or more Amazon Lightsail virtual private servers, or <i>instances</i>.</p>
     fn create_instances(
         &self,
-        input: &CreateInstancesRequest,
+        input: CreateInstancesRequest,
     ) -> RusotoFuture<CreateInstancesResult, CreateInstancesError>;
 
     /// <p>Uses a specific snapshot as a blueprint for creating one or more new instances that are based on that identical configuration.</p>
     fn create_instances_from_snapshot(
         &self,
-        input: &CreateInstancesFromSnapshotRequest,
+        input: CreateInstancesFromSnapshotRequest,
     ) -> RusotoFuture<CreateInstancesFromSnapshotResult, CreateInstancesFromSnapshotError>;
 
     /// <p>Creates sn SSH key pair.</p>
     fn create_key_pair(
         &self,
-        input: &CreateKeyPairRequest,
+        input: CreateKeyPairRequest,
     ) -> RusotoFuture<CreateKeyPairResult, CreateKeyPairError>;
 
     /// <p>Creates a Lightsail load balancer. To learn more about deciding whether to load balance your application, see <a href="https://lightsail.aws.amazon.com/ls/docs/how-to/article/configure-lightsail-instances-for-load-balancing">Configure your Lightsail instances for load balancing</a>. You can create up to 5 load balancers per AWS Region in your account.</p> <p>When you create a load balancer, you can specify a unique name and port settings. To change additional load balancer settings, use the <code>UpdateLoadBalancerAttribute</code> operation.</p>
     fn create_load_balancer(
         &self,
-        input: &CreateLoadBalancerRequest,
+        input: CreateLoadBalancerRequest,
     ) -> RusotoFuture<CreateLoadBalancerResult, CreateLoadBalancerError>;
 
     /// <p>Creates a Lightsail load balancer TLS certificate.</p> <p>TLS is just an updated, more secure version of Secure Socket Layer (SSL).</p>
     fn create_load_balancer_tls_certificate(
         &self,
-        input: &CreateLoadBalancerTlsCertificateRequest,
+        input: CreateLoadBalancerTlsCertificateRequest,
     ) -> RusotoFuture<CreateLoadBalancerTlsCertificateResult, CreateLoadBalancerTlsCertificateError>;
 
     /// <p><p>Deletes the specified block storage disk. The disk must be in the <code>available</code> state (not attached to a Lightsail instance).</p> <note> <p>The disk may remain in the <code>deleting</code> state for several minutes.</p> </note></p>
     fn delete_disk(
         &self,
-        input: &DeleteDiskRequest,
+        input: DeleteDiskRequest,
     ) -> RusotoFuture<DeleteDiskResult, DeleteDiskError>;
 
     /// <p>Deletes the specified disk snapshot.</p> <p>When you make periodic snapshots of a disk, the snapshots are incremental, and only the blocks on the device that have changed since your last snapshot are saved in the new snapshot. When you delete a snapshot, only the data not needed for any other snapshot is removed. So regardless of which prior snapshots have been deleted, all active snapshots will have access to all the information needed to restore the disk.</p>
     fn delete_disk_snapshot(
         &self,
-        input: &DeleteDiskSnapshotRequest,
+        input: DeleteDiskSnapshotRequest,
     ) -> RusotoFuture<DeleteDiskSnapshotResult, DeleteDiskSnapshotError>;
 
     /// <p>Deletes the specified domain recordset and all of its domain records.</p>
     fn delete_domain(
         &self,
-        input: &DeleteDomainRequest,
+        input: DeleteDomainRequest,
     ) -> RusotoFuture<DeleteDomainResult, DeleteDomainError>;
 
     /// <p>Deletes a specific domain entry.</p>
     fn delete_domain_entry(
         &self,
-        input: &DeleteDomainEntryRequest,
+        input: DeleteDomainEntryRequest,
     ) -> RusotoFuture<DeleteDomainEntryResult, DeleteDomainEntryError>;
 
     /// <p>Deletes a specific Amazon Lightsail virtual private server, or <i>instance</i>.</p>
     fn delete_instance(
         &self,
-        input: &DeleteInstanceRequest,
+        input: DeleteInstanceRequest,
     ) -> RusotoFuture<DeleteInstanceResult, DeleteInstanceError>;
 
     /// <p>Deletes a specific snapshot of a virtual private server (or <i>instance</i>).</p>
     fn delete_instance_snapshot(
         &self,
-        input: &DeleteInstanceSnapshotRequest,
+        input: DeleteInstanceSnapshotRequest,
     ) -> RusotoFuture<DeleteInstanceSnapshotResult, DeleteInstanceSnapshotError>;
 
     /// <p>Deletes a specific SSH key pair.</p>
     fn delete_key_pair(
         &self,
-        input: &DeleteKeyPairRequest,
+        input: DeleteKeyPairRequest,
     ) -> RusotoFuture<DeleteKeyPairResult, DeleteKeyPairError>;
 
     /// <p>Deletes a Lightsail load balancer and all its associated SSL/TLS certificates. Once the load balancer is deleted, you will need to create a new load balancer, create a new certificate, and verify domain ownership again.</p>
     fn delete_load_balancer(
         &self,
-        input: &DeleteLoadBalancerRequest,
+        input: DeleteLoadBalancerRequest,
     ) -> RusotoFuture<DeleteLoadBalancerResult, DeleteLoadBalancerError>;
 
     /// <p>Deletes an SSL/TLS certificate associated with a Lightsail load balancer.</p>
     fn delete_load_balancer_tls_certificate(
         &self,
-        input: &DeleteLoadBalancerTlsCertificateRequest,
+        input: DeleteLoadBalancerTlsCertificateRequest,
     ) -> RusotoFuture<DeleteLoadBalancerTlsCertificateResult, DeleteLoadBalancerTlsCertificateError>;
 
     /// <p>Detaches a stopped block storage disk from a Lightsail instance. Make sure to unmount any file systems on the device within your operating system before stopping the instance and detaching the disk.</p>
     fn detach_disk(
         &self,
-        input: &DetachDiskRequest,
+        input: DetachDiskRequest,
     ) -> RusotoFuture<DetachDiskResult, DetachDiskError>;
 
     /// <p>Detaches the specified instances from a Lightsail load balancer.</p> <p>This operation waits until the instances are no longer needed before they are detached from the load balancer.</p>
     fn detach_instances_from_load_balancer(
         &self,
-        input: &DetachInstancesFromLoadBalancerRequest,
+        input: DetachInstancesFromLoadBalancerRequest,
     ) -> RusotoFuture<DetachInstancesFromLoadBalancerResult, DetachInstancesFromLoadBalancerError>;
 
     /// <p>Detaches a static IP from the Amazon Lightsail instance to which it is attached.</p>
     fn detach_static_ip(
         &self,
-        input: &DetachStaticIpRequest,
+        input: DetachStaticIpRequest,
     ) -> RusotoFuture<DetachStaticIpResult, DetachStaticIpError>;
 
     /// <p>Downloads the default SSH key pair from the user's account.</p>
@@ -10690,173 +10690,172 @@ pub trait Lightsail {
     /// <p>Returns the names of all active (not deleted) resources.</p>
     fn get_active_names(
         &self,
-        input: &GetActiveNamesRequest,
+        input: GetActiveNamesRequest,
     ) -> RusotoFuture<GetActiveNamesResult, GetActiveNamesError>;
 
     /// <p>Returns the list of available instance images, or <i>blueprints</i>. You can use a blueprint to create a new virtual private server already running a specific operating system, as well as a preinstalled app or development stack. The software each instance is running depends on the blueprint image you choose.</p>
     fn get_blueprints(
         &self,
-        input: &GetBlueprintsRequest,
+        input: GetBlueprintsRequest,
     ) -> RusotoFuture<GetBlueprintsResult, GetBlueprintsError>;
 
     /// <p>Returns the list of bundles that are available for purchase. A bundle describes the specs for your virtual private server (or <i>instance</i>).</p>
     fn get_bundles(
         &self,
-        input: &GetBundlesRequest,
+        input: GetBundlesRequest,
     ) -> RusotoFuture<GetBundlesResult, GetBundlesError>;
 
     /// <p>Returns information about a specific block storage disk.</p>
-    fn get_disk(&self, input: &GetDiskRequest) -> RusotoFuture<GetDiskResult, GetDiskError>;
+    fn get_disk(&self, input: GetDiskRequest) -> RusotoFuture<GetDiskResult, GetDiskError>;
 
     /// <p>Returns information about a specific block storage disk snapshot.</p>
     fn get_disk_snapshot(
         &self,
-        input: &GetDiskSnapshotRequest,
+        input: GetDiskSnapshotRequest,
     ) -> RusotoFuture<GetDiskSnapshotResult, GetDiskSnapshotError>;
 
     /// <p>Returns information about all block storage disk snapshots in your AWS account and region.</p> <p>If you are describing a long list of disk snapshots, you can paginate the output to make the list more manageable. You can use the pageToken and nextPageToken values to retrieve the next items in the list.</p>
     fn get_disk_snapshots(
         &self,
-        input: &GetDiskSnapshotsRequest,
+        input: GetDiskSnapshotsRequest,
     ) -> RusotoFuture<GetDiskSnapshotsResult, GetDiskSnapshotsError>;
 
     /// <p>Returns information about all block storage disks in your AWS account and region.</p> <p>If you are describing a long list of disks, you can paginate the output to make the list more manageable. You can use the pageToken and nextPageToken values to retrieve the next items in the list.</p>
-    fn get_disks(&self, input: &GetDisksRequest) -> RusotoFuture<GetDisksResult, GetDisksError>;
+    fn get_disks(&self, input: GetDisksRequest) -> RusotoFuture<GetDisksResult, GetDisksError>;
 
     /// <p>Returns information about a specific domain recordset.</p>
-    fn get_domain(&self, input: &GetDomainRequest)
-        -> RusotoFuture<GetDomainResult, GetDomainError>;
+    fn get_domain(&self, input: GetDomainRequest) -> RusotoFuture<GetDomainResult, GetDomainError>;
 
     /// <p>Returns a list of all domains in the user's account.</p>
     fn get_domains(
         &self,
-        input: &GetDomainsRequest,
+        input: GetDomainsRequest,
     ) -> RusotoFuture<GetDomainsResult, GetDomainsError>;
 
     /// <p>Returns information about a specific Amazon Lightsail instance, which is a virtual private server.</p>
     fn get_instance(
         &self,
-        input: &GetInstanceRequest,
+        input: GetInstanceRequest,
     ) -> RusotoFuture<GetInstanceResult, GetInstanceError>;
 
     /// <p>Returns temporary SSH keys you can use to connect to a specific virtual private server, or <i>instance</i>.</p>
     fn get_instance_access_details(
         &self,
-        input: &GetInstanceAccessDetailsRequest,
+        input: GetInstanceAccessDetailsRequest,
     ) -> RusotoFuture<GetInstanceAccessDetailsResult, GetInstanceAccessDetailsError>;
 
     /// <p>Returns the data points for the specified Amazon Lightsail instance metric, given an instance name.</p>
     fn get_instance_metric_data(
         &self,
-        input: &GetInstanceMetricDataRequest,
+        input: GetInstanceMetricDataRequest,
     ) -> RusotoFuture<GetInstanceMetricDataResult, GetInstanceMetricDataError>;
 
     /// <p>Returns the port states for a specific virtual private server, or <i>instance</i>.</p>
     fn get_instance_port_states(
         &self,
-        input: &GetInstancePortStatesRequest,
+        input: GetInstancePortStatesRequest,
     ) -> RusotoFuture<GetInstancePortStatesResult, GetInstancePortStatesError>;
 
     /// <p>Returns information about a specific instance snapshot.</p>
     fn get_instance_snapshot(
         &self,
-        input: &GetInstanceSnapshotRequest,
+        input: GetInstanceSnapshotRequest,
     ) -> RusotoFuture<GetInstanceSnapshotResult, GetInstanceSnapshotError>;
 
     /// <p>Returns all instance snapshots for the user's account.</p>
     fn get_instance_snapshots(
         &self,
-        input: &GetInstanceSnapshotsRequest,
+        input: GetInstanceSnapshotsRequest,
     ) -> RusotoFuture<GetInstanceSnapshotsResult, GetInstanceSnapshotsError>;
 
     /// <p>Returns the state of a specific instance. Works on one instance at a time.</p>
     fn get_instance_state(
         &self,
-        input: &GetInstanceStateRequest,
+        input: GetInstanceStateRequest,
     ) -> RusotoFuture<GetInstanceStateResult, GetInstanceStateError>;
 
     /// <p>Returns information about all Amazon Lightsail virtual private servers, or <i>instances</i>.</p>
     fn get_instances(
         &self,
-        input: &GetInstancesRequest,
+        input: GetInstancesRequest,
     ) -> RusotoFuture<GetInstancesResult, GetInstancesError>;
 
     /// <p>Returns information about a specific key pair.</p>
     fn get_key_pair(
         &self,
-        input: &GetKeyPairRequest,
+        input: GetKeyPairRequest,
     ) -> RusotoFuture<GetKeyPairResult, GetKeyPairError>;
 
     /// <p>Returns information about all key pairs in the user's account.</p>
     fn get_key_pairs(
         &self,
-        input: &GetKeyPairsRequest,
+        input: GetKeyPairsRequest,
     ) -> RusotoFuture<GetKeyPairsResult, GetKeyPairsError>;
 
     /// <p>Returns information about the specified Lightsail load balancer.</p>
     fn get_load_balancer(
         &self,
-        input: &GetLoadBalancerRequest,
+        input: GetLoadBalancerRequest,
     ) -> RusotoFuture<GetLoadBalancerResult, GetLoadBalancerError>;
 
     /// <p>Returns information about health metrics for your Lightsail load balancer.</p>
     fn get_load_balancer_metric_data(
         &self,
-        input: &GetLoadBalancerMetricDataRequest,
+        input: GetLoadBalancerMetricDataRequest,
     ) -> RusotoFuture<GetLoadBalancerMetricDataResult, GetLoadBalancerMetricDataError>;
 
     /// <p>Returns information about the TLS certificates that are associated with the specified Lightsail load balancer.</p> <p>TLS is just an updated, more secure version of Secure Socket Layer (SSL).</p> <p>You can have a maximum of 2 certificates associated with a Lightsail load balancer. One is active and the other is inactive.</p>
     fn get_load_balancer_tls_certificates(
         &self,
-        input: &GetLoadBalancerTlsCertificatesRequest,
+        input: GetLoadBalancerTlsCertificatesRequest,
     ) -> RusotoFuture<GetLoadBalancerTlsCertificatesResult, GetLoadBalancerTlsCertificatesError>;
 
     /// <p>Returns information about all load balancers in an account.</p> <p>If you are describing a long list of load balancers, you can paginate the output to make the list more manageable. You can use the pageToken and nextPageToken values to retrieve the next items in the list.</p>
     fn get_load_balancers(
         &self,
-        input: &GetLoadBalancersRequest,
+        input: GetLoadBalancersRequest,
     ) -> RusotoFuture<GetLoadBalancersResult, GetLoadBalancersError>;
 
     /// <p>Returns information about a specific operation. Operations include events such as when you create an instance, allocate a static IP, attach a static IP, and so on.</p>
     fn get_operation(
         &self,
-        input: &GetOperationRequest,
+        input: GetOperationRequest,
     ) -> RusotoFuture<GetOperationResult, GetOperationError>;
 
     /// <p>Returns information about all operations.</p> <p>Results are returned from oldest to newest, up to a maximum of 200. Results can be paged by making each subsequent call to <code>GetOperations</code> use the maximum (last) <code>statusChangedAt</code> value from the previous request.</p>
     fn get_operations(
         &self,
-        input: &GetOperationsRequest,
+        input: GetOperationsRequest,
     ) -> RusotoFuture<GetOperationsResult, GetOperationsError>;
 
     /// <p>Gets operations for a specific resource (e.g., an instance or a static IP).</p>
     fn get_operations_for_resource(
         &self,
-        input: &GetOperationsForResourceRequest,
+        input: GetOperationsForResourceRequest,
     ) -> RusotoFuture<GetOperationsForResourceResult, GetOperationsForResourceError>;
 
     /// <p>Returns a list of all valid regions for Amazon Lightsail. Use the <code>include availability zones</code> parameter to also return the availability zones in a region.</p>
     fn get_regions(
         &self,
-        input: &GetRegionsRequest,
+        input: GetRegionsRequest,
     ) -> RusotoFuture<GetRegionsResult, GetRegionsError>;
 
     /// <p>Returns information about a specific static IP.</p>
     fn get_static_ip(
         &self,
-        input: &GetStaticIpRequest,
+        input: GetStaticIpRequest,
     ) -> RusotoFuture<GetStaticIpResult, GetStaticIpError>;
 
     /// <p>Returns information about all static IPs in the user's account.</p>
     fn get_static_ips(
         &self,
-        input: &GetStaticIpsRequest,
+        input: GetStaticIpsRequest,
     ) -> RusotoFuture<GetStaticIpsResult, GetStaticIpsError>;
 
     /// <p>Imports a public SSH key from a specific key pair.</p>
     fn import_key_pair(
         &self,
-        input: &ImportKeyPairRequest,
+        input: ImportKeyPairRequest,
     ) -> RusotoFuture<ImportKeyPairResult, ImportKeyPairError>;
 
     /// <p>Returns a Boolean value indicating whether your Lightsail VPC is peered.</p>
@@ -10865,7 +10864,7 @@ pub trait Lightsail {
     /// <p>Adds public ports to an Amazon Lightsail instance.</p>
     fn open_instance_public_ports(
         &self,
-        input: &OpenInstancePublicPortsRequest,
+        input: OpenInstancePublicPortsRequest,
     ) -> RusotoFuture<OpenInstancePublicPortsResult, OpenInstancePublicPortsError>;
 
     /// <p>Tries to peer the Lightsail VPC with the user's default VPC.</p>
@@ -10874,31 +10873,31 @@ pub trait Lightsail {
     /// <p>Sets the specified open ports for an Amazon Lightsail instance, and closes all ports for every protocol not included in the current request.</p>
     fn put_instance_public_ports(
         &self,
-        input: &PutInstancePublicPortsRequest,
+        input: PutInstancePublicPortsRequest,
     ) -> RusotoFuture<PutInstancePublicPortsResult, PutInstancePublicPortsError>;
 
     /// <p>Restarts a specific instance. When your Amazon Lightsail instance is finished rebooting, Lightsail assigns a new public IP address. To use the same IP address after restarting, create a static IP address and attach it to the instance.</p>
     fn reboot_instance(
         &self,
-        input: &RebootInstanceRequest,
+        input: RebootInstanceRequest,
     ) -> RusotoFuture<RebootInstanceResult, RebootInstanceError>;
 
     /// <p>Deletes a specific static IP from your account.</p>
     fn release_static_ip(
         &self,
-        input: &ReleaseStaticIpRequest,
+        input: ReleaseStaticIpRequest,
     ) -> RusotoFuture<ReleaseStaticIpResult, ReleaseStaticIpError>;
 
     /// <p>Starts a specific Amazon Lightsail instance from a stopped state. To restart an instance, use the reboot instance operation.</p>
     fn start_instance(
         &self,
-        input: &StartInstanceRequest,
+        input: StartInstanceRequest,
     ) -> RusotoFuture<StartInstanceResult, StartInstanceError>;
 
     /// <p>Stops a specific Amazon Lightsail instance that is currently running.</p>
     fn stop_instance(
         &self,
-        input: &StopInstanceRequest,
+        input: StopInstanceRequest,
     ) -> RusotoFuture<StopInstanceResult, StopInstanceError>;
 
     /// <p>Attempts to unpeer the Lightsail VPC from the user's default VPC.</p>
@@ -10907,13 +10906,13 @@ pub trait Lightsail {
     /// <p>Updates a domain recordset after it is created.</p>
     fn update_domain_entry(
         &self,
-        input: &UpdateDomainEntryRequest,
+        input: UpdateDomainEntryRequest,
     ) -> RusotoFuture<UpdateDomainEntryResult, UpdateDomainEntryError>;
 
     /// <p>Updates the specified attribute for a load balancer. You can only update one attribute at a time.</p>
     fn update_load_balancer_attribute(
         &self,
-        input: &UpdateLoadBalancerAttributeRequest,
+        input: UpdateLoadBalancerAttributeRequest,
     ) -> RusotoFuture<UpdateLoadBalancerAttributeResult, UpdateLoadBalancerAttributeError>;
 }
 /// A client for the Amazon Lightsail API.
@@ -10962,13 +10961,13 @@ where
     /// <p>Allocates a static IP address.</p>
     fn allocate_static_ip(
         &self,
-        input: &AllocateStaticIpRequest,
+        input: AllocateStaticIpRequest,
     ) -> RusotoFuture<AllocateStaticIpResult, AllocateStaticIpError> {
         let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.AllocateStaticIp");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -10976,7 +10975,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -10999,13 +10998,13 @@ where
     /// <p>Attaches a block storage disk to a running or stopped Lightsail instance and exposes it to the instance with the specified disk name.</p>
     fn attach_disk(
         &self,
-        input: &AttachDiskRequest,
+        input: AttachDiskRequest,
     ) -> RusotoFuture<AttachDiskResult, AttachDiskError> {
         let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.AttachDisk");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -11013,7 +11012,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -11036,7 +11035,7 @@ where
     /// <p>Attaches one or more Lightsail instances to a load balancer.</p> <p>After some time, the instances are attached to the load balancer and the health check status is available.</p>
     fn attach_instances_to_load_balancer(
         &self,
-        input: &AttachInstancesToLoadBalancerRequest,
+        input: AttachInstancesToLoadBalancerRequest,
     ) -> RusotoFuture<AttachInstancesToLoadBalancerResult, AttachInstancesToLoadBalancerError> {
         let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
 
@@ -11045,7 +11044,7 @@ where
             "x-amz-target",
             "Lightsail_20161128.AttachInstancesToLoadBalancer",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -11053,7 +11052,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -11076,7 +11075,7 @@ where
     /// <p>Attaches a Transport Layer Security (TLS) certificate to your load balancer. TLS is just an updated, more secure version of Secure Socket Layer (SSL).</p> <p>Once you create and validate your certificate, you can attach it to your load balancer. You can also use this API to rotate the certificates on your account. Use the <code>AttachLoadBalancerTlsCertificate</code> operation with the non-attached certificate, and it will replace the existing one and become the attached certificate.</p>
     fn attach_load_balancer_tls_certificate(
         &self,
-        input: &AttachLoadBalancerTlsCertificateRequest,
+        input: AttachLoadBalancerTlsCertificateRequest,
     ) -> RusotoFuture<AttachLoadBalancerTlsCertificateResult, AttachLoadBalancerTlsCertificateError>
     {
         let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
@@ -11086,7 +11085,7 @@ where
             "x-amz-target",
             "Lightsail_20161128.AttachLoadBalancerTlsCertificate",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -11094,7 +11093,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -11117,13 +11116,13 @@ where
     /// <p>Attaches a static IP address to a specific Amazon Lightsail instance.</p>
     fn attach_static_ip(
         &self,
-        input: &AttachStaticIpRequest,
+        input: AttachStaticIpRequest,
     ) -> RusotoFuture<AttachStaticIpResult, AttachStaticIpError> {
         let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.AttachStaticIp");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -11131,7 +11130,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -11154,7 +11153,7 @@ where
     /// <p>Closes the public ports on a specific Amazon Lightsail instance.</p>
     fn close_instance_public_ports(
         &self,
-        input: &CloseInstancePublicPortsRequest,
+        input: CloseInstancePublicPortsRequest,
     ) -> RusotoFuture<CloseInstancePublicPortsResult, CloseInstancePublicPortsError> {
         let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
 
@@ -11163,7 +11162,7 @@ where
             "x-amz-target",
             "Lightsail_20161128.CloseInstancePublicPorts",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -11171,7 +11170,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -11194,13 +11193,13 @@ where
     /// <p>Creates a block storage disk that can be attached to a Lightsail instance in the same Availability Zone (e.g., <code>us-east-2a</code>). The disk is created in the regional endpoint that you send the HTTP request to. For more information, see <a href="https://lightsail.aws.amazon.com/ls/docs/overview/article/understanding-regions-and-availability-zones-in-amazon-lightsail">Regions and Availability Zones in Lightsail</a>.</p>
     fn create_disk(
         &self,
-        input: &CreateDiskRequest,
+        input: CreateDiskRequest,
     ) -> RusotoFuture<CreateDiskResult, CreateDiskError> {
         let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.CreateDisk");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -11208,7 +11207,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -11231,13 +11230,13 @@ where
     /// <p>Creates a block storage disk from a disk snapshot that can be attached to a Lightsail instance in the same Availability Zone (e.g., <code>us-east-2a</code>). The disk is created in the regional endpoint that you send the HTTP request to. For more information, see <a href="https://lightsail.aws.amazon.com/ls/docs/overview/article/understanding-regions-and-availability-zones-in-amazon-lightsail">Regions and Availability Zones in Lightsail</a>.</p>
     fn create_disk_from_snapshot(
         &self,
-        input: &CreateDiskFromSnapshotRequest,
+        input: CreateDiskFromSnapshotRequest,
     ) -> RusotoFuture<CreateDiskFromSnapshotResult, CreateDiskFromSnapshotError> {
         let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.CreateDiskFromSnapshot");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -11245,7 +11244,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -11268,13 +11267,13 @@ where
     /// <p>Creates a snapshot of a block storage disk. You can use snapshots for backups, to make copies of disks, and to save data before shutting down a Lightsail instance.</p> <p>You can take a snapshot of an attached disk that is in use; however, snapshots only capture data that has been written to your disk at the time the snapshot command is issued. This may exclude any data that has been cached by any applications or the operating system. If you can pause any file systems on the disk long enough to take a snapshot, your snapshot should be complete. Nevertheless, if you cannot pause all file writes to the disk, you should unmount the disk from within the Lightsail instance, issue the create disk snapshot command, and then remount the disk to ensure a consistent and complete snapshot. You may remount and use your disk while the snapshot status is pending.</p>
     fn create_disk_snapshot(
         &self,
-        input: &CreateDiskSnapshotRequest,
+        input: CreateDiskSnapshotRequest,
     ) -> RusotoFuture<CreateDiskSnapshotResult, CreateDiskSnapshotError> {
         let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.CreateDiskSnapshot");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -11282,7 +11281,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -11305,13 +11304,13 @@ where
     /// <p>Creates a domain resource for the specified domain (e.g., example.com).</p>
     fn create_domain(
         &self,
-        input: &CreateDomainRequest,
+        input: CreateDomainRequest,
     ) -> RusotoFuture<CreateDomainResult, CreateDomainError> {
         let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.CreateDomain");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -11319,7 +11318,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -11342,13 +11341,13 @@ where
     /// <p>Creates one of the following entry records associated with the domain: A record, CNAME record, TXT record, or MX record.</p>
     fn create_domain_entry(
         &self,
-        input: &CreateDomainEntryRequest,
+        input: CreateDomainEntryRequest,
     ) -> RusotoFuture<CreateDomainEntryResult, CreateDomainEntryError> {
         let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.CreateDomainEntry");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -11356,7 +11355,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -11379,13 +11378,13 @@ where
     /// <p>Creates a snapshot of a specific virtual private server, or <i>instance</i>. You can use a snapshot to create a new instance that is based on that snapshot.</p>
     fn create_instance_snapshot(
         &self,
-        input: &CreateInstanceSnapshotRequest,
+        input: CreateInstanceSnapshotRequest,
     ) -> RusotoFuture<CreateInstanceSnapshotResult, CreateInstanceSnapshotError> {
         let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.CreateInstanceSnapshot");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -11393,7 +11392,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -11416,13 +11415,13 @@ where
     /// <p>Creates one or more Amazon Lightsail virtual private servers, or <i>instances</i>.</p>
     fn create_instances(
         &self,
-        input: &CreateInstancesRequest,
+        input: CreateInstancesRequest,
     ) -> RusotoFuture<CreateInstancesResult, CreateInstancesError> {
         let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.CreateInstances");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -11430,7 +11429,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -11453,7 +11452,7 @@ where
     /// <p>Uses a specific snapshot as a blueprint for creating one or more new instances that are based on that identical configuration.</p>
     fn create_instances_from_snapshot(
         &self,
-        input: &CreateInstancesFromSnapshotRequest,
+        input: CreateInstancesFromSnapshotRequest,
     ) -> RusotoFuture<CreateInstancesFromSnapshotResult, CreateInstancesFromSnapshotError> {
         let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
 
@@ -11462,7 +11461,7 @@ where
             "x-amz-target",
             "Lightsail_20161128.CreateInstancesFromSnapshot",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -11470,7 +11469,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -11493,13 +11492,13 @@ where
     /// <p>Creates sn SSH key pair.</p>
     fn create_key_pair(
         &self,
-        input: &CreateKeyPairRequest,
+        input: CreateKeyPairRequest,
     ) -> RusotoFuture<CreateKeyPairResult, CreateKeyPairError> {
         let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.CreateKeyPair");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -11507,7 +11506,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -11530,13 +11529,13 @@ where
     /// <p>Creates a Lightsail load balancer. To learn more about deciding whether to load balance your application, see <a href="https://lightsail.aws.amazon.com/ls/docs/how-to/article/configure-lightsail-instances-for-load-balancing">Configure your Lightsail instances for load balancing</a>. You can create up to 5 load balancers per AWS Region in your account.</p> <p>When you create a load balancer, you can specify a unique name and port settings. To change additional load balancer settings, use the <code>UpdateLoadBalancerAttribute</code> operation.</p>
     fn create_load_balancer(
         &self,
-        input: &CreateLoadBalancerRequest,
+        input: CreateLoadBalancerRequest,
     ) -> RusotoFuture<CreateLoadBalancerResult, CreateLoadBalancerError> {
         let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.CreateLoadBalancer");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -11544,7 +11543,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -11567,7 +11566,7 @@ where
     /// <p>Creates a Lightsail load balancer TLS certificate.</p> <p>TLS is just an updated, more secure version of Secure Socket Layer (SSL).</p>
     fn create_load_balancer_tls_certificate(
         &self,
-        input: &CreateLoadBalancerTlsCertificateRequest,
+        input: CreateLoadBalancerTlsCertificateRequest,
     ) -> RusotoFuture<CreateLoadBalancerTlsCertificateResult, CreateLoadBalancerTlsCertificateError>
     {
         let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
@@ -11577,7 +11576,7 @@ where
             "x-amz-target",
             "Lightsail_20161128.CreateLoadBalancerTlsCertificate",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -11585,7 +11584,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -11608,13 +11607,13 @@ where
     /// <p><p>Deletes the specified block storage disk. The disk must be in the <code>available</code> state (not attached to a Lightsail instance).</p> <note> <p>The disk may remain in the <code>deleting</code> state for several minutes.</p> </note></p>
     fn delete_disk(
         &self,
-        input: &DeleteDiskRequest,
+        input: DeleteDiskRequest,
     ) -> RusotoFuture<DeleteDiskResult, DeleteDiskError> {
         let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.DeleteDisk");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -11622,7 +11621,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -11645,13 +11644,13 @@ where
     /// <p>Deletes the specified disk snapshot.</p> <p>When you make periodic snapshots of a disk, the snapshots are incremental, and only the blocks on the device that have changed since your last snapshot are saved in the new snapshot. When you delete a snapshot, only the data not needed for any other snapshot is removed. So regardless of which prior snapshots have been deleted, all active snapshots will have access to all the information needed to restore the disk.</p>
     fn delete_disk_snapshot(
         &self,
-        input: &DeleteDiskSnapshotRequest,
+        input: DeleteDiskSnapshotRequest,
     ) -> RusotoFuture<DeleteDiskSnapshotResult, DeleteDiskSnapshotError> {
         let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.DeleteDiskSnapshot");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -11659,7 +11658,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -11682,13 +11681,13 @@ where
     /// <p>Deletes the specified domain recordset and all of its domain records.</p>
     fn delete_domain(
         &self,
-        input: &DeleteDomainRequest,
+        input: DeleteDomainRequest,
     ) -> RusotoFuture<DeleteDomainResult, DeleteDomainError> {
         let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.DeleteDomain");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -11696,7 +11695,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -11719,13 +11718,13 @@ where
     /// <p>Deletes a specific domain entry.</p>
     fn delete_domain_entry(
         &self,
-        input: &DeleteDomainEntryRequest,
+        input: DeleteDomainEntryRequest,
     ) -> RusotoFuture<DeleteDomainEntryResult, DeleteDomainEntryError> {
         let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.DeleteDomainEntry");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -11733,7 +11732,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -11756,13 +11755,13 @@ where
     /// <p>Deletes a specific Amazon Lightsail virtual private server, or <i>instance</i>.</p>
     fn delete_instance(
         &self,
-        input: &DeleteInstanceRequest,
+        input: DeleteInstanceRequest,
     ) -> RusotoFuture<DeleteInstanceResult, DeleteInstanceError> {
         let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.DeleteInstance");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -11770,7 +11769,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -11793,13 +11792,13 @@ where
     /// <p>Deletes a specific snapshot of a virtual private server (or <i>instance</i>).</p>
     fn delete_instance_snapshot(
         &self,
-        input: &DeleteInstanceSnapshotRequest,
+        input: DeleteInstanceSnapshotRequest,
     ) -> RusotoFuture<DeleteInstanceSnapshotResult, DeleteInstanceSnapshotError> {
         let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.DeleteInstanceSnapshot");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -11807,7 +11806,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -11830,13 +11829,13 @@ where
     /// <p>Deletes a specific SSH key pair.</p>
     fn delete_key_pair(
         &self,
-        input: &DeleteKeyPairRequest,
+        input: DeleteKeyPairRequest,
     ) -> RusotoFuture<DeleteKeyPairResult, DeleteKeyPairError> {
         let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.DeleteKeyPair");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -11844,7 +11843,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -11867,13 +11866,13 @@ where
     /// <p>Deletes a Lightsail load balancer and all its associated SSL/TLS certificates. Once the load balancer is deleted, you will need to create a new load balancer, create a new certificate, and verify domain ownership again.</p>
     fn delete_load_balancer(
         &self,
-        input: &DeleteLoadBalancerRequest,
+        input: DeleteLoadBalancerRequest,
     ) -> RusotoFuture<DeleteLoadBalancerResult, DeleteLoadBalancerError> {
         let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.DeleteLoadBalancer");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -11881,7 +11880,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -11904,7 +11903,7 @@ where
     /// <p>Deletes an SSL/TLS certificate associated with a Lightsail load balancer.</p>
     fn delete_load_balancer_tls_certificate(
         &self,
-        input: &DeleteLoadBalancerTlsCertificateRequest,
+        input: DeleteLoadBalancerTlsCertificateRequest,
     ) -> RusotoFuture<DeleteLoadBalancerTlsCertificateResult, DeleteLoadBalancerTlsCertificateError>
     {
         let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
@@ -11914,7 +11913,7 @@ where
             "x-amz-target",
             "Lightsail_20161128.DeleteLoadBalancerTlsCertificate",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -11922,7 +11921,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -11945,13 +11944,13 @@ where
     /// <p>Detaches a stopped block storage disk from a Lightsail instance. Make sure to unmount any file systems on the device within your operating system before stopping the instance and detaching the disk.</p>
     fn detach_disk(
         &self,
-        input: &DetachDiskRequest,
+        input: DetachDiskRequest,
     ) -> RusotoFuture<DetachDiskResult, DetachDiskError> {
         let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.DetachDisk");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -11959,7 +11958,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -11982,7 +11981,7 @@ where
     /// <p>Detaches the specified instances from a Lightsail load balancer.</p> <p>This operation waits until the instances are no longer needed before they are detached from the load balancer.</p>
     fn detach_instances_from_load_balancer(
         &self,
-        input: &DetachInstancesFromLoadBalancerRequest,
+        input: DetachInstancesFromLoadBalancerRequest,
     ) -> RusotoFuture<DetachInstancesFromLoadBalancerResult, DetachInstancesFromLoadBalancerError>
     {
         let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
@@ -11992,7 +11991,7 @@ where
             "x-amz-target",
             "Lightsail_20161128.DetachInstancesFromLoadBalancer",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -12000,7 +11999,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -12023,13 +12022,13 @@ where
     /// <p>Detaches a static IP from the Amazon Lightsail instance to which it is attached.</p>
     fn detach_static_ip(
         &self,
-        input: &DetachStaticIpRequest,
+        input: DetachStaticIpRequest,
     ) -> RusotoFuture<DetachStaticIpResult, DetachStaticIpError> {
         let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.DetachStaticIp");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -12037,7 +12036,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -12072,7 +12071,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -12095,13 +12094,13 @@ where
     /// <p>Returns the names of all active (not deleted) resources.</p>
     fn get_active_names(
         &self,
-        input: &GetActiveNamesRequest,
+        input: GetActiveNamesRequest,
     ) -> RusotoFuture<GetActiveNamesResult, GetActiveNamesError> {
         let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.GetActiveNames");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -12109,7 +12108,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -12132,13 +12131,13 @@ where
     /// <p>Returns the list of available instance images, or <i>blueprints</i>. You can use a blueprint to create a new virtual private server already running a specific operating system, as well as a preinstalled app or development stack. The software each instance is running depends on the blueprint image you choose.</p>
     fn get_blueprints(
         &self,
-        input: &GetBlueprintsRequest,
+        input: GetBlueprintsRequest,
     ) -> RusotoFuture<GetBlueprintsResult, GetBlueprintsError> {
         let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.GetBlueprints");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -12146,7 +12145,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -12169,13 +12168,13 @@ where
     /// <p>Returns the list of bundles that are available for purchase. A bundle describes the specs for your virtual private server (or <i>instance</i>).</p>
     fn get_bundles(
         &self,
-        input: &GetBundlesRequest,
+        input: GetBundlesRequest,
     ) -> RusotoFuture<GetBundlesResult, GetBundlesError> {
         let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.GetBundles");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -12183,7 +12182,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -12204,12 +12203,12 @@ where
     }
 
     /// <p>Returns information about a specific block storage disk.</p>
-    fn get_disk(&self, input: &GetDiskRequest) -> RusotoFuture<GetDiskResult, GetDiskError> {
+    fn get_disk(&self, input: GetDiskRequest) -> RusotoFuture<GetDiskResult, GetDiskError> {
         let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.GetDisk");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -12217,7 +12216,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -12240,13 +12239,13 @@ where
     /// <p>Returns information about a specific block storage disk snapshot.</p>
     fn get_disk_snapshot(
         &self,
-        input: &GetDiskSnapshotRequest,
+        input: GetDiskSnapshotRequest,
     ) -> RusotoFuture<GetDiskSnapshotResult, GetDiskSnapshotError> {
         let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.GetDiskSnapshot");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -12254,7 +12253,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -12277,13 +12276,13 @@ where
     /// <p>Returns information about all block storage disk snapshots in your AWS account and region.</p> <p>If you are describing a long list of disk snapshots, you can paginate the output to make the list more manageable. You can use the pageToken and nextPageToken values to retrieve the next items in the list.</p>
     fn get_disk_snapshots(
         &self,
-        input: &GetDiskSnapshotsRequest,
+        input: GetDiskSnapshotsRequest,
     ) -> RusotoFuture<GetDiskSnapshotsResult, GetDiskSnapshotsError> {
         let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.GetDiskSnapshots");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -12291,7 +12290,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -12312,12 +12311,12 @@ where
     }
 
     /// <p>Returns information about all block storage disks in your AWS account and region.</p> <p>If you are describing a long list of disks, you can paginate the output to make the list more manageable. You can use the pageToken and nextPageToken values to retrieve the next items in the list.</p>
-    fn get_disks(&self, input: &GetDisksRequest) -> RusotoFuture<GetDisksResult, GetDisksError> {
+    fn get_disks(&self, input: GetDisksRequest) -> RusotoFuture<GetDisksResult, GetDisksError> {
         let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.GetDisks");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -12325,7 +12324,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -12346,15 +12345,12 @@ where
     }
 
     /// <p>Returns information about a specific domain recordset.</p>
-    fn get_domain(
-        &self,
-        input: &GetDomainRequest,
-    ) -> RusotoFuture<GetDomainResult, GetDomainError> {
+    fn get_domain(&self, input: GetDomainRequest) -> RusotoFuture<GetDomainResult, GetDomainError> {
         let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.GetDomain");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -12362,7 +12358,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -12385,13 +12381,13 @@ where
     /// <p>Returns a list of all domains in the user's account.</p>
     fn get_domains(
         &self,
-        input: &GetDomainsRequest,
+        input: GetDomainsRequest,
     ) -> RusotoFuture<GetDomainsResult, GetDomainsError> {
         let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.GetDomains");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -12399,7 +12395,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -12422,13 +12418,13 @@ where
     /// <p>Returns information about a specific Amazon Lightsail instance, which is a virtual private server.</p>
     fn get_instance(
         &self,
-        input: &GetInstanceRequest,
+        input: GetInstanceRequest,
     ) -> RusotoFuture<GetInstanceResult, GetInstanceError> {
         let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.GetInstance");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -12436,7 +12432,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -12459,7 +12455,7 @@ where
     /// <p>Returns temporary SSH keys you can use to connect to a specific virtual private server, or <i>instance</i>.</p>
     fn get_instance_access_details(
         &self,
-        input: &GetInstanceAccessDetailsRequest,
+        input: GetInstanceAccessDetailsRequest,
     ) -> RusotoFuture<GetInstanceAccessDetailsResult, GetInstanceAccessDetailsError> {
         let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
 
@@ -12468,7 +12464,7 @@ where
             "x-amz-target",
             "Lightsail_20161128.GetInstanceAccessDetails",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -12476,7 +12472,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -12499,13 +12495,13 @@ where
     /// <p>Returns the data points for the specified Amazon Lightsail instance metric, given an instance name.</p>
     fn get_instance_metric_data(
         &self,
-        input: &GetInstanceMetricDataRequest,
+        input: GetInstanceMetricDataRequest,
     ) -> RusotoFuture<GetInstanceMetricDataResult, GetInstanceMetricDataError> {
         let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.GetInstanceMetricData");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -12513,7 +12509,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -12536,13 +12532,13 @@ where
     /// <p>Returns the port states for a specific virtual private server, or <i>instance</i>.</p>
     fn get_instance_port_states(
         &self,
-        input: &GetInstancePortStatesRequest,
+        input: GetInstancePortStatesRequest,
     ) -> RusotoFuture<GetInstancePortStatesResult, GetInstancePortStatesError> {
         let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.GetInstancePortStates");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -12550,7 +12546,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -12573,13 +12569,13 @@ where
     /// <p>Returns information about a specific instance snapshot.</p>
     fn get_instance_snapshot(
         &self,
-        input: &GetInstanceSnapshotRequest,
+        input: GetInstanceSnapshotRequest,
     ) -> RusotoFuture<GetInstanceSnapshotResult, GetInstanceSnapshotError> {
         let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.GetInstanceSnapshot");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -12587,7 +12583,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -12610,13 +12606,13 @@ where
     /// <p>Returns all instance snapshots for the user's account.</p>
     fn get_instance_snapshots(
         &self,
-        input: &GetInstanceSnapshotsRequest,
+        input: GetInstanceSnapshotsRequest,
     ) -> RusotoFuture<GetInstanceSnapshotsResult, GetInstanceSnapshotsError> {
         let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.GetInstanceSnapshots");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -12624,7 +12620,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -12647,13 +12643,13 @@ where
     /// <p>Returns the state of a specific instance. Works on one instance at a time.</p>
     fn get_instance_state(
         &self,
-        input: &GetInstanceStateRequest,
+        input: GetInstanceStateRequest,
     ) -> RusotoFuture<GetInstanceStateResult, GetInstanceStateError> {
         let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.GetInstanceState");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -12661,7 +12657,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -12684,13 +12680,13 @@ where
     /// <p>Returns information about all Amazon Lightsail virtual private servers, or <i>instances</i>.</p>
     fn get_instances(
         &self,
-        input: &GetInstancesRequest,
+        input: GetInstancesRequest,
     ) -> RusotoFuture<GetInstancesResult, GetInstancesError> {
         let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.GetInstances");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -12698,7 +12694,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -12721,13 +12717,13 @@ where
     /// <p>Returns information about a specific key pair.</p>
     fn get_key_pair(
         &self,
-        input: &GetKeyPairRequest,
+        input: GetKeyPairRequest,
     ) -> RusotoFuture<GetKeyPairResult, GetKeyPairError> {
         let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.GetKeyPair");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -12735,7 +12731,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -12758,13 +12754,13 @@ where
     /// <p>Returns information about all key pairs in the user's account.</p>
     fn get_key_pairs(
         &self,
-        input: &GetKeyPairsRequest,
+        input: GetKeyPairsRequest,
     ) -> RusotoFuture<GetKeyPairsResult, GetKeyPairsError> {
         let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.GetKeyPairs");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -12772,7 +12768,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -12795,13 +12791,13 @@ where
     /// <p>Returns information about the specified Lightsail load balancer.</p>
     fn get_load_balancer(
         &self,
-        input: &GetLoadBalancerRequest,
+        input: GetLoadBalancerRequest,
     ) -> RusotoFuture<GetLoadBalancerResult, GetLoadBalancerError> {
         let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.GetLoadBalancer");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -12809,7 +12805,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -12832,7 +12828,7 @@ where
     /// <p>Returns information about health metrics for your Lightsail load balancer.</p>
     fn get_load_balancer_metric_data(
         &self,
-        input: &GetLoadBalancerMetricDataRequest,
+        input: GetLoadBalancerMetricDataRequest,
     ) -> RusotoFuture<GetLoadBalancerMetricDataResult, GetLoadBalancerMetricDataError> {
         let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
 
@@ -12841,7 +12837,7 @@ where
             "x-amz-target",
             "Lightsail_20161128.GetLoadBalancerMetricData",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -12849,7 +12845,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -12872,7 +12868,7 @@ where
     /// <p>Returns information about the TLS certificates that are associated with the specified Lightsail load balancer.</p> <p>TLS is just an updated, more secure version of Secure Socket Layer (SSL).</p> <p>You can have a maximum of 2 certificates associated with a Lightsail load balancer. One is active and the other is inactive.</p>
     fn get_load_balancer_tls_certificates(
         &self,
-        input: &GetLoadBalancerTlsCertificatesRequest,
+        input: GetLoadBalancerTlsCertificatesRequest,
     ) -> RusotoFuture<GetLoadBalancerTlsCertificatesResult, GetLoadBalancerTlsCertificatesError>
     {
         let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
@@ -12882,7 +12878,7 @@ where
             "x-amz-target",
             "Lightsail_20161128.GetLoadBalancerTlsCertificates",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -12890,7 +12886,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -12913,13 +12909,13 @@ where
     /// <p>Returns information about all load balancers in an account.</p> <p>If you are describing a long list of load balancers, you can paginate the output to make the list more manageable. You can use the pageToken and nextPageToken values to retrieve the next items in the list.</p>
     fn get_load_balancers(
         &self,
-        input: &GetLoadBalancersRequest,
+        input: GetLoadBalancersRequest,
     ) -> RusotoFuture<GetLoadBalancersResult, GetLoadBalancersError> {
         let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.GetLoadBalancers");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -12927,7 +12923,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -12950,13 +12946,13 @@ where
     /// <p>Returns information about a specific operation. Operations include events such as when you create an instance, allocate a static IP, attach a static IP, and so on.</p>
     fn get_operation(
         &self,
-        input: &GetOperationRequest,
+        input: GetOperationRequest,
     ) -> RusotoFuture<GetOperationResult, GetOperationError> {
         let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.GetOperation");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -12964,7 +12960,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -12987,13 +12983,13 @@ where
     /// <p>Returns information about all operations.</p> <p>Results are returned from oldest to newest, up to a maximum of 200. Results can be paged by making each subsequent call to <code>GetOperations</code> use the maximum (last) <code>statusChangedAt</code> value from the previous request.</p>
     fn get_operations(
         &self,
-        input: &GetOperationsRequest,
+        input: GetOperationsRequest,
     ) -> RusotoFuture<GetOperationsResult, GetOperationsError> {
         let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.GetOperations");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -13001,7 +12997,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -13024,7 +13020,7 @@ where
     /// <p>Gets operations for a specific resource (e.g., an instance or a static IP).</p>
     fn get_operations_for_resource(
         &self,
-        input: &GetOperationsForResourceRequest,
+        input: GetOperationsForResourceRequest,
     ) -> RusotoFuture<GetOperationsForResourceResult, GetOperationsForResourceError> {
         let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
 
@@ -13033,7 +13029,7 @@ where
             "x-amz-target",
             "Lightsail_20161128.GetOperationsForResource",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -13041,7 +13037,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -13064,13 +13060,13 @@ where
     /// <p>Returns a list of all valid regions for Amazon Lightsail. Use the <code>include availability zones</code> parameter to also return the availability zones in a region.</p>
     fn get_regions(
         &self,
-        input: &GetRegionsRequest,
+        input: GetRegionsRequest,
     ) -> RusotoFuture<GetRegionsResult, GetRegionsError> {
         let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.GetRegions");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -13078,7 +13074,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -13101,13 +13097,13 @@ where
     /// <p>Returns information about a specific static IP.</p>
     fn get_static_ip(
         &self,
-        input: &GetStaticIpRequest,
+        input: GetStaticIpRequest,
     ) -> RusotoFuture<GetStaticIpResult, GetStaticIpError> {
         let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.GetStaticIp");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -13115,7 +13111,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -13138,13 +13134,13 @@ where
     /// <p>Returns information about all static IPs in the user's account.</p>
     fn get_static_ips(
         &self,
-        input: &GetStaticIpsRequest,
+        input: GetStaticIpsRequest,
     ) -> RusotoFuture<GetStaticIpsResult, GetStaticIpsError> {
         let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.GetStaticIps");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -13152,7 +13148,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -13175,13 +13171,13 @@ where
     /// <p>Imports a public SSH key from a specific key pair.</p>
     fn import_key_pair(
         &self,
-        input: &ImportKeyPairRequest,
+        input: ImportKeyPairRequest,
     ) -> RusotoFuture<ImportKeyPairResult, ImportKeyPairError> {
         let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.ImportKeyPair");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -13189,7 +13185,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -13222,7 +13218,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -13245,13 +13241,13 @@ where
     /// <p>Adds public ports to an Amazon Lightsail instance.</p>
     fn open_instance_public_ports(
         &self,
-        input: &OpenInstancePublicPortsRequest,
+        input: OpenInstancePublicPortsRequest,
     ) -> RusotoFuture<OpenInstancePublicPortsResult, OpenInstancePublicPortsError> {
         let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.OpenInstancePublicPorts");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -13259,7 +13255,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -13292,7 +13288,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -13315,13 +13311,13 @@ where
     /// <p>Sets the specified open ports for an Amazon Lightsail instance, and closes all ports for every protocol not included in the current request.</p>
     fn put_instance_public_ports(
         &self,
-        input: &PutInstancePublicPortsRequest,
+        input: PutInstancePublicPortsRequest,
     ) -> RusotoFuture<PutInstancePublicPortsResult, PutInstancePublicPortsError> {
         let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.PutInstancePublicPorts");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -13329,7 +13325,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -13352,13 +13348,13 @@ where
     /// <p>Restarts a specific instance. When your Amazon Lightsail instance is finished rebooting, Lightsail assigns a new public IP address. To use the same IP address after restarting, create a static IP address and attach it to the instance.</p>
     fn reboot_instance(
         &self,
-        input: &RebootInstanceRequest,
+        input: RebootInstanceRequest,
     ) -> RusotoFuture<RebootInstanceResult, RebootInstanceError> {
         let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.RebootInstance");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -13366,7 +13362,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -13389,13 +13385,13 @@ where
     /// <p>Deletes a specific static IP from your account.</p>
     fn release_static_ip(
         &self,
-        input: &ReleaseStaticIpRequest,
+        input: ReleaseStaticIpRequest,
     ) -> RusotoFuture<ReleaseStaticIpResult, ReleaseStaticIpError> {
         let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.ReleaseStaticIp");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -13403,7 +13399,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -13426,13 +13422,13 @@ where
     /// <p>Starts a specific Amazon Lightsail instance from a stopped state. To restart an instance, use the reboot instance operation.</p>
     fn start_instance(
         &self,
-        input: &StartInstanceRequest,
+        input: StartInstanceRequest,
     ) -> RusotoFuture<StartInstanceResult, StartInstanceError> {
         let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.StartInstance");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -13440,7 +13436,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -13463,13 +13459,13 @@ where
     /// <p>Stops a specific Amazon Lightsail instance that is currently running.</p>
     fn stop_instance(
         &self,
-        input: &StopInstanceRequest,
+        input: StopInstanceRequest,
     ) -> RusotoFuture<StopInstanceResult, StopInstanceError> {
         let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.StopInstance");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -13477,7 +13473,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -13510,7 +13506,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -13533,13 +13529,13 @@ where
     /// <p>Updates a domain recordset after it is created.</p>
     fn update_domain_entry(
         &self,
-        input: &UpdateDomainEntryRequest,
+        input: UpdateDomainEntryRequest,
     ) -> RusotoFuture<UpdateDomainEntryResult, UpdateDomainEntryError> {
         let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.UpdateDomainEntry");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -13547,7 +13543,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -13570,7 +13566,7 @@ where
     /// <p>Updates the specified attribute for a load balancer. You can only update one attribute at a time.</p>
     fn update_load_balancer_attribute(
         &self,
-        input: &UpdateLoadBalancerAttributeRequest,
+        input: UpdateLoadBalancerAttributeRequest,
     ) -> RusotoFuture<UpdateLoadBalancerAttributeResult, UpdateLoadBalancerAttributeError> {
         let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
 
@@ -13579,7 +13575,7 @@ where
             "x-amz-target",
             "Lightsail_20161128.UpdateLoadBalancerAttribute",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -13587,7 +13583,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 

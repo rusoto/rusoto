@@ -18,25 +18,28 @@ use std::io;
 use futures::future;
 use futures::Future;
 use rusoto_core::reactor::{CredentialsProvider, RequestDispatcher};
-use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::region;
+use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::{ClientInner, RusotoFuture};
 
-use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
+use rusoto_core::request::HttpDispatchError;
 
-use serde_json;
-use rusoto_core::signature::SignedRequest;
-use serde_json::Value as SerdeJsonValue;
-use serde_json::from_str;
 use hyper::StatusCode;
+use rusoto_core::signature::SignedRequest;
+use serde_json;
+use serde_json::from_str;
+use serde_json::Value as SerdeJsonValue;
 /// <p>Represents the data for an attribute. You can set one, and only one, of the elements.</p> <p>Each attribute in an item is a name-value pair. An attribute can be single-valued or multi-valued set. For example, a book item can have title and authors attributes. Each book has one title but can have many authors. The multi-valued attribute is a set; duplicate values are not allowed.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct AttributeValue {
     /// <p>A Binary data type.</p>
     #[serde(rename = "B")]
-    #[serde(deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
-            serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob", default)]
+    #[serde(
+        deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
+        serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
+        default
+    )]
     pub b: Option<Vec<u8>>,
     /// <p>A Boolean data type.</p>
     #[serde(rename = "BOOL")]
@@ -724,25 +727,25 @@ pub trait DynamoDbStreams {
     /// <p>Returns information about a stream, including the current status of the stream, its Amazon Resource Name (ARN), the composition of its shards, and its corresponding DynamoDB table.</p> <note> <p>You can call <code>DescribeStream</code> at a maximum rate of 10 times per second.</p> </note> <p>Each shard in the stream has a <code>SequenceNumberRange</code> associated with it. If the <code>SequenceNumberRange</code> has a <code>StartingSequenceNumber</code> but no <code>EndingSequenceNumber</code>, then the shard is still open (able to receive more stream records). If both <code>StartingSequenceNumber</code> and <code>EndingSequenceNumber</code> are present, then that shard is closed and can no longer receive more data.</p>
     fn describe_stream(
         &self,
-        input: &DescribeStreamInput,
+        input: DescribeStreamInput,
     ) -> RusotoFuture<DescribeStreamOutput, DescribeStreamError>;
 
     /// <p><p>Retrieves the stream records from a given shard.</p> <p>Specify a shard iterator using the <code>ShardIterator</code> parameter. The shard iterator specifies the position in the shard from which you want to start reading stream records sequentially. If there are no stream records available in the portion of the shard that the iterator points to, <code>GetRecords</code> returns an empty list. Note that it might take multiple calls to get to a portion of the shard that contains stream records.</p> <note> <p> <code>GetRecords</code> can retrieve a maximum of 1 MB of data or 1000 stream records, whichever comes first.</p> </note></p>
     fn get_records(
         &self,
-        input: &GetRecordsInput,
+        input: GetRecordsInput,
     ) -> RusotoFuture<GetRecordsOutput, GetRecordsError>;
 
     /// <p><p>Returns a shard iterator. A shard iterator provides information about how to retrieve the stream records from within a shard. Use the shard iterator in a subsequent <code>GetRecords</code> request to read the stream records from the shard.</p> <note> <p>A shard iterator expires 15 minutes after it is returned to the requester.</p> </note></p>
     fn get_shard_iterator(
         &self,
-        input: &GetShardIteratorInput,
+        input: GetShardIteratorInput,
     ) -> RusotoFuture<GetShardIteratorOutput, GetShardIteratorError>;
 
     /// <p><p>Returns an array of stream ARNs associated with the current account and endpoint. If the <code>TableName</code> parameter is present, then <code>ListStreams</code> will return only the streams ARNs for that table.</p> <note> <p>You can call <code>ListStreams</code> at a maximum rate of 5 times per second.</p> </note></p>
     fn list_streams(
         &self,
-        input: &ListStreamsInput,
+        input: ListStreamsInput,
     ) -> RusotoFuture<ListStreamsOutput, ListStreamsError>;
 }
 /// A client for the Amazon DynamoDB Streams API.
@@ -791,13 +794,13 @@ where
     /// <p>Returns information about a stream, including the current status of the stream, its Amazon Resource Name (ARN), the composition of its shards, and its corresponding DynamoDB table.</p> <note> <p>You can call <code>DescribeStream</code> at a maximum rate of 10 times per second.</p> </note> <p>Each shard in the stream has a <code>SequenceNumberRange</code> associated with it. If the <code>SequenceNumberRange</code> has a <code>StartingSequenceNumber</code> but no <code>EndingSequenceNumber</code>, then the shard is still open (able to receive more stream records). If both <code>StartingSequenceNumber</code> and <code>EndingSequenceNumber</code> are present, then that shard is closed and can no longer receive more data.</p>
     fn describe_stream(
         &self,
-        input: &DescribeStreamInput,
+        input: DescribeStreamInput,
     ) -> RusotoFuture<DescribeStreamOutput, DescribeStreamError> {
         let mut request = SignedRequest::new("POST", "dynamodb", &self.region, "/");
         request.set_endpoint_prefix("streams.dynamodb".to_string());
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "DynamoDBStreams_20120810.DescribeStream");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -805,7 +808,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -828,13 +831,13 @@ where
     /// <p><p>Retrieves the stream records from a given shard.</p> <p>Specify a shard iterator using the <code>ShardIterator</code> parameter. The shard iterator specifies the position in the shard from which you want to start reading stream records sequentially. If there are no stream records available in the portion of the shard that the iterator points to, <code>GetRecords</code> returns an empty list. Note that it might take multiple calls to get to a portion of the shard that contains stream records.</p> <note> <p> <code>GetRecords</code> can retrieve a maximum of 1 MB of data or 1000 stream records, whichever comes first.</p> </note></p>
     fn get_records(
         &self,
-        input: &GetRecordsInput,
+        input: GetRecordsInput,
     ) -> RusotoFuture<GetRecordsOutput, GetRecordsError> {
         let mut request = SignedRequest::new("POST", "dynamodb", &self.region, "/");
         request.set_endpoint_prefix("streams.dynamodb".to_string());
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "DynamoDBStreams_20120810.GetRecords");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -842,7 +845,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -865,13 +868,13 @@ where
     /// <p><p>Returns a shard iterator. A shard iterator provides information about how to retrieve the stream records from within a shard. Use the shard iterator in a subsequent <code>GetRecords</code> request to read the stream records from the shard.</p> <note> <p>A shard iterator expires 15 minutes after it is returned to the requester.</p> </note></p>
     fn get_shard_iterator(
         &self,
-        input: &GetShardIteratorInput,
+        input: GetShardIteratorInput,
     ) -> RusotoFuture<GetShardIteratorOutput, GetShardIteratorError> {
         let mut request = SignedRequest::new("POST", "dynamodb", &self.region, "/");
         request.set_endpoint_prefix("streams.dynamodb".to_string());
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "DynamoDBStreams_20120810.GetShardIterator");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -879,7 +882,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -902,13 +905,13 @@ where
     /// <p><p>Returns an array of stream ARNs associated with the current account and endpoint. If the <code>TableName</code> parameter is present, then <code>ListStreams</code> will return only the streams ARNs for that table.</p> <note> <p>You can call <code>ListStreams</code> at a maximum rate of 5 times per second.</p> </note></p>
     fn list_streams(
         &self,
-        input: &ListStreamsInput,
+        input: ListStreamsInput,
     ) -> RusotoFuture<ListStreamsOutput, ListStreamsError> {
         let mut request = SignedRequest::new("POST", "dynamodb", &self.region, "/");
         request.set_endpoint_prefix("streams.dynamodb".to_string());
         request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "DynamoDBStreams_20120810.ListStreams");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -916,7 +919,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 

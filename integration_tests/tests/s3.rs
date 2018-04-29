@@ -1,5 +1,6 @@
 #![cfg(feature = "s3")]
 extern crate futures;
+extern crate futures_fs;
 extern crate rusoto_core;
 extern crate rusoto_s3;
 extern crate time;
@@ -13,12 +14,13 @@ use std::io::Read;
 use time::get_time;
 
 use futures::{Future, Stream};
+use futures_fs::FsPool;
 use rusoto_core::Region;
 use rusoto_s3::{S3, S3Client, HeadObjectRequest, CopyObjectRequest, GetObjectError, GetObjectRequest,
                  PutObjectRequest, DeleteObjectRequest, PutBucketCorsRequest, CORSConfiguration,
                  CORSRule, CreateBucketRequest, DeleteBucketRequest, CreateMultipartUploadRequest,
                  UploadPartRequest, CompleteMultipartUploadRequest, CompletedMultipartUpload,
-                 CompletedPart, ListObjectsRequest, ListObjectsV2Request};
+                 CompletedPart, ListObjectsRequest, ListObjectsV2Request, StreamingBody};
 
 type TestClient = S3Client;
 
@@ -64,7 +66,7 @@ fn test_all_the_things() {
         test_put_bucket_cors(&client, &test_bucket);
     }
 
-    // PUT an object (no_credentials is an arbitrary choice)
+    // PUT an object via buffer (no_credentials is an arbitrary choice)
     test_put_object_with_filename(&client,
                                   &test_bucket,
                                   &filename,
@@ -99,13 +101,12 @@ fn test_all_the_things() {
                                   &"tests/sample-data/binary-file");
     test_get_object(&client, &test_bucket, &binary_filename);
 
-    // paging test requires three items in the bucket, put another item there:
-    // PUT an object (no_credentials is an arbitrary choice)
-    let another_filename = format!("foo{}", filename);
-    test_put_object_with_filename(&client,
-                                  &test_bucket,
-                                  &another_filename,
-                                  &"tests/sample-data/no_credentials");
+    // PUT an object via stream
+    let another_filename = format!("streaming{}", filename);
+    test_put_object_stream_with_filename(&client,
+                                         &test_bucket,
+                                         &another_filename,
+                                         &"tests/sample-data/binary-file");
 
     // metadata tests
     let mut metadata = HashMap::<String, String>::new();
@@ -149,14 +150,14 @@ fn test_multipart_upload(client: &TestClient, bucket: &str, filename: &str) {
     };
 
     // start the multipart upload and note the upload_id generated
-    let response = client.create_multipart_upload(&create_multipart_req).sync().expect("Couldn't create multipart upload");
+    let response = client.create_multipart_upload(create_multipart_req).sync().expect("Couldn't create multipart upload");
     println!("{:#?}", response);
     let upload_id = response.upload_id.unwrap();
 
     // create 2 upload parts
     let create_upload_part = |body: Vec<u8>, part_number: i64| -> UploadPartRequest {
         UploadPartRequest {
-            body: Some(body),
+            body: Some(body.into()),
             bucket: bucket.to_owned(),
             key: filename.to_owned(),
             upload_id: upload_id.to_owned(),
@@ -171,12 +172,13 @@ fn test_multipart_upload(client: &TestClient, bucket: &str, filename: &str) {
 
     // upload 2 parts and note the etags generated for them
     let mut completed_parts = Vec::new();
-    for req in [part_req1, part_req2].into_iter() {
-        let response = client.upload_part(&req).sync().expect("Couldn't upload a file part");
+    for req in vec![part_req1, part_req2].into_iter() {
+        let part_number = req.part_number;
+        let response = client.upload_part(req).sync().expect("Couldn't upload a file part");
         println!("{:#?}", response);
         completed_parts.push(CompletedPart {
             e_tag: response.e_tag.clone(),
-            part_number: Some(req.part_number),
+            part_number: Some(part_number),
         });
     }
 
@@ -191,7 +193,7 @@ fn test_multipart_upload(client: &TestClient, bucket: &str, filename: &str) {
         ..Default::default()
     };
 
-    let response = client.complete_multipart_upload(&complete_req).sync().expect("Couldn't complete multipart upload");
+    let response = client.complete_multipart_upload(complete_req).sync().expect("Couldn't complete multipart upload");
     println!("{:#?}", response);
 
     // delete the completed file
@@ -201,14 +203,14 @@ fn test_multipart_upload(client: &TestClient, bucket: &str, filename: &str) {
 fn test_create_bucket(client: &TestClient, bucket: &str) {
     let create_bucket_req = CreateBucketRequest { bucket: bucket.to_owned(), ..Default::default() };
 
-    let result = client.create_bucket(&create_bucket_req).sync().expect("Couldn't create bucket");
+    let result = client.create_bucket(create_bucket_req).sync().expect("Couldn't create bucket");
     println!("{:#?}", result);
 }
 
 fn test_delete_bucket(client: &TestClient, bucket: &str) {
     let delete_bucket_req = DeleteBucketRequest { bucket: bucket.to_owned(), ..Default::default() };
 
-    let result = client.delete_bucket(&delete_bucket_req).sync().expect("Couldn't delete bucket");
+    let result = client.delete_bucket(delete_bucket_req).sync().expect("Couldn't delete bucket");
     println!("{:#?}", result);
 }
 
@@ -224,13 +226,31 @@ fn test_put_object_with_filename(client: &TestClient,
             let req = PutObjectRequest {
                 bucket: bucket.to_owned(),
                 key: dest_filename.to_owned(),
-                body: Some(contents),
+                body: Some(contents.into()),
                 ..Default::default()
             };
-            let result = client.put_object(&req).sync().expect("Couldn't PUT object");
+            let result = client.put_object(req).sync().expect("Couldn't PUT object");
             println!("{:#?}", result);
         }
     }
+}
+
+fn test_put_object_stream_with_filename(client: &TestClient,
+                                        bucket: &str,
+                                        dest_filename: &str,
+                                        local_filename: &str) {
+    let meta = ::std::fs::metadata(local_filename).unwrap();
+    let fs = FsPool::default();
+    let read_stream = fs.read(local_filename.to_owned());
+    let req = PutObjectRequest {
+        bucket: bucket.to_owned(),
+        key: dest_filename.to_owned(),
+        content_length: Some(meta.len() as i64),
+        body: Some(StreamingBody::new(read_stream.map(|bytes| bytes.to_vec()))),
+        ..Default::default()
+    };
+    let result = client.put_object(req).sync().expect("Couldn't PUT object");
+    println!("{:#?}", result);
 }
 
 fn test_head_object(client: &TestClient, bucket: &str, filename: &str) {
@@ -240,7 +260,7 @@ fn test_head_object(client: &TestClient, bucket: &str, filename: &str) {
         ..Default::default()
     };
 
-    let result = client.head_object(&head_req).sync().expect("Couldn't HEAD object");
+    let result = client.head_object(head_req).sync().expect("Couldn't HEAD object");
     println!("{:#?}", result);
 }
 
@@ -251,7 +271,7 @@ fn test_get_object(client: &TestClient, bucket: &str, filename: &str) {
         ..Default::default()
     };
 
-    let result = client.get_object(&get_req).sync().expect("Couldn't GET object");
+    let result = client.get_object(get_req).sync().expect("Couldn't GET object");
     println!("get object result: {:#?}", result);
 
     let stream = result.body.unwrap();
@@ -267,7 +287,7 @@ fn test_get_object_no_such_object(client: &TestClient, bucket: &str, filename: &
         ..Default::default()
     };
 
-    match client.get_object(&get_req).sync() {
+    match client.get_object(get_req).sync() {
         Err(GetObjectError::NoSuchKey(_)) => (),
         r => panic!("unexpected response {:?}", r)
     };
@@ -281,7 +301,7 @@ fn test_get_object_range(client: &TestClient, bucket: &str, filename: &str) {
         ..Default::default()
     };
 
-    let result = client.get_object(&get_req).sync().expect("Couldn't GET object (range)");
+    let result = client.get_object(get_req).sync().expect("Couldn't GET object (range)");
     println!("\nget object range result: {:#?}", result);
     assert_eq!(result.content_length.unwrap(), 2);
 }
@@ -297,7 +317,7 @@ fn test_copy_object(client: &TestClient, bucket: &str, filename: &str) {
         ..Default::default()
     };
 
-    let result = client.copy_object(&req).sync().expect("Couldn't copy object");
+    let result = client.copy_object(req).sync().expect("Couldn't copy object");
     println!("{:#?}", result);
 }
 
@@ -312,7 +332,7 @@ fn test_copy_object_utf8(client: &TestClient, bucket: &str, filename: &str) {
         ..Default::default()
     };
 
-    let result = client.copy_object(&req).sync().expect("Couldn't copy object (utf8)");
+    let result = client.copy_object(req).sync().expect("Couldn't copy object (utf8)");
     println!("{:#?}", result);
 }
 
@@ -323,7 +343,7 @@ fn test_delete_object(client: &TestClient, bucket: &str, filename: &str) {
         ..Default::default()
     };
 
-    let result = client.delete_object(&del_req).sync().expect("Couldn't delete object");
+    let result = client.delete_object(del_req).sync().expect("Couldn't delete object");
     println!("{:#?}", result);
 }
 
@@ -338,7 +358,7 @@ fn list_items_in_bucket(client: &TestClient, bucket: &str) {
         start_after: Some("foo".to_owned()),
         ..Default::default()
     };
-    let result = client.list_objects_v2(&list_obj_req).sync().expect("Couldn't list items in bucket (v2)");
+    let result = client.list_objects_v2(list_obj_req).sync().expect("Couldn't list items in bucket (v2)");
     println!("Items in bucket: {:#?}", result);
 }
 
@@ -350,7 +370,7 @@ fn list_items_in_bucket_paged_v1(client: &TestClient, bucket: &str) {
         ..Default::default()
     };
 
-    let response1 = client.list_objects(&list_request).sync().expect("list objects failed");
+    let response1 = client.list_objects(list_request.clone()).sync().expect("list objects failed");
     println!("Items in bucket, page 1: {:#?}", response1);
     let contents1 = response1.contents.unwrap();
     assert!(response1.is_truncated.unwrap());
@@ -358,7 +378,7 @@ fn list_items_in_bucket_paged_v1(client: &TestClient, bucket: &str) {
 
     list_request.marker = Some(response1.next_marker.unwrap());
     list_request.max_keys = Some(1000);
-    let response2 = client.list_objects(&list_request).sync().expect("list objects failed");
+    let response2 = client.list_objects(list_request).sync().expect("list objects failed");
     println!("Items in buckut, page 2: {:#?}", response2);
     let contents2 = response2.contents.unwrap();
     assert!(!response2.is_truncated.unwrap());
@@ -372,12 +392,12 @@ fn list_items_in_bucket_paged_v2(client: &TestClient, bucket: &str) {
         max_keys: Some(1),
         ..Default::default()
     };
-    let result1 = client.list_objects_v2(&list_obj_req).sync().expect("list objects v2 failed");
+    let result1 = client.list_objects_v2(list_obj_req.clone()).sync().expect("list objects v2 failed");
     println!("Items in bucket, page 1: {:#?}", result1);
     assert!(result1.next_continuation_token.is_some());
 
     list_obj_req.continuation_token = result1.next_continuation_token;
-    let result2 = client.list_objects_v2(&list_obj_req).sync().expect("list objects v2 paging failed");
+    let result2 = client.list_objects_v2(list_obj_req).sync().expect("list objects v2 paging failed");
     println!("Items in bucket, page 2: {:#?}", result2);
     // For the second call it the token is in `continuation_token` not `next_continuation_token`
     assert!(result2.continuation_token.is_some());
@@ -406,7 +426,7 @@ fn test_put_bucket_cors(client: &TestClient, bucket: &str) {
         ..Default::default()
     };
 
-    let result = client.put_bucket_cors(&req).sync().expect("Couldn't apply bucket CORS");
+    let result = client.put_bucket_cors(req).sync().expect("Couldn't apply bucket CORS");
     println!("{:#?}", result);
 }
 
@@ -424,11 +444,11 @@ fn test_put_object_with_metadata(client: &TestClient,
             let req = PutObjectRequest {
                 bucket: bucket.to_owned(),
                 key: dest_filename.to_owned(),
-                body: Some(contents),
+                body: Some(contents.into()),
                 metadata: Some(metadata.clone()),
                 ..Default::default()
             };
-            let result = client.put_object(&req).sync().expect("Couldn't PUT object");
+            let result = client.put_object(req).sync().expect("Couldn't PUT object");
             println!("{:#?}", result);
         }
     }
@@ -441,7 +461,7 @@ fn test_head_object_with_metadata(client: &TestClient, bucket: &str, filename: &
         ..Default::default()
     };
 
-    let result = client.head_object(&head_req).sync().expect("Couldn't HEAD object");
+    let result = client.head_object(head_req).sync().expect("Couldn't HEAD object");
     println!("{:#?}", result);
 
     let head_metadata = result.metadata.as_ref().expect("No metadata available");
@@ -455,7 +475,7 @@ fn test_get_object_with_metadata(client: &TestClient, bucket: &str, filename: &s
         ..Default::default()
     };
 
-    let result = client.get_object(&get_req).sync().expect("Couldn't GET object");
+    let result = client.get_object(get_req).sync().expect("Couldn't GET object");
     println!("get object result: {:#?}", result);
 
     let head_metadata = result.metadata.as_ref().expect("No metadata available");

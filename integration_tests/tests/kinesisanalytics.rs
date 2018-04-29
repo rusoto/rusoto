@@ -11,6 +11,6 @@ fn should_list_applications() {
     let client = KinesisAnalyticsClient::simple(Region::UsEast1);
     let request = ListApplicationsRequest::default();
 
-    let result = client.list_applications(&request).sync().unwrap();
+    let result = client.list_applications(request).sync().unwrap();
 	println!("{:#?}", result);
 }

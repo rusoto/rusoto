@@ -18,24 +18,24 @@ use std::io;
 use futures::future;
 use futures::Future;
 use rusoto_core::reactor::{CredentialsProvider, RequestDispatcher};
-use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::region;
+use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::{ClientInner, RusotoFuture};
 
-use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
+use rusoto_core::request::HttpDispatchError;
 
-use std::str::FromStr;
-use xml::EventReader;
-use xml::reader::ParserConfig;
+use hyper::StatusCode;
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::signature::SignedRequest;
-use xml::reader::XmlEvent;
-use rusoto_core::xmlutil::{Next, Peek, XmlParseError, XmlResponse};
+use rusoto_core::xmlerror::*;
 use rusoto_core::xmlutil::{characters, end_element, find_start_element, peek_at_name, skip_tree,
                            start_element};
-use rusoto_core::xmlerror::*;
-use hyper::StatusCode;
+use rusoto_core::xmlutil::{Next, Peek, XmlParseError, XmlResponse};
+use std::str::FromStr;
+use xml::reader::ParserConfig;
+use xml::reader::XmlEvent;
+use xml::EventReader;
 
 enum DeserializerNext {
     Close,
@@ -375,14 +375,12 @@ impl AdditionalAttributeDeserializer {
                 DeserializerNext::Element(name) => match &name[..] {
                     "Key" => {
                         obj.key = Some(try!(AdditionalAttributeKeyDeserializer::deserialize(
-                            "Key",
-                            stack
+                            "Key", stack
                         )));
                     }
                     "Value" => {
                         obj.value = Some(try!(AdditionalAttributeValueDeserializer::deserialize(
-                            "Value",
-                            stack
+                            "Value", stack
                         )));
                     }
                     _ => skip_tree(stack),
@@ -475,8 +473,7 @@ impl AdditionalAttributesDeserializer {
                 DeserializerNext::Element(name) => {
                     if name == "member" {
                         obj.push(try!(AdditionalAttributeDeserializer::deserialize(
-                            "member",
-                            stack
+                            "member", stack
                         )));
                     } else {
                         skip_tree(stack);
@@ -530,8 +527,7 @@ impl AppCookieStickinessPoliciesDeserializer {
                 DeserializerNext::Element(name) => {
                     if name == "member" {
                         obj.push(try!(AppCookieStickinessPolicyDeserializer::deserialize(
-                            "member",
-                            stack
+                            "member", stack
                         )));
                     } else {
                         skip_tree(stack);
@@ -838,8 +834,7 @@ impl AvailabilityZonesDeserializer {
                 DeserializerNext::Element(name) => {
                     if name == "member" {
                         obj.push(try!(AvailabilityZoneDeserializer::deserialize(
-                            "member",
-                            stack
+                            "member", stack
                         )));
                     } else {
                         skip_tree(stack);
@@ -950,8 +945,7 @@ impl BackendServerDescriptionsDeserializer {
                 DeserializerNext::Element(name) => {
                     if name == "member" {
                         obj.push(try!(BackendServerDescriptionDeserializer::deserialize(
-                            "member",
-                            stack
+                            "member", stack
                         )));
                     } else {
                         skip_tree(stack);
@@ -1096,8 +1090,7 @@ impl ConnectionDrainingDeserializer {
                 DeserializerNext::Element(name) => match &name[..] {
                     "Enabled" => {
                         obj.enabled = try!(ConnectionDrainingEnabledDeserializer::deserialize(
-                            "Enabled",
-                            stack
+                            "Enabled", stack
                         ));
                     }
                     "Timeout" => {
@@ -1646,8 +1639,7 @@ impl CrossZoneLoadBalancingDeserializer {
                 DeserializerNext::Element(name) => match &name[..] {
                     "Enabled" => {
                         obj.enabled = try!(CrossZoneLoadBalancingEnabledDeserializer::deserialize(
-                            "Enabled",
-                            stack
+                            "Enabled", stack
                         ));
                     }
                     _ => skip_tree(stack),
@@ -2641,8 +2633,7 @@ impl HealthCheckDeserializer {
                     }
                     "Interval" => {
                         obj.interval = try!(HealthCheckIntervalDeserializer::deserialize(
-                            "Interval",
-                            stack
+                            "Interval", stack
                         ));
                     }
                     "Target" => {
@@ -2651,8 +2642,7 @@ impl HealthCheckDeserializer {
                     }
                     "Timeout" => {
                         obj.timeout = try!(HealthCheckTimeoutDeserializer::deserialize(
-                            "Timeout",
-                            stack
+                            "Timeout", stack
                         ));
                     }
                     "UnhealthyThreshold" => {
@@ -2968,8 +2958,7 @@ impl InstanceStatesDeserializer {
                 DeserializerNext::Element(name) => {
                     if name == "member" {
                         obj.push(try!(InstanceStateDeserializer::deserialize(
-                            "member",
-                            stack
+                            "member", stack
                         )));
                     } else {
                         skip_tree(stack);
@@ -3063,8 +3052,7 @@ impl LBCookieStickinessPoliciesDeserializer {
                 DeserializerNext::Element(name) => {
                     if name == "member" {
                         obj.push(try!(LBCookieStickinessPolicyDeserializer::deserialize(
-                            "member",
-                            stack
+                            "member", stack
                         )));
                     } else {
                         skip_tree(stack);
@@ -3422,8 +3410,7 @@ impl ListenerDescriptionsDeserializer {
                 DeserializerNext::Element(name) => {
                     if name == "member" {
                         obj.push(try!(ListenerDescriptionDeserializer::deserialize(
-                            "member",
-                            stack
+                            "member", stack
                         )));
                     } else {
                         skip_tree(stack);
@@ -3704,8 +3691,7 @@ impl LoadBalancerDescriptionDeserializer {
                     }
                     "Scheme" => {
                         obj.scheme = Some(try!(LoadBalancerSchemeDeserializer::deserialize(
-                            "Scheme",
-                            stack
+                            "Scheme", stack
                         )));
                     }
                     "SecurityGroups" => {
@@ -3765,8 +3751,7 @@ impl LoadBalancerDescriptionsDeserializer {
                 DeserializerNext::Element(name) => {
                     if name == "member" {
                         obj.push(try!(LoadBalancerDescriptionDeserializer::deserialize(
-                            "member",
-                            stack
+                            "member", stack
                         )));
                     } else {
                         skip_tree(stack);
@@ -4131,8 +4116,7 @@ impl PolicyAttributeDescriptionsDeserializer {
                 DeserializerNext::Element(name) => {
                     if name == "member" {
                         obj.push(try!(PolicyAttributeDescriptionDeserializer::deserialize(
-                            "member",
-                            stack
+                            "member", stack
                         )));
                     } else {
                         skip_tree(stack);
@@ -4256,8 +4240,7 @@ impl PolicyAttributeTypeDescriptionsDeserializer {
                     if name == "member" {
                         obj.push(try!(
                             PolicyAttributeTypeDescriptionDeserializer::deserialize(
-                                "member",
-                                stack
+                                "member", stack
                             )
                         ));
                     } else {
@@ -4378,8 +4361,7 @@ impl PolicyDescriptionsDeserializer {
                 DeserializerNext::Element(name) => {
                     if name == "member" {
                         obj.push(try!(PolicyDescriptionDeserializer::deserialize(
-                            "member",
-                            stack
+                            "member", stack
                         )));
                     } else {
                         skip_tree(stack);
@@ -4554,8 +4536,7 @@ impl PolicyTypeDescriptionsDeserializer {
                 DeserializerNext::Element(name) => {
                     if name == "member" {
                         obj.push(try!(PolicyTypeDescriptionDeserializer::deserialize(
-                            "member",
-                            stack
+                            "member", stack
                         )));
                     } else {
                         skip_tree(stack);
@@ -4934,8 +4915,7 @@ impl SecurityGroupsDeserializer {
                 DeserializerNext::Element(name) => {
                     if name == "member" {
                         obj.push(try!(SecurityGroupIdDeserializer::deserialize(
-                            "member",
-                            stack
+                            "member", stack
                         )));
                     } else {
                         skip_tree(stack);
@@ -5427,8 +5407,7 @@ impl TagDescriptionsDeserializer {
                 DeserializerNext::Element(name) => {
                     if name == "member" {
                         obj.push(try!(TagDescriptionDeserializer::deserialize(
-                            "member",
-                            stack
+                            "member", stack
                         )));
                     } else {
                         skip_tree(stack);
@@ -8240,162 +8219,162 @@ impl Error for SetLoadBalancerPoliciesOfListenerError {
 /// Trait representing the capabilities of the Elastic Load Balancing API. Elastic Load Balancing clients implement this trait.
 pub trait Elb {
     /// <p>Adds the specified tags to the specified load balancer. Each load balancer can have a maximum of 10 tags.</p> <p>Each tag consists of a key and an optional value. If a tag with the same key is already associated with the load balancer, <code>AddTags</code> updates its value.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/add-remove-tags.html">Tag Your Classic Load Balancer</a> in the <i>Classic Load Balancer Guide</i>.</p>
-    fn add_tags(&self, input: &AddTagsInput) -> RusotoFuture<AddTagsOutput, AddTagsError>;
+    fn add_tags(&self, input: AddTagsInput) -> RusotoFuture<AddTagsOutput, AddTagsError>;
 
     /// <p>Associates one or more security groups with your load balancer in a virtual private cloud (VPC). The specified security groups override the previously associated security groups.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-security-groups.html#elb-vpc-security-groups">Security Groups for Load Balancers in a VPC</a> in the <i>Classic Load Balancer Guide</i>.</p>
     fn apply_security_groups_to_load_balancer(
         &self,
-        input: &ApplySecurityGroupsToLoadBalancerInput,
+        input: ApplySecurityGroupsToLoadBalancerInput,
     ) -> RusotoFuture<ApplySecurityGroupsToLoadBalancerOutput, ApplySecurityGroupsToLoadBalancerError>;
 
     /// <p>Adds one or more subnets to the set of configured subnets for the specified load balancer.</p> <p>The load balancer evenly distributes requests across all registered subnets. For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-manage-subnets.html">Add or Remove Subnets for Your Load Balancer in a VPC</a> in the <i>Classic Load Balancer Guide</i>.</p>
     fn attach_load_balancer_to_subnets(
         &self,
-        input: &AttachLoadBalancerToSubnetsInput,
+        input: AttachLoadBalancerToSubnetsInput,
     ) -> RusotoFuture<AttachLoadBalancerToSubnetsOutput, AttachLoadBalancerToSubnetsError>;
 
     /// <p>Specifies the health check settings to use when evaluating the health state of your EC2 instances.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-healthchecks.html">Configure Health Checks for Your Load Balancer</a> in the <i>Classic Load Balancer Guide</i>.</p>
     fn configure_health_check(
         &self,
-        input: &ConfigureHealthCheckInput,
+        input: ConfigureHealthCheckInput,
     ) -> RusotoFuture<ConfigureHealthCheckOutput, ConfigureHealthCheckError>;
 
     /// <p>Generates a stickiness policy with sticky session lifetimes that follow that of an application-generated cookie. This policy can be associated only with HTTP/HTTPS listeners.</p> <p>This policy is similar to the policy created by <a>CreateLBCookieStickinessPolicy</a>, except that the lifetime of the special Elastic Load Balancing cookie, <code>AWSELB</code>, follows the lifetime of the application-generated cookie specified in the policy configuration. The load balancer only inserts a new stickiness cookie when the application response includes a new application cookie.</p> <p>If the application cookie is explicitly removed or expires, the session stops being sticky until a new application cookie is issued.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-sticky-sessions.html#enable-sticky-sessions-application">Application-Controlled Session Stickiness</a> in the <i>Classic Load Balancer Guide</i>.</p>
     fn create_app_cookie_stickiness_policy(
         &self,
-        input: &CreateAppCookieStickinessPolicyInput,
+        input: CreateAppCookieStickinessPolicyInput,
     ) -> RusotoFuture<CreateAppCookieStickinessPolicyOutput, CreateAppCookieStickinessPolicyError>;
 
     /// <p>Generates a stickiness policy with sticky session lifetimes controlled by the lifetime of the browser (user-agent) or a specified expiration period. This policy can be associated only with HTTP/HTTPS listeners.</p> <p>When a load balancer implements this policy, the load balancer uses a special cookie to track the instance for each request. When the load balancer receives a request, it first checks to see if this cookie is present in the request. If so, the load balancer sends the request to the application server specified in the cookie. If not, the load balancer sends the request to a server that is chosen based on the existing load-balancing algorithm.</p> <p>A cookie is inserted into the response for binding subsequent requests from the same user to that server. The validity of the cookie is based on the cookie expiration time, which is specified in the policy configuration.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-sticky-sessions.html#enable-sticky-sessions-duration">Duration-Based Session Stickiness</a> in the <i>Classic Load Balancer Guide</i>.</p>
     fn create_lb_cookie_stickiness_policy(
         &self,
-        input: &CreateLBCookieStickinessPolicyInput,
+        input: CreateLBCookieStickinessPolicyInput,
     ) -> RusotoFuture<CreateLBCookieStickinessPolicyOutput, CreateLBCookieStickinessPolicyError>;
 
     /// <p>Creates a Classic Load Balancer.</p> <p>You can add listeners, security groups, subnets, and tags when you create your load balancer, or you can add them later using <a>CreateLoadBalancerListeners</a>, <a>ApplySecurityGroupsToLoadBalancer</a>, <a>AttachLoadBalancerToSubnets</a>, and <a>AddTags</a>.</p> <p>To describe your current load balancers, see <a>DescribeLoadBalancers</a>. When you are finished with a load balancer, you can delete it using <a>DeleteLoadBalancer</a>.</p> <p>You can create up to 20 load balancers per region per account. You can request an increase for the number of load balancers for your account. For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-limits.html">Limits for Your Classic Load Balancer</a> in the <i>Classic Load Balancer Guide</i>.</p>
     fn create_load_balancer(
         &self,
-        input: &CreateAccessPointInput,
+        input: CreateAccessPointInput,
     ) -> RusotoFuture<CreateAccessPointOutput, CreateLoadBalancerError>;
 
     /// <p>Creates one or more listeners for the specified load balancer. If a listener with the specified port does not already exist, it is created; otherwise, the properties of the new listener must match the properties of the existing listener.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-listener-config.html">Listeners for Your Classic Load Balancer</a> in the <i>Classic Load Balancer Guide</i>.</p>
     fn create_load_balancer_listeners(
         &self,
-        input: &CreateLoadBalancerListenerInput,
+        input: CreateLoadBalancerListenerInput,
     ) -> RusotoFuture<CreateLoadBalancerListenerOutput, CreateLoadBalancerListenersError>;
 
     /// <p>Creates a policy with the specified attributes for the specified load balancer.</p> <p>Policies are settings that are saved for your load balancer and that can be applied to the listener or the application server, depending on the policy type.</p>
     fn create_load_balancer_policy(
         &self,
-        input: &CreateLoadBalancerPolicyInput,
+        input: CreateLoadBalancerPolicyInput,
     ) -> RusotoFuture<CreateLoadBalancerPolicyOutput, CreateLoadBalancerPolicyError>;
 
     /// <p>Deletes the specified load balancer.</p> <p>If you are attempting to recreate a load balancer, you must reconfigure all settings. The DNS name associated with a deleted load balancer are no longer usable. The name and associated DNS record of the deleted load balancer no longer exist and traffic sent to any of its IP addresses is no longer delivered to your instances.</p> <p>If the load balancer does not exist or has already been deleted, the call to <code>DeleteLoadBalancer</code> still succeeds.</p>
     fn delete_load_balancer(
         &self,
-        input: &DeleteAccessPointInput,
+        input: DeleteAccessPointInput,
     ) -> RusotoFuture<DeleteAccessPointOutput, DeleteLoadBalancerError>;
 
     /// <p>Deletes the specified listeners from the specified load balancer.</p>
     fn delete_load_balancer_listeners(
         &self,
-        input: &DeleteLoadBalancerListenerInput,
+        input: DeleteLoadBalancerListenerInput,
     ) -> RusotoFuture<DeleteLoadBalancerListenerOutput, DeleteLoadBalancerListenersError>;
 
     /// <p>Deletes the specified policy from the specified load balancer. This policy must not be enabled for any listeners.</p>
     fn delete_load_balancer_policy(
         &self,
-        input: &DeleteLoadBalancerPolicyInput,
+        input: DeleteLoadBalancerPolicyInput,
     ) -> RusotoFuture<DeleteLoadBalancerPolicyOutput, DeleteLoadBalancerPolicyError>;
 
     /// <p>Deregisters the specified instances from the specified load balancer. After the instance is deregistered, it no longer receives traffic from the load balancer.</p> <p>You can use <a>DescribeLoadBalancers</a> to verify that the instance is deregistered from the load balancer.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-deregister-register-instances.html">Register or De-Register EC2 Instances</a> in the <i>Classic Load Balancer Guide</i>.</p>
     fn deregister_instances_from_load_balancer(
         &self,
-        input: &DeregisterEndPointsInput,
+        input: DeregisterEndPointsInput,
     ) -> RusotoFuture<DeregisterEndPointsOutput, DeregisterInstancesFromLoadBalancerError>;
 
     /// <p>Describes the current Elastic Load Balancing resource limits for your AWS account.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-limits.html">Limits for Your Classic Load Balancer</a> in the <i>Classic Load Balancer Guide</i>.</p>
     fn describe_account_limits(
         &self,
-        input: &DescribeAccountLimitsInput,
+        input: DescribeAccountLimitsInput,
     ) -> RusotoFuture<DescribeAccountLimitsOutput, DescribeAccountLimitsError>;
 
     /// <p>Describes the state of the specified instances with respect to the specified load balancer. If no instances are specified, the call describes the state of all instances that are currently registered with the load balancer. If instances are specified, their state is returned even if they are no longer registered with the load balancer. The state of terminated instances is not returned.</p>
     fn describe_instance_health(
         &self,
-        input: &DescribeEndPointStateInput,
+        input: DescribeEndPointStateInput,
     ) -> RusotoFuture<DescribeEndPointStateOutput, DescribeInstanceHealthError>;
 
     /// <p>Describes the attributes for the specified load balancer.</p>
     fn describe_load_balancer_attributes(
         &self,
-        input: &DescribeLoadBalancerAttributesInput,
+        input: DescribeLoadBalancerAttributesInput,
     ) -> RusotoFuture<DescribeLoadBalancerAttributesOutput, DescribeLoadBalancerAttributesError>;
 
     /// <p>Describes the specified policies.</p> <p>If you specify a load balancer name, the action returns the descriptions of all policies created for the load balancer. If you specify a policy name associated with your load balancer, the action returns the description of that policy. If you don't specify a load balancer name, the action returns descriptions of the specified sample policies, or descriptions of all sample policies. The names of the sample policies have the <code>ELBSample-</code> prefix.</p>
     fn describe_load_balancer_policies(
         &self,
-        input: &DescribeLoadBalancerPoliciesInput,
+        input: DescribeLoadBalancerPoliciesInput,
     ) -> RusotoFuture<DescribeLoadBalancerPoliciesOutput, DescribeLoadBalancerPoliciesError>;
 
     /// <p>Describes the specified load balancer policy types or all load balancer policy types.</p> <p>The description of each type indicates how it can be used. For example, some policies can be used only with layer 7 listeners, some policies can be used only with layer 4 listeners, and some policies can be used only with your EC2 instances.</p> <p>You can use <a>CreateLoadBalancerPolicy</a> to create a policy configuration for any of these policy types. Then, depending on the policy type, use either <a>SetLoadBalancerPoliciesOfListener</a> or <a>SetLoadBalancerPoliciesForBackendServer</a> to set the policy.</p>
     fn describe_load_balancer_policy_types(
         &self,
-        input: &DescribeLoadBalancerPolicyTypesInput,
+        input: DescribeLoadBalancerPolicyTypesInput,
     ) -> RusotoFuture<DescribeLoadBalancerPolicyTypesOutput, DescribeLoadBalancerPolicyTypesError>;
 
     /// <p>Describes the specified the load balancers. If no load balancers are specified, the call describes all of your load balancers.</p>
     fn describe_load_balancers(
         &self,
-        input: &DescribeAccessPointsInput,
+        input: DescribeAccessPointsInput,
     ) -> RusotoFuture<DescribeAccessPointsOutput, DescribeLoadBalancersError>;
 
     /// <p>Describes the tags associated with the specified load balancers.</p>
     fn describe_tags(
         &self,
-        input: &DescribeTagsInput,
+        input: DescribeTagsInput,
     ) -> RusotoFuture<DescribeTagsOutput, DescribeTagsError>;
 
     /// <p>Removes the specified subnets from the set of configured subnets for the load balancer.</p> <p>After a subnet is removed, all EC2 instances registered with the load balancer in the removed subnet go into the <code>OutOfService</code> state. Then, the load balancer balances the traffic among the remaining routable subnets.</p>
     fn detach_load_balancer_from_subnets(
         &self,
-        input: &DetachLoadBalancerFromSubnetsInput,
+        input: DetachLoadBalancerFromSubnetsInput,
     ) -> RusotoFuture<DetachLoadBalancerFromSubnetsOutput, DetachLoadBalancerFromSubnetsError>;
 
     /// <p>Removes the specified Availability Zones from the set of Availability Zones for the specified load balancer.</p> <p>There must be at least one Availability Zone registered with a load balancer at all times. After an Availability Zone is removed, all instances registered with the load balancer that are in the removed Availability Zone go into the <code>OutOfService</code> state. Then, the load balancer attempts to equally balance the traffic among its remaining Availability Zones.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/enable-disable-az.html">Add or Remove Availability Zones</a> in the <i>Classic Load Balancer Guide</i>.</p>
     fn disable_availability_zones_for_load_balancer(
         &self,
-        input: &RemoveAvailabilityZonesInput,
+        input: RemoveAvailabilityZonesInput,
     ) -> RusotoFuture<RemoveAvailabilityZonesOutput, DisableAvailabilityZonesForLoadBalancerError>;
 
     /// <p>Adds the specified Availability Zones to the set of Availability Zones for the specified load balancer.</p> <p>The load balancer evenly distributes requests across all its registered Availability Zones that contain instances.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/enable-disable-az.html">Add or Remove Availability Zones</a> in the <i>Classic Load Balancer Guide</i>.</p>
     fn enable_availability_zones_for_load_balancer(
         &self,
-        input: &AddAvailabilityZonesInput,
+        input: AddAvailabilityZonesInput,
     ) -> RusotoFuture<AddAvailabilityZonesOutput, EnableAvailabilityZonesForLoadBalancerError>;
 
     /// <p><p>Modifies the attributes of the specified load balancer.</p> <p>You can modify the load balancer attributes, such as <code>AccessLogs</code>, <code>ConnectionDraining</code>, and <code>CrossZoneLoadBalancing</code> by either enabling or disabling them. Or, you can modify the load balancer attribute <code>ConnectionSettings</code> by specifying an idle connection timeout value for your load balancer.</p> <p>For more information, see the following in the <i>Classic Load Balancer Guide</i>:</p> <ul> <li> <p> <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/enable-disable-crosszone-lb.html">Cross-Zone Load Balancing</a> </p> </li> <li> <p> <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/config-conn-drain.html">Connection Draining</a> </p> </li> <li> <p> <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/access-log-collection.html">Access Logs</a> </p> </li> <li> <p> <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/config-idle-timeout.html">Idle Connection Timeout</a> </p> </li> </ul></p>
     fn modify_load_balancer_attributes(
         &self,
-        input: &ModifyLoadBalancerAttributesInput,
+        input: ModifyLoadBalancerAttributesInput,
     ) -> RusotoFuture<ModifyLoadBalancerAttributesOutput, ModifyLoadBalancerAttributesError>;
 
     /// <p>Adds the specified instances to the specified load balancer.</p> <p>The instance must be a running instance in the same network as the load balancer (EC2-Classic or the same VPC). If you have EC2-Classic instances and a load balancer in a VPC with ClassicLink enabled, you can link the EC2-Classic instances to that VPC and then register the linked EC2-Classic instances with the load balancer in the VPC.</p> <p>Note that <code>RegisterInstanceWithLoadBalancer</code> completes when the request has been registered. Instance registration takes a little time to complete. To check the state of the registered instances, use <a>DescribeLoadBalancers</a> or <a>DescribeInstanceHealth</a>.</p> <p>After the instance is registered, it starts receiving traffic and requests from the load balancer. Any instance that is not in one of the Availability Zones registered for the load balancer is moved to the <code>OutOfService</code> state. If an Availability Zone is added to the load balancer later, any instances registered with the load balancer move to the <code>InService</code> state.</p> <p>To deregister instances from a load balancer, use <a>DeregisterInstancesFromLoadBalancer</a>.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-deregister-register-instances.html">Register or De-Register EC2 Instances</a> in the <i>Classic Load Balancer Guide</i>.</p>
     fn register_instances_with_load_balancer(
         &self,
-        input: &RegisterEndPointsInput,
+        input: RegisterEndPointsInput,
     ) -> RusotoFuture<RegisterEndPointsOutput, RegisterInstancesWithLoadBalancerError>;
 
     /// <p>Removes one or more tags from the specified load balancer.</p>
     fn remove_tags(
         &self,
-        input: &RemoveTagsInput,
+        input: RemoveTagsInput,
     ) -> RusotoFuture<RemoveTagsOutput, RemoveTagsError>;
 
     /// <p>Sets the certificate that terminates the specified listener's SSL connections. The specified certificate replaces any prior certificate that was used on the same load balancer and port.</p> <p>For more information about updating your SSL certificate, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-update-ssl-cert.html">Replace the SSL Certificate for Your Load Balancer</a> in the <i>Classic Load Balancer Guide</i>.</p>
     fn set_load_balancer_listener_ssl_certificate(
         &self,
-        input: &SetLoadBalancerListenerSSLCertificateInput,
+        input: SetLoadBalancerListenerSSLCertificateInput,
     ) -> RusotoFuture<
         SetLoadBalancerListenerSSLCertificateOutput,
         SetLoadBalancerListenerSSLCertificateError,
@@ -8404,7 +8383,7 @@ pub trait Elb {
     /// <p>Replaces the set of policies associated with the specified port on which the EC2 instance is listening with a new set of policies. At this time, only the back-end server authentication policy type can be applied to the instance ports; this policy type is composed of multiple public key policies.</p> <p>Each time you use <code>SetLoadBalancerPoliciesForBackendServer</code> to enable the policies, use the <code>PolicyNames</code> parameter to list the policies that you want to enable.</p> <p>You can use <a>DescribeLoadBalancers</a> or <a>DescribeLoadBalancerPolicies</a> to verify that the policy is associated with the EC2 instance.</p> <p>For more information about enabling back-end instance authentication, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-create-https-ssl-load-balancer.html#configure_backendauth_clt">Configure Back-end Instance Authentication</a> in the <i>Classic Load Balancer Guide</i>. For more information about Proxy Protocol, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/enable-proxy-protocol.html">Configure Proxy Protocol Support</a> in the <i>Classic Load Balancer Guide</i>.</p>
     fn set_load_balancer_policies_for_backend_server(
         &self,
-        input: &SetLoadBalancerPoliciesForBackendServerInput,
+        input: SetLoadBalancerPoliciesForBackendServerInput,
     ) -> RusotoFuture<
         SetLoadBalancerPoliciesForBackendServerOutput,
         SetLoadBalancerPoliciesForBackendServerError,
@@ -8413,7 +8392,7 @@ pub trait Elb {
     /// <p>Replaces the current set of policies for the specified load balancer port with the specified set of policies.</p> <p>To enable back-end server authentication, use <a>SetLoadBalancerPoliciesForBackendServer</a>.</p> <p>For more information about setting policies, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/ssl-config-update.html">Update the SSL Negotiation Configuration</a>, <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-sticky-sessions.html#enable-sticky-sessions-duration">Duration-Based Session Stickiness</a>, and <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-sticky-sessions.html#enable-sticky-sessions-application">Application-Controlled Session Stickiness</a> in the <i>Classic Load Balancer Guide</i>.</p>
     fn set_load_balancer_policies_of_listener(
         &self,
-        input: &SetLoadBalancerPoliciesOfListenerInput,
+        input: SetLoadBalancerPoliciesOfListenerInput,
     ) -> RusotoFuture<SetLoadBalancerPoliciesOfListenerOutput, SetLoadBalancerPoliciesOfListenerError>;
 }
 /// A client for the Elastic Load Balancing API.
@@ -8460,7 +8439,7 @@ where
     D: DispatchSignedRequest + 'static,
 {
     /// <p>Adds the specified tags to the specified load balancer. Each load balancer can have a maximum of 10 tags.</p> <p>Each tag consists of a key and an optional value. If a tag with the same key is already associated with the load balancer, <code>AddTags</code> updates its value.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/add-remove-tags.html">Tag Your Classic Load Balancer</a> in the <i>Classic Load Balancer Guide</i>.</p>
-    fn add_tags(&self, input: &AddTagsInput) -> RusotoFuture<AddTagsOutput, AddTagsError> {
+    fn add_tags(&self, input: AddTagsInput) -> RusotoFuture<AddTagsOutput, AddTagsError> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
 
@@ -8510,7 +8489,7 @@ where
     /// <p>Associates one or more security groups with your load balancer in a virtual private cloud (VPC). The specified security groups override the previously associated security groups.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-security-groups.html#elb-vpc-security-groups">Security Groups for Load Balancers in a VPC</a> in the <i>Classic Load Balancer Guide</i>.</p>
     fn apply_security_groups_to_load_balancer(
         &self,
-        input: &ApplySecurityGroupsToLoadBalancerInput,
+        input: ApplySecurityGroupsToLoadBalancerInput,
     ) -> RusotoFuture<ApplySecurityGroupsToLoadBalancerOutput, ApplySecurityGroupsToLoadBalancerError>
     {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
@@ -8564,7 +8543,7 @@ where
     /// <p>Adds one or more subnets to the set of configured subnets for the specified load balancer.</p> <p>The load balancer evenly distributes requests across all registered subnets. For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-manage-subnets.html">Add or Remove Subnets for Your Load Balancer in a VPC</a> in the <i>Classic Load Balancer Guide</i>.</p>
     fn attach_load_balancer_to_subnets(
         &self,
-        input: &AttachLoadBalancerToSubnetsInput,
+        input: AttachLoadBalancerToSubnetsInput,
     ) -> RusotoFuture<AttachLoadBalancerToSubnetsOutput, AttachLoadBalancerToSubnetsError> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
@@ -8615,7 +8594,7 @@ where
     /// <p>Specifies the health check settings to use when evaluating the health state of your EC2 instances.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-healthchecks.html">Configure Health Checks for Your Load Balancer</a> in the <i>Classic Load Balancer Guide</i>.</p>
     fn configure_health_check(
         &self,
-        input: &ConfigureHealthCheckInput,
+        input: ConfigureHealthCheckInput,
     ) -> RusotoFuture<ConfigureHealthCheckOutput, ConfigureHealthCheckError> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
@@ -8666,7 +8645,7 @@ where
     /// <p>Generates a stickiness policy with sticky session lifetimes that follow that of an application-generated cookie. This policy can be associated only with HTTP/HTTPS listeners.</p> <p>This policy is similar to the policy created by <a>CreateLBCookieStickinessPolicy</a>, except that the lifetime of the special Elastic Load Balancing cookie, <code>AWSELB</code>, follows the lifetime of the application-generated cookie specified in the policy configuration. The load balancer only inserts a new stickiness cookie when the application response includes a new application cookie.</p> <p>If the application cookie is explicitly removed or expires, the session stops being sticky until a new application cookie is issued.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-sticky-sessions.html#enable-sticky-sessions-application">Application-Controlled Session Stickiness</a> in the <i>Classic Load Balancer Guide</i>.</p>
     fn create_app_cookie_stickiness_policy(
         &self,
-        input: &CreateAppCookieStickinessPolicyInput,
+        input: CreateAppCookieStickinessPolicyInput,
     ) -> RusotoFuture<CreateAppCookieStickinessPolicyOutput, CreateAppCookieStickinessPolicyError>
     {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
@@ -8720,7 +8699,7 @@ where
     /// <p>Generates a stickiness policy with sticky session lifetimes controlled by the lifetime of the browser (user-agent) or a specified expiration period. This policy can be associated only with HTTP/HTTPS listeners.</p> <p>When a load balancer implements this policy, the load balancer uses a special cookie to track the instance for each request. When the load balancer receives a request, it first checks to see if this cookie is present in the request. If so, the load balancer sends the request to the application server specified in the cookie. If not, the load balancer sends the request to a server that is chosen based on the existing load-balancing algorithm.</p> <p>A cookie is inserted into the response for binding subsequent requests from the same user to that server. The validity of the cookie is based on the cookie expiration time, which is specified in the policy configuration.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-sticky-sessions.html#enable-sticky-sessions-duration">Duration-Based Session Stickiness</a> in the <i>Classic Load Balancer Guide</i>.</p>
     fn create_lb_cookie_stickiness_policy(
         &self,
-        input: &CreateLBCookieStickinessPolicyInput,
+        input: CreateLBCookieStickinessPolicyInput,
     ) -> RusotoFuture<CreateLBCookieStickinessPolicyOutput, CreateLBCookieStickinessPolicyError>
     {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
@@ -8774,7 +8753,7 @@ where
     /// <p>Creates a Classic Load Balancer.</p> <p>You can add listeners, security groups, subnets, and tags when you create your load balancer, or you can add them later using <a>CreateLoadBalancerListeners</a>, <a>ApplySecurityGroupsToLoadBalancer</a>, <a>AttachLoadBalancerToSubnets</a>, and <a>AddTags</a>.</p> <p>To describe your current load balancers, see <a>DescribeLoadBalancers</a>. When you are finished with a load balancer, you can delete it using <a>DeleteLoadBalancer</a>.</p> <p>You can create up to 20 load balancers per region per account. You can request an increase for the number of load balancers for your account. For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-limits.html">Limits for Your Classic Load Balancer</a> in the <i>Classic Load Balancer Guide</i>.</p>
     fn create_load_balancer(
         &self,
-        input: &CreateAccessPointInput,
+        input: CreateAccessPointInput,
     ) -> RusotoFuture<CreateAccessPointOutput, CreateLoadBalancerError> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
@@ -8825,7 +8804,7 @@ where
     /// <p>Creates one or more listeners for the specified load balancer. If a listener with the specified port does not already exist, it is created; otherwise, the properties of the new listener must match the properties of the existing listener.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-listener-config.html">Listeners for Your Classic Load Balancer</a> in the <i>Classic Load Balancer Guide</i>.</p>
     fn create_load_balancer_listeners(
         &self,
-        input: &CreateLoadBalancerListenerInput,
+        input: CreateLoadBalancerListenerInput,
     ) -> RusotoFuture<CreateLoadBalancerListenerOutput, CreateLoadBalancerListenersError> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
@@ -8876,7 +8855,7 @@ where
     /// <p>Creates a policy with the specified attributes for the specified load balancer.</p> <p>Policies are settings that are saved for your load balancer and that can be applied to the listener or the application server, depending on the policy type.</p>
     fn create_load_balancer_policy(
         &self,
-        input: &CreateLoadBalancerPolicyInput,
+        input: CreateLoadBalancerPolicyInput,
     ) -> RusotoFuture<CreateLoadBalancerPolicyOutput, CreateLoadBalancerPolicyError> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
@@ -8927,7 +8906,7 @@ where
     /// <p>Deletes the specified load balancer.</p> <p>If you are attempting to recreate a load balancer, you must reconfigure all settings. The DNS name associated with a deleted load balancer are no longer usable. The name and associated DNS record of the deleted load balancer no longer exist and traffic sent to any of its IP addresses is no longer delivered to your instances.</p> <p>If the load balancer does not exist or has already been deleted, the call to <code>DeleteLoadBalancer</code> still succeeds.</p>
     fn delete_load_balancer(
         &self,
-        input: &DeleteAccessPointInput,
+        input: DeleteAccessPointInput,
     ) -> RusotoFuture<DeleteAccessPointOutput, DeleteLoadBalancerError> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
@@ -8978,7 +8957,7 @@ where
     /// <p>Deletes the specified listeners from the specified load balancer.</p>
     fn delete_load_balancer_listeners(
         &self,
-        input: &DeleteLoadBalancerListenerInput,
+        input: DeleteLoadBalancerListenerInput,
     ) -> RusotoFuture<DeleteLoadBalancerListenerOutput, DeleteLoadBalancerListenersError> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
@@ -9029,7 +9008,7 @@ where
     /// <p>Deletes the specified policy from the specified load balancer. This policy must not be enabled for any listeners.</p>
     fn delete_load_balancer_policy(
         &self,
-        input: &DeleteLoadBalancerPolicyInput,
+        input: DeleteLoadBalancerPolicyInput,
     ) -> RusotoFuture<DeleteLoadBalancerPolicyOutput, DeleteLoadBalancerPolicyError> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
@@ -9080,7 +9059,7 @@ where
     /// <p>Deregisters the specified instances from the specified load balancer. After the instance is deregistered, it no longer receives traffic from the load balancer.</p> <p>You can use <a>DescribeLoadBalancers</a> to verify that the instance is deregistered from the load balancer.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-deregister-register-instances.html">Register or De-Register EC2 Instances</a> in the <i>Classic Load Balancer Guide</i>.</p>
     fn deregister_instances_from_load_balancer(
         &self,
-        input: &DeregisterEndPointsInput,
+        input: DeregisterEndPointsInput,
     ) -> RusotoFuture<DeregisterEndPointsOutput, DeregisterInstancesFromLoadBalancerError> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
@@ -9131,7 +9110,7 @@ where
     /// <p>Describes the current Elastic Load Balancing resource limits for your AWS account.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-limits.html">Limits for Your Classic Load Balancer</a> in the <i>Classic Load Balancer Guide</i>.</p>
     fn describe_account_limits(
         &self,
-        input: &DescribeAccountLimitsInput,
+        input: DescribeAccountLimitsInput,
     ) -> RusotoFuture<DescribeAccountLimitsOutput, DescribeAccountLimitsError> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
@@ -9182,7 +9161,7 @@ where
     /// <p>Describes the state of the specified instances with respect to the specified load balancer. If no instances are specified, the call describes the state of all instances that are currently registered with the load balancer. If instances are specified, their state is returned even if they are no longer registered with the load balancer. The state of terminated instances is not returned.</p>
     fn describe_instance_health(
         &self,
-        input: &DescribeEndPointStateInput,
+        input: DescribeEndPointStateInput,
     ) -> RusotoFuture<DescribeEndPointStateOutput, DescribeInstanceHealthError> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
@@ -9233,7 +9212,7 @@ where
     /// <p>Describes the attributes for the specified load balancer.</p>
     fn describe_load_balancer_attributes(
         &self,
-        input: &DescribeLoadBalancerAttributesInput,
+        input: DescribeLoadBalancerAttributesInput,
     ) -> RusotoFuture<DescribeLoadBalancerAttributesOutput, DescribeLoadBalancerAttributesError>
     {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
@@ -9287,7 +9266,7 @@ where
     /// <p>Describes the specified policies.</p> <p>If you specify a load balancer name, the action returns the descriptions of all policies created for the load balancer. If you specify a policy name associated with your load balancer, the action returns the description of that policy. If you don't specify a load balancer name, the action returns descriptions of the specified sample policies, or descriptions of all sample policies. The names of the sample policies have the <code>ELBSample-</code> prefix.</p>
     fn describe_load_balancer_policies(
         &self,
-        input: &DescribeLoadBalancerPoliciesInput,
+        input: DescribeLoadBalancerPoliciesInput,
     ) -> RusotoFuture<DescribeLoadBalancerPoliciesOutput, DescribeLoadBalancerPoliciesError> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
@@ -9338,7 +9317,7 @@ where
     /// <p>Describes the specified load balancer policy types or all load balancer policy types.</p> <p>The description of each type indicates how it can be used. For example, some policies can be used only with layer 7 listeners, some policies can be used only with layer 4 listeners, and some policies can be used only with your EC2 instances.</p> <p>You can use <a>CreateLoadBalancerPolicy</a> to create a policy configuration for any of these policy types. Then, depending on the policy type, use either <a>SetLoadBalancerPoliciesOfListener</a> or <a>SetLoadBalancerPoliciesForBackendServer</a> to set the policy.</p>
     fn describe_load_balancer_policy_types(
         &self,
-        input: &DescribeLoadBalancerPolicyTypesInput,
+        input: DescribeLoadBalancerPolicyTypesInput,
     ) -> RusotoFuture<DescribeLoadBalancerPolicyTypesOutput, DescribeLoadBalancerPolicyTypesError>
     {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
@@ -9392,7 +9371,7 @@ where
     /// <p>Describes the specified the load balancers. If no load balancers are specified, the call describes all of your load balancers.</p>
     fn describe_load_balancers(
         &self,
-        input: &DescribeAccessPointsInput,
+        input: DescribeAccessPointsInput,
     ) -> RusotoFuture<DescribeAccessPointsOutput, DescribeLoadBalancersError> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
@@ -9443,7 +9422,7 @@ where
     /// <p>Describes the tags associated with the specified load balancers.</p>
     fn describe_tags(
         &self,
-        input: &DescribeTagsInput,
+        input: DescribeTagsInput,
     ) -> RusotoFuture<DescribeTagsOutput, DescribeTagsError> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
@@ -9494,7 +9473,7 @@ where
     /// <p>Removes the specified subnets from the set of configured subnets for the load balancer.</p> <p>After a subnet is removed, all EC2 instances registered with the load balancer in the removed subnet go into the <code>OutOfService</code> state. Then, the load balancer balances the traffic among the remaining routable subnets.</p>
     fn detach_load_balancer_from_subnets(
         &self,
-        input: &DetachLoadBalancerFromSubnetsInput,
+        input: DetachLoadBalancerFromSubnetsInput,
     ) -> RusotoFuture<DetachLoadBalancerFromSubnetsOutput, DetachLoadBalancerFromSubnetsError> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
@@ -9547,7 +9526,7 @@ where
     /// <p>Removes the specified Availability Zones from the set of Availability Zones for the specified load balancer.</p> <p>There must be at least one Availability Zone registered with a load balancer at all times. After an Availability Zone is removed, all instances registered with the load balancer that are in the removed Availability Zone go into the <code>OutOfService</code> state. Then, the load balancer attempts to equally balance the traffic among its remaining Availability Zones.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/enable-disable-az.html">Add or Remove Availability Zones</a> in the <i>Classic Load Balancer Guide</i>.</p>
     fn disable_availability_zones_for_load_balancer(
         &self,
-        input: &RemoveAvailabilityZonesInput,
+        input: RemoveAvailabilityZonesInput,
     ) -> RusotoFuture<RemoveAvailabilityZonesOutput, DisableAvailabilityZonesForLoadBalancerError>
     {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
@@ -9599,7 +9578,7 @@ where
     /// <p>Adds the specified Availability Zones to the set of Availability Zones for the specified load balancer.</p> <p>The load balancer evenly distributes requests across all its registered Availability Zones that contain instances.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/enable-disable-az.html">Add or Remove Availability Zones</a> in the <i>Classic Load Balancer Guide</i>.</p>
     fn enable_availability_zones_for_load_balancer(
         &self,
-        input: &AddAvailabilityZonesInput,
+        input: AddAvailabilityZonesInput,
     ) -> RusotoFuture<AddAvailabilityZonesOutput, EnableAvailabilityZonesForLoadBalancerError> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
@@ -9650,7 +9629,7 @@ where
     /// <p><p>Modifies the attributes of the specified load balancer.</p> <p>You can modify the load balancer attributes, such as <code>AccessLogs</code>, <code>ConnectionDraining</code>, and <code>CrossZoneLoadBalancing</code> by either enabling or disabling them. Or, you can modify the load balancer attribute <code>ConnectionSettings</code> by specifying an idle connection timeout value for your load balancer.</p> <p>For more information, see the following in the <i>Classic Load Balancer Guide</i>:</p> <ul> <li> <p> <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/enable-disable-crosszone-lb.html">Cross-Zone Load Balancing</a> </p> </li> <li> <p> <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/config-conn-drain.html">Connection Draining</a> </p> </li> <li> <p> <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/access-log-collection.html">Access Logs</a> </p> </li> <li> <p> <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/config-idle-timeout.html">Idle Connection Timeout</a> </p> </li> </ul></p>
     fn modify_load_balancer_attributes(
         &self,
-        input: &ModifyLoadBalancerAttributesInput,
+        input: ModifyLoadBalancerAttributesInput,
     ) -> RusotoFuture<ModifyLoadBalancerAttributesOutput, ModifyLoadBalancerAttributesError> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
@@ -9701,7 +9680,7 @@ where
     /// <p>Adds the specified instances to the specified load balancer.</p> <p>The instance must be a running instance in the same network as the load balancer (EC2-Classic or the same VPC). If you have EC2-Classic instances and a load balancer in a VPC with ClassicLink enabled, you can link the EC2-Classic instances to that VPC and then register the linked EC2-Classic instances with the load balancer in the VPC.</p> <p>Note that <code>RegisterInstanceWithLoadBalancer</code> completes when the request has been registered. Instance registration takes a little time to complete. To check the state of the registered instances, use <a>DescribeLoadBalancers</a> or <a>DescribeInstanceHealth</a>.</p> <p>After the instance is registered, it starts receiving traffic and requests from the load balancer. Any instance that is not in one of the Availability Zones registered for the load balancer is moved to the <code>OutOfService</code> state. If an Availability Zone is added to the load balancer later, any instances registered with the load balancer move to the <code>InService</code> state.</p> <p>To deregister instances from a load balancer, use <a>DeregisterInstancesFromLoadBalancer</a>.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-deregister-register-instances.html">Register or De-Register EC2 Instances</a> in the <i>Classic Load Balancer Guide</i>.</p>
     fn register_instances_with_load_balancer(
         &self,
-        input: &RegisterEndPointsInput,
+        input: RegisterEndPointsInput,
     ) -> RusotoFuture<RegisterEndPointsOutput, RegisterInstancesWithLoadBalancerError> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
@@ -9752,7 +9731,7 @@ where
     /// <p>Removes one or more tags from the specified load balancer.</p>
     fn remove_tags(
         &self,
-        input: &RemoveTagsInput,
+        input: RemoveTagsInput,
     ) -> RusotoFuture<RemoveTagsOutput, RemoveTagsError> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
@@ -9803,7 +9782,7 @@ where
     /// <p>Sets the certificate that terminates the specified listener's SSL connections. The specified certificate replaces any prior certificate that was used on the same load balancer and port.</p> <p>For more information about updating your SSL certificate, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-update-ssl-cert.html">Replace the SSL Certificate for Your Load Balancer</a> in the <i>Classic Load Balancer Guide</i>.</p>
     fn set_load_balancer_listener_ssl_certificate(
         &self,
-        input: &SetLoadBalancerListenerSSLCertificateInput,
+        input: SetLoadBalancerListenerSSLCertificateInput,
     ) -> RusotoFuture<
         SetLoadBalancerListenerSSLCertificateOutput,
         SetLoadBalancerListenerSSLCertificateError,
@@ -9859,7 +9838,7 @@ where
     /// <p>Replaces the set of policies associated with the specified port on which the EC2 instance is listening with a new set of policies. At this time, only the back-end server authentication policy type can be applied to the instance ports; this policy type is composed of multiple public key policies.</p> <p>Each time you use <code>SetLoadBalancerPoliciesForBackendServer</code> to enable the policies, use the <code>PolicyNames</code> parameter to list the policies that you want to enable.</p> <p>You can use <a>DescribeLoadBalancers</a> or <a>DescribeLoadBalancerPolicies</a> to verify that the policy is associated with the EC2 instance.</p> <p>For more information about enabling back-end instance authentication, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-create-https-ssl-load-balancer.html#configure_backendauth_clt">Configure Back-end Instance Authentication</a> in the <i>Classic Load Balancer Guide</i>. For more information about Proxy Protocol, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/enable-proxy-protocol.html">Configure Proxy Protocol Support</a> in the <i>Classic Load Balancer Guide</i>.</p>
     fn set_load_balancer_policies_for_backend_server(
         &self,
-        input: &SetLoadBalancerPoliciesForBackendServerInput,
+        input: SetLoadBalancerPoliciesForBackendServerInput,
     ) -> RusotoFuture<
         SetLoadBalancerPoliciesForBackendServerOutput,
         SetLoadBalancerPoliciesForBackendServerError,
@@ -9915,7 +9894,7 @@ where
     /// <p>Replaces the current set of policies for the specified load balancer port with the specified set of policies.</p> <p>To enable back-end server authentication, use <a>SetLoadBalancerPoliciesForBackendServer</a>.</p> <p>For more information about setting policies, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/ssl-config-update.html">Update the SSL Negotiation Configuration</a>, <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-sticky-sessions.html#enable-sticky-sessions-duration">Duration-Based Session Stickiness</a>, and <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-sticky-sessions.html#enable-sticky-sessions-application">Application-Controlled Session Stickiness</a> in the <i>Classic Load Balancer Guide</i>.</p>
     fn set_load_balancer_policies_of_listener(
         &self,
-        input: &SetLoadBalancerPoliciesOfListenerInput,
+        input: SetLoadBalancerPoliciesOfListenerInput,
     ) -> RusotoFuture<SetLoadBalancerPoliciesOfListenerOutput, SetLoadBalancerPoliciesOfListenerError>
     {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
@@ -9972,8 +9951,8 @@ mod protocol_tests {
 
     extern crate rusoto_mock;
 
-    use super::*;
     use self::rusoto_mock::*;
+    use super::*;
     use rusoto_core::Region as rusoto_region;
 
     #[test]
@@ -9985,7 +9964,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(400).with_body(&mock_response);
         let client = ElbClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = DescribeAccessPointsInput::default();
-        let result = client.describe_load_balancers(&request).sync();
+        let result = client.describe_load_balancers(request).sync();
         assert!(!result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -9998,7 +9977,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = ElbClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = DescribeLoadBalancerPoliciesInput::default();
-        let result = client.describe_load_balancer_policies(&request).sync();
+        let result = client.describe_load_balancer_policies(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -10011,7 +9990,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = ElbClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = DescribeLoadBalancerPolicyTypesInput::default();
-        let result = client.describe_load_balancer_policy_types(&request).sync();
+        let result = client.describe_load_balancer_policy_types(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -10024,7 +10003,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = ElbClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = DescribeAccessPointsInput::default();
-        let result = client.describe_load_balancers(&request).sync();
+        let result = client.describe_load_balancers(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 }

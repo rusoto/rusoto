@@ -18,18 +18,18 @@ use std::io;
 use futures::future;
 use futures::Future;
 use rusoto_core::reactor::{CredentialsProvider, RequestDispatcher};
-use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::region;
+use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::{ClientInner, RusotoFuture};
 
-use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
+use rusoto_core::request::HttpDispatchError;
 
-use serde_json;
-use rusoto_core::signature::SignedRequest;
-use serde_json::Value as SerdeJsonValue;
-use serde_json::from_str;
 use hyper::StatusCode;
+use rusoto_core::signature::SignedRequest;
+use serde_json;
+use serde_json::from_str;
+use serde_json::Value as SerdeJsonValue;
 /// <p>An activation registers one or more on-premises servers or virtual machines (VMs) with AWS so that you can configure those servers or VMs using Run Command. A server or VM that has been registered with AWS is called a managed instance.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct Activation {
@@ -3959,8 +3959,11 @@ pub struct MaintenanceWindowLambdaParameters {
     pub client_context: Option<String>,
     /// <p>JSON to provide to your Lambda function as input.</p>
     #[serde(rename = "Payload")]
-    #[serde(deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
-            serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob", default)]
+    #[serde(
+        deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
+        serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
+        default
+    )]
     pub payload: Option<Vec<u8>>,
     /// <p>(Optional) Specify a Lambda function version or alias name. If you specify a function version, the action uses the qualified function ARN to invoke a specific Lambda function. If you specify an alias name, the action uses the alias ARN to invoke the Lambda function version to which the alias points.</p>
     #[serde(rename = "Qualifier")]
@@ -15175,115 +15178,115 @@ pub trait Ssm {
     /// <p>Adds or overwrites one or more tags for the specified resource. Tags are metadata that you can assign to your documents, managed instances, Maintenance Windows, Parameter Store parameters, and patch baselines. Tags enable you to categorize your resources in different ways, for example, by purpose, owner, or environment. Each tag consists of a key and an optional value, both of which you define. For example, you could define a set of tags for your account's managed instances that helps you track each instance's owner and stack level. For example: Key=Owner and Value=DbAdmin, SysAdmin, or Dev. Or Key=Stack and Value=Production, Pre-Production, or Test.</p> <p>Each resource can have a maximum of 50 tags. </p> <p>We recommend that you devise a set of tag keys that meets your needs for each resource type. Using a consistent set of tag keys makes it easier for you to manage your resources. You can search and filter the resources based on the tags you add. Tags don't have any semantic meaning to Amazon EC2 and are interpreted strictly as a string of characters. </p> <p>For more information about tags, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Using_Tags.html">Tagging Your Amazon EC2 Resources</a> in the <i>Amazon EC2 User Guide</i>.</p>
     fn add_tags_to_resource(
         &self,
-        input: &AddTagsToResourceRequest,
+        input: AddTagsToResourceRequest,
     ) -> RusotoFuture<AddTagsToResourceResult, AddTagsToResourceError>;
 
     /// <p>Attempts to cancel the command specified by the Command ID. There is no guarantee that the command will be terminated and the underlying process stopped.</p>
     fn cancel_command(
         &self,
-        input: &CancelCommandRequest,
+        input: CancelCommandRequest,
     ) -> RusotoFuture<CancelCommandResult, CancelCommandError>;
 
     /// <p>Registers your on-premises server or virtual machine with Amazon EC2 so that you can manage these resources using Run Command. An on-premises server or virtual machine that has been registered with EC2 is called a managed instance. For more information about activations, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-managedinstances.html">Setting Up Systems Manager in Hybrid Environments</a>.</p>
     fn create_activation(
         &self,
-        input: &CreateActivationRequest,
+        input: CreateActivationRequest,
     ) -> RusotoFuture<CreateActivationResult, CreateActivationError>;
 
     /// <p>Associates the specified Systems Manager document with the specified instances or targets.</p> <p>When you associate a document with one or more instances using instance IDs or tags, the SSM Agent running on the instance processes the document and configures the instance as specified.</p> <p>If you associate a document with an instance that already has an associated document, the system throws the AssociationAlreadyExists exception.</p>
     fn create_association(
         &self,
-        input: &CreateAssociationRequest,
+        input: CreateAssociationRequest,
     ) -> RusotoFuture<CreateAssociationResult, CreateAssociationError>;
 
     /// <p>Associates the specified Systems Manager document with the specified instances or targets.</p> <p>When you associate a document with one or more instances using instance IDs or tags, the SSM Agent running on the instance processes the document and configures the instance as specified.</p> <p>If you associate a document with an instance that already has an associated document, the system throws the AssociationAlreadyExists exception.</p>
     fn create_association_batch(
         &self,
-        input: &CreateAssociationBatchRequest,
+        input: CreateAssociationBatchRequest,
     ) -> RusotoFuture<CreateAssociationBatchResult, CreateAssociationBatchError>;
 
     /// <p>Creates a Systems Manager document.</p> <p>After you create a document, you can use CreateAssociation to associate it with one or more running instances.</p>
     fn create_document(
         &self,
-        input: &CreateDocumentRequest,
+        input: CreateDocumentRequest,
     ) -> RusotoFuture<CreateDocumentResult, CreateDocumentError>;
 
     /// <p>Creates a new Maintenance Window.</p>
     fn create_maintenance_window(
         &self,
-        input: &CreateMaintenanceWindowRequest,
+        input: CreateMaintenanceWindowRequest,
     ) -> RusotoFuture<CreateMaintenanceWindowResult, CreateMaintenanceWindowError>;
 
     /// <p><p>Creates a patch baseline.</p> <note> <p>For information about valid key and value pairs in <code>PatchFilters</code> for each supported operating system type, see <a href="http://docs.aws.amazon.com/systems-manager/latest/APIReference/API_PatchFilter.html">PatchFilter</a>.</p> </note></p>
     fn create_patch_baseline(
         &self,
-        input: &CreatePatchBaselineRequest,
+        input: CreatePatchBaselineRequest,
     ) -> RusotoFuture<CreatePatchBaselineResult, CreatePatchBaselineError>;
 
     /// <p>Creates a resource data sync configuration to a single bucket in Amazon S3. This is an asynchronous operation that returns immediately. After a successful initial sync is completed, the system continuously syncs data to the Amazon S3 bucket. To check the status of the sync, use the <a>ListResourceDataSync</a>.</p> <p>By default, data is not encrypted in Amazon S3. We strongly recommend that you enable encryption in Amazon S3 to ensure secure data storage. We also recommend that you secure access to the Amazon S3 bucket by creating a restrictive bucket policy. To view an example of a restrictive Amazon S3 bucket policy for Resource Data Sync, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-inventory-configuring.html#sysman-inventory-datasync">Configuring Resource Data Sync for Inventory</a>.</p>
     fn create_resource_data_sync(
         &self,
-        input: &CreateResourceDataSyncRequest,
+        input: CreateResourceDataSyncRequest,
     ) -> RusotoFuture<CreateResourceDataSyncResult, CreateResourceDataSyncError>;
 
     /// <p>Deletes an activation. You are not required to delete an activation. If you delete an activation, you can no longer use it to register additional managed instances. Deleting an activation does not de-register managed instances. You must manually de-register managed instances.</p>
     fn delete_activation(
         &self,
-        input: &DeleteActivationRequest,
+        input: DeleteActivationRequest,
     ) -> RusotoFuture<DeleteActivationResult, DeleteActivationError>;
 
     /// <p>Disassociates the specified Systems Manager document from the specified instance.</p> <p>When you disassociate a document from an instance, it does not change the configuration of the instance. To change the configuration state of an instance after you disassociate a document, you must create a new document with the desired configuration and associate it with the instance.</p>
     fn delete_association(
         &self,
-        input: &DeleteAssociationRequest,
+        input: DeleteAssociationRequest,
     ) -> RusotoFuture<DeleteAssociationResult, DeleteAssociationError>;
 
     /// <p>Deletes the Systems Manager document and all instance associations to the document.</p> <p>Before you delete the document, we recommend that you use <a>DeleteAssociation</a> to disassociate all instances that are associated with the document.</p>
     fn delete_document(
         &self,
-        input: &DeleteDocumentRequest,
+        input: DeleteDocumentRequest,
     ) -> RusotoFuture<DeleteDocumentResult, DeleteDocumentError>;
 
     /// <p>Deletes a Maintenance Window.</p>
     fn delete_maintenance_window(
         &self,
-        input: &DeleteMaintenanceWindowRequest,
+        input: DeleteMaintenanceWindowRequest,
     ) -> RusotoFuture<DeleteMaintenanceWindowResult, DeleteMaintenanceWindowError>;
 
     /// <p>Delete a parameter from the system.</p>
     fn delete_parameter(
         &self,
-        input: &DeleteParameterRequest,
+        input: DeleteParameterRequest,
     ) -> RusotoFuture<DeleteParameterResult, DeleteParameterError>;
 
     /// <p>Delete a list of parameters. This API is used to delete parameters by using the Amazon EC2 console.</p>
     fn delete_parameters(
         &self,
-        input: &DeleteParametersRequest,
+        input: DeleteParametersRequest,
     ) -> RusotoFuture<DeleteParametersResult, DeleteParametersError>;
 
     /// <p>Deletes a patch baseline.</p>
     fn delete_patch_baseline(
         &self,
-        input: &DeletePatchBaselineRequest,
+        input: DeletePatchBaselineRequest,
     ) -> RusotoFuture<DeletePatchBaselineResult, DeletePatchBaselineError>;
 
     /// <p>Deletes a Resource Data Sync configuration. After the configuration is deleted, changes to inventory data on managed instances are no longer synced with the target Amazon S3 bucket. Deleting a sync configuration does not delete data in the target Amazon S3 bucket.</p>
     fn delete_resource_data_sync(
         &self,
-        input: &DeleteResourceDataSyncRequest,
+        input: DeleteResourceDataSyncRequest,
     ) -> RusotoFuture<DeleteResourceDataSyncResult, DeleteResourceDataSyncError>;
 
     /// <p>Removes the server or virtual machine from the list of registered servers. You can reregister the instance again at any time. If you don't plan to use Run Command on the server, we suggest uninstalling the SSM Agent first.</p>
     fn deregister_managed_instance(
         &self,
-        input: &DeregisterManagedInstanceRequest,
+        input: DeregisterManagedInstanceRequest,
     ) -> RusotoFuture<DeregisterManagedInstanceResult, DeregisterManagedInstanceError>;
 
     /// <p>Removes a patch group from a patch baseline.</p>
     fn deregister_patch_baseline_for_patch_group(
         &self,
-        input: &DeregisterPatchBaselineForPatchGroupRequest,
+        input: DeregisterPatchBaselineForPatchGroupRequest,
     ) -> RusotoFuture<
         DeregisterPatchBaselineForPatchGroupResult,
         DeregisterPatchBaselineForPatchGroupError,
@@ -15292,7 +15295,7 @@ pub trait Ssm {
     /// <p>Removes a target from a Maintenance Window.</p>
     fn deregister_target_from_maintenance_window(
         &self,
-        input: &DeregisterTargetFromMaintenanceWindowRequest,
+        input: DeregisterTargetFromMaintenanceWindowRequest,
     ) -> RusotoFuture<
         DeregisterTargetFromMaintenanceWindowResult,
         DeregisterTargetFromMaintenanceWindowError,
@@ -15301,7 +15304,7 @@ pub trait Ssm {
     /// <p>Removes a task from a Maintenance Window.</p>
     fn deregister_task_from_maintenance_window(
         &self,
-        input: &DeregisterTaskFromMaintenanceWindowRequest,
+        input: DeregisterTaskFromMaintenanceWindowRequest,
     ) -> RusotoFuture<
         DeregisterTaskFromMaintenanceWindowResult,
         DeregisterTaskFromMaintenanceWindowError,
@@ -15310,49 +15313,49 @@ pub trait Ssm {
     /// <p>Details about the activation, including: the date and time the activation was created, the expiration date, the IAM role assigned to the instances in the activation, and the number of instances activated by this registration.</p>
     fn describe_activations(
         &self,
-        input: &DescribeActivationsRequest,
+        input: DescribeActivationsRequest,
     ) -> RusotoFuture<DescribeActivationsResult, DescribeActivationsError>;
 
     /// <p>Describes the association for the specified target or instance. If you created the association by using the <code>Targets</code> parameter, then you must retrieve the association by using the association ID. If you created the association by specifying an instance ID and a Systems Manager document, then you retrieve the association by specifying the document name and the instance ID. </p>
     fn describe_association(
         &self,
-        input: &DescribeAssociationRequest,
+        input: DescribeAssociationRequest,
     ) -> RusotoFuture<DescribeAssociationResult, DescribeAssociationError>;
 
     /// <p>Provides details about all active and terminated Automation executions.</p>
     fn describe_automation_executions(
         &self,
-        input: &DescribeAutomationExecutionsRequest,
+        input: DescribeAutomationExecutionsRequest,
     ) -> RusotoFuture<DescribeAutomationExecutionsResult, DescribeAutomationExecutionsError>;
 
     /// <p>Information about all active and terminated step executions in an Automation workflow.</p>
     fn describe_automation_step_executions(
         &self,
-        input: &DescribeAutomationStepExecutionsRequest,
+        input: DescribeAutomationStepExecutionsRequest,
     ) -> RusotoFuture<DescribeAutomationStepExecutionsResult, DescribeAutomationStepExecutionsError>;
 
     /// <p>Lists all patches that could possibly be included in a patch baseline.</p>
     fn describe_available_patches(
         &self,
-        input: &DescribeAvailablePatchesRequest,
+        input: DescribeAvailablePatchesRequest,
     ) -> RusotoFuture<DescribeAvailablePatchesResult, DescribeAvailablePatchesError>;
 
     /// <p>Describes the specified Systems Manager document.</p>
     fn describe_document(
         &self,
-        input: &DescribeDocumentRequest,
+        input: DescribeDocumentRequest,
     ) -> RusotoFuture<DescribeDocumentResult, DescribeDocumentError>;
 
     /// <p>Describes the permissions for a Systems Manager document. If you created the document, you are the owner. If a document is shared, it can either be shared privately (by specifying a user's AWS account ID) or publicly (<i>All</i>). </p>
     fn describe_document_permission(
         &self,
-        input: &DescribeDocumentPermissionRequest,
+        input: DescribeDocumentPermissionRequest,
     ) -> RusotoFuture<DescribeDocumentPermissionResponse, DescribeDocumentPermissionError>;
 
     /// <p>All associations for the instance(s).</p>
     fn describe_effective_instance_associations(
         &self,
-        input: &DescribeEffectiveInstanceAssociationsRequest,
+        input: DescribeEffectiveInstanceAssociationsRequest,
     ) -> RusotoFuture<
         DescribeEffectiveInstanceAssociationsResult,
         DescribeEffectiveInstanceAssociationsError,
@@ -15361,7 +15364,7 @@ pub trait Ssm {
     /// <p>Retrieves the current effective patches (the patch and the approval state) for the specified patch baseline. Note that this API applies only to Windows patch baselines.</p>
     fn describe_effective_patches_for_patch_baseline(
         &self,
-        input: &DescribeEffectivePatchesForPatchBaselineRequest,
+        input: DescribeEffectivePatchesForPatchBaselineRequest,
     ) -> RusotoFuture<
         DescribeEffectivePatchesForPatchBaselineResult,
         DescribeEffectivePatchesForPatchBaselineError,
@@ -15370,7 +15373,7 @@ pub trait Ssm {
     /// <p>The status of the associations for the instance(s).</p>
     fn describe_instance_associations_status(
         &self,
-        input: &DescribeInstanceAssociationsStatusRequest,
+        input: DescribeInstanceAssociationsStatusRequest,
     ) -> RusotoFuture<
         DescribeInstanceAssociationsStatusResult,
         DescribeInstanceAssociationsStatusError,
@@ -15379,19 +15382,19 @@ pub trait Ssm {
     /// <p>Describes one or more of your instances. You can use this to get information about instances like the operating system platform, the SSM Agent version (Linux), status etc. If you specify one or more instance IDs, it returns information for those instances. If you do not specify instance IDs, it returns information for all your instances. If you specify an instance ID that is not valid or an instance that you do not own, you receive an error. </p>
     fn describe_instance_information(
         &self,
-        input: &DescribeInstanceInformationRequest,
+        input: DescribeInstanceInformationRequest,
     ) -> RusotoFuture<DescribeInstanceInformationResult, DescribeInstanceInformationError>;
 
     /// <p>Retrieves the high-level patch state of one or more instances.</p>
     fn describe_instance_patch_states(
         &self,
-        input: &DescribeInstancePatchStatesRequest,
+        input: DescribeInstancePatchStatesRequest,
     ) -> RusotoFuture<DescribeInstancePatchStatesResult, DescribeInstancePatchStatesError>;
 
     /// <p>Retrieves the high-level patch state for the instances in the specified patch group.</p>
     fn describe_instance_patch_states_for_patch_group(
         &self,
-        input: &DescribeInstancePatchStatesForPatchGroupRequest,
+        input: DescribeInstancePatchStatesForPatchGroupRequest,
     ) -> RusotoFuture<
         DescribeInstancePatchStatesForPatchGroupResult,
         DescribeInstancePatchStatesForPatchGroupError,
@@ -15400,13 +15403,13 @@ pub trait Ssm {
     /// <p>Retrieves information about the patches on the specified instance and their state relative to the patch baseline being used for the instance.</p>
     fn describe_instance_patches(
         &self,
-        input: &DescribeInstancePatchesRequest,
+        input: DescribeInstancePatchesRequest,
     ) -> RusotoFuture<DescribeInstancePatchesResult, DescribeInstancePatchesError>;
 
     /// <p>Retrieves the individual task executions (one per target) for a particular task executed as part of a Maintenance Window execution.</p>
     fn describe_maintenance_window_execution_task_invocations(
         &self,
-        input: &DescribeMaintenanceWindowExecutionTaskInvocationsRequest,
+        input: DescribeMaintenanceWindowExecutionTaskInvocationsRequest,
     ) -> RusotoFuture<
         DescribeMaintenanceWindowExecutionTaskInvocationsResult,
         DescribeMaintenanceWindowExecutionTaskInvocationsError,
@@ -15415,7 +15418,7 @@ pub trait Ssm {
     /// <p>For a given Maintenance Window execution, lists the tasks that were executed.</p>
     fn describe_maintenance_window_execution_tasks(
         &self,
-        input: &DescribeMaintenanceWindowExecutionTasksRequest,
+        input: DescribeMaintenanceWindowExecutionTasksRequest,
     ) -> RusotoFuture<
         DescribeMaintenanceWindowExecutionTasksResult,
         DescribeMaintenanceWindowExecutionTasksError,
@@ -15424,7 +15427,7 @@ pub trait Ssm {
     /// <p>Lists the executions of a Maintenance Window. This includes information about when the Maintenance Window was scheduled to be active, and information about tasks registered and run with the Maintenance Window.</p>
     fn describe_maintenance_window_executions(
         &self,
-        input: &DescribeMaintenanceWindowExecutionsRequest,
+        input: DescribeMaintenanceWindowExecutionsRequest,
     ) -> RusotoFuture<
         DescribeMaintenanceWindowExecutionsResult,
         DescribeMaintenanceWindowExecutionsError,
@@ -15433,67 +15436,67 @@ pub trait Ssm {
     /// <p>Lists the targets registered with the Maintenance Window.</p>
     fn describe_maintenance_window_targets(
         &self,
-        input: &DescribeMaintenanceWindowTargetsRequest,
+        input: DescribeMaintenanceWindowTargetsRequest,
     ) -> RusotoFuture<DescribeMaintenanceWindowTargetsResult, DescribeMaintenanceWindowTargetsError>;
 
     /// <p>Lists the tasks in a Maintenance Window.</p>
     fn describe_maintenance_window_tasks(
         &self,
-        input: &DescribeMaintenanceWindowTasksRequest,
+        input: DescribeMaintenanceWindowTasksRequest,
     ) -> RusotoFuture<DescribeMaintenanceWindowTasksResult, DescribeMaintenanceWindowTasksError>;
 
     /// <p>Retrieves the Maintenance Windows in an AWS account.</p>
     fn describe_maintenance_windows(
         &self,
-        input: &DescribeMaintenanceWindowsRequest,
+        input: DescribeMaintenanceWindowsRequest,
     ) -> RusotoFuture<DescribeMaintenanceWindowsResult, DescribeMaintenanceWindowsError>;
 
     /// <p>Get information about a parameter.</p> <p>Request results are returned on a best-effort basis. If you specify <code>MaxResults</code> in the request, the response includes information up to the limit specified. The number of items returned, however, can be between zero and the value of <code>MaxResults</code>. If the service reaches an internal limit while processing the results, it stops the operation and returns the matching values up to that point and a <code>NextToken</code>. You can specify the <code>NextToken</code> in a subsequent call to get the next set of results.</p>
     fn describe_parameters(
         &self,
-        input: &DescribeParametersRequest,
+        input: DescribeParametersRequest,
     ) -> RusotoFuture<DescribeParametersResult, DescribeParametersError>;
 
     /// <p>Lists the patch baselines in your AWS account.</p>
     fn describe_patch_baselines(
         &self,
-        input: &DescribePatchBaselinesRequest,
+        input: DescribePatchBaselinesRequest,
     ) -> RusotoFuture<DescribePatchBaselinesResult, DescribePatchBaselinesError>;
 
     /// <p>Returns high-level aggregated patch compliance state for a patch group.</p>
     fn describe_patch_group_state(
         &self,
-        input: &DescribePatchGroupStateRequest,
+        input: DescribePatchGroupStateRequest,
     ) -> RusotoFuture<DescribePatchGroupStateResult, DescribePatchGroupStateError>;
 
     /// <p>Lists all patch groups that have been registered with patch baselines.</p>
     fn describe_patch_groups(
         &self,
-        input: &DescribePatchGroupsRequest,
+        input: DescribePatchGroupsRequest,
     ) -> RusotoFuture<DescribePatchGroupsResult, DescribePatchGroupsError>;
 
     /// <p>Get detailed information about a particular Automation execution.</p>
     fn get_automation_execution(
         &self,
-        input: &GetAutomationExecutionRequest,
+        input: GetAutomationExecutionRequest,
     ) -> RusotoFuture<GetAutomationExecutionResult, GetAutomationExecutionError>;
 
     /// <p>Returns detailed information about command execution for an invocation or plugin. </p>
     fn get_command_invocation(
         &self,
-        input: &GetCommandInvocationRequest,
+        input: GetCommandInvocationRequest,
     ) -> RusotoFuture<GetCommandInvocationResult, GetCommandInvocationError>;
 
     /// <p>Retrieves the default patch baseline. Note that Systems Manager supports creating multiple default patch baselines. For example, you can create a default patch baseline for each operating system.</p> <p>If you do not specify an operating system value, the default patch baseline for Windows is returned.</p>
     fn get_default_patch_baseline(
         &self,
-        input: &GetDefaultPatchBaselineRequest,
+        input: GetDefaultPatchBaselineRequest,
     ) -> RusotoFuture<GetDefaultPatchBaselineResult, GetDefaultPatchBaselineError>;
 
     /// <p>Retrieves the current snapshot for the patch baseline the instance uses. This API is primarily used by the AWS-RunPatchBaseline Systems Manager document. </p>
     fn get_deployable_patch_snapshot_for_instance(
         &self,
-        input: &GetDeployablePatchSnapshotForInstanceRequest,
+        input: GetDeployablePatchSnapshotForInstanceRequest,
     ) -> RusotoFuture<
         GetDeployablePatchSnapshotForInstanceResult,
         GetDeployablePatchSnapshotForInstanceError,
@@ -15502,43 +15505,43 @@ pub trait Ssm {
     /// <p>Gets the contents of the specified Systems Manager document.</p>
     fn get_document(
         &self,
-        input: &GetDocumentRequest,
+        input: GetDocumentRequest,
     ) -> RusotoFuture<GetDocumentResult, GetDocumentError>;
 
     /// <p>Query inventory information.</p>
     fn get_inventory(
         &self,
-        input: &GetInventoryRequest,
+        input: GetInventoryRequest,
     ) -> RusotoFuture<GetInventoryResult, GetInventoryError>;
 
     /// <p>Return a list of inventory type names for the account, or return a list of attribute names for a specific Inventory item type. </p>
     fn get_inventory_schema(
         &self,
-        input: &GetInventorySchemaRequest,
+        input: GetInventorySchemaRequest,
     ) -> RusotoFuture<GetInventorySchemaResult, GetInventorySchemaError>;
 
     /// <p>Retrieves a Maintenance Window.</p>
     fn get_maintenance_window(
         &self,
-        input: &GetMaintenanceWindowRequest,
+        input: GetMaintenanceWindowRequest,
     ) -> RusotoFuture<GetMaintenanceWindowResult, GetMaintenanceWindowError>;
 
     /// <p>Retrieves details about a specific task executed as part of a Maintenance Window execution.</p>
     fn get_maintenance_window_execution(
         &self,
-        input: &GetMaintenanceWindowExecutionRequest,
+        input: GetMaintenanceWindowExecutionRequest,
     ) -> RusotoFuture<GetMaintenanceWindowExecutionResult, GetMaintenanceWindowExecutionError>;
 
     /// <p>Retrieves the details about a specific task executed as part of a Maintenance Window execution.</p>
     fn get_maintenance_window_execution_task(
         &self,
-        input: &GetMaintenanceWindowExecutionTaskRequest,
+        input: GetMaintenanceWindowExecutionTaskRequest,
     ) -> RusotoFuture<GetMaintenanceWindowExecutionTaskResult, GetMaintenanceWindowExecutionTaskError>;
 
     /// <p>Retrieves a task invocation. A task invocation is a specific task executing on a specific target. Maintenance Windows report status for all invocations. </p>
     fn get_maintenance_window_execution_task_invocation(
         &self,
-        input: &GetMaintenanceWindowExecutionTaskInvocationRequest,
+        input: GetMaintenanceWindowExecutionTaskInvocationRequest,
     ) -> RusotoFuture<
         GetMaintenanceWindowExecutionTaskInvocationResult,
         GetMaintenanceWindowExecutionTaskInvocationError,
@@ -15547,151 +15550,151 @@ pub trait Ssm {
     /// <p>Lists the tasks in a Maintenance Window.</p>
     fn get_maintenance_window_task(
         &self,
-        input: &GetMaintenanceWindowTaskRequest,
+        input: GetMaintenanceWindowTaskRequest,
     ) -> RusotoFuture<GetMaintenanceWindowTaskResult, GetMaintenanceWindowTaskError>;
 
     /// <p>Get information about a parameter by using the parameter name. </p>
     fn get_parameter(
         &self,
-        input: &GetParameterRequest,
+        input: GetParameterRequest,
     ) -> RusotoFuture<GetParameterResult, GetParameterError>;
 
     /// <p>Query a list of all parameters used by the AWS account.</p>
     fn get_parameter_history(
         &self,
-        input: &GetParameterHistoryRequest,
+        input: GetParameterHistoryRequest,
     ) -> RusotoFuture<GetParameterHistoryResult, GetParameterHistoryError>;
 
     /// <p>Get details of a parameter.</p>
     fn get_parameters(
         &self,
-        input: &GetParametersRequest,
+        input: GetParametersRequest,
     ) -> RusotoFuture<GetParametersResult, GetParametersError>;
 
     /// <p><p>Retrieve parameters in a specific hierarchy. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-paramstore-working.html">Working with Systems Manager Parameters</a>. </p> <p>Request results are returned on a best-effort basis. If you specify <code>MaxResults</code> in the request, the response includes information up to the limit specified. The number of items returned, however, can be between zero and the value of <code>MaxResults</code>. If the service reaches an internal limit while processing the results, it stops the operation and returns the matching values up to that point and a <code>NextToken</code>. You can specify the <code>NextToken</code> in a subsequent call to get the next set of results.</p> <note> <p>This API action doesn&#39;t support filtering by tags. </p> </note></p>
     fn get_parameters_by_path(
         &self,
-        input: &GetParametersByPathRequest,
+        input: GetParametersByPathRequest,
     ) -> RusotoFuture<GetParametersByPathResult, GetParametersByPathError>;
 
     /// <p>Retrieves information about a patch baseline.</p>
     fn get_patch_baseline(
         &self,
-        input: &GetPatchBaselineRequest,
+        input: GetPatchBaselineRequest,
     ) -> RusotoFuture<GetPatchBaselineResult, GetPatchBaselineError>;
 
     /// <p>Retrieves the patch baseline that should be used for the specified patch group.</p>
     fn get_patch_baseline_for_patch_group(
         &self,
-        input: &GetPatchBaselineForPatchGroupRequest,
+        input: GetPatchBaselineForPatchGroupRequest,
     ) -> RusotoFuture<GetPatchBaselineForPatchGroupResult, GetPatchBaselineForPatchGroupError>;
 
     /// <p>Retrieves all versions of an association for a specific association ID.</p>
     fn list_association_versions(
         &self,
-        input: &ListAssociationVersionsRequest,
+        input: ListAssociationVersionsRequest,
     ) -> RusotoFuture<ListAssociationVersionsResult, ListAssociationVersionsError>;
 
     /// <p>Lists the associations for the specified Systems Manager document or instance.</p>
     fn list_associations(
         &self,
-        input: &ListAssociationsRequest,
+        input: ListAssociationsRequest,
     ) -> RusotoFuture<ListAssociationsResult, ListAssociationsError>;
 
     /// <p>An invocation is copy of a command sent to a specific instance. A command can apply to one or more instances. A command invocation applies to one instance. For example, if a user executes SendCommand against three instances, then a command invocation is created for each requested instance ID. ListCommandInvocations provide status about command execution.</p>
     fn list_command_invocations(
         &self,
-        input: &ListCommandInvocationsRequest,
+        input: ListCommandInvocationsRequest,
     ) -> RusotoFuture<ListCommandInvocationsResult, ListCommandInvocationsError>;
 
     /// <p>Lists the commands requested by users of the AWS account.</p>
     fn list_commands(
         &self,
-        input: &ListCommandsRequest,
+        input: ListCommandsRequest,
     ) -> RusotoFuture<ListCommandsResult, ListCommandsError>;
 
     /// <p>For a specified resource ID, this API action returns a list of compliance statuses for different resource types. Currently, you can only specify one resource ID per call. List results depend on the criteria specified in the filter. </p>
     fn list_compliance_items(
         &self,
-        input: &ListComplianceItemsRequest,
+        input: ListComplianceItemsRequest,
     ) -> RusotoFuture<ListComplianceItemsResult, ListComplianceItemsError>;
 
     /// <p>Returns a summary count of compliant and non-compliant resources for a compliance type. For example, this call can return State Manager associations, patches, or custom compliance types according to the filter criteria that you specify. </p>
     fn list_compliance_summaries(
         &self,
-        input: &ListComplianceSummariesRequest,
+        input: ListComplianceSummariesRequest,
     ) -> RusotoFuture<ListComplianceSummariesResult, ListComplianceSummariesError>;
 
     /// <p>List all versions for a document.</p>
     fn list_document_versions(
         &self,
-        input: &ListDocumentVersionsRequest,
+        input: ListDocumentVersionsRequest,
     ) -> RusotoFuture<ListDocumentVersionsResult, ListDocumentVersionsError>;
 
     /// <p>Describes one or more of your Systems Manager documents.</p>
     fn list_documents(
         &self,
-        input: &ListDocumentsRequest,
+        input: ListDocumentsRequest,
     ) -> RusotoFuture<ListDocumentsResult, ListDocumentsError>;
 
     /// <p>A list of inventory items returned by the request.</p>
     fn list_inventory_entries(
         &self,
-        input: &ListInventoryEntriesRequest,
+        input: ListInventoryEntriesRequest,
     ) -> RusotoFuture<ListInventoryEntriesResult, ListInventoryEntriesError>;
 
     /// <p>Returns a resource-level summary count. The summary includes information about compliant and non-compliant statuses and detailed compliance-item severity counts, according to the filter criteria you specify.</p>
     fn list_resource_compliance_summaries(
         &self,
-        input: &ListResourceComplianceSummariesRequest,
+        input: ListResourceComplianceSummariesRequest,
     ) -> RusotoFuture<ListResourceComplianceSummariesResult, ListResourceComplianceSummariesError>;
 
     /// <p>Lists your resource data sync configurations. Includes information about the last time a sync attempted to start, the last sync status, and the last time a sync successfully completed.</p> <p>The number of sync configurations might be too large to return using a single call to <code>ListResourceDataSync</code>. You can limit the number of sync configurations returned by using the <code>MaxResults</code> parameter. To determine whether there are more sync configurations to list, check the value of <code>NextToken</code> in the output. If there are more sync configurations to list, you can request them by specifying the <code>NextToken</code> returned in the call to the parameter of a subsequent call. </p>
     fn list_resource_data_sync(
         &self,
-        input: &ListResourceDataSyncRequest,
+        input: ListResourceDataSyncRequest,
     ) -> RusotoFuture<ListResourceDataSyncResult, ListResourceDataSyncError>;
 
     /// <p>Returns a list of the tags assigned to the specified resource.</p>
     fn list_tags_for_resource(
         &self,
-        input: &ListTagsForResourceRequest,
+        input: ListTagsForResourceRequest,
     ) -> RusotoFuture<ListTagsForResourceResult, ListTagsForResourceError>;
 
     /// <p>Shares a Systems Manager document publicly or privately. If you share a document privately, you must specify the AWS user account IDs for those people who can use the document. If you share a document publicly, you must specify <i>All</i> as the account ID.</p>
     fn modify_document_permission(
         &self,
-        input: &ModifyDocumentPermissionRequest,
+        input: ModifyDocumentPermissionRequest,
     ) -> RusotoFuture<ModifyDocumentPermissionResponse, ModifyDocumentPermissionError>;
 
     /// <p><p>Registers a compliance type and other compliance details on a designated resource. This action lets you register custom compliance details with a resource. This call overwrites existing compliance information on the resource, so you must provide a full list of compliance items each time that you send the request.</p> <p>ComplianceType can be one of the following:</p> <ul> <li> <p>ExecutionId: The execution ID when the patch, association, or custom compliance item was applied.</p> </li> <li> <p>ExecutionType: Specify patch, association, or Custom:<code>string</code>.</p> </li> <li> <p>ExecutionTime. The time the patch, association, or custom compliance item was applied to the instance.</p> </li> <li> <p>Id: The patch, association, or custom compliance ID.</p> </li> <li> <p>Title: A title.</p> </li> <li> <p>Status: The status of the compliance item. For example, <code>approved</code> for patches, or <code>Failed</code> for associations.</p> </li> <li> <p>Severity: A patch severity. For example, <code>critical</code>.</p> </li> <li> <p>DocumentName: A SSM document name. For example, AWS-RunPatchBaseline.</p> </li> <li> <p>DocumentVersion: An SSM document version number. For example, 4.</p> </li> <li> <p>Classification: A patch classification. For example, <code>security updates</code>.</p> </li> <li> <p>PatchBaselineId: A patch baseline ID.</p> </li> <li> <p>PatchSeverity: A patch severity. For example, <code>Critical</code>.</p> </li> <li> <p>PatchState: A patch state. For example, <code>InstancesWithFailedPatches</code>.</p> </li> <li> <p>PatchGroup: The name of a patch group.</p> </li> <li> <p>InstalledTime: The time the association, patch, or custom compliance item was applied to the resource. Specify the time by using the following format: yyyy-MM-dd&#39;T&#39;HH:mm:ss&#39;Z&#39;</p> </li> </ul></p>
     fn put_compliance_items(
         &self,
-        input: &PutComplianceItemsRequest,
+        input: PutComplianceItemsRequest,
     ) -> RusotoFuture<PutComplianceItemsResult, PutComplianceItemsError>;
 
     /// <p>Bulk update custom inventory items on one more instance. The request adds an inventory item, if it doesn't already exist, or updates an inventory item, if it does exist.</p>
     fn put_inventory(
         &self,
-        input: &PutInventoryRequest,
+        input: PutInventoryRequest,
     ) -> RusotoFuture<PutInventoryResult, PutInventoryError>;
 
     /// <p>Add one or more parameters to the system.</p>
     fn put_parameter(
         &self,
-        input: &PutParameterRequest,
+        input: PutParameterRequest,
     ) -> RusotoFuture<PutParameterResult, PutParameterError>;
 
     /// <p>Defines the default patch baseline.</p>
     fn register_default_patch_baseline(
         &self,
-        input: &RegisterDefaultPatchBaselineRequest,
+        input: RegisterDefaultPatchBaselineRequest,
     ) -> RusotoFuture<RegisterDefaultPatchBaselineResult, RegisterDefaultPatchBaselineError>;
 
     /// <p>Registers a patch baseline for a patch group.</p>
     fn register_patch_baseline_for_patch_group(
         &self,
-        input: &RegisterPatchBaselineForPatchGroupRequest,
+        input: RegisterPatchBaselineForPatchGroupRequest,
     ) -> RusotoFuture<
         RegisterPatchBaselineForPatchGroupResult,
         RegisterPatchBaselineForPatchGroupError,
@@ -15700,7 +15703,7 @@ pub trait Ssm {
     /// <p>Registers a target with a Maintenance Window.</p>
     fn register_target_with_maintenance_window(
         &self,
-        input: &RegisterTargetWithMaintenanceWindowRequest,
+        input: RegisterTargetWithMaintenanceWindowRequest,
     ) -> RusotoFuture<
         RegisterTargetWithMaintenanceWindowResult,
         RegisterTargetWithMaintenanceWindowError,
@@ -15709,91 +15712,91 @@ pub trait Ssm {
     /// <p>Adds a new task to a Maintenance Window.</p>
     fn register_task_with_maintenance_window(
         &self,
-        input: &RegisterTaskWithMaintenanceWindowRequest,
+        input: RegisterTaskWithMaintenanceWindowRequest,
     ) -> RusotoFuture<RegisterTaskWithMaintenanceWindowResult, RegisterTaskWithMaintenanceWindowError>;
 
     /// <p>Removes all tags from the specified resource.</p>
     fn remove_tags_from_resource(
         &self,
-        input: &RemoveTagsFromResourceRequest,
+        input: RemoveTagsFromResourceRequest,
     ) -> RusotoFuture<RemoveTagsFromResourceResult, RemoveTagsFromResourceError>;
 
     /// <p>Sends a signal to an Automation execution to change the current behavior or status of the execution. </p>
     fn send_automation_signal(
         &self,
-        input: &SendAutomationSignalRequest,
+        input: SendAutomationSignalRequest,
     ) -> RusotoFuture<SendAutomationSignalResult, SendAutomationSignalError>;
 
     /// <p>Executes commands on one or more managed instances.</p>
     fn send_command(
         &self,
-        input: &SendCommandRequest,
+        input: SendCommandRequest,
     ) -> RusotoFuture<SendCommandResult, SendCommandError>;
 
     /// <p>Initiates execution of an Automation document.</p>
     fn start_automation_execution(
         &self,
-        input: &StartAutomationExecutionRequest,
+        input: StartAutomationExecutionRequest,
     ) -> RusotoFuture<StartAutomationExecutionResult, StartAutomationExecutionError>;
 
     /// <p>Stop an Automation that is currently executing.</p>
     fn stop_automation_execution(
         &self,
-        input: &StopAutomationExecutionRequest,
+        input: StopAutomationExecutionRequest,
     ) -> RusotoFuture<StopAutomationExecutionResult, StopAutomationExecutionError>;
 
     /// <p>Updates an association. You can update the association name and version, the document version, schedule, parameters, and Amazon S3 output.</p>
     fn update_association(
         &self,
-        input: &UpdateAssociationRequest,
+        input: UpdateAssociationRequest,
     ) -> RusotoFuture<UpdateAssociationResult, UpdateAssociationError>;
 
     /// <p>Updates the status of the Systems Manager document associated with the specified instance.</p>
     fn update_association_status(
         &self,
-        input: &UpdateAssociationStatusRequest,
+        input: UpdateAssociationStatusRequest,
     ) -> RusotoFuture<UpdateAssociationStatusResult, UpdateAssociationStatusError>;
 
     /// <p>The document you want to update.</p>
     fn update_document(
         &self,
-        input: &UpdateDocumentRequest,
+        input: UpdateDocumentRequest,
     ) -> RusotoFuture<UpdateDocumentResult, UpdateDocumentError>;
 
     /// <p>Set the default version of a document. </p>
     fn update_document_default_version(
         &self,
-        input: &UpdateDocumentDefaultVersionRequest,
+        input: UpdateDocumentDefaultVersionRequest,
     ) -> RusotoFuture<UpdateDocumentDefaultVersionResult, UpdateDocumentDefaultVersionError>;
 
     /// <p>Updates an existing Maintenance Window. Only specified parameters are modified.</p>
     fn update_maintenance_window(
         &self,
-        input: &UpdateMaintenanceWindowRequest,
+        input: UpdateMaintenanceWindowRequest,
     ) -> RusotoFuture<UpdateMaintenanceWindowResult, UpdateMaintenanceWindowError>;
 
     /// <p>Modifies the target of an existing Maintenance Window. You can't change the target type, but you can change the following:</p> <p>The target from being an ID target to a Tag target, or a Tag target to an ID target.</p> <p>IDs for an ID target.</p> <p>Tags for a Tag target.</p> <p>Owner.</p> <p>Name.</p> <p>Description.</p> <p>If a parameter is null, then the corresponding field is not modified.</p>
     fn update_maintenance_window_target(
         &self,
-        input: &UpdateMaintenanceWindowTargetRequest,
+        input: UpdateMaintenanceWindowTargetRequest,
     ) -> RusotoFuture<UpdateMaintenanceWindowTargetResult, UpdateMaintenanceWindowTargetError>;
 
     /// <p>Modifies a task assigned to a Maintenance Window. You can't change the task type, but you can change the following values:</p> <ul> <li> <p>TaskARN. For example, you can change a RUN_COMMAND task from AWS-RunPowerShellScript to AWS-RunShellScript.</p> </li> <li> <p>ServiceRoleArn</p> </li> <li> <p>TaskInvocationParameters</p> </li> <li> <p>Priority</p> </li> <li> <p>MaxConcurrency</p> </li> <li> <p>MaxErrors</p> </li> </ul> <p>If a parameter is null, then the corresponding field is not modified. Also, if you set Replace to true, then all fields required by the <a>RegisterTaskWithMaintenanceWindow</a> action are required for this request. Optional fields that aren't specified are set to null.</p>
     fn update_maintenance_window_task(
         &self,
-        input: &UpdateMaintenanceWindowTaskRequest,
+        input: UpdateMaintenanceWindowTaskRequest,
     ) -> RusotoFuture<UpdateMaintenanceWindowTaskResult, UpdateMaintenanceWindowTaskError>;
 
     /// <p>Assigns or changes an Amazon Identity and Access Management (IAM) role to the managed instance.</p>
     fn update_managed_instance_role(
         &self,
-        input: &UpdateManagedInstanceRoleRequest,
+        input: UpdateManagedInstanceRoleRequest,
     ) -> RusotoFuture<UpdateManagedInstanceRoleResult, UpdateManagedInstanceRoleError>;
 
     /// <p><p>Modifies an existing patch baseline. Fields not specified in the request are left unchanged.</p> <note> <p>For information about valid key and value pairs in <code>PatchFilters</code> for each supported operating system type, see <a href="http://docs.aws.amazon.com/systems-manager/latest/APIReference/API_PatchFilter.html">PatchFilter</a>.</p> </note></p>
     fn update_patch_baseline(
         &self,
-        input: &UpdatePatchBaselineRequest,
+        input: UpdatePatchBaselineRequest,
     ) -> RusotoFuture<UpdatePatchBaselineResult, UpdatePatchBaselineError>;
 }
 /// A client for the Amazon SSM API.
@@ -15842,13 +15845,13 @@ where
     /// <p>Adds or overwrites one or more tags for the specified resource. Tags are metadata that you can assign to your documents, managed instances, Maintenance Windows, Parameter Store parameters, and patch baselines. Tags enable you to categorize your resources in different ways, for example, by purpose, owner, or environment. Each tag consists of a key and an optional value, both of which you define. For example, you could define a set of tags for your account's managed instances that helps you track each instance's owner and stack level. For example: Key=Owner and Value=DbAdmin, SysAdmin, or Dev. Or Key=Stack and Value=Production, Pre-Production, or Test.</p> <p>Each resource can have a maximum of 50 tags. </p> <p>We recommend that you devise a set of tag keys that meets your needs for each resource type. Using a consistent set of tag keys makes it easier for you to manage your resources. You can search and filter the resources based on the tags you add. Tags don't have any semantic meaning to Amazon EC2 and are interpreted strictly as a string of characters. </p> <p>For more information about tags, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Using_Tags.html">Tagging Your Amazon EC2 Resources</a> in the <i>Amazon EC2 User Guide</i>.</p>
     fn add_tags_to_resource(
         &self,
-        input: &AddTagsToResourceRequest,
+        input: AddTagsToResourceRequest,
     ) -> RusotoFuture<AddTagsToResourceResult, AddTagsToResourceError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.AddTagsToResource");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -15856,7 +15859,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -15879,13 +15882,13 @@ where
     /// <p>Attempts to cancel the command specified by the Command ID. There is no guarantee that the command will be terminated and the underlying process stopped.</p>
     fn cancel_command(
         &self,
-        input: &CancelCommandRequest,
+        input: CancelCommandRequest,
     ) -> RusotoFuture<CancelCommandResult, CancelCommandError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.CancelCommand");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -15893,7 +15896,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -15916,13 +15919,13 @@ where
     /// <p>Registers your on-premises server or virtual machine with Amazon EC2 so that you can manage these resources using Run Command. An on-premises server or virtual machine that has been registered with EC2 is called a managed instance. For more information about activations, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-managedinstances.html">Setting Up Systems Manager in Hybrid Environments</a>.</p>
     fn create_activation(
         &self,
-        input: &CreateActivationRequest,
+        input: CreateActivationRequest,
     ) -> RusotoFuture<CreateActivationResult, CreateActivationError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.CreateActivation");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -15930,7 +15933,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -15953,13 +15956,13 @@ where
     /// <p>Associates the specified Systems Manager document with the specified instances or targets.</p> <p>When you associate a document with one or more instances using instance IDs or tags, the SSM Agent running on the instance processes the document and configures the instance as specified.</p> <p>If you associate a document with an instance that already has an associated document, the system throws the AssociationAlreadyExists exception.</p>
     fn create_association(
         &self,
-        input: &CreateAssociationRequest,
+        input: CreateAssociationRequest,
     ) -> RusotoFuture<CreateAssociationResult, CreateAssociationError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.CreateAssociation");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -15967,7 +15970,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -15990,13 +15993,13 @@ where
     /// <p>Associates the specified Systems Manager document with the specified instances or targets.</p> <p>When you associate a document with one or more instances using instance IDs or tags, the SSM Agent running on the instance processes the document and configures the instance as specified.</p> <p>If you associate a document with an instance that already has an associated document, the system throws the AssociationAlreadyExists exception.</p>
     fn create_association_batch(
         &self,
-        input: &CreateAssociationBatchRequest,
+        input: CreateAssociationBatchRequest,
     ) -> RusotoFuture<CreateAssociationBatchResult, CreateAssociationBatchError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.CreateAssociationBatch");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -16004,7 +16007,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -16027,13 +16030,13 @@ where
     /// <p>Creates a Systems Manager document.</p> <p>After you create a document, you can use CreateAssociation to associate it with one or more running instances.</p>
     fn create_document(
         &self,
-        input: &CreateDocumentRequest,
+        input: CreateDocumentRequest,
     ) -> RusotoFuture<CreateDocumentResult, CreateDocumentError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.CreateDocument");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -16041,7 +16044,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -16064,13 +16067,13 @@ where
     /// <p>Creates a new Maintenance Window.</p>
     fn create_maintenance_window(
         &self,
-        input: &CreateMaintenanceWindowRequest,
+        input: CreateMaintenanceWindowRequest,
     ) -> RusotoFuture<CreateMaintenanceWindowResult, CreateMaintenanceWindowError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.CreateMaintenanceWindow");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -16078,7 +16081,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -16101,13 +16104,13 @@ where
     /// <p><p>Creates a patch baseline.</p> <note> <p>For information about valid key and value pairs in <code>PatchFilters</code> for each supported operating system type, see <a href="http://docs.aws.amazon.com/systems-manager/latest/APIReference/API_PatchFilter.html">PatchFilter</a>.</p> </note></p>
     fn create_patch_baseline(
         &self,
-        input: &CreatePatchBaselineRequest,
+        input: CreatePatchBaselineRequest,
     ) -> RusotoFuture<CreatePatchBaselineResult, CreatePatchBaselineError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.CreatePatchBaseline");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -16115,7 +16118,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -16138,13 +16141,13 @@ where
     /// <p>Creates a resource data sync configuration to a single bucket in Amazon S3. This is an asynchronous operation that returns immediately. After a successful initial sync is completed, the system continuously syncs data to the Amazon S3 bucket. To check the status of the sync, use the <a>ListResourceDataSync</a>.</p> <p>By default, data is not encrypted in Amazon S3. We strongly recommend that you enable encryption in Amazon S3 to ensure secure data storage. We also recommend that you secure access to the Amazon S3 bucket by creating a restrictive bucket policy. To view an example of a restrictive Amazon S3 bucket policy for Resource Data Sync, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-inventory-configuring.html#sysman-inventory-datasync">Configuring Resource Data Sync for Inventory</a>.</p>
     fn create_resource_data_sync(
         &self,
-        input: &CreateResourceDataSyncRequest,
+        input: CreateResourceDataSyncRequest,
     ) -> RusotoFuture<CreateResourceDataSyncResult, CreateResourceDataSyncError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.CreateResourceDataSync");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -16152,7 +16155,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -16175,13 +16178,13 @@ where
     /// <p>Deletes an activation. You are not required to delete an activation. If you delete an activation, you can no longer use it to register additional managed instances. Deleting an activation does not de-register managed instances. You must manually de-register managed instances.</p>
     fn delete_activation(
         &self,
-        input: &DeleteActivationRequest,
+        input: DeleteActivationRequest,
     ) -> RusotoFuture<DeleteActivationResult, DeleteActivationError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.DeleteActivation");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -16189,7 +16192,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -16212,13 +16215,13 @@ where
     /// <p>Disassociates the specified Systems Manager document from the specified instance.</p> <p>When you disassociate a document from an instance, it does not change the configuration of the instance. To change the configuration state of an instance after you disassociate a document, you must create a new document with the desired configuration and associate it with the instance.</p>
     fn delete_association(
         &self,
-        input: &DeleteAssociationRequest,
+        input: DeleteAssociationRequest,
     ) -> RusotoFuture<DeleteAssociationResult, DeleteAssociationError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.DeleteAssociation");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -16226,7 +16229,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -16249,13 +16252,13 @@ where
     /// <p>Deletes the Systems Manager document and all instance associations to the document.</p> <p>Before you delete the document, we recommend that you use <a>DeleteAssociation</a> to disassociate all instances that are associated with the document.</p>
     fn delete_document(
         &self,
-        input: &DeleteDocumentRequest,
+        input: DeleteDocumentRequest,
     ) -> RusotoFuture<DeleteDocumentResult, DeleteDocumentError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.DeleteDocument");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -16263,7 +16266,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -16286,13 +16289,13 @@ where
     /// <p>Deletes a Maintenance Window.</p>
     fn delete_maintenance_window(
         &self,
-        input: &DeleteMaintenanceWindowRequest,
+        input: DeleteMaintenanceWindowRequest,
     ) -> RusotoFuture<DeleteMaintenanceWindowResult, DeleteMaintenanceWindowError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.DeleteMaintenanceWindow");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -16300,7 +16303,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -16323,13 +16326,13 @@ where
     /// <p>Delete a parameter from the system.</p>
     fn delete_parameter(
         &self,
-        input: &DeleteParameterRequest,
+        input: DeleteParameterRequest,
     ) -> RusotoFuture<DeleteParameterResult, DeleteParameterError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.DeleteParameter");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -16337,7 +16340,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -16360,13 +16363,13 @@ where
     /// <p>Delete a list of parameters. This API is used to delete parameters by using the Amazon EC2 console.</p>
     fn delete_parameters(
         &self,
-        input: &DeleteParametersRequest,
+        input: DeleteParametersRequest,
     ) -> RusotoFuture<DeleteParametersResult, DeleteParametersError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.DeleteParameters");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -16374,7 +16377,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -16397,13 +16400,13 @@ where
     /// <p>Deletes a patch baseline.</p>
     fn delete_patch_baseline(
         &self,
-        input: &DeletePatchBaselineRequest,
+        input: DeletePatchBaselineRequest,
     ) -> RusotoFuture<DeletePatchBaselineResult, DeletePatchBaselineError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.DeletePatchBaseline");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -16411,7 +16414,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -16434,13 +16437,13 @@ where
     /// <p>Deletes a Resource Data Sync configuration. After the configuration is deleted, changes to inventory data on managed instances are no longer synced with the target Amazon S3 bucket. Deleting a sync configuration does not delete data in the target Amazon S3 bucket.</p>
     fn delete_resource_data_sync(
         &self,
-        input: &DeleteResourceDataSyncRequest,
+        input: DeleteResourceDataSyncRequest,
     ) -> RusotoFuture<DeleteResourceDataSyncResult, DeleteResourceDataSyncError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.DeleteResourceDataSync");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -16448,7 +16451,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -16471,13 +16474,13 @@ where
     /// <p>Removes the server or virtual machine from the list of registered servers. You can reregister the instance again at any time. If you don't plan to use Run Command on the server, we suggest uninstalling the SSM Agent first.</p>
     fn deregister_managed_instance(
         &self,
-        input: &DeregisterManagedInstanceRequest,
+        input: DeregisterManagedInstanceRequest,
     ) -> RusotoFuture<DeregisterManagedInstanceResult, DeregisterManagedInstanceError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.DeregisterManagedInstance");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -16485,7 +16488,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -16508,7 +16511,7 @@ where
     /// <p>Removes a patch group from a patch baseline.</p>
     fn deregister_patch_baseline_for_patch_group(
         &self,
-        input: &DeregisterPatchBaselineForPatchGroupRequest,
+        input: DeregisterPatchBaselineForPatchGroupRequest,
     ) -> RusotoFuture<
         DeregisterPatchBaselineForPatchGroupResult,
         DeregisterPatchBaselineForPatchGroupError,
@@ -16520,7 +16523,7 @@ where
             "x-amz-target",
             "AmazonSSM.DeregisterPatchBaselineForPatchGroup",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -16528,7 +16531,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -16551,7 +16554,7 @@ where
     /// <p>Removes a target from a Maintenance Window.</p>
     fn deregister_target_from_maintenance_window(
         &self,
-        input: &DeregisterTargetFromMaintenanceWindowRequest,
+        input: DeregisterTargetFromMaintenanceWindowRequest,
     ) -> RusotoFuture<
         DeregisterTargetFromMaintenanceWindowResult,
         DeregisterTargetFromMaintenanceWindowError,
@@ -16563,7 +16566,7 @@ where
             "x-amz-target",
             "AmazonSSM.DeregisterTargetFromMaintenanceWindow",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -16571,7 +16574,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -16594,7 +16597,7 @@ where
     /// <p>Removes a task from a Maintenance Window.</p>
     fn deregister_task_from_maintenance_window(
         &self,
-        input: &DeregisterTaskFromMaintenanceWindowRequest,
+        input: DeregisterTaskFromMaintenanceWindowRequest,
     ) -> RusotoFuture<
         DeregisterTaskFromMaintenanceWindowResult,
         DeregisterTaskFromMaintenanceWindowError,
@@ -16606,7 +16609,7 @@ where
             "x-amz-target",
             "AmazonSSM.DeregisterTaskFromMaintenanceWindow",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -16614,7 +16617,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -16637,13 +16640,13 @@ where
     /// <p>Details about the activation, including: the date and time the activation was created, the expiration date, the IAM role assigned to the instances in the activation, and the number of instances activated by this registration.</p>
     fn describe_activations(
         &self,
-        input: &DescribeActivationsRequest,
+        input: DescribeActivationsRequest,
     ) -> RusotoFuture<DescribeActivationsResult, DescribeActivationsError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.DescribeActivations");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -16651,7 +16654,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -16674,13 +16677,13 @@ where
     /// <p>Describes the association for the specified target or instance. If you created the association by using the <code>Targets</code> parameter, then you must retrieve the association by using the association ID. If you created the association by specifying an instance ID and a Systems Manager document, then you retrieve the association by specifying the document name and the instance ID. </p>
     fn describe_association(
         &self,
-        input: &DescribeAssociationRequest,
+        input: DescribeAssociationRequest,
     ) -> RusotoFuture<DescribeAssociationResult, DescribeAssociationError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.DescribeAssociation");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -16688,7 +16691,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -16711,13 +16714,13 @@ where
     /// <p>Provides details about all active and terminated Automation executions.</p>
     fn describe_automation_executions(
         &self,
-        input: &DescribeAutomationExecutionsRequest,
+        input: DescribeAutomationExecutionsRequest,
     ) -> RusotoFuture<DescribeAutomationExecutionsResult, DescribeAutomationExecutionsError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.DescribeAutomationExecutions");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -16725,7 +16728,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -16748,14 +16751,14 @@ where
     /// <p>Information about all active and terminated step executions in an Automation workflow.</p>
     fn describe_automation_step_executions(
         &self,
-        input: &DescribeAutomationStepExecutionsRequest,
+        input: DescribeAutomationStepExecutionsRequest,
     ) -> RusotoFuture<DescribeAutomationStepExecutionsResult, DescribeAutomationStepExecutionsError>
     {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.DescribeAutomationStepExecutions");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -16763,7 +16766,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -16786,13 +16789,13 @@ where
     /// <p>Lists all patches that could possibly be included in a patch baseline.</p>
     fn describe_available_patches(
         &self,
-        input: &DescribeAvailablePatchesRequest,
+        input: DescribeAvailablePatchesRequest,
     ) -> RusotoFuture<DescribeAvailablePatchesResult, DescribeAvailablePatchesError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.DescribeAvailablePatches");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -16800,7 +16803,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -16823,13 +16826,13 @@ where
     /// <p>Describes the specified Systems Manager document.</p>
     fn describe_document(
         &self,
-        input: &DescribeDocumentRequest,
+        input: DescribeDocumentRequest,
     ) -> RusotoFuture<DescribeDocumentResult, DescribeDocumentError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.DescribeDocument");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -16837,7 +16840,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -16860,13 +16863,13 @@ where
     /// <p>Describes the permissions for a Systems Manager document. If you created the document, you are the owner. If a document is shared, it can either be shared privately (by specifying a user's AWS account ID) or publicly (<i>All</i>). </p>
     fn describe_document_permission(
         &self,
-        input: &DescribeDocumentPermissionRequest,
+        input: DescribeDocumentPermissionRequest,
     ) -> RusotoFuture<DescribeDocumentPermissionResponse, DescribeDocumentPermissionError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.DescribeDocumentPermission");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -16874,7 +16877,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -16897,7 +16900,7 @@ where
     /// <p>All associations for the instance(s).</p>
     fn describe_effective_instance_associations(
         &self,
-        input: &DescribeEffectiveInstanceAssociationsRequest,
+        input: DescribeEffectiveInstanceAssociationsRequest,
     ) -> RusotoFuture<
         DescribeEffectiveInstanceAssociationsResult,
         DescribeEffectiveInstanceAssociationsError,
@@ -16909,7 +16912,7 @@ where
             "x-amz-target",
             "AmazonSSM.DescribeEffectiveInstanceAssociations",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -16917,7 +16920,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -16940,7 +16943,7 @@ where
     /// <p>Retrieves the current effective patches (the patch and the approval state) for the specified patch baseline. Note that this API applies only to Windows patch baselines.</p>
     fn describe_effective_patches_for_patch_baseline(
         &self,
-        input: &DescribeEffectivePatchesForPatchBaselineRequest,
+        input: DescribeEffectivePatchesForPatchBaselineRequest,
     ) -> RusotoFuture<
         DescribeEffectivePatchesForPatchBaselineResult,
         DescribeEffectivePatchesForPatchBaselineError,
@@ -16952,7 +16955,7 @@ where
             "x-amz-target",
             "AmazonSSM.DescribeEffectivePatchesForPatchBaseline",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -16960,7 +16963,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -16983,7 +16986,7 @@ where
     /// <p>The status of the associations for the instance(s).</p>
     fn describe_instance_associations_status(
         &self,
-        input: &DescribeInstanceAssociationsStatusRequest,
+        input: DescribeInstanceAssociationsStatusRequest,
     ) -> RusotoFuture<
         DescribeInstanceAssociationsStatusResult,
         DescribeInstanceAssociationsStatusError,
@@ -16995,7 +16998,7 @@ where
             "x-amz-target",
             "AmazonSSM.DescribeInstanceAssociationsStatus",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -17003,7 +17006,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -17026,13 +17029,13 @@ where
     /// <p>Describes one or more of your instances. You can use this to get information about instances like the operating system platform, the SSM Agent version (Linux), status etc. If you specify one or more instance IDs, it returns information for those instances. If you do not specify instance IDs, it returns information for all your instances. If you specify an instance ID that is not valid or an instance that you do not own, you receive an error. </p>
     fn describe_instance_information(
         &self,
-        input: &DescribeInstanceInformationRequest,
+        input: DescribeInstanceInformationRequest,
     ) -> RusotoFuture<DescribeInstanceInformationResult, DescribeInstanceInformationError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.DescribeInstanceInformation");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -17040,7 +17043,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -17063,13 +17066,13 @@ where
     /// <p>Retrieves the high-level patch state of one or more instances.</p>
     fn describe_instance_patch_states(
         &self,
-        input: &DescribeInstancePatchStatesRequest,
+        input: DescribeInstancePatchStatesRequest,
     ) -> RusotoFuture<DescribeInstancePatchStatesResult, DescribeInstancePatchStatesError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.DescribeInstancePatchStates");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -17077,7 +17080,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -17100,7 +17103,7 @@ where
     /// <p>Retrieves the high-level patch state for the instances in the specified patch group.</p>
     fn describe_instance_patch_states_for_patch_group(
         &self,
-        input: &DescribeInstancePatchStatesForPatchGroupRequest,
+        input: DescribeInstancePatchStatesForPatchGroupRequest,
     ) -> RusotoFuture<
         DescribeInstancePatchStatesForPatchGroupResult,
         DescribeInstancePatchStatesForPatchGroupError,
@@ -17112,7 +17115,7 @@ where
             "x-amz-target",
             "AmazonSSM.DescribeInstancePatchStatesForPatchGroup",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -17120,7 +17123,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -17143,13 +17146,13 @@ where
     /// <p>Retrieves information about the patches on the specified instance and their state relative to the patch baseline being used for the instance.</p>
     fn describe_instance_patches(
         &self,
-        input: &DescribeInstancePatchesRequest,
+        input: DescribeInstancePatchesRequest,
     ) -> RusotoFuture<DescribeInstancePatchesResult, DescribeInstancePatchesError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.DescribeInstancePatches");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -17157,7 +17160,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -17180,7 +17183,7 @@ where
     /// <p>Retrieves the individual task executions (one per target) for a particular task executed as part of a Maintenance Window execution.</p>
     fn describe_maintenance_window_execution_task_invocations(
         &self,
-        input: &DescribeMaintenanceWindowExecutionTaskInvocationsRequest,
+        input: DescribeMaintenanceWindowExecutionTaskInvocationsRequest,
     ) -> RusotoFuture<
         DescribeMaintenanceWindowExecutionTaskInvocationsResult,
         DescribeMaintenanceWindowExecutionTaskInvocationsError,
@@ -17192,7 +17195,7 @@ where
             "x-amz-target",
             "AmazonSSM.DescribeMaintenanceWindowExecutionTaskInvocations",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -17200,7 +17203,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -17225,7 +17228,7 @@ where
     /// <p>For a given Maintenance Window execution, lists the tasks that were executed.</p>
     fn describe_maintenance_window_execution_tasks(
         &self,
-        input: &DescribeMaintenanceWindowExecutionTasksRequest,
+        input: DescribeMaintenanceWindowExecutionTasksRequest,
     ) -> RusotoFuture<
         DescribeMaintenanceWindowExecutionTasksResult,
         DescribeMaintenanceWindowExecutionTasksError,
@@ -17237,7 +17240,7 @@ where
             "x-amz-target",
             "AmazonSSM.DescribeMaintenanceWindowExecutionTasks",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -17245,7 +17248,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -17268,7 +17271,7 @@ where
     /// <p>Lists the executions of a Maintenance Window. This includes information about when the Maintenance Window was scheduled to be active, and information about tasks registered and run with the Maintenance Window.</p>
     fn describe_maintenance_window_executions(
         &self,
-        input: &DescribeMaintenanceWindowExecutionsRequest,
+        input: DescribeMaintenanceWindowExecutionsRequest,
     ) -> RusotoFuture<
         DescribeMaintenanceWindowExecutionsResult,
         DescribeMaintenanceWindowExecutionsError,
@@ -17280,7 +17283,7 @@ where
             "x-amz-target",
             "AmazonSSM.DescribeMaintenanceWindowExecutions",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -17288,7 +17291,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -17311,14 +17314,14 @@ where
     /// <p>Lists the targets registered with the Maintenance Window.</p>
     fn describe_maintenance_window_targets(
         &self,
-        input: &DescribeMaintenanceWindowTargetsRequest,
+        input: DescribeMaintenanceWindowTargetsRequest,
     ) -> RusotoFuture<DescribeMaintenanceWindowTargetsResult, DescribeMaintenanceWindowTargetsError>
     {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.DescribeMaintenanceWindowTargets");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -17326,7 +17329,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -17349,14 +17352,14 @@ where
     /// <p>Lists the tasks in a Maintenance Window.</p>
     fn describe_maintenance_window_tasks(
         &self,
-        input: &DescribeMaintenanceWindowTasksRequest,
+        input: DescribeMaintenanceWindowTasksRequest,
     ) -> RusotoFuture<DescribeMaintenanceWindowTasksResult, DescribeMaintenanceWindowTasksError>
     {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.DescribeMaintenanceWindowTasks");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -17364,7 +17367,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -17387,13 +17390,13 @@ where
     /// <p>Retrieves the Maintenance Windows in an AWS account.</p>
     fn describe_maintenance_windows(
         &self,
-        input: &DescribeMaintenanceWindowsRequest,
+        input: DescribeMaintenanceWindowsRequest,
     ) -> RusotoFuture<DescribeMaintenanceWindowsResult, DescribeMaintenanceWindowsError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.DescribeMaintenanceWindows");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -17401,7 +17404,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -17424,13 +17427,13 @@ where
     /// <p>Get information about a parameter.</p> <p>Request results are returned on a best-effort basis. If you specify <code>MaxResults</code> in the request, the response includes information up to the limit specified. The number of items returned, however, can be between zero and the value of <code>MaxResults</code>. If the service reaches an internal limit while processing the results, it stops the operation and returns the matching values up to that point and a <code>NextToken</code>. You can specify the <code>NextToken</code> in a subsequent call to get the next set of results.</p>
     fn describe_parameters(
         &self,
-        input: &DescribeParametersRequest,
+        input: DescribeParametersRequest,
     ) -> RusotoFuture<DescribeParametersResult, DescribeParametersError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.DescribeParameters");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -17438,7 +17441,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -17461,13 +17464,13 @@ where
     /// <p>Lists the patch baselines in your AWS account.</p>
     fn describe_patch_baselines(
         &self,
-        input: &DescribePatchBaselinesRequest,
+        input: DescribePatchBaselinesRequest,
     ) -> RusotoFuture<DescribePatchBaselinesResult, DescribePatchBaselinesError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.DescribePatchBaselines");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -17475,7 +17478,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -17498,13 +17501,13 @@ where
     /// <p>Returns high-level aggregated patch compliance state for a patch group.</p>
     fn describe_patch_group_state(
         &self,
-        input: &DescribePatchGroupStateRequest,
+        input: DescribePatchGroupStateRequest,
     ) -> RusotoFuture<DescribePatchGroupStateResult, DescribePatchGroupStateError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.DescribePatchGroupState");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -17512,7 +17515,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -17535,13 +17538,13 @@ where
     /// <p>Lists all patch groups that have been registered with patch baselines.</p>
     fn describe_patch_groups(
         &self,
-        input: &DescribePatchGroupsRequest,
+        input: DescribePatchGroupsRequest,
     ) -> RusotoFuture<DescribePatchGroupsResult, DescribePatchGroupsError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.DescribePatchGroups");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -17549,7 +17552,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -17572,13 +17575,13 @@ where
     /// <p>Get detailed information about a particular Automation execution.</p>
     fn get_automation_execution(
         &self,
-        input: &GetAutomationExecutionRequest,
+        input: GetAutomationExecutionRequest,
     ) -> RusotoFuture<GetAutomationExecutionResult, GetAutomationExecutionError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.GetAutomationExecution");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -17586,7 +17589,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -17609,13 +17612,13 @@ where
     /// <p>Returns detailed information about command execution for an invocation or plugin. </p>
     fn get_command_invocation(
         &self,
-        input: &GetCommandInvocationRequest,
+        input: GetCommandInvocationRequest,
     ) -> RusotoFuture<GetCommandInvocationResult, GetCommandInvocationError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.GetCommandInvocation");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -17623,7 +17626,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -17646,13 +17649,13 @@ where
     /// <p>Retrieves the default patch baseline. Note that Systems Manager supports creating multiple default patch baselines. For example, you can create a default patch baseline for each operating system.</p> <p>If you do not specify an operating system value, the default patch baseline for Windows is returned.</p>
     fn get_default_patch_baseline(
         &self,
-        input: &GetDefaultPatchBaselineRequest,
+        input: GetDefaultPatchBaselineRequest,
     ) -> RusotoFuture<GetDefaultPatchBaselineResult, GetDefaultPatchBaselineError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.GetDefaultPatchBaseline");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -17660,7 +17663,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -17683,7 +17686,7 @@ where
     /// <p>Retrieves the current snapshot for the patch baseline the instance uses. This API is primarily used by the AWS-RunPatchBaseline Systems Manager document. </p>
     fn get_deployable_patch_snapshot_for_instance(
         &self,
-        input: &GetDeployablePatchSnapshotForInstanceRequest,
+        input: GetDeployablePatchSnapshotForInstanceRequest,
     ) -> RusotoFuture<
         GetDeployablePatchSnapshotForInstanceResult,
         GetDeployablePatchSnapshotForInstanceError,
@@ -17695,7 +17698,7 @@ where
             "x-amz-target",
             "AmazonSSM.GetDeployablePatchSnapshotForInstance",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -17703,7 +17706,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -17726,13 +17729,13 @@ where
     /// <p>Gets the contents of the specified Systems Manager document.</p>
     fn get_document(
         &self,
-        input: &GetDocumentRequest,
+        input: GetDocumentRequest,
     ) -> RusotoFuture<GetDocumentResult, GetDocumentError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.GetDocument");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -17740,7 +17743,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -17763,13 +17766,13 @@ where
     /// <p>Query inventory information.</p>
     fn get_inventory(
         &self,
-        input: &GetInventoryRequest,
+        input: GetInventoryRequest,
     ) -> RusotoFuture<GetInventoryResult, GetInventoryError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.GetInventory");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -17777,7 +17780,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -17800,13 +17803,13 @@ where
     /// <p>Return a list of inventory type names for the account, or return a list of attribute names for a specific Inventory item type. </p>
     fn get_inventory_schema(
         &self,
-        input: &GetInventorySchemaRequest,
+        input: GetInventorySchemaRequest,
     ) -> RusotoFuture<GetInventorySchemaResult, GetInventorySchemaError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.GetInventorySchema");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -17814,7 +17817,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -17837,13 +17840,13 @@ where
     /// <p>Retrieves a Maintenance Window.</p>
     fn get_maintenance_window(
         &self,
-        input: &GetMaintenanceWindowRequest,
+        input: GetMaintenanceWindowRequest,
     ) -> RusotoFuture<GetMaintenanceWindowResult, GetMaintenanceWindowError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.GetMaintenanceWindow");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -17851,7 +17854,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -17874,13 +17877,13 @@ where
     /// <p>Retrieves details about a specific task executed as part of a Maintenance Window execution.</p>
     fn get_maintenance_window_execution(
         &self,
-        input: &GetMaintenanceWindowExecutionRequest,
+        input: GetMaintenanceWindowExecutionRequest,
     ) -> RusotoFuture<GetMaintenanceWindowExecutionResult, GetMaintenanceWindowExecutionError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.GetMaintenanceWindowExecution");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -17888,7 +17891,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -17911,7 +17914,7 @@ where
     /// <p>Retrieves the details about a specific task executed as part of a Maintenance Window execution.</p>
     fn get_maintenance_window_execution_task(
         &self,
-        input: &GetMaintenanceWindowExecutionTaskRequest,
+        input: GetMaintenanceWindowExecutionTaskRequest,
     ) -> RusotoFuture<GetMaintenanceWindowExecutionTaskResult, GetMaintenanceWindowExecutionTaskError>
     {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
@@ -17921,7 +17924,7 @@ where
             "x-amz-target",
             "AmazonSSM.GetMaintenanceWindowExecutionTask",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -17929,7 +17932,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -17952,7 +17955,7 @@ where
     /// <p>Retrieves a task invocation. A task invocation is a specific task executing on a specific target. Maintenance Windows report status for all invocations. </p>
     fn get_maintenance_window_execution_task_invocation(
         &self,
-        input: &GetMaintenanceWindowExecutionTaskInvocationRequest,
+        input: GetMaintenanceWindowExecutionTaskInvocationRequest,
     ) -> RusotoFuture<
         GetMaintenanceWindowExecutionTaskInvocationResult,
         GetMaintenanceWindowExecutionTaskInvocationError,
@@ -17964,7 +17967,7 @@ where
             "x-amz-target",
             "AmazonSSM.GetMaintenanceWindowExecutionTaskInvocation",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -17972,7 +17975,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -17995,13 +17998,13 @@ where
     /// <p>Lists the tasks in a Maintenance Window.</p>
     fn get_maintenance_window_task(
         &self,
-        input: &GetMaintenanceWindowTaskRequest,
+        input: GetMaintenanceWindowTaskRequest,
     ) -> RusotoFuture<GetMaintenanceWindowTaskResult, GetMaintenanceWindowTaskError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.GetMaintenanceWindowTask");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -18009,7 +18012,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -18032,13 +18035,13 @@ where
     /// <p>Get information about a parameter by using the parameter name. </p>
     fn get_parameter(
         &self,
-        input: &GetParameterRequest,
+        input: GetParameterRequest,
     ) -> RusotoFuture<GetParameterResult, GetParameterError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.GetParameter");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -18046,7 +18049,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -18069,13 +18072,13 @@ where
     /// <p>Query a list of all parameters used by the AWS account.</p>
     fn get_parameter_history(
         &self,
-        input: &GetParameterHistoryRequest,
+        input: GetParameterHistoryRequest,
     ) -> RusotoFuture<GetParameterHistoryResult, GetParameterHistoryError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.GetParameterHistory");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -18083,7 +18086,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -18106,13 +18109,13 @@ where
     /// <p>Get details of a parameter.</p>
     fn get_parameters(
         &self,
-        input: &GetParametersRequest,
+        input: GetParametersRequest,
     ) -> RusotoFuture<GetParametersResult, GetParametersError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.GetParameters");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -18120,7 +18123,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -18143,13 +18146,13 @@ where
     /// <p><p>Retrieve parameters in a specific hierarchy. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-paramstore-working.html">Working with Systems Manager Parameters</a>. </p> <p>Request results are returned on a best-effort basis. If you specify <code>MaxResults</code> in the request, the response includes information up to the limit specified. The number of items returned, however, can be between zero and the value of <code>MaxResults</code>. If the service reaches an internal limit while processing the results, it stops the operation and returns the matching values up to that point and a <code>NextToken</code>. You can specify the <code>NextToken</code> in a subsequent call to get the next set of results.</p> <note> <p>This API action doesn&#39;t support filtering by tags. </p> </note></p>
     fn get_parameters_by_path(
         &self,
-        input: &GetParametersByPathRequest,
+        input: GetParametersByPathRequest,
     ) -> RusotoFuture<GetParametersByPathResult, GetParametersByPathError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.GetParametersByPath");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -18157,7 +18160,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -18180,13 +18183,13 @@ where
     /// <p>Retrieves information about a patch baseline.</p>
     fn get_patch_baseline(
         &self,
-        input: &GetPatchBaselineRequest,
+        input: GetPatchBaselineRequest,
     ) -> RusotoFuture<GetPatchBaselineResult, GetPatchBaselineError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.GetPatchBaseline");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -18194,7 +18197,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -18217,13 +18220,13 @@ where
     /// <p>Retrieves the patch baseline that should be used for the specified patch group.</p>
     fn get_patch_baseline_for_patch_group(
         &self,
-        input: &GetPatchBaselineForPatchGroupRequest,
+        input: GetPatchBaselineForPatchGroupRequest,
     ) -> RusotoFuture<GetPatchBaselineForPatchGroupResult, GetPatchBaselineForPatchGroupError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.GetPatchBaselineForPatchGroup");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -18231,7 +18234,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -18254,13 +18257,13 @@ where
     /// <p>Retrieves all versions of an association for a specific association ID.</p>
     fn list_association_versions(
         &self,
-        input: &ListAssociationVersionsRequest,
+        input: ListAssociationVersionsRequest,
     ) -> RusotoFuture<ListAssociationVersionsResult, ListAssociationVersionsError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.ListAssociationVersions");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -18268,7 +18271,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -18291,13 +18294,13 @@ where
     /// <p>Lists the associations for the specified Systems Manager document or instance.</p>
     fn list_associations(
         &self,
-        input: &ListAssociationsRequest,
+        input: ListAssociationsRequest,
     ) -> RusotoFuture<ListAssociationsResult, ListAssociationsError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.ListAssociations");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -18305,7 +18308,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -18328,13 +18331,13 @@ where
     /// <p>An invocation is copy of a command sent to a specific instance. A command can apply to one or more instances. A command invocation applies to one instance. For example, if a user executes SendCommand against three instances, then a command invocation is created for each requested instance ID. ListCommandInvocations provide status about command execution.</p>
     fn list_command_invocations(
         &self,
-        input: &ListCommandInvocationsRequest,
+        input: ListCommandInvocationsRequest,
     ) -> RusotoFuture<ListCommandInvocationsResult, ListCommandInvocationsError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.ListCommandInvocations");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -18342,7 +18345,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -18365,13 +18368,13 @@ where
     /// <p>Lists the commands requested by users of the AWS account.</p>
     fn list_commands(
         &self,
-        input: &ListCommandsRequest,
+        input: ListCommandsRequest,
     ) -> RusotoFuture<ListCommandsResult, ListCommandsError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.ListCommands");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -18379,7 +18382,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -18402,13 +18405,13 @@ where
     /// <p>For a specified resource ID, this API action returns a list of compliance statuses for different resource types. Currently, you can only specify one resource ID per call. List results depend on the criteria specified in the filter. </p>
     fn list_compliance_items(
         &self,
-        input: &ListComplianceItemsRequest,
+        input: ListComplianceItemsRequest,
     ) -> RusotoFuture<ListComplianceItemsResult, ListComplianceItemsError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.ListComplianceItems");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -18416,7 +18419,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -18439,13 +18442,13 @@ where
     /// <p>Returns a summary count of compliant and non-compliant resources for a compliance type. For example, this call can return State Manager associations, patches, or custom compliance types according to the filter criteria that you specify. </p>
     fn list_compliance_summaries(
         &self,
-        input: &ListComplianceSummariesRequest,
+        input: ListComplianceSummariesRequest,
     ) -> RusotoFuture<ListComplianceSummariesResult, ListComplianceSummariesError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.ListComplianceSummaries");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -18453,7 +18456,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -18476,13 +18479,13 @@ where
     /// <p>List all versions for a document.</p>
     fn list_document_versions(
         &self,
-        input: &ListDocumentVersionsRequest,
+        input: ListDocumentVersionsRequest,
     ) -> RusotoFuture<ListDocumentVersionsResult, ListDocumentVersionsError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.ListDocumentVersions");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -18490,7 +18493,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -18513,13 +18516,13 @@ where
     /// <p>Describes one or more of your Systems Manager documents.</p>
     fn list_documents(
         &self,
-        input: &ListDocumentsRequest,
+        input: ListDocumentsRequest,
     ) -> RusotoFuture<ListDocumentsResult, ListDocumentsError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.ListDocuments");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -18527,7 +18530,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -18550,13 +18553,13 @@ where
     /// <p>A list of inventory items returned by the request.</p>
     fn list_inventory_entries(
         &self,
-        input: &ListInventoryEntriesRequest,
+        input: ListInventoryEntriesRequest,
     ) -> RusotoFuture<ListInventoryEntriesResult, ListInventoryEntriesError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.ListInventoryEntries");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -18564,7 +18567,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -18587,14 +18590,14 @@ where
     /// <p>Returns a resource-level summary count. The summary includes information about compliant and non-compliant statuses and detailed compliance-item severity counts, according to the filter criteria you specify.</p>
     fn list_resource_compliance_summaries(
         &self,
-        input: &ListResourceComplianceSummariesRequest,
+        input: ListResourceComplianceSummariesRequest,
     ) -> RusotoFuture<ListResourceComplianceSummariesResult, ListResourceComplianceSummariesError>
     {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.ListResourceComplianceSummaries");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -18602,7 +18605,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -18625,13 +18628,13 @@ where
     /// <p>Lists your resource data sync configurations. Includes information about the last time a sync attempted to start, the last sync status, and the last time a sync successfully completed.</p> <p>The number of sync configurations might be too large to return using a single call to <code>ListResourceDataSync</code>. You can limit the number of sync configurations returned by using the <code>MaxResults</code> parameter. To determine whether there are more sync configurations to list, check the value of <code>NextToken</code> in the output. If there are more sync configurations to list, you can request them by specifying the <code>NextToken</code> returned in the call to the parameter of a subsequent call. </p>
     fn list_resource_data_sync(
         &self,
-        input: &ListResourceDataSyncRequest,
+        input: ListResourceDataSyncRequest,
     ) -> RusotoFuture<ListResourceDataSyncResult, ListResourceDataSyncError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.ListResourceDataSync");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -18639,7 +18642,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -18662,13 +18665,13 @@ where
     /// <p>Returns a list of the tags assigned to the specified resource.</p>
     fn list_tags_for_resource(
         &self,
-        input: &ListTagsForResourceRequest,
+        input: ListTagsForResourceRequest,
     ) -> RusotoFuture<ListTagsForResourceResult, ListTagsForResourceError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.ListTagsForResource");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -18676,7 +18679,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -18699,13 +18702,13 @@ where
     /// <p>Shares a Systems Manager document publicly or privately. If you share a document privately, you must specify the AWS user account IDs for those people who can use the document. If you share a document publicly, you must specify <i>All</i> as the account ID.</p>
     fn modify_document_permission(
         &self,
-        input: &ModifyDocumentPermissionRequest,
+        input: ModifyDocumentPermissionRequest,
     ) -> RusotoFuture<ModifyDocumentPermissionResponse, ModifyDocumentPermissionError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.ModifyDocumentPermission");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -18713,7 +18716,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -18736,13 +18739,13 @@ where
     /// <p><p>Registers a compliance type and other compliance details on a designated resource. This action lets you register custom compliance details with a resource. This call overwrites existing compliance information on the resource, so you must provide a full list of compliance items each time that you send the request.</p> <p>ComplianceType can be one of the following:</p> <ul> <li> <p>ExecutionId: The execution ID when the patch, association, or custom compliance item was applied.</p> </li> <li> <p>ExecutionType: Specify patch, association, or Custom:<code>string</code>.</p> </li> <li> <p>ExecutionTime. The time the patch, association, or custom compliance item was applied to the instance.</p> </li> <li> <p>Id: The patch, association, or custom compliance ID.</p> </li> <li> <p>Title: A title.</p> </li> <li> <p>Status: The status of the compliance item. For example, <code>approved</code> for patches, or <code>Failed</code> for associations.</p> </li> <li> <p>Severity: A patch severity. For example, <code>critical</code>.</p> </li> <li> <p>DocumentName: A SSM document name. For example, AWS-RunPatchBaseline.</p> </li> <li> <p>DocumentVersion: An SSM document version number. For example, 4.</p> </li> <li> <p>Classification: A patch classification. For example, <code>security updates</code>.</p> </li> <li> <p>PatchBaselineId: A patch baseline ID.</p> </li> <li> <p>PatchSeverity: A patch severity. For example, <code>Critical</code>.</p> </li> <li> <p>PatchState: A patch state. For example, <code>InstancesWithFailedPatches</code>.</p> </li> <li> <p>PatchGroup: The name of a patch group.</p> </li> <li> <p>InstalledTime: The time the association, patch, or custom compliance item was applied to the resource. Specify the time by using the following format: yyyy-MM-dd&#39;T&#39;HH:mm:ss&#39;Z&#39;</p> </li> </ul></p>
     fn put_compliance_items(
         &self,
-        input: &PutComplianceItemsRequest,
+        input: PutComplianceItemsRequest,
     ) -> RusotoFuture<PutComplianceItemsResult, PutComplianceItemsError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.PutComplianceItems");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -18750,7 +18753,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -18773,13 +18776,13 @@ where
     /// <p>Bulk update custom inventory items on one more instance. The request adds an inventory item, if it doesn't already exist, or updates an inventory item, if it does exist.</p>
     fn put_inventory(
         &self,
-        input: &PutInventoryRequest,
+        input: PutInventoryRequest,
     ) -> RusotoFuture<PutInventoryResult, PutInventoryError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.PutInventory");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -18787,7 +18790,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -18810,13 +18813,13 @@ where
     /// <p>Add one or more parameters to the system.</p>
     fn put_parameter(
         &self,
-        input: &PutParameterRequest,
+        input: PutParameterRequest,
     ) -> RusotoFuture<PutParameterResult, PutParameterError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.PutParameter");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -18824,7 +18827,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -18847,13 +18850,13 @@ where
     /// <p>Defines the default patch baseline.</p>
     fn register_default_patch_baseline(
         &self,
-        input: &RegisterDefaultPatchBaselineRequest,
+        input: RegisterDefaultPatchBaselineRequest,
     ) -> RusotoFuture<RegisterDefaultPatchBaselineResult, RegisterDefaultPatchBaselineError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.RegisterDefaultPatchBaseline");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -18861,7 +18864,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -18884,7 +18887,7 @@ where
     /// <p>Registers a patch baseline for a patch group.</p>
     fn register_patch_baseline_for_patch_group(
         &self,
-        input: &RegisterPatchBaselineForPatchGroupRequest,
+        input: RegisterPatchBaselineForPatchGroupRequest,
     ) -> RusotoFuture<
         RegisterPatchBaselineForPatchGroupResult,
         RegisterPatchBaselineForPatchGroupError,
@@ -18896,7 +18899,7 @@ where
             "x-amz-target",
             "AmazonSSM.RegisterPatchBaselineForPatchGroup",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -18904,7 +18907,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -18927,7 +18930,7 @@ where
     /// <p>Registers a target with a Maintenance Window.</p>
     fn register_target_with_maintenance_window(
         &self,
-        input: &RegisterTargetWithMaintenanceWindowRequest,
+        input: RegisterTargetWithMaintenanceWindowRequest,
     ) -> RusotoFuture<
         RegisterTargetWithMaintenanceWindowResult,
         RegisterTargetWithMaintenanceWindowError,
@@ -18939,7 +18942,7 @@ where
             "x-amz-target",
             "AmazonSSM.RegisterTargetWithMaintenanceWindow",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -18947,7 +18950,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -18970,7 +18973,7 @@ where
     /// <p>Adds a new task to a Maintenance Window.</p>
     fn register_task_with_maintenance_window(
         &self,
-        input: &RegisterTaskWithMaintenanceWindowRequest,
+        input: RegisterTaskWithMaintenanceWindowRequest,
     ) -> RusotoFuture<RegisterTaskWithMaintenanceWindowResult, RegisterTaskWithMaintenanceWindowError>
     {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
@@ -18980,7 +18983,7 @@ where
             "x-amz-target",
             "AmazonSSM.RegisterTaskWithMaintenanceWindow",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -18988,7 +18991,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -19011,13 +19014,13 @@ where
     /// <p>Removes all tags from the specified resource.</p>
     fn remove_tags_from_resource(
         &self,
-        input: &RemoveTagsFromResourceRequest,
+        input: RemoveTagsFromResourceRequest,
     ) -> RusotoFuture<RemoveTagsFromResourceResult, RemoveTagsFromResourceError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.RemoveTagsFromResource");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -19025,7 +19028,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -19048,13 +19051,13 @@ where
     /// <p>Sends a signal to an Automation execution to change the current behavior or status of the execution. </p>
     fn send_automation_signal(
         &self,
-        input: &SendAutomationSignalRequest,
+        input: SendAutomationSignalRequest,
     ) -> RusotoFuture<SendAutomationSignalResult, SendAutomationSignalError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.SendAutomationSignal");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -19062,7 +19065,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -19085,13 +19088,13 @@ where
     /// <p>Executes commands on one or more managed instances.</p>
     fn send_command(
         &self,
-        input: &SendCommandRequest,
+        input: SendCommandRequest,
     ) -> RusotoFuture<SendCommandResult, SendCommandError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.SendCommand");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -19099,7 +19102,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -19122,13 +19125,13 @@ where
     /// <p>Initiates execution of an Automation document.</p>
     fn start_automation_execution(
         &self,
-        input: &StartAutomationExecutionRequest,
+        input: StartAutomationExecutionRequest,
     ) -> RusotoFuture<StartAutomationExecutionResult, StartAutomationExecutionError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.StartAutomationExecution");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -19136,7 +19139,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -19159,13 +19162,13 @@ where
     /// <p>Stop an Automation that is currently executing.</p>
     fn stop_automation_execution(
         &self,
-        input: &StopAutomationExecutionRequest,
+        input: StopAutomationExecutionRequest,
     ) -> RusotoFuture<StopAutomationExecutionResult, StopAutomationExecutionError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.StopAutomationExecution");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -19173,7 +19176,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -19196,13 +19199,13 @@ where
     /// <p>Updates an association. You can update the association name and version, the document version, schedule, parameters, and Amazon S3 output.</p>
     fn update_association(
         &self,
-        input: &UpdateAssociationRequest,
+        input: UpdateAssociationRequest,
     ) -> RusotoFuture<UpdateAssociationResult, UpdateAssociationError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.UpdateAssociation");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -19210,7 +19213,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -19233,13 +19236,13 @@ where
     /// <p>Updates the status of the Systems Manager document associated with the specified instance.</p>
     fn update_association_status(
         &self,
-        input: &UpdateAssociationStatusRequest,
+        input: UpdateAssociationStatusRequest,
     ) -> RusotoFuture<UpdateAssociationStatusResult, UpdateAssociationStatusError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.UpdateAssociationStatus");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -19247,7 +19250,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -19270,13 +19273,13 @@ where
     /// <p>The document you want to update.</p>
     fn update_document(
         &self,
-        input: &UpdateDocumentRequest,
+        input: UpdateDocumentRequest,
     ) -> RusotoFuture<UpdateDocumentResult, UpdateDocumentError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.UpdateDocument");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -19284,7 +19287,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -19307,13 +19310,13 @@ where
     /// <p>Set the default version of a document. </p>
     fn update_document_default_version(
         &self,
-        input: &UpdateDocumentDefaultVersionRequest,
+        input: UpdateDocumentDefaultVersionRequest,
     ) -> RusotoFuture<UpdateDocumentDefaultVersionResult, UpdateDocumentDefaultVersionError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.UpdateDocumentDefaultVersion");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -19321,7 +19324,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -19344,13 +19347,13 @@ where
     /// <p>Updates an existing Maintenance Window. Only specified parameters are modified.</p>
     fn update_maintenance_window(
         &self,
-        input: &UpdateMaintenanceWindowRequest,
+        input: UpdateMaintenanceWindowRequest,
     ) -> RusotoFuture<UpdateMaintenanceWindowResult, UpdateMaintenanceWindowError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.UpdateMaintenanceWindow");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -19358,7 +19361,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -19381,13 +19384,13 @@ where
     /// <p>Modifies the target of an existing Maintenance Window. You can't change the target type, but you can change the following:</p> <p>The target from being an ID target to a Tag target, or a Tag target to an ID target.</p> <p>IDs for an ID target.</p> <p>Tags for a Tag target.</p> <p>Owner.</p> <p>Name.</p> <p>Description.</p> <p>If a parameter is null, then the corresponding field is not modified.</p>
     fn update_maintenance_window_target(
         &self,
-        input: &UpdateMaintenanceWindowTargetRequest,
+        input: UpdateMaintenanceWindowTargetRequest,
     ) -> RusotoFuture<UpdateMaintenanceWindowTargetResult, UpdateMaintenanceWindowTargetError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.UpdateMaintenanceWindowTarget");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -19395,7 +19398,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -19418,13 +19421,13 @@ where
     /// <p>Modifies a task assigned to a Maintenance Window. You can't change the task type, but you can change the following values:</p> <ul> <li> <p>TaskARN. For example, you can change a RUN_COMMAND task from AWS-RunPowerShellScript to AWS-RunShellScript.</p> </li> <li> <p>ServiceRoleArn</p> </li> <li> <p>TaskInvocationParameters</p> </li> <li> <p>Priority</p> </li> <li> <p>MaxConcurrency</p> </li> <li> <p>MaxErrors</p> </li> </ul> <p>If a parameter is null, then the corresponding field is not modified. Also, if you set Replace to true, then all fields required by the <a>RegisterTaskWithMaintenanceWindow</a> action are required for this request. Optional fields that aren't specified are set to null.</p>
     fn update_maintenance_window_task(
         &self,
-        input: &UpdateMaintenanceWindowTaskRequest,
+        input: UpdateMaintenanceWindowTaskRequest,
     ) -> RusotoFuture<UpdateMaintenanceWindowTaskResult, UpdateMaintenanceWindowTaskError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.UpdateMaintenanceWindowTask");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -19432,7 +19435,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -19455,13 +19458,13 @@ where
     /// <p>Assigns or changes an Amazon Identity and Access Management (IAM) role to the managed instance.</p>
     fn update_managed_instance_role(
         &self,
-        input: &UpdateManagedInstanceRoleRequest,
+        input: UpdateManagedInstanceRoleRequest,
     ) -> RusotoFuture<UpdateManagedInstanceRoleResult, UpdateManagedInstanceRoleError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.UpdateManagedInstanceRole");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -19469,7 +19472,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -19492,13 +19495,13 @@ where
     /// <p><p>Modifies an existing patch baseline. Fields not specified in the request are left unchanged.</p> <note> <p>For information about valid key and value pairs in <code>PatchFilters</code> for each supported operating system type, see <a href="http://docs.aws.amazon.com/systems-manager/latest/APIReference/API_PatchFilter.html">PatchFilter</a>.</p> </note></p>
     fn update_patch_baseline(
         &self,
-        input: &UpdatePatchBaselineRequest,
+        input: UpdatePatchBaselineRequest,
     ) -> RusotoFuture<UpdatePatchBaselineResult, UpdatePatchBaselineError> {
         let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.UpdatePatchBaseline");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -19506,7 +19509,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 

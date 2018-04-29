@@ -18,18 +18,18 @@ use std::io;
 use futures::future;
 use futures::Future;
 use rusoto_core::reactor::{CredentialsProvider, RequestDispatcher};
-use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::region;
+use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::{ClientInner, RusotoFuture};
 
-use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
+use rusoto_core::request::HttpDispatchError;
 
-use serde_json;
-use rusoto_core::signature::SignedRequest;
-use serde_json::Value as SerdeJsonValue;
-use serde_json::from_str;
 use hyper::StatusCode;
+use rusoto_core::signature::SignedRequest;
+use serde_json;
+use serde_json::from_str;
+use serde_json::Value as SerdeJsonValue;
 /// <p>An address book with attributes.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct AddressBook {
@@ -5223,103 +5223,103 @@ pub trait AlexaForBusiness {
     /// <p>Associates a contact to a given address book.</p>
     fn associate_contact_with_address_book(
         &self,
-        input: &AssociateContactWithAddressBookRequest,
+        input: AssociateContactWithAddressBookRequest,
     ) -> RusotoFuture<AssociateContactWithAddressBookResponse, AssociateContactWithAddressBookError>;
 
     /// <p>Associates a device to a given room. This applies all the settings from the room profile to the device, and all the skills in any skill groups added to that room. This operation requires the device to be online, or a manual sync is required. </p>
     fn associate_device_with_room(
         &self,
-        input: &AssociateDeviceWithRoomRequest,
+        input: AssociateDeviceWithRoomRequest,
     ) -> RusotoFuture<AssociateDeviceWithRoomResponse, AssociateDeviceWithRoomError>;
 
     /// <p>Associates a skill group to a given room. This enables all skills in the associated skill group on all devices in the room.</p>
     fn associate_skill_group_with_room(
         &self,
-        input: &AssociateSkillGroupWithRoomRequest,
+        input: AssociateSkillGroupWithRoomRequest,
     ) -> RusotoFuture<AssociateSkillGroupWithRoomResponse, AssociateSkillGroupWithRoomError>;
 
     /// <p>Creates an address book with the specified details.</p>
     fn create_address_book(
         &self,
-        input: &CreateAddressBookRequest,
+        input: CreateAddressBookRequest,
     ) -> RusotoFuture<CreateAddressBookResponse, CreateAddressBookError>;
 
     /// <p>Creates a contact with the specified details.</p>
     fn create_contact(
         &self,
-        input: &CreateContactRequest,
+        input: CreateContactRequest,
     ) -> RusotoFuture<CreateContactResponse, CreateContactError>;
 
     /// <p>Creates a new room profile with the specified details.</p>
     fn create_profile(
         &self,
-        input: &CreateProfileRequest,
+        input: CreateProfileRequest,
     ) -> RusotoFuture<CreateProfileResponse, CreateProfileError>;
 
     /// <p>Creates a room with the specified details.</p>
     fn create_room(
         &self,
-        input: &CreateRoomRequest,
+        input: CreateRoomRequest,
     ) -> RusotoFuture<CreateRoomResponse, CreateRoomError>;
 
     /// <p>Creates a skill group with a specified name and description.</p>
     fn create_skill_group(
         &self,
-        input: &CreateSkillGroupRequest,
+        input: CreateSkillGroupRequest,
     ) -> RusotoFuture<CreateSkillGroupResponse, CreateSkillGroupError>;
 
     /// <p>Creates a user.</p>
     fn create_user(
         &self,
-        input: &CreateUserRequest,
+        input: CreateUserRequest,
     ) -> RusotoFuture<CreateUserResponse, CreateUserError>;
 
     /// <p>Deletes an address book by the address book ARN.</p>
     fn delete_address_book(
         &self,
-        input: &DeleteAddressBookRequest,
+        input: DeleteAddressBookRequest,
     ) -> RusotoFuture<DeleteAddressBookResponse, DeleteAddressBookError>;
 
     /// <p>Deletes a contact by the contact ARN.</p>
     fn delete_contact(
         &self,
-        input: &DeleteContactRequest,
+        input: DeleteContactRequest,
     ) -> RusotoFuture<DeleteContactResponse, DeleteContactError>;
 
     /// <p>Deletes a room profile by the profile ARN.</p>
     fn delete_profile(
         &self,
-        input: &DeleteProfileRequest,
+        input: DeleteProfileRequest,
     ) -> RusotoFuture<DeleteProfileResponse, DeleteProfileError>;
 
     /// <p>Deletes a room by the room ARN.</p>
     fn delete_room(
         &self,
-        input: &DeleteRoomRequest,
+        input: DeleteRoomRequest,
     ) -> RusotoFuture<DeleteRoomResponse, DeleteRoomError>;
 
     /// <p>Deletes room skill parameter details by room, skill, and parameter key ID.</p>
     fn delete_room_skill_parameter(
         &self,
-        input: &DeleteRoomSkillParameterRequest,
+        input: DeleteRoomSkillParameterRequest,
     ) -> RusotoFuture<DeleteRoomSkillParameterResponse, DeleteRoomSkillParameterError>;
 
     /// <p>Deletes a skill group by skill group ARN.</p>
     fn delete_skill_group(
         &self,
-        input: &DeleteSkillGroupRequest,
+        input: DeleteSkillGroupRequest,
     ) -> RusotoFuture<DeleteSkillGroupResponse, DeleteSkillGroupError>;
 
     /// <p>Deletes a specified user by user ARN and enrollment ARN.</p>
     fn delete_user(
         &self,
-        input: &DeleteUserRequest,
+        input: DeleteUserRequest,
     ) -> RusotoFuture<DeleteUserResponse, DeleteUserError>;
 
     /// <p>Disassociates a contact from a given address book.</p>
     fn disassociate_contact_from_address_book(
         &self,
-        input: &DisassociateContactFromAddressBookRequest,
+        input: DisassociateContactFromAddressBookRequest,
     ) -> RusotoFuture<
         DisassociateContactFromAddressBookResponse,
         DisassociateContactFromAddressBookError,
@@ -5328,181 +5328,181 @@ pub trait AlexaForBusiness {
     /// <p>Disassociates a device from its current room. The device continues to be connected to the Wi-Fi network and is still registered to the account. The device settings and skills are removed from the room.</p>
     fn disassociate_device_from_room(
         &self,
-        input: &DisassociateDeviceFromRoomRequest,
+        input: DisassociateDeviceFromRoomRequest,
     ) -> RusotoFuture<DisassociateDeviceFromRoomResponse, DisassociateDeviceFromRoomError>;
 
     /// <p>Disassociates a skill group from a specified room. This disables all skills in the skill group on all devices in the room.</p>
     fn disassociate_skill_group_from_room(
         &self,
-        input: &DisassociateSkillGroupFromRoomRequest,
+        input: DisassociateSkillGroupFromRoomRequest,
     ) -> RusotoFuture<DisassociateSkillGroupFromRoomResponse, DisassociateSkillGroupFromRoomError>;
 
     /// <p>Gets address the book details by the address book ARN.</p>
     fn get_address_book(
         &self,
-        input: &GetAddressBookRequest,
+        input: GetAddressBookRequest,
     ) -> RusotoFuture<GetAddressBookResponse, GetAddressBookError>;
 
     /// <p>Gets the contact details by the contact ARN.</p>
     fn get_contact(
         &self,
-        input: &GetContactRequest,
+        input: GetContactRequest,
     ) -> RusotoFuture<GetContactResponse, GetContactError>;
 
     /// <p>Gets the details of a device by device ARN.</p>
     fn get_device(
         &self,
-        input: &GetDeviceRequest,
+        input: GetDeviceRequest,
     ) -> RusotoFuture<GetDeviceResponse, GetDeviceError>;
 
     /// <p>Gets the details of a room profile by profile ARN.</p>
     fn get_profile(
         &self,
-        input: &GetProfileRequest,
+        input: GetProfileRequest,
     ) -> RusotoFuture<GetProfileResponse, GetProfileError>;
 
     /// <p>Gets room details by room ARN.</p>
-    fn get_room(&self, input: &GetRoomRequest) -> RusotoFuture<GetRoomResponse, GetRoomError>;
+    fn get_room(&self, input: GetRoomRequest) -> RusotoFuture<GetRoomResponse, GetRoomError>;
 
     /// <p>Gets room skill parameter details by room, skill, and parameter key ARN.</p>
     fn get_room_skill_parameter(
         &self,
-        input: &GetRoomSkillParameterRequest,
+        input: GetRoomSkillParameterRequest,
     ) -> RusotoFuture<GetRoomSkillParameterResponse, GetRoomSkillParameterError>;
 
     /// <p>Gets skill group details by skill group ARN.</p>
     fn get_skill_group(
         &self,
-        input: &GetSkillGroupRequest,
+        input: GetSkillGroupRequest,
     ) -> RusotoFuture<GetSkillGroupResponse, GetSkillGroupError>;
 
     /// <p>Lists all enabled skills in a specific skill group.</p>
     fn list_skills(
         &self,
-        input: &ListSkillsRequest,
+        input: ListSkillsRequest,
     ) -> RusotoFuture<ListSkillsResponse, ListSkillsError>;
 
     /// <p>Lists all tags for a specific resource.</p>
-    fn list_tags(&self, input: &ListTagsRequest) -> RusotoFuture<ListTagsResponse, ListTagsError>;
+    fn list_tags(&self, input: ListTagsRequest) -> RusotoFuture<ListTagsResponse, ListTagsError>;
 
     /// <p>Updates room skill parameter details by room, skill, and parameter key ID. Not all skills have a room skill parameter.</p>
     fn put_room_skill_parameter(
         &self,
-        input: &PutRoomSkillParameterRequest,
+        input: PutRoomSkillParameterRequest,
     ) -> RusotoFuture<PutRoomSkillParameterResponse, PutRoomSkillParameterError>;
 
     /// <p>Determines the details for the room from which a skill request was invoked. This operation is used by skill developers.</p>
     fn resolve_room(
         &self,
-        input: &ResolveRoomRequest,
+        input: ResolveRoomRequest,
     ) -> RusotoFuture<ResolveRoomResponse, ResolveRoomError>;
 
     /// <p>Revokes an invitation and invalidates the enrollment URL.</p>
     fn revoke_invitation(
         &self,
-        input: &RevokeInvitationRequest,
+        input: RevokeInvitationRequest,
     ) -> RusotoFuture<RevokeInvitationResponse, RevokeInvitationError>;
 
     /// <p>Searches address books and lists the ones that meet a set of filter and sort criteria.</p>
     fn search_address_books(
         &self,
-        input: &SearchAddressBooksRequest,
+        input: SearchAddressBooksRequest,
     ) -> RusotoFuture<SearchAddressBooksResponse, SearchAddressBooksError>;
 
     /// <p>Searches contacts and lists the ones that meet a set of filter and sort criteria.</p>
     fn search_contacts(
         &self,
-        input: &SearchContactsRequest,
+        input: SearchContactsRequest,
     ) -> RusotoFuture<SearchContactsResponse, SearchContactsError>;
 
     /// <p>Searches devices and lists the ones that meet a set of filter criteria.</p>
     fn search_devices(
         &self,
-        input: &SearchDevicesRequest,
+        input: SearchDevicesRequest,
     ) -> RusotoFuture<SearchDevicesResponse, SearchDevicesError>;
 
     /// <p>Searches room profiles and lists the ones that meet a set of filter criteria.</p>
     fn search_profiles(
         &self,
-        input: &SearchProfilesRequest,
+        input: SearchProfilesRequest,
     ) -> RusotoFuture<SearchProfilesResponse, SearchProfilesError>;
 
     /// <p>Searches rooms and lists the ones that meet a set of filter and sort criteria.</p>
     fn search_rooms(
         &self,
-        input: &SearchRoomsRequest,
+        input: SearchRoomsRequest,
     ) -> RusotoFuture<SearchRoomsResponse, SearchRoomsError>;
 
     /// <p>Searches skill groups and lists the ones that meet a set of filter and sort criteria.</p>
     fn search_skill_groups(
         &self,
-        input: &SearchSkillGroupsRequest,
+        input: SearchSkillGroupsRequest,
     ) -> RusotoFuture<SearchSkillGroupsResponse, SearchSkillGroupsError>;
 
     /// <p>Searches users and lists the ones that meet a set of filter and sort criteria.</p>
     fn search_users(
         &self,
-        input: &SearchUsersRequest,
+        input: SearchUsersRequest,
     ) -> RusotoFuture<SearchUsersResponse, SearchUsersError>;
 
     /// <p>Sends an enrollment invitation email with a URL to a user. The URL is valid for 72 hours or until you call this operation again, whichever comes first. </p>
     fn send_invitation(
         &self,
-        input: &SendInvitationRequest,
+        input: SendInvitationRequest,
     ) -> RusotoFuture<SendInvitationResponse, SendInvitationError>;
 
     /// <p>Resets a device and its account to the known default settings by clearing all information and settings set by previous users.</p>
     fn start_device_sync(
         &self,
-        input: &StartDeviceSyncRequest,
+        input: StartDeviceSyncRequest,
     ) -> RusotoFuture<StartDeviceSyncResponse, StartDeviceSyncError>;
 
     /// <p>Adds metadata tags to a specified resource.</p>
     fn tag_resource(
         &self,
-        input: &TagResourceRequest,
+        input: TagResourceRequest,
     ) -> RusotoFuture<TagResourceResponse, TagResourceError>;
 
     /// <p>Removes metadata tags from a specified resource.</p>
     fn untag_resource(
         &self,
-        input: &UntagResourceRequest,
+        input: UntagResourceRequest,
     ) -> RusotoFuture<UntagResourceResponse, UntagResourceError>;
 
     /// <p>Updates address book details by the address book ARN.</p>
     fn update_address_book(
         &self,
-        input: &UpdateAddressBookRequest,
+        input: UpdateAddressBookRequest,
     ) -> RusotoFuture<UpdateAddressBookResponse, UpdateAddressBookError>;
 
     /// <p>Updates the contact details by the contact ARN.</p>
     fn update_contact(
         &self,
-        input: &UpdateContactRequest,
+        input: UpdateContactRequest,
     ) -> RusotoFuture<UpdateContactResponse, UpdateContactError>;
 
     /// <p>Updates the device name by device ARN.</p>
     fn update_device(
         &self,
-        input: &UpdateDeviceRequest,
+        input: UpdateDeviceRequest,
     ) -> RusotoFuture<UpdateDeviceResponse, UpdateDeviceError>;
 
     /// <p>Updates an existing room profile by room profile ARN.</p>
     fn update_profile(
         &self,
-        input: &UpdateProfileRequest,
+        input: UpdateProfileRequest,
     ) -> RusotoFuture<UpdateProfileResponse, UpdateProfileError>;
 
     /// <p>Updates room details by room ARN.</p>
     fn update_room(
         &self,
-        input: &UpdateRoomRequest,
+        input: UpdateRoomRequest,
     ) -> RusotoFuture<UpdateRoomResponse, UpdateRoomError>;
 
     /// <p>Updates skill group details by skill group ARN.</p>
     fn update_skill_group(
         &self,
-        input: &UpdateSkillGroupRequest,
+        input: UpdateSkillGroupRequest,
     ) -> RusotoFuture<UpdateSkillGroupResponse, UpdateSkillGroupError>;
 }
 /// A client for the Alexa For Business API.
@@ -5551,7 +5551,7 @@ where
     /// <p>Associates a contact to a given address book.</p>
     fn associate_contact_with_address_book(
         &self,
-        input: &AssociateContactWithAddressBookRequest,
+        input: AssociateContactWithAddressBookRequest,
     ) -> RusotoFuture<AssociateContactWithAddressBookResponse, AssociateContactWithAddressBookError>
     {
         let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
@@ -5561,7 +5561,7 @@ where
             "x-amz-target",
             "AlexaForBusiness.AssociateContactWithAddressBook",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -5569,7 +5569,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -5592,13 +5592,13 @@ where
     /// <p>Associates a device to a given room. This applies all the settings from the room profile to the device, and all the skills in any skill groups added to that room. This operation requires the device to be online, or a manual sync is required. </p>
     fn associate_device_with_room(
         &self,
-        input: &AssociateDeviceWithRoomRequest,
+        input: AssociateDeviceWithRoomRequest,
     ) -> RusotoFuture<AssociateDeviceWithRoomResponse, AssociateDeviceWithRoomError> {
         let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AlexaForBusiness.AssociateDeviceWithRoom");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -5606,7 +5606,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -5629,7 +5629,7 @@ where
     /// <p>Associates a skill group to a given room. This enables all skills in the associated skill group on all devices in the room.</p>
     fn associate_skill_group_with_room(
         &self,
-        input: &AssociateSkillGroupWithRoomRequest,
+        input: AssociateSkillGroupWithRoomRequest,
     ) -> RusotoFuture<AssociateSkillGroupWithRoomResponse, AssociateSkillGroupWithRoomError> {
         let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
 
@@ -5638,7 +5638,7 @@ where
             "x-amz-target",
             "AlexaForBusiness.AssociateSkillGroupWithRoom",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -5646,7 +5646,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -5669,13 +5669,13 @@ where
     /// <p>Creates an address book with the specified details.</p>
     fn create_address_book(
         &self,
-        input: &CreateAddressBookRequest,
+        input: CreateAddressBookRequest,
     ) -> RusotoFuture<CreateAddressBookResponse, CreateAddressBookError> {
         let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AlexaForBusiness.CreateAddressBook");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -5683,7 +5683,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -5706,13 +5706,13 @@ where
     /// <p>Creates a contact with the specified details.</p>
     fn create_contact(
         &self,
-        input: &CreateContactRequest,
+        input: CreateContactRequest,
     ) -> RusotoFuture<CreateContactResponse, CreateContactError> {
         let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AlexaForBusiness.CreateContact");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -5720,7 +5720,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -5743,13 +5743,13 @@ where
     /// <p>Creates a new room profile with the specified details.</p>
     fn create_profile(
         &self,
-        input: &CreateProfileRequest,
+        input: CreateProfileRequest,
     ) -> RusotoFuture<CreateProfileResponse, CreateProfileError> {
         let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AlexaForBusiness.CreateProfile");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -5757,7 +5757,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -5780,13 +5780,13 @@ where
     /// <p>Creates a room with the specified details.</p>
     fn create_room(
         &self,
-        input: &CreateRoomRequest,
+        input: CreateRoomRequest,
     ) -> RusotoFuture<CreateRoomResponse, CreateRoomError> {
         let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AlexaForBusiness.CreateRoom");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -5794,7 +5794,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -5817,13 +5817,13 @@ where
     /// <p>Creates a skill group with a specified name and description.</p>
     fn create_skill_group(
         &self,
-        input: &CreateSkillGroupRequest,
+        input: CreateSkillGroupRequest,
     ) -> RusotoFuture<CreateSkillGroupResponse, CreateSkillGroupError> {
         let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AlexaForBusiness.CreateSkillGroup");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -5831,7 +5831,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -5854,13 +5854,13 @@ where
     /// <p>Creates a user.</p>
     fn create_user(
         &self,
-        input: &CreateUserRequest,
+        input: CreateUserRequest,
     ) -> RusotoFuture<CreateUserResponse, CreateUserError> {
         let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AlexaForBusiness.CreateUser");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -5868,7 +5868,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -5891,13 +5891,13 @@ where
     /// <p>Deletes an address book by the address book ARN.</p>
     fn delete_address_book(
         &self,
-        input: &DeleteAddressBookRequest,
+        input: DeleteAddressBookRequest,
     ) -> RusotoFuture<DeleteAddressBookResponse, DeleteAddressBookError> {
         let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AlexaForBusiness.DeleteAddressBook");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -5905,7 +5905,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -5928,13 +5928,13 @@ where
     /// <p>Deletes a contact by the contact ARN.</p>
     fn delete_contact(
         &self,
-        input: &DeleteContactRequest,
+        input: DeleteContactRequest,
     ) -> RusotoFuture<DeleteContactResponse, DeleteContactError> {
         let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AlexaForBusiness.DeleteContact");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -5942,7 +5942,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -5965,13 +5965,13 @@ where
     /// <p>Deletes a room profile by the profile ARN.</p>
     fn delete_profile(
         &self,
-        input: &DeleteProfileRequest,
+        input: DeleteProfileRequest,
     ) -> RusotoFuture<DeleteProfileResponse, DeleteProfileError> {
         let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AlexaForBusiness.DeleteProfile");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -5979,7 +5979,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -6002,13 +6002,13 @@ where
     /// <p>Deletes a room by the room ARN.</p>
     fn delete_room(
         &self,
-        input: &DeleteRoomRequest,
+        input: DeleteRoomRequest,
     ) -> RusotoFuture<DeleteRoomResponse, DeleteRoomError> {
         let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AlexaForBusiness.DeleteRoom");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -6016,7 +6016,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -6039,13 +6039,13 @@ where
     /// <p>Deletes room skill parameter details by room, skill, and parameter key ID.</p>
     fn delete_room_skill_parameter(
         &self,
-        input: &DeleteRoomSkillParameterRequest,
+        input: DeleteRoomSkillParameterRequest,
     ) -> RusotoFuture<DeleteRoomSkillParameterResponse, DeleteRoomSkillParameterError> {
         let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AlexaForBusiness.DeleteRoomSkillParameter");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -6053,7 +6053,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -6076,13 +6076,13 @@ where
     /// <p>Deletes a skill group by skill group ARN.</p>
     fn delete_skill_group(
         &self,
-        input: &DeleteSkillGroupRequest,
+        input: DeleteSkillGroupRequest,
     ) -> RusotoFuture<DeleteSkillGroupResponse, DeleteSkillGroupError> {
         let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AlexaForBusiness.DeleteSkillGroup");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -6090,7 +6090,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -6113,13 +6113,13 @@ where
     /// <p>Deletes a specified user by user ARN and enrollment ARN.</p>
     fn delete_user(
         &self,
-        input: &DeleteUserRequest,
+        input: DeleteUserRequest,
     ) -> RusotoFuture<DeleteUserResponse, DeleteUserError> {
         let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AlexaForBusiness.DeleteUser");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -6127,7 +6127,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -6150,7 +6150,7 @@ where
     /// <p>Disassociates a contact from a given address book.</p>
     fn disassociate_contact_from_address_book(
         &self,
-        input: &DisassociateContactFromAddressBookRequest,
+        input: DisassociateContactFromAddressBookRequest,
     ) -> RusotoFuture<
         DisassociateContactFromAddressBookResponse,
         DisassociateContactFromAddressBookError,
@@ -6162,7 +6162,7 @@ where
             "x-amz-target",
             "AlexaForBusiness.DisassociateContactFromAddressBook",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -6170,7 +6170,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -6193,7 +6193,7 @@ where
     /// <p>Disassociates a device from its current room. The device continues to be connected to the Wi-Fi network and is still registered to the account. The device settings and skills are removed from the room.</p>
     fn disassociate_device_from_room(
         &self,
-        input: &DisassociateDeviceFromRoomRequest,
+        input: DisassociateDeviceFromRoomRequest,
     ) -> RusotoFuture<DisassociateDeviceFromRoomResponse, DisassociateDeviceFromRoomError> {
         let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
 
@@ -6202,7 +6202,7 @@ where
             "x-amz-target",
             "AlexaForBusiness.DisassociateDeviceFromRoom",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -6210,7 +6210,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -6233,7 +6233,7 @@ where
     /// <p>Disassociates a skill group from a specified room. This disables all skills in the skill group on all devices in the room.</p>
     fn disassociate_skill_group_from_room(
         &self,
-        input: &DisassociateSkillGroupFromRoomRequest,
+        input: DisassociateSkillGroupFromRoomRequest,
     ) -> RusotoFuture<DisassociateSkillGroupFromRoomResponse, DisassociateSkillGroupFromRoomError>
     {
         let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
@@ -6243,7 +6243,7 @@ where
             "x-amz-target",
             "AlexaForBusiness.DisassociateSkillGroupFromRoom",
         );
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -6251,7 +6251,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -6274,13 +6274,13 @@ where
     /// <p>Gets address the book details by the address book ARN.</p>
     fn get_address_book(
         &self,
-        input: &GetAddressBookRequest,
+        input: GetAddressBookRequest,
     ) -> RusotoFuture<GetAddressBookResponse, GetAddressBookError> {
         let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AlexaForBusiness.GetAddressBook");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -6288,7 +6288,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -6311,13 +6311,13 @@ where
     /// <p>Gets the contact details by the contact ARN.</p>
     fn get_contact(
         &self,
-        input: &GetContactRequest,
+        input: GetContactRequest,
     ) -> RusotoFuture<GetContactResponse, GetContactError> {
         let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AlexaForBusiness.GetContact");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -6325,7 +6325,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -6348,13 +6348,13 @@ where
     /// <p>Gets the details of a device by device ARN.</p>
     fn get_device(
         &self,
-        input: &GetDeviceRequest,
+        input: GetDeviceRequest,
     ) -> RusotoFuture<GetDeviceResponse, GetDeviceError> {
         let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AlexaForBusiness.GetDevice");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -6362,7 +6362,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -6385,13 +6385,13 @@ where
     /// <p>Gets the details of a room profile by profile ARN.</p>
     fn get_profile(
         &self,
-        input: &GetProfileRequest,
+        input: GetProfileRequest,
     ) -> RusotoFuture<GetProfileResponse, GetProfileError> {
         let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AlexaForBusiness.GetProfile");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -6399,7 +6399,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -6420,12 +6420,12 @@ where
     }
 
     /// <p>Gets room details by room ARN.</p>
-    fn get_room(&self, input: &GetRoomRequest) -> RusotoFuture<GetRoomResponse, GetRoomError> {
+    fn get_room(&self, input: GetRoomRequest) -> RusotoFuture<GetRoomResponse, GetRoomError> {
         let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AlexaForBusiness.GetRoom");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -6433,7 +6433,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -6456,13 +6456,13 @@ where
     /// <p>Gets room skill parameter details by room, skill, and parameter key ARN.</p>
     fn get_room_skill_parameter(
         &self,
-        input: &GetRoomSkillParameterRequest,
+        input: GetRoomSkillParameterRequest,
     ) -> RusotoFuture<GetRoomSkillParameterResponse, GetRoomSkillParameterError> {
         let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AlexaForBusiness.GetRoomSkillParameter");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -6470,7 +6470,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -6493,13 +6493,13 @@ where
     /// <p>Gets skill group details by skill group ARN.</p>
     fn get_skill_group(
         &self,
-        input: &GetSkillGroupRequest,
+        input: GetSkillGroupRequest,
     ) -> RusotoFuture<GetSkillGroupResponse, GetSkillGroupError> {
         let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AlexaForBusiness.GetSkillGroup");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -6507,7 +6507,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -6530,13 +6530,13 @@ where
     /// <p>Lists all enabled skills in a specific skill group.</p>
     fn list_skills(
         &self,
-        input: &ListSkillsRequest,
+        input: ListSkillsRequest,
     ) -> RusotoFuture<ListSkillsResponse, ListSkillsError> {
         let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AlexaForBusiness.ListSkills");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -6544,7 +6544,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -6565,12 +6565,12 @@ where
     }
 
     /// <p>Lists all tags for a specific resource.</p>
-    fn list_tags(&self, input: &ListTagsRequest) -> RusotoFuture<ListTagsResponse, ListTagsError> {
+    fn list_tags(&self, input: ListTagsRequest) -> RusotoFuture<ListTagsResponse, ListTagsError> {
         let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AlexaForBusiness.ListTags");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -6578,7 +6578,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -6601,13 +6601,13 @@ where
     /// <p>Updates room skill parameter details by room, skill, and parameter key ID. Not all skills have a room skill parameter.</p>
     fn put_room_skill_parameter(
         &self,
-        input: &PutRoomSkillParameterRequest,
+        input: PutRoomSkillParameterRequest,
     ) -> RusotoFuture<PutRoomSkillParameterResponse, PutRoomSkillParameterError> {
         let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AlexaForBusiness.PutRoomSkillParameter");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -6615,7 +6615,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -6638,13 +6638,13 @@ where
     /// <p>Determines the details for the room from which a skill request was invoked. This operation is used by skill developers.</p>
     fn resolve_room(
         &self,
-        input: &ResolveRoomRequest,
+        input: ResolveRoomRequest,
     ) -> RusotoFuture<ResolveRoomResponse, ResolveRoomError> {
         let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AlexaForBusiness.ResolveRoom");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -6652,7 +6652,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -6675,13 +6675,13 @@ where
     /// <p>Revokes an invitation and invalidates the enrollment URL.</p>
     fn revoke_invitation(
         &self,
-        input: &RevokeInvitationRequest,
+        input: RevokeInvitationRequest,
     ) -> RusotoFuture<RevokeInvitationResponse, RevokeInvitationError> {
         let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AlexaForBusiness.RevokeInvitation");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -6689,7 +6689,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -6712,13 +6712,13 @@ where
     /// <p>Searches address books and lists the ones that meet a set of filter and sort criteria.</p>
     fn search_address_books(
         &self,
-        input: &SearchAddressBooksRequest,
+        input: SearchAddressBooksRequest,
     ) -> RusotoFuture<SearchAddressBooksResponse, SearchAddressBooksError> {
         let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AlexaForBusiness.SearchAddressBooks");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -6726,7 +6726,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -6749,13 +6749,13 @@ where
     /// <p>Searches contacts and lists the ones that meet a set of filter and sort criteria.</p>
     fn search_contacts(
         &self,
-        input: &SearchContactsRequest,
+        input: SearchContactsRequest,
     ) -> RusotoFuture<SearchContactsResponse, SearchContactsError> {
         let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AlexaForBusiness.SearchContacts");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -6763,7 +6763,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -6786,13 +6786,13 @@ where
     /// <p>Searches devices and lists the ones that meet a set of filter criteria.</p>
     fn search_devices(
         &self,
-        input: &SearchDevicesRequest,
+        input: SearchDevicesRequest,
     ) -> RusotoFuture<SearchDevicesResponse, SearchDevicesError> {
         let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AlexaForBusiness.SearchDevices");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -6800,7 +6800,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -6823,13 +6823,13 @@ where
     /// <p>Searches room profiles and lists the ones that meet a set of filter criteria.</p>
     fn search_profiles(
         &self,
-        input: &SearchProfilesRequest,
+        input: SearchProfilesRequest,
     ) -> RusotoFuture<SearchProfilesResponse, SearchProfilesError> {
         let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AlexaForBusiness.SearchProfiles");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -6837,7 +6837,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -6860,13 +6860,13 @@ where
     /// <p>Searches rooms and lists the ones that meet a set of filter and sort criteria.</p>
     fn search_rooms(
         &self,
-        input: &SearchRoomsRequest,
+        input: SearchRoomsRequest,
     ) -> RusotoFuture<SearchRoomsResponse, SearchRoomsError> {
         let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AlexaForBusiness.SearchRooms");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -6874,7 +6874,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -6897,13 +6897,13 @@ where
     /// <p>Searches skill groups and lists the ones that meet a set of filter and sort criteria.</p>
     fn search_skill_groups(
         &self,
-        input: &SearchSkillGroupsRequest,
+        input: SearchSkillGroupsRequest,
     ) -> RusotoFuture<SearchSkillGroupsResponse, SearchSkillGroupsError> {
         let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AlexaForBusiness.SearchSkillGroups");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -6911,7 +6911,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -6934,13 +6934,13 @@ where
     /// <p>Searches users and lists the ones that meet a set of filter and sort criteria.</p>
     fn search_users(
         &self,
-        input: &SearchUsersRequest,
+        input: SearchUsersRequest,
     ) -> RusotoFuture<SearchUsersResponse, SearchUsersError> {
         let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AlexaForBusiness.SearchUsers");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -6948,7 +6948,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -6971,13 +6971,13 @@ where
     /// <p>Sends an enrollment invitation email with a URL to a user. The URL is valid for 72 hours or until you call this operation again, whichever comes first. </p>
     fn send_invitation(
         &self,
-        input: &SendInvitationRequest,
+        input: SendInvitationRequest,
     ) -> RusotoFuture<SendInvitationResponse, SendInvitationError> {
         let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AlexaForBusiness.SendInvitation");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -6985,7 +6985,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -7008,13 +7008,13 @@ where
     /// <p>Resets a device and its account to the known default settings by clearing all information and settings set by previous users.</p>
     fn start_device_sync(
         &self,
-        input: &StartDeviceSyncRequest,
+        input: StartDeviceSyncRequest,
     ) -> RusotoFuture<StartDeviceSyncResponse, StartDeviceSyncError> {
         let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AlexaForBusiness.StartDeviceSync");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -7022,7 +7022,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -7045,13 +7045,13 @@ where
     /// <p>Adds metadata tags to a specified resource.</p>
     fn tag_resource(
         &self,
-        input: &TagResourceRequest,
+        input: TagResourceRequest,
     ) -> RusotoFuture<TagResourceResponse, TagResourceError> {
         let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AlexaForBusiness.TagResource");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -7059,7 +7059,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -7082,13 +7082,13 @@ where
     /// <p>Removes metadata tags from a specified resource.</p>
     fn untag_resource(
         &self,
-        input: &UntagResourceRequest,
+        input: UntagResourceRequest,
     ) -> RusotoFuture<UntagResourceResponse, UntagResourceError> {
         let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AlexaForBusiness.UntagResource");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -7096,7 +7096,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -7119,13 +7119,13 @@ where
     /// <p>Updates address book details by the address book ARN.</p>
     fn update_address_book(
         &self,
-        input: &UpdateAddressBookRequest,
+        input: UpdateAddressBookRequest,
     ) -> RusotoFuture<UpdateAddressBookResponse, UpdateAddressBookError> {
         let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AlexaForBusiness.UpdateAddressBook");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -7133,7 +7133,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -7156,13 +7156,13 @@ where
     /// <p>Updates the contact details by the contact ARN.</p>
     fn update_contact(
         &self,
-        input: &UpdateContactRequest,
+        input: UpdateContactRequest,
     ) -> RusotoFuture<UpdateContactResponse, UpdateContactError> {
         let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AlexaForBusiness.UpdateContact");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -7170,7 +7170,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -7193,13 +7193,13 @@ where
     /// <p>Updates the device name by device ARN.</p>
     fn update_device(
         &self,
-        input: &UpdateDeviceRequest,
+        input: UpdateDeviceRequest,
     ) -> RusotoFuture<UpdateDeviceResponse, UpdateDeviceError> {
         let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AlexaForBusiness.UpdateDevice");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -7207,7 +7207,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -7230,13 +7230,13 @@ where
     /// <p>Updates an existing room profile by room profile ARN.</p>
     fn update_profile(
         &self,
-        input: &UpdateProfileRequest,
+        input: UpdateProfileRequest,
     ) -> RusotoFuture<UpdateProfileResponse, UpdateProfileError> {
         let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AlexaForBusiness.UpdateProfile");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -7244,7 +7244,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -7267,13 +7267,13 @@ where
     /// <p>Updates room details by room ARN.</p>
     fn update_room(
         &self,
-        input: &UpdateRoomRequest,
+        input: UpdateRoomRequest,
     ) -> RusotoFuture<UpdateRoomResponse, UpdateRoomError> {
         let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AlexaForBusiness.UpdateRoom");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -7281,7 +7281,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 
@@ -7304,13 +7304,13 @@ where
     /// <p>Updates skill group details by skill group ARN.</p>
     fn update_skill_group(
         &self,
-        input: &UpdateSkillGroupRequest,
+        input: UpdateSkillGroupRequest,
     ) -> RusotoFuture<UpdateSkillGroupResponse, UpdateSkillGroupError> {
         let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AlexaForBusiness.UpdateSkillGroup");
-        let encoded = serde_json::to_string(input).unwrap();
+        let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
@@ -7318,7 +7318,7 @@ where
                 future::Either::A(response.buffer().from_err().map(|response| {
                     let mut body = response.body;
 
-                    if body == b"null" {
+                    if body.is_empty() || body == b"null" {
                         body = b"{}".to_vec();
                     }
 

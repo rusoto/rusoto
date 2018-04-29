@@ -13,7 +13,7 @@ fn should_parse_error_type() {
     // limit of -1 should generate a validation error
     let request = ListTablesInput { limit: Some(-1), ..Default::default() };
 
-    let response = client.list_tables(&request).sync();
+    let response = client.list_tables(request).sync();
     match response {
         Err(ListTablesError::Validation(msg)) => {
             // local dynamodb gives a different error, this matches both:
@@ -28,5 +28,5 @@ fn should_list_tables() {
     let client = DynamoDbClient::simple(Region::UsEast1);
     let request = ListTablesInput::default();
 
-    client.list_tables(&request).sync().unwrap();
+    client.list_tables(request).sync().unwrap();
 }

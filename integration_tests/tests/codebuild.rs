@@ -11,6 +11,6 @@ fn should_list_projects() {
     let client = CodeBuildClient::simple(Region::UsEast1);
     let request = ListProjectsInput::default();
 
-    let result = client.list_projects(&request).sync().unwrap();
+    let result = client.list_projects(request).sync().unwrap();
 	println!("{:#?}", result);
 }
