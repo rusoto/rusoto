@@ -2,12 +2,12 @@
 
 Rusoto has the ability to source AWS access credentials in a few different ways:
 
-1. Environment variables via `rusoto::EnvironmentProvider` (`AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY`)
-2. AWS credentials file via `rusoto::ProfileProvider`
-3. IAM ECS container profile via `rusoto::ContainerProvider`
-4. IAM EC2 instance profile via `rusoto::InstanceMetadataProvider`
+1. Environment variables via `rusoto_core::EnvironmentProvider` (`AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY`)
+2. AWS credentials file via `rusoto_core::ProfileProvider`
+3. IAM ECS container profile via `rusoto_core::ContainerProvider`
+4. IAM EC2 instance profile via `rusoto_core::InstanceMetadataProvider`
 
-There is also `rusoto::ChainProvider`, which is a convenience for attempting to source access credentials using the methods above in order.
+There is also `rusoto_core::ChainProvider`, which is a convenience for attempting to source access credentials using the methods above in order.
 If credentials cannot be obtained through one method, it falls back to the next.
 If all possibilites are exhausted, an error will be returned.
 
@@ -16,7 +16,7 @@ If not explicitly provided as arguments, the values for these two parameters are
 * **location of credentials file:** if set and not empty the value of the environment variable ```AWS_SHARED_CREDENTIALS_FILE``` otherwise ```"~/.aws/credentials"```.
 * **profile name:** if set and not empty the value of the environment variable ```AWS_PROFILE``` otherwise ```"default"```
 
-It's also possible to implement your own credentials sourcing mechanism by creating a type that implements `rusoto::ProvideAwsCredentials`.
+It's also possible to implement your own credentials sourcing mechanism by creating a type that implements `rusoto_core::ProvideAwsCredentials`.
 
 #### sts:AssumeRole
 
