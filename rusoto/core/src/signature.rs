@@ -22,7 +22,7 @@ use hex;
 use md5;
 use base64;
 
-use param::Params;
+use param::{Params, ServiceParams};
 use region::Region;
 use credential::AwsCredentials;
 
@@ -227,6 +227,97 @@ impl SignedRequest {
     /// Sets paramaters with a given variable of `Params` type
     pub fn set_params(&mut self, params: Params) {
         self.params = params;
+    }
+
+
+    /// http://docs.aws.amazon.com/AmazonS3/latest/API/sigv4-query-string-auth.html
+    pub fn generate_presigned_url(&mut self, creds: &AwsCredentials) -> String {
+        debug!("Presigning request URL");
+
+        self.sign(creds);
+        let hostname = match self.hostname {
+            Some(ref h) => h.to_string(),
+            None => build_hostname(&self.service, &self.region),
+        };
+
+        let current_time = now_utc();
+        let current_time_fmted = current_time.strftime("%Y%m%dT%H%M%SZ").unwrap();
+        let current_time_fmted = format!("{}", &current_time_fmted);
+        let current_date = current_time.strftime("%Y%m%d").unwrap();
+
+        self.remove_header("X-Amz-Content-Sha256");
+
+        self.remove_header("X-Amz-Date");
+        
+        self.remove_header("Content-Type");
+
+        if let Some(ref token) = *creds.token() {
+            self.remove_header("x-amz-security-token");
+            self.params.put("x-amz-security-token", encode_uri_strict(token));
+        }
+
+        self.remove_header("X-Amz-Algorithm");
+        self.params.put("X-Amz-Algorithm", "AWS4-HMAC-SHA256");
+
+        self.remove_header("X-Amz-Credential");
+        self.params.put("X-Amz-Credential", format!("{}/{}/{}/{}/aws4_request", &creds.aws_access_key_id(), &current_date, self.region.name(), self.service));
+
+        self.remove_header("X-Amz-Expires");
+        let expiration_time = match self.params.get("response-expires") {
+            Some(&Some(ref value)) => value.to_string(),
+            _ => "3600".to_string(),
+        };
+        self.params.put("X-Amz-Expires", expiration_time);
+
+        self.canonical_uri = canonical_uri(&self.path);
+        let canonical_headers = canonical_headers(&self.headers);
+
+        let signed_headers = signed_headers(&self.headers);
+        self.params.put("X-Amz-SignedHeaders", &signed_headers);
+
+        self.params.put("X-Amz-Date", current_time_fmted);
+
+        self.canonical_query_string = build_canonical_query_string(&self.params);
+        
+        debug!("canonical_uri: {:?}", self.canonical_uri);
+        debug!("canonical_headers: {:?}", canonical_headers);
+        debug!("signed_headers: {:?}", signed_headers);
+        debug!("canonical_query_string: {:?}", self.canonical_query_string);
+
+        let canonical_request = format!("{}\n{}\n{}\n{}\n{}\n{}",
+                                        &self.method,
+                                        self.canonical_uri,
+                                        self.canonical_query_string,
+                                        canonical_headers,
+                                        &signed_headers,
+                                        "UNSIGNED-PAYLOAD");
+
+        debug!("canonical_request: {:?}", canonical_request);
+
+        // use the hashed canonical request to build the string to sign
+        let hashed_canonical_request = to_hexdigest(&canonical_request);
+
+        debug!("hashed_canonical_request: {:?}", hashed_canonical_request);
+
+        let scope = format!("{}/{}/{}/aws4_request",
+                            current_date,
+                            self.region.name(),
+                            &self.service);
+
+        debug!("scope: {}", scope);
+
+        let string_to_sign = string_to_sign(current_time, &hashed_canonical_request, &scope);
+
+        debug!("string_to_sign: {}", string_to_sign);
+
+        let signature = sign_string(&string_to_sign,
+                                    creds.aws_secret_access_key(),
+                                    current_time,
+                                    &self.region.name(),
+                                    &self.service);
+        self.params.put("X-Amz-Signature", signature);
+
+        format!("{}://{}{}?{}", self.scheme(), hostname, self.canonical_uri, build_canonical_query_string(&self.params))
     }
 
     /// Signs the request using Amazon Signature version 4 to verify identity.
