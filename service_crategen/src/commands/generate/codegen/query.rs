@@ -36,7 +36,7 @@ impl GenerateProtocol for QueryGenerator {
                     params.put(\"Action\", \"{operation_name}\");
                     params.put(\"Version\", \"{api_version}\");
                     {serialize_input}
-                    request.set_params(params);
+                    {set_input_params}
 
                     let future = self.inner.sign_and_dispatch(request, |response| {{
                         if response.status != StatusCode::Ok {{
@@ -61,7 +61,8 @@ impl GenerateProtocol for QueryGenerator {
                      method_signature = generate_method_signature(operation_name, operation, service),
                      operation_name = &operation.name,
                      request_uri = &operation.http.request_uri,
-                     serialize_input = generate_method_input_serialization(operation))?;
+                     serialize_input = generate_method_input_serialization(operation),
+                     set_input_params = generate_set_input_params(operation))?;
         }
         Ok(())
     }
@@ -77,6 +78,7 @@ impl GenerateProtocol for QueryGenerator {
             use rusoto_core::xmlutil::{{Next, Peek, XmlParseError, XmlResponse}};
             use rusoto_core::xmlutil::{{characters, end_element, find_start_element, start_element, skip_tree, peek_at_name}};
             use rusoto_core::xmlerror::*;
+            use serde_urlencoded;
             use hyper::StatusCode;
 
             enum DeserializerNext {{
@@ -128,6 +130,15 @@ pub fn generate_method_input_serialization(operation: &Operation) -> String {
         )
     } else {
         String::new()
+    }
+}
+
+fn generate_set_input_params(operation: &Operation) -> String {
+    if operation.http.method == "GET" {
+        "request.set_params(params);".to_owned()
+    } else {
+        "request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap().into_bytes()));
+        request.set_content_type(\"application/x-www-form-urlencoded\".to_owned());".to_owned()
     }
 }
 
