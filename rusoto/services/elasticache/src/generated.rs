@@ -33,6 +33,7 @@ use rusoto_core::xmlutil::{
     characters, end_element, find_start_element, peek_at_name, skip_tree, start_element,
 };
 use rusoto_core::xmlutil::{Next, Peek, XmlParseError, XmlResponse};
+use serde_urlencoded;
 use std::str::FromStr;
 use xml::reader::ParserConfig;
 use xml::reader::XmlEvent;
@@ -12877,7 +12878,10 @@ where
         params.put("Action", "AddTagsToResource");
         params.put("Version", "2015-02-02");
         AddTagsToResourceMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -12931,7 +12935,10 @@ where
         params.put("Action", "AuthorizeCacheSecurityGroupIngress");
         params.put("Version", "2015-02-02");
         AuthorizeCacheSecurityGroupIngressMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -12984,7 +12991,10 @@ where
         params.put("Action", "CopySnapshot");
         params.put("Version", "2015-02-02");
         CopySnapshotMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -13035,7 +13045,10 @@ where
         params.put("Action", "CreateCacheCluster");
         params.put("Version", "2015-02-02");
         CreateCacheClusterMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -13086,7 +13099,10 @@ where
         params.put("Action", "CreateCacheParameterGroup");
         params.put("Version", "2015-02-02");
         CreateCacheParameterGroupMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -13137,7 +13153,10 @@ where
         params.put("Action", "CreateCacheSecurityGroup");
         params.put("Version", "2015-02-02");
         CreateCacheSecurityGroupMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -13188,7 +13207,10 @@ where
         params.put("Action", "CreateCacheSubnetGroup");
         params.put("Version", "2015-02-02");
         CreateCacheSubnetGroupMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -13239,7 +13261,10 @@ where
         params.put("Action", "CreateReplicationGroup");
         params.put("Version", "2015-02-02");
         CreateReplicationGroupMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -13290,7 +13315,10 @@ where
         params.put("Action", "CreateSnapshot");
         params.put("Version", "2015-02-02");
         CreateSnapshotMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -13341,7 +13369,10 @@ where
         params.put("Action", "DeleteCacheCluster");
         params.put("Version", "2015-02-02");
         DeleteCacheClusterMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -13392,7 +13423,10 @@ where
         params.put("Action", "DeleteCacheParameterGroup");
         params.put("Version", "2015-02-02");
         DeleteCacheParameterGroupMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -13420,7 +13454,10 @@ where
         params.put("Action", "DeleteCacheSecurityGroup");
         params.put("Version", "2015-02-02");
         DeleteCacheSecurityGroupMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -13448,7 +13485,10 @@ where
         params.put("Action", "DeleteCacheSubnetGroup");
         params.put("Version", "2015-02-02");
         DeleteCacheSubnetGroupMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -13476,7 +13516,10 @@ where
         params.put("Action", "DeleteReplicationGroup");
         params.put("Version", "2015-02-02");
         DeleteReplicationGroupMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -13527,7 +13570,10 @@ where
         params.put("Action", "DeleteSnapshot");
         params.put("Version", "2015-02-02");
         DeleteSnapshotMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -13578,7 +13624,10 @@ where
         params.put("Action", "DescribeCacheClusters");
         params.put("Version", "2015-02-02");
         DescribeCacheClustersMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -13629,7 +13678,10 @@ where
         params.put("Action", "DescribeCacheEngineVersions");
         params.put("Version", "2015-02-02");
         DescribeCacheEngineVersionsMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -13680,7 +13732,10 @@ where
         params.put("Action", "DescribeCacheParameterGroups");
         params.put("Version", "2015-02-02");
         DescribeCacheParameterGroupsMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -13731,7 +13786,10 @@ where
         params.put("Action", "DescribeCacheParameters");
         params.put("Version", "2015-02-02");
         DescribeCacheParametersMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -13782,7 +13840,10 @@ where
         params.put("Action", "DescribeCacheSecurityGroups");
         params.put("Version", "2015-02-02");
         DescribeCacheSecurityGroupsMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -13833,7 +13894,10 @@ where
         params.put("Action", "DescribeCacheSubnetGroups");
         params.put("Version", "2015-02-02");
         DescribeCacheSubnetGroupsMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -13885,7 +13949,10 @@ where
         params.put("Action", "DescribeEngineDefaultParameters");
         params.put("Version", "2015-02-02");
         DescribeEngineDefaultParametersMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -13938,7 +14005,10 @@ where
         params.put("Action", "DescribeEvents");
         params.put("Version", "2015-02-02");
         DescribeEventsMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -13989,7 +14059,10 @@ where
         params.put("Action", "DescribeReplicationGroups");
         params.put("Version", "2015-02-02");
         DescribeReplicationGroupsMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -14040,7 +14113,10 @@ where
         params.put("Action", "DescribeReservedCacheNodes");
         params.put("Version", "2015-02-02");
         DescribeReservedCacheNodesMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -14092,7 +14168,10 @@ where
         params.put("Action", "DescribeReservedCacheNodesOfferings");
         params.put("Version", "2015-02-02");
         DescribeReservedCacheNodesOfferingsMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -14143,7 +14222,10 @@ where
         params.put("Action", "DescribeSnapshots");
         params.put("Version", "2015-02-02");
         DescribeSnapshotsMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -14195,7 +14277,10 @@ where
         params.put("Action", "ListAllowedNodeTypeModifications");
         params.put("Version", "2015-02-02");
         ListAllowedNodeTypeModificationsMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -14248,7 +14333,10 @@ where
         params.put("Action", "ListTagsForResource");
         params.put("Version", "2015-02-02");
         ListTagsForResourceMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -14299,7 +14387,10 @@ where
         params.put("Action", "ModifyCacheCluster");
         params.put("Version", "2015-02-02");
         ModifyCacheClusterMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -14350,7 +14441,10 @@ where
         params.put("Action", "ModifyCacheParameterGroup");
         params.put("Version", "2015-02-02");
         ModifyCacheParameterGroupMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -14401,7 +14495,10 @@ where
         params.put("Action", "ModifyCacheSubnetGroup");
         params.put("Version", "2015-02-02");
         ModifyCacheSubnetGroupMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -14452,7 +14549,10 @@ where
         params.put("Action", "ModifyReplicationGroup");
         params.put("Version", "2015-02-02");
         ModifyReplicationGroupMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -14510,7 +14610,10 @@ where
             "",
             &input,
         );
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -14566,7 +14669,10 @@ where
         params.put("Action", "PurchaseReservedCacheNodesOffering");
         params.put("Version", "2015-02-02");
         PurchaseReservedCacheNodesOfferingMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -14619,7 +14725,10 @@ where
         params.put("Action", "RebootCacheCluster");
         params.put("Version", "2015-02-02");
         RebootCacheClusterMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -14670,7 +14779,10 @@ where
         params.put("Action", "RemoveTagsFromResource");
         params.put("Version", "2015-02-02");
         RemoveTagsFromResourceMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -14721,7 +14833,10 @@ where
         params.put("Action", "ResetCacheParameterGroup");
         params.put("Version", "2015-02-02");
         ResetCacheParameterGroupMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -14773,7 +14888,10 @@ where
         params.put("Action", "RevokeCacheSecurityGroupIngress");
         params.put("Version", "2015-02-02");
         RevokeCacheSecurityGroupIngressMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -14826,7 +14944,10 @@ where
         params.put("Action", "TestFailover");
         params.put("Version", "2015-02-02");
         TestFailoverMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {

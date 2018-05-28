@@ -19,6 +19,7 @@
 extern crate futures;
 extern crate hyper;
 extern crate rusoto_core;
+extern crate serde_urlencoded;
 extern crate tokio_core;
 extern crate xml;
 

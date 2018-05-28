@@ -33,6 +33,7 @@ use rusoto_core::xmlutil::{
     characters, end_element, find_start_element, peek_at_name, skip_tree, start_element,
 };
 use rusoto_core::xmlutil::{Next, Peek, XmlParseError, XmlResponse};
+use serde_urlencoded;
 use std::str::FromStr;
 use xml::reader::ParserConfig;
 use xml::reader::XmlEvent;
@@ -28055,7 +28056,10 @@ where
         params.put("Action", "AddRoleToDBCluster");
         params.put("Version", "2014-10-31");
         AddRoleToDBClusterMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -28084,7 +28088,10 @@ where
         params.put("Action", "AddSourceIdentifierToSubscription");
         params.put("Version", "2014-10-31");
         AddSourceIdentifierToSubscriptionMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -28137,7 +28144,10 @@ where
         params.put("Action", "AddTagsToResource");
         params.put("Version", "2014-10-31");
         AddTagsToResourceMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -28165,7 +28175,10 @@ where
         params.put("Action", "ApplyPendingMaintenanceAction");
         params.put("Version", "2014-10-31");
         ApplyPendingMaintenanceActionMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -28219,7 +28232,10 @@ where
         params.put("Action", "AuthorizeDBSecurityGroupIngress");
         params.put("Version", "2014-10-31");
         AuthorizeDBSecurityGroupIngressMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -28272,7 +28288,10 @@ where
         params.put("Action", "CopyDBClusterParameterGroup");
         params.put("Version", "2014-10-31");
         CopyDBClusterParameterGroupMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -28323,7 +28342,10 @@ where
         params.put("Action", "CopyDBClusterSnapshot");
         params.put("Version", "2014-10-31");
         CopyDBClusterSnapshotMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -28374,7 +28396,10 @@ where
         params.put("Action", "CopyDBParameterGroup");
         params.put("Version", "2014-10-31");
         CopyDBParameterGroupMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -28425,7 +28450,10 @@ where
         params.put("Action", "CopyDBSnapshot");
         params.put("Version", "2014-10-31");
         CopyDBSnapshotMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -28476,7 +28504,10 @@ where
         params.put("Action", "CopyOptionGroup");
         params.put("Version", "2014-10-31");
         CopyOptionGroupMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -28527,7 +28558,10 @@ where
         params.put("Action", "CreateDBCluster");
         params.put("Version", "2014-10-31");
         CreateDBClusterMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -28578,7 +28612,10 @@ where
         params.put("Action", "CreateDBClusterParameterGroup");
         params.put("Version", "2014-10-31");
         CreateDBClusterParameterGroupMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -28631,7 +28668,10 @@ where
         params.put("Action", "CreateDBClusterSnapshot");
         params.put("Version", "2014-10-31");
         CreateDBClusterSnapshotMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -28682,7 +28722,10 @@ where
         params.put("Action", "CreateDBInstance");
         params.put("Version", "2014-10-31");
         CreateDBInstanceMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -28733,7 +28776,10 @@ where
         params.put("Action", "CreateDBInstanceReadReplica");
         params.put("Version", "2014-10-31");
         CreateDBInstanceReadReplicaMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -28784,7 +28830,10 @@ where
         params.put("Action", "CreateDBParameterGroup");
         params.put("Version", "2014-10-31");
         CreateDBParameterGroupMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -28835,7 +28884,10 @@ where
         params.put("Action", "CreateDBSecurityGroup");
         params.put("Version", "2014-10-31");
         CreateDBSecurityGroupMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -28886,7 +28938,10 @@ where
         params.put("Action", "CreateDBSnapshot");
         params.put("Version", "2014-10-31");
         CreateDBSnapshotMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -28937,7 +28992,10 @@ where
         params.put("Action", "CreateDBSubnetGroup");
         params.put("Version", "2014-10-31");
         CreateDBSubnetGroupMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -28988,7 +29046,10 @@ where
         params.put("Action", "CreateEventSubscription");
         params.put("Version", "2014-10-31");
         CreateEventSubscriptionMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -29039,7 +29100,10 @@ where
         params.put("Action", "CreateOptionGroup");
         params.put("Version", "2014-10-31");
         CreateOptionGroupMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -29090,7 +29154,10 @@ where
         params.put("Action", "DeleteDBCluster");
         params.put("Version", "2014-10-31");
         DeleteDBClusterMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -29141,7 +29208,10 @@ where
         params.put("Action", "DeleteDBClusterParameterGroup");
         params.put("Version", "2014-10-31");
         DeleteDBClusterParameterGroupMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -29169,7 +29239,10 @@ where
         params.put("Action", "DeleteDBClusterSnapshot");
         params.put("Version", "2014-10-31");
         DeleteDBClusterSnapshotMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -29220,7 +29293,10 @@ where
         params.put("Action", "DeleteDBInstance");
         params.put("Version", "2014-10-31");
         DeleteDBInstanceMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -29271,7 +29347,10 @@ where
         params.put("Action", "DeleteDBParameterGroup");
         params.put("Version", "2014-10-31");
         DeleteDBParameterGroupMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -29299,7 +29378,10 @@ where
         params.put("Action", "DeleteDBSecurityGroup");
         params.put("Version", "2014-10-31");
         DeleteDBSecurityGroupMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -29327,7 +29409,10 @@ where
         params.put("Action", "DeleteDBSnapshot");
         params.put("Version", "2014-10-31");
         DeleteDBSnapshotMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -29378,7 +29463,10 @@ where
         params.put("Action", "DeleteDBSubnetGroup");
         params.put("Version", "2014-10-31");
         DeleteDBSubnetGroupMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -29406,7 +29494,10 @@ where
         params.put("Action", "DeleteEventSubscription");
         params.put("Version", "2014-10-31");
         DeleteEventSubscriptionMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -29457,7 +29548,10 @@ where
         params.put("Action", "DeleteOptionGroup");
         params.put("Version", "2014-10-31");
         DeleteOptionGroupMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -29485,7 +29579,10 @@ where
         params.put("Action", "DescribeAccountAttributes");
         params.put("Version", "2014-10-31");
         DescribeAccountAttributesMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -29536,7 +29633,10 @@ where
         params.put("Action", "DescribeCertificates");
         params.put("Version", "2014-10-31");
         DescribeCertificatesMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -29587,7 +29687,10 @@ where
         params.put("Action", "DescribeDBClusterParameterGroups");
         params.put("Version", "2014-10-31");
         DescribeDBClusterParameterGroupsMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -29638,7 +29741,10 @@ where
         params.put("Action", "DescribeDBClusterParameters");
         params.put("Version", "2014-10-31");
         DescribeDBClusterParametersMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -29692,7 +29798,10 @@ where
         params.put("Action", "DescribeDBClusterSnapshotAttributes");
         params.put("Version", "2014-10-31");
         DescribeDBClusterSnapshotAttributesMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -29745,7 +29854,10 @@ where
         params.put("Action", "DescribeDBClusterSnapshots");
         params.put("Version", "2014-10-31");
         DescribeDBClusterSnapshotsMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -29796,7 +29908,10 @@ where
         params.put("Action", "DescribeDBClusters");
         params.put("Version", "2014-10-31");
         DescribeDBClustersMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -29847,7 +29962,10 @@ where
         params.put("Action", "DescribeDBEngineVersions");
         params.put("Version", "2014-10-31");
         DescribeDBEngineVersionsMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -29898,7 +30016,10 @@ where
         params.put("Action", "DescribeDBInstances");
         params.put("Version", "2014-10-31");
         DescribeDBInstancesMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -29949,7 +30070,10 @@ where
         params.put("Action", "DescribeDBLogFiles");
         params.put("Version", "2014-10-31");
         DescribeDBLogFilesMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -30000,7 +30124,10 @@ where
         params.put("Action", "DescribeDBParameterGroups");
         params.put("Version", "2014-10-31");
         DescribeDBParameterGroupsMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -30051,7 +30178,10 @@ where
         params.put("Action", "DescribeDBParameters");
         params.put("Version", "2014-10-31");
         DescribeDBParametersMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -30102,7 +30232,10 @@ where
         params.put("Action", "DescribeDBSecurityGroups");
         params.put("Version", "2014-10-31");
         DescribeDBSecurityGroupsMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -30153,7 +30286,10 @@ where
         params.put("Action", "DescribeDBSnapshotAttributes");
         params.put("Version", "2014-10-31");
         DescribeDBSnapshotAttributesMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -30204,7 +30340,10 @@ where
         params.put("Action", "DescribeDBSnapshots");
         params.put("Version", "2014-10-31");
         DescribeDBSnapshotsMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -30255,7 +30394,10 @@ where
         params.put("Action", "DescribeDBSubnetGroups");
         params.put("Version", "2014-10-31");
         DescribeDBSubnetGroupsMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -30309,7 +30451,10 @@ where
         params.put("Action", "DescribeEngineDefaultClusterParameters");
         params.put("Version", "2014-10-31");
         DescribeEngineDefaultClusterParametersMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -30363,7 +30508,10 @@ where
         params.put("Action", "DescribeEngineDefaultParameters");
         params.put("Version", "2014-10-31");
         DescribeEngineDefaultParametersMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -30416,7 +30564,10 @@ where
         params.put("Action", "DescribeEventCategories");
         params.put("Version", "2014-10-31");
         DescribeEventCategoriesMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -30467,7 +30618,10 @@ where
         params.put("Action", "DescribeEventSubscriptions");
         params.put("Version", "2014-10-31");
         DescribeEventSubscriptionsMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -30518,7 +30672,10 @@ where
         params.put("Action", "DescribeEvents");
         params.put("Version", "2014-10-31");
         DescribeEventsMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -30569,7 +30726,10 @@ where
         params.put("Action", "DescribeOptionGroupOptions");
         params.put("Version", "2014-10-31");
         DescribeOptionGroupOptionsMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -30620,7 +30780,10 @@ where
         params.put("Action", "DescribeOptionGroups");
         params.put("Version", "2014-10-31");
         DescribeOptionGroupsMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -30672,7 +30835,10 @@ where
         params.put("Action", "DescribeOrderableDBInstanceOptions");
         params.put("Version", "2014-10-31");
         DescribeOrderableDBInstanceOptionsMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -30724,7 +30890,10 @@ where
         params.put("Action", "DescribePendingMaintenanceActions");
         params.put("Version", "2014-10-31");
         DescribePendingMaintenanceActionsMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -30775,7 +30944,10 @@ where
         params.put("Action", "DescribeReservedDBInstances");
         params.put("Version", "2014-10-31");
         DescribeReservedDBInstancesMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -30827,7 +30999,10 @@ where
         params.put("Action", "DescribeReservedDBInstancesOfferings");
         params.put("Version", "2014-10-31");
         DescribeReservedDBInstancesOfferingsMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -30878,7 +31053,10 @@ where
         params.put("Action", "DescribeSourceRegions");
         params.put("Version", "2014-10-31");
         DescribeSourceRegionsMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -30932,7 +31110,10 @@ where
         params.put("Action", "DescribeValidDBInstanceModifications");
         params.put("Version", "2014-10-31");
         DescribeValidDBInstanceModificationsMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -30985,7 +31166,10 @@ where
         params.put("Action", "DownloadDBLogFilePortion");
         params.put("Version", "2014-10-31");
         DownloadDBLogFilePortionMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -31036,7 +31220,10 @@ where
         params.put("Action", "FailoverDBCluster");
         params.put("Version", "2014-10-31");
         FailoverDBClusterMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -31087,7 +31274,10 @@ where
         params.put("Action", "ListTagsForResource");
         params.put("Version", "2014-10-31");
         ListTagsForResourceMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -31138,7 +31328,10 @@ where
         params.put("Action", "ModifyDBCluster");
         params.put("Version", "2014-10-31");
         ModifyDBClusterMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -31189,7 +31382,10 @@ where
         params.put("Action", "ModifyDBClusterParameterGroup");
         params.put("Version", "2014-10-31");
         ModifyDBClusterParameterGroupMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -31241,7 +31437,10 @@ where
         params.put("Action", "ModifyDBClusterSnapshotAttribute");
         params.put("Version", "2014-10-31");
         ModifyDBClusterSnapshotAttributeMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -31294,7 +31493,10 @@ where
         params.put("Action", "ModifyDBInstance");
         params.put("Version", "2014-10-31");
         ModifyDBInstanceMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -31345,7 +31547,10 @@ where
         params.put("Action", "ModifyDBParameterGroup");
         params.put("Version", "2014-10-31");
         ModifyDBParameterGroupMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -31396,7 +31601,10 @@ where
         params.put("Action", "ModifyDBSnapshot");
         params.put("Version", "2014-10-31");
         ModifyDBSnapshotMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -31447,7 +31655,10 @@ where
         params.put("Action", "ModifyDBSnapshotAttribute");
         params.put("Version", "2014-10-31");
         ModifyDBSnapshotAttributeMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -31498,7 +31709,10 @@ where
         params.put("Action", "ModifyDBSubnetGroup");
         params.put("Version", "2014-10-31");
         ModifyDBSubnetGroupMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -31549,7 +31763,10 @@ where
         params.put("Action", "ModifyEventSubscription");
         params.put("Version", "2014-10-31");
         ModifyEventSubscriptionMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -31600,7 +31817,10 @@ where
         params.put("Action", "ModifyOptionGroup");
         params.put("Version", "2014-10-31");
         ModifyOptionGroupMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -31651,7 +31871,10 @@ where
         params.put("Action", "PromoteReadReplica");
         params.put("Version", "2014-10-31");
         PromoteReadReplicaMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -31702,7 +31925,10 @@ where
         params.put("Action", "PromoteReadReplicaDBCluster");
         params.put("Version", "2014-10-31");
         PromoteReadReplicaDBClusterMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -31756,7 +31982,10 @@ where
         params.put("Action", "PurchaseReservedDBInstancesOffering");
         params.put("Version", "2014-10-31");
         PurchaseReservedDBInstancesOfferingMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -31809,7 +32038,10 @@ where
         params.put("Action", "RebootDBInstance");
         params.put("Version", "2014-10-31");
         RebootDBInstanceMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -31860,7 +32092,10 @@ where
         params.put("Action", "RemoveRoleFromDBCluster");
         params.put("Version", "2014-10-31");
         RemoveRoleFromDBClusterMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -31891,7 +32126,10 @@ where
         params.put("Action", "RemoveSourceIdentifierFromSubscription");
         params.put("Version", "2014-10-31");
         RemoveSourceIdentifierFromSubscriptionMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -31944,7 +32182,10 @@ where
         params.put("Action", "RemoveTagsFromResource");
         params.put("Version", "2014-10-31");
         RemoveTagsFromResourceMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -31972,7 +32213,10 @@ where
         params.put("Action", "ResetDBClusterParameterGroup");
         params.put("Version", "2014-10-31");
         ResetDBClusterParameterGroupMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -32023,7 +32267,10 @@ where
         params.put("Action", "ResetDBParameterGroup");
         params.put("Version", "2014-10-31");
         ResetDBParameterGroupMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -32074,7 +32321,10 @@ where
         params.put("Action", "RestoreDBClusterFromS3");
         params.put("Version", "2014-10-31");
         RestoreDBClusterFromS3MessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -32125,7 +32375,10 @@ where
         params.put("Action", "RestoreDBClusterFromSnapshot");
         params.put("Version", "2014-10-31");
         RestoreDBClusterFromSnapshotMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -32176,7 +32429,10 @@ where
         params.put("Action", "RestoreDBClusterToPointInTime");
         params.put("Version", "2014-10-31");
         RestoreDBClusterToPointInTimeMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -32230,7 +32486,10 @@ where
         params.put("Action", "RestoreDBInstanceFromDBSnapshot");
         params.put("Version", "2014-10-31");
         RestoreDBInstanceFromDBSnapshotMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -32283,7 +32542,10 @@ where
         params.put("Action", "RestoreDBInstanceFromS3");
         params.put("Version", "2014-10-31");
         RestoreDBInstanceFromS3MessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -32335,7 +32597,10 @@ where
         params.put("Action", "RestoreDBInstanceToPointInTime");
         params.put("Version", "2014-10-31");
         RestoreDBInstanceToPointInTimeMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -32388,7 +32653,10 @@ where
         params.put("Action", "RevokeDBSecurityGroupIngress");
         params.put("Version", "2014-10-31");
         RevokeDBSecurityGroupIngressMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -32439,7 +32707,10 @@ where
         params.put("Action", "StartDBInstance");
         params.put("Version", "2014-10-31");
         StartDBInstanceMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
@@ -32490,7 +32761,10 @@ where
         params.put("Action", "StopDBInstance");
         params.put("Version", "2014-10-31");
         StopDBInstanceMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         let future = self.inner.sign_and_dispatch(request, |response| {
             if response.status != StatusCode::Ok {
