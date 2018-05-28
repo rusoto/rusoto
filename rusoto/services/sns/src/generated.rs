@@ -31,6 +31,7 @@ use rusoto_core::xmlutil::{
     characters, end_element, find_start_element, peek_at_name, skip_tree, start_element,
 };
 use rusoto_core::xmlutil::{Next, Peek, XmlParseError, XmlResponse};
+use serde_urlencoded;
 use std::str::FromStr;
 use xml::reader::ParserConfig;
 use xml::reader::XmlEvent;
@@ -5680,7 +5681,10 @@ impl Sns for SnsClient {
         params.put("Action", "AddPermission");
         params.put("Version", "2010-03-31");
         AddPermissionInputSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -5706,7 +5710,10 @@ impl Sns for SnsClient {
         params.put("Action", "CheckIfPhoneNumberIsOptedOut");
         params.put("Version", "2010-03-31");
         CheckIfPhoneNumberIsOptedOutInputSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -5757,7 +5764,10 @@ impl Sns for SnsClient {
         params.put("Action", "ConfirmSubscription");
         params.put("Version", "2010-03-31");
         ConfirmSubscriptionInputSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -5806,7 +5816,10 @@ impl Sns for SnsClient {
         params.put("Action", "CreatePlatformApplication");
         params.put("Version", "2010-03-31");
         CreatePlatformApplicationInputSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -5855,7 +5868,10 @@ impl Sns for SnsClient {
         params.put("Action", "CreatePlatformEndpoint");
         params.put("Version", "2010-03-31");
         CreatePlatformEndpointInputSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -5904,7 +5920,10 @@ impl Sns for SnsClient {
         params.put("Action", "CreateTopic");
         params.put("Version", "2010-03-31");
         CreateTopicInputSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -5950,7 +5969,10 @@ impl Sns for SnsClient {
         params.put("Action", "DeleteEndpoint");
         params.put("Version", "2010-03-31");
         DeleteEndpointInputSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -5976,7 +5998,10 @@ impl Sns for SnsClient {
         params.put("Action", "DeletePlatformApplication");
         params.put("Version", "2010-03-31");
         DeletePlatformApplicationInputSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -5999,7 +6024,10 @@ impl Sns for SnsClient {
         params.put("Action", "DeleteTopic");
         params.put("Version", "2010-03-31");
         DeleteTopicInputSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -6025,7 +6053,10 @@ impl Sns for SnsClient {
         params.put("Action", "GetEndpointAttributes");
         params.put("Version", "2010-03-31");
         GetEndpointAttributesInputSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -6075,7 +6106,10 @@ impl Sns for SnsClient {
         params.put("Action", "GetPlatformApplicationAttributes");
         params.put("Version", "2010-03-31");
         GetPlatformApplicationAttributesInputSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -6126,7 +6160,10 @@ impl Sns for SnsClient {
         params.put("Action", "GetSMSAttributes");
         params.put("Version", "2010-03-31");
         GetSMSAttributesInputSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -6175,7 +6212,10 @@ impl Sns for SnsClient {
         params.put("Action", "GetSubscriptionAttributes");
         params.put("Version", "2010-03-31");
         GetSubscriptionAttributesInputSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -6224,7 +6264,10 @@ impl Sns for SnsClient {
         params.put("Action", "GetTopicAttributes");
         params.put("Version", "2010-03-31");
         GetTopicAttributesInputSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -6276,7 +6319,10 @@ impl Sns for SnsClient {
         params.put("Action", "ListEndpointsByPlatformApplication");
         params.put("Version", "2010-03-31");
         ListEndpointsByPlatformApplicationInputSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -6327,7 +6373,10 @@ impl Sns for SnsClient {
         params.put("Action", "ListPhoneNumbersOptedOut");
         params.put("Version", "2010-03-31");
         ListPhoneNumbersOptedOutInputSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -6376,7 +6425,10 @@ impl Sns for SnsClient {
         params.put("Action", "ListPlatformApplications");
         params.put("Version", "2010-03-31");
         ListPlatformApplicationsInputSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -6425,7 +6477,10 @@ impl Sns for SnsClient {
         params.put("Action", "ListSubscriptions");
         params.put("Version", "2010-03-31");
         ListSubscriptionsInputSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -6474,7 +6529,10 @@ impl Sns for SnsClient {
         params.put("Action", "ListSubscriptionsByTopic");
         params.put("Version", "2010-03-31");
         ListSubscriptionsByTopicInputSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -6523,7 +6581,10 @@ impl Sns for SnsClient {
         params.put("Action", "ListTopics");
         params.put("Version", "2010-03-31");
         ListTopicsInputSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -6572,7 +6633,10 @@ impl Sns for SnsClient {
         params.put("Action", "OptInPhoneNumber");
         params.put("Version", "2010-03-31");
         OptInPhoneNumberInputSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -6618,7 +6682,10 @@ impl Sns for SnsClient {
         params.put("Action", "Publish");
         params.put("Version", "2010-03-31");
         PublishInputSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -6667,7 +6734,10 @@ impl Sns for SnsClient {
         params.put("Action", "RemovePermission");
         params.put("Version", "2010-03-31");
         RemovePermissionInputSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -6693,7 +6763,10 @@ impl Sns for SnsClient {
         params.put("Action", "SetEndpointAttributes");
         params.put("Version", "2010-03-31");
         SetEndpointAttributesInputSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -6719,7 +6792,10 @@ impl Sns for SnsClient {
         params.put("Action", "SetPlatformApplicationAttributes");
         params.put("Version", "2010-03-31");
         SetPlatformApplicationAttributesInputSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -6745,7 +6821,10 @@ impl Sns for SnsClient {
         params.put("Action", "SetSMSAttributes");
         params.put("Version", "2010-03-31");
         SetSMSAttributesInputSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -6794,7 +6873,10 @@ impl Sns for SnsClient {
         params.put("Action", "SetSubscriptionAttributes");
         params.put("Version", "2010-03-31");
         SetSubscriptionAttributesInputSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -6820,7 +6902,10 @@ impl Sns for SnsClient {
         params.put("Action", "SetTopicAttributes");
         params.put("Version", "2010-03-31");
         SetTopicAttributesInputSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -6843,7 +6928,10 @@ impl Sns for SnsClient {
         params.put("Action", "Subscribe");
         params.put("Version", "2010-03-31");
         SubscribeInputSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -6889,7 +6977,10 @@ impl Sns for SnsClient {
         params.put("Action", "Unsubscribe");
         params.put("Version", "2010-03-31");
         UnsubscribeInputSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {

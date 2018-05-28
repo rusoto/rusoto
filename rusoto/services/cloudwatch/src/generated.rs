@@ -31,6 +31,7 @@ use rusoto_core::xmlutil::{
     characters, end_element, find_start_element, peek_at_name, skip_tree, start_element,
 };
 use rusoto_core::xmlutil::{Next, Peek, XmlParseError, XmlResponse};
+use serde_urlencoded;
 use std::str::FromStr;
 use xml::reader::ParserConfig;
 use xml::reader::XmlEvent;
@@ -5004,7 +5005,10 @@ impl CloudWatch for CloudWatchClient {
         params.put("Action", "DeleteAlarms");
         params.put("Version", "2010-08-01");
         DeleteAlarmsInputSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -5030,7 +5034,10 @@ impl CloudWatch for CloudWatchClient {
         params.put("Action", "DeleteDashboards");
         params.put("Version", "2010-08-01");
         DeleteDashboardsInputSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -5079,7 +5086,10 @@ impl CloudWatch for CloudWatchClient {
         params.put("Action", "DescribeAlarmHistory");
         params.put("Version", "2010-08-01");
         DescribeAlarmHistoryInputSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -5128,7 +5138,10 @@ impl CloudWatch for CloudWatchClient {
         params.put("Action", "DescribeAlarms");
         params.put("Version", "2010-08-01");
         DescribeAlarmsInputSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -5177,7 +5190,10 @@ impl CloudWatch for CloudWatchClient {
         params.put("Action", "DescribeAlarmsForMetric");
         params.put("Version", "2010-08-01");
         DescribeAlarmsForMetricInputSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -5226,7 +5242,10 @@ impl CloudWatch for CloudWatchClient {
         params.put("Action", "DisableAlarmActions");
         params.put("Version", "2010-08-01");
         DisableAlarmActionsInputSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -5252,7 +5271,10 @@ impl CloudWatch for CloudWatchClient {
         params.put("Action", "EnableAlarmActions");
         params.put("Version", "2010-08-01");
         EnableAlarmActionsInputSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -5278,7 +5300,10 @@ impl CloudWatch for CloudWatchClient {
         params.put("Action", "GetDashboard");
         params.put("Version", "2010-08-01");
         GetDashboardInputSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -5327,7 +5352,10 @@ impl CloudWatch for CloudWatchClient {
         params.put("Action", "GetMetricData");
         params.put("Version", "2010-08-01");
         GetMetricDataInputSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -5376,7 +5404,10 @@ impl CloudWatch for CloudWatchClient {
         params.put("Action", "GetMetricStatistics");
         params.put("Version", "2010-08-01");
         GetMetricStatisticsInputSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -5425,7 +5456,10 @@ impl CloudWatch for CloudWatchClient {
         params.put("Action", "ListDashboards");
         params.put("Version", "2010-08-01");
         ListDashboardsInputSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -5474,7 +5508,10 @@ impl CloudWatch for CloudWatchClient {
         params.put("Action", "ListMetrics");
         params.put("Version", "2010-08-01");
         ListMetricsInputSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -5523,7 +5560,10 @@ impl CloudWatch for CloudWatchClient {
         params.put("Action", "PutDashboard");
         params.put("Version", "2010-08-01");
         PutDashboardInputSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -5572,7 +5612,10 @@ impl CloudWatch for CloudWatchClient {
         params.put("Action", "PutMetricAlarm");
         params.put("Version", "2010-08-01");
         PutMetricAlarmInputSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -5595,7 +5638,10 @@ impl CloudWatch for CloudWatchClient {
         params.put("Action", "PutMetricData");
         params.put("Version", "2010-08-01");
         PutMetricDataInputSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -5618,7 +5664,10 @@ impl CloudWatch for CloudWatchClient {
         params.put("Action", "SetAlarmState");
         params.put("Version", "2010-08-01");
         SetAlarmStateInputSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {

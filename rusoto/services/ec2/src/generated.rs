@@ -31,6 +31,7 @@ use rusoto_core::xmlutil::{
     characters, end_element, find_start_element, peek_at_name, skip_tree, start_element,
 };
 use rusoto_core::xmlutil::{Next, Peek, XmlParseError, XmlResponse};
+use serde_urlencoded;
 use std::str::FromStr;
 use xml::reader::ParserConfig;
 use xml::reader::XmlEvent;
@@ -75767,7 +75768,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "AcceptReservedInstancesExchangeQuote");
         params.put("Version", "2016-11-15");
         AcceptReservedInstancesExchangeQuoteRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -75815,7 +75819,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "AcceptVpcEndpointConnections");
         params.put("Version", "2016-11-15");
         AcceptVpcEndpointConnectionsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -75861,7 +75868,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "AcceptVpcPeeringConnection");
         params.put("Version", "2016-11-15");
         AcceptVpcPeeringConnectionRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -75907,7 +75917,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "AllocateAddress");
         params.put("Version", "2016-11-15");
         AllocateAddressRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -75953,7 +75966,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "AllocateHosts");
         params.put("Version", "2016-11-15");
         AllocateHostsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -75999,7 +76015,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "AssignIpv6Addresses");
         params.put("Version", "2016-11-15");
         AssignIpv6AddressesRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -76045,7 +76064,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "AssignPrivateIpAddresses");
         params.put("Version", "2016-11-15");
         AssignPrivateIpAddressesRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -76071,7 +76093,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "AssociateAddress");
         params.put("Version", "2016-11-15");
         AssociateAddressRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -76117,7 +76142,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "AssociateDhcpOptions");
         params.put("Version", "2016-11-15");
         AssociateDhcpOptionsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -76143,7 +76171,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "AssociateIamInstanceProfile");
         params.put("Version", "2016-11-15");
         AssociateIamInstanceProfileRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -76189,7 +76220,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "AssociateRouteTable");
         params.put("Version", "2016-11-15");
         AssociateRouteTableRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -76235,7 +76269,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "AssociateSubnetCidrBlock");
         params.put("Version", "2016-11-15");
         AssociateSubnetCidrBlockRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -76281,7 +76318,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "AssociateVpcCidrBlock");
         params.put("Version", "2016-11-15");
         AssociateVpcCidrBlockRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -76327,7 +76367,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "AttachClassicLinkVpc");
         params.put("Version", "2016-11-15");
         AttachClassicLinkVpcRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -76373,7 +76416,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "AttachInternetGateway");
         params.put("Version", "2016-11-15");
         AttachInternetGatewayRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -76399,7 +76445,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "AttachNetworkInterface");
         params.put("Version", "2016-11-15");
         AttachNetworkInterfaceRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -76445,7 +76494,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "AttachVolume");
         params.put("Version", "2016-11-15");
         AttachVolumeRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -76491,7 +76543,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "AttachVpnGateway");
         params.put("Version", "2016-11-15");
         AttachVpnGatewayRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -76537,7 +76592,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "AuthorizeSecurityGroupEgress");
         params.put("Version", "2016-11-15");
         AuthorizeSecurityGroupEgressRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -76563,7 +76621,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "AuthorizeSecurityGroupIngress");
         params.put("Version", "2016-11-15");
         AuthorizeSecurityGroupIngressRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -76589,7 +76650,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "BundleInstance");
         params.put("Version", "2016-11-15");
         BundleInstanceRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -76635,7 +76699,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "CancelBundleTask");
         params.put("Version", "2016-11-15");
         CancelBundleTaskRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -76681,7 +76748,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "CancelConversionTask");
         params.put("Version", "2016-11-15");
         CancelConversionRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -76707,7 +76777,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "CancelExportTask");
         params.put("Version", "2016-11-15");
         CancelExportTaskRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -76733,7 +76806,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "CancelImportTask");
         params.put("Version", "2016-11-15");
         CancelImportTaskRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -76780,7 +76856,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "CancelReservedInstancesListing");
         params.put("Version", "2016-11-15");
         CancelReservedInstancesListingRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -76828,7 +76907,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "CancelSpotFleetRequests");
         params.put("Version", "2016-11-15");
         CancelSpotFleetRequestsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -76874,7 +76956,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "CancelSpotInstanceRequests");
         params.put("Version", "2016-11-15");
         CancelSpotInstanceRequestsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -76920,7 +77005,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "ConfirmProductInstance");
         params.put("Version", "2016-11-15");
         ConfirmProductInstanceRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -76966,7 +77054,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "CopyFpgaImage");
         params.put("Version", "2016-11-15");
         CopyFpgaImageRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -77009,7 +77100,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "CopyImage");
         params.put("Version", "2016-11-15");
         CopyImageRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -77055,7 +77149,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "CopySnapshot");
         params.put("Version", "2016-11-15");
         CopySnapshotRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -77101,7 +77198,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "CreateCustomerGateway");
         params.put("Version", "2016-11-15");
         CreateCustomerGatewayRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -77147,7 +77247,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "CreateDefaultSubnet");
         params.put("Version", "2016-11-15");
         CreateDefaultSubnetRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -77193,7 +77296,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "CreateDefaultVpc");
         params.put("Version", "2016-11-15");
         CreateDefaultVpcRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -77239,7 +77345,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "CreateDhcpOptions");
         params.put("Version", "2016-11-15");
         CreateDhcpOptionsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -77286,7 +77395,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "CreateEgressOnlyInternetGateway");
         params.put("Version", "2016-11-15");
         CreateEgressOnlyInternetGatewayRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -77334,7 +77446,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "CreateFlowLogs");
         params.put("Version", "2016-11-15");
         CreateFlowLogsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -77380,7 +77495,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "CreateFpgaImage");
         params.put("Version", "2016-11-15");
         CreateFpgaImageRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -77426,7 +77544,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "CreateImage");
         params.put("Version", "2016-11-15");
         CreateImageRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -77472,7 +77593,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "CreateInstanceExportTask");
         params.put("Version", "2016-11-15");
         CreateInstanceExportTaskRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -77518,7 +77642,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "CreateInternetGateway");
         params.put("Version", "2016-11-15");
         CreateInternetGatewayRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -77564,7 +77691,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "CreateKeyPair");
         params.put("Version", "2016-11-15");
         CreateKeyPairRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -77610,7 +77740,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "CreateLaunchTemplate");
         params.put("Version", "2016-11-15");
         CreateLaunchTemplateRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -77656,7 +77789,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "CreateLaunchTemplateVersion");
         params.put("Version", "2016-11-15");
         CreateLaunchTemplateVersionRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -77702,7 +77838,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "CreateNatGateway");
         params.put("Version", "2016-11-15");
         CreateNatGatewayRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -77748,7 +77887,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "CreateNetworkAcl");
         params.put("Version", "2016-11-15");
         CreateNetworkAclRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -77794,7 +77936,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "CreateNetworkAclEntry");
         params.put("Version", "2016-11-15");
         CreateNetworkAclEntryRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -77820,7 +77965,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "CreateNetworkInterface");
         params.put("Version", "2016-11-15");
         CreateNetworkInterfaceRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -77867,7 +78015,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "CreateNetworkInterfacePermission");
         params.put("Version", "2016-11-15");
         CreateNetworkInterfacePermissionRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -77915,7 +78066,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "CreatePlacementGroup");
         params.put("Version", "2016-11-15");
         CreatePlacementGroupRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -77942,7 +78096,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "CreateReservedInstancesListing");
         params.put("Version", "2016-11-15");
         CreateReservedInstancesListingRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -77990,7 +78147,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "CreateRoute");
         params.put("Version", "2016-11-15");
         CreateRouteRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -78036,7 +78196,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "CreateRouteTable");
         params.put("Version", "2016-11-15");
         CreateRouteTableRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -78082,7 +78245,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "CreateSecurityGroup");
         params.put("Version", "2016-11-15");
         CreateSecurityGroupRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -78128,7 +78294,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "CreateSnapshot");
         params.put("Version", "2016-11-15");
         CreateSnapshotRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -78175,7 +78344,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "CreateSpotDatafeedSubscription");
         params.put("Version", "2016-11-15");
         CreateSpotDatafeedSubscriptionRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -78223,7 +78395,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "CreateSubnet");
         params.put("Version", "2016-11-15");
         CreateSubnetRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -78266,7 +78441,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "CreateTags");
         params.put("Version", "2016-11-15");
         CreateTagsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -78289,7 +78467,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "CreateVolume");
         params.put("Version", "2016-11-15");
         CreateVolumeRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -78332,7 +78513,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "CreateVpc");
         params.put("Version", "2016-11-15");
         CreateVpcRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -78378,7 +78562,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "CreateVpcEndpoint");
         params.put("Version", "2016-11-15");
         CreateVpcEndpointRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -78431,7 +78618,10 @@ impl Ec2 for Ec2Client {
             "",
             &input,
         );
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -78482,7 +78672,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "CreateVpcEndpointServiceConfiguration");
         params.put("Version", "2016-11-15");
         CreateVpcEndpointServiceConfigurationRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -78530,7 +78723,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "CreateVpcPeeringConnection");
         params.put("Version", "2016-11-15");
         CreateVpcPeeringConnectionRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -78576,7 +78772,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "CreateVpnConnection");
         params.put("Version", "2016-11-15");
         CreateVpnConnectionRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -78622,7 +78821,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "CreateVpnConnectionRoute");
         params.put("Version", "2016-11-15");
         CreateVpnConnectionRouteRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -78648,7 +78850,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "CreateVpnGateway");
         params.put("Version", "2016-11-15");
         CreateVpnGatewayRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -78694,7 +78899,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DeleteCustomerGateway");
         params.put("Version", "2016-11-15");
         DeleteCustomerGatewayRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -78720,7 +78928,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DeleteDhcpOptions");
         params.put("Version", "2016-11-15");
         DeleteDhcpOptionsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -78747,7 +78958,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DeleteEgressOnlyInternetGateway");
         params.put("Version", "2016-11-15");
         DeleteEgressOnlyInternetGatewayRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -78795,7 +79009,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DeleteFlowLogs");
         params.put("Version", "2016-11-15");
         DeleteFlowLogsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -78841,7 +79058,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DeleteFpgaImage");
         params.put("Version", "2016-11-15");
         DeleteFpgaImageRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -78887,7 +79107,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DeleteInternetGateway");
         params.put("Version", "2016-11-15");
         DeleteInternetGatewayRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -78910,7 +79133,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DeleteKeyPair");
         params.put("Version", "2016-11-15");
         DeleteKeyPairRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -78936,7 +79162,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DeleteLaunchTemplate");
         params.put("Version", "2016-11-15");
         DeleteLaunchTemplateRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -78982,7 +79211,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DeleteLaunchTemplateVersions");
         params.put("Version", "2016-11-15");
         DeleteLaunchTemplateVersionsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -79028,7 +79260,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DeleteNatGateway");
         params.put("Version", "2016-11-15");
         DeleteNatGatewayRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -79074,7 +79309,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DeleteNetworkAcl");
         params.put("Version", "2016-11-15");
         DeleteNetworkAclRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -79100,7 +79338,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DeleteNetworkAclEntry");
         params.put("Version", "2016-11-15");
         DeleteNetworkAclEntryRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -79126,7 +79367,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DeleteNetworkInterface");
         params.put("Version", "2016-11-15");
         DeleteNetworkInterfaceRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -79153,7 +79397,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DeleteNetworkInterfacePermission");
         params.put("Version", "2016-11-15");
         DeleteNetworkInterfacePermissionRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -79201,7 +79448,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DeletePlacementGroup");
         params.put("Version", "2016-11-15");
         DeletePlacementGroupRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -79224,7 +79474,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DeleteRoute");
         params.put("Version", "2016-11-15");
         DeleteRouteRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -79250,7 +79503,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DeleteRouteTable");
         params.put("Version", "2016-11-15");
         DeleteRouteTableRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -79276,7 +79532,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DeleteSecurityGroup");
         params.put("Version", "2016-11-15");
         DeleteSecurityGroupRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -79302,7 +79561,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DeleteSnapshot");
         params.put("Version", "2016-11-15");
         DeleteSnapshotRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -79328,7 +79590,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DeleteSpotDatafeedSubscription");
         params.put("Version", "2016-11-15");
         DeleteSpotDatafeedSubscriptionRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -79351,7 +79616,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DeleteSubnet");
         params.put("Version", "2016-11-15");
         DeleteSubnetRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -79374,7 +79642,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DeleteTags");
         params.put("Version", "2016-11-15");
         DeleteTagsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -79397,7 +79668,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DeleteVolume");
         params.put("Version", "2016-11-15");
         DeleteVolumeRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -79420,7 +79694,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DeleteVpc");
         params.put("Version", "2016-11-15");
         DeleteVpcRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -79453,7 +79730,10 @@ impl Ec2 for Ec2Client {
             "",
             &input,
         );
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -79504,7 +79784,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DeleteVpcEndpointServiceConfigurations");
         params.put("Version", "2016-11-15");
         DeleteVpcEndpointServiceConfigurationsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -79552,7 +79835,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DeleteVpcEndpoints");
         params.put("Version", "2016-11-15");
         DeleteVpcEndpointsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -79598,7 +79884,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DeleteVpcPeeringConnection");
         params.put("Version", "2016-11-15");
         DeleteVpcPeeringConnectionRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -79644,7 +79933,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DeleteVpnConnection");
         params.put("Version", "2016-11-15");
         DeleteVpnConnectionRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -79670,7 +79962,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DeleteVpnConnectionRoute");
         params.put("Version", "2016-11-15");
         DeleteVpnConnectionRouteRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -79696,7 +79991,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DeleteVpnGateway");
         params.put("Version", "2016-11-15");
         DeleteVpnGatewayRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -79722,7 +80020,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DeregisterImage");
         params.put("Version", "2016-11-15");
         DeregisterImageRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -79748,7 +80049,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeAccountAttributes");
         params.put("Version", "2016-11-15");
         DescribeAccountAttributesRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -79794,7 +80098,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeAddresses");
         params.put("Version", "2016-11-15");
         DescribeAddressesRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -79840,7 +80147,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeAggregateIdFormat");
         params.put("Version", "2016-11-15");
         DescribeAggregateIdFormatRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -79886,7 +80196,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeAvailabilityZones");
         params.put("Version", "2016-11-15");
         DescribeAvailabilityZonesRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -79932,7 +80245,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeBundleTasks");
         params.put("Version", "2016-11-15");
         DescribeBundleTasksRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -79978,7 +80294,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeClassicLinkInstances");
         params.put("Version", "2016-11-15");
         DescribeClassicLinkInstancesRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -80024,7 +80343,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeConversionTasks");
         params.put("Version", "2016-11-15");
         DescribeConversionTasksRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -80070,7 +80392,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeCustomerGateways");
         params.put("Version", "2016-11-15");
         DescribeCustomerGatewaysRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -80116,7 +80441,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeDhcpOptions");
         params.put("Version", "2016-11-15");
         DescribeDhcpOptionsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -80165,7 +80493,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeEgressOnlyInternetGateways");
         params.put("Version", "2016-11-15");
         DescribeEgressOnlyInternetGatewaysRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -80213,7 +80544,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeElasticGpus");
         params.put("Version", "2016-11-15");
         DescribeElasticGpusRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -80259,7 +80593,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeExportTasks");
         params.put("Version", "2016-11-15");
         DescribeExportTasksRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -80305,7 +80642,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeFlowLogs");
         params.put("Version", "2016-11-15");
         DescribeFlowLogsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -80351,7 +80691,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeFpgaImageAttribute");
         params.put("Version", "2016-11-15");
         DescribeFpgaImageAttributeRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -80397,7 +80740,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeFpgaImages");
         params.put("Version", "2016-11-15");
         DescribeFpgaImagesRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -80444,7 +80790,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeHostReservationOfferings");
         params.put("Version", "2016-11-15");
         DescribeHostReservationOfferingsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -80492,7 +80841,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeHostReservations");
         params.put("Version", "2016-11-15");
         DescribeHostReservationsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -80538,7 +80890,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeHosts");
         params.put("Version", "2016-11-15");
         DescribeHostsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -80587,7 +80942,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeIamInstanceProfileAssociations");
         params.put("Version", "2016-11-15");
         DescribeIamInstanceProfileAssociationsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -80635,7 +80993,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeIdFormat");
         params.put("Version", "2016-11-15");
         DescribeIdFormatRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -80681,7 +81042,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeIdentityIdFormat");
         params.put("Version", "2016-11-15");
         DescribeIdentityIdFormatRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -80727,7 +81091,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeImageAttribute");
         params.put("Version", "2016-11-15");
         DescribeImageAttributeRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -80773,7 +81140,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeImages");
         params.put("Version", "2016-11-15");
         DescribeImagesRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -80819,7 +81189,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeImportImageTasks");
         params.put("Version", "2016-11-15");
         DescribeImportImageTasksRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -80865,7 +81238,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeImportSnapshotTasks");
         params.put("Version", "2016-11-15");
         DescribeImportSnapshotTasksRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -80911,7 +81287,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeInstanceAttribute");
         params.put("Version", "2016-11-15");
         DescribeInstanceAttributeRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -80960,7 +81339,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeInstanceCreditSpecifications");
         params.put("Version", "2016-11-15");
         DescribeInstanceCreditSpecificationsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -81008,7 +81390,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeInstanceStatus");
         params.put("Version", "2016-11-15");
         DescribeInstanceStatusRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -81054,7 +81439,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeInstances");
         params.put("Version", "2016-11-15");
         DescribeInstancesRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -81100,7 +81488,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeInternetGateways");
         params.put("Version", "2016-11-15");
         DescribeInternetGatewaysRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -81146,7 +81537,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeKeyPairs");
         params.put("Version", "2016-11-15");
         DescribeKeyPairsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -81193,7 +81587,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeLaunchTemplateVersions");
         params.put("Version", "2016-11-15");
         DescribeLaunchTemplateVersionsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -81241,7 +81638,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeLaunchTemplates");
         params.put("Version", "2016-11-15");
         DescribeLaunchTemplatesRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -81287,7 +81687,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeMovingAddresses");
         params.put("Version", "2016-11-15");
         DescribeMovingAddressesRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -81333,7 +81736,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeNatGateways");
         params.put("Version", "2016-11-15");
         DescribeNatGatewaysRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -81379,7 +81785,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeNetworkAcls");
         params.put("Version", "2016-11-15");
         DescribeNetworkAclsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -81426,7 +81835,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeNetworkInterfaceAttribute");
         params.put("Version", "2016-11-15");
         DescribeNetworkInterfaceAttributeRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -81477,7 +81889,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeNetworkInterfacePermissions");
         params.put("Version", "2016-11-15");
         DescribeNetworkInterfacePermissionsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -81525,7 +81940,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeNetworkInterfaces");
         params.put("Version", "2016-11-15");
         DescribeNetworkInterfacesRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -81571,7 +81989,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribePlacementGroups");
         params.put("Version", "2016-11-15");
         DescribePlacementGroupsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -81617,7 +82038,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribePrefixLists");
         params.put("Version", "2016-11-15");
         DescribePrefixListsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -81663,7 +82087,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribePrincipalIdFormat");
         params.put("Version", "2016-11-15");
         DescribePrincipalIdFormatRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -81709,7 +82136,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeRegions");
         params.put("Version", "2016-11-15");
         DescribeRegionsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -81755,7 +82185,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeReservedInstances");
         params.put("Version", "2016-11-15");
         DescribeReservedInstancesRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -81802,7 +82235,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeReservedInstancesListings");
         params.put("Version", "2016-11-15");
         DescribeReservedInstancesListingsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -81853,7 +82289,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeReservedInstancesModifications");
         params.put("Version", "2016-11-15");
         DescribeReservedInstancesModificationsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -81904,7 +82343,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeReservedInstancesOfferings");
         params.put("Version", "2016-11-15");
         DescribeReservedInstancesOfferingsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -81952,7 +82394,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeRouteTables");
         params.put("Version", "2016-11-15");
         DescribeRouteTablesRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -82001,7 +82446,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeScheduledInstanceAvailability");
         params.put("Version", "2016-11-15");
         DescribeScheduledInstanceAvailabilityRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -82049,7 +82497,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeScheduledInstances");
         params.put("Version", "2016-11-15");
         DescribeScheduledInstancesRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -82096,7 +82547,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeSecurityGroupReferences");
         params.put("Version", "2016-11-15");
         DescribeSecurityGroupReferencesRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -82144,7 +82598,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeSecurityGroups");
         params.put("Version", "2016-11-15");
         DescribeSecurityGroupsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -82190,7 +82647,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeSnapshotAttribute");
         params.put("Version", "2016-11-15");
         DescribeSnapshotAttributeRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -82236,7 +82696,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeSnapshots");
         params.put("Version", "2016-11-15");
         DescribeSnapshotsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -82283,7 +82746,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeSpotDatafeedSubscription");
         params.put("Version", "2016-11-15");
         DescribeSpotDatafeedSubscriptionRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -82331,7 +82797,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeSpotFleetInstances");
         params.put("Version", "2016-11-15");
         DescribeSpotFleetInstancesRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -82378,7 +82847,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeSpotFleetRequestHistory");
         params.put("Version", "2016-11-15");
         DescribeSpotFleetRequestHistoryRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -82426,7 +82898,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeSpotFleetRequests");
         params.put("Version", "2016-11-15");
         DescribeSpotFleetRequestsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -82472,7 +82947,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeSpotInstanceRequests");
         params.put("Version", "2016-11-15");
         DescribeSpotInstanceRequestsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -82518,7 +82996,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeSpotPriceHistory");
         params.put("Version", "2016-11-15");
         DescribeSpotPriceHistoryRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -82564,7 +83045,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeStaleSecurityGroups");
         params.put("Version", "2016-11-15");
         DescribeStaleSecurityGroupsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -82610,7 +83094,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeSubnets");
         params.put("Version", "2016-11-15");
         DescribeSubnetsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -82656,7 +83143,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeTags");
         params.put("Version", "2016-11-15");
         DescribeTagsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -82702,7 +83192,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeVolumeAttribute");
         params.put("Version", "2016-11-15");
         DescribeVolumeAttributeRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -82748,7 +83241,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeVolumeStatus");
         params.put("Version", "2016-11-15");
         DescribeVolumeStatusRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -82794,7 +83290,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeVolumes");
         params.put("Version", "2016-11-15");
         DescribeVolumesRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -82840,7 +83339,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeVolumesModifications");
         params.put("Version", "2016-11-15");
         DescribeVolumesModificationsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -82886,7 +83388,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeVpcAttribute");
         params.put("Version", "2016-11-15");
         DescribeVpcAttributeRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -82932,7 +83437,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeVpcClassicLink");
         params.put("Version", "2016-11-15");
         DescribeVpcClassicLinkRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -82979,7 +83487,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeVpcClassicLinkDnsSupport");
         params.put("Version", "2016-11-15");
         DescribeVpcClassicLinkDnsSupportRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -83034,7 +83545,10 @@ impl Ec2 for Ec2Client {
             "",
             &input,
         );
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -83083,7 +83597,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeVpcEndpointConnections");
         params.put("Version", "2016-11-15");
         DescribeVpcEndpointConnectionsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -83138,7 +83655,10 @@ impl Ec2 for Ec2Client {
             "",
             &input,
         );
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -83189,7 +83709,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeVpcEndpointServicePermissions");
         params.put("Version", "2016-11-15");
         DescribeVpcEndpointServicePermissionsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -83237,7 +83760,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeVpcEndpointServices");
         params.put("Version", "2016-11-15");
         DescribeVpcEndpointServicesRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -83283,7 +83809,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeVpcEndpoints");
         params.put("Version", "2016-11-15");
         DescribeVpcEndpointsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -83329,7 +83858,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeVpcPeeringConnections");
         params.put("Version", "2016-11-15");
         DescribeVpcPeeringConnectionsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -83377,7 +83909,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeVpcs");
         params.put("Version", "2016-11-15");
         DescribeVpcsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -83423,7 +83958,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeVpnConnections");
         params.put("Version", "2016-11-15");
         DescribeVpnConnectionsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -83469,7 +84007,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DescribeVpnGateways");
         params.put("Version", "2016-11-15");
         DescribeVpnGatewaysRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -83515,7 +84056,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DetachClassicLinkVpc");
         params.put("Version", "2016-11-15");
         DetachClassicLinkVpcRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -83561,7 +84105,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DetachInternetGateway");
         params.put("Version", "2016-11-15");
         DetachInternetGatewayRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -83587,7 +84134,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DetachNetworkInterface");
         params.put("Version", "2016-11-15");
         DetachNetworkInterfaceRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -83613,7 +84163,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DetachVolume");
         params.put("Version", "2016-11-15");
         DetachVolumeRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -83659,7 +84212,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DetachVpnGateway");
         params.put("Version", "2016-11-15");
         DetachVpnGatewayRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -83685,7 +84241,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DisableVgwRoutePropagation");
         params.put("Version", "2016-11-15");
         DisableVgwRoutePropagationRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -83711,7 +84270,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DisableVpcClassicLink");
         params.put("Version", "2016-11-15");
         DisableVpcClassicLinkRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -83758,7 +84320,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DisableVpcClassicLinkDnsSupport");
         params.put("Version", "2016-11-15");
         DisableVpcClassicLinkDnsSupportRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -83806,7 +84371,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DisassociateAddress");
         params.put("Version", "2016-11-15");
         DisassociateAddressRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -83833,7 +84401,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DisassociateIamInstanceProfile");
         params.put("Version", "2016-11-15");
         DisassociateIamInstanceProfileRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -83881,7 +84452,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DisassociateRouteTable");
         params.put("Version", "2016-11-15");
         DisassociateRouteTableRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -83907,7 +84481,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DisassociateSubnetCidrBlock");
         params.put("Version", "2016-11-15");
         DisassociateSubnetCidrBlockRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -83953,7 +84530,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "DisassociateVpcCidrBlock");
         params.put("Version", "2016-11-15");
         DisassociateVpcCidrBlockRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -83999,7 +84579,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "EnableVgwRoutePropagation");
         params.put("Version", "2016-11-15");
         EnableVgwRoutePropagationRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -84025,7 +84608,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "EnableVolumeIO");
         params.put("Version", "2016-11-15");
         EnableVolumeIORequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -84051,7 +84637,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "EnableVpcClassicLink");
         params.put("Version", "2016-11-15");
         EnableVpcClassicLinkRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -84098,7 +84687,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "EnableVpcClassicLinkDnsSupport");
         params.put("Version", "2016-11-15");
         EnableVpcClassicLinkDnsSupportRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -84146,7 +84738,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "GetConsoleOutput");
         params.put("Version", "2016-11-15");
         GetConsoleOutputRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -84192,7 +84787,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "GetConsoleScreenshot");
         params.put("Version", "2016-11-15");
         GetConsoleScreenshotRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -84239,7 +84837,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "GetHostReservationPurchasePreview");
         params.put("Version", "2016-11-15");
         GetHostReservationPurchasePreviewRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -84287,7 +84888,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "GetLaunchTemplateData");
         params.put("Version", "2016-11-15");
         GetLaunchTemplateDataRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -84333,7 +84937,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "GetPasswordData");
         params.put("Version", "2016-11-15");
         GetPasswordDataRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -84380,7 +84987,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "GetReservedInstancesExchangeQuote");
         params.put("Version", "2016-11-15");
         GetReservedInstancesExchangeQuoteRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -84428,7 +85038,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "ImportImage");
         params.put("Version", "2016-11-15");
         ImportImageRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -84474,7 +85087,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "ImportInstance");
         params.put("Version", "2016-11-15");
         ImportInstanceRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -84520,7 +85136,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "ImportKeyPair");
         params.put("Version", "2016-11-15");
         ImportKeyPairRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -84566,7 +85185,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "ImportSnapshot");
         params.put("Version", "2016-11-15");
         ImportSnapshotRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -84612,7 +85234,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "ImportVolume");
         params.put("Version", "2016-11-15");
         ImportVolumeRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -84658,7 +85283,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "ModifyFpgaImageAttribute");
         params.put("Version", "2016-11-15");
         ModifyFpgaImageAttributeRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -84704,7 +85332,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "ModifyHosts");
         params.put("Version", "2016-11-15");
         ModifyHostsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -84750,7 +85381,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "ModifyIdFormat");
         params.put("Version", "2016-11-15");
         ModifyIdFormatRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -84776,7 +85410,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "ModifyIdentityIdFormat");
         params.put("Version", "2016-11-15");
         ModifyIdentityIdFormatRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -84802,7 +85439,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "ModifyImageAttribute");
         params.put("Version", "2016-11-15");
         ModifyImageAttributeRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -84828,7 +85468,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "ModifyInstanceAttribute");
         params.put("Version", "2016-11-15");
         ModifyInstanceAttributeRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -84855,7 +85498,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "ModifyInstanceCreditSpecification");
         params.put("Version", "2016-11-15");
         ModifyInstanceCreditSpecificationRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -84903,7 +85549,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "ModifyInstancePlacement");
         params.put("Version", "2016-11-15");
         ModifyInstancePlacementRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -84949,7 +85598,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "ModifyLaunchTemplate");
         params.put("Version", "2016-11-15");
         ModifyLaunchTemplateRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -84995,7 +85647,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "ModifyNetworkInterfaceAttribute");
         params.put("Version", "2016-11-15");
         ModifyNetworkInterfaceAttributeRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -85021,7 +85676,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "ModifyReservedInstances");
         params.put("Version", "2016-11-15");
         ModifyReservedInstancesRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -85067,7 +85725,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "ModifySnapshotAttribute");
         params.put("Version", "2016-11-15");
         ModifySnapshotAttributeRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -85093,7 +85754,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "ModifySpotFleetRequest");
         params.put("Version", "2016-11-15");
         ModifySpotFleetRequestRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -85139,7 +85803,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "ModifySubnetAttribute");
         params.put("Version", "2016-11-15");
         ModifySubnetAttributeRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -85165,7 +85832,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "ModifyVolume");
         params.put("Version", "2016-11-15");
         ModifyVolumeRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -85211,7 +85881,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "ModifyVolumeAttribute");
         params.put("Version", "2016-11-15");
         ModifyVolumeAttributeRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -85237,7 +85910,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "ModifyVpcAttribute");
         params.put("Version", "2016-11-15");
         ModifyVpcAttributeRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -85263,7 +85939,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "ModifyVpcEndpoint");
         params.put("Version", "2016-11-15");
         ModifyVpcEndpointRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -85316,7 +85995,10 @@ impl Ec2 for Ec2Client {
             "",
             &input,
         );
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -85367,7 +86049,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "ModifyVpcEndpointServiceConfiguration");
         params.put("Version", "2016-11-15");
         ModifyVpcEndpointServiceConfigurationRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -85418,7 +86103,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "ModifyVpcEndpointServicePermissions");
         params.put("Version", "2016-11-15");
         ModifyVpcEndpointServicePermissionsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -85467,7 +86155,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "ModifyVpcPeeringConnectionOptions");
         params.put("Version", "2016-11-15");
         ModifyVpcPeeringConnectionOptionsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -85515,7 +86206,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "ModifyVpcTenancy");
         params.put("Version", "2016-11-15");
         ModifyVpcTenancyRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -85561,7 +86255,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "MonitorInstances");
         params.put("Version", "2016-11-15");
         MonitorInstancesRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -85607,7 +86304,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "MoveAddressToVpc");
         params.put("Version", "2016-11-15");
         MoveAddressToVpcRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -85653,7 +86353,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "PurchaseHostReservation");
         params.put("Version", "2016-11-15");
         PurchaseHostReservationRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -85700,7 +86403,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "PurchaseReservedInstancesOffering");
         params.put("Version", "2016-11-15");
         PurchaseReservedInstancesOfferingRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -85748,7 +86454,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "PurchaseScheduledInstances");
         params.put("Version", "2016-11-15");
         PurchaseScheduledInstancesRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -85794,7 +86503,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "RebootInstances");
         params.put("Version", "2016-11-15");
         RebootInstancesRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -85820,7 +86532,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "RegisterImage");
         params.put("Version", "2016-11-15");
         RegisterImageRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -85866,7 +86581,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "RejectVpcEndpointConnections");
         params.put("Version", "2016-11-15");
         RejectVpcEndpointConnectionsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -85912,7 +86630,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "RejectVpcPeeringConnection");
         params.put("Version", "2016-11-15");
         RejectVpcPeeringConnectionRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -85958,7 +86679,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "ReleaseAddress");
         params.put("Version", "2016-11-15");
         ReleaseAddressRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -85984,7 +86708,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "ReleaseHosts");
         params.put("Version", "2016-11-15");
         ReleaseHostsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -86033,7 +86760,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "ReplaceIamInstanceProfileAssociation");
         params.put("Version", "2016-11-15");
         ReplaceIamInstanceProfileAssociationRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -86081,7 +86811,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "ReplaceNetworkAclAssociation");
         params.put("Version", "2016-11-15");
         ReplaceNetworkAclAssociationRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -86127,7 +86860,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "ReplaceNetworkAclEntry");
         params.put("Version", "2016-11-15");
         ReplaceNetworkAclEntryRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -86150,7 +86886,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "ReplaceRoute");
         params.put("Version", "2016-11-15");
         ReplaceRouteRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -86176,7 +86915,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "ReplaceRouteTableAssociation");
         params.put("Version", "2016-11-15");
         ReplaceRouteTableAssociationRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -86222,7 +86964,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "ReportInstanceStatus");
         params.put("Version", "2016-11-15");
         ReportInstanceStatusRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -86248,7 +86993,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "RequestSpotFleet");
         params.put("Version", "2016-11-15");
         RequestSpotFleetRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -86294,7 +87042,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "RequestSpotInstances");
         params.put("Version", "2016-11-15");
         RequestSpotInstancesRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -86340,7 +87091,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "ResetFpgaImageAttribute");
         params.put("Version", "2016-11-15");
         ResetFpgaImageAttributeRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -86386,7 +87140,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "ResetImageAttribute");
         params.put("Version", "2016-11-15");
         ResetImageAttributeRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -86412,7 +87169,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "ResetInstanceAttribute");
         params.put("Version", "2016-11-15");
         ResetInstanceAttributeRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -86438,7 +87198,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "ResetNetworkInterfaceAttribute");
         params.put("Version", "2016-11-15");
         ResetNetworkInterfaceAttributeRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -86464,7 +87227,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "ResetSnapshotAttribute");
         params.put("Version", "2016-11-15");
         ResetSnapshotAttributeRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -86490,7 +87256,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "RestoreAddressToClassic");
         params.put("Version", "2016-11-15");
         RestoreAddressToClassicRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -86536,7 +87305,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "RevokeSecurityGroupEgress");
         params.put("Version", "2016-11-15");
         RevokeSecurityGroupEgressRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -86562,7 +87334,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "RevokeSecurityGroupIngress");
         params.put("Version", "2016-11-15");
         RevokeSecurityGroupIngressRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -86588,7 +87363,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "RunInstances");
         params.put("Version", "2016-11-15");
         RunInstancesRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -86634,7 +87412,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "RunScheduledInstances");
         params.put("Version", "2016-11-15");
         RunScheduledInstancesRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -86680,7 +87461,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "StartInstances");
         params.put("Version", "2016-11-15");
         StartInstancesRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -86726,7 +87510,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "StopInstances");
         params.put("Version", "2016-11-15");
         StopInstancesRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -86772,7 +87559,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "TerminateInstances");
         params.put("Version", "2016-11-15");
         TerminateInstancesRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -86818,7 +87608,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "UnassignIpv6Addresses");
         params.put("Version", "2016-11-15");
         UnassignIpv6AddressesRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -86864,7 +87657,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "UnassignPrivateIpAddresses");
         params.put("Version", "2016-11-15");
         UnassignPrivateIpAddressesRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -86890,7 +87686,10 @@ impl Ec2 for Ec2Client {
         params.put("Action", "UnmonitorInstances");
         params.put("Version", "2016-11-15");
         UnmonitorInstancesRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -86943,7 +87742,10 @@ impl Ec2 for Ec2Client {
             "",
             &input,
         );
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -86998,7 +87800,10 @@ impl Ec2 for Ec2Client {
             "",
             &input,
         );
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {

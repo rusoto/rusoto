@@ -31,6 +31,7 @@ use rusoto_core::xmlutil::{
     characters, end_element, find_start_element, peek_at_name, skip_tree, start_element,
 };
 use rusoto_core::xmlutil::{Next, Peek, XmlParseError, XmlResponse};
+use serde_urlencoded;
 use std::str::FromStr;
 use xml::reader::ParserConfig;
 use xml::reader::XmlEvent;
@@ -2140,7 +2141,10 @@ impl SimpleDb for SimpleDbClient {
         params.put("Action", "BatchDeleteAttributes");
         params.put("Version", "2009-04-15");
         BatchDeleteAttributesRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -2166,7 +2170,10 @@ impl SimpleDb for SimpleDbClient {
         params.put("Action", "BatchPutAttributes");
         params.put("Version", "2009-04-15");
         BatchPutAttributesRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -2189,7 +2196,10 @@ impl SimpleDb for SimpleDbClient {
         params.put("Action", "CreateDomain");
         params.put("Version", "2009-04-15");
         CreateDomainRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -2215,7 +2225,10 @@ impl SimpleDb for SimpleDbClient {
         params.put("Action", "DeleteAttributes");
         params.put("Version", "2009-04-15");
         DeleteAttributesRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -2238,7 +2251,10 @@ impl SimpleDb for SimpleDbClient {
         params.put("Action", "DeleteDomain");
         params.put("Version", "2009-04-15");
         DeleteDomainRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -2264,7 +2280,10 @@ impl SimpleDb for SimpleDbClient {
         params.put("Action", "DomainMetadata");
         params.put("Version", "2009-04-15");
         DomainMetadataRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -2313,7 +2332,10 @@ impl SimpleDb for SimpleDbClient {
         params.put("Action", "GetAttributes");
         params.put("Version", "2009-04-15");
         GetAttributesRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -2362,7 +2384,10 @@ impl SimpleDb for SimpleDbClient {
         params.put("Action", "ListDomains");
         params.put("Version", "2009-04-15");
         ListDomainsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -2408,7 +2433,10 @@ impl SimpleDb for SimpleDbClient {
         params.put("Action", "PutAttributes");
         params.put("Version", "2009-04-15");
         PutAttributesRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -2431,7 +2459,10 @@ impl SimpleDb for SimpleDbClient {
         params.put("Action", "Select");
         params.put("Version", "2009-04-15");
         SelectRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {

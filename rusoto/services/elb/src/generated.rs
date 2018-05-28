@@ -31,6 +31,7 @@ use rusoto_core::xmlutil::{
     characters, end_element, find_start_element, peek_at_name, skip_tree, start_element,
 };
 use rusoto_core::xmlutil::{Next, Peek, XmlParseError, XmlResponse};
+use serde_urlencoded;
 use std::str::FromStr;
 use xml::reader::ParserConfig;
 use xml::reader::XmlEvent;
@@ -8438,7 +8439,10 @@ impl Elb for ElbClient {
         params.put("Action", "AddTags");
         params.put("Version", "2012-06-01");
         AddTagsInputSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -8488,7 +8492,10 @@ impl Elb for ElbClient {
         params.put("Action", "ApplySecurityGroupsToLoadBalancer");
         params.put("Version", "2012-06-01");
         ApplySecurityGroupsToLoadBalancerInputSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -8539,7 +8546,10 @@ impl Elb for ElbClient {
         params.put("Action", "AttachLoadBalancerToSubnets");
         params.put("Version", "2012-06-01");
         AttachLoadBalancerToSubnetsInputSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -8588,7 +8598,10 @@ impl Elb for ElbClient {
         params.put("Action", "ConfigureHealthCheck");
         params.put("Version", "2012-06-01");
         ConfigureHealthCheckInputSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -8638,7 +8651,10 @@ impl Elb for ElbClient {
         params.put("Action", "CreateAppCookieStickinessPolicy");
         params.put("Version", "2012-06-01");
         CreateAppCookieStickinessPolicyInputSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -8690,7 +8706,10 @@ impl Elb for ElbClient {
         params.put("Action", "CreateLBCookieStickinessPolicy");
         params.put("Version", "2012-06-01");
         CreateLBCookieStickinessPolicyInputSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -8741,7 +8760,10 @@ impl Elb for ElbClient {
         params.put("Action", "CreateLoadBalancer");
         params.put("Version", "2012-06-01");
         CreateAccessPointInputSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -8790,7 +8812,10 @@ impl Elb for ElbClient {
         params.put("Action", "CreateLoadBalancerListeners");
         params.put("Version", "2012-06-01");
         CreateLoadBalancerListenerInputSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -8839,7 +8864,10 @@ impl Elb for ElbClient {
         params.put("Action", "CreateLoadBalancerPolicy");
         params.put("Version", "2012-06-01");
         CreateLoadBalancerPolicyInputSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -8888,7 +8916,10 @@ impl Elb for ElbClient {
         params.put("Action", "DeleteLoadBalancer");
         params.put("Version", "2012-06-01");
         DeleteAccessPointInputSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -8937,7 +8968,10 @@ impl Elb for ElbClient {
         params.put("Action", "DeleteLoadBalancerListeners");
         params.put("Version", "2012-06-01");
         DeleteLoadBalancerListenerInputSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -8986,7 +9020,10 @@ impl Elb for ElbClient {
         params.put("Action", "DeleteLoadBalancerPolicy");
         params.put("Version", "2012-06-01");
         DeleteLoadBalancerPolicyInputSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -9035,7 +9072,10 @@ impl Elb for ElbClient {
         params.put("Action", "DeregisterInstancesFromLoadBalancer");
         params.put("Version", "2012-06-01");
         DeregisterEndPointsInputSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -9084,7 +9124,10 @@ impl Elb for ElbClient {
         params.put("Action", "DescribeAccountLimits");
         params.put("Version", "2012-06-01");
         DescribeAccountLimitsInputSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -9133,7 +9176,10 @@ impl Elb for ElbClient {
         params.put("Action", "DescribeInstanceHealth");
         params.put("Version", "2012-06-01");
         DescribeEndPointStateInputSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -9183,7 +9229,10 @@ impl Elb for ElbClient {
         params.put("Action", "DescribeLoadBalancerAttributes");
         params.put("Version", "2012-06-01");
         DescribeLoadBalancerAttributesInputSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -9234,7 +9283,10 @@ impl Elb for ElbClient {
         params.put("Action", "DescribeLoadBalancerPolicies");
         params.put("Version", "2012-06-01");
         DescribeLoadBalancerPoliciesInputSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -9284,7 +9336,10 @@ impl Elb for ElbClient {
         params.put("Action", "DescribeLoadBalancerPolicyTypes");
         params.put("Version", "2012-06-01");
         DescribeLoadBalancerPolicyTypesInputSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -9335,7 +9390,10 @@ impl Elb for ElbClient {
         params.put("Action", "DescribeLoadBalancers");
         params.put("Version", "2012-06-01");
         DescribeAccessPointsInputSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -9384,7 +9442,10 @@ impl Elb for ElbClient {
         params.put("Action", "DescribeTags");
         params.put("Version", "2012-06-01");
         DescribeTagsInputSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -9433,7 +9494,10 @@ impl Elb for ElbClient {
         params.put("Action", "DetachLoadBalancerFromSubnets");
         params.put("Version", "2012-06-01");
         DetachLoadBalancerFromSubnetsInputSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -9485,7 +9549,10 @@ impl Elb for ElbClient {
         params.put("Action", "DisableAvailabilityZonesForLoadBalancer");
         params.put("Version", "2012-06-01");
         RemoveAvailabilityZonesInputSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -9534,7 +9601,10 @@ impl Elb for ElbClient {
         params.put("Action", "EnableAvailabilityZonesForLoadBalancer");
         params.put("Version", "2012-06-01");
         AddAvailabilityZonesInputSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -9583,7 +9653,10 @@ impl Elb for ElbClient {
         params.put("Action", "ModifyLoadBalancerAttributes");
         params.put("Version", "2012-06-01");
         ModifyLoadBalancerAttributesInputSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -9632,7 +9705,10 @@ impl Elb for ElbClient {
         params.put("Action", "RegisterInstancesWithLoadBalancer");
         params.put("Version", "2012-06-01");
         RegisterEndPointsInputSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -9681,7 +9757,10 @@ impl Elb for ElbClient {
         params.put("Action", "RemoveTags");
         params.put("Version", "2012-06-01");
         RemoveTagsInputSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -9733,7 +9812,10 @@ impl Elb for ElbClient {
         params.put("Action", "SetLoadBalancerListenerSSLCertificate");
         params.put("Version", "2012-06-01");
         SetLoadBalancerListenerSSLCertificateInputSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -9787,7 +9869,10 @@ impl Elb for ElbClient {
         params.put("Action", "SetLoadBalancerPoliciesForBackendServer");
         params.put("Version", "2012-06-01");
         SetLoadBalancerPoliciesForBackendServerInputSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -9839,7 +9924,10 @@ impl Elb for ElbClient {
         params.put("Action", "SetLoadBalancerPoliciesOfListener");
         params.put("Version", "2012-06-01");
         SetLoadBalancerPoliciesOfListenerInputSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {

@@ -31,6 +31,7 @@ use rusoto_core::xmlutil::{
     characters, end_element, find_start_element, peek_at_name, skip_tree, start_element,
 };
 use rusoto_core::xmlutil::{Next, Peek, XmlParseError, XmlResponse};
+use serde_urlencoded;
 use std::str::FromStr;
 use xml::reader::ParserConfig;
 use xml::reader::XmlEvent;
@@ -14267,7 +14268,10 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         params.put("Action", "AbortEnvironmentUpdate");
         params.put("Version", "2010-12-01");
         AbortEnvironmentUpdateMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -14293,7 +14297,10 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         params.put("Action", "ApplyEnvironmentManagedAction");
         params.put("Version", "2010-12-01");
         ApplyEnvironmentManagedActionRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -14344,7 +14351,10 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         params.put("Action", "CheckDNSAvailability");
         params.put("Version", "2010-12-01");
         CheckDNSAvailabilityMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -14393,7 +14403,10 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         params.put("Action", "ComposeEnvironments");
         params.put("Version", "2010-12-01");
         ComposeEnvironmentsMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -14442,7 +14455,10 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         params.put("Action", "CreateApplication");
         params.put("Version", "2010-12-01");
         CreateApplicationMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -14491,7 +14507,10 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         params.put("Action", "CreateApplicationVersion");
         params.put("Version", "2010-12-01");
         CreateApplicationVersionMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -14542,7 +14561,10 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         params.put("Action", "CreateConfigurationTemplate");
         params.put("Version", "2010-12-01");
         CreateConfigurationTemplateMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -14591,7 +14613,10 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         params.put("Action", "CreateEnvironment");
         params.put("Version", "2010-12-01");
         CreateEnvironmentMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -14640,7 +14665,10 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         params.put("Action", "CreatePlatformVersion");
         params.put("Version", "2010-12-01");
         CreatePlatformVersionRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -14688,7 +14716,10 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         params.put("Action", "CreateStorageLocation");
         params.put("Version", "2010-12-01");
 
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -14737,7 +14768,10 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         params.put("Action", "DeleteApplication");
         params.put("Version", "2010-12-01");
         DeleteApplicationMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -14763,7 +14797,10 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         params.put("Action", "DeleteApplicationVersion");
         params.put("Version", "2010-12-01");
         DeleteApplicationVersionMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -14789,7 +14826,10 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         params.put("Action", "DeleteConfigurationTemplate");
         params.put("Version", "2010-12-01");
         DeleteConfigurationTemplateMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -14815,7 +14855,10 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         params.put("Action", "DeleteEnvironmentConfiguration");
         params.put("Version", "2010-12-01");
         DeleteEnvironmentConfigurationMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -14841,7 +14884,10 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         params.put("Action", "DeletePlatformVersion");
         params.put("Version", "2010-12-01");
         DeletePlatformVersionRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -14889,7 +14935,10 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         params.put("Action", "DescribeAccountAttributes");
         params.put("Version", "2010-12-01");
 
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -14938,7 +14987,10 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         params.put("Action", "DescribeApplicationVersions");
         params.put("Version", "2010-12-01");
         DescribeApplicationVersionsMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -14989,7 +15041,10 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         params.put("Action", "DescribeApplications");
         params.put("Version", "2010-12-01");
         DescribeApplicationsMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -15038,7 +15093,10 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         params.put("Action", "DescribeConfigurationOptions");
         params.put("Version", "2010-12-01");
         DescribeConfigurationOptionsMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -15087,7 +15145,10 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         params.put("Action", "DescribeConfigurationSettings");
         params.put("Version", "2010-12-01");
         DescribeConfigurationSettingsMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -15136,7 +15197,10 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         params.put("Action", "DescribeEnvironmentHealth");
         params.put("Version", "2010-12-01");
         DescribeEnvironmentHealthRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -15192,7 +15256,10 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             "",
             &input,
         );
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -15244,7 +15311,10 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         params.put("Action", "DescribeEnvironmentManagedActions");
         params.put("Version", "2010-12-01");
         DescribeEnvironmentManagedActionsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -15296,7 +15366,10 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         params.put("Action", "DescribeEnvironmentResources");
         params.put("Version", "2010-12-01");
         DescribeEnvironmentResourcesMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -15347,7 +15420,10 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         params.put("Action", "DescribeEnvironments");
         params.put("Version", "2010-12-01");
         DescribeEnvironmentsMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -15396,7 +15472,10 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         params.put("Action", "DescribeEvents");
         params.put("Version", "2010-12-01");
         DescribeEventsMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -15445,7 +15524,10 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         params.put("Action", "DescribeInstancesHealth");
         params.put("Version", "2010-12-01");
         DescribeInstancesHealthRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -15494,7 +15576,10 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         params.put("Action", "DescribePlatformVersion");
         params.put("Version", "2010-12-01");
         DescribePlatformVersionRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -15543,7 +15628,10 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         params.put("Action", "ListAvailableSolutionStacks");
         params.put("Version", "2010-12-01");
 
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -15594,7 +15682,10 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         params.put("Action", "ListPlatformVersions");
         params.put("Version", "2010-12-01");
         ListPlatformVersionsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -15643,7 +15734,10 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         params.put("Action", "ListTagsForResource");
         params.put("Version", "2010-12-01");
         ListTagsForResourceMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -15692,7 +15786,10 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         params.put("Action", "RebuildEnvironment");
         params.put("Version", "2010-12-01");
         RebuildEnvironmentMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -15718,7 +15815,10 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         params.put("Action", "RequestEnvironmentInfo");
         params.put("Version", "2010-12-01");
         RequestEnvironmentInfoMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -15744,7 +15844,10 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         params.put("Action", "RestartAppServer");
         params.put("Version", "2010-12-01");
         RestartAppServerMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -15770,7 +15873,10 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         params.put("Action", "RetrieveEnvironmentInfo");
         params.put("Version", "2010-12-01");
         RetrieveEnvironmentInfoMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -15821,7 +15927,10 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         params.put("Action", "SwapEnvironmentCNAMEs");
         params.put("Version", "2010-12-01");
         SwapEnvironmentCNAMEsMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -15847,7 +15956,10 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         params.put("Action", "TerminateEnvironment");
         params.put("Version", "2010-12-01");
         TerminateEnvironmentMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -15896,7 +16008,10 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         params.put("Action", "UpdateApplication");
         params.put("Version", "2010-12-01");
         UpdateApplicationMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -15948,7 +16063,10 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         params.put("Action", "UpdateApplicationResourceLifecycle");
         params.put("Version", "2010-12-01");
         UpdateApplicationResourceLifecycleMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -15999,7 +16117,10 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         params.put("Action", "UpdateApplicationVersion");
         params.put("Version", "2010-12-01");
         UpdateApplicationVersionMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -16050,7 +16171,10 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         params.put("Action", "UpdateConfigurationTemplate");
         params.put("Version", "2010-12-01");
         UpdateConfigurationTemplateMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -16099,7 +16223,10 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         params.put("Action", "UpdateEnvironment");
         params.put("Version", "2010-12-01");
         UpdateEnvironmentMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -16148,7 +16275,10 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         params.put("Action", "UpdateTagsForResource");
         params.put("Version", "2010-12-01");
         UpdateTagsForResourceMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -16175,7 +16305,10 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         params.put("Action", "ValidateConfigurationSettings");
         params.put("Version", "2010-12-01");
         ValidateConfigurationSettingsMessageSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {

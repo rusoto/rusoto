@@ -31,6 +31,7 @@ use rusoto_core::xmlutil::{
     characters, end_element, find_start_element, peek_at_name, skip_tree, start_element,
 };
 use rusoto_core::xmlutil::{Next, Peek, XmlParseError, XmlResponse};
+use serde_urlencoded;
 use std::str::FromStr;
 use xml::reader::ParserConfig;
 use xml::reader::XmlEvent;
@@ -15336,7 +15337,10 @@ impl Ses for SesClient {
         params.put("Action", "CloneReceiptRuleSet");
         params.put("Version", "2010-12-01");
         CloneReceiptRuleSetRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -15385,7 +15389,10 @@ impl Ses for SesClient {
         params.put("Action", "CreateConfigurationSet");
         params.put("Version", "2010-12-01");
         CreateConfigurationSetRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -15437,7 +15444,10 @@ impl Ses for SesClient {
         params.put("Action", "CreateConfigurationSetEventDestination");
         params.put("Version", "2010-12-01");
         CreateConfigurationSetEventDestinationRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -15491,7 +15501,10 @@ impl Ses for SesClient {
         params.put("Action", "CreateConfigurationSetTrackingOptions");
         params.put("Version", "2010-12-01");
         CreateConfigurationSetTrackingOptionsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -15542,7 +15555,10 @@ impl Ses for SesClient {
         params.put("Action", "CreateCustomVerificationEmailTemplate");
         params.put("Version", "2010-12-01");
         CreateCustomVerificationEmailTemplateRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -15568,7 +15584,10 @@ impl Ses for SesClient {
         params.put("Action", "CreateReceiptFilter");
         params.put("Version", "2010-12-01");
         CreateReceiptFilterRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -15617,7 +15636,10 @@ impl Ses for SesClient {
         params.put("Action", "CreateReceiptRule");
         params.put("Version", "2010-12-01");
         CreateReceiptRuleRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -15666,7 +15688,10 @@ impl Ses for SesClient {
         params.put("Action", "CreateReceiptRuleSet");
         params.put("Version", "2010-12-01");
         CreateReceiptRuleSetRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -15715,7 +15740,10 @@ impl Ses for SesClient {
         params.put("Action", "CreateTemplate");
         params.put("Version", "2010-12-01");
         CreateTemplateRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -15764,7 +15792,10 @@ impl Ses for SesClient {
         params.put("Action", "DeleteConfigurationSet");
         params.put("Version", "2010-12-01");
         DeleteConfigurationSetRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -15816,7 +15847,10 @@ impl Ses for SesClient {
         params.put("Action", "DeleteConfigurationSetEventDestination");
         params.put("Version", "2010-12-01");
         DeleteConfigurationSetEventDestinationRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -15870,7 +15904,10 @@ impl Ses for SesClient {
         params.put("Action", "DeleteConfigurationSetTrackingOptions");
         params.put("Version", "2010-12-01");
         DeleteConfigurationSetTrackingOptionsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -15921,7 +15958,10 @@ impl Ses for SesClient {
         params.put("Action", "DeleteCustomVerificationEmailTemplate");
         params.put("Version", "2010-12-01");
         DeleteCustomVerificationEmailTemplateRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -15947,7 +15987,10 @@ impl Ses for SesClient {
         params.put("Action", "DeleteIdentity");
         params.put("Version", "2010-12-01");
         DeleteIdentityRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -15996,7 +16039,10 @@ impl Ses for SesClient {
         params.put("Action", "DeleteIdentityPolicy");
         params.put("Version", "2010-12-01");
         DeleteIdentityPolicyRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -16045,7 +16091,10 @@ impl Ses for SesClient {
         params.put("Action", "DeleteReceiptFilter");
         params.put("Version", "2010-12-01");
         DeleteReceiptFilterRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -16094,7 +16143,10 @@ impl Ses for SesClient {
         params.put("Action", "DeleteReceiptRule");
         params.put("Version", "2010-12-01");
         DeleteReceiptRuleRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -16143,7 +16195,10 @@ impl Ses for SesClient {
         params.put("Action", "DeleteReceiptRuleSet");
         params.put("Version", "2010-12-01");
         DeleteReceiptRuleSetRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -16192,7 +16247,10 @@ impl Ses for SesClient {
         params.put("Action", "DeleteTemplate");
         params.put("Version", "2010-12-01");
         DeleteTemplateRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -16241,7 +16299,10 @@ impl Ses for SesClient {
         params.put("Action", "DeleteVerifiedEmailAddress");
         params.put("Version", "2010-12-01");
         DeleteVerifiedEmailAddressRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -16267,7 +16328,10 @@ impl Ses for SesClient {
         params.put("Action", "DescribeActiveReceiptRuleSet");
         params.put("Version", "2010-12-01");
         DescribeActiveReceiptRuleSetRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -16318,7 +16382,10 @@ impl Ses for SesClient {
         params.put("Action", "DescribeConfigurationSet");
         params.put("Version", "2010-12-01");
         DescribeConfigurationSetRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -16367,7 +16434,10 @@ impl Ses for SesClient {
         params.put("Action", "DescribeReceiptRule");
         params.put("Version", "2010-12-01");
         DescribeReceiptRuleRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -16416,7 +16486,10 @@ impl Ses for SesClient {
         params.put("Action", "DescribeReceiptRuleSet");
         params.put("Version", "2010-12-01");
         DescribeReceiptRuleSetRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -16464,7 +16537,10 @@ impl Ses for SesClient {
         params.put("Action", "GetAccountSendingEnabled");
         params.put("Version", "2010-12-01");
 
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -16516,7 +16592,10 @@ impl Ses for SesClient {
         params.put("Action", "GetCustomVerificationEmailTemplate");
         params.put("Version", "2010-12-01");
         GetCustomVerificationEmailTemplateRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -16567,7 +16646,10 @@ impl Ses for SesClient {
         params.put("Action", "GetIdentityDkimAttributes");
         params.put("Version", "2010-12-01");
         GetIdentityDkimAttributesRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -16619,7 +16701,10 @@ impl Ses for SesClient {
         params.put("Action", "GetIdentityMailFromDomainAttributes");
         params.put("Version", "2010-12-01");
         GetIdentityMailFromDomainAttributesRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -16673,7 +16758,10 @@ impl Ses for SesClient {
         params.put("Action", "GetIdentityNotificationAttributes");
         params.put("Version", "2010-12-01");
         GetIdentityNotificationAttributesRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -16724,7 +16812,10 @@ impl Ses for SesClient {
         params.put("Action", "GetIdentityPolicies");
         params.put("Version", "2010-12-01");
         GetIdentityPoliciesRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -16776,7 +16867,10 @@ impl Ses for SesClient {
         params.put("Action", "GetIdentityVerificationAttributes");
         params.put("Version", "2010-12-01");
         GetIdentityVerificationAttributesRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -16824,7 +16918,10 @@ impl Ses for SesClient {
         params.put("Action", "GetSendQuota");
         params.put("Version", "2010-12-01");
 
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -16872,7 +16969,10 @@ impl Ses for SesClient {
         params.put("Action", "GetSendStatistics");
         params.put("Version", "2010-12-01");
 
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -16921,7 +17021,10 @@ impl Ses for SesClient {
         params.put("Action", "GetTemplate");
         params.put("Version", "2010-12-01");
         GetTemplateRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -16970,7 +17073,10 @@ impl Ses for SesClient {
         params.put("Action", "ListConfigurationSets");
         params.put("Version", "2010-12-01");
         ListConfigurationSetsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -17022,7 +17128,10 @@ impl Ses for SesClient {
         params.put("Action", "ListCustomVerificationEmailTemplates");
         params.put("Version", "2010-12-01");
         ListCustomVerificationEmailTemplatesRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -17073,7 +17182,10 @@ impl Ses for SesClient {
         params.put("Action", "ListIdentities");
         params.put("Version", "2010-12-01");
         ListIdentitiesRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -17122,7 +17234,10 @@ impl Ses for SesClient {
         params.put("Action", "ListIdentityPolicies");
         params.put("Version", "2010-12-01");
         ListIdentityPoliciesRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -17171,7 +17286,10 @@ impl Ses for SesClient {
         params.put("Action", "ListReceiptFilters");
         params.put("Version", "2010-12-01");
         ListReceiptFiltersRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -17220,7 +17338,10 @@ impl Ses for SesClient {
         params.put("Action", "ListReceiptRuleSets");
         params.put("Version", "2010-12-01");
         ListReceiptRuleSetsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -17269,7 +17390,10 @@ impl Ses for SesClient {
         params.put("Action", "ListTemplates");
         params.put("Version", "2010-12-01");
         ListTemplatesRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -17317,7 +17441,10 @@ impl Ses for SesClient {
         params.put("Action", "ListVerifiedEmailAddresses");
         params.put("Version", "2010-12-01");
 
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -17366,7 +17493,10 @@ impl Ses for SesClient {
         params.put("Action", "PutIdentityPolicy");
         params.put("Version", "2010-12-01");
         PutIdentityPolicyRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -17415,7 +17545,10 @@ impl Ses for SesClient {
         params.put("Action", "ReorderReceiptRuleSet");
         params.put("Version", "2010-12-01");
         ReorderReceiptRuleSetRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -17464,7 +17597,10 @@ impl Ses for SesClient {
         params.put("Action", "SendBounce");
         params.put("Version", "2010-12-01");
         SendBounceRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -17513,7 +17649,10 @@ impl Ses for SesClient {
         params.put("Action", "SendBulkTemplatedEmail");
         params.put("Version", "2010-12-01");
         SendBulkTemplatedEmailRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -17562,7 +17701,10 @@ impl Ses for SesClient {
         params.put("Action", "SendCustomVerificationEmail");
         params.put("Version", "2010-12-01");
         SendCustomVerificationEmailRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -17613,7 +17755,10 @@ impl Ses for SesClient {
         params.put("Action", "SendEmail");
         params.put("Version", "2010-12-01");
         SendEmailRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -17662,7 +17807,10 @@ impl Ses for SesClient {
         params.put("Action", "SendRawEmail");
         params.put("Version", "2010-12-01");
         SendRawEmailRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -17711,7 +17859,10 @@ impl Ses for SesClient {
         params.put("Action", "SendTemplatedEmail");
         params.put("Version", "2010-12-01");
         SendTemplatedEmailRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -17760,7 +17911,10 @@ impl Ses for SesClient {
         params.put("Action", "SetActiveReceiptRuleSet");
         params.put("Version", "2010-12-01");
         SetActiveReceiptRuleSetRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -17809,7 +17963,10 @@ impl Ses for SesClient {
         params.put("Action", "SetIdentityDkimEnabled");
         params.put("Version", "2010-12-01");
         SetIdentityDkimEnabledRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -17861,7 +18018,10 @@ impl Ses for SesClient {
         params.put("Action", "SetIdentityFeedbackForwardingEnabled");
         params.put("Version", "2010-12-01");
         SetIdentityFeedbackForwardingEnabledRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -17919,7 +18079,10 @@ impl Ses for SesClient {
             "",
             &input,
         );
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -17970,7 +18133,10 @@ impl Ses for SesClient {
         params.put("Action", "SetIdentityMailFromDomain");
         params.put("Version", "2010-12-01");
         SetIdentityMailFromDomainRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -18019,7 +18185,10 @@ impl Ses for SesClient {
         params.put("Action", "SetIdentityNotificationTopic");
         params.put("Version", "2010-12-01");
         SetIdentityNotificationTopicRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -18070,7 +18239,10 @@ impl Ses for SesClient {
         params.put("Action", "SetReceiptRulePosition");
         params.put("Version", "2010-12-01");
         SetReceiptRulePositionRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -18119,7 +18291,10 @@ impl Ses for SesClient {
         params.put("Action", "TestRenderTemplate");
         params.put("Version", "2010-12-01");
         TestRenderTemplateRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -18168,7 +18343,10 @@ impl Ses for SesClient {
         params.put("Action", "UpdateAccountSendingEnabled");
         params.put("Version", "2010-12-01");
         UpdateAccountSendingEnabledRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -18197,7 +18375,10 @@ impl Ses for SesClient {
         params.put("Action", "UpdateConfigurationSetEventDestination");
         params.put("Version", "2010-12-01");
         UpdateConfigurationSetEventDestinationRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -18252,7 +18433,10 @@ impl Ses for SesClient {
             "",
             &input,
         );
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -18280,7 +18464,10 @@ impl Ses for SesClient {
         params.put("Action", "UpdateConfigurationSetSendingEnabled");
         params.put("Version", "2010-12-01");
         UpdateConfigurationSetSendingEnabledRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -18309,7 +18496,10 @@ impl Ses for SesClient {
         params.put("Action", "UpdateConfigurationSetTrackingOptions");
         params.put("Version", "2010-12-01");
         UpdateConfigurationSetTrackingOptionsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -18360,7 +18550,10 @@ impl Ses for SesClient {
         params.put("Action", "UpdateCustomVerificationEmailTemplate");
         params.put("Version", "2010-12-01");
         UpdateCustomVerificationEmailTemplateRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -18386,7 +18579,10 @@ impl Ses for SesClient {
         params.put("Action", "UpdateReceiptRule");
         params.put("Version", "2010-12-01");
         UpdateReceiptRuleRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -18435,7 +18631,10 @@ impl Ses for SesClient {
         params.put("Action", "UpdateTemplate");
         params.put("Version", "2010-12-01");
         UpdateTemplateRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -18484,7 +18683,10 @@ impl Ses for SesClient {
         params.put("Action", "VerifyDomainDkim");
         params.put("Version", "2010-12-01");
         VerifyDomainDkimRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -18533,7 +18735,10 @@ impl Ses for SesClient {
         params.put("Action", "VerifyDomainIdentity");
         params.put("Version", "2010-12-01");
         VerifyDomainIdentityRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -18582,7 +18787,10 @@ impl Ses for SesClient {
         params.put("Action", "VerifyEmailAddress");
         params.put("Version", "2010-12-01");
         VerifyEmailAddressRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -18608,7 +18816,10 @@ impl Ses for SesClient {
         params.put("Action", "VerifyEmailIdentity");
         params.put("Version", "2010-12-01");
         VerifyEmailIdentityRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {

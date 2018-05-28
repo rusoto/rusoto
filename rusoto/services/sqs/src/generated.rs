@@ -31,6 +31,7 @@ use rusoto_core::xmlutil::{
     characters, end_element, find_start_element, peek_at_name, skip_tree, start_element,
 };
 use rusoto_core::xmlutil::{Next, Peek, XmlParseError, XmlResponse};
+use serde_urlencoded;
 use std::str::FromStr;
 use xml::reader::ParserConfig;
 use xml::reader::XmlEvent;
@@ -4195,7 +4196,10 @@ impl Sqs for SqsClient {
         params.put("Action", "AddPermission");
         params.put("Version", "2012-11-05");
         AddPermissionRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -4221,7 +4225,10 @@ impl Sqs for SqsClient {
         params.put("Action", "ChangeMessageVisibility");
         params.put("Version", "2012-11-05");
         ChangeMessageVisibilityRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -4247,7 +4254,10 @@ impl Sqs for SqsClient {
         params.put("Action", "ChangeMessageVisibilityBatch");
         params.put("Version", "2012-11-05");
         ChangeMessageVisibilityBatchRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -4296,7 +4306,10 @@ impl Sqs for SqsClient {
         params.put("Action", "CreateQueue");
         params.put("Version", "2012-11-05");
         CreateQueueRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -4342,7 +4355,10 @@ impl Sqs for SqsClient {
         params.put("Action", "DeleteMessage");
         params.put("Version", "2012-11-05");
         DeleteMessageRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -4368,7 +4384,10 @@ impl Sqs for SqsClient {
         params.put("Action", "DeleteMessageBatch");
         params.put("Version", "2012-11-05");
         DeleteMessageBatchRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -4414,7 +4433,10 @@ impl Sqs for SqsClient {
         params.put("Action", "DeleteQueue");
         params.put("Version", "2012-11-05");
         DeleteQueueRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -4440,7 +4462,10 @@ impl Sqs for SqsClient {
         params.put("Action", "GetQueueAttributes");
         params.put("Version", "2012-11-05");
         GetQueueAttributesRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -4489,7 +4514,10 @@ impl Sqs for SqsClient {
         params.put("Action", "GetQueueUrl");
         params.put("Version", "2012-11-05");
         GetQueueUrlRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -4538,7 +4566,10 @@ impl Sqs for SqsClient {
         params.put("Action", "ListDeadLetterSourceQueues");
         params.put("Version", "2012-11-05");
         ListDeadLetterSourceQueuesRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -4587,7 +4618,10 @@ impl Sqs for SqsClient {
         params.put("Action", "ListQueueTags");
         params.put("Version", "2012-11-05");
         ListQueueTagsRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -4636,7 +4670,10 @@ impl Sqs for SqsClient {
         params.put("Action", "ListQueues");
         params.put("Version", "2012-11-05");
         ListQueuesRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -4682,7 +4719,10 @@ impl Sqs for SqsClient {
         params.put("Action", "PurgeQueue");
         params.put("Version", "2012-11-05");
         PurgeQueueRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -4708,7 +4748,10 @@ impl Sqs for SqsClient {
         params.put("Action", "ReceiveMessage");
         params.put("Version", "2012-11-05");
         ReceiveMessageRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -4757,7 +4800,10 @@ impl Sqs for SqsClient {
         params.put("Action", "RemovePermission");
         params.put("Version", "2012-11-05");
         RemovePermissionRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -4783,7 +4829,10 @@ impl Sqs for SqsClient {
         params.put("Action", "SendMessage");
         params.put("Version", "2012-11-05");
         SendMessageRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -4832,7 +4881,10 @@ impl Sqs for SqsClient {
         params.put("Action", "SendMessageBatch");
         params.put("Version", "2012-11-05");
         SendMessageBatchRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -4881,7 +4933,10 @@ impl Sqs for SqsClient {
         params.put("Action", "SetQueueAttributes");
         params.put("Version", "2012-11-05");
         SetQueueAttributesRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -4904,7 +4959,10 @@ impl Sqs for SqsClient {
         params.put("Action", "TagQueue");
         params.put("Version", "2012-11-05");
         TagQueueRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
@@ -4927,7 +4985,10 @@ impl Sqs for SqsClient {
         params.put("Action", "UntagQueue");
         params.put("Version", "2012-11-05");
         UntagQueueRequestSerializer::serialize(&mut params, "", &input);
-        request.set_params(params);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
