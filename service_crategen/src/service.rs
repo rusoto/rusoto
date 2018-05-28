@@ -114,7 +114,11 @@ impl <'b> Service <'b> {
                 dependencies.insert("serde_derive".to_owned(), cargo::Dependency::Simple("1.0.2".into()));
                 dependencies.insert("serde_json".to_owned(), cargo::Dependency::Simple("1.0.1".into()));
             },
-            "query" | "ec2" | "rest-xml" => {
+            "query" | "ec2" => {
+                dependencies.insert("serde_urlencoded".to_owned(), cargo::Dependency::Simple("0.5".into()));
+                dependencies.insert("xml-rs".to_owned(), cargo::Dependency::Simple("0.7".into()));
+            },
+            "rest-xml" => {
                 dependencies.insert("xml-rs".to_owned(), cargo::Dependency::Simple("0.7".into()));
             },
             "rest-json" => {
