@@ -701,7 +701,8 @@ impl CreateTagsError {
     pub fn from_body(body: &str) -> CreateTagsError {
         match from_str::<SerdeJsonValue>(body) {
             Ok(json) => {
-                let raw_error_type = json.get("__type")
+                let raw_error_type = json
+                    .get("__type")
                     .and_then(|e| e.as_str())
                     .unwrap_or("Unknown");
                 let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
@@ -787,7 +788,8 @@ impl CreateWorkspacesError {
     pub fn from_body(body: &str) -> CreateWorkspacesError {
         match from_str::<SerdeJsonValue>(body) {
             Ok(json) => {
-                let raw_error_type = json.get("__type")
+                let raw_error_type = json
+                    .get("__type")
                     .and_then(|e| e.as_str())
                     .unwrap_or("Unknown");
                 let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
@@ -871,7 +873,8 @@ impl DeleteTagsError {
     pub fn from_body(body: &str) -> DeleteTagsError {
         match from_str::<SerdeJsonValue>(body) {
             Ok(json) => {
-                let raw_error_type = json.get("__type")
+                let raw_error_type = json
+                    .get("__type")
                     .and_then(|e| e.as_str())
                     .unwrap_or("Unknown");
                 let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
@@ -951,7 +954,8 @@ impl DescribeTagsError {
     pub fn from_body(body: &str) -> DescribeTagsError {
         match from_str::<SerdeJsonValue>(body) {
             Ok(json) => {
-                let raw_error_type = json.get("__type")
+                let raw_error_type = json
+                    .get("__type")
                     .and_then(|e| e.as_str())
                     .unwrap_or("Unknown");
                 let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
@@ -1029,7 +1033,8 @@ impl DescribeWorkspaceBundlesError {
     pub fn from_body(body: &str) -> DescribeWorkspaceBundlesError {
         match from_str::<SerdeJsonValue>(body) {
             Ok(json) => {
-                let raw_error_type = json.get("__type")
+                let raw_error_type = json
+                    .get("__type")
                     .and_then(|e| e.as_str())
                     .unwrap_or("Unknown");
                 let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
@@ -1111,7 +1116,8 @@ impl DescribeWorkspaceDirectoriesError {
     pub fn from_body(body: &str) -> DescribeWorkspaceDirectoriesError {
         match from_str::<SerdeJsonValue>(body) {
             Ok(json) => {
-                let raw_error_type = json.get("__type")
+                let raw_error_type = json
+                    .get("__type")
                     .and_then(|e| e.as_str())
                     .unwrap_or("Unknown");
                 let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
@@ -1195,7 +1201,8 @@ impl DescribeWorkspacesError {
     pub fn from_body(body: &str) -> DescribeWorkspacesError {
         match from_str::<SerdeJsonValue>(body) {
             Ok(json) => {
-                let raw_error_type = json.get("__type")
+                let raw_error_type = json
+                    .get("__type")
                     .and_then(|e| e.as_str())
                     .unwrap_or("Unknown");
                 let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
@@ -1279,7 +1286,8 @@ impl DescribeWorkspacesConnectionStatusError {
     pub fn from_body(body: &str) -> DescribeWorkspacesConnectionStatusError {
         match from_str::<SerdeJsonValue>(body) {
             Ok(json) => {
-                let raw_error_type = json.get("__type")
+                let raw_error_type = json
+                    .get("__type")
                     .and_then(|e| e.as_str())
                     .unwrap_or("Unknown");
                 let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
@@ -1373,7 +1381,8 @@ impl ModifyWorkspacePropertiesError {
     pub fn from_body(body: &str) -> ModifyWorkspacePropertiesError {
         match from_str::<SerdeJsonValue>(body) {
             Ok(json) => {
-                let raw_error_type = json.get("__type")
+                let raw_error_type = json
+                    .get("__type")
                     .and_then(|e| e.as_str())
                     .unwrap_or("Unknown");
                 let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
@@ -1487,7 +1496,8 @@ impl RebootWorkspacesError {
     pub fn from_body(body: &str) -> RebootWorkspacesError {
         match from_str::<SerdeJsonValue>(body) {
             Ok(json) => {
-                let raw_error_type = json.get("__type")
+                let raw_error_type = json
+                    .get("__type")
                     .and_then(|e| e.as_str())
                     .unwrap_or("Unknown");
                 let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
@@ -1559,7 +1569,8 @@ impl RebuildWorkspacesError {
     pub fn from_body(body: &str) -> RebuildWorkspacesError {
         match from_str::<SerdeJsonValue>(body) {
             Ok(json) => {
-                let raw_error_type = json.get("__type")
+                let raw_error_type = json
+                    .get("__type")
                     .and_then(|e| e.as_str())
                     .unwrap_or("Unknown");
                 let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
@@ -1633,7 +1644,8 @@ impl StartWorkspacesError {
     pub fn from_body(body: &str) -> StartWorkspacesError {
         match from_str::<SerdeJsonValue>(body) {
             Ok(json) => {
-                let raw_error_type = json.get("__type")
+                let raw_error_type = json
+                    .get("__type")
                     .and_then(|e| e.as_str())
                     .unwrap_or("Unknown");
                 let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
@@ -1705,7 +1717,8 @@ impl StopWorkspacesError {
     pub fn from_body(body: &str) -> StopWorkspacesError {
         match from_str::<SerdeJsonValue>(body) {
             Ok(json) => {
-                let raw_error_type = json.get("__type")
+                let raw_error_type = json
+                    .get("__type")
                     .and_then(|e| e.as_str())
                     .unwrap_or("Unknown");
                 let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
@@ -1777,7 +1790,8 @@ impl TerminateWorkspacesError {
     pub fn from_body(body: &str) -> TerminateWorkspacesError {
         match from_str::<SerdeJsonValue>(body) {
             Ok(json) => {
-                let raw_error_type = json.get("__type")
+                let raw_error_type = json
+                    .get("__type")
                     .and_then(|e| e.as_str())
                     .unwrap_or("Unknown");
                 let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);

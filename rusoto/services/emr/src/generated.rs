@@ -2331,7 +2331,8 @@ impl AddInstanceFleetError {
     pub fn from_body(body: &str) -> AddInstanceFleetError {
         match from_str::<SerdeJsonValue>(body) {
             Ok(json) => {
-                let raw_error_type = json.get("__type")
+                let raw_error_type = json
+                    .get("__type")
                     .and_then(|e| e.as_str())
                     .unwrap_or("Unknown");
                 let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
@@ -2413,7 +2414,8 @@ impl AddInstanceGroupsError {
     pub fn from_body(body: &str) -> AddInstanceGroupsError {
         match from_str::<SerdeJsonValue>(body) {
             Ok(json) => {
-                let raw_error_type = json.get("__type")
+                let raw_error_type = json
+                    .get("__type")
                     .and_then(|e| e.as_str())
                     .unwrap_or("Unknown");
                 let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
@@ -2493,7 +2495,8 @@ impl AddJobFlowStepsError {
     pub fn from_body(body: &str) -> AddJobFlowStepsError {
         match from_str::<SerdeJsonValue>(body) {
             Ok(json) => {
-                let raw_error_type = json.get("__type")
+                let raw_error_type = json
+                    .get("__type")
                     .and_then(|e| e.as_str())
                     .unwrap_or("Unknown");
                 let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
@@ -2573,7 +2576,8 @@ impl AddTagsError {
     pub fn from_body(body: &str) -> AddTagsError {
         match from_str::<SerdeJsonValue>(body) {
             Ok(json) => {
-                let raw_error_type = json.get("__type")
+                let raw_error_type = json
+                    .get("__type")
                     .and_then(|e| e.as_str())
                     .unwrap_or("Unknown");
                 let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
@@ -2655,7 +2659,8 @@ impl CancelStepsError {
     pub fn from_body(body: &str) -> CancelStepsError {
         match from_str::<SerdeJsonValue>(body) {
             Ok(json) => {
-                let raw_error_type = json.get("__type")
+                let raw_error_type = json
+                    .get("__type")
                     .and_then(|e| e.as_str())
                     .unwrap_or("Unknown");
                 let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
@@ -2739,7 +2744,8 @@ impl CreateSecurityConfigurationError {
     pub fn from_body(body: &str) -> CreateSecurityConfigurationError {
         match from_str::<SerdeJsonValue>(body) {
             Ok(json) => {
-                let raw_error_type = json.get("__type")
+                let raw_error_type = json
+                    .get("__type")
                     .and_then(|e| e.as_str())
                     .unwrap_or("Unknown");
                 let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
@@ -2825,7 +2831,8 @@ impl DeleteSecurityConfigurationError {
     pub fn from_body(body: &str) -> DeleteSecurityConfigurationError {
         match from_str::<SerdeJsonValue>(body) {
             Ok(json) => {
-                let raw_error_type = json.get("__type")
+                let raw_error_type = json
+                    .get("__type")
                     .and_then(|e| e.as_str())
                     .unwrap_or("Unknown");
                 let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
@@ -2911,7 +2918,8 @@ impl DescribeClusterError {
     pub fn from_body(body: &str) -> DescribeClusterError {
         match from_str::<SerdeJsonValue>(body) {
             Ok(json) => {
-                let raw_error_type = json.get("__type")
+                let raw_error_type = json
+                    .get("__type")
                     .and_then(|e| e.as_str())
                     .unwrap_or("Unknown");
                 let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
@@ -2993,7 +3001,8 @@ impl DescribeJobFlowsError {
     pub fn from_body(body: &str) -> DescribeJobFlowsError {
         match from_str::<SerdeJsonValue>(body) {
             Ok(json) => {
-                let raw_error_type = json.get("__type")
+                let raw_error_type = json
+                    .get("__type")
                     .and_then(|e| e.as_str())
                     .unwrap_or("Unknown");
                 let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
@@ -3073,7 +3082,8 @@ impl DescribeSecurityConfigurationError {
     pub fn from_body(body: &str) -> DescribeSecurityConfigurationError {
         match from_str::<SerdeJsonValue>(body) {
             Ok(json) => {
-                let raw_error_type = json.get("__type")
+                let raw_error_type = json
+                    .get("__type")
                     .and_then(|e| e.as_str())
                     .unwrap_or("Unknown");
                 let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
@@ -3163,7 +3173,8 @@ impl DescribeStepError {
     pub fn from_body(body: &str) -> DescribeStepError {
         match from_str::<SerdeJsonValue>(body) {
             Ok(json) => {
-                let raw_error_type = json.get("__type")
+                let raw_error_type = json
+                    .get("__type")
                     .and_then(|e| e.as_str())
                     .unwrap_or("Unknown");
                 let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
@@ -3247,7 +3258,8 @@ impl ListBootstrapActionsError {
     pub fn from_body(body: &str) -> ListBootstrapActionsError {
         match from_str::<SerdeJsonValue>(body) {
             Ok(json) => {
-                let raw_error_type = json.get("__type")
+                let raw_error_type = json
+                    .get("__type")
                     .and_then(|e| e.as_str())
                     .unwrap_or("Unknown");
                 let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
@@ -3333,7 +3345,8 @@ impl ListClustersError {
     pub fn from_body(body: &str) -> ListClustersError {
         match from_str::<SerdeJsonValue>(body) {
             Ok(json) => {
-                let raw_error_type = json.get("__type")
+                let raw_error_type = json
+                    .get("__type")
                     .and_then(|e| e.as_str())
                     .unwrap_or("Unknown");
                 let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
@@ -3417,7 +3430,8 @@ impl ListInstanceFleetsError {
     pub fn from_body(body: &str) -> ListInstanceFleetsError {
         match from_str::<SerdeJsonValue>(body) {
             Ok(json) => {
-                let raw_error_type = json.get("__type")
+                let raw_error_type = json
+                    .get("__type")
                     .and_then(|e| e.as_str())
                     .unwrap_or("Unknown");
                 let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
@@ -3503,7 +3517,8 @@ impl ListInstanceGroupsError {
     pub fn from_body(body: &str) -> ListInstanceGroupsError {
         match from_str::<SerdeJsonValue>(body) {
             Ok(json) => {
-                let raw_error_type = json.get("__type")
+                let raw_error_type = json
+                    .get("__type")
                     .and_then(|e| e.as_str())
                     .unwrap_or("Unknown");
                 let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
@@ -3589,7 +3604,8 @@ impl ListInstancesError {
     pub fn from_body(body: &str) -> ListInstancesError {
         match from_str::<SerdeJsonValue>(body) {
             Ok(json) => {
-                let raw_error_type = json.get("__type")
+                let raw_error_type = json
+                    .get("__type")
                     .and_then(|e| e.as_str())
                     .unwrap_or("Unknown");
                 let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
@@ -3673,7 +3689,8 @@ impl ListSecurityConfigurationsError {
     pub fn from_body(body: &str) -> ListSecurityConfigurationsError {
         match from_str::<SerdeJsonValue>(body) {
             Ok(json) => {
-                let raw_error_type = json.get("__type")
+                let raw_error_type = json
+                    .get("__type")
                     .and_then(|e| e.as_str())
                     .unwrap_or("Unknown");
                 let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
@@ -3759,7 +3776,8 @@ impl ListStepsError {
     pub fn from_body(body: &str) -> ListStepsError {
         match from_str::<SerdeJsonValue>(body) {
             Ok(json) => {
-                let raw_error_type = json.get("__type")
+                let raw_error_type = json
+                    .get("__type")
                     .and_then(|e| e.as_str())
                     .unwrap_or("Unknown");
                 let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
@@ -3841,7 +3859,8 @@ impl ModifyInstanceFleetError {
     pub fn from_body(body: &str) -> ModifyInstanceFleetError {
         match from_str::<SerdeJsonValue>(body) {
             Ok(json) => {
-                let raw_error_type = json.get("__type")
+                let raw_error_type = json
+                    .get("__type")
                     .and_then(|e| e.as_str())
                     .unwrap_or("Unknown");
                 let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
@@ -3925,7 +3944,8 @@ impl ModifyInstanceGroupsError {
     pub fn from_body(body: &str) -> ModifyInstanceGroupsError {
         match from_str::<SerdeJsonValue>(body) {
             Ok(json) => {
-                let raw_error_type = json.get("__type")
+                let raw_error_type = json
+                    .get("__type")
                     .and_then(|e| e.as_str())
                     .unwrap_or("Unknown");
                 let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
@@ -4003,7 +4023,8 @@ impl PutAutoScalingPolicyError {
     pub fn from_body(body: &str) -> PutAutoScalingPolicyError {
         match from_str::<SerdeJsonValue>(body) {
             Ok(json) => {
-                let raw_error_type = json.get("__type")
+                let raw_error_type = json
+                    .get("__type")
                     .and_then(|e| e.as_str())
                     .unwrap_or("Unknown");
                 let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
@@ -4077,7 +4098,8 @@ impl RemoveAutoScalingPolicyError {
     pub fn from_body(body: &str) -> RemoveAutoScalingPolicyError {
         match from_str::<SerdeJsonValue>(body) {
             Ok(json) => {
-                let raw_error_type = json.get("__type")
+                let raw_error_type = json
+                    .get("__type")
                     .and_then(|e| e.as_str())
                     .unwrap_or("Unknown");
                 let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
@@ -4155,7 +4177,8 @@ impl RemoveTagsError {
     pub fn from_body(body: &str) -> RemoveTagsError {
         match from_str::<SerdeJsonValue>(body) {
             Ok(json) => {
-                let raw_error_type = json.get("__type")
+                let raw_error_type = json
+                    .get("__type")
                     .and_then(|e| e.as_str())
                     .unwrap_or("Unknown");
                 let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
@@ -4235,7 +4258,8 @@ impl RunJobFlowError {
     pub fn from_body(body: &str) -> RunJobFlowError {
         match from_str::<SerdeJsonValue>(body) {
             Ok(json) => {
-                let raw_error_type = json.get("__type")
+                let raw_error_type = json
+                    .get("__type")
                     .and_then(|e| e.as_str())
                     .unwrap_or("Unknown");
                 let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
@@ -4311,7 +4335,8 @@ impl SetTerminationProtectionError {
     pub fn from_body(body: &str) -> SetTerminationProtectionError {
         match from_str::<SerdeJsonValue>(body) {
             Ok(json) => {
-                let raw_error_type = json.get("__type")
+                let raw_error_type = json
+                    .get("__type")
                     .and_then(|e| e.as_str())
                     .unwrap_or("Unknown");
                 let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
@@ -4391,7 +4416,8 @@ impl SetVisibleToAllUsersError {
     pub fn from_body(body: &str) -> SetVisibleToAllUsersError {
         match from_str::<SerdeJsonValue>(body) {
             Ok(json) => {
-                let raw_error_type = json.get("__type")
+                let raw_error_type = json
+                    .get("__type")
                     .and_then(|e| e.as_str())
                     .unwrap_or("Unknown");
                 let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
@@ -4471,7 +4497,8 @@ impl TerminateJobFlowsError {
     pub fn from_body(body: &str) -> TerminateJobFlowsError {
         match from_str::<SerdeJsonValue>(body) {
             Ok(json) => {
-                let raw_error_type = json.get("__type")
+                let raw_error_type = json
+                    .get("__type")
                     .and_then(|e| e.as_str())
                     .unwrap_or("Unknown");
                 let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);

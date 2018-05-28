@@ -977,7 +977,8 @@ impl CancelKeyDeletionError {
     pub fn from_body(body: &str) -> CancelKeyDeletionError {
         match from_str::<SerdeJsonValue>(body) {
             Ok(json) => {
-                let raw_error_type = json.get("__type")
+                let raw_error_type = json
+                    .get("__type")
                     .and_then(|e| e.as_str())
                     .unwrap_or("Unknown");
                 let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
@@ -1085,7 +1086,8 @@ impl CreateAliasError {
     pub fn from_body(body: &str) -> CreateAliasError {
         match from_str::<SerdeJsonValue>(body) {
             Ok(json) => {
-                let raw_error_type = json.get("__type")
+                let raw_error_type = json
+                    .get("__type")
                     .and_then(|e| e.as_str())
                     .unwrap_or("Unknown");
                 let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
@@ -1199,7 +1201,8 @@ impl CreateGrantError {
     pub fn from_body(body: &str) -> CreateGrantError {
         match from_str::<SerdeJsonValue>(body) {
             Ok(json) => {
-                let raw_error_type = json.get("__type")
+                let raw_error_type = json
+                    .get("__type")
                     .and_then(|e| e.as_str())
                     .unwrap_or("Unknown");
                 let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
@@ -1313,7 +1316,8 @@ impl CreateKeyError {
     pub fn from_body(body: &str) -> CreateKeyError {
         match from_str::<SerdeJsonValue>(body) {
             Ok(json) => {
-                let raw_error_type = json.get("__type")
+                let raw_error_type = json
+                    .get("__type")
                     .and_then(|e| e.as_str())
                     .unwrap_or("Unknown");
                 let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
@@ -1425,7 +1429,8 @@ impl DecryptError {
     pub fn from_body(body: &str) -> DecryptError {
         match from_str::<SerdeJsonValue>(body) {
             Ok(json) => {
-                let raw_error_type = json.get("__type")
+                let raw_error_type = json
+                    .get("__type")
                     .and_then(|e| e.as_str())
                     .unwrap_or("Unknown");
                 let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
@@ -1531,7 +1536,8 @@ impl DeleteAliasError {
     pub fn from_body(body: &str) -> DeleteAliasError {
         match from_str::<SerdeJsonValue>(body) {
             Ok(json) => {
-                let raw_error_type = json.get("__type")
+                let raw_error_type = json
+                    .get("__type")
                     .and_then(|e| e.as_str())
                     .unwrap_or("Unknown");
                 let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
@@ -1629,7 +1635,8 @@ impl DeleteImportedKeyMaterialError {
     pub fn from_body(body: &str) -> DeleteImportedKeyMaterialError {
         match from_str::<SerdeJsonValue>(body) {
             Ok(json) => {
-                let raw_error_type = json.get("__type")
+                let raw_error_type = json
+                    .get("__type")
                     .and_then(|e| e.as_str())
                     .unwrap_or("Unknown");
                 let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
@@ -1739,7 +1746,8 @@ impl DescribeKeyError {
     pub fn from_body(body: &str) -> DescribeKeyError {
         match from_str::<SerdeJsonValue>(body) {
             Ok(json) => {
-                let raw_error_type = json.get("__type")
+                let raw_error_type = json
+                    .get("__type")
                     .and_then(|e| e.as_str())
                     .unwrap_or("Unknown");
                 let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
@@ -1835,7 +1843,8 @@ impl DisableKeyError {
     pub fn from_body(body: &str) -> DisableKeyError {
         match from_str::<SerdeJsonValue>(body) {
             Ok(json) => {
-                let raw_error_type = json.get("__type")
+                let raw_error_type = json
+                    .get("__type")
                     .and_then(|e| e.as_str())
                     .unwrap_or("Unknown");
                 let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
@@ -1937,7 +1946,8 @@ impl DisableKeyRotationError {
     pub fn from_body(body: &str) -> DisableKeyRotationError {
         match from_str::<SerdeJsonValue>(body) {
             Ok(json) => {
-                let raw_error_type = json.get("__type")
+                let raw_error_type = json
+                    .get("__type")
                     .and_then(|e| e.as_str())
                     .unwrap_or("Unknown");
                 let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
@@ -2051,7 +2061,8 @@ impl EnableKeyError {
     pub fn from_body(body: &str) -> EnableKeyError {
         match from_str::<SerdeJsonValue>(body) {
             Ok(json) => {
-                let raw_error_type = json.get("__type")
+                let raw_error_type = json
+                    .get("__type")
                     .and_then(|e| e.as_str())
                     .unwrap_or("Unknown");
                 let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
@@ -2157,7 +2168,8 @@ impl EnableKeyRotationError {
     pub fn from_body(body: &str) -> EnableKeyRotationError {
         match from_str::<SerdeJsonValue>(body) {
             Ok(json) => {
-                let raw_error_type = json.get("__type")
+                let raw_error_type = json
+                    .get("__type")
                     .and_then(|e| e.as_str())
                     .unwrap_or("Unknown");
                 let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
@@ -2275,7 +2287,8 @@ impl EncryptError {
     pub fn from_body(body: &str) -> EncryptError {
         match from_str::<SerdeJsonValue>(body) {
             Ok(json) => {
-                let raw_error_type = json.get("__type")
+                let raw_error_type = json
+                    .get("__type")
                     .and_then(|e| e.as_str())
                     .unwrap_or("Unknown");
                 let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
@@ -2389,7 +2402,8 @@ impl GenerateDataKeyError {
     pub fn from_body(body: &str) -> GenerateDataKeyError {
         match from_str::<SerdeJsonValue>(body) {
             Ok(json) => {
-                let raw_error_type = json.get("__type")
+                let raw_error_type = json
+                    .get("__type")
                     .and_then(|e| e.as_str())
                     .unwrap_or("Unknown");
                 let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
@@ -2509,7 +2523,8 @@ impl GenerateDataKeyWithoutPlaintextError {
     pub fn from_body(body: &str) -> GenerateDataKeyWithoutPlaintextError {
         match from_str::<SerdeJsonValue>(body) {
             Ok(json) => {
-                let raw_error_type = json.get("__type")
+                let raw_error_type = json
+                    .get("__type")
                     .and_then(|e| e.as_str())
                     .unwrap_or("Unknown");
                 let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
@@ -2629,7 +2644,8 @@ impl GenerateRandomError {
     pub fn from_body(body: &str) -> GenerateRandomError {
         match from_str::<SerdeJsonValue>(body) {
             Ok(json) => {
-                let raw_error_type = json.get("__type")
+                let raw_error_type = json
+                    .get("__type")
                     .and_then(|e| e.as_str())
                     .unwrap_or("Unknown");
                 let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
@@ -2719,7 +2735,8 @@ impl GetKeyPolicyError {
     pub fn from_body(body: &str) -> GetKeyPolicyError {
         match from_str::<SerdeJsonValue>(body) {
             Ok(json) => {
-                let raw_error_type = json.get("__type")
+                let raw_error_type = json
+                    .get("__type")
                     .and_then(|e| e.as_str())
                     .unwrap_or("Unknown");
                 let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
@@ -2821,7 +2838,8 @@ impl GetKeyRotationStatusError {
     pub fn from_body(body: &str) -> GetKeyRotationStatusError {
         match from_str::<SerdeJsonValue>(body) {
             Ok(json) => {
-                let raw_error_type = json.get("__type")
+                let raw_error_type = json
+                    .get("__type")
                     .and_then(|e| e.as_str())
                     .unwrap_or("Unknown");
                 let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
@@ -2931,7 +2949,8 @@ impl GetParametersForImportError {
     pub fn from_body(body: &str) -> GetParametersForImportError {
         match from_str::<SerdeJsonValue>(body) {
             Ok(json) => {
-                let raw_error_type = json.get("__type")
+                let raw_error_type = json
+                    .get("__type")
                     .and_then(|e| e.as_str())
                     .unwrap_or("Unknown");
                 let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
@@ -3051,7 +3070,8 @@ impl ImportKeyMaterialError {
     pub fn from_body(body: &str) -> ImportKeyMaterialError {
         match from_str::<SerdeJsonValue>(body) {
             Ok(json) => {
-                let raw_error_type = json.get("__type")
+                let raw_error_type = json
+                    .get("__type")
                     .and_then(|e| e.as_str())
                     .unwrap_or("Unknown");
                 let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
@@ -3171,7 +3191,8 @@ impl ListAliasesError {
     pub fn from_body(body: &str) -> ListAliasesError {
         match from_str::<SerdeJsonValue>(body) {
             Ok(json) => {
-                let raw_error_type = json.get("__type")
+                let raw_error_type = json
+                    .get("__type")
                     .and_then(|e| e.as_str())
                     .unwrap_or("Unknown");
                 let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
@@ -3267,7 +3288,8 @@ impl ListGrantsError {
     pub fn from_body(body: &str) -> ListGrantsError {
         match from_str::<SerdeJsonValue>(body) {
             Ok(json) => {
-                let raw_error_type = json.get("__type")
+                let raw_error_type = json
+                    .get("__type")
                     .and_then(|e| e.as_str())
                     .unwrap_or("Unknown");
                 let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
@@ -3369,7 +3391,8 @@ impl ListKeyPoliciesError {
     pub fn from_body(body: &str) -> ListKeyPoliciesError {
         match from_str::<SerdeJsonValue>(body) {
             Ok(json) => {
-                let raw_error_type = json.get("__type")
+                let raw_error_type = json
+                    .get("__type")
                     .and_then(|e| e.as_str())
                     .unwrap_or("Unknown");
                 let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
@@ -3467,7 +3490,8 @@ impl ListKeysError {
     pub fn from_body(body: &str) -> ListKeysError {
         match from_str::<SerdeJsonValue>(body) {
             Ok(json) => {
-                let raw_error_type = json.get("__type")
+                let raw_error_type = json
+                    .get("__type")
                     .and_then(|e| e.as_str())
                     .unwrap_or("Unknown");
                 let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
@@ -3557,7 +3581,8 @@ impl ListResourceTagsError {
     pub fn from_body(body: &str) -> ListResourceTagsError {
         match from_str::<SerdeJsonValue>(body) {
             Ok(json) => {
-                let raw_error_type = json.get("__type")
+                let raw_error_type = json
+                    .get("__type")
                     .and_then(|e| e.as_str())
                     .unwrap_or("Unknown");
                 let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
@@ -3655,7 +3680,8 @@ impl ListRetirableGrantsError {
     pub fn from_body(body: &str) -> ListRetirableGrantsError {
         match from_str::<SerdeJsonValue>(body) {
             Ok(json) => {
-                let raw_error_type = json.get("__type")
+                let raw_error_type = json
+                    .get("__type")
                     .and_then(|e| e.as_str())
                     .unwrap_or("Unknown");
                 let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
@@ -3765,7 +3791,8 @@ impl PutKeyPolicyError {
     pub fn from_body(body: &str) -> PutKeyPolicyError {
         match from_str::<SerdeJsonValue>(body) {
             Ok(json) => {
-                let raw_error_type = json.get("__type")
+                let raw_error_type = json
+                    .get("__type")
                     .and_then(|e| e.as_str())
                     .unwrap_or("Unknown");
                 let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
@@ -3885,7 +3912,8 @@ impl ReEncryptError {
     pub fn from_body(body: &str) -> ReEncryptError {
         match from_str::<SerdeJsonValue>(body) {
             Ok(json) => {
-                let raw_error_type = json.get("__type")
+                let raw_error_type = json
+                    .get("__type")
                     .and_then(|e| e.as_str())
                     .unwrap_or("Unknown");
                 let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
@@ -4001,7 +4029,8 @@ impl RetireGrantError {
     pub fn from_body(body: &str) -> RetireGrantError {
         match from_str::<SerdeJsonValue>(body) {
             Ok(json) => {
-                let raw_error_type = json.get("__type")
+                let raw_error_type = json
+                    .get("__type")
                     .and_then(|e| e.as_str())
                     .unwrap_or("Unknown");
                 let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
@@ -4111,7 +4140,8 @@ impl RevokeGrantError {
     pub fn from_body(body: &str) -> RevokeGrantError {
         match from_str::<SerdeJsonValue>(body) {
             Ok(json) => {
-                let raw_error_type = json.get("__type")
+                let raw_error_type = json
+                    .get("__type")
                     .and_then(|e| e.as_str())
                     .unwrap_or("Unknown");
                 let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
@@ -4215,7 +4245,8 @@ impl ScheduleKeyDeletionError {
     pub fn from_body(body: &str) -> ScheduleKeyDeletionError {
         match from_str::<SerdeJsonValue>(body) {
             Ok(json) => {
-                let raw_error_type = json.get("__type")
+                let raw_error_type = json
+                    .get("__type")
                     .and_then(|e| e.as_str())
                     .unwrap_or("Unknown");
                 let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
@@ -4321,7 +4352,8 @@ impl TagResourceError {
     pub fn from_body(body: &str) -> TagResourceError {
         match from_str::<SerdeJsonValue>(body) {
             Ok(json) => {
-                let raw_error_type = json.get("__type")
+                let raw_error_type = json
+                    .get("__type")
                     .and_then(|e| e.as_str())
                     .unwrap_or("Unknown");
                 let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
@@ -4423,7 +4455,8 @@ impl UntagResourceError {
     pub fn from_body(body: &str) -> UntagResourceError {
         match from_str::<SerdeJsonValue>(body) {
             Ok(json) => {
-                let raw_error_type = json.get("__type")
+                let raw_error_type = json
+                    .get("__type")
                     .and_then(|e| e.as_str())
                     .unwrap_or("Unknown");
                 let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
@@ -4521,7 +4554,8 @@ impl UpdateAliasError {
     pub fn from_body(body: &str) -> UpdateAliasError {
         match from_str::<SerdeJsonValue>(body) {
             Ok(json) => {
-                let raw_error_type = json.get("__type")
+                let raw_error_type = json
+                    .get("__type")
                     .and_then(|e| e.as_str())
                     .unwrap_or("Unknown");
                 let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
@@ -4617,7 +4651,8 @@ impl UpdateKeyDescriptionError {
     pub fn from_body(body: &str) -> UpdateKeyDescriptionError {
         match from_str::<SerdeJsonValue>(body) {
             Ok(json) => {
-                let raw_error_type = json.get("__type")
+                let raw_error_type = json
+                    .get("__type")
                     .and_then(|e| e.as_str())
                     .unwrap_or("Unknown");
                 let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);

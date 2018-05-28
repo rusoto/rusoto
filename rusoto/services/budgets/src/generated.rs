@@ -505,7 +505,8 @@ impl CreateBudgetError {
     pub fn from_body(body: &str) -> CreateBudgetError {
         match from_str::<SerdeJsonValue>(body) {
             Ok(json) => {
-                let raw_error_type = json.get("__type")
+                let raw_error_type = json
+                    .get("__type")
                     .and_then(|e| e.as_str())
                     .unwrap_or("Unknown");
                 let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
@@ -603,7 +604,8 @@ impl CreateNotificationError {
     pub fn from_body(body: &str) -> CreateNotificationError {
         match from_str::<SerdeJsonValue>(body) {
             Ok(json) => {
-                let raw_error_type = json.get("__type")
+                let raw_error_type = json
+                    .get("__type")
                     .and_then(|e| e.as_str())
                     .unwrap_or("Unknown");
                 let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
@@ -707,7 +709,8 @@ impl CreateSubscriberError {
     pub fn from_body(body: &str) -> CreateSubscriberError {
         match from_str::<SerdeJsonValue>(body) {
             Ok(json) => {
-                let raw_error_type = json.get("__type")
+                let raw_error_type = json
+                    .get("__type")
                     .and_then(|e| e.as_str())
                     .unwrap_or("Unknown");
                 let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
@@ -805,7 +808,8 @@ impl DeleteBudgetError {
     pub fn from_body(body: &str) -> DeleteBudgetError {
         match from_str::<SerdeJsonValue>(body) {
             Ok(json) => {
-                let raw_error_type = json.get("__type")
+                let raw_error_type = json
+                    .get("__type")
                     .and_then(|e| e.as_str())
                     .unwrap_or("Unknown");
                 let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
@@ -893,7 +897,8 @@ impl DeleteNotificationError {
     pub fn from_body(body: &str) -> DeleteNotificationError {
         match from_str::<SerdeJsonValue>(body) {
             Ok(json) => {
-                let raw_error_type = json.get("__type")
+                let raw_error_type = json
+                    .get("__type")
                     .and_then(|e| e.as_str())
                     .unwrap_or("Unknown");
                 let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
@@ -985,7 +990,8 @@ impl DeleteSubscriberError {
     pub fn from_body(body: &str) -> DeleteSubscriberError {
         match from_str::<SerdeJsonValue>(body) {
             Ok(json) => {
-                let raw_error_type = json.get("__type")
+                let raw_error_type = json
+                    .get("__type")
                     .and_then(|e| e.as_str())
                     .unwrap_or("Unknown");
                 let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
@@ -1075,7 +1081,8 @@ impl DescribeBudgetError {
     pub fn from_body(body: &str) -> DescribeBudgetError {
         match from_str::<SerdeJsonValue>(body) {
             Ok(json) => {
-                let raw_error_type = json.get("__type")
+                let raw_error_type = json
+                    .get("__type")
                     .and_then(|e| e.as_str())
                     .unwrap_or("Unknown");
                 let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
@@ -1169,7 +1176,8 @@ impl DescribeBudgetsError {
     pub fn from_body(body: &str) -> DescribeBudgetsError {
         match from_str::<SerdeJsonValue>(body) {
             Ok(json) => {
-                let raw_error_type = json.get("__type")
+                let raw_error_type = json
+                    .get("__type")
                     .and_then(|e| e.as_str())
                     .unwrap_or("Unknown");
                 let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
@@ -1271,7 +1279,8 @@ impl DescribeNotificationsForBudgetError {
     pub fn from_body(body: &str) -> DescribeNotificationsForBudgetError {
         match from_str::<SerdeJsonValue>(body) {
             Ok(json) => {
-                let raw_error_type = json.get("__type")
+                let raw_error_type = json
+                    .get("__type")
                     .and_then(|e| e.as_str())
                     .unwrap_or("Unknown");
                 let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
@@ -1381,7 +1390,8 @@ impl DescribeSubscribersForNotificationError {
     pub fn from_body(body: &str) -> DescribeSubscribersForNotificationError {
         match from_str::<SerdeJsonValue>(body) {
             Ok(json) => {
-                let raw_error_type = json.get("__type")
+                let raw_error_type = json
+                    .get("__type")
                     .and_then(|e| e.as_str())
                     .unwrap_or("Unknown");
                 let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
@@ -1489,7 +1499,8 @@ impl UpdateBudgetError {
     pub fn from_body(body: &str) -> UpdateBudgetError {
         match from_str::<SerdeJsonValue>(body) {
             Ok(json) => {
-                let raw_error_type = json.get("__type")
+                let raw_error_type = json
+                    .get("__type")
                     .and_then(|e| e.as_str())
                     .unwrap_or("Unknown");
                 let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
@@ -1579,7 +1590,8 @@ impl UpdateNotificationError {
     pub fn from_body(body: &str) -> UpdateNotificationError {
         match from_str::<SerdeJsonValue>(body) {
             Ok(json) => {
-                let raw_error_type = json.get("__type")
+                let raw_error_type = json
+                    .get("__type")
                     .and_then(|e| e.as_str())
                     .unwrap_or("Unknown");
                 let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
@@ -1677,7 +1689,8 @@ impl UpdateSubscriberError {
     pub fn from_body(body: &str) -> UpdateSubscriberError {
         match from_str::<SerdeJsonValue>(body) {
             Ok(json) => {
-                let raw_error_type = json.get("__type")
+                let raw_error_type = json
+                    .get("__type")
                     .and_then(|e| e.as_str())
                     .unwrap_or("Unknown");
                 let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);

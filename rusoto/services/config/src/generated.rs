@@ -1805,7 +1805,8 @@ impl BatchGetResourceConfigError {
     pub fn from_body(body: &str) -> BatchGetResourceConfigError {
         match from_str::<SerdeJsonValue>(body) {
             Ok(json) => {
-                let raw_error_type = json.get("__type")
+                let raw_error_type = json
+                    .get("__type")
                     .and_then(|e| e.as_str())
                     .unwrap_or("Unknown");
                 let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
@@ -1887,7 +1888,8 @@ impl DeleteAggregationAuthorizationError {
     pub fn from_body(body: &str) -> DeleteAggregationAuthorizationError {
         match from_str::<SerdeJsonValue>(body) {
             Ok(json) => {
-                let raw_error_type = json.get("__type")
+                let raw_error_type = json
+                    .get("__type")
                     .and_then(|e| e.as_str())
                     .unwrap_or("Unknown");
                 let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
@@ -1971,7 +1973,8 @@ impl DeleteConfigRuleError {
     pub fn from_body(body: &str) -> DeleteConfigRuleError {
         match from_str::<SerdeJsonValue>(body) {
             Ok(json) => {
-                let raw_error_type = json.get("__type")
+                let raw_error_type = json
+                    .get("__type")
                     .and_then(|e| e.as_str())
                     .unwrap_or("Unknown");
                 let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
@@ -2053,7 +2056,8 @@ impl DeleteConfigurationAggregatorError {
     pub fn from_body(body: &str) -> DeleteConfigurationAggregatorError {
         match from_str::<SerdeJsonValue>(body) {
             Ok(json) => {
-                let raw_error_type = json.get("__type")
+                let raw_error_type = json
+                    .get("__type")
                     .and_then(|e| e.as_str())
                     .unwrap_or("Unknown");
                 let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
@@ -2135,7 +2139,8 @@ impl DeleteConfigurationRecorderError {
     pub fn from_body(body: &str) -> DeleteConfigurationRecorderError {
         match from_str::<SerdeJsonValue>(body) {
             Ok(json) => {
-                let raw_error_type = json.get("__type")
+                let raw_error_type = json
+                    .get("__type")
                     .and_then(|e| e.as_str())
                     .unwrap_or("Unknown");
                 let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
@@ -2219,7 +2224,8 @@ impl DeleteDeliveryChannelError {
     pub fn from_body(body: &str) -> DeleteDeliveryChannelError {
         match from_str::<SerdeJsonValue>(body) {
             Ok(json) => {
-                let raw_error_type = json.get("__type")
+                let raw_error_type = json
+                    .get("__type")
                     .and_then(|e| e.as_str())
                     .unwrap_or("Unknown");
                 let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
@@ -2309,7 +2315,8 @@ impl DeleteEvaluationResultsError {
     pub fn from_body(body: &str) -> DeleteEvaluationResultsError {
         match from_str::<SerdeJsonValue>(body) {
             Ok(json) => {
-                let raw_error_type = json.get("__type")
+                let raw_error_type = json
+                    .get("__type")
                     .and_then(|e| e.as_str())
                     .unwrap_or("Unknown");
                 let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
@@ -2393,7 +2400,8 @@ impl DeletePendingAggregationRequestError {
     pub fn from_body(body: &str) -> DeletePendingAggregationRequestError {
         match from_str::<SerdeJsonValue>(body) {
             Ok(json) => {
-                let raw_error_type = json.get("__type")
+                let raw_error_type = json
+                    .get("__type")
                     .and_then(|e| e.as_str())
                     .unwrap_or("Unknown");
                 let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
@@ -2479,7 +2487,8 @@ impl DeliverConfigSnapshotError {
     pub fn from_body(body: &str) -> DeliverConfigSnapshotError {
         match from_str::<SerdeJsonValue>(body) {
             Ok(json) => {
-                let raw_error_type = json.get("__type")
+                let raw_error_type = json
+                    .get("__type")
                     .and_then(|e| e.as_str())
                     .unwrap_or("Unknown");
                 let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
@@ -2577,7 +2586,8 @@ impl DescribeAggregateComplianceByConfigRulesError {
     pub fn from_body(body: &str) -> DescribeAggregateComplianceByConfigRulesError {
         match from_str::<SerdeJsonValue>(body) {
             Ok(json) => {
-                let raw_error_type = json.get("__type")
+                let raw_error_type = json
+                    .get("__type")
                     .and_then(|e| e.as_str())
                     .unwrap_or("Unknown");
                 let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
@@ -2681,7 +2691,8 @@ impl DescribeAggregationAuthorizationsError {
     pub fn from_body(body: &str) -> DescribeAggregationAuthorizationsError {
         match from_str::<SerdeJsonValue>(body) {
             Ok(json) => {
-                let raw_error_type = json.get("__type")
+                let raw_error_type = json
+                    .get("__type")
                     .and_then(|e| e.as_str())
                     .unwrap_or("Unknown");
                 let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
@@ -2779,7 +2790,8 @@ impl DescribeComplianceByConfigRuleError {
     pub fn from_body(body: &str) -> DescribeComplianceByConfigRuleError {
         match from_str::<SerdeJsonValue>(body) {
             Ok(json) => {
-                let raw_error_type = json.get("__type")
+                let raw_error_type = json
+                    .get("__type")
                     .and_then(|e| e.as_str())
                     .unwrap_or("Unknown");
                 let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
@@ -2875,7 +2887,8 @@ impl DescribeComplianceByResourceError {
     pub fn from_body(body: &str) -> DescribeComplianceByResourceError {
         match from_str::<SerdeJsonValue>(body) {
             Ok(json) => {
-                let raw_error_type = json.get("__type")
+                let raw_error_type = json
+                    .get("__type")
                     .and_then(|e| e.as_str())
                     .unwrap_or("Unknown");
                 let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
@@ -2967,7 +2980,8 @@ impl DescribeConfigRuleEvaluationStatusError {
     pub fn from_body(body: &str) -> DescribeConfigRuleEvaluationStatusError {
         match from_str::<SerdeJsonValue>(body) {
             Ok(json) => {
-                let raw_error_type = json.get("__type")
+                let raw_error_type = json
+                    .get("__type")
                     .and_then(|e| e.as_str())
                     .unwrap_or("Unknown");
                 let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
@@ -3063,7 +3077,8 @@ impl DescribeConfigRulesError {
     pub fn from_body(body: &str) -> DescribeConfigRulesError {
         match from_str::<SerdeJsonValue>(body) {
             Ok(json) => {
-                let raw_error_type = json.get("__type")
+                let raw_error_type = json
+                    .get("__type")
                     .and_then(|e| e.as_str())
                     .unwrap_or("Unknown");
                 let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
@@ -3153,7 +3168,8 @@ impl DescribeConfigurationAggregatorSourcesStatusError {
     pub fn from_body(body: &str) -> DescribeConfigurationAggregatorSourcesStatusError {
         match from_str::<SerdeJsonValue>(body) {
             Ok(json) => {
-                let raw_error_type = json.get("__type")
+                let raw_error_type = json
+                    .get("__type")
                     .and_then(|e| e.as_str())
                     .unwrap_or("Unknown");
                 let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
@@ -3251,7 +3267,8 @@ impl DescribeConfigurationAggregatorsError {
     pub fn from_body(body: &str) -> DescribeConfigurationAggregatorsError {
         match from_str::<SerdeJsonValue>(body) {
             Ok(json) => {
-                let raw_error_type = json.get("__type")
+                let raw_error_type = json
+                    .get("__type")
                     .and_then(|e| e.as_str())
                     .unwrap_or("Unknown");
                 let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
@@ -3351,7 +3368,8 @@ impl DescribeConfigurationRecorderStatusError {
     pub fn from_body(body: &str) -> DescribeConfigurationRecorderStatusError {
         match from_str::<SerdeJsonValue>(body) {
             Ok(json) => {
-                let raw_error_type = json.get("__type")
+                let raw_error_type = json
+                    .get("__type")
                     .and_then(|e| e.as_str())
                     .unwrap_or("Unknown");
                 let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
@@ -3435,7 +3453,8 @@ impl DescribeConfigurationRecordersError {
     pub fn from_body(body: &str) -> DescribeConfigurationRecordersError {
         match from_str::<SerdeJsonValue>(body) {
             Ok(json) => {
-                let raw_error_type = json.get("__type")
+                let raw_error_type = json
+                    .get("__type")
                     .and_then(|e| e.as_str())
                     .unwrap_or("Unknown");
                 let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
@@ -3517,7 +3536,8 @@ impl DescribeDeliveryChannelStatusError {
     pub fn from_body(body: &str) -> DescribeDeliveryChannelStatusError {
         match from_str::<SerdeJsonValue>(body) {
             Ok(json) => {
-                let raw_error_type = json.get("__type")
+                let raw_error_type = json
+                    .get("__type")
                     .and_then(|e| e.as_str())
                     .unwrap_or("Unknown");
                 let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
@@ -3599,7 +3619,8 @@ impl DescribeDeliveryChannelsError {
     pub fn from_body(body: &str) -> DescribeDeliveryChannelsError {
         match from_str::<SerdeJsonValue>(body) {
             Ok(json) => {
-                let raw_error_type = json.get("__type")
+                let raw_error_type = json
+                    .get("__type")
                     .and_then(|e| e.as_str())
                     .unwrap_or("Unknown");
                 let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
@@ -3685,7 +3706,8 @@ impl DescribePendingAggregationRequestsError {
     pub fn from_body(body: &str) -> DescribePendingAggregationRequestsError {
         match from_str::<SerdeJsonValue>(body) {
             Ok(json) => {
-                let raw_error_type = json.get("__type")
+                let raw_error_type = json
+                    .get("__type")
                     .and_then(|e| e.as_str())
                     .unwrap_or("Unknown");
                 let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
@@ -3783,7 +3805,8 @@ impl GetAggregateComplianceDetailsByConfigRuleError {
     pub fn from_body(body: &str) -> GetAggregateComplianceDetailsByConfigRuleError {
         match from_str::<SerdeJsonValue>(body) {
             Ok(json) => {
-                let raw_error_type = json.get("__type")
+                let raw_error_type = json
+                    .get("__type")
                     .and_then(|e| e.as_str())
                     .unwrap_or("Unknown");
                 let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
@@ -3871,7 +3894,8 @@ impl GetAggregateConfigRuleComplianceSummaryError {
     pub fn from_body(body: &str) -> GetAggregateConfigRuleComplianceSummaryError {
         match from_str::<SerdeJsonValue>(body) {
             Ok(json) => {
-                let raw_error_type = json.get("__type")
+                let raw_error_type = json
+                    .get("__type")
                     .and_then(|e| e.as_str())
                     .unwrap_or("Unknown");
                 let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
@@ -3973,7 +3997,8 @@ impl GetComplianceDetailsByConfigRuleError {
     pub fn from_body(body: &str) -> GetComplianceDetailsByConfigRuleError {
         match from_str::<SerdeJsonValue>(body) {
             Ok(json) => {
-                let raw_error_type = json.get("__type")
+                let raw_error_type = json
+                    .get("__type")
                     .and_then(|e| e.as_str())
                     .unwrap_or("Unknown");
                 let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
@@ -4067,7 +4092,8 @@ impl GetComplianceDetailsByResourceError {
     pub fn from_body(body: &str) -> GetComplianceDetailsByResourceError {
         match from_str::<SerdeJsonValue>(body) {
             Ok(json) => {
-                let raw_error_type = json.get("__type")
+                let raw_error_type = json
+                    .get("__type")
                     .and_then(|e| e.as_str())
                     .unwrap_or("Unknown");
                 let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
@@ -4147,7 +4173,8 @@ impl GetComplianceSummaryByConfigRuleError {
     pub fn from_body(body: &str) -> GetComplianceSummaryByConfigRuleError {
         match from_str::<SerdeJsonValue>(body) {
             Ok(json) => {
-                let raw_error_type = json.get("__type")
+                let raw_error_type = json
+                    .get("__type")
                     .and_then(|e| e.as_str())
                     .unwrap_or("Unknown");
                 let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
@@ -4223,7 +4250,8 @@ impl GetComplianceSummaryByResourceTypeError {
     pub fn from_body(body: &str) -> GetComplianceSummaryByResourceTypeError {
         match from_str::<SerdeJsonValue>(body) {
             Ok(json) => {
-                let raw_error_type = json.get("__type")
+                let raw_error_type = json
+                    .get("__type")
                     .and_then(|e| e.as_str())
                     .unwrap_or("Unknown");
                 let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
@@ -4307,7 +4335,8 @@ impl GetDiscoveredResourceCountsError {
     pub fn from_body(body: &str) -> GetDiscoveredResourceCountsError {
         match from_str::<SerdeJsonValue>(body) {
             Ok(json) => {
-                let raw_error_type = json.get("__type")
+                let raw_error_type = json
+                    .get("__type")
                     .and_then(|e| e.as_str())
                     .unwrap_or("Unknown");
                 let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
@@ -4401,7 +4430,8 @@ impl GetResourceConfigHistoryError {
     pub fn from_body(body: &str) -> GetResourceConfigHistoryError {
         match from_str::<SerdeJsonValue>(body) {
             Ok(json) => {
-                let raw_error_type = json.get("__type")
+                let raw_error_type = json
+                    .get("__type")
                     .and_then(|e| e.as_str())
                     .unwrap_or("Unknown");
                 let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
@@ -4505,7 +4535,8 @@ impl ListDiscoveredResourcesError {
     pub fn from_body(body: &str) -> ListDiscoveredResourcesError {
         match from_str::<SerdeJsonValue>(body) {
             Ok(json) => {
-                let raw_error_type = json.get("__type")
+                let raw_error_type = json
+                    .get("__type")
                     .and_then(|e| e.as_str())
                     .unwrap_or("Unknown");
                 let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
@@ -4595,7 +4626,8 @@ impl PutAggregationAuthorizationError {
     pub fn from_body(body: &str) -> PutAggregationAuthorizationError {
         match from_str::<SerdeJsonValue>(body) {
             Ok(json) => {
-                let raw_error_type = json.get("__type")
+                let raw_error_type = json
+                    .get("__type")
                     .and_then(|e| e.as_str())
                     .unwrap_or("Unknown");
                 let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
@@ -4685,7 +4717,8 @@ impl PutConfigRuleError {
     pub fn from_body(body: &str) -> PutConfigRuleError {
         match from_str::<SerdeJsonValue>(body) {
             Ok(json) => {
-                let raw_error_type = json.get("__type")
+                let raw_error_type = json
+                    .get("__type")
                     .and_then(|e| e.as_str())
                     .unwrap_or("Unknown");
                 let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
@@ -4793,7 +4826,8 @@ impl PutConfigurationAggregatorError {
     pub fn from_body(body: &str) -> PutConfigurationAggregatorError {
         match from_str::<SerdeJsonValue>(body) {
             Ok(json) => {
-                let raw_error_type = json.get("__type")
+                let raw_error_type = json
+                    .get("__type")
                     .and_then(|e| e.as_str())
                     .unwrap_or("Unknown");
                 let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
@@ -4907,7 +4941,8 @@ impl PutConfigurationRecorderError {
     pub fn from_body(body: &str) -> PutConfigurationRecorderError {
         match from_str::<SerdeJsonValue>(body) {
             Ok(json) => {
-                let raw_error_type = json.get("__type")
+                let raw_error_type = json
+                    .get("__type")
                     .and_then(|e| e.as_str())
                     .unwrap_or("Unknown");
                 let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
@@ -5019,7 +5054,8 @@ impl PutDeliveryChannelError {
     pub fn from_body(body: &str) -> PutDeliveryChannelError {
         match from_str::<SerdeJsonValue>(body) {
             Ok(json) => {
-                let raw_error_type = json.get("__type")
+                let raw_error_type = json
+                    .get("__type")
                     .and_then(|e| e.as_str())
                     .unwrap_or("Unknown");
                 let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
@@ -5135,7 +5171,8 @@ impl PutEvaluationsError {
     pub fn from_body(body: &str) -> PutEvaluationsError {
         match from_str::<SerdeJsonValue>(body) {
             Ok(json) => {
-                let raw_error_type = json.get("__type")
+                let raw_error_type = json
+                    .get("__type")
                     .and_then(|e| e.as_str())
                     .unwrap_or("Unknown");
                 let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
@@ -5227,7 +5264,8 @@ impl StartConfigRulesEvaluationError {
     pub fn from_body(body: &str) -> StartConfigRulesEvaluationError {
         match from_str::<SerdeJsonValue>(body) {
             Ok(json) => {
-                let raw_error_type = json.get("__type")
+                let raw_error_type = json
+                    .get("__type")
                     .and_then(|e| e.as_str())
                     .unwrap_or("Unknown");
                 let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
@@ -5325,7 +5363,8 @@ impl StartConfigurationRecorderError {
     pub fn from_body(body: &str) -> StartConfigurationRecorderError {
         match from_str::<SerdeJsonValue>(body) {
             Ok(json) => {
-                let raw_error_type = json.get("__type")
+                let raw_error_type = json
+                    .get("__type")
                     .and_then(|e| e.as_str())
                     .unwrap_or("Unknown");
                 let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
@@ -5413,7 +5452,8 @@ impl StopConfigurationRecorderError {
     pub fn from_body(body: &str) -> StopConfigurationRecorderError {
         match from_str::<SerdeJsonValue>(body) {
             Ok(json) => {
-                let raw_error_type = json.get("__type")
+                let raw_error_type = json
+                    .get("__type")
                     .and_then(|e| e.as_str())
                     .unwrap_or("Unknown");
                 let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);

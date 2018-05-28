@@ -29,8 +29,9 @@ use hyper::StatusCode;
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::signature::SignedRequest;
 use rusoto_core::xmlerror::*;
-use rusoto_core::xmlutil::{characters, end_element, find_start_element, peek_at_name, skip_tree,
-                           start_element};
+use rusoto_core::xmlutil::{
+    characters, end_element, find_start_element, peek_at_name, skip_tree, start_element,
+};
 use rusoto_core::xmlutil::{Next, Peek, XmlParseError, XmlResponse};
 use std::str::FromStr;
 use xml::reader::ParserConfig;
