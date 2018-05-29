@@ -3,12 +3,19 @@ extern crate rusoto_mock;
 use std::collections::HashMap;
 use ::{Sqs, SqsClient, SendMessageRequest, ReceiveMessageRequest, MessageAttributeValue, GetQueueUrlRequest, GetQueueUrlError};
 
+<<<<<<< HEAD
 use rusoto_core::Region;
 use rusoto_core::signature::SignedRequest;
+=======
+use rusoto_core::{Region, SignedRequest};
+use rusoto_core::signature::SignedRequestPayload;
+use rusoto_core::param::Params;
+use serde_urlencoded;
+>>>>>>> Fix test for urlencoded request
 use self::rusoto_mock::*;
 
 #[test]
-fn should_serialize_map_parameters_in_query_string() {
+fn should_serialize_map_parameters_in_request_body() {
     let mock = MockRequestDispatcher::with_status(200)
         .with_body(r#"<?xml version="1.0" encoding="UTF-8"?>
         <SendMessageResponse>
@@ -34,13 +41,17 @@ fn should_serialize_map_parameters_in_query_string() {
 
             assert_eq!("POST", request.method);
             assert_eq!("/", request.path);
-            assert!(request.payload.is_none());
-            assert_eq!(Some(&Some("test_attribute_name".to_owned())),
-                        request.params.get("MessageAttribute.1.Name"));
-            assert_eq!(Some(&Some("test_attribute_value".to_owned())),
-                        request.params.get("MessageAttribute.1.Value.StringValue"));
-            assert_eq!(Some(&Some("String".to_owned())),
-                        request.params.get("MessageAttribute.1.Value.DataType"));
+            if let Some(SignedRequestPayload::Buffer(ref buffer)) = request.payload {
+                let params: Params = serde_urlencoded::from_bytes(buffer).unwrap();
+                assert_eq!(Some(&Some("test_attribute_name".to_owned())),
+                            params.get("MessageAttribute.1.Name"));
+                assert_eq!(Some(&Some("test_attribute_value".to_owned())),
+                            params.get("MessageAttribute.1.Value.StringValue"));
+                assert_eq!(Some(&Some("String".to_owned())),
+                            params.get("MessageAttribute.1.Value.DataType"));
+            } else {
+                panic!("Unexpected request.payload: {:?}", request.payload);
+            }
         });
 
     let mut message_attributes = HashMap::new();
@@ -96,15 +107,20 @@ fn should_fix_issue_323() {
         .with_request_checker(|request: &SignedRequest| {
             assert_eq!("POST", request.method);
             assert_eq!("/", request.path);
-            assert_eq!(request.params.get("Action"),
-                        Some(&Some("ReceiveMessage".to_owned())));
-            assert_eq!(request.params.get("MaxNumberOfMessages"),
-                        Some(&Some("1".to_owned())));
-            assert_eq!(request.params.get("VisibilityTimeout"),
-                        Some(&Some("2".to_owned())));
-            assert_eq!(request.params.get("WaitTimeSeconds"),
-                        Some(&Some("3".to_owned())));
-            assert_eq!(request.params.get("Integer"), None);
+            if let Some(SignedRequestPayload::Buffer(ref buffer)) = request.payload {
+                let params: Params = serde_urlencoded::from_bytes(buffer).unwrap();
+                assert_eq!(params.get("Action"),
+                            Some(&Some("ReceiveMessage".to_owned())));
+                assert_eq!(params.get("MaxNumberOfMessages"),
+                            Some(&Some("1".to_owned())));
+                assert_eq!(params.get("VisibilityTimeout"),
+                            Some(&Some("2".to_owned())));
+                assert_eq!(params.get("WaitTimeSeconds"),
+                            Some(&Some("3".to_owned())));
+                assert_eq!(params.get("Integer"), None);
+            } else {
+                panic!("Unexpected request.payload: {:?}", request.payload);
+            }
         });
 
     let request = ReceiveMessageRequest {
