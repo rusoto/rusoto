@@ -31,7 +31,7 @@ use serde_json;
 use serde_json::from_str;
 use serde_json::Value as SerdeJsonValue;
 /// <p>An object representing authorization data for an Amazon ECR registry.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct AuthorizationData {
     /// <p>A base64-encoded string that contains authorization data for the specified Amazon ECR registry. When the string is decoded, it is presented in the format <code>user:password</code> for private registry authentication using <code>docker login</code>.</p>
     #[serde(rename = "authorizationToken")]
@@ -47,7 +47,7 @@ pub struct AuthorizationData {
     pub proxy_endpoint: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct BatchCheckLayerAvailabilityRequest {
     /// <p>The digests of the image layers to check.</p>
     #[serde(rename = "layerDigests")]
@@ -61,7 +61,7 @@ pub struct BatchCheckLayerAvailabilityRequest {
     pub repository_name: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct BatchCheckLayerAvailabilityResponse {
     /// <p>Any failures associated with the call.</p>
     #[serde(rename = "failures")]
@@ -74,7 +74,7 @@ pub struct BatchCheckLayerAvailabilityResponse {
 }
 
 /// <p>Deletes specified images within a specified repository. Images are specified with either the <code>imageTag</code> or <code>imageDigest</code>.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct BatchDeleteImageRequest {
     /// <p>A list of image ID references that correspond to images to delete. The format of the <code>imageIds</code> reference is <code>imageTag=tag</code> or <code>imageDigest=digest</code>.</p>
     #[serde(rename = "imageIds")]
@@ -88,7 +88,7 @@ pub struct BatchDeleteImageRequest {
     pub repository_name: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct BatchDeleteImageResponse {
     /// <p>Any failures associated with the call.</p>
     #[serde(rename = "failures")]
@@ -100,7 +100,7 @@ pub struct BatchDeleteImageResponse {
     pub image_ids: Option<Vec<ImageIdentifier>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct BatchGetImageRequest {
     /// <p>The accepted media types for the request.</p> <p>Valid values: <code>application/vnd.docker.distribution.manifest.v1+json</code> | <code>application/vnd.docker.distribution.manifest.v2+json</code> | <code>application/vnd.oci.image.manifest.v1+json</code> </p>
     #[serde(rename = "acceptedMediaTypes")]
@@ -118,7 +118,7 @@ pub struct BatchGetImageRequest {
     pub repository_name: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct BatchGetImageResponse {
     /// <p>Any failures associated with the call.</p>
     #[serde(rename = "failures")]
@@ -130,7 +130,7 @@ pub struct BatchGetImageResponse {
     pub images: Option<Vec<Image>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CompleteLayerUploadRequest {
     /// <p>The <code>sha256</code> digest of the image layer.</p>
     #[serde(rename = "layerDigests")]
@@ -147,7 +147,7 @@ pub struct CompleteLayerUploadRequest {
     pub upload_id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CompleteLayerUploadResponse {
     /// <p>The <code>sha256</code> digest of the image layer.</p>
     #[serde(rename = "layerDigest")]
@@ -167,14 +167,14 @@ pub struct CompleteLayerUploadResponse {
     pub upload_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateRepositoryRequest {
     /// <p>The name to use for the repository. The repository name may be specified on its own (such as <code>nginx-web-app</code>) or it can be prepended with a namespace to group the repository into a category (such as <code>project-a/nginx-web-app</code>).</p>
     #[serde(rename = "repositoryName")]
     pub repository_name: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CreateRepositoryResponse {
     /// <p>The repository that was created.</p>
     #[serde(rename = "repository")]
@@ -182,7 +182,7 @@ pub struct CreateRepositoryResponse {
     pub repository: Option<Repository>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteLifecyclePolicyRequest {
     /// <p>The AWS account ID associated with the registry that contains the repository. If you do not specify a registry, the default registry is assumed.</p>
     #[serde(rename = "registryId")]
@@ -193,7 +193,7 @@ pub struct DeleteLifecyclePolicyRequest {
     pub repository_name: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DeleteLifecyclePolicyResponse {
     /// <p>The time stamp of the last time that the lifecycle policy was run.</p>
     #[serde(rename = "lastEvaluatedAt")]
@@ -213,7 +213,7 @@ pub struct DeleteLifecyclePolicyResponse {
     pub repository_name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteRepositoryPolicyRequest {
     /// <p>The AWS account ID associated with the registry that contains the repository policy to delete. If you do not specify a registry, the default registry is assumed.</p>
     #[serde(rename = "registryId")]
@@ -224,7 +224,7 @@ pub struct DeleteRepositoryPolicyRequest {
     pub repository_name: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DeleteRepositoryPolicyResponse {
     /// <p>The JSON repository policy that was deleted from the repository.</p>
     #[serde(rename = "policyText")]
@@ -240,7 +240,7 @@ pub struct DeleteRepositoryPolicyResponse {
     pub repository_name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteRepositoryRequest {
     /// <p> If a repository contains images, forces the deletion.</p>
     #[serde(rename = "force")]
@@ -255,7 +255,7 @@ pub struct DeleteRepositoryRequest {
     pub repository_name: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DeleteRepositoryResponse {
     /// <p>The repository that was deleted.</p>
     #[serde(rename = "repository")]
@@ -264,7 +264,7 @@ pub struct DeleteRepositoryResponse {
 }
 
 /// <p>An object representing a filter on a <a>DescribeImages</a> operation.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeImagesFilter {
     /// <p>The tag status with which to filter your <a>DescribeImages</a> results. You can filter results based on whether they are <code>TAGGED</code> or <code>UNTAGGED</code>.</p>
     #[serde(rename = "tagStatus")]
@@ -272,7 +272,7 @@ pub struct DescribeImagesFilter {
     pub tag_status: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeImagesRequest {
     /// <p>The filter key and value with which to filter your <code>DescribeImages</code> results.</p>
     #[serde(rename = "filter")]
@@ -299,7 +299,7 @@ pub struct DescribeImagesRequest {
     pub repository_name: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribeImagesResponse {
     /// <p>A list of <a>ImageDetail</a> objects that contain data about the image.</p>
     #[serde(rename = "imageDetails")]
@@ -311,7 +311,7 @@ pub struct DescribeImagesResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeRepositoriesRequest {
     /// <p>The maximum number of repository results returned by <code>DescribeRepositories</code> in paginated output. When this parameter is used, <code>DescribeRepositories</code> only returns <code>maxResults</code> results in a single page along with a <code>nextToken</code> response element. The remaining results of the initial request can be seen by sending another <code>DescribeRepositories</code> request with the returned <code>nextToken</code> value. This value can be between 1 and 100. If this parameter is not used, then <code>DescribeRepositories</code> returns up to 100 results and a <code>nextToken</code> value, if applicable. This option cannot be used when you specify repositories with <code>repositoryNames</code>.</p>
     #[serde(rename = "maxResults")]
@@ -331,7 +331,7 @@ pub struct DescribeRepositoriesRequest {
     pub repository_names: Option<Vec<String>>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribeRepositoriesResponse {
     /// <p>The <code>nextToken</code> value to include in a future <code>DescribeRepositories</code> request. When the results of a <code>DescribeRepositories</code> request exceed <code>maxResults</code>, this value can be used to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>
     #[serde(rename = "nextToken")]
@@ -343,7 +343,7 @@ pub struct DescribeRepositoriesResponse {
     pub repositories: Option<Vec<Repository>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetAuthorizationTokenRequest {
     /// <p>A list of AWS account IDs that are associated with the registries for which to get authorization tokens. If you do not specify a registry, the default registry is assumed.</p>
     #[serde(rename = "registryIds")]
@@ -351,7 +351,7 @@ pub struct GetAuthorizationTokenRequest {
     pub registry_ids: Option<Vec<String>>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct GetAuthorizationTokenResponse {
     /// <p>A list of authorization token data objects that correspond to the <code>registryIds</code> values in the request.</p>
     #[serde(rename = "authorizationData")]
@@ -359,7 +359,7 @@ pub struct GetAuthorizationTokenResponse {
     pub authorization_data: Option<Vec<AuthorizationData>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetDownloadUrlForLayerRequest {
     /// <p>The digest of the image layer to download.</p>
     #[serde(rename = "layerDigest")]
@@ -373,7 +373,7 @@ pub struct GetDownloadUrlForLayerRequest {
     pub repository_name: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct GetDownloadUrlForLayerResponse {
     /// <p>The pre-signed Amazon S3 download URL for the requested layer.</p>
     #[serde(rename = "downloadUrl")]
@@ -385,7 +385,7 @@ pub struct GetDownloadUrlForLayerResponse {
     pub layer_digest: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetLifecyclePolicyPreviewRequest {
     /// <p>An optional parameter that filters results based on image tag status and all tags, if tagged.</p>
     #[serde(rename = "filter")]
@@ -412,7 +412,7 @@ pub struct GetLifecyclePolicyPreviewRequest {
     pub repository_name: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct GetLifecyclePolicyPreviewResponse {
     /// <p>The JSON lifecycle policy text.</p>
     #[serde(rename = "lifecyclePolicyText")]
@@ -444,7 +444,7 @@ pub struct GetLifecyclePolicyPreviewResponse {
     pub summary: Option<LifecyclePolicyPreviewSummary>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetLifecyclePolicyRequest {
     /// <p>The AWS account ID associated with the registry that contains the repository. If you do not specify a registry, the default registry is assumed.</p>
     #[serde(rename = "registryId")]
@@ -455,7 +455,7 @@ pub struct GetLifecyclePolicyRequest {
     pub repository_name: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct GetLifecyclePolicyResponse {
     /// <p>The time stamp of the last time that the lifecycle policy was run.</p>
     #[serde(rename = "lastEvaluatedAt")]
@@ -475,7 +475,7 @@ pub struct GetLifecyclePolicyResponse {
     pub repository_name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetRepositoryPolicyRequest {
     /// <p>The AWS account ID associated with the registry that contains the repository. If you do not specify a registry, the default registry is assumed.</p>
     #[serde(rename = "registryId")]
@@ -486,7 +486,7 @@ pub struct GetRepositoryPolicyRequest {
     pub repository_name: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct GetRepositoryPolicyResponse {
     /// <p>The JSON repository policy text associated with the repository.</p>
     #[serde(rename = "policyText")]
@@ -503,7 +503,7 @@ pub struct GetRepositoryPolicyResponse {
 }
 
 /// <p>An object representing an Amazon ECR image.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct Image {
     /// <p>An object containing the image tag and image digest associated with an image.</p>
     #[serde(rename = "imageId")]
@@ -524,7 +524,7 @@ pub struct Image {
 }
 
 /// <p>An object that describes an image returned by a <a>DescribeImages</a> operation.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ImageDetail {
     /// <p>The <code>sha256</code> digest of the image manifest.</p>
     #[serde(rename = "imageDigest")]
@@ -553,7 +553,7 @@ pub struct ImageDetail {
 }
 
 /// <p>An object representing an Amazon ECR image failure.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ImageFailure {
     /// <p>The code associated with the failure.</p>
     #[serde(rename = "failureCode")]
@@ -570,7 +570,7 @@ pub struct ImageFailure {
 }
 
 /// <p>An object with identifying information for an Amazon ECR image.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ImageIdentifier {
     /// <p>The <code>sha256</code> digest of the image manifest.</p>
     #[serde(rename = "imageDigest")]
@@ -582,7 +582,7 @@ pub struct ImageIdentifier {
     pub image_tag: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct InitiateLayerUploadRequest {
     /// <p>The AWS account ID associated with the registry to which you intend to upload layers. If you do not specify a registry, the default registry is assumed.</p>
     #[serde(rename = "registryId")]
@@ -593,7 +593,7 @@ pub struct InitiateLayerUploadRequest {
     pub repository_name: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct InitiateLayerUploadResponse {
     /// <p>The size, in bytes, that Amazon ECR expects future layer part uploads to be.</p>
     #[serde(rename = "partSize")]
@@ -606,7 +606,7 @@ pub struct InitiateLayerUploadResponse {
 }
 
 /// <p>An object representing an Amazon ECR image layer.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct Layer {
     /// <p>The availability status of the image layer.</p>
     #[serde(rename = "layerAvailability")]
@@ -627,7 +627,7 @@ pub struct Layer {
 }
 
 /// <p>An object representing an Amazon ECR image layer failure.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct LayerFailure {
     /// <p>The failure code associated with the failure.</p>
     #[serde(rename = "failureCode")]
@@ -644,7 +644,7 @@ pub struct LayerFailure {
 }
 
 /// <p>The filter for the lifecycle policy preview.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct LifecyclePolicyPreviewFilter {
     /// <p>The tag status of the image.</p>
     #[serde(rename = "tagStatus")]
@@ -653,7 +653,7 @@ pub struct LifecyclePolicyPreviewFilter {
 }
 
 /// <p>The result of the lifecycle policy preview.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct LifecyclePolicyPreviewResult {
     /// <p>The type of action to be taken.</p>
     #[serde(rename = "action")]
@@ -678,7 +678,7 @@ pub struct LifecyclePolicyPreviewResult {
 }
 
 /// <p>The summary of the lifecycle policy preview request.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct LifecyclePolicyPreviewSummary {
     /// <p>The number of expiring images.</p>
     #[serde(rename = "expiringImageTotalCount")]
@@ -687,7 +687,7 @@ pub struct LifecyclePolicyPreviewSummary {
 }
 
 /// <p>The type of action to be taken.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct LifecyclePolicyRuleAction {
     /// <p>The type of action to be taken.</p>
     #[serde(rename = "type")]
@@ -696,7 +696,7 @@ pub struct LifecyclePolicyRuleAction {
 }
 
 /// <p>An object representing a filter on a <a>ListImages</a> operation.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListImagesFilter {
     /// <p>The tag status with which to filter your <a>ListImages</a> results. You can filter results based on whether they are <code>TAGGED</code> or <code>UNTAGGED</code>.</p>
     #[serde(rename = "tagStatus")]
@@ -704,7 +704,7 @@ pub struct ListImagesFilter {
     pub tag_status: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListImagesRequest {
     /// <p>The filter key and value with which to filter your <code>ListImages</code> results.</p>
     #[serde(rename = "filter")]
@@ -727,7 +727,7 @@ pub struct ListImagesRequest {
     pub repository_name: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListImagesResponse {
     /// <p>The list of image IDs for the requested repository.</p>
     #[serde(rename = "imageIds")]
@@ -739,7 +739,7 @@ pub struct ListImagesResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct PutImageRequest {
     /// <p>The image manifest corresponding to the image to be uploaded.</p>
     #[serde(rename = "imageManifest")]
@@ -757,7 +757,7 @@ pub struct PutImageRequest {
     pub repository_name: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct PutImageResponse {
     /// <p>Details of the image uploaded.</p>
     #[serde(rename = "image")]
@@ -765,7 +765,7 @@ pub struct PutImageResponse {
     pub image: Option<Image>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct PutLifecyclePolicyRequest {
     /// <p>The JSON repository policy text to apply to the repository.</p>
     #[serde(rename = "lifecyclePolicyText")]
@@ -779,7 +779,7 @@ pub struct PutLifecyclePolicyRequest {
     pub repository_name: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct PutLifecyclePolicyResponse {
     /// <p>The JSON repository policy text.</p>
     #[serde(rename = "lifecyclePolicyText")]
@@ -796,7 +796,7 @@ pub struct PutLifecyclePolicyResponse {
 }
 
 /// <p>An object representing a repository.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct Repository {
     /// <p>The date and time, in JavaScript date format, when the repository was created.</p>
     #[serde(rename = "createdAt")]
@@ -820,7 +820,7 @@ pub struct Repository {
     pub repository_uri: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct SetRepositoryPolicyRequest {
     /// <p>If the policy you are attempting to set on a repository policy would prevent you from setting another policy in the future, you must force the <a>SetRepositoryPolicy</a> operation. This is intended to prevent accidental repository lock outs.</p>
     #[serde(rename = "force")]
@@ -838,7 +838,7 @@ pub struct SetRepositoryPolicyRequest {
     pub repository_name: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct SetRepositoryPolicyResponse {
     /// <p>The JSON repository policy text applied to the repository.</p>
     #[serde(rename = "policyText")]
@@ -854,7 +854,7 @@ pub struct SetRepositoryPolicyResponse {
     pub repository_name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct StartLifecyclePolicyPreviewRequest {
     /// <p>The policy to be evaluated against. If you do not specify a policy, the current policy for the repository is used.</p>
     #[serde(rename = "lifecyclePolicyText")]
@@ -869,7 +869,7 @@ pub struct StartLifecyclePolicyPreviewRequest {
     pub repository_name: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct StartLifecyclePolicyPreviewResponse {
     /// <p>The JSON repository policy text.</p>
     #[serde(rename = "lifecyclePolicyText")]
@@ -889,7 +889,7 @@ pub struct StartLifecyclePolicyPreviewResponse {
     pub status: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UploadLayerPartRequest {
     /// <p>The base64-encoded layer part payload.</p>
     #[serde(rename = "layerPartBlob")]
@@ -917,7 +917,7 @@ pub struct UploadLayerPartRequest {
     pub upload_id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct UploadLayerPartResponse {
     /// <p>The integer value of the last byte received in the request.</p>
     #[serde(rename = "lastByteReceived")]

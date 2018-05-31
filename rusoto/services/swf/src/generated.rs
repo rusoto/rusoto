@@ -31,7 +31,7 @@ use serde_json;
 use serde_json::from_str;
 use serde_json::Value as SerdeJsonValue;
 /// <p>Unit of work sent to an activity worker.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ActivityTask {
     /// <p>The unique ID of the task.</p>
     #[serde(rename = "activityId")]
@@ -55,7 +55,7 @@ pub struct ActivityTask {
 }
 
 /// <p>Provides the details of the <code>ActivityTaskCancelRequested</code> event.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ActivityTaskCancelRequestedEventAttributes {
     /// <p>The unique ID of the task.</p>
     #[serde(rename = "activityId")]
@@ -66,7 +66,7 @@ pub struct ActivityTaskCancelRequestedEventAttributes {
 }
 
 /// <p>Provides the details of the <code>ActivityTaskCanceled</code> event.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ActivityTaskCanceledEventAttributes {
     /// <p>Details of the cancellation.</p>
     #[serde(rename = "details")]
@@ -85,7 +85,7 @@ pub struct ActivityTaskCanceledEventAttributes {
 }
 
 /// <p>Provides the details of the <code>ActivityTaskCompleted</code> event.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ActivityTaskCompletedEventAttributes {
     /// <p>The results of the activity task.</p>
     #[serde(rename = "result")]
@@ -100,7 +100,7 @@ pub struct ActivityTaskCompletedEventAttributes {
 }
 
 /// <p>Provides the details of the <code>ActivityTaskFailed</code> event.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ActivityTaskFailedEventAttributes {
     /// <p>The details of the failure.</p>
     #[serde(rename = "details")]
@@ -119,7 +119,7 @@ pub struct ActivityTaskFailedEventAttributes {
 }
 
 /// <p>Provides the details of the <code>ActivityTaskScheduled</code> event.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ActivityTaskScheduledEventAttributes {
     /// <p>The unique ID of the activity task.</p>
     #[serde(rename = "activityId")]
@@ -164,7 +164,7 @@ pub struct ActivityTaskScheduledEventAttributes {
 }
 
 /// <p>Provides the details of the <code>ActivityTaskStarted</code> event.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ActivityTaskStartedEventAttributes {
     /// <p>Identity of the worker that was assigned this task. This aids diagnostics when problems arise. The form of this identity is user defined.</p>
     #[serde(rename = "identity")]
@@ -176,7 +176,7 @@ pub struct ActivityTaskStartedEventAttributes {
 }
 
 /// <p>Status information about an activity task.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ActivityTaskStatus {
     /// <p>Set to <code>true</code> if cancellation of the task is requested.</p>
     #[serde(rename = "cancelRequested")]
@@ -184,7 +184,7 @@ pub struct ActivityTaskStatus {
 }
 
 /// <p>Provides the details of the <code>ActivityTaskTimedOut</code> event.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ActivityTaskTimedOutEventAttributes {
     /// <p>Contains the content of the <code>details</code> parameter for the last call made by the activity to <code>RecordActivityTaskHeartbeat</code>.</p>
     #[serde(rename = "details")]
@@ -202,7 +202,7 @@ pub struct ActivityTaskTimedOutEventAttributes {
 }
 
 /// <p>Represents an activity type.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ActivityType {
     /// <p><p>The name of this activity.</p> <note> <p>The combination of activity type name and version must be unique within a domain.</p> </note></p>
     #[serde(rename = "name")]
@@ -213,7 +213,7 @@ pub struct ActivityType {
 }
 
 /// <p>Configuration settings registered with the activity type.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ActivityTypeConfiguration {
     /// <p> The default maximum time, in seconds, before which a worker processing a task must report progress by calling <a>RecordActivityTaskHeartbeat</a>.</p> <p>You can specify this value only when <i>registering</i> an activity type. The registered default value can be overridden when you schedule a task through the <code>ScheduleActivityTask</code> <a>Decision</a>. If the activity worker subsequently attempts to record a heartbeat or returns a result, the activity worker receives an <code>UnknownResource</code> fault. In this case, Amazon SWF no longer considers the activity task to be valid; the activity worker should clean up the activity task.</p> <p>The duration is specified in seconds, an integer greater than or equal to <code>0</code>. You can use <code>NONE</code> to specify unlimited duration.</p>
     #[serde(rename = "defaultTaskHeartbeatTimeout")]
@@ -242,7 +242,7 @@ pub struct ActivityTypeConfiguration {
 }
 
 /// <p>Detailed information about an activity type.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ActivityTypeDetail {
     /// <p>The configuration settings registered with the activity type.</p>
     #[serde(rename = "configuration")]
@@ -253,7 +253,7 @@ pub struct ActivityTypeDetail {
 }
 
 /// <p>Detailed information about an activity type.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ActivityTypeInfo {
     /// <p>The <a>ActivityType</a> type structure representing the activity type.</p>
     #[serde(rename = "activityType")]
@@ -275,7 +275,7 @@ pub struct ActivityTypeInfo {
 }
 
 /// <p>Contains a paginated list of activity type information structures.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ActivityTypeInfos {
     /// <p>If a <code>NextPageToken</code> was returned by a previous call, there are more results available. To retrieve the next page of results, make the call again using the returned token in <code>nextPageToken</code>. Keep all other arguments unchanged.</p> <p>The configured <code>maximumPageSize</code> determines how many results can be returned in a single call.</p>
     #[serde(rename = "nextPageToken")]
@@ -287,7 +287,7 @@ pub struct ActivityTypeInfos {
 }
 
 /// <p>Provides the details of the <code>CancelTimer</code> decision.</p> <p> <b>Access Control</b> </p> <p>You can use IAM policies to control this decision's access to Amazon SWF resources as follows:</p> <ul> <li> <p>Use a <code>Resource</code> element with the domain name to limit the action to only specified domains.</p> </li> <li> <p>Use an <code>Action</code> element to allow or deny permission to call this action.</p> </li> <li> <p>You cannot use an IAM policy to constrain this action's parameters.</p> </li> </ul> <p>If the caller doesn't have sufficient permissions to invoke the action, or the parameter values fall outside the specified constraints, the action fails. The associated event attribute's <code>cause</code> parameter is set to <code>OPERATION_NOT_PERMITTED</code>. For details and example IAM policies, see <a href="http://docs.aws.amazon.com/amazonswf/latest/developerguide/swf-dev-iam.html">Using IAM to Manage Access to Amazon SWF Workflows</a> in the <i>Amazon SWF Developer Guide</i>.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CancelTimerDecisionAttributes {
     /// <p> The unique ID of the timer to cancel.</p>
     #[serde(rename = "timerId")]
@@ -295,7 +295,7 @@ pub struct CancelTimerDecisionAttributes {
 }
 
 /// <p>Provides the details of the <code>CancelTimerFailed</code> event.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CancelTimerFailedEventAttributes {
     /// <p><p>The cause of the failure. This information is generated by the system and can be useful for diagnostic purposes.</p> <note> <p>If <code>cause</code> is set to <code>OPERATION<em>NOT</em>PERMITTED</code>, the decision failed because it lacked sufficient permissions. For details and example IAM policies, see <a href="http://docs.aws.amazon.com/amazonswf/latest/developerguide/swf-dev-iam.html">Using IAM to Manage Access to Amazon SWF Workflows</a> in the <i>Amazon SWF Developer Guide</i>.</p> </note></p>
     #[serde(rename = "cause")]
@@ -309,7 +309,7 @@ pub struct CancelTimerFailedEventAttributes {
 }
 
 /// <p>Provides the details of the <code>CancelWorkflowExecution</code> decision.</p> <p> <b>Access Control</b> </p> <p>You can use IAM policies to control this decision's access to Amazon SWF resources as follows:</p> <ul> <li> <p>Use a <code>Resource</code> element with the domain name to limit the action to only specified domains.</p> </li> <li> <p>Use an <code>Action</code> element to allow or deny permission to call this action.</p> </li> <li> <p>You cannot use an IAM policy to constrain this action's parameters.</p> </li> </ul> <p>If the caller doesn't have sufficient permissions to invoke the action, or the parameter values fall outside the specified constraints, the action fails. The associated event attribute's <code>cause</code> parameter is set to <code>OPERATION_NOT_PERMITTED</code>. For details and example IAM policies, see <a href="http://docs.aws.amazon.com/amazonswf/latest/developerguide/swf-dev-iam.html">Using IAM to Manage Access to Amazon SWF Workflows</a> in the <i>Amazon SWF Developer Guide</i>.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CancelWorkflowExecutionDecisionAttributes {
     /// <p> Details of the cancellation.</p>
     #[serde(rename = "details")]
@@ -318,7 +318,7 @@ pub struct CancelWorkflowExecutionDecisionAttributes {
 }
 
 /// <p>Provides the details of the <code>CancelWorkflowExecutionFailed</code> event.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CancelWorkflowExecutionFailedEventAttributes {
     /// <p><p>The cause of the failure. This information is generated by the system and can be useful for diagnostic purposes.</p> <note> <p>If <code>cause</code> is set to <code>OPERATION<em>NOT</em>PERMITTED</code>, the decision failed because it lacked sufficient permissions. For details and example IAM policies, see <a href="http://docs.aws.amazon.com/amazonswf/latest/developerguide/swf-dev-iam.html">Using IAM to Manage Access to Amazon SWF Workflows</a> in the <i>Amazon SWF Developer Guide</i>.</p> </note></p>
     #[serde(rename = "cause")]
@@ -329,7 +329,7 @@ pub struct CancelWorkflowExecutionFailedEventAttributes {
 }
 
 /// <p>Provide details of the <code>ChildWorkflowExecutionCanceled</code> event.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ChildWorkflowExecutionCanceledEventAttributes {
     /// <p>Details of the cancellation (if provided).</p>
     #[serde(rename = "details")]
@@ -350,7 +350,7 @@ pub struct ChildWorkflowExecutionCanceledEventAttributes {
 }
 
 /// <p>Provides the details of the <code>ChildWorkflowExecutionCompleted</code> event.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ChildWorkflowExecutionCompletedEventAttributes {
     /// <p>The ID of the <code>StartChildWorkflowExecutionInitiated</code> event corresponding to the <code>StartChildWorkflowExecution</code> <a>Decision</a> to start this child workflow execution. This information can be useful for diagnosing problems by tracing back the chain of events leading up to this event.</p>
     #[serde(rename = "initiatedEventId")]
@@ -371,7 +371,7 @@ pub struct ChildWorkflowExecutionCompletedEventAttributes {
 }
 
 /// <p>Provides the details of the <code>ChildWorkflowExecutionFailed</code> event.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ChildWorkflowExecutionFailedEventAttributes {
     /// <p>The details of the failure (if provided).</p>
     #[serde(rename = "details")]
@@ -396,7 +396,7 @@ pub struct ChildWorkflowExecutionFailedEventAttributes {
 }
 
 /// <p>Provides the details of the <code>ChildWorkflowExecutionStarted</code> event.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ChildWorkflowExecutionStartedEventAttributes {
     /// <p>The ID of the <code>StartChildWorkflowExecutionInitiated</code> event corresponding to the <code>StartChildWorkflowExecution</code> <a>Decision</a> to start this child workflow execution. This information can be useful for diagnosing problems by tracing back the chain of events leading up to this event.</p>
     #[serde(rename = "initiatedEventId")]
@@ -410,7 +410,7 @@ pub struct ChildWorkflowExecutionStartedEventAttributes {
 }
 
 /// <p>Provides the details of the <code>ChildWorkflowExecutionTerminated</code> event.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ChildWorkflowExecutionTerminatedEventAttributes {
     /// <p>The ID of the <code>StartChildWorkflowExecutionInitiated</code> event corresponding to the <code>StartChildWorkflowExecution</code> <a>Decision</a> to start this child workflow execution. This information can be useful for diagnosing problems by tracing back the chain of events leading up to this event.</p>
     #[serde(rename = "initiatedEventId")]
@@ -427,7 +427,7 @@ pub struct ChildWorkflowExecutionTerminatedEventAttributes {
 }
 
 /// <p>Provides the details of the <code>ChildWorkflowExecutionTimedOut</code> event.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ChildWorkflowExecutionTimedOutEventAttributes {
     /// <p>The ID of the <code>StartChildWorkflowExecutionInitiated</code> event corresponding to the <code>StartChildWorkflowExecution</code> <a>Decision</a> to start this child workflow execution. This information can be useful for diagnosing problems by tracing back the chain of events leading up to this event.</p>
     #[serde(rename = "initiatedEventId")]
@@ -447,7 +447,7 @@ pub struct ChildWorkflowExecutionTimedOutEventAttributes {
 }
 
 /// <p>Used to filter the closed workflow executions in visibility APIs by their close status.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CloseStatusFilter {
     /// <p> The close status that must match the close status of an execution for it to meet the criteria of this filter.</p>
     #[serde(rename = "status")]
@@ -455,7 +455,7 @@ pub struct CloseStatusFilter {
 }
 
 /// <p>Provides the details of the <code>CompleteWorkflowExecution</code> decision.</p> <p> <b>Access Control</b> </p> <p>You can use IAM policies to control this decision's access to Amazon SWF resources as follows:</p> <ul> <li> <p>Use a <code>Resource</code> element with the domain name to limit the action to only specified domains.</p> </li> <li> <p>Use an <code>Action</code> element to allow or deny permission to call this action.</p> </li> <li> <p>You cannot use an IAM policy to constrain this action's parameters.</p> </li> </ul> <p>If the caller doesn't have sufficient permissions to invoke the action, or the parameter values fall outside the specified constraints, the action fails. The associated event attribute's <code>cause</code> parameter is set to <code>OPERATION_NOT_PERMITTED</code>. For details and example IAM policies, see <a href="http://docs.aws.amazon.com/amazonswf/latest/developerguide/swf-dev-iam.html">Using IAM to Manage Access to Amazon SWF Workflows</a> in the <i>Amazon SWF Developer Guide</i>.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CompleteWorkflowExecutionDecisionAttributes {
     /// <p>The result of the workflow execution. The form of the result is implementation defined.</p>
     #[serde(rename = "result")]
@@ -464,7 +464,7 @@ pub struct CompleteWorkflowExecutionDecisionAttributes {
 }
 
 /// <p>Provides the details of the <code>CompleteWorkflowExecutionFailed</code> event.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CompleteWorkflowExecutionFailedEventAttributes {
     /// <p><p>The cause of the failure. This information is generated by the system and can be useful for diagnostic purposes.</p> <note> <p>If <code>cause</code> is set to <code>OPERATION<em>NOT</em>PERMITTED</code>, the decision failed because it lacked sufficient permissions. For details and example IAM policies, see <a href="http://docs.aws.amazon.com/amazonswf/latest/developerguide/swf-dev-iam.html">Using IAM to Manage Access to Amazon SWF Workflows</a> in the <i>Amazon SWF Developer Guide</i>.</p> </note></p>
     #[serde(rename = "cause")]
@@ -475,7 +475,7 @@ pub struct CompleteWorkflowExecutionFailedEventAttributes {
 }
 
 /// <p>Provides the details of the <code>ContinueAsNewWorkflowExecution</code> decision.</p> <p> <b>Access Control</b> </p> <p>You can use IAM policies to control this decision's access to Amazon SWF resources as follows:</p> <ul> <li> <p>Use a <code>Resource</code> element with the domain name to limit the action to only specified domains.</p> </li> <li> <p>Use an <code>Action</code> element to allow or deny permission to call this action.</p> </li> <li> <p>Constrain the following parameters by using a <code>Condition</code> element with the appropriate keys.</p> <ul> <li> <p> <code>tag</code> – A tag used to identify the workflow execution</p> </li> <li> <p> <code>taskList</code> – String constraint. The key is <code>swf:taskList.name</code>.</p> </li> <li> <p> <code>workflowType.version</code> – String constraint. The key is <code>swf:workflowType.version</code>.</p> </li> </ul> </li> </ul> <p>If the caller doesn't have sufficient permissions to invoke the action, or the parameter values fall outside the specified constraints, the action fails. The associated event attribute's <code>cause</code> parameter is set to <code>OPERATION_NOT_PERMITTED</code>. For details and example IAM policies, see <a href="http://docs.aws.amazon.com/amazonswf/latest/developerguide/swf-dev-iam.html">Using IAM to Manage Access to Amazon SWF Workflows</a> in the <i>Amazon SWF Developer Guide</i>.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ContinueAsNewWorkflowExecutionDecisionAttributes {
     /// <p><p>If set, specifies the policy to use for the child workflow executions of the new execution if it is terminated by calling the <a>TerminateWorkflowExecution</a> action explicitly or due to an expired timeout. This policy overrides the default child policy specified when registering the workflow type using <a>RegisterWorkflowType</a>.</p> <p>The supported child policies are:</p> <ul> <li> <p> <code>TERMINATE</code> – The child executions are terminated.</p> </li> <li> <p> <code>REQUEST_CANCEL</code> – A request to cancel is attempted for each child execution by recording a <code>WorkflowExecutionCancelRequested</code> event in its history. It is up to the decider to take appropriate actions when it receives an execution history with this event.</p> </li> <li> <p> <code>ABANDON</code> – No action is taken. The child executions continue to run.</p> </li> </ul> <note> <p>A child policy for this workflow execution must be specified either as a default for the workflow type or through this parameter. If neither this parameter is set nor a default child policy was specified at registration time then a fault is returned.</p> </note></p>
     #[serde(rename = "childPolicy")]
@@ -516,7 +516,7 @@ pub struct ContinueAsNewWorkflowExecutionDecisionAttributes {
 }
 
 /// <p>Provides the details of the <code>ContinueAsNewWorkflowExecutionFailed</code> event.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ContinueAsNewWorkflowExecutionFailedEventAttributes {
     /// <p><p>The cause of the failure. This information is generated by the system and can be useful for diagnostic purposes.</p> <note> <p>If <code>cause</code> is set to <code>OPERATION<em>NOT</em>PERMITTED</code>, the decision failed because it lacked sufficient permissions. For details and example IAM policies, see <a href="http://docs.aws.amazon.com/amazonswf/latest/developerguide/swf-dev-iam.html">Using IAM to Manage Access to Amazon SWF Workflows</a> in the <i>Amazon SWF Developer Guide</i>.</p> </note></p>
     #[serde(rename = "cause")]
@@ -526,7 +526,7 @@ pub struct ContinueAsNewWorkflowExecutionFailedEventAttributes {
     pub decision_task_completed_event_id: i64,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CountClosedWorkflowExecutionsInput {
     /// <p><p>If specified, only workflow executions that match this close status are counted. This filter has an affect only if <code>executionStatus</code> is specified as <code>CLOSED</code>.</p> <note> <p> <code>closeStatusFilter</code>, <code>executionFilter</code>, <code>typeFilter</code> and <code>tagFilter</code> are mutually exclusive. You can specify at most one of these in a request.</p> </note></p>
     #[serde(rename = "closeStatusFilter")]
@@ -557,7 +557,7 @@ pub struct CountClosedWorkflowExecutionsInput {
     pub type_filter: Option<WorkflowTypeFilter>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CountOpenWorkflowExecutionsInput {
     /// <p>The name of the domain containing the workflow executions to count.</p>
     #[serde(rename = "domain")]
@@ -579,7 +579,7 @@ pub struct CountOpenWorkflowExecutionsInput {
     pub type_filter: Option<WorkflowTypeFilter>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CountPendingActivityTasksInput {
     /// <p>The name of the domain that contains the task list.</p>
     #[serde(rename = "domain")]
@@ -589,7 +589,7 @@ pub struct CountPendingActivityTasksInput {
     pub task_list: TaskList,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CountPendingDecisionTasksInput {
     /// <p>The name of the domain that contains the task list.</p>
     #[serde(rename = "domain")]
@@ -600,7 +600,7 @@ pub struct CountPendingDecisionTasksInput {
 }
 
 /// <p><p>Specifies a decision made by the decider. A decision can be one of these types:</p> <ul> <li> <p> <code>CancelTimer</code> – Cancels a previously started timer and records a <code>TimerCanceled</code> event in the history.</p> </li> <li> <p> <code>CancelWorkflowExecution</code> – Closes the workflow execution and records a <code>WorkflowExecutionCanceled</code> event in the history.</p> </li> <li> <p> <code>CompleteWorkflowExecution</code> – Closes the workflow execution and records a <code>WorkflowExecutionCompleted</code> event in the history .</p> </li> <li> <p> <code>ContinueAsNewWorkflowExecution</code> – Closes the workflow execution and starts a new workflow execution of the same type using the same workflow ID and a unique run Id. A <code>WorkflowExecutionContinuedAsNew</code> event is recorded in the history.</p> </li> <li> <p> <code>FailWorkflowExecution</code> – Closes the workflow execution and records a <code>WorkflowExecutionFailed</code> event in the history.</p> </li> <li> <p> <code>RecordMarker</code> – Records a <code>MarkerRecorded</code> event in the history. Markers can be used for adding custom information in the history for instance to let deciders know that they don&#39;t need to look at the history beyond the marker event.</p> </li> <li> <p> <code>RequestCancelActivityTask</code> – Attempts to cancel a previously scheduled activity task. If the activity task was scheduled but has not been assigned to a worker, then it is canceled. If the activity task was already assigned to a worker, then the worker is informed that cancellation has been requested in the response to <a>RecordActivityTaskHeartbeat</a>.</p> </li> <li> <p> <code>RequestCancelExternalWorkflowExecution</code> – Requests that a request be made to cancel the specified external workflow execution and records a <code>RequestCancelExternalWorkflowExecutionInitiated</code> event in the history.</p> </li> <li> <p> <code>ScheduleActivityTask</code> – Schedules an activity task.</p> </li> <li> <p> <code>SignalExternalWorkflowExecution</code> – Requests a signal to be delivered to the specified external workflow execution and records a <code>SignalExternalWorkflowExecutionInitiated</code> event in the history.</p> </li> <li> <p> <code>StartChildWorkflowExecution</code> – Requests that a child workflow execution be started and records a <code>StartChildWorkflowExecutionInitiated</code> event in the history. The child workflow execution is a separate workflow execution with its own history.</p> </li> <li> <p> <code>StartTimer</code> – Starts a timer for this workflow execution and records a <code>TimerStarted</code> event in the history. This timer fires after the specified delay and record a <code>TimerFired</code> event.</p> </li> </ul> <p> <b>Access Control</b> </p> <p>If you grant permission to use <code>RespondDecisionTaskCompleted</code>, you can use IAM policies to express permissions for the list of decisions returned by this action as if they were members of the API. Treating decisions as a pseudo API maintains a uniform conceptual model and helps keep policies readable. For details and example IAM policies, see <a href="http://docs.aws.amazon.com/amazonswf/latest/developerguide/swf-dev-iam.html">Using IAM to Manage Access to Amazon SWF Workflows</a> in the <i>Amazon SWF Developer Guide</i>.</p> <p> <b>Decision Failure</b> </p> <p>Decisions can fail for several reasons</p> <ul> <li> <p>The ordering of decisions should follow a logical flow. Some decisions might not make sense in the current context of the workflow execution and therefore fails.</p> </li> <li> <p>A limit on your account was reached.</p> </li> <li> <p>The decision lacks sufficient permissions.</p> </li> </ul> <p>One of the following events might be added to the history to indicate an error. The event attribute&#39;s <code>cause</code> parameter indicates the cause. If <code>cause</code> is set to <code>OPERATION<em>NOT</em>PERMITTED</code>, the decision failed because it lacked sufficient permissions. For details and example IAM policies, see <a href="http://docs.aws.amazon.com/amazonswf/latest/developerguide/swf-dev-iam.html">Using IAM to Manage Access to Amazon SWF Workflows</a> in the <i>Amazon SWF Developer Guide</i>.</p> <ul> <li> <p> <code>ScheduleActivityTaskFailed</code> – A <code>ScheduleActivityTask</code> decision failed. This could happen if the activity type specified in the decision isn&#39;t registered, is in a deprecated state, or the decision isn&#39;t properly configured.</p> </li> <li> <p> <code>RequestCancelActivityTaskFailed</code> – A <code>RequestCancelActivityTask</code> decision failed. This could happen if there is no open activity task with the specified activityId.</p> </li> <li> <p> <code>StartTimerFailed</code> – A <code>StartTimer</code> decision failed. This could happen if there is another open timer with the same timerId.</p> </li> <li> <p> <code>CancelTimerFailed</code> – A <code>CancelTimer</code> decision failed. This could happen if there is no open timer with the specified timerId.</p> </li> <li> <p> <code>StartChildWorkflowExecutionFailed</code> – A <code>StartChildWorkflowExecution</code> decision failed. This could happen if the workflow type specified isn&#39;t registered, is deprecated, or the decision isn&#39;t properly configured.</p> </li> <li> <p> <code>SignalExternalWorkflowExecutionFailed</code> – A <code>SignalExternalWorkflowExecution</code> decision failed. This could happen if the <code>workflowID</code> specified in the decision was incorrect.</p> </li> <li> <p> <code>RequestCancelExternalWorkflowExecutionFailed</code> – A <code>RequestCancelExternalWorkflowExecution</code> decision failed. This could happen if the <code>workflowID</code> specified in the decision was incorrect.</p> </li> <li> <p> <code>CancelWorkflowExecutionFailed</code> – A <code>CancelWorkflowExecution</code> decision failed. This could happen if there is an unhandled decision task pending in the workflow execution.</p> </li> <li> <p> <code>CompleteWorkflowExecutionFailed</code> – A <code>CompleteWorkflowExecution</code> decision failed. This could happen if there is an unhandled decision task pending in the workflow execution.</p> </li> <li> <p> <code>ContinueAsNewWorkflowExecutionFailed</code> – A <code>ContinueAsNewWorkflowExecution</code> decision failed. This could happen if there is an unhandled decision task pending in the workflow execution or the ContinueAsNewWorkflowExecution decision was not configured correctly.</p> </li> <li> <p> <code>FailWorkflowExecutionFailed</code> – A <code>FailWorkflowExecution</code> decision failed. This could happen if there is an unhandled decision task pending in the workflow execution.</p> </li> </ul> <p>The preceding error events might occur due to an error in the decider logic, which might put the workflow execution in an unstable state The cause field in the event structure for the error event indicates the cause of the error.</p> <note> <p>A workflow execution may be closed by the decider by returning one of the following decisions when completing a decision task: <code>CompleteWorkflowExecution</code>, <code>FailWorkflowExecution</code>, <code>CancelWorkflowExecution</code> and <code>ContinueAsNewWorkflowExecution</code>. An <code>UnhandledDecision</code> fault is returned if a workflow closing decision is specified and a signal or activity event had been added to the history while the decision task was being performed by the decider. Unlike the above situations which are logic issues, this fault is always possible because of race conditions in a distributed system. The right action here is to call <a>RespondDecisionTaskCompleted</a> without any decisions. This would result in another decision task with these new events included in the history. The decider should handle the new events and may decide to close the workflow execution.</p> </note> <p> <b>How to Code a Decision</b> </p> <p>You code a decision by first setting the decision type field to one of the above decision values, and then set the corresponding attributes field shown below:</p> <ul> <li> <p> <code> <a>ScheduleActivityTaskDecisionAttributes</a> </code> </p> </li> <li> <p> <code> <a>RequestCancelActivityTaskDecisionAttributes</a> </code> </p> </li> <li> <p> <code> <a>CompleteWorkflowExecutionDecisionAttributes</a> </code> </p> </li> <li> <p> <code> <a>FailWorkflowExecutionDecisionAttributes</a> </code> </p> </li> <li> <p> <code> <a>CancelWorkflowExecutionDecisionAttributes</a> </code> </p> </li> <li> <p> <code> <a>ContinueAsNewWorkflowExecutionDecisionAttributes</a> </code> </p> </li> <li> <p> <code> <a>RecordMarkerDecisionAttributes</a> </code> </p> </li> <li> <p> <code> <a>StartTimerDecisionAttributes</a> </code> </p> </li> <li> <p> <code> <a>CancelTimerDecisionAttributes</a> </code> </p> </li> <li> <p> <code> <a>SignalExternalWorkflowExecutionDecisionAttributes</a> </code> </p> </li> <li> <p> <code> <a>RequestCancelExternalWorkflowExecutionDecisionAttributes</a> </code> </p> </li> <li> <p> <code> <a>StartChildWorkflowExecutionDecisionAttributes</a> </code> </p> </li> </ul></p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct Decision {
     /// <p>Provides the details of the <code>CancelTimer</code> decision. It isn't set for other decision types.</p>
     #[serde(rename = "cancelTimerDecisionAttributes")]
@@ -669,7 +669,7 @@ pub struct Decision {
 }
 
 /// <p>A structure that represents a decision task. Decision tasks are sent to deciders in order for them to make decisions.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DecisionTask {
     /// <p>A paginated list of history events of the workflow execution. The decider uses this during the processing of the decision task.</p>
     #[serde(rename = "events")]
@@ -697,7 +697,7 @@ pub struct DecisionTask {
 }
 
 /// <p>Provides the details of the <code>DecisionTaskCompleted</code> event.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DecisionTaskCompletedEventAttributes {
     /// <p>User defined context for the workflow execution.</p>
     #[serde(rename = "executionContext")]
@@ -712,7 +712,7 @@ pub struct DecisionTaskCompletedEventAttributes {
 }
 
 /// <p>Provides details about the <code>DecisionTaskScheduled</code> event.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DecisionTaskScheduledEventAttributes {
     /// <p>The maximum duration for this decision task. The task is considered timed out if it doesn't completed within this duration.</p> <p>The duration is specified in seconds, an integer greater than or equal to <code>0</code>. You can use <code>NONE</code> to specify unlimited duration.</p>
     #[serde(rename = "startToCloseTimeout")]
@@ -728,7 +728,7 @@ pub struct DecisionTaskScheduledEventAttributes {
 }
 
 /// <p>Provides the details of the <code>DecisionTaskStarted</code> event.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DecisionTaskStartedEventAttributes {
     /// <p>Identity of the decider making the request. This enables diagnostic tracing when problems arise. The form of this identity is user defined.</p>
     #[serde(rename = "identity")]
@@ -740,7 +740,7 @@ pub struct DecisionTaskStartedEventAttributes {
 }
 
 /// <p>Provides the details of the <code>DecisionTaskTimedOut</code> event.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DecisionTaskTimedOutEventAttributes {
     /// <p>The ID of the <code>DecisionTaskScheduled</code> event that was recorded when this decision task was scheduled. This information can be useful for diagnosing problems by tracing back the chain of events leading up to this event.</p>
     #[serde(rename = "scheduledEventId")]
@@ -753,7 +753,7 @@ pub struct DecisionTaskTimedOutEventAttributes {
     pub timeout_type: String,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeprecateActivityTypeInput {
     /// <p>The activity type to deprecate.</p>
     #[serde(rename = "activityType")]
@@ -763,14 +763,14 @@ pub struct DeprecateActivityTypeInput {
     pub domain: String,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeprecateDomainInput {
     /// <p>The name of the domain to deprecate.</p>
     #[serde(rename = "name")]
     pub name: String,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeprecateWorkflowTypeInput {
     /// <p>The name of the domain in which the workflow type is registered.</p>
     #[serde(rename = "domain")]
@@ -780,7 +780,7 @@ pub struct DeprecateWorkflowTypeInput {
     pub workflow_type: WorkflowType,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeActivityTypeInput {
     /// <p>The activity type to get information about. Activity types are identified by the <code>name</code> and <code>version</code> that were supplied when the activity was registered.</p>
     #[serde(rename = "activityType")]
@@ -790,14 +790,14 @@ pub struct DescribeActivityTypeInput {
     pub domain: String,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeDomainInput {
     /// <p>The name of the domain to describe.</p>
     #[serde(rename = "name")]
     pub name: String,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeWorkflowExecutionInput {
     /// <p>The name of the domain containing the workflow execution.</p>
     #[serde(rename = "domain")]
@@ -807,7 +807,7 @@ pub struct DescribeWorkflowExecutionInput {
     pub execution: WorkflowExecution,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeWorkflowTypeInput {
     /// <p>The name of the domain in which this workflow type is registered.</p>
     #[serde(rename = "domain")]
@@ -818,7 +818,7 @@ pub struct DescribeWorkflowTypeInput {
 }
 
 /// <p>Contains the configuration settings of a domain.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DomainConfiguration {
     /// <p>The retention period for workflow executions in this domain.</p>
     #[serde(rename = "workflowExecutionRetentionPeriodInDays")]
@@ -826,7 +826,7 @@ pub struct DomainConfiguration {
 }
 
 /// <p>Contains details of a domain.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DomainDetail {
     /// <p>The domain configuration. Currently, this includes only the domain's retention period.</p>
     #[serde(rename = "configuration")]
@@ -837,7 +837,7 @@ pub struct DomainDetail {
 }
 
 /// <p>Contains general information about a domain.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DomainInfo {
     /// <p>The description of the domain provided through <a>RegisterDomain</a>.</p>
     #[serde(rename = "description")]
@@ -852,7 +852,7 @@ pub struct DomainInfo {
 }
 
 /// <p>Contains a paginated collection of DomainInfo structures.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DomainInfos {
     /// <p>A list of DomainInfo structures.</p>
     #[serde(rename = "domainInfos")]
@@ -864,7 +864,7 @@ pub struct DomainInfos {
 }
 
 /// <p>Used to filter the workflow executions in visibility APIs by various time-based rules. Each parameter, if specified, defines a rule that must be satisfied by each returned query result. The parameter values are in the <a href="https://en.wikipedia.org/wiki/Unix_time">Unix Time format</a>. For example: <code>"oldestDate": 1325376070.</code> </p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ExecutionTimeFilter {
     /// <p>Specifies the latest start or close date and time to return.</p>
     #[serde(rename = "latestDate")]
@@ -876,7 +876,7 @@ pub struct ExecutionTimeFilter {
 }
 
 /// <p>Provides the details of the <code>ExternalWorkflowExecutionCancelRequested</code> event.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ExternalWorkflowExecutionCancelRequestedEventAttributes {
     /// <p>The ID of the <code>RequestCancelExternalWorkflowExecutionInitiated</code> event corresponding to the <code>RequestCancelExternalWorkflowExecution</code> decision to cancel this external workflow execution. This information can be useful for diagnosing problems by tracing back the chain of events leading up to this event.</p>
     #[serde(rename = "initiatedEventId")]
@@ -887,7 +887,7 @@ pub struct ExternalWorkflowExecutionCancelRequestedEventAttributes {
 }
 
 /// <p>Provides the details of the <code>ExternalWorkflowExecutionSignaled</code> event.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ExternalWorkflowExecutionSignaledEventAttributes {
     /// <p>The ID of the <code>SignalExternalWorkflowExecutionInitiated</code> event corresponding to the <code>SignalExternalWorkflowExecution</code> decision to request this signal. This information can be useful for diagnosing problems by tracing back the chain of events leading up to this event.</p>
     #[serde(rename = "initiatedEventId")]
@@ -898,7 +898,7 @@ pub struct ExternalWorkflowExecutionSignaledEventAttributes {
 }
 
 /// <p>Provides the details of the <code>FailWorkflowExecution</code> decision.</p> <p> <b>Access Control</b> </p> <p>You can use IAM policies to control this decision's access to Amazon SWF resources as follows:</p> <ul> <li> <p>Use a <code>Resource</code> element with the domain name to limit the action to only specified domains.</p> </li> <li> <p>Use an <code>Action</code> element to allow or deny permission to call this action.</p> </li> <li> <p>You cannot use an IAM policy to constrain this action's parameters.</p> </li> </ul> <p>If the caller doesn't have sufficient permissions to invoke the action, or the parameter values fall outside the specified constraints, the action fails. The associated event attribute's <code>cause</code> parameter is set to <code>OPERATION_NOT_PERMITTED</code>. For details and example IAM policies, see <a href="http://docs.aws.amazon.com/amazonswf/latest/developerguide/swf-dev-iam.html">Using IAM to Manage Access to Amazon SWF Workflows</a> in the <i>Amazon SWF Developer Guide</i>.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct FailWorkflowExecutionDecisionAttributes {
     /// <p> Details of the failure.</p>
     #[serde(rename = "details")]
@@ -911,7 +911,7 @@ pub struct FailWorkflowExecutionDecisionAttributes {
 }
 
 /// <p>Provides the details of the <code>FailWorkflowExecutionFailed</code> event.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct FailWorkflowExecutionFailedEventAttributes {
     /// <p><p>The cause of the failure. This information is generated by the system and can be useful for diagnostic purposes.</p> <note> <p>If <code>cause</code> is set to <code>OPERATION<em>NOT</em>PERMITTED</code>, the decision failed because it lacked sufficient permissions. For details and example IAM policies, see <a href="http://docs.aws.amazon.com/amazonswf/latest/developerguide/swf-dev-iam.html">Using IAM to Manage Access to Amazon SWF Workflows</a> in the <i>Amazon SWF Developer Guide</i>.</p> </note></p>
     #[serde(rename = "cause")]
@@ -921,7 +921,7 @@ pub struct FailWorkflowExecutionFailedEventAttributes {
     pub decision_task_completed_event_id: i64,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetWorkflowExecutionHistoryInput {
     /// <p>The name of the domain containing the workflow execution.</p>
     #[serde(rename = "domain")]
@@ -944,7 +944,7 @@ pub struct GetWorkflowExecutionHistoryInput {
 }
 
 /// <p>Paginated representation of a workflow history for a workflow execution. This is the up to date, complete and authoritative record of the events related to all tasks and events in the life of the workflow execution.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct History {
     /// <p>The list of history events.</p>
     #[serde(rename = "events")]
@@ -956,7 +956,7 @@ pub struct History {
 }
 
 /// <p><p>Event within a workflow execution. A history event can be one of these types:</p> <ul> <li> <p> <code>ActivityTaskCancelRequested</code> – A <code>RequestCancelActivityTask</code> decision was received by the system.</p> </li> <li> <p> <code>ActivityTaskCanceled</code> – The activity task was successfully canceled.</p> </li> <li> <p> <code>ActivityTaskCompleted</code> – An activity worker successfully completed an activity task by calling <a>RespondActivityTaskCompleted</a>.</p> </li> <li> <p> <code>ActivityTaskFailed</code> – An activity worker failed an activity task by calling <a>RespondActivityTaskFailed</a>.</p> </li> <li> <p> <code>ActivityTaskScheduled</code> – An activity task was scheduled for execution.</p> </li> <li> <p> <code>ActivityTaskStarted</code> – The scheduled activity task was dispatched to a worker.</p> </li> <li> <p> <code>ActivityTaskTimedOut</code> – The activity task timed out.</p> </li> <li> <p> <code>CancelTimerFailed</code> – Failed to process CancelTimer decision. This happens when the decision isn&#39;t configured properly, for example no timer exists with the specified timer Id.</p> </li> <li> <p> <code>CancelWorkflowExecutionFailed</code> – A request to cancel a workflow execution failed.</p> </li> <li> <p> <code>ChildWorkflowExecutionCanceled</code> – A child workflow execution, started by this workflow execution, was canceled and closed.</p> </li> <li> <p> <code>ChildWorkflowExecutionCompleted</code> – A child workflow execution, started by this workflow execution, completed successfully and was closed.</p> </li> <li> <p> <code>ChildWorkflowExecutionFailed</code> – A child workflow execution, started by this workflow execution, failed to complete successfully and was closed.</p> </li> <li> <p> <code>ChildWorkflowExecutionStarted</code> – A child workflow execution was successfully started.</p> </li> <li> <p> <code>ChildWorkflowExecutionTerminated</code> – A child workflow execution, started by this workflow execution, was terminated.</p> </li> <li> <p> <code>ChildWorkflowExecutionTimedOut</code> – A child workflow execution, started by this workflow execution, timed out and was closed.</p> </li> <li> <p> <code>CompleteWorkflowExecutionFailed</code> – The workflow execution failed to complete.</p> </li> <li> <p> <code>ContinueAsNewWorkflowExecutionFailed</code> – The workflow execution failed to complete after being continued as a new workflow execution.</p> </li> <li> <p> <code>DecisionTaskCompleted</code> – The decider successfully completed a decision task by calling <a>RespondDecisionTaskCompleted</a>.</p> </li> <li> <p> <code>DecisionTaskScheduled</code> – A decision task was scheduled for the workflow execution.</p> </li> <li> <p> <code>DecisionTaskStarted</code> – The decision task was dispatched to a decider.</p> </li> <li> <p> <code>DecisionTaskTimedOut</code> – The decision task timed out.</p> </li> <li> <p> <code>ExternalWorkflowExecutionCancelRequested</code> – Request to cancel an external workflow execution was successfully delivered to the target execution.</p> </li> <li> <p> <code>ExternalWorkflowExecutionSignaled</code> – A signal, requested by this workflow execution, was successfully delivered to the target external workflow execution.</p> </li> <li> <p> <code>FailWorkflowExecutionFailed</code> – A request to mark a workflow execution as failed, itself failed.</p> </li> <li> <p> <code>MarkerRecorded</code> – A marker was recorded in the workflow history as the result of a <code>RecordMarker</code> decision.</p> </li> <li> <p> <code>RecordMarkerFailed</code> – A <code>RecordMarker</code> decision was returned as failed.</p> </li> <li> <p> <code>RequestCancelActivityTaskFailed</code> – Failed to process RequestCancelActivityTask decision. This happens when the decision isn&#39;t configured properly.</p> </li> <li> <p> <code>RequestCancelExternalWorkflowExecutionFailed</code> – Request to cancel an external workflow execution failed.</p> </li> <li> <p> <code>RequestCancelExternalWorkflowExecutionInitiated</code> – A request was made to request the cancellation of an external workflow execution.</p> </li> <li> <p> <code>ScheduleActivityTaskFailed</code> – Failed to process ScheduleActivityTask decision. This happens when the decision isn&#39;t configured properly, for example the activity type specified isn&#39;t registered.</p> </li> <li> <p> <code>SignalExternalWorkflowExecutionFailed</code> – The request to signal an external workflow execution failed.</p> </li> <li> <p> <code>SignalExternalWorkflowExecutionInitiated</code> – A request to signal an external workflow was made.</p> </li> <li> <p> <code>StartActivityTaskFailed</code> – A scheduled activity task failed to start.</p> </li> <li> <p> <code>StartChildWorkflowExecutionFailed</code> – Failed to process StartChildWorkflowExecution decision. This happens when the decision isn&#39;t configured properly, for example the workflow type specified isn&#39;t registered.</p> </li> <li> <p> <code>StartChildWorkflowExecutionInitiated</code> – A request was made to start a child workflow execution.</p> </li> <li> <p> <code>StartTimerFailed</code> – Failed to process StartTimer decision. This happens when the decision isn&#39;t configured properly, for example a timer already exists with the specified timer Id.</p> </li> <li> <p> <code>TimerCanceled</code> – A timer, previously started for this workflow execution, was successfully canceled.</p> </li> <li> <p> <code>TimerFired</code> – A timer, previously started for this workflow execution, fired.</p> </li> <li> <p> <code>TimerStarted</code> – A timer was started for the workflow execution due to a <code>StartTimer</code> decision.</p> </li> <li> <p> <code>WorkflowExecutionCancelRequested</code> – A request to cancel this workflow execution was made.</p> </li> <li> <p> <code>WorkflowExecutionCanceled</code> – The workflow execution was successfully canceled and closed.</p> </li> <li> <p> <code>WorkflowExecutionCompleted</code> – The workflow execution was closed due to successful completion.</p> </li> <li> <p> <code>WorkflowExecutionContinuedAsNew</code> – The workflow execution was closed and a new execution of the same type was created with the same workflowId.</p> </li> <li> <p> <code>WorkflowExecutionFailed</code> – The workflow execution closed due to a failure.</p> </li> <li> <p> <code>WorkflowExecutionSignaled</code> – An external signal was received for the workflow execution.</p> </li> <li> <p> <code>WorkflowExecutionStarted</code> – The workflow execution was started.</p> </li> <li> <p> <code>WorkflowExecutionTerminated</code> – The workflow execution was terminated.</p> </li> <li> <p> <code>WorkflowExecutionTimedOut</code> – The workflow execution was closed because a time out was exceeded.</p> </li> </ul></p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct HistoryEvent {
     /// <p>If the event is of type <code>ActivityTaskcancelRequested</code> then this member is set and provides detailed information about the event. It isn't set for other event types.</p>
     #[serde(rename = "activityTaskCancelRequestedEventAttributes")]
@@ -1217,7 +1217,7 @@ pub struct HistoryEvent {
 }
 
 /// <p>Provides the details of the <code>LambdaFunctionCompleted</code> event. It isn't set for other event types.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct LambdaFunctionCompletedEventAttributes {
     /// <p>The results of the Lambda task.</p>
     #[serde(rename = "result")]
@@ -1232,7 +1232,7 @@ pub struct LambdaFunctionCompletedEventAttributes {
 }
 
 /// <p>Provides the details of the <code>LambdaFunctionFailed</code> event. It isn't set for other event types.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct LambdaFunctionFailedEventAttributes {
     /// <p>The details of the failure.</p>
     #[serde(rename = "details")]
@@ -1251,7 +1251,7 @@ pub struct LambdaFunctionFailedEventAttributes {
 }
 
 /// <p>Provides the details of the <code>LambdaFunctionScheduled</code> event. It isn't set for other event types.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct LambdaFunctionScheduledEventAttributes {
     /// <p>Data attached to the event that the decider can use in subsequent workflow tasks. This data isn't sent to the Lambda task.</p>
     #[serde(rename = "control")]
@@ -1277,7 +1277,7 @@ pub struct LambdaFunctionScheduledEventAttributes {
 }
 
 /// <p>Provides the details of the <code>LambdaFunctionStarted</code> event. It isn't set for other event types.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct LambdaFunctionStartedEventAttributes {
     /// <p>The ID of the <code>LambdaFunctionScheduled</code> event that was recorded when this activity task was scheduled. To help diagnose issues, use this information to trace back the chain of events leading up to this event.</p>
     #[serde(rename = "scheduledEventId")]
@@ -1285,7 +1285,7 @@ pub struct LambdaFunctionStartedEventAttributes {
 }
 
 /// <p>Provides details of the <code>LambdaFunctionTimedOut</code> event.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct LambdaFunctionTimedOutEventAttributes {
     /// <p>The ID of the <code>LambdaFunctionScheduled</code> event that was recorded when this activity task was scheduled. To help diagnose issues, use this information to trace back the chain of events leading up to this event.</p>
     #[serde(rename = "scheduledEventId")]
@@ -1299,7 +1299,7 @@ pub struct LambdaFunctionTimedOutEventAttributes {
     pub timeout_type: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListActivityTypesInput {
     /// <p>The name of the domain in which the activity types have been registered.</p>
     #[serde(rename = "domain")]
@@ -1325,7 +1325,7 @@ pub struct ListActivityTypesInput {
     pub reverse_order: Option<bool>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListClosedWorkflowExecutionsInput {
     /// <p><p>If specified, only workflow executions that match this <i>close status</i> are listed. For example, if TERMINATED is specified, then only TERMINATED workflow executions are listed.</p> <note> <p> <code>closeStatusFilter</code>, <code>executionFilter</code>, <code>typeFilter</code> and <code>tagFilter</code> are mutually exclusive. You can specify at most one of these in a request.</p> </note></p>
     #[serde(rename = "closeStatusFilter")]
@@ -1368,7 +1368,7 @@ pub struct ListClosedWorkflowExecutionsInput {
     pub type_filter: Option<WorkflowTypeFilter>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListDomainsInput {
     /// <p>The maximum number of results that are returned per call. <code>nextPageToken</code> can be used to obtain futher pages of results. The default is 1000, which is the maximum allowed page size. You can, however, specify a page size <i>smaller</i> than the maximum.</p> <p>This is an upper limit only; the actual number of results returned per call may be fewer than the specified maximum.</p>
     #[serde(rename = "maximumPageSize")]
@@ -1387,7 +1387,7 @@ pub struct ListDomainsInput {
     pub reverse_order: Option<bool>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListOpenWorkflowExecutionsInput {
     /// <p>The name of the domain that contains the workflow executions to list.</p>
     #[serde(rename = "domain")]
@@ -1421,7 +1421,7 @@ pub struct ListOpenWorkflowExecutionsInput {
     pub type_filter: Option<WorkflowTypeFilter>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListWorkflowTypesInput {
     /// <p>The name of the domain in which the workflow types have been registered.</p>
     #[serde(rename = "domain")]
@@ -1448,7 +1448,7 @@ pub struct ListWorkflowTypesInput {
 }
 
 /// <p>Provides the details of the <code>MarkerRecorded</code> event.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct MarkerRecordedEventAttributes {
     /// <p>The ID of the <code>DecisionTaskCompleted</code> event corresponding to the decision task that resulted in the <code>RecordMarker</code> decision that requested this marker. This information can be useful for diagnosing problems by tracing back the chain of events leading up to this event.</p>
     #[serde(rename = "decisionTaskCompletedEventId")]
@@ -1463,7 +1463,7 @@ pub struct MarkerRecordedEventAttributes {
 }
 
 /// <p>Contains the count of tasks in a task list.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct PendingTaskCount {
     /// <p>The number of tasks in the task list.</p>
     #[serde(rename = "count")]
@@ -1474,7 +1474,7 @@ pub struct PendingTaskCount {
     pub truncated: Option<bool>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct PollForActivityTaskInput {
     /// <p>The name of the domain that contains the task lists being polled.</p>
     #[serde(rename = "domain")]
@@ -1488,7 +1488,7 @@ pub struct PollForActivityTaskInput {
     pub task_list: TaskList,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct PollForDecisionTaskInput {
     /// <p>The name of the domain containing the task lists to poll.</p>
     #[serde(rename = "domain")]
@@ -1514,7 +1514,7 @@ pub struct PollForDecisionTaskInput {
     pub task_list: TaskList,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct RecordActivityTaskHeartbeatInput {
     /// <p>If specified, contains details about the progress of the task.</p>
     #[serde(rename = "details")]
@@ -1526,7 +1526,7 @@ pub struct RecordActivityTaskHeartbeatInput {
 }
 
 /// <p>Provides the details of the <code>RecordMarker</code> decision.</p> <p> <b>Access Control</b> </p> <p>You can use IAM policies to control this decision's access to Amazon SWF resources as follows:</p> <ul> <li> <p>Use a <code>Resource</code> element with the domain name to limit the action to only specified domains.</p> </li> <li> <p>Use an <code>Action</code> element to allow or deny permission to call this action.</p> </li> <li> <p>You cannot use an IAM policy to constrain this action's parameters.</p> </li> </ul> <p>If the caller doesn't have sufficient permissions to invoke the action, or the parameter values fall outside the specified constraints, the action fails. The associated event attribute's <code>cause</code> parameter is set to <code>OPERATION_NOT_PERMITTED</code>. For details and example IAM policies, see <a href="http://docs.aws.amazon.com/amazonswf/latest/developerguide/swf-dev-iam.html">Using IAM to Manage Access to Amazon SWF Workflows</a> in the <i>Amazon SWF Developer Guide</i>.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct RecordMarkerDecisionAttributes {
     /// <p> The details of the marker.</p>
     #[serde(rename = "details")]
@@ -1538,7 +1538,7 @@ pub struct RecordMarkerDecisionAttributes {
 }
 
 /// <p>Provides the details of the <code>RecordMarkerFailed</code> event.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct RecordMarkerFailedEventAttributes {
     /// <p><p>The cause of the failure. This information is generated by the system and can be useful for diagnostic purposes.</p> <note> <p>If <code>cause</code> is set to <code>OPERATION<em>NOT</em>PERMITTED</code>, the decision failed because it lacked sufficient permissions. For details and example IAM policies, see <a href="http://docs.aws.amazon.com/amazonswf/latest/developerguide/swf-dev-iam.html">Using IAM to Manage Access to Amazon SWF Workflows</a> in the <i>Amazon SWF Developer Guide</i>.</p> </note></p>
     #[serde(rename = "cause")]
@@ -1551,7 +1551,7 @@ pub struct RecordMarkerFailedEventAttributes {
     pub marker_name: String,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct RegisterActivityTypeInput {
     /// <p>If set, specifies the default maximum time before which a worker processing a task of this type must report progress by calling <a>RecordActivityTaskHeartbeat</a>. If the timeout is exceeded, the activity task is automatically timed out. This default can be overridden when scheduling an activity task using the <code>ScheduleActivityTask</code> <a>Decision</a>. If the activity worker subsequently attempts to record a heartbeat or returns a result, the activity worker receives an <code>UnknownResource</code> fault. In this case, Amazon SWF no longer considers the activity task to be valid; the activity worker should clean up the activity task.</p> <p>The duration is specified in seconds, an integer greater than or equal to <code>0</code>. You can use <code>NONE</code> to specify unlimited duration.</p>
     #[serde(rename = "defaultTaskHeartbeatTimeout")]
@@ -1592,7 +1592,7 @@ pub struct RegisterActivityTypeInput {
     pub version: String,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct RegisterDomainInput {
     /// <p>A text description of the domain.</p>
     #[serde(rename = "description")]
@@ -1606,7 +1606,7 @@ pub struct RegisterDomainInput {
     pub workflow_execution_retention_period_in_days: String,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct RegisterWorkflowTypeInput {
     /// <p><p>If set, specifies the default policy to use for the child workflow executions when a workflow execution of this type is terminated, by calling the <a>TerminateWorkflowExecution</a> action explicitly or due to an expired timeout. This default can be overridden when starting a workflow execution using the <a>StartWorkflowExecution</a> action or the <code>StartChildWorkflowExecution</code> <a>Decision</a>.</p> <p>The supported child policies are:</p> <ul> <li> <p> <code>TERMINATE</code> – The child executions are terminated.</p> </li> <li> <p> <code>REQUEST_CANCEL</code> – A request to cancel is attempted for each child execution by recording a <code>WorkflowExecutionCancelRequested</code> event in its history. It is up to the decider to take appropriate actions when it receives an execution history with this event.</p> </li> <li> <p> <code>ABANDON</code> – No action is taken. The child executions continue to run.</p> </li> </ul></p>
     #[serde(rename = "defaultChildPolicy")]
@@ -1648,7 +1648,7 @@ pub struct RegisterWorkflowTypeInput {
 }
 
 /// <p>Provides the details of the <code>RequestCancelActivityTask</code> decision.</p> <p> <b>Access Control</b> </p> <p>You can use IAM policies to control this decision's access to Amazon SWF resources as follows:</p> <ul> <li> <p>Use a <code>Resource</code> element with the domain name to limit the action to only specified domains.</p> </li> <li> <p>Use an <code>Action</code> element to allow or deny permission to call this action.</p> </li> <li> <p>You cannot use an IAM policy to constrain this action's parameters.</p> </li> </ul> <p>If the caller doesn't have sufficient permissions to invoke the action, or the parameter values fall outside the specified constraints, the action fails. The associated event attribute's <code>cause</code> parameter is set to <code>OPERATION_NOT_PERMITTED</code>. For details and example IAM policies, see <a href="http://docs.aws.amazon.com/amazonswf/latest/developerguide/swf-dev-iam.html">Using IAM to Manage Access to Amazon SWF Workflows</a> in the <i>Amazon SWF Developer Guide</i>.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct RequestCancelActivityTaskDecisionAttributes {
     /// <p>The <code>activityId</code> of the activity task to be canceled.</p>
     #[serde(rename = "activityId")]
@@ -1656,7 +1656,7 @@ pub struct RequestCancelActivityTaskDecisionAttributes {
 }
 
 /// <p>Provides the details of the <code>RequestCancelActivityTaskFailed</code> event.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct RequestCancelActivityTaskFailedEventAttributes {
     /// <p>The activityId provided in the <code>RequestCancelActivityTask</code> decision that failed.</p>
     #[serde(rename = "activityId")]
@@ -1670,7 +1670,7 @@ pub struct RequestCancelActivityTaskFailedEventAttributes {
 }
 
 /// <p>Provides the details of the <code>RequestCancelExternalWorkflowExecution</code> decision.</p> <p> <b>Access Control</b> </p> <p>You can use IAM policies to control this decision's access to Amazon SWF resources as follows:</p> <ul> <li> <p>Use a <code>Resource</code> element with the domain name to limit the action to only specified domains.</p> </li> <li> <p>Use an <code>Action</code> element to allow or deny permission to call this action.</p> </li> <li> <p>You cannot use an IAM policy to constrain this action's parameters.</p> </li> </ul> <p>If the caller doesn't have sufficient permissions to invoke the action, or the parameter values fall outside the specified constraints, the action fails. The associated event attribute's <code>cause</code> parameter is set to <code>OPERATION_NOT_PERMITTED</code>. For details and example IAM policies, see <a href="http://docs.aws.amazon.com/amazonswf/latest/developerguide/swf-dev-iam.html">Using IAM to Manage Access to Amazon SWF Workflows</a> in the <i>Amazon SWF Developer Guide</i>.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct RequestCancelExternalWorkflowExecutionDecisionAttributes {
     /// <p>The data attached to the event that can be used by the decider in subsequent workflow tasks.</p>
     #[serde(rename = "control")]
@@ -1686,7 +1686,7 @@ pub struct RequestCancelExternalWorkflowExecutionDecisionAttributes {
 }
 
 /// <p>Provides the details of the <code>RequestCancelExternalWorkflowExecutionFailed</code> event.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct RequestCancelExternalWorkflowExecutionFailedEventAttributes {
     /// <p><p>The cause of the failure. This information is generated by the system and can be useful for diagnostic purposes.</p> <note> <p>If <code>cause</code> is set to <code>OPERATION<em>NOT</em>PERMITTED</code>, the decision failed because it lacked sufficient permissions. For details and example IAM policies, see <a href="http://docs.aws.amazon.com/amazonswf/latest/developerguide/swf-dev-iam.html">Using IAM to Manage Access to Amazon SWF Workflows</a> in the <i>Amazon SWF Developer Guide</i>.</p> </note></p>
     #[serde(rename = "cause")]
@@ -1711,7 +1711,7 @@ pub struct RequestCancelExternalWorkflowExecutionFailedEventAttributes {
 }
 
 /// <p>Provides the details of the <code>RequestCancelExternalWorkflowExecutionInitiated</code> event.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct RequestCancelExternalWorkflowExecutionInitiatedEventAttributes {
     /// <p>Data attached to the event that can be used by the decider in subsequent workflow tasks.</p>
     #[serde(rename = "control")]
@@ -1729,7 +1729,7 @@ pub struct RequestCancelExternalWorkflowExecutionInitiatedEventAttributes {
     pub workflow_id: String,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct RequestCancelWorkflowExecutionInput {
     /// <p>The name of the domain containing the workflow execution to cancel.</p>
     #[serde(rename = "domain")]
@@ -1743,7 +1743,7 @@ pub struct RequestCancelWorkflowExecutionInput {
     pub workflow_id: String,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct RespondActivityTaskCanceledInput {
     /// <p> Information about the cancellation.</p>
     #[serde(rename = "details")]
@@ -1754,7 +1754,7 @@ pub struct RespondActivityTaskCanceledInput {
     pub task_token: String,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct RespondActivityTaskCompletedInput {
     /// <p>The result of the activity task. It is a free form string that is implementation specific.</p>
     #[serde(rename = "result")]
@@ -1765,7 +1765,7 @@ pub struct RespondActivityTaskCompletedInput {
     pub task_token: String,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct RespondActivityTaskFailedInput {
     /// <p> Detailed information about the failure.</p>
     #[serde(rename = "details")]
@@ -1781,7 +1781,7 @@ pub struct RespondActivityTaskFailedInput {
 }
 
 /// <p>Input data for a TaskCompleted response to a decision task.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct RespondDecisionTaskCompletedInput {
     /// <p>The list of decisions (possibly empty) made by the decider while processing this decision task. See the docs for the <a>Decision</a> structure for details.</p>
     #[serde(rename = "decisions")]
@@ -1797,7 +1797,7 @@ pub struct RespondDecisionTaskCompletedInput {
 }
 
 /// <p>Specifies the <code>runId</code> of a workflow execution.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct Run {
     /// <p>The <code>runId</code> of a workflow execution. This ID is generated by the service and can be used to uniquely identify the workflow execution within a domain.</p>
     #[serde(rename = "runId")]
@@ -1806,7 +1806,7 @@ pub struct Run {
 }
 
 /// <p>Provides the details of the <code>ScheduleActivityTask</code> decision.</p> <p> <b>Access Control</b> </p> <p>You can use IAM policies to control this decision's access to Amazon SWF resources as follows:</p> <ul> <li> <p>Use a <code>Resource</code> element with the domain name to limit the action to only specified domains.</p> </li> <li> <p>Use an <code>Action</code> element to allow or deny permission to call this action.</p> </li> <li> <p>Constrain the following parameters by using a <code>Condition</code> element with the appropriate keys.</p> <ul> <li> <p> <code>activityType.name</code> – String constraint. The key is <code>swf:activityType.name</code>.</p> </li> <li> <p> <code>activityType.version</code> – String constraint. The key is <code>swf:activityType.version</code>.</p> </li> <li> <p> <code>taskList</code> – String constraint. The key is <code>swf:taskList.name</code>.</p> </li> </ul> </li> </ul> <p>If the caller doesn't have sufficient permissions to invoke the action, or the parameter values fall outside the specified constraints, the action fails. The associated event attribute's <code>cause</code> parameter is set to <code>OPERATION_NOT_PERMITTED</code>. For details and example IAM policies, see <a href="http://docs.aws.amazon.com/amazonswf/latest/developerguide/swf-dev-iam.html">Using IAM to Manage Access to Amazon SWF Workflows</a> in the <i>Amazon SWF Developer Guide</i>.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ScheduleActivityTaskDecisionAttributes {
     /// <p> The <code>activityId</code> of the activity task.</p> <p>The specified string must not start or end with whitespace. It must not contain a <code>:</code> (colon), <code>/</code> (slash), <code>|</code> (vertical bar), or any control characters (<code>\u0000-\u001f</code> | <code>\u007f-\u009f</code>). Also, it must not contain the literal string <code>arn</code>.</p>
     #[serde(rename = "activityId")]
@@ -1849,7 +1849,7 @@ pub struct ScheduleActivityTaskDecisionAttributes {
 }
 
 /// <p>Provides the details of the <code>ScheduleActivityTaskFailed</code> event.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ScheduleActivityTaskFailedEventAttributes {
     /// <p>The activityId provided in the <code>ScheduleActivityTask</code> decision that failed.</p>
     #[serde(rename = "activityId")]
@@ -1866,7 +1866,7 @@ pub struct ScheduleActivityTaskFailedEventAttributes {
 }
 
 /// <p>Decision attributes specified in <code>scheduleLambdaFunctionDecisionAttributes</code> within the list of decisions <code>decisions</code> passed to <a>RespondDecisionTaskCompleted</a>.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ScheduleLambdaFunctionDecisionAttributes {
     /// <p>The data attached to the event that the decider can use in subsequent workflow tasks. This data isn't sent to the Lambda task.</p>
     #[serde(rename = "control")]
@@ -1889,7 +1889,7 @@ pub struct ScheduleLambdaFunctionDecisionAttributes {
 }
 
 /// <p>Provides the details of the <code>ScheduleLambdaFunctionFailed</code> event. It isn't set for other event types.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ScheduleLambdaFunctionFailedEventAttributes {
     /// <p><p>The cause of the failure. To help diagnose issues, use this information to trace back the chain of events leading up to this event.</p> <note> <p>If <code>cause</code> is set to <code>OPERATION<em>NOT</em>PERMITTED</code>, the decision failed because it lacked sufficient permissions. For details and example IAM policies, see <a href="http://docs.aws.amazon.com/amazonswf/latest/developerguide/swf-dev-iam.html">Using IAM to Manage Access to Amazon SWF Workflows</a> in the <i>Amazon SWF Developer Guide</i>.</p> </note></p>
     #[serde(rename = "cause")]
@@ -1906,7 +1906,7 @@ pub struct ScheduleLambdaFunctionFailedEventAttributes {
 }
 
 /// <p>Provides the details of the <code>SignalExternalWorkflowExecution</code> decision.</p> <p> <b>Access Control</b> </p> <p>You can use IAM policies to control this decision's access to Amazon SWF resources as follows:</p> <ul> <li> <p>Use a <code>Resource</code> element with the domain name to limit the action to only specified domains.</p> </li> <li> <p>Use an <code>Action</code> element to allow or deny permission to call this action.</p> </li> <li> <p>You cannot use an IAM policy to constrain this action's parameters.</p> </li> </ul> <p>If the caller doesn't have sufficient permissions to invoke the action, or the parameter values fall outside the specified constraints, the action fails. The associated event attribute's <code>cause</code> parameter is set to <code>OPERATION_NOT_PERMITTED</code>. For details and example IAM policies, see <a href="http://docs.aws.amazon.com/amazonswf/latest/developerguide/swf-dev-iam.html">Using IAM to Manage Access to Amazon SWF Workflows</a> in the <i>Amazon SWF Developer Guide</i>.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct SignalExternalWorkflowExecutionDecisionAttributes {
     /// <p>The data attached to the event that can be used by the decider in subsequent decision tasks.</p>
     #[serde(rename = "control")]
@@ -1929,7 +1929,7 @@ pub struct SignalExternalWorkflowExecutionDecisionAttributes {
 }
 
 /// <p>Provides the details of the <code>SignalExternalWorkflowExecutionFailed</code> event.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct SignalExternalWorkflowExecutionFailedEventAttributes {
     /// <p><p>The cause of the failure. This information is generated by the system and can be useful for diagnostic purposes.</p> <note> <p>If <code>cause</code> is set to <code>OPERATION<em>NOT</em>PERMITTED</code>, the decision failed because it lacked sufficient permissions. For details and example IAM policies, see <a href="http://docs.aws.amazon.com/amazonswf/latest/developerguide/swf-dev-iam.html">Using IAM to Manage Access to Amazon SWF Workflows</a> in the <i>Amazon SWF Developer Guide</i>.</p> </note></p>
     #[serde(rename = "cause")]
@@ -1954,7 +1954,7 @@ pub struct SignalExternalWorkflowExecutionFailedEventAttributes {
 }
 
 /// <p>Provides the details of the <code>SignalExternalWorkflowExecutionInitiated</code> event.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct SignalExternalWorkflowExecutionInitiatedEventAttributes {
     /// <p>Data attached to the event that can be used by the decider in subsequent decision tasks.</p>
     #[serde(rename = "control")]
@@ -1979,7 +1979,7 @@ pub struct SignalExternalWorkflowExecutionInitiatedEventAttributes {
     pub workflow_id: String,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct SignalWorkflowExecutionInput {
     /// <p>The name of the domain containing the workflow execution to signal.</p>
     #[serde(rename = "domain")]
@@ -2001,7 +2001,7 @@ pub struct SignalWorkflowExecutionInput {
 }
 
 /// <p>Provides the details of the <code>StartChildWorkflowExecution</code> decision.</p> <p> <b>Access Control</b> </p> <p>You can use IAM policies to control this decision's access to Amazon SWF resources as follows:</p> <ul> <li> <p>Use a <code>Resource</code> element with the domain name to limit the action to only specified domains.</p> </li> <li> <p>Use an <code>Action</code> element to allow or deny permission to call this action.</p> </li> <li> <p>Constrain the following parameters by using a <code>Condition</code> element with the appropriate keys.</p> <ul> <li> <p> <code>tagList.member.N</code> – The key is "swf:tagList.N" where N is the tag number from 0 to 4, inclusive.</p> </li> <li> <p> <code>taskList</code> – String constraint. The key is <code>swf:taskList.name</code>.</p> </li> <li> <p> <code>workflowType.name</code> – String constraint. The key is <code>swf:workflowType.name</code>.</p> </li> <li> <p> <code>workflowType.version</code> – String constraint. The key is <code>swf:workflowType.version</code>.</p> </li> </ul> </li> </ul> <p>If the caller doesn't have sufficient permissions to invoke the action, or the parameter values fall outside the specified constraints, the action fails. The associated event attribute's <code>cause</code> parameter is set to <code>OPERATION_NOT_PERMITTED</code>. For details and example IAM policies, see <a href="http://docs.aws.amazon.com/amazonswf/latest/developerguide/swf-dev-iam.html">Using IAM to Manage Access to Amazon SWF Workflows</a> in the <i>Amazon SWF Developer Guide</i>.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct StartChildWorkflowExecutionDecisionAttributes {
     /// <p><p> If set, specifies the policy to use for the child workflow executions if the workflow execution being started is terminated by calling the <a>TerminateWorkflowExecution</a> action explicitly or due to an expired timeout. This policy overrides the default child policy specified when registering the workflow type using <a>RegisterWorkflowType</a>.</p> <p>The supported child policies are:</p> <ul> <li> <p> <code>TERMINATE</code> – The child executions are terminated.</p> </li> <li> <p> <code>REQUEST_CANCEL</code> – A request to cancel is attempted for each child execution by recording a <code>WorkflowExecutionCancelRequested</code> event in its history. It is up to the decider to take appropriate actions when it receives an execution history with this event.</p> </li> <li> <p> <code>ABANDON</code> – No action is taken. The child executions continue to run.</p> </li> </ul> <note> <p>A child policy for this workflow execution must be specified either as a default for the workflow type or through this parameter. If neither this parameter is set nor a default child policy was specified at registration time then a fault is returned.</p> </note></p>
     #[serde(rename = "childPolicy")]
@@ -2048,7 +2048,7 @@ pub struct StartChildWorkflowExecutionDecisionAttributes {
 }
 
 /// <p>Provides the details of the <code>StartChildWorkflowExecutionFailed</code> event.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct StartChildWorkflowExecutionFailedEventAttributes {
     /// <p><p>The cause of the failure. This information is generated by the system and can be useful for diagnostic purposes.</p> <note> <p>When <code>cause</code> is set to <code>OPERATION<em>NOT</em>PERMITTED</code>, the decision fails because it lacks sufficient permissions. For details and example IAM policies, see <a href="http://docs.aws.amazon.com/amazonswf/latest/developerguide/swf-dev-iam.html"> Using IAM to Manage Access to Amazon SWF Workflows</a> in the <i>Amazon SWF Developer Guide</i>.</p> </note></p>
     #[serde(rename = "cause")]
@@ -2072,7 +2072,7 @@ pub struct StartChildWorkflowExecutionFailedEventAttributes {
 }
 
 /// <p>Provides the details of the <code>StartChildWorkflowExecutionInitiated</code> event.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct StartChildWorkflowExecutionInitiatedEventAttributes {
     /// <p><p>The policy to use for the child workflow executions if this execution gets terminated by explicitly calling the <a>TerminateWorkflowExecution</a> action or due to an expired timeout.</p> <p>The supported child policies are:</p> <ul> <li> <p> <code>TERMINATE</code> – The child executions are terminated.</p> </li> <li> <p> <code>REQUEST_CANCEL</code> – A request to cancel is attempted for each child execution by recording a <code>WorkflowExecutionCancelRequested</code> event in its history. It is up to the decider to take appropriate actions when it receives an execution history with this event.</p> </li> <li> <p> <code>ABANDON</code> – No action is taken. The child executions continue to run.</p> </li> </ul></p>
     #[serde(rename = "childPolicy")]
@@ -2120,7 +2120,7 @@ pub struct StartChildWorkflowExecutionInitiatedEventAttributes {
 }
 
 /// <p>Provides the details of the <code>StartLambdaFunctionFailed</code> event. It isn't set for other event types.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct StartLambdaFunctionFailedEventAttributes {
     /// <p><p>The cause of the failure. To help diagnose issues, use this information to trace back the chain of events leading up to this event.</p> <note> <p>If <code>cause</code> is set to <code>OPERATION<em>NOT</em>PERMITTED</code>, the decision failed because the IAM role attached to the execution lacked sufficient permissions. For details and example IAM policies, see <a href="http://docs.aws.amazon.com/amazonswf/latest/developerguide/lambda-task.html">Lambda Tasks</a> in the <i>Amazon SWF Developer Guide</i>.</p> </note></p>
     #[serde(rename = "cause")]
@@ -2137,7 +2137,7 @@ pub struct StartLambdaFunctionFailedEventAttributes {
 }
 
 /// <p>Provides the details of the <code>StartTimer</code> decision.</p> <p> <b>Access Control</b> </p> <p>You can use IAM policies to control this decision's access to Amazon SWF resources as follows:</p> <ul> <li> <p>Use a <code>Resource</code> element with the domain name to limit the action to only specified domains.</p> </li> <li> <p>Use an <code>Action</code> element to allow or deny permission to call this action.</p> </li> <li> <p>You cannot use an IAM policy to constrain this action's parameters.</p> </li> </ul> <p>If the caller doesn't have sufficient permissions to invoke the action, or the parameter values fall outside the specified constraints, the action fails. The associated event attribute's <code>cause</code> parameter is set to <code>OPERATION_NOT_PERMITTED</code>. For details and example IAM policies, see <a href="http://docs.aws.amazon.com/amazonswf/latest/developerguide/swf-dev-iam.html">Using IAM to Manage Access to Amazon SWF Workflows</a> in the <i>Amazon SWF Developer Guide</i>.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct StartTimerDecisionAttributes {
     /// <p>The data attached to the event that can be used by the decider in subsequent workflow tasks.</p>
     #[serde(rename = "control")]
@@ -2152,7 +2152,7 @@ pub struct StartTimerDecisionAttributes {
 }
 
 /// <p>Provides the details of the <code>StartTimerFailed</code> event.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct StartTimerFailedEventAttributes {
     /// <p><p>The cause of the failure. This information is generated by the system and can be useful for diagnostic purposes.</p> <note> <p>If <code>cause</code> is set to <code>OPERATION<em>NOT</em>PERMITTED</code>, the decision failed because it lacked sufficient permissions. For details and example IAM policies, see <a href="http://docs.aws.amazon.com/amazonswf/latest/developerguide/swf-dev-iam.html">Using IAM to Manage Access to Amazon SWF Workflows</a> in the <i>Amazon SWF Developer Guide</i>.</p> </note></p>
     #[serde(rename = "cause")]
@@ -2165,7 +2165,7 @@ pub struct StartTimerFailedEventAttributes {
     pub timer_id: String,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct StartWorkflowExecutionInput {
     /// <p><p>If set, specifies the policy to use for the child workflow executions of this workflow execution if it is terminated, by calling the <a>TerminateWorkflowExecution</a> action explicitly or due to an expired timeout. This policy overrides the default child policy specified when registering the workflow type using <a>RegisterWorkflowType</a>.</p> <p>The supported child policies are:</p> <ul> <li> <p> <code>TERMINATE</code> – The child executions are terminated.</p> </li> <li> <p> <code>REQUEST_CANCEL</code> – A request to cancel is attempted for each child execution by recording a <code>WorkflowExecutionCancelRequested</code> event in its history. It is up to the decider to take appropriate actions when it receives an execution history with this event.</p> </li> <li> <p> <code>ABANDON</code> – No action is taken. The child executions continue to run.</p> </li> </ul> <note> <p>A child policy for this workflow execution must be specified either as a default for the workflow type or through this parameter. If neither this parameter is set nor a default child policy was specified at registration time then a fault is returned.</p> </note></p>
     #[serde(rename = "childPolicy")]
@@ -2211,7 +2211,7 @@ pub struct StartWorkflowExecutionInput {
 }
 
 /// <p>Used to filter the workflow executions in visibility APIs based on a tag.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct TagFilter {
     /// <p> Specifies the tag that must be associated with the execution for it to meet the filter criteria.</p>
     #[serde(rename = "tag")]
@@ -2219,14 +2219,14 @@ pub struct TagFilter {
 }
 
 /// <p>Represents a task list.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct TaskList {
     /// <p>The name of the task list.</p>
     #[serde(rename = "name")]
     pub name: String,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct TerminateWorkflowExecutionInput {
     /// <p><p>If set, specifies the policy to use for the child workflow executions of the workflow execution being terminated. This policy overrides the child policy specified for the workflow execution at registration time or when starting the execution.</p> <p>The supported child policies are:</p> <ul> <li> <p> <code>TERMINATE</code> – The child executions are terminated.</p> </li> <li> <p> <code>REQUEST_CANCEL</code> – A request to cancel is attempted for each child execution by recording a <code>WorkflowExecutionCancelRequested</code> event in its history. It is up to the decider to take appropriate actions when it receives an execution history with this event.</p> </li> <li> <p> <code>ABANDON</code> – No action is taken. The child executions continue to run.</p> </li> </ul> <note> <p>A child policy for this workflow execution must be specified either as a default for the workflow type or through this parameter. If neither this parameter is set nor a default child policy was specified at registration time then a fault is returned.</p> </note></p>
     #[serde(rename = "childPolicy")]
@@ -2253,7 +2253,7 @@ pub struct TerminateWorkflowExecutionInput {
 }
 
 /// <p> Provides the details of the <code>TimerCanceled</code> event. </p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct TimerCanceledEventAttributes {
     /// <p>The ID of the <code>DecisionTaskCompleted</code> event corresponding to the decision task that resulted in the <code>CancelTimer</code> decision to cancel this timer. This information can be useful for diagnosing problems by tracing back the chain of events leading up to this event.</p>
     #[serde(rename = "decisionTaskCompletedEventId")]
@@ -2267,7 +2267,7 @@ pub struct TimerCanceledEventAttributes {
 }
 
 /// <p>Provides the details of the <code>TimerFired</code> event.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct TimerFiredEventAttributes {
     /// <p>The ID of the <code>TimerStarted</code> event that was recorded when this timer was started. This information can be useful for diagnosing problems by tracing back the chain of events leading up to this event.</p>
     #[serde(rename = "startedEventId")]
@@ -2278,7 +2278,7 @@ pub struct TimerFiredEventAttributes {
 }
 
 /// <p>Provides the details of the <code>TimerStarted</code> event.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct TimerStartedEventAttributes {
     /// <p>Data attached to the event that can be used by the decider in subsequent workflow tasks.</p>
     #[serde(rename = "control")]
@@ -2296,7 +2296,7 @@ pub struct TimerStartedEventAttributes {
 }
 
 /// <p>Represents a workflow execution.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct WorkflowExecution {
     /// <p>A system-generated unique identifier for the workflow execution.</p>
     #[serde(rename = "runId")]
@@ -2307,7 +2307,7 @@ pub struct WorkflowExecution {
 }
 
 /// <p>Provides the details of the <code>WorkflowExecutionCancelRequested</code> event.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct WorkflowExecutionCancelRequestedEventAttributes {
     /// <p>If set, indicates that the request to cancel the workflow execution was automatically generated, and specifies the cause. This happens if the parent workflow execution times out or is terminated, and the child policy is set to cancel child executions.</p>
     #[serde(rename = "cause")]
@@ -2324,7 +2324,7 @@ pub struct WorkflowExecutionCancelRequestedEventAttributes {
 }
 
 /// <p>Provides the details of the <code>WorkflowExecutionCanceled</code> event.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct WorkflowExecutionCanceledEventAttributes {
     /// <p>The ID of the <code>DecisionTaskCompleted</code> event corresponding to the decision task that resulted in the <code>CancelWorkflowExecution</code> decision for this cancellation request. This information can be useful for diagnosing problems by tracing back the chain of events leading up to this event.</p>
     #[serde(rename = "decisionTaskCompletedEventId")]
@@ -2336,7 +2336,7 @@ pub struct WorkflowExecutionCanceledEventAttributes {
 }
 
 /// <p>Provides the details of the <code>WorkflowExecutionCompleted</code> event.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct WorkflowExecutionCompletedEventAttributes {
     /// <p>The ID of the <code>DecisionTaskCompleted</code> event corresponding to the decision task that resulted in the <code>CompleteWorkflowExecution</code> decision to complete this execution. This information can be useful for diagnosing problems by tracing back the chain of events leading up to this event.</p>
     #[serde(rename = "decisionTaskCompletedEventId")]
@@ -2348,7 +2348,7 @@ pub struct WorkflowExecutionCompletedEventAttributes {
 }
 
 /// <p>The configuration settings for a workflow execution including timeout values, tasklist etc. These configuration settings are determined from the defaults specified when registering the workflow type and those specified when starting the workflow execution.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct WorkflowExecutionConfiguration {
     /// <p><p>The policy to use for the child workflow executions if this workflow execution is terminated, by calling the <a>TerminateWorkflowExecution</a> action explicitly or due to an expired timeout.</p> <p>The supported child policies are:</p> <ul> <li> <p> <code>TERMINATE</code> – The child executions are terminated.</p> </li> <li> <p> <code>REQUEST_CANCEL</code> – A request to cancel is attempted for each child execution by recording a <code>WorkflowExecutionCancelRequested</code> event in its history. It is up to the decider to take appropriate actions when it receives an execution history with this event.</p> </li> <li> <p> <code>ABANDON</code> – No action is taken. The child executions continue to run.</p> </li> </ul></p>
     #[serde(rename = "childPolicy")]
@@ -2373,7 +2373,7 @@ pub struct WorkflowExecutionConfiguration {
 }
 
 /// <p>Provides the details of the <code>WorkflowExecutionContinuedAsNew</code> event.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct WorkflowExecutionContinuedAsNewEventAttributes {
     /// <p><p>The policy to use for the child workflow executions of the new execution if it is terminated by calling the <a>TerminateWorkflowExecution</a> action explicitly or due to an expired timeout.</p> <p>The supported child policies are:</p> <ul> <li> <p> <code>TERMINATE</code> – The child executions are terminated.</p> </li> <li> <p> <code>REQUEST_CANCEL</code> – A request to cancel is attempted for each child execution by recording a <code>WorkflowExecutionCancelRequested</code> event in its history. It is up to the decider to take appropriate actions when it receives an execution history with this event.</p> </li> <li> <p> <code>ABANDON</code> – No action is taken. The child executions continue to run.</p> </li> </ul></p>
     #[serde(rename = "childPolicy")]
@@ -2417,7 +2417,7 @@ pub struct WorkflowExecutionContinuedAsNewEventAttributes {
 }
 
 /// <p>Contains the count of workflow executions returned from <a>CountOpenWorkflowExecutions</a> or <a>CountClosedWorkflowExecutions</a> </p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct WorkflowExecutionCount {
     /// <p>The number of workflow executions.</p>
     #[serde(rename = "count")]
@@ -2429,7 +2429,7 @@ pub struct WorkflowExecutionCount {
 }
 
 /// <p>Contains details about a workflow execution.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct WorkflowExecutionDetail {
     /// <p>The configuration settings for this workflow execution including timeout values, tasklist etc.</p>
     #[serde(rename = "executionConfiguration")]
@@ -2451,7 +2451,7 @@ pub struct WorkflowExecutionDetail {
 }
 
 /// <p>Provides the details of the <code>WorkflowExecutionFailed</code> event.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct WorkflowExecutionFailedEventAttributes {
     /// <p>The ID of the <code>DecisionTaskCompleted</code> event corresponding to the decision task that resulted in the <code>FailWorkflowExecution</code> decision to fail this execution. This information can be useful for diagnosing problems by tracing back the chain of events leading up to this event.</p>
     #[serde(rename = "decisionTaskCompletedEventId")]
@@ -2467,7 +2467,7 @@ pub struct WorkflowExecutionFailedEventAttributes {
 }
 
 /// <p>Used to filter the workflow executions in visibility APIs by their <code>workflowId</code>.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct WorkflowExecutionFilter {
     /// <p>The workflowId to pass of match the criteria of this filter.</p>
     #[serde(rename = "workflowId")]
@@ -2475,7 +2475,7 @@ pub struct WorkflowExecutionFilter {
 }
 
 /// <p>Contains information about a workflow execution.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct WorkflowExecutionInfo {
     /// <p>Set to true if a cancellation is requested for this workflow execution.</p>
     #[serde(rename = "cancelRequested")]
@@ -2512,7 +2512,7 @@ pub struct WorkflowExecutionInfo {
 }
 
 /// <p>Contains a paginated list of information about workflow executions.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct WorkflowExecutionInfos {
     /// <p>The list of workflow information structures.</p>
     #[serde(rename = "executionInfos")]
@@ -2524,7 +2524,7 @@ pub struct WorkflowExecutionInfos {
 }
 
 /// <p>Contains the counts of open tasks, child workflow executions and timers for a workflow execution.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct WorkflowExecutionOpenCounts {
     /// <p>The count of activity tasks whose status is <code>OPEN</code>.</p>
     #[serde(rename = "openActivityTasks")]
@@ -2545,7 +2545,7 @@ pub struct WorkflowExecutionOpenCounts {
 }
 
 /// <p>Provides the details of the <code>WorkflowExecutionSignaled</code> event.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct WorkflowExecutionSignaledEventAttributes {
     /// <p>The ID of the <code>SignalExternalWorkflowExecutionInitiated</code> event corresponding to the <code>SignalExternalWorkflow</code> decision to signal this workflow execution.The source event with this ID can be found in the history of the source workflow execution. This information can be useful for diagnosing problems by tracing back the chain of events leading up to this event. This field is set only if the signal was initiated by another workflow execution.</p>
     #[serde(rename = "externalInitiatedEventId")]
@@ -2565,7 +2565,7 @@ pub struct WorkflowExecutionSignaledEventAttributes {
 }
 
 /// <p>Provides details of <code>WorkflowExecutionStarted</code> event.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct WorkflowExecutionStartedEventAttributes {
     /// <p><p>The policy to use for the child workflow executions if this workflow execution is terminated, by calling the <a>TerminateWorkflowExecution</a> action explicitly or due to an expired timeout.</p> <p>The supported child policies are:</p> <ul> <li> <p> <code>TERMINATE</code> – The child executions are terminated.</p> </li> <li> <p> <code>REQUEST_CANCEL</code> – A request to cancel is attempted for each child execution by recording a <code>WorkflowExecutionCancelRequested</code> event in its history. It is up to the decider to take appropriate actions when it receives an execution history with this event.</p> </li> <li> <p> <code>ABANDON</code> – No action is taken. The child executions continue to run.</p> </li> </ul></p>
     #[serde(rename = "childPolicy")]
@@ -2615,7 +2615,7 @@ pub struct WorkflowExecutionStartedEventAttributes {
 }
 
 /// <p>Provides the details of the <code>WorkflowExecutionTerminated</code> event.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct WorkflowExecutionTerminatedEventAttributes {
     /// <p>If set, indicates that the workflow execution was automatically terminated, and specifies the cause. This happens if the parent workflow execution times out or is terminated and the child policy is set to terminate child executions.</p>
     #[serde(rename = "cause")]
@@ -2635,7 +2635,7 @@ pub struct WorkflowExecutionTerminatedEventAttributes {
 }
 
 /// <p>Provides the details of the <code>WorkflowExecutionTimedOut</code> event.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct WorkflowExecutionTimedOutEventAttributes {
     /// <p><p>The policy used for the child workflow executions of this workflow execution.</p> <p>The supported child policies are:</p> <ul> <li> <p> <code>TERMINATE</code> – The child executions are terminated.</p> </li> <li> <p> <code>REQUEST_CANCEL</code> – A request to cancel is attempted for each child execution by recording a <code>WorkflowExecutionCancelRequested</code> event in its history. It is up to the decider to take appropriate actions when it receives an execution history with this event.</p> </li> <li> <p> <code>ABANDON</code> – No action is taken. The child executions continue to run.</p> </li> </ul></p>
     #[serde(rename = "childPolicy")]
@@ -2646,7 +2646,7 @@ pub struct WorkflowExecutionTimedOutEventAttributes {
 }
 
 /// <p>Represents a workflow type.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct WorkflowType {
     /// <p><p> The name of the workflow type.</p> <note> <p>The combination of workflow type name and version must be unique with in a domain.</p> </note></p>
     #[serde(rename = "name")]
@@ -2657,7 +2657,7 @@ pub struct WorkflowType {
 }
 
 /// <p>The configuration settings of a workflow type.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct WorkflowTypeConfiguration {
     /// <p><p> The default policy to use for the child workflow executions when a workflow execution of this type is terminated, by calling the <a>TerminateWorkflowExecution</a> action explicitly or due to an expired timeout. This default can be overridden when starting a workflow execution using the <a>StartWorkflowExecution</a> action or the <code>StartChildWorkflowExecution</code> <a>Decision</a>.</p> <p>The supported child policies are:</p> <ul> <li> <p> <code>TERMINATE</code> – The child executions are terminated.</p> </li> <li> <p> <code>REQUEST_CANCEL</code> – A request to cancel is attempted for each child execution by recording a <code>WorkflowExecutionCancelRequested</code> event in its history. It is up to the decider to take appropriate actions when it receives an execution history with this event.</p> </li> <li> <p> <code>ABANDON</code> – No action is taken. The child executions continue to run.</p> </li> </ul></p>
     #[serde(rename = "defaultChildPolicy")]
@@ -2686,7 +2686,7 @@ pub struct WorkflowTypeConfiguration {
 }
 
 /// <p>Contains details about a workflow type.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct WorkflowTypeDetail {
     /// <p>Configuration settings of the workflow type registered through <a>RegisterWorkflowType</a> </p>
     #[serde(rename = "configuration")]
@@ -2697,7 +2697,7 @@ pub struct WorkflowTypeDetail {
 }
 
 /// <p>Used to filter workflow execution query results by type. Each parameter, if specified, defines a rule that must be satisfied by each returned result.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct WorkflowTypeFilter {
     /// <p> Name of the workflow type.</p>
     #[serde(rename = "name")]
@@ -2709,7 +2709,7 @@ pub struct WorkflowTypeFilter {
 }
 
 /// <p>Contains information about a workflow type.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct WorkflowTypeInfo {
     /// <p>The date when this type was registered.</p>
     #[serde(rename = "creationDate")]
@@ -2731,7 +2731,7 @@ pub struct WorkflowTypeInfo {
 }
 
 /// <p>Contains a paginated list of information structures about workflow types.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct WorkflowTypeInfos {
     /// <p>If a <code>NextPageToken</code> was returned by a previous call, there are more results available. To retrieve the next page of results, make the call again using the returned token in <code>nextPageToken</code>. Keep all other arguments unchanged.</p> <p>The configured <code>maximumPageSize</code> determines how many results can be returned in a single call.</p>
     #[serde(rename = "nextPageToken")]

@@ -31,7 +31,7 @@ use serde_json;
 use serde_json::from_str;
 use serde_json::Value as SerdeJsonValue;
 /// <p>Represents a CloudWatch alarm associated with a scaling policy.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct Alarm {
     /// <p>The Amazon Resource Name (ARN) of the alarm.</p>
     #[serde(rename = "AlarmARN")]
@@ -42,7 +42,7 @@ pub struct Alarm {
 }
 
 /// <p>Configures a customized metric for a target tracking policy.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct CustomizedMetricSpecification {
     /// <p>The dimensions of the metric.</p>
     #[serde(rename = "Dimensions")]
@@ -63,7 +63,7 @@ pub struct CustomizedMetricSpecification {
     pub unit: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteScalingPolicyRequest {
     /// <p>The name of the scaling policy.</p>
     #[serde(rename = "PolicyName")]
@@ -79,10 +79,10 @@ pub struct DeleteScalingPolicyRequest {
     pub service_namespace: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DeleteScalingPolicyResponse {}
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteScheduledActionRequest {
     /// <p><p>The identifier of the resource associated with the scheduled action. This string consists of the resource type and unique identifier.</p> <ul> <li> <p>ECS service - The resource type is <code>service</code> and the unique identifier is the cluster name and service name. Example: <code>service/default/sample-webapp</code>.</p> </li> <li> <p>Spot fleet request - The resource type is <code>spot-fleet-request</code> and the unique identifier is the Spot fleet request ID. Example: <code>spot-fleet-request/sfr-73fbd2ce-aa30-494c-8788-1cee4EXAMPLE</code>.</p> </li> <li> <p>EMR cluster - The resource type is <code>instancegroup</code> and the unique identifier is the cluster ID and instance group ID. Example: <code>instancegroup/j-2EEZNYKUA1NTV/ig-1791Y4E1L8YI0</code>.</p> </li> <li> <p>AppStream 2.0 fleet - The resource type is <code>fleet</code> and the unique identifier is the fleet name. Example: <code>fleet/sample-fleet</code>.</p> </li> <li> <p>DynamoDB table - The resource type is <code>table</code> and the unique identifier is the resource ID. Example: <code>table/my-table</code>.</p> </li> <li> <p>DynamoDB global secondary index - The resource type is <code>index</code> and the unique identifier is the resource ID. Example: <code>table/my-table/index/my-table-index</code>.</p> </li> <li> <p>Aurora DB cluster - The resource type is <code>cluster</code> and the unique identifier is the cluster name. Example: <code>cluster:my-db-cluster</code>.</p> </li> <li> <p>Amazon SageMaker endpoint variants - The resource type is <code>variant</code> and the unique identifier is the resource ID. Example: <code>endpoint/my-end-point/variant/KMeansClustering</code>.</p> </li> </ul></p>
     #[serde(rename = "ResourceId")]
@@ -99,10 +99,10 @@ pub struct DeleteScheduledActionRequest {
     pub service_namespace: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DeleteScheduledActionResponse {}
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeregisterScalableTargetRequest {
     /// <p><p>The identifier of the resource associated with the scalable target. This string consists of the resource type and unique identifier.</p> <ul> <li> <p>ECS service - The resource type is <code>service</code> and the unique identifier is the cluster name and service name. Example: <code>service/default/sample-webapp</code>.</p> </li> <li> <p>Spot fleet request - The resource type is <code>spot-fleet-request</code> and the unique identifier is the Spot fleet request ID. Example: <code>spot-fleet-request/sfr-73fbd2ce-aa30-494c-8788-1cee4EXAMPLE</code>.</p> </li> <li> <p>EMR cluster - The resource type is <code>instancegroup</code> and the unique identifier is the cluster ID and instance group ID. Example: <code>instancegroup/j-2EEZNYKUA1NTV/ig-1791Y4E1L8YI0</code>.</p> </li> <li> <p>AppStream 2.0 fleet - The resource type is <code>fleet</code> and the unique identifier is the fleet name. Example: <code>fleet/sample-fleet</code>.</p> </li> <li> <p>DynamoDB table - The resource type is <code>table</code> and the unique identifier is the resource ID. Example: <code>table/my-table</code>.</p> </li> <li> <p>DynamoDB global secondary index - The resource type is <code>index</code> and the unique identifier is the resource ID. Example: <code>table/my-table/index/my-table-index</code>.</p> </li> <li> <p>Aurora DB cluster - The resource type is <code>cluster</code> and the unique identifier is the cluster name. Example: <code>cluster:my-db-cluster</code>.</p> </li> <li> <p>Amazon SageMaker endpoint variants - The resource type is <code>variant</code> and the unique identifier is the resource ID. Example: <code>endpoint/my-end-point/variant/KMeansClustering</code>.</p> </li> </ul></p>
     #[serde(rename = "ResourceId")]
@@ -115,10 +115,10 @@ pub struct DeregisterScalableTargetRequest {
     pub service_namespace: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DeregisterScalableTargetResponse {}
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeScalableTargetsRequest {
     /// <p>The maximum number of scalable targets. This value can be between 1 and 50. The default value is 50.</p> <p>If this parameter is used, the operation returns up to <code>MaxResults</code> results at a time, along with a <code>NextToken</code> value. To get the next set of results, include the <code>NextToken</code> value in a subsequent call. If this parameter is not used, the operation returns up to 50 results and a <code>NextToken</code> value, if applicable.</p>
     #[serde(rename = "MaxResults")]
@@ -141,7 +141,7 @@ pub struct DescribeScalableTargetsRequest {
     pub service_namespace: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribeScalableTargetsResponse {
     /// <p>The token required to get the next set of results. This value is <code>null</code> if there are no more results to return.</p>
     #[serde(rename = "NextToken")]
@@ -153,7 +153,7 @@ pub struct DescribeScalableTargetsResponse {
     pub scalable_targets: Option<Vec<ScalableTarget>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeScalingActivitiesRequest {
     /// <p>The maximum number of scalable targets. This value can be between 1 and 50. The default value is 50.</p> <p>If this parameter is used, the operation returns up to <code>MaxResults</code> results at a time, along with a <code>NextToken</code> value. To get the next set of results, include the <code>NextToken</code> value in a subsequent call. If this parameter is not used, the operation returns up to 50 results and a <code>NextToken</code> value, if applicable.</p>
     #[serde(rename = "MaxResults")]
@@ -176,7 +176,7 @@ pub struct DescribeScalingActivitiesRequest {
     pub service_namespace: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribeScalingActivitiesResponse {
     /// <p>The token required to get the next set of results. This value is <code>null</code> if there are no more results to return.</p>
     #[serde(rename = "NextToken")]
@@ -188,7 +188,7 @@ pub struct DescribeScalingActivitiesResponse {
     pub scaling_activities: Option<Vec<ScalingActivity>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeScalingPoliciesRequest {
     /// <p>The maximum number of scalable targets. This value can be between 1 and 50. The default value is 50.</p> <p>If this parameter is used, the operation returns up to <code>MaxResults</code> results at a time, along with a <code>NextToken</code> value. To get the next set of results, include the <code>NextToken</code> value in a subsequent call. If this parameter is not used, the operation returns up to 50 results and a <code>NextToken</code> value, if applicable.</p>
     #[serde(rename = "MaxResults")]
@@ -215,7 +215,7 @@ pub struct DescribeScalingPoliciesRequest {
     pub service_namespace: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribeScalingPoliciesResponse {
     /// <p>The token required to get the next set of results. This value is <code>null</code> if there are no more results to return.</p>
     #[serde(rename = "NextToken")]
@@ -227,7 +227,7 @@ pub struct DescribeScalingPoliciesResponse {
     pub scaling_policies: Option<Vec<ScalingPolicy>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeScheduledActionsRequest {
     /// <p>The maximum number of scheduled action results. This value can be between 1 and 50. The default value is 50.</p> <p>If this parameter is used, the operation returns up to <code>MaxResults</code> results at a time, along with a <code>NextToken</code> value. To get the next set of results, include the <code>NextToken</code> value in a subsequent call. If this parameter is not used, the operation returns up to 50 results and a <code>NextToken</code> value, if applicable.</p>
     #[serde(rename = "MaxResults")]
@@ -254,7 +254,7 @@ pub struct DescribeScheduledActionsRequest {
     pub service_namespace: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribeScheduledActionsResponse {
     /// <p>The token required to get the next set of results. This value is <code>null</code> if there are no more results to return.</p>
     #[serde(rename = "NextToken")]
@@ -267,7 +267,7 @@ pub struct DescribeScheduledActionsResponse {
 }
 
 /// <p>Describes the dimension of a metric.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct MetricDimension {
     /// <p>The name of the dimension.</p>
     #[serde(rename = "Name")]
@@ -278,7 +278,7 @@ pub struct MetricDimension {
 }
 
 /// <p>Configures a predefined metric for a target tracking policy.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct PredefinedMetricSpecification {
     /// <p>The metric type. The <code>ALBRequestCountPerTarget</code> metric type applies only to Spot fleet requests and ECS services.</p>
     #[serde(rename = "PredefinedMetricType")]
@@ -289,7 +289,7 @@ pub struct PredefinedMetricSpecification {
     pub resource_label: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct PutScalingPolicyRequest {
     /// <p>The name of the scaling policy.</p>
     #[serde(rename = "PolicyName")]
@@ -318,7 +318,7 @@ pub struct PutScalingPolicyRequest {
         Option<TargetTrackingScalingPolicyConfiguration>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct PutScalingPolicyResponse {
     /// <p>The CloudWatch alarms created for the target tracking policy.</p>
     #[serde(rename = "Alarms")]
@@ -329,7 +329,7 @@ pub struct PutScalingPolicyResponse {
     pub policy_arn: String,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct PutScheduledActionRequest {
     /// <p>The date and time for the scheduled action to end.</p>
     #[serde(rename = "EndTime")]
@@ -362,10 +362,10 @@ pub struct PutScheduledActionRequest {
     pub start_time: Option<f64>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct PutScheduledActionResponse {}
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct RegisterScalableTargetRequest {
     /// <p>The maximum value to scale to in response to a scale out event. This parameter is required if you are registering a scalable target.</p>
     #[serde(rename = "MaxCapacity")]
@@ -390,11 +390,11 @@ pub struct RegisterScalableTargetRequest {
     pub service_namespace: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct RegisterScalableTargetResponse {}
 
 /// <p>Represents a scalable target.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ScalableTarget {
     /// <p>The Unix timestamp for when the scalable target was created.</p>
     #[serde(rename = "CreationTime")]
@@ -420,7 +420,7 @@ pub struct ScalableTarget {
 }
 
 /// <p>Represents the minimum and maximum capacity for a scheduled action.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ScalableTargetAction {
     /// <p>The maximum capacity.</p>
     #[serde(rename = "MaxCapacity")]
@@ -433,7 +433,7 @@ pub struct ScalableTargetAction {
 }
 
 /// <p>Represents a scaling activity.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ScalingActivity {
     /// <p>The unique identifier of the scaling activity.</p>
     #[serde(rename = "ActivityId")]
@@ -474,7 +474,7 @@ pub struct ScalingActivity {
 }
 
 /// <p>Represents a scaling policy.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ScalingPolicy {
     /// <p>The CloudWatch alarms associated with the scaling policy.</p>
     #[serde(rename = "Alarms")]
@@ -513,7 +513,7 @@ pub struct ScalingPolicy {
 }
 
 /// <p>Represents a scheduled action.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ScheduledAction {
     /// <p>The date and time that the scheduled action was created.</p>
     #[serde(rename = "CreationTime")]
@@ -552,7 +552,7 @@ pub struct ScheduledAction {
 }
 
 /// <p><p>Represents a step adjustment for a <a>StepScalingPolicyConfiguration</a>. Describes an adjustment based on the difference between the value of the aggregated CloudWatch metric and the breach threshold that you&#39;ve defined for the alarm. </p> <p>For the following examples, suppose that you have an alarm with a breach threshold of 50:</p> <ul> <li> <p>To trigger the adjustment when the metric is greater than or equal to 50 and less than 60, specify a lower bound of 0 and an upper bound of 10.</p> </li> <li> <p>To trigger the adjustment when the metric is greater than 40 and less than or equal to 50, specify a lower bound of -10 and an upper bound of 0.</p> </li> </ul> <p>There are a few rules for the step adjustments for your step policy:</p> <ul> <li> <p>The ranges of your step adjustments can&#39;t overlap or have a gap.</p> </li> <li> <p>At most one step adjustment can have a null lower bound. If one step adjustment has a negative lower bound, then there must be a step adjustment with a null lower bound.</p> </li> <li> <p>At most one step adjustment can have a null upper bound. If one step adjustment has a positive upper bound, then there must be a step adjustment with a null upper bound.</p> </li> <li> <p>The upper and lower bound can&#39;t be null in the same step adjustment.</p> </li> </ul></p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct StepAdjustment {
     /// <p>The lower bound for the difference between the alarm threshold and the CloudWatch metric. If the metric value is above the breach threshold, the lower bound is inclusive (the metric must be greater than or equal to the threshold plus the lower bound). Otherwise, it is exclusive (the metric must be greater than the threshold plus the lower bound). A null value indicates negative infinity.</p>
     #[serde(rename = "MetricIntervalLowerBound")]
@@ -568,7 +568,7 @@ pub struct StepAdjustment {
 }
 
 /// <p>Represents a step scaling policy configuration.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct StepScalingPolicyConfiguration {
     /// <p>The adjustment type, which specifies how the <code>ScalingAdjustment</code> parameter in a <a>StepAdjustment</a> is interpreted.</p>
     #[serde(rename = "AdjustmentType")]
@@ -593,7 +593,7 @@ pub struct StepScalingPolicyConfiguration {
 }
 
 /// <p>Represents a target tracking scaling policy configuration.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct TargetTrackingScalingPolicyConfiguration {
     /// <p>A customized metric.</p>
     #[serde(rename = "CustomizedMetricSpecification")]

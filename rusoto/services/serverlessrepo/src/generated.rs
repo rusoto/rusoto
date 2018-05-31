@@ -31,7 +31,7 @@ use serde_json;
 use serde_json::from_str;
 use serde_json::Value as SerdeJsonValue;
 /// <p>Details about the application.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct Application {
     /// <p>The application Amazon Resource Name (ARN).</p>
     pub application_id: String,
@@ -59,7 +59,7 @@ pub struct Application {
 }
 
 /// <p>List of application details.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ApplicationPage {
     /// <p>Array of application summaries.</p>
     pub applications: Vec<ApplicationSummary>,
@@ -68,14 +68,14 @@ pub struct ApplicationPage {
 }
 
 /// <p>Policy statements applied to the application.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ApplicationPolicy {
     /// <p>Array of policy statements applied to the application.</p>
     pub statements: Vec<ApplicationPolicyStatement>,
 }
 
 /// <p>Policy statement applied to the application.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ApplicationPolicyStatement {
     /// <p>A list of supported actions:</p><p>
     /// GetApplication
@@ -99,7 +99,7 @@ pub struct ApplicationPolicyStatement {
 }
 
 /// <p>Summary of details about the application.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ApplicationSummary {
     /// <p>The application ARN.</p>
     #[serde(rename = "ApplicationId")]
@@ -133,7 +133,7 @@ pub struct ApplicationSummary {
 }
 
 /// <p>List of version summaries for the application.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ApplicationVersionPage {
     /// <p>The token to request the next page of results.</p>
     pub next_token: Option<String>,
@@ -142,7 +142,7 @@ pub struct ApplicationVersionPage {
 }
 
 /// <p>Details of the change set.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ChangeSetDetails {
     /// <p>The application Amazon Resource Name (ARN).</p>
     pub application_id: String,
@@ -157,7 +157,7 @@ pub struct ChangeSetDetails {
 }
 
 /// <p>Create application request.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateApplicationInput {
     /// <p>The name of the author publishing the app.</p><p>Min Length=1. Max Length=127.</p><p>Pattern "^[a-z0-9](([a-z0-9]|-(?!-))*[a-z0-9])?$";</p>
     pub author: String,
@@ -192,7 +192,7 @@ pub struct CreateApplicationInput {
     pub template_url: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateApplicationRequest {
     /// <p>The name of the author publishing the app.</p><p>Min Length=1. Max Length=127.</p><p>Pattern "^[a-z0-9](([a-z0-9]|-(?!-))*[a-z0-9])?$";</p>
     #[serde(rename = "Author")]
@@ -255,7 +255,7 @@ pub struct CreateApplicationRequest {
     pub template_url: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CreateApplicationResponse {
     /// <p>The application Amazon Resource Name (ARN).</p>
     #[serde(rename = "ApplicationId")]
@@ -305,7 +305,7 @@ pub struct CreateApplicationResponse {
 }
 
 /// <p>Create version request.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateApplicationVersionInput {
     /// <p>A link to a public repository for the source code of your application.</p>
     pub source_code_url: Option<String>,
@@ -315,7 +315,7 @@ pub struct CreateApplicationVersionInput {
     pub template_url: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateApplicationVersionRequest {
     /// <p>The ID of the application to get.</p>
     #[serde(rename = "ApplicationId")]
@@ -337,7 +337,7 @@ pub struct CreateApplicationVersionRequest {
     pub template_url: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CreateApplicationVersionResponse {
     /// <p>The application Amazon Resource Name (ARN).</p>
     #[serde(rename = "ApplicationId")]
@@ -368,7 +368,7 @@ pub struct CreateApplicationVersionResponse {
 }
 
 /// <p>Create application ChangeSet request.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateCloudFormationChangeSetInput {
     /// <p>A list of parameter values for the parameters of the application.</p>
     pub parameter_overrides: Option<Vec<ParameterValue>>,
@@ -382,7 +382,7 @@ pub struct CreateCloudFormationChangeSetInput {
     pub stack_name: String,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateCloudFormationChangeSetRequest {
     /// <p>The ID of the application to get.</p>
     #[serde(rename = "ApplicationId")]
@@ -405,7 +405,7 @@ pub struct CreateCloudFormationChangeSetRequest {
     pub stack_name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CreateCloudFormationChangeSetResponse {
     /// <p>The application Amazon Resource Name (ARN).</p>
     #[serde(rename = "ApplicationId")]
@@ -427,21 +427,21 @@ pub struct CreateCloudFormationChangeSetResponse {
     pub stack_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteApplicationRequest {
     /// <p>The ID of the application to get.</p>
     #[serde(rename = "ApplicationId")]
     pub application_id: String,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetApplicationPolicyRequest {
     /// <p>The ID of the application to get.</p>
     #[serde(rename = "ApplicationId")]
     pub application_id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct GetApplicationPolicyResponse {
     /// <p>Array of policy statements applied to the application.</p>
     #[serde(rename = "Statements")]
@@ -449,7 +449,7 @@ pub struct GetApplicationPolicyResponse {
     pub statements: Option<Vec<ApplicationPolicyStatement>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetApplicationRequest {
     /// <p>The ID of the application to get.</p>
     #[serde(rename = "ApplicationId")]
@@ -460,7 +460,7 @@ pub struct GetApplicationRequest {
     pub semantic_version: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct GetApplicationResponse {
     /// <p>The application Amazon Resource Name (ARN).</p>
     #[serde(rename = "ApplicationId")]
@@ -509,7 +509,7 @@ pub struct GetApplicationResponse {
     pub version: Option<Version>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListApplicationVersionsRequest {
     /// <p>The ID of the application to get.</p>
     #[serde(rename = "ApplicationId")]
@@ -524,7 +524,7 @@ pub struct ListApplicationVersionsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListApplicationVersionsResponse {
     /// <p>The token to request the next page of results.</p>
     #[serde(rename = "NextToken")]
@@ -536,7 +536,7 @@ pub struct ListApplicationVersionsResponse {
     pub versions: Option<Vec<VersionSummary>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListApplicationsRequest {
     /// <p>The total number of items to return.</p>
     #[serde(rename = "MaxItems")]
@@ -548,7 +548,7 @@ pub struct ListApplicationsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListApplicationsResponse {
     /// <p>Array of application summaries.</p>
     #[serde(rename = "Applications")]
@@ -561,7 +561,7 @@ pub struct ListApplicationsResponse {
 }
 
 /// <p>Parameters supported by the application.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ParameterDefinition {
     /// <p>A regular expression that represents the patterns to allow for String types.</p>
     #[serde(rename = "AllowedPattern")]
@@ -633,7 +633,7 @@ pub struct ParameterDefinition {
 }
 
 /// <p>Parameter value of the application.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ParameterValue {
     /// <p>The key associated with the parameter. If you don't specify a key and value for a particular parameter, AWS CloudFormation
     /// uses the default value that is specified in your template.</p>
@@ -644,7 +644,7 @@ pub struct ParameterValue {
     pub value: String,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct PutApplicationPolicyRequest {
     /// <p>The ID of the application to get.</p>
     #[serde(rename = "ApplicationId")]
@@ -655,7 +655,7 @@ pub struct PutApplicationPolicyRequest {
     pub statements: Option<Vec<ApplicationPolicyStatement>>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct PutApplicationPolicyResponse {
     /// <p>Array of policy statements applied to the application.</p>
     #[serde(rename = "Statements")]
@@ -664,7 +664,7 @@ pub struct PutApplicationPolicyResponse {
 }
 
 /// <p>Update application request.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct UpdateApplicationInput {
     /// <p>The name of the author publishing the app.</p><p>Min Length=1. Max Length=127.</p><p>Pattern "^[a-z0-9](([a-z0-9]|-(?!-))*[a-z0-9])?$";</p>
     pub author: Option<String>,
@@ -681,7 +681,7 @@ pub struct UpdateApplicationInput {
     pub readme_url: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateApplicationRequest {
     /// <p>The ID of the application to get.</p>
     #[serde(rename = "ApplicationId")]
@@ -713,7 +713,7 @@ pub struct UpdateApplicationRequest {
     pub readme_url: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct UpdateApplicationResponse {
     /// <p>The application Amazon Resource Name (ARN).</p>
     #[serde(rename = "ApplicationId")]
@@ -763,7 +763,7 @@ pub struct UpdateApplicationResponse {
 }
 
 /// <p>Application version details.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct Version {
     /// <p>The application Amazon Resource Name (ARN).</p>
     #[serde(rename = "ApplicationId")]
@@ -789,7 +789,7 @@ pub struct Version {
 }
 
 /// <p>Application version summary.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct VersionSummary {
     /// <p>The application Amazon Resource Name (ARN).</p>
     #[serde(rename = "ApplicationId")]

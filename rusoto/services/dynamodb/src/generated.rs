@@ -31,7 +31,7 @@ use serde_json;
 use serde_json::from_str;
 use serde_json::Value as SerdeJsonValue;
 /// <p>Represents an attribute for describing the key schema for the table and indexes.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AttributeDefinition {
     /// <p>A name for the attribute.</p>
     #[serde(rename = "AttributeName")]
@@ -42,7 +42,7 @@ pub struct AttributeDefinition {
 }
 
 /// <p>Represents the data for an attribute.</p> <p>Each attribute value is described as a name-value pair. The name is the data type, and the value is the data itself.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.NamingRulesDataTypes.html#HowItWorks.DataTypes">Data Types</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AttributeValue {
     /// <p>An attribute of type Binary. For example:</p> <p> <code>"B": "dGhpcyB0ZXh0IGlzIGJhc2U2NC1lbmNvZGVk"</code> </p>
     #[serde(rename = "B")]
@@ -91,7 +91,7 @@ pub struct AttributeValue {
 }
 
 /// <p>For the <code>UpdateItem</code> operation, represents the attributes to be modified, the action to perform on each, and the new value for each.</p> <note> <p>You cannot use <code>UpdateItem</code> to update any primary key attributes. Instead, you will need to delete the item, and then use <code>PutItem</code> to create a new item with new attributes.</p> </note> <p>Attribute values cannot be null; string and binary type attributes must have lengths greater than zero; and set type attributes must not be empty. Requests with empty values will be rejected with a <code>ValidationException</code> exception.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct AttributeValueUpdate {
     /// <p><p>Specifies how to perform the update. Valid values are <code>PUT</code> (default), <code>DELETE</code>, and <code>ADD</code>. The behavior depends on whether the specified primary key already exists in the table.</p> <p> <b>If an item with the specified <i>Key</i> is found in the table:</b> </p> <ul> <li> <p> <code>PUT</code> - Adds the specified attribute to the item. If the attribute already exists, it is replaced by the new value. </p> </li> <li> <p> <code>DELETE</code> - If no value is specified, the attribute and its value are removed from the item. The data type of the specified value must match the existing value&#39;s data type.</p> <p>If a <i>set</i> of values is specified, then those values are subtracted from the old set. For example, if the attribute value was the set <code>[a,b,c]</code> and the <code>DELETE</code> action specified <code>[a,c]</code>, then the final attribute value would be <code>[b]</code>. Specifying an empty set is an error.</p> </li> <li> <p> <code>ADD</code> - If the attribute does not already exist, then the attribute and its values are added to the item. If the attribute does exist, then the behavior of <code>ADD</code> depends on the data type of the attribute:</p> <ul> <li> <p>If the existing attribute is a number, and if <code>Value</code> is also a number, then the <code>Value</code> is mathematically added to the existing attribute. If <code>Value</code> is a negative number, then it is subtracted from the existing attribute.</p> <note> <p> If you use <code>ADD</code> to increment or decrement a number value for an item that doesn&#39;t exist before the update, DynamoDB uses 0 as the initial value.</p> <p>In addition, if you use <code>ADD</code> to update an existing item, and intend to increment or decrement an attribute value which does not yet exist, DynamoDB uses <code>0</code> as the initial value. For example, suppose that the item you want to update does not yet have an attribute named <i>itemcount</i>, but you decide to <code>ADD</code> the number <code>3</code> to this attribute anyway, even though it currently does not exist. DynamoDB will create the <i>itemcount</i> attribute, set its initial value to <code>0</code>, and finally add <code>3</code> to it. The result will be a new <i>itemcount</i> attribute in the item, with a value of <code>3</code>.</p> </note> </li> <li> <p>If the existing data type is a set, and if the <code>Value</code> is also a set, then the <code>Value</code> is added to the existing set. (This is a <i>set</i> operation, not mathematical addition.) For example, if the attribute value was the set <code>[1,2]</code>, and the <code>ADD</code> action specified <code>[3]</code>, then the final attribute value would be <code>[1,2,3]</code>. An error occurs if an Add action is specified for a set attribute and the attribute type specified does not match the existing set type. </p> <p>Both sets must have the same primitive data type. For example, if the existing data type is a set of strings, the <code>Value</code> must also be a set of strings. The same holds true for number sets and binary sets.</p> </li> </ul> <p>This action is only valid for an existing attribute whose data type is number or is a set. Do not use <code>ADD</code> for any other data types.</p> </li> </ul> <p> <b>If no item with the specified <i>Key</i> is found:</b> </p> <ul> <li> <p> <code>PUT</code> - DynamoDB creates a new item with the specified primary key, and then adds the attribute. </p> </li> <li> <p> <code>DELETE</code> - Nothing happens; there is no attribute to delete.</p> </li> <li> <p> <code>ADD</code> - DynamoDB creates an item with the supplied primary key and number (or set of numbers) for the attribute value. The only data types allowed are number and number set; no other data types can be specified.</p> </li> </ul></p>
     #[serde(rename = "Action")]
@@ -104,7 +104,7 @@ pub struct AttributeValueUpdate {
 }
 
 /// <p>Contains the description of the backup created for the table.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct BackupDescription {
     /// <p>Contains the details of the backup created for the table. </p>
     #[serde(rename = "BackupDetails")]
@@ -121,7 +121,7 @@ pub struct BackupDescription {
 }
 
 /// <p>Contains the details of the backup created for the table.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct BackupDetails {
     /// <p>ARN associated with the backup.</p>
     #[serde(rename = "BackupArn")]
@@ -142,7 +142,7 @@ pub struct BackupDetails {
 }
 
 /// <p>Contains details for the backup.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct BackupSummary {
     /// <p>ARN associated with the backup.</p>
     #[serde(rename = "BackupArn")]
@@ -179,7 +179,7 @@ pub struct BackupSummary {
 }
 
 /// <p>Represents the input of a <code>BatchGetItem</code> operation.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct BatchGetItemInput {
     /// <p><p>A map of one or more table names and, for each table, a map that describes one or more items to retrieve from that table. Each table name can be used only once per <code>BatchGetItem</code> request.</p> <p>Each element in the map of items to retrieve consists of the following:</p> <ul> <li> <p> <code>ConsistentRead</code> - If <code>true</code>, a strongly consistent read is used; if <code>false</code> (the default), an eventually consistent read is used.</p> </li> <li> <p> <code>ExpressionAttributeNames</code> - One or more substitution tokens for attribute names in the <code>ProjectionExpression</code> parameter. The following are some use cases for using <code>ExpressionAttributeNames</code>:</p> <ul> <li> <p>To access an attribute whose name conflicts with a DynamoDB reserved word.</p> </li> <li> <p>To create a placeholder for repeating occurrences of an attribute name in an expression.</p> </li> <li> <p>To prevent special characters in an attribute name from being misinterpreted in an expression.</p> </li> </ul> <p>Use the <b>#</b> character in an expression to dereference an attribute name. For example, consider the following attribute name:</p> <ul> <li> <p> <code>Percentile</code> </p> </li> </ul> <p>The name of this attribute conflicts with a reserved word, so it cannot be used directly in an expression. (For the complete list of reserved words, see <a href="http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/ReservedWords.html">Reserved Words</a> in the <i>Amazon DynamoDB Developer Guide</i>). To work around this, you could specify the following for <code>ExpressionAttributeNames</code>:</p> <ul> <li> <p> <code>{&quot;#P&quot;:&quot;Percentile&quot;}</code> </p> </li> </ul> <p>You could then use this substitution in an expression, as in this example:</p> <ul> <li> <p> <code>#P = :val</code> </p> </li> </ul> <note> <p>Tokens that begin with the <b>:</b> character are <i>expression attribute values</i>, which are placeholders for the actual value at runtime.</p> </note> <p>For more information on expression attribute names, see <a href="http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Expressions.AccessingItemAttributes.html">Accessing Item Attributes</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p> </li> <li> <p> <code>Keys</code> - An array of primary key attribute values that define specific items in the table. For each primary key, you must provide <i>all</i> of the key attributes. For example, with a simple primary key, you only need to provide the partition key value. For a composite key, you must provide <i>both</i> the partition key value and the sort key value.</p> </li> <li> <p> <code>ProjectionExpression</code> - A string that identifies one or more attributes to retrieve from the table. These attributes can include scalars, sets, or elements of a JSON document. The attributes in the expression must be separated by commas.</p> <p>If no attribute names are specified, then all attributes will be returned. If any of the requested attributes are not found, they will not appear in the result.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Expressions.AccessingItemAttributes.html">Accessing Item Attributes</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p> </li> <li> <p> <code>AttributesToGet</code> - This is a legacy parameter. Use <code>ProjectionExpression</code> instead. For more information, see <a href="http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/LegacyConditionalParameters.AttributesToGet.html">AttributesToGet</a> in the <i>Amazon DynamoDB Developer Guide</i>. </p> </li> </ul></p>
     #[serde(rename = "RequestItems")]
@@ -190,7 +190,7 @@ pub struct BatchGetItemInput {
 }
 
 /// <p>Represents the output of a <code>BatchGetItem</code> operation.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct BatchGetItemOutput {
     /// <p><p>The read capacity units consumed by the entire <code>BatchGetItem</code> operation.</p> <p>Each element consists of:</p> <ul> <li> <p> <code>TableName</code> - The table that consumed the provisioned throughput.</p> </li> <li> <p> <code>CapacityUnits</code> - The total number of capacity units consumed.</p> </li> </ul></p>
     #[serde(rename = "ConsumedCapacity")]
@@ -212,7 +212,7 @@ pub struct BatchGetItemOutput {
 }
 
 /// <p>Represents the input of a <code>BatchWriteItem</code> operation.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct BatchWriteItemInput {
     /// <p><p>A map of one or more table names and, for each table, a list of operations to be performed (<code>DeleteRequest</code> or <code>PutRequest</code>). Each element in the map consists of the following:</p> <ul> <li> <p> <code>DeleteRequest</code> - Perform a <code>DeleteItem</code> operation on the specified item. The item to be deleted is identified by a <code>Key</code> subelement:</p> <ul> <li> <p> <code>Key</code> - A map of primary key attribute values that uniquely identify the item. Each entry in this map consists of an attribute name and an attribute value. For each primary key, you must provide <i>all</i> of the key attributes. For example, with a simple primary key, you only need to provide a value for the partition key. For a composite primary key, you must provide values for <i>both</i> the partition key and the sort key.</p> </li> </ul> </li> <li> <p> <code>PutRequest</code> - Perform a <code>PutItem</code> operation on the specified item. The item to be put is identified by an <code>Item</code> subelement:</p> <ul> <li> <p> <code>Item</code> - A map of attributes and their values. Each entry in this map consists of an attribute name and an attribute value. Attribute values must not be null; string and binary type attributes must have lengths greater than zero; and set type attributes must not be empty. Requests that contain empty values will be rejected with a <code>ValidationException</code> exception.</p> <p>If you specify any attributes that are part of an index key, then the data types for those attributes must match those of the schema in the table&#39;s attribute definition.</p> </li> </ul> </li> </ul></p>
     #[serde(rename = "RequestItems")]
@@ -227,7 +227,7 @@ pub struct BatchWriteItemInput {
 }
 
 /// <p>Represents the output of a <code>BatchWriteItem</code> operation.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct BatchWriteItemOutput {
     /// <p><p>The capacity units consumed by the entire <code>BatchWriteItem</code> operation.</p> <p>Each element consists of:</p> <ul> <li> <p> <code>TableName</code> - The table that consumed the provisioned throughput.</p> </li> <li> <p> <code>CapacityUnits</code> - The total number of capacity units consumed.</p> </li> </ul></p>
     #[serde(rename = "ConsumedCapacity")]
@@ -245,7 +245,7 @@ pub struct BatchWriteItemOutput {
 }
 
 /// <p>Represents the amount of provisioned throughput capacity consumed on a table or an index.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct Capacity {
     /// <p>The total number of capacity units consumed on a table or an index.</p>
     #[serde(rename = "CapacityUnits")]
@@ -254,7 +254,7 @@ pub struct Capacity {
 }
 
 /// <p><p>Represents the selection criteria for a <code>Query</code> or <code>Scan</code> operation:</p> <ul> <li> <p>For a <code>Query</code> operation, <code>Condition</code> is used for specifying the <code>KeyConditions</code> to use when querying a table or an index. For <code>KeyConditions</code>, only the following comparison operators are supported:</p> <p> <code>EQ | LE | LT | GE | GT | BEGINS_WITH | BETWEEN</code> </p> <p> <code>Condition</code> is also used in a <code>QueryFilter</code>, which evaluates the query results and returns only the desired values.</p> </li> <li> <p>For a <code>Scan</code> operation, <code>Condition</code> is used in a <code>ScanFilter</code>, which evaluates the scan results and returns only the desired values.</p> </li> </ul></p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct Condition {
     /// <p>One or more values to evaluate against the supplied attribute. The number of values in the list depends on the <code>ComparisonOperator</code> being used.</p> <p>For type Number, value comparisons are numeric.</p> <p>String value comparisons for greater than, equals, or less than are based on ASCII character code values. For example, <code>a</code> is greater than <code>A</code>, and <code>a</code> is greater than <code>B</code>. For a list of code values, see <a href="http://en.wikipedia.org/wiki/ASCII#ASCII_printable_characters">http://en.wikipedia.org/wiki/ASCII#ASCII_printable_characters</a>.</p> <p>For Binary, DynamoDB treats each byte of the binary data as unsigned when it compares binary values.</p>
     #[serde(rename = "AttributeValueList")]
@@ -266,7 +266,7 @@ pub struct Condition {
 }
 
 /// <p>The capacity units consumed by an operation. The data returned includes the total provisioned throughput consumed, along with statistics for the table and any indexes involved in the operation. <code>ConsumedCapacity</code> is only returned if the request asked for it. For more information, see <a href="http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/ProvisionedThroughputIntro.html">Provisioned Throughput</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ConsumedCapacity {
     /// <p>The total number of capacity units consumed by the operation.</p>
     #[serde(rename = "CapacityUnits")]
@@ -291,7 +291,7 @@ pub struct ConsumedCapacity {
 }
 
 /// <p>Represents the continuous backups and point in time recovery settings on the table.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ContinuousBackupsDescription {
     /// <p> <code>ContinuousBackupsStatus</code> can be one of the following states : ENABLED, DISABLED</p>
     #[serde(rename = "ContinuousBackupsStatus")]
@@ -302,7 +302,7 @@ pub struct ContinuousBackupsDescription {
     pub point_in_time_recovery_description: Option<PointInTimeRecoveryDescription>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateBackupInput {
     /// <p>Specified name for the backup.</p>
     #[serde(rename = "BackupName")]
@@ -312,7 +312,7 @@ pub struct CreateBackupInput {
     pub table_name: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CreateBackupOutput {
     /// <p>Contains the details of the backup created for the table.</p>
     #[serde(rename = "BackupDetails")]
@@ -321,7 +321,7 @@ pub struct CreateBackupOutput {
 }
 
 /// <p>Represents a new global secondary index to be added to an existing table.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateGlobalSecondaryIndexAction {
     /// <p>The name of the global secondary index to be created.</p>
     #[serde(rename = "IndexName")]
@@ -337,7 +337,7 @@ pub struct CreateGlobalSecondaryIndexAction {
     pub provisioned_throughput: ProvisionedThroughput,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateGlobalTableInput {
     /// <p>The global table name.</p>
     #[serde(rename = "GlobalTableName")]
@@ -347,7 +347,7 @@ pub struct CreateGlobalTableInput {
     pub replication_group: Vec<Replica>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CreateGlobalTableOutput {
     /// <p>Contains the details of the global table.</p>
     #[serde(rename = "GlobalTableDescription")]
@@ -356,7 +356,7 @@ pub struct CreateGlobalTableOutput {
 }
 
 /// <p>Represents a replica to be added.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateReplicaAction {
     /// <p>The region of the replica to be added.</p>
     #[serde(rename = "RegionName")]
@@ -364,7 +364,7 @@ pub struct CreateReplicaAction {
 }
 
 /// <p>Represents the input of a <code>CreateTable</code> operation.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateTableInput {
     /// <p>An array of attributes that describe the key schema for the table and indexes.</p>
     #[serde(rename = "AttributeDefinitions")]
@@ -397,7 +397,7 @@ pub struct CreateTableInput {
 }
 
 /// <p>Represents the output of a <code>CreateTable</code> operation.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CreateTableOutput {
     /// <p>Represents the properties of the table.</p>
     #[serde(rename = "TableDescription")]
@@ -405,14 +405,14 @@ pub struct CreateTableOutput {
     pub table_description: Option<TableDescription>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteBackupInput {
     /// <p>The ARN associated with the backup.</p>
     #[serde(rename = "BackupArn")]
     pub backup_arn: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DeleteBackupOutput {
     /// <p>Contains the description of the backup created for the table.</p>
     #[serde(rename = "BackupDescription")]
@@ -421,7 +421,7 @@ pub struct DeleteBackupOutput {
 }
 
 /// <p>Represents a global secondary index to be deleted from an existing table.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteGlobalSecondaryIndexAction {
     /// <p>The name of the global secondary index to be deleted.</p>
     #[serde(rename = "IndexName")]
@@ -429,7 +429,7 @@ pub struct DeleteGlobalSecondaryIndexAction {
 }
 
 /// <p>Represents the input of a <code>DeleteItem</code> operation.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteItemInput {
     /// <p>A condition that must be satisfied in order for a conditional <code>DeleteItem</code> to succeed.</p> <p>An expression can contain any of the following:</p> <ul> <li> <p>Functions: <code>attribute_exists | attribute_not_exists | attribute_type | contains | begins_with | size</code> </p> <p>These function names are case-sensitive.</p> </li> <li> <p>Comparison operators: <code>= | &lt;&gt; | &lt; | &gt; | &lt;= | &gt;= | BETWEEN | IN </code> </p> </li> <li> <p> Logical operators: <code>AND | OR | NOT</code> </p> </li> </ul> <p>For more information on condition expressions, see <a href="http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Expressions.SpecifyingConditions.html">Specifying Conditions</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p>
     #[serde(rename = "ConditionExpression")]
@@ -471,7 +471,7 @@ pub struct DeleteItemInput {
 }
 
 /// <p>Represents the output of a <code>DeleteItem</code> operation.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DeleteItemOutput {
     /// <p>A map of attribute names to <code>AttributeValue</code> objects, representing the item as it appeared before the <code>DeleteItem</code> operation. This map appears in the response only if <code>ReturnValues</code> was specified as <code>ALL_OLD</code> in the request.</p>
     #[serde(rename = "Attributes")]
@@ -488,7 +488,7 @@ pub struct DeleteItemOutput {
 }
 
 /// <p>Represents a replica to be removed.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteReplicaAction {
     /// <p>The region of the replica to be removed.</p>
     #[serde(rename = "RegionName")]
@@ -496,7 +496,7 @@ pub struct DeleteReplicaAction {
 }
 
 /// <p>Represents a request to perform a <code>DeleteItem</code> operation on an item.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DeleteRequest {
     /// <p>A map of attribute name to attribute values, representing the primary key of the item to delete. All of the table's primary key attributes must be specified, and their data types must match those of the table's key schema.</p>
     #[serde(rename = "Key")]
@@ -504,7 +504,7 @@ pub struct DeleteRequest {
 }
 
 /// <p>Represents the input of a <code>DeleteTable</code> operation.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteTableInput {
     /// <p>The name of the table to delete.</p>
     #[serde(rename = "TableName")]
@@ -512,7 +512,7 @@ pub struct DeleteTableInput {
 }
 
 /// <p>Represents the output of a <code>DeleteTable</code> operation.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DeleteTableOutput {
     /// <p>Represents the properties of a table.</p>
     #[serde(rename = "TableDescription")]
@@ -520,14 +520,14 @@ pub struct DeleteTableOutput {
     pub table_description: Option<TableDescription>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeBackupInput {
     /// <p>The ARN associated with the backup.</p>
     #[serde(rename = "BackupArn")]
     pub backup_arn: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribeBackupOutput {
     /// <p>Contains the description of the backup created for the table.</p>
     #[serde(rename = "BackupDescription")]
@@ -535,14 +535,14 @@ pub struct DescribeBackupOutput {
     pub backup_description: Option<BackupDescription>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeContinuousBackupsInput {
     /// <p>Name of the table for which the customer wants to check the continuous backups and point in time recovery settings.</p>
     #[serde(rename = "TableName")]
     pub table_name: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribeContinuousBackupsOutput {
     /// <p> <code>ContinuousBackupsDescription</code> can be one of the following : ENABLED, DISABLED. </p>
     #[serde(rename = "ContinuousBackupsDescription")]
@@ -550,14 +550,14 @@ pub struct DescribeContinuousBackupsOutput {
     pub continuous_backups_description: Option<ContinuousBackupsDescription>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeGlobalTableInput {
     /// <p>The name of the global table.</p>
     #[serde(rename = "GlobalTableName")]
     pub global_table_name: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribeGlobalTableOutput {
     /// <p>Contains the details of the global table.</p>
     #[serde(rename = "GlobalTableDescription")]
@@ -566,11 +566,11 @@ pub struct DescribeGlobalTableOutput {
 }
 
 /// <p>Represents the input of a <code>DescribeLimits</code> operation. Has no content.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeLimitsInput {}
 
 /// <p>Represents the output of a <code>DescribeLimits</code> operation.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribeLimitsOutput {
     /// <p>The maximum total read capacity units that your account allows you to provision across all of your tables in this region.</p>
     #[serde(rename = "AccountMaxReadCapacityUnits")]
@@ -591,7 +591,7 @@ pub struct DescribeLimitsOutput {
 }
 
 /// <p>Represents the input of a <code>DescribeTable</code> operation.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeTableInput {
     /// <p>The name of the table to describe.</p>
     #[serde(rename = "TableName")]
@@ -599,7 +599,7 @@ pub struct DescribeTableInput {
 }
 
 /// <p>Represents the output of a <code>DescribeTable</code> operation.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribeTableOutput {
     /// <p>The properties of the table.</p>
     #[serde(rename = "Table")]
@@ -607,14 +607,14 @@ pub struct DescribeTableOutput {
     pub table: Option<TableDescription>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeTimeToLiveInput {
     /// <p>The name of the table to be described.</p>
     #[serde(rename = "TableName")]
     pub table_name: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribeTimeToLiveOutput {
     /// <p><p/></p>
     #[serde(rename = "TimeToLiveDescription")]
@@ -623,7 +623,7 @@ pub struct DescribeTimeToLiveOutput {
 }
 
 /// <p>Represents a condition to be compared with an attribute value. This condition can be used with <code>DeleteItem</code>, <code>PutItem</code> or <code>UpdateItem</code> operations; if the comparison evaluates to true, the operation succeeds; if not, the operation fails. You can use <code>ExpectedAttributeValue</code> in one of two different ways:</p> <ul> <li> <p>Use <code>AttributeValueList</code> to specify one or more values to compare against an attribute. Use <code>ComparisonOperator</code> to specify how you want to perform the comparison. If the comparison evaluates to true, then the conditional operation succeeds.</p> </li> <li> <p>Use <code>Value</code> to specify a value that DynamoDB will compare against an attribute. If the values match, then <code>ExpectedAttributeValue</code> evaluates to true and the conditional operation succeeds. Optionally, you can also set <code>Exists</code> to false, indicating that you <i>do not</i> expect to find the attribute value in the table. In this case, the conditional operation succeeds only if the comparison evaluates to false.</p> </li> </ul> <p> <code>Value</code> and <code>Exists</code> are incompatible with <code>AttributeValueList</code> and <code>ComparisonOperator</code>. Note that if you use both sets of parameters at once, DynamoDB will return a <code>ValidationException</code> exception.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ExpectedAttributeValue {
     /// <p>One or more values to evaluate against the supplied attribute. The number of values in the list depends on the <code>ComparisonOperator</code> being used.</p> <p>For type Number, value comparisons are numeric.</p> <p>String value comparisons for greater than, equals, or less than are based on ASCII character code values. For example, <code>a</code> is greater than <code>A</code>, and <code>a</code> is greater than <code>B</code>. For a list of code values, see <a href="http://en.wikipedia.org/wiki/ASCII#ASCII_printable_characters">http://en.wikipedia.org/wiki/ASCII#ASCII_printable_characters</a>.</p> <p>For Binary, DynamoDB treats each byte of the binary data as unsigned when it compares binary values.</p> <p>For information on specifying data types in JSON, see <a href="http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/DataFormat.html">JSON Data Format</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p>
     #[serde(rename = "AttributeValueList")]
@@ -644,7 +644,7 @@ pub struct ExpectedAttributeValue {
 }
 
 /// <p>Represents the input of a <code>GetItem</code> operation.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetItemInput {
     /// <p>This is a legacy parameter. Use <code>ProjectionExpression</code> instead. For more information, see <a href="http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/LegacyConditionalParameters.AttributesToGet.html">AttributesToGet</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p>
     #[serde(rename = "AttributesToGet")]
@@ -674,7 +674,7 @@ pub struct GetItemInput {
 }
 
 /// <p>Represents the output of a <code>GetItem</code> operation.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct GetItemOutput {
     /// <p>The capacity units consumed by the <code>GetItem</code> operation. The data returned includes the total provisioned throughput consumed, along with statistics for the table and any indexes involved in the operation. <code>ConsumedCapacity</code> is only returned if the <code>ReturnConsumedCapacity</code> parameter was specified. For more information, see <a href="http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/ProvisionedThroughputIntro.html">Provisioned Throughput</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p>
     #[serde(rename = "ConsumedCapacity")]
@@ -687,7 +687,7 @@ pub struct GetItemOutput {
 }
 
 /// <p>Represents the properties of a global secondary index.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GlobalSecondaryIndex {
     /// <p>The name of the global secondary index. The name must be unique among all other indexes on this table.</p>
     #[serde(rename = "IndexName")]
@@ -704,7 +704,7 @@ pub struct GlobalSecondaryIndex {
 }
 
 /// <p>Represents the properties of a global secondary index.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct GlobalSecondaryIndexDescription {
     /// <p><p>Indicates whether the index is currently backfilling. <i>Backfilling</i> is the process of reading items from the table and determining whether they can be added to the index. (Not all items will qualify: For example, a partition key cannot have any duplicate values.) If an item can be added to the index, DynamoDB will do so. After all items have been processed, the backfilling operation is complete and <code>Backfilling</code> is false.</p> <note> <p>For indexes that were created during a <code>CreateTable</code> operation, the <code>Backfilling</code> attribute does not appear in the <code>DescribeTable</code> output.</p> </note></p>
     #[serde(rename = "Backfilling")]
@@ -745,7 +745,7 @@ pub struct GlobalSecondaryIndexDescription {
 }
 
 /// <p>Represents the properties of a global secondary index for the table when the backup was created.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct GlobalSecondaryIndexInfo {
     /// <p>The name of the global secondary index.</p>
     #[serde(rename = "IndexName")]
@@ -766,7 +766,7 @@ pub struct GlobalSecondaryIndexInfo {
 }
 
 /// <p><p>Represents one of the following:</p> <ul> <li> <p>A new global secondary index to be added to an existing table.</p> </li> <li> <p>New provisioned throughput parameters for an existing global secondary index.</p> </li> <li> <p>An existing global secondary index to be removed from an existing table.</p> </li> </ul></p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GlobalSecondaryIndexUpdate {
     /// <p><p>The parameters required for creating a global secondary index on an existing table:</p> <ul> <li> <p> <code>IndexName </code> </p> </li> <li> <p> <code>KeySchema </code> </p> </li> <li> <p> <code>AttributeDefinitions </code> </p> </li> <li> <p> <code>Projection </code> </p> </li> <li> <p> <code>ProvisionedThroughput </code> </p> </li> </ul></p>
     #[serde(rename = "Create")]
@@ -783,7 +783,7 @@ pub struct GlobalSecondaryIndexUpdate {
 }
 
 /// <p>Represents the properties of a global table.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct GlobalTable {
     /// <p>The global table name.</p>
     #[serde(rename = "GlobalTableName")]
@@ -796,7 +796,7 @@ pub struct GlobalTable {
 }
 
 /// <p>Contains details about the global table.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct GlobalTableDescription {
     /// <p>The creation time of the global table.</p>
     #[serde(rename = "CreationDateTime")]
@@ -821,7 +821,7 @@ pub struct GlobalTableDescription {
 }
 
 /// <p>Information about item collections, if any, that were affected by the operation. <code>ItemCollectionMetrics</code> is only returned if the request asked for it. If the table does not have any local secondary indexes, this information is not returned in the response.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ItemCollectionMetrics {
     /// <p>The partition key value of the item collection. This value is the same as the partition key value of the item.</p>
     #[serde(rename = "ItemCollectionKey")]
@@ -834,7 +834,7 @@ pub struct ItemCollectionMetrics {
 }
 
 /// <p>Represents <i>a single element</i> of a key schema. A key schema specifies the attributes that make up the primary key of a table, or the key attributes of an index.</p> <p>A <code>KeySchemaElement</code> represents exactly one attribute of the primary key. For example, a simple primary key would be represented by one <code>KeySchemaElement</code> (for the partition key). A composite primary key would require one <code>KeySchemaElement</code> for the partition key, and another <code>KeySchemaElement</code> for the sort key.</p> <p>A <code>KeySchemaElement</code> must be a scalar, top-level attribute (not a nested attribute). The data type must be one of String, Number, or Binary. The attribute cannot be nested within a List or a Map.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct KeySchemaElement {
     /// <p>The name of a key attribute.</p>
     #[serde(rename = "AttributeName")]
@@ -845,7 +845,7 @@ pub struct KeySchemaElement {
 }
 
 /// <p>Represents a set of primary keys and, for each key, the attributes to retrieve from the table.</p> <p>For each primary key, you must provide <i>all</i> of the key attributes. For example, with a simple primary key, you only need to provide the partition key. For a composite primary key, you must provide <i>both</i> the partition key and the sort key.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct KeysAndAttributes {
     /// <p>This is a legacy parameter. Use <code>ProjectionExpression</code> instead. For more information, see <a href="http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/LegacyConditionalParameters.html">Legacy Conditional Parameters</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p>
     #[serde(rename = "AttributesToGet")]
@@ -868,7 +868,7 @@ pub struct KeysAndAttributes {
     pub projection_expression: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListBackupsInput {
     /// <p> <code>LastEvaluatedBackupARN</code> returned by the previous ListBackups call. </p>
     #[serde(rename = "ExclusiveStartBackupArn")]
@@ -892,7 +892,7 @@ pub struct ListBackupsInput {
     pub time_range_upper_bound: Option<f64>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListBackupsOutput {
     /// <p>List of <code>BackupSummary</code> objects.</p>
     #[serde(rename = "BackupSummaries")]
@@ -904,7 +904,7 @@ pub struct ListBackupsOutput {
     pub last_evaluated_backup_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListGlobalTablesInput {
     /// <p>The first global table name that this operation will evaluate.</p>
     #[serde(rename = "ExclusiveStartGlobalTableName")]
@@ -920,7 +920,7 @@ pub struct ListGlobalTablesInput {
     pub region_name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListGlobalTablesOutput {
     /// <p>List of global table names.</p>
     #[serde(rename = "GlobalTables")]
@@ -933,7 +933,7 @@ pub struct ListGlobalTablesOutput {
 }
 
 /// <p>Represents the input of a <code>ListTables</code> operation.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListTablesInput {
     /// <p>The first table name that this operation will evaluate. Use the value that was returned for <code>LastEvaluatedTableName</code> in a previous operation, so that you can obtain the next page of results.</p>
     #[serde(rename = "ExclusiveStartTableName")]
@@ -946,7 +946,7 @@ pub struct ListTablesInput {
 }
 
 /// <p>Represents the output of a <code>ListTables</code> operation.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListTablesOutput {
     /// <p>The name of the last table in the current page of results. Use this value as the <code>ExclusiveStartTableName</code> in a new request to obtain the next page of results, until all the table names are returned.</p> <p>If you do not receive a <code>LastEvaluatedTableName</code> value in the response, this means that there are no more table names to be retrieved.</p>
     #[serde(rename = "LastEvaluatedTableName")]
@@ -958,7 +958,7 @@ pub struct ListTablesOutput {
     pub table_names: Option<Vec<String>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListTagsOfResourceInput {
     /// <p>An optional string that, if supplied, must be copied from the output of a previous call to ListTagOfResource. When provided in this manner, this API fetches the next page of results.</p>
     #[serde(rename = "NextToken")]
@@ -969,7 +969,7 @@ pub struct ListTagsOfResourceInput {
     pub resource_arn: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListTagsOfResourceOutput {
     /// <p>If this value is returned, there are additional results to be displayed. To retrieve them, call ListTagsOfResource again, with NextToken set to this value.</p>
     #[serde(rename = "NextToken")]
@@ -982,7 +982,7 @@ pub struct ListTagsOfResourceOutput {
 }
 
 /// <p>Represents the properties of a local secondary index.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct LocalSecondaryIndex {
     /// <p>The name of the local secondary index. The name must be unique among all other indexes on this table.</p>
     #[serde(rename = "IndexName")]
@@ -996,7 +996,7 @@ pub struct LocalSecondaryIndex {
 }
 
 /// <p>Represents the properties of a local secondary index.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct LocalSecondaryIndexDescription {
     /// <p>The Amazon Resource Name (ARN) that uniquely identifies the index.</p>
     #[serde(rename = "IndexArn")]
@@ -1025,7 +1025,7 @@ pub struct LocalSecondaryIndexDescription {
 }
 
 /// <p>Represents the properties of a local secondary index for the table when the backup was created.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct LocalSecondaryIndexInfo {
     /// <p>Represents the name of the local secondary index.</p>
     #[serde(rename = "IndexName")]
@@ -1042,7 +1042,7 @@ pub struct LocalSecondaryIndexInfo {
 }
 
 /// <p>The description of the point in time settings applied to the table.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct PointInTimeRecoveryDescription {
     /// <p>Specifies the earliest point in time you can restore your table to. It is equal to the maximum of point in time recovery enabled time and <code>CurrentTime</code> - <code>PointInTimeRecoveryPeriod</code>.</p>
     #[serde(rename = "EarliestRestorableDateTime")]
@@ -1059,7 +1059,7 @@ pub struct PointInTimeRecoveryDescription {
 }
 
 /// <p>Represents the settings used to enable point in time recovery.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct PointInTimeRecoverySpecification {
     /// <p>Indicates whether point in time recovery is enabled (true) or disabled (false) on the table.</p>
     #[serde(rename = "PointInTimeRecoveryEnabled")]
@@ -1067,7 +1067,7 @@ pub struct PointInTimeRecoverySpecification {
 }
 
 /// <p>Represents attributes that are copied (projected) from the table into an index. These are in addition to the primary key attributes and index key attributes, which are automatically projected.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Projection {
     /// <p>Represents the non-key attribute names which will be projected into the index.</p> <p>For local secondary indexes, the total count of <code>NonKeyAttributes</code> summed across all of the local secondary indexes, must not exceed 20. If you project the same attribute into two different indexes, this counts as two distinct attributes when determining the total.</p>
     #[serde(rename = "NonKeyAttributes")]
@@ -1080,7 +1080,7 @@ pub struct Projection {
 }
 
 /// <p>Represents the provisioned throughput settings for a specified table or index. The settings can be modified using the <code>UpdateTable</code> operation.</p> <p>For current minimum and maximum provisioned throughput values, see <a href="http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Limits.html">Limits</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ProvisionedThroughput {
     /// <p>The maximum number of strongly consistent reads consumed per second before DynamoDB returns a <code>ThrottlingException</code>. For more information, see <a href="http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/WorkingWithTables.html#ProvisionedThroughput">Specifying Read and Write Requirements</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p>
     #[serde(rename = "ReadCapacityUnits")]
@@ -1091,7 +1091,7 @@ pub struct ProvisionedThroughput {
 }
 
 /// <p>Represents the provisioned throughput settings for the table, consisting of read and write capacity units, along with data about increases and decreases.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ProvisionedThroughputDescription {
     /// <p>The date and time of the last provisioned throughput decrease for this table.</p>
     #[serde(rename = "LastDecreaseDateTime")]
@@ -1116,7 +1116,7 @@ pub struct ProvisionedThroughputDescription {
 }
 
 /// <p>Represents the input of a <code>PutItem</code> operation.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct PutItemInput {
     /// <p>A condition that must be satisfied in order for a conditional <code>PutItem</code> operation to succeed.</p> <p>An expression can contain any of the following:</p> <ul> <li> <p>Functions: <code>attribute_exists | attribute_not_exists | attribute_type | contains | begins_with | size</code> </p> <p>These function names are case-sensitive.</p> </li> <li> <p>Comparison operators: <code>= | &lt;&gt; | &lt; | &gt; | &lt;= | &gt;= | BETWEEN | IN </code> </p> </li> <li> <p> Logical operators: <code>AND | OR | NOT</code> </p> </li> </ul> <p>For more information on condition expressions, see <a href="http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Expressions.SpecifyingConditions.html">Specifying Conditions</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p>
     #[serde(rename = "ConditionExpression")]
@@ -1158,7 +1158,7 @@ pub struct PutItemInput {
 }
 
 /// <p>Represents the output of a <code>PutItem</code> operation.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct PutItemOutput {
     /// <p>The attribute values as they appeared before the <code>PutItem</code> operation, but only if <code>ReturnValues</code> is specified as <code>ALL_OLD</code> in the request. Each element consists of an attribute name and an attribute value.</p>
     #[serde(rename = "Attributes")]
@@ -1175,7 +1175,7 @@ pub struct PutItemOutput {
 }
 
 /// <p>Represents a request to perform a <code>PutItem</code> operation on an item.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct PutRequest {
     /// <p>A map of attribute name to attribute values, representing the primary key of an item to be processed by <code>PutItem</code>. All of the table's primary key attributes must be specified, and their data types must match those of the table's key schema. If any attributes are present in the item which are part of an index key schema for the table, their types must match the index key schema.</p>
     #[serde(rename = "Item")]
@@ -1183,7 +1183,7 @@ pub struct PutRequest {
 }
 
 /// <p>Represents the input of a <code>Query</code> operation.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct QueryInput {
     /// <p>This is a legacy parameter. Use <code>ProjectionExpression</code> instead. For more information, see <a href="http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/LegacyConditionalParameters.AttributesToGet.html">AttributesToGet</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p>
     #[serde(rename = "AttributesToGet")]
@@ -1254,7 +1254,7 @@ pub struct QueryInput {
 }
 
 /// <p>Represents the output of a <code>Query</code> operation.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct QueryOutput {
     /// <p>The capacity units consumed by the <code>Query</code> operation. The data returned includes the total provisioned throughput consumed, along with statistics for the table and any indexes involved in the operation. <code>ConsumedCapacity</code> is only returned if the <code>ReturnConsumedCapacity</code> parameter was specified For more information, see <a href="http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/ProvisionedThroughputIntro.html">Provisioned Throughput</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p>
     #[serde(rename = "ConsumedCapacity")]
@@ -1279,7 +1279,7 @@ pub struct QueryOutput {
 }
 
 /// <p>Represents the properties of a replica.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Replica {
     /// <p>The region where the replica needs to be created.</p>
     #[serde(rename = "RegionName")]
@@ -1288,7 +1288,7 @@ pub struct Replica {
 }
 
 /// <p>Contains the details of the replica.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ReplicaDescription {
     /// <p>The name of the region.</p>
     #[serde(rename = "RegionName")]
@@ -1297,7 +1297,7 @@ pub struct ReplicaDescription {
 }
 
 /// <p><p>Represents one of the following:</p> <ul> <li> <p>A new replica to be added to an existing global table.</p> </li> <li> <p>New parameters for an existing replica.</p> </li> <li> <p>An existing replica to be removed from an existing global table.</p> </li> </ul></p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ReplicaUpdate {
     /// <p>The parameters required for creating a replica on an existing global table.</p>
     #[serde(rename = "Create")]
@@ -1310,7 +1310,7 @@ pub struct ReplicaUpdate {
 }
 
 /// <p>Contains details for the restore.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct RestoreSummary {
     /// <p>Point in time or source backup time.</p>
     #[serde(rename = "RestoreDateTime")]
@@ -1328,7 +1328,7 @@ pub struct RestoreSummary {
     pub source_table_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct RestoreTableFromBackupInput {
     /// <p>The ARN associated with the backup.</p>
     #[serde(rename = "BackupArn")]
@@ -1338,7 +1338,7 @@ pub struct RestoreTableFromBackupInput {
     pub target_table_name: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct RestoreTableFromBackupOutput {
     /// <p>The description of the table created from an existing backup.</p>
     #[serde(rename = "TableDescription")]
@@ -1346,7 +1346,7 @@ pub struct RestoreTableFromBackupOutput {
     pub table_description: Option<TableDescription>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct RestoreTableToPointInTimeInput {
     /// <p>Time in the past to restore the table to.</p>
     #[serde(rename = "RestoreDateTime")]
@@ -1364,7 +1364,7 @@ pub struct RestoreTableToPointInTimeInput {
     pub use_latest_restorable_time: Option<bool>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct RestoreTableToPointInTimeOutput {
     /// <p>Represents the properties of a table.</p>
     #[serde(rename = "TableDescription")]
@@ -1373,7 +1373,7 @@ pub struct RestoreTableToPointInTimeOutput {
 }
 
 /// <p>The description of the server-side encryption status on the specified table.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct SSEDescription {
     /// <p><p>The current state of server-side encryption:</p> <ul> <li> <p> <code>ENABLING</code> - Server-side encryption is being enabled.</p> </li> <li> <p> <code>ENABLED</code> - Server-side encryption is enabled.</p> </li> <li> <p> <code>DISABLING</code> - Server-side encryption is being disabled.</p> </li> <li> <p> <code>DISABLED</code> - Server-side encryption is disabled.</p> </li> </ul></p>
     #[serde(rename = "Status")]
@@ -1382,7 +1382,7 @@ pub struct SSEDescription {
 }
 
 /// <p>Represents the settings used to enable server-side encryption.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct SSESpecification {
     /// <p>Indicates whether server-side encryption is enabled (true) or disabled (false) on the table.</p>
     #[serde(rename = "Enabled")]
@@ -1390,7 +1390,7 @@ pub struct SSESpecification {
 }
 
 /// <p>Represents the input of a <code>Scan</code> operation.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ScanInput {
     /// <p>This is a legacy parameter. Use <code>ProjectionExpression</code> instead. For more information, see <a href="http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/LegacyConditionalParameters.AttributesToGet.html">AttributesToGet</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p>
     #[serde(rename = "AttributesToGet")]
@@ -1457,7 +1457,7 @@ pub struct ScanInput {
 }
 
 /// <p>Represents the output of a <code>Scan</code> operation.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ScanOutput {
     /// <p>The capacity units consumed by the <code>Scan</code> operation. The data returned includes the total provisioned throughput consumed, along with statistics for the table and any indexes involved in the operation. <code>ConsumedCapacity</code> is only returned if the <code>ReturnConsumedCapacity</code> parameter was specified. For more information, see <a href="http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/ProvisionedThroughputIntro.html">Provisioned Throughput</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p>
     #[serde(rename = "ConsumedCapacity")]
@@ -1482,7 +1482,7 @@ pub struct ScanOutput {
 }
 
 /// <p>Contains the details of the table when the backup was created. </p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct SourceTableDetails {
     /// <p>Number of items in the table. Please note this is an approximate value. </p>
     #[serde(rename = "ItemCount")]
@@ -1514,7 +1514,7 @@ pub struct SourceTableDetails {
 }
 
 /// <p>Contains the details of the features enabled on the table when the backup was created. For example, LSIs, GSIs, streams, TTL. </p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct SourceTableFeatureDetails {
     /// <p>Represents the GSI properties for the table when the backup was created. It includes the IndexName, KeySchema, Projection and ProvisionedThroughput for the GSIs on the table at the time of backup. </p>
     #[serde(rename = "GlobalSecondaryIndexes")]
@@ -1539,7 +1539,7 @@ pub struct SourceTableFeatureDetails {
 }
 
 /// <p>Represents the DynamoDB Streams configuration for a table in DynamoDB.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct StreamSpecification {
     /// <p>Indicates whether DynamoDB Streams is enabled (true) or disabled (false) on the table.</p>
     #[serde(rename = "StreamEnabled")]
@@ -1552,7 +1552,7 @@ pub struct StreamSpecification {
 }
 
 /// <p>Represents the properties of a table.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct TableDescription {
     /// <p><p>An array of <code>AttributeDefinition</code> objects. Each of these objects describes one attribute in the table and index key schema.</p> <p>Each <code>AttributeDefinition</code> object in this array is composed of:</p> <ul> <li> <p> <code>AttributeName</code> - The name of the attribute.</p> </li> <li> <p> <code>AttributeType</code> - The data type for the attribute.</p> </li> </ul></p>
     #[serde(rename = "AttributeDefinitions")]
@@ -1625,7 +1625,7 @@ pub struct TableDescription {
 }
 
 /// <p>Describes a tag. A tag is a key-value pair. You can add up to 50 tags to a single DynamoDB table. </p> <p> AWS-assigned tag names and values are automatically assigned the aws: prefix, which the user cannot assign. AWS-assigned tag names do not count towards the tag limit of 50. User-assigned tag names have the prefix user: in the Cost Allocation Report. You cannot backdate the application of a tag. </p> <p>For an overview on tagging DynamoDB resources, see <a href="http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Tagging.html">Tagging for DynamoDB</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Tag {
     /// <p>The key of the tag.Tag keys are case sensitive. Each DynamoDB table can only have up to one tag with the same key. If you try to add an existing tag (same key), the existing tag value will be updated to the new value. </p>
     #[serde(rename = "Key")]
@@ -1635,7 +1635,7 @@ pub struct Tag {
     pub value: String,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct TagResourceInput {
     /// <p>Identifies the Amazon DynamoDB resource to which tags should be added. This value is an Amazon Resource Name (ARN).</p>
     #[serde(rename = "ResourceArn")]
@@ -1646,7 +1646,7 @@ pub struct TagResourceInput {
 }
 
 /// <p>The description of the Time to Live (TTL) status on the specified table. </p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct TimeToLiveDescription {
     /// <p> The name of the Time to Live attribute for items in the table.</p>
     #[serde(rename = "AttributeName")]
@@ -1659,7 +1659,7 @@ pub struct TimeToLiveDescription {
 }
 
 /// <p>Represents the settings used to enable or disable Time to Live for the specified table.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct TimeToLiveSpecification {
     /// <p>The name of the Time to Live attribute used to store the expiration time for items in the table.</p>
     #[serde(rename = "AttributeName")]
@@ -1669,7 +1669,7 @@ pub struct TimeToLiveSpecification {
     pub enabled: bool,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UntagResourceInput {
     /// <p>The Amazon DyanamoDB resource the tags will be removed from. This value is an Amazon Resource Name (ARN).</p>
     #[serde(rename = "ResourceArn")]
@@ -1679,7 +1679,7 @@ pub struct UntagResourceInput {
     pub tag_keys: Vec<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateContinuousBackupsInput {
     /// <p>Represents the settings used to enable point in time recovery.</p>
     #[serde(rename = "PointInTimeRecoverySpecification")]
@@ -1689,7 +1689,7 @@ pub struct UpdateContinuousBackupsInput {
     pub table_name: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct UpdateContinuousBackupsOutput {
     /// <p>Represents the continuous backups and point in time recovery settings on the table.</p>
     #[serde(rename = "ContinuousBackupsDescription")]
@@ -1698,7 +1698,7 @@ pub struct UpdateContinuousBackupsOutput {
 }
 
 /// <p>Represents the new provisioned throughput settings to be applied to a global secondary index.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateGlobalSecondaryIndexAction {
     /// <p>The name of the global secondary index to be updated.</p>
     #[serde(rename = "IndexName")]
@@ -1708,7 +1708,7 @@ pub struct UpdateGlobalSecondaryIndexAction {
     pub provisioned_throughput: ProvisionedThroughput,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateGlobalTableInput {
     /// <p>The global table name.</p>
     #[serde(rename = "GlobalTableName")]
@@ -1718,7 +1718,7 @@ pub struct UpdateGlobalTableInput {
     pub replica_updates: Vec<ReplicaUpdate>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct UpdateGlobalTableOutput {
     /// <p>Contains the details of the global table.</p>
     #[serde(rename = "GlobalTableDescription")]
@@ -1727,7 +1727,7 @@ pub struct UpdateGlobalTableOutput {
 }
 
 /// <p>Represents the input of an <code>UpdateItem</code> operation.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateItemInput {
     /// <p>This is a legacy parameter. Use <code>UpdateExpression</code> instead. For more information, see <a href="http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/LegacyConditionalParameters.AttributeUpdates.html">AttributeUpdates</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p>
     #[serde(rename = "AttributeUpdates")]
@@ -1777,7 +1777,7 @@ pub struct UpdateItemInput {
 }
 
 /// <p>Represents the output of an <code>UpdateItem</code> operation.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct UpdateItemOutput {
     /// <p>A map of attribute values as they appear before or after the <code>UpdateItem</code> operation, as determined by the <code>ReturnValues</code> parameter.</p> <p>The <code>Attributes</code> map is only present if <code>ReturnValues</code> was specified as something other than <code>NONE</code> in the request. Each element represents one attribute.</p>
     #[serde(rename = "Attributes")]
@@ -1794,7 +1794,7 @@ pub struct UpdateItemOutput {
 }
 
 /// <p>Represents the input of an <code>UpdateTable</code> operation.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateTableInput {
     /// <p>An array of attributes that describe the key schema for the table and indexes. If you are adding a new global secondary index to the table, <code>AttributeDefinitions</code> must include the key element(s) of the new index.</p>
     #[serde(rename = "AttributeDefinitions")]
@@ -1818,7 +1818,7 @@ pub struct UpdateTableInput {
 }
 
 /// <p>Represents the output of an <code>UpdateTable</code> operation.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct UpdateTableOutput {
     /// <p>Represents the properties of the table.</p>
     #[serde(rename = "TableDescription")]
@@ -1827,7 +1827,7 @@ pub struct UpdateTableOutput {
 }
 
 /// <p>Represents the input of an <code>UpdateTimeToLive</code> operation.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateTimeToLiveInput {
     /// <p>The name of the table to be configured.</p>
     #[serde(rename = "TableName")]
@@ -1837,7 +1837,7 @@ pub struct UpdateTimeToLiveInput {
     pub time_to_live_specification: TimeToLiveSpecification,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct UpdateTimeToLiveOutput {
     /// <p>Represents the output of an <code>UpdateTimeToLive</code> operation.</p>
     #[serde(rename = "TimeToLiveSpecification")]
@@ -1846,7 +1846,7 @@ pub struct UpdateTimeToLiveOutput {
 }
 
 /// <p>Represents an operation to perform - either <code>DeleteItem</code> or <code>PutItem</code>. You can only request one of these operations, not both, in a single <code>WriteRequest</code>. If you do need to perform both of these operations, you will need to provide two separate <code>WriteRequest</code> objects.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct WriteRequest {
     /// <p>A request to perform a <code>DeleteItem</code> operation.</p>
     #[serde(rename = "DeleteRequest")]

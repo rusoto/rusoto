@@ -31,7 +31,7 @@ use serde_json;
 use serde_json::from_str;
 use serde_json::Value as SerdeJsonValue;
 /// <p>Represents the output of the <code>CreateBudget</code> operation. The content consists of the detailed metadata and data file information, and the current status of the <code>budget</code>.</p> <p>The ARN pattern for a budget is: <code>arn:aws:budgetservice::AccountId:budget/budgetName</code> </p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Budget {
     /// <p>The total amount of cost, usage, or RI utilization that you want to track with your budget.</p> <p> <code>BudgetLimit</code> is required for cost or usage budgets, but optional for RI utilization budgets. RI utilization budgets default to the only valid value for RI utilization budgets, which is <code>100</code>.</p>
     #[serde(rename = "BudgetLimit")]
@@ -65,7 +65,7 @@ pub struct Budget {
 }
 
 /// <p>The spend objects associated with this budget. The <code>actualSpend</code> tracks how much you've used, cost, usage, or RI units, and the <code>forecastedSpend</code> tracks how much you are predicted to spend if your current usage remains steady.</p> <p>For example, if it is the 20th of the month and you have spent <code>50</code> dollars on Amazon EC2, your <code>actualSpend</code> is <code>50 USD</code>, and your <code>forecastedSpend</code> is <code>75 USD</code>.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct CalculatedSpend {
     /// <p>The amount of cost, usage, or RI units that you have used.</p>
     #[serde(rename = "ActualSpend")]
@@ -77,7 +77,7 @@ pub struct CalculatedSpend {
 }
 
 /// <p>The types of cost included in a budget, such as tax and subscriptions.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct CostTypes {
     /// <p>Specifies whether a budget includes credits.</p> <p>The default value is <code>true</code>.</p>
     #[serde(rename = "IncludeCredit")]
@@ -126,7 +126,7 @@ pub struct CostTypes {
 }
 
 /// <p> Request of CreateBudget </p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateBudgetRequest {
     /// <p>The <code>accountId</code> that is associated with the budget.</p>
     #[serde(rename = "AccountId")]
@@ -141,11 +141,11 @@ pub struct CreateBudgetRequest {
 }
 
 /// <p> Response of CreateBudget </p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CreateBudgetResponse {}
 
 /// <p> Request of CreateNotification </p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateNotificationRequest {
     /// <p>The <code>accountId</code> that is associated with the budget that you want to create a notification for.</p>
     #[serde(rename = "AccountId")]
@@ -162,11 +162,11 @@ pub struct CreateNotificationRequest {
 }
 
 /// <p> Response of CreateNotification </p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CreateNotificationResponse {}
 
 /// <p> Request of CreateSubscriber </p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateSubscriberRequest {
     /// <p>The <code>accountId</code> associated with the budget that you want to create a subscriber for.</p>
     #[serde(rename = "AccountId")]
@@ -183,11 +183,11 @@ pub struct CreateSubscriberRequest {
 }
 
 /// <p> Response of CreateSubscriber </p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CreateSubscriberResponse {}
 
 /// <p> Request of DeleteBudget </p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteBudgetRequest {
     /// <p>The <code>accountId</code> that is associated with the budget that you want to delete.</p>
     #[serde(rename = "AccountId")]
@@ -198,11 +198,11 @@ pub struct DeleteBudgetRequest {
 }
 
 /// <p> Response of DeleteBudget </p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DeleteBudgetResponse {}
 
 /// <p> Request of DeleteNotification </p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteNotificationRequest {
     /// <p>The <code>accountId</code> that is associated with the budget whose notification you want to delete.</p>
     #[serde(rename = "AccountId")]
@@ -216,11 +216,11 @@ pub struct DeleteNotificationRequest {
 }
 
 /// <p> Response of DeleteNotification </p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DeleteNotificationResponse {}
 
 /// <p> Request of DeleteSubscriber </p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteSubscriberRequest {
     /// <p>The <code>accountId</code> that is associated with the budget whose subscriber you want to delete.</p>
     #[serde(rename = "AccountId")]
@@ -237,11 +237,11 @@ pub struct DeleteSubscriberRequest {
 }
 
 /// <p> Response of DeleteSubscriber </p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DeleteSubscriberResponse {}
 
 /// <p> Request of DescribeBudget </p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeBudgetRequest {
     /// <p>The <code>accountId</code> that is associated with the budget that you want a description of.</p>
     #[serde(rename = "AccountId")]
@@ -252,7 +252,7 @@ pub struct DescribeBudgetRequest {
 }
 
 /// <p> Response of DescribeBudget </p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribeBudgetResponse {
     /// <p>The description of the budget.</p>
     #[serde(rename = "Budget")]
@@ -261,7 +261,7 @@ pub struct DescribeBudgetResponse {
 }
 
 /// <p> Request of DescribeBudgets </p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeBudgetsRequest {
     /// <p>The <code>accountId</code> that is associated with the budgets that you want descriptions of.</p>
     #[serde(rename = "AccountId")]
@@ -277,7 +277,7 @@ pub struct DescribeBudgetsRequest {
 }
 
 /// <p> Response of DescribeBudgets </p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribeBudgetsResponse {
     /// <p>A list of budgets.</p>
     #[serde(rename = "Budgets")]
@@ -290,7 +290,7 @@ pub struct DescribeBudgetsResponse {
 }
 
 /// <p> Request of DescribeNotificationsForBudget </p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeNotificationsForBudgetRequest {
     /// <p>The <code>accountId</code> that is associated with the budget whose notifications you want descriptions of.</p>
     #[serde(rename = "AccountId")]
@@ -309,7 +309,7 @@ pub struct DescribeNotificationsForBudgetRequest {
 }
 
 /// <p> Response of GetNotificationsForBudget </p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribeNotificationsForBudgetResponse {
     /// <p>The pagination token that indicates the next set of results that you can retrieve.</p>
     #[serde(rename = "NextToken")]
@@ -322,7 +322,7 @@ pub struct DescribeNotificationsForBudgetResponse {
 }
 
 /// <p> Request of DescribeSubscribersForNotification </p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeSubscribersForNotificationRequest {
     /// <p>The <code>accountId</code> that is associated with the budget whose subscribers you want descriptions of.</p>
     #[serde(rename = "AccountId")]
@@ -344,7 +344,7 @@ pub struct DescribeSubscribersForNotificationRequest {
 }
 
 /// <p> Response of DescribeSubscribersForNotification </p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribeSubscribersForNotificationResponse {
     /// <p>The pagination token that indicates the next set of results that you can retrieve.</p>
     #[serde(rename = "NextToken")]
@@ -357,7 +357,7 @@ pub struct DescribeSubscribersForNotificationResponse {
 }
 
 /// <p><p>A notification associated with a budget. A budget can have up to five notifications. </p> <p>Each notification must have at least one subscriber. A notification can have one SNS subscriber and up to ten email subscribers, for a total of 11 subscribers.</p> <p>For example, if you have a budget for 200 dollars and you want to be notified when you go over 160 dollars, create a notification with the following parameters:</p> <ul> <li> <p>A notificationType of <code>ACTUAL</code> </p> </li> <li> <p>A comparisonOperator of <code>GREATER_THAN</code> </p> </li> <li> <p>A notification threshold of <code>80</code> </p> </li> </ul></p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Notification {
     /// <p>The comparison used for this notification.</p>
     #[serde(rename = "ComparisonOperator")]
@@ -375,7 +375,7 @@ pub struct Notification {
 }
 
 /// <p>A notification with subscribers. A notification can have one SNS subscriber and up to ten email subscribers, for a total of 11 subscribers.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct NotificationWithSubscribers {
     /// <p>The notification associated with a budget.</p>
     #[serde(rename = "Notification")]
@@ -386,7 +386,7 @@ pub struct NotificationWithSubscribers {
 }
 
 /// <p><p>The amount of cost or usage being measured for a budget.</p> <p>For example, a <code>Spend</code> for <code>3 GB</code> of S3 usage would have the following parameters:</p> <ul> <li> <p>An <code>Amount</code> of <code>3</code> </p> </li> <li> <p>A <code>unit</code> of <code>GB</code> </p> </li> </ul></p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Spend {
     /// <p>The cost or usage amount associated with a budget forecast, actual spend, or budget threshold.</p>
     #[serde(rename = "Amount")]
@@ -397,7 +397,7 @@ pub struct Spend {
 }
 
 /// <p><p>The subscriber to a budget notification. The subscriber consists of a subscription type and either an Amazon Simple Notification Service topic or an email address.</p> <p>For example, an email subscriber would have the following parameters:</p> <ul> <li> <p>A <code>subscriptionType</code> of <code>EMAIL</code> </p> </li> <li> <p>An <code>address</code> of <code>example@example.com</code> </p> </li> </ul></p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Subscriber {
     /// <p>The address that AWS sends budget notifications to, either an SNS topic or an email.</p>
     #[serde(rename = "Address")]
@@ -408,7 +408,7 @@ pub struct Subscriber {
 }
 
 /// <p>The period of time covered by a budget. Has a start date and an end date. The start date must come before the end date. There are no restrictions on the end date. </p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct TimePeriod {
     /// <p>The end date for a budget. If you didn't specify an end date, AWS set your end date to <code>06/15/87 00:00 UTC</code>. The defaults are the same for the AWS Billing and Cost Management console and the API.</p> <p>After the end date, AWS deletes the budget and all associated notifications and subscribers. You can change your end date with the <code>UpdateBudget</code> operation.</p>
     #[serde(rename = "End")]
@@ -421,7 +421,7 @@ pub struct TimePeriod {
 }
 
 /// <p> Request of UpdateBudget </p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateBudgetRequest {
     /// <p>The <code>accountId</code> that is associated with the budget that you want to update.</p>
     #[serde(rename = "AccountId")]
@@ -432,11 +432,11 @@ pub struct UpdateBudgetRequest {
 }
 
 /// <p> Response of UpdateBudget </p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct UpdateBudgetResponse {}
 
 /// <p> Request of UpdateNotification </p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateNotificationRequest {
     /// <p>The <code>accountId</code> that is associated with the budget whose notification you want to update.</p>
     #[serde(rename = "AccountId")]
@@ -453,11 +453,11 @@ pub struct UpdateNotificationRequest {
 }
 
 /// <p> Response of UpdateNotification </p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct UpdateNotificationResponse {}
 
 /// <p> Request of UpdateSubscriber </p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateSubscriberRequest {
     /// <p>The <code>accountId</code> that is associated with the budget whose subscriber you want to update.</p>
     #[serde(rename = "AccountId")]
@@ -477,7 +477,7 @@ pub struct UpdateSubscriberRequest {
 }
 
 /// <p> Response of UpdateSubscriber </p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct UpdateSubscriberResponse {}
 
 /// Errors returned by CreateBudget

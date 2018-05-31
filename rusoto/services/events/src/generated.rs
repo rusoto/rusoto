@@ -31,7 +31,7 @@ use serde_json;
 use serde_json::from_str;
 use serde_json::Value as SerdeJsonValue;
 /// <p>The array properties for the submitted job, such as the size of the array. The array size can be between 2 and 10,000. If you specify array properties for a job, it becomes an array job. This parameter is used only if the target is an AWS Batch job.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct BatchArrayProperties {
     /// <p>The size of the array, if this is an array batch job. Valid values are integers between 2 and 10,000.</p>
     #[serde(rename = "Size")]
@@ -40,7 +40,7 @@ pub struct BatchArrayProperties {
 }
 
 /// <p>The custom parameters to be used when the target is an AWS Batch job.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct BatchParameters {
     /// <p>The array properties for the submitted job, such as the size of the array. The array size can be between 2 and 10,000. If you specify array properties for a job, it becomes an array job. This parameter is used only if the target is an AWS Batch job.</p>
     #[serde(rename = "ArrayProperties")]
@@ -59,7 +59,7 @@ pub struct BatchParameters {
 }
 
 /// <p>The retry strategy to use for failed jobs, if the target is an AWS Batch job. If you specify a retry strategy here, it overrides the retry strategy defined in the job definition.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct BatchRetryStrategy {
     /// <p>The number of times to attempt to retry, if the job fails. Valid values are 1 to 10.</p>
     #[serde(rename = "Attempts")]
@@ -67,17 +67,17 @@ pub struct BatchRetryStrategy {
     pub attempts: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteRuleRequest {
     /// <p>The name of the rule.</p>
     #[serde(rename = "Name")]
     pub name: String,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeEventBusRequest {}
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribeEventBusResponse {
     /// <p>The Amazon Resource Name (ARN) of the account permitted to write events to the current account.</p>
     #[serde(rename = "Arn")]
@@ -93,14 +93,14 @@ pub struct DescribeEventBusResponse {
     pub policy: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeRuleRequest {
     /// <p>The name of the rule.</p>
     #[serde(rename = "Name")]
     pub name: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribeRuleResponse {
     /// <p>The Amazon Resource Name (ARN) of the rule.</p>
     #[serde(rename = "Arn")]
@@ -132,7 +132,7 @@ pub struct DescribeRuleResponse {
     pub state: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DisableRuleRequest {
     /// <p>The name of the rule.</p>
     #[serde(rename = "Name")]
@@ -140,7 +140,7 @@ pub struct DisableRuleRequest {
 }
 
 /// <p>The custom parameters to be used when the target is an Amazon ECS cluster.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct EcsParameters {
     /// <p>The number of tasks to create based on the <code>TaskDefinition</code>. The default is one.</p>
     #[serde(rename = "TaskCount")]
@@ -151,7 +151,7 @@ pub struct EcsParameters {
     pub task_definition_arn: String,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct EnableRuleRequest {
     /// <p>The name of the rule.</p>
     #[serde(rename = "Name")]
@@ -159,7 +159,7 @@ pub struct EnableRuleRequest {
 }
 
 /// <p>Contains the parameters needed for you to provide custom input to a target based on one or more pieces of data extracted from the event.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct InputTransformer {
     /// <p>Map of JSON paths to be extracted from the event. These are key-value pairs, where each value is a JSON path. You must use JSON dot notation, not bracket notation.</p>
     #[serde(rename = "InputPathsMap")]
@@ -171,14 +171,14 @@ pub struct InputTransformer {
 }
 
 /// <p>This object enables you to specify a JSON path to extract from the event and use as the partition key for the Amazon Kinesis stream, so that you can control the shard to which the event goes. If you do not include this parameter, the default is to use the <code>eventId</code> as the partition key.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct KinesisParameters {
     /// <p>The JSON path to be extracted from the event and used as the partition key. For more information, see <a href="http://docs.aws.amazon.com/streams/latest/dev/key-concepts.html#partition-key">Amazon Kinesis Streams Key Concepts</a> in the <i>Amazon Kinesis Streams Developer Guide</i>.</p>
     #[serde(rename = "PartitionKeyPath")]
     pub partition_key_path: String,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListRuleNamesByTargetRequest {
     /// <p>The maximum number of results to return.</p>
     #[serde(rename = "Limit")]
@@ -193,7 +193,7 @@ pub struct ListRuleNamesByTargetRequest {
     pub target_arn: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListRuleNamesByTargetResponse {
     /// <p>Indicates whether there are additional results to retrieve. If there are no more results, the value is null.</p>
     #[serde(rename = "NextToken")]
@@ -205,7 +205,7 @@ pub struct ListRuleNamesByTargetResponse {
     pub rule_names: Option<Vec<String>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListRulesRequest {
     /// <p>The maximum number of results to return.</p>
     #[serde(rename = "Limit")]
@@ -221,7 +221,7 @@ pub struct ListRulesRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListRulesResponse {
     /// <p>Indicates whether there are additional results to retrieve. If there are no more results, the value is null.</p>
     #[serde(rename = "NextToken")]
@@ -233,7 +233,7 @@ pub struct ListRulesResponse {
     pub rules: Option<Vec<Rule>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListTargetsByRuleRequest {
     /// <p>The maximum number of results to return.</p>
     #[serde(rename = "Limit")]
@@ -248,7 +248,7 @@ pub struct ListTargetsByRuleRequest {
     pub rule: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListTargetsByRuleResponse {
     /// <p>Indicates whether there are additional results to retrieve. If there are no more results, the value is null.</p>
     #[serde(rename = "NextToken")]
@@ -260,7 +260,7 @@ pub struct ListTargetsByRuleResponse {
     pub targets: Option<Vec<Target>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct PutEventsRequest {
     /// <p>The entry that defines an event in your system. You can specify several parameters for the entry such as the source and type of the event, resources associated with the event, and so on.</p>
     #[serde(rename = "Entries")]
@@ -268,7 +268,7 @@ pub struct PutEventsRequest {
 }
 
 /// <p>Represents an event to be submitted.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct PutEventsRequestEntry {
     /// <p>A valid JSON string. There is no other schema imposed. The JSON string may contain fields and nested subobjects.</p>
     #[serde(rename = "Detail")]
@@ -292,7 +292,7 @@ pub struct PutEventsRequestEntry {
     pub time: Option<f64>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct PutEventsResponse {
     /// <p>The successfully and unsuccessfully ingested events results. If the ingestion was successful, the entry has the event ID in it. Otherwise, you can use the error code and error message to identify the problem with the entry.</p>
     #[serde(rename = "Entries")]
@@ -305,7 +305,7 @@ pub struct PutEventsResponse {
 }
 
 /// <p>Represents an event that failed to be submitted.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct PutEventsResultEntry {
     /// <p>The error code that indicates why the event submission failed.</p>
     #[serde(rename = "ErrorCode")]
@@ -321,7 +321,7 @@ pub struct PutEventsResultEntry {
     pub event_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct PutPermissionRequest {
     /// <p>The action that you are enabling the other account to perform. Currently, this must be <code>events:PutEvents</code>.</p>
     #[serde(rename = "Action")]
@@ -334,7 +334,7 @@ pub struct PutPermissionRequest {
     pub statement_id: String,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct PutRuleRequest {
     /// <p>A description of the rule.</p>
     #[serde(rename = "Description")]
@@ -361,7 +361,7 @@ pub struct PutRuleRequest {
     pub state: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct PutRuleResponse {
     /// <p>The Amazon Resource Name (ARN) of the rule.</p>
     #[serde(rename = "RuleArn")]
@@ -369,7 +369,7 @@ pub struct PutRuleResponse {
     pub rule_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct PutTargetsRequest {
     /// <p>The name of the rule.</p>
     #[serde(rename = "Rule")]
@@ -379,7 +379,7 @@ pub struct PutTargetsRequest {
     pub targets: Vec<Target>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct PutTargetsResponse {
     /// <p>The failed target entries.</p>
     #[serde(rename = "FailedEntries")]
@@ -392,7 +392,7 @@ pub struct PutTargetsResponse {
 }
 
 /// <p>Represents a target that failed to be added to a rule.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct PutTargetsResultEntry {
     /// <p>The error code that indicates why the target addition failed. If the value is <code>ConcurrentModificationException</code>, too many requests were made at the same time.</p>
     #[serde(rename = "ErrorCode")]
@@ -408,14 +408,14 @@ pub struct PutTargetsResultEntry {
     pub target_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct RemovePermissionRequest {
     /// <p>The statement ID corresponding to the account that is no longer allowed to put events to the default event bus.</p>
     #[serde(rename = "StatementId")]
     pub statement_id: String,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct RemoveTargetsRequest {
     /// <p>The IDs of the targets to remove from the rule.</p>
     #[serde(rename = "Ids")]
@@ -425,7 +425,7 @@ pub struct RemoveTargetsRequest {
     pub rule: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct RemoveTargetsResponse {
     /// <p>The failed target entries.</p>
     #[serde(rename = "FailedEntries")]
@@ -438,7 +438,7 @@ pub struct RemoveTargetsResponse {
 }
 
 /// <p>Represents a target that failed to be removed from a rule.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct RemoveTargetsResultEntry {
     /// <p>The error code that indicates why the target removal failed. If the value is <code>ConcurrentModificationException</code>, too many requests were made at the same time.</p>
     #[serde(rename = "ErrorCode")]
@@ -455,7 +455,7 @@ pub struct RemoveTargetsResultEntry {
 }
 
 /// <p>Contains information about a rule in Amazon CloudWatch Events.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct Rule {
     /// <p>The Amazon Resource Name (ARN) of the rule.</p>
     #[serde(rename = "Arn")]
@@ -488,7 +488,7 @@ pub struct Rule {
 }
 
 /// <p>This parameter contains the criteria (either InstanceIds or a tag) used to specify which EC2 instances are to be sent the command. </p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct RunCommandParameters {
     /// <p>Currently, we support including only one RunCommandTarget block, which specifies either an array of InstanceIds or a tag.</p>
     #[serde(rename = "RunCommandTargets")]
@@ -496,7 +496,7 @@ pub struct RunCommandParameters {
 }
 
 /// <p>Information about the EC2 instances that are to be sent the command, specified as key-value pairs. Each <code>RunCommandTarget</code> block can include only one key, but this key may specify multiple values.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct RunCommandTarget {
     /// <p>Can be either <code>tag:</code> <i>tag-key</i> or <code>InstanceIds</code>.</p>
     #[serde(rename = "Key")]
@@ -507,7 +507,7 @@ pub struct RunCommandTarget {
 }
 
 /// <p>This structure includes the custom parameter to be used when the target is an SQS FIFO queue.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SqsParameters {
     /// <p>The FIFO message group ID to use as the target.</p>
     #[serde(rename = "MessageGroupId")]
@@ -516,7 +516,7 @@ pub struct SqsParameters {
 }
 
 /// <p>Targets are the resources to be invoked when a rule is triggered. Target types include EC2 instances, AWS Lambda functions, Amazon Kinesis streams, Amazon ECS tasks, AWS Step Functions state machines, Run Command, and built-in targets.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Target {
     /// <p>The Amazon Resource Name (ARN) of the target.</p>
     #[serde(rename = "Arn")]
@@ -562,7 +562,7 @@ pub struct Target {
     pub sqs_parameters: Option<SqsParameters>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct TestEventPatternRequest {
     /// <p>The event, in JSON format, to test against the event pattern.</p>
     #[serde(rename = "Event")]
@@ -572,7 +572,7 @@ pub struct TestEventPatternRequest {
     pub event_pattern: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct TestEventPatternResponse {
     /// <p>Indicates whether the event matches the event pattern.</p>
     #[serde(rename = "Result")]

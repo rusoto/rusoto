@@ -30,7 +30,7 @@ use rusoto_core::signature::SignedRequest;
 use serde_json;
 use serde_json::from_str;
 use serde_json::Value as SerdeJsonValue;
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct AcceptPortfolioShareInput {
     /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
@@ -41,11 +41,11 @@ pub struct AcceptPortfolioShareInput {
     pub portfolio_id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct AcceptPortfolioShareOutput {}
 
 /// <p>The access level to use to filter results.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct AccessLevelFilter {
     /// <p><p>The access level.</p> <ul> <li> <p> <code>Account</code> - Filter results based on the account.</p> </li> <li> <p> <code>Role</code> - Filter results based on the federated role of the specified user.</p> </li> <li> <p> <code>User</code> - Filter results based on the specified user.</p> </li> </ul></p>
     #[serde(rename = "Key")]
@@ -57,7 +57,7 @@ pub struct AccessLevelFilter {
     pub value: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct AssociatePrincipalWithPortfolioInput {
     /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
@@ -74,10 +74,10 @@ pub struct AssociatePrincipalWithPortfolioInput {
     pub principal_type: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct AssociatePrincipalWithPortfolioOutput {}
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct AssociateProductWithPortfolioInput {
     /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
@@ -95,10 +95,10 @@ pub struct AssociateProductWithPortfolioInput {
     pub source_portfolio_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct AssociateProductWithPortfolioOutput {}
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct AssociateTagOptionWithResourceInput {
     /// <p>The resource identifier.</p>
     #[serde(rename = "ResourceId")]
@@ -108,11 +108,11 @@ pub struct AssociateTagOptionWithResourceInput {
     pub tag_option_id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct AssociateTagOptionWithResourceOutput {}
 
 /// <p>Information about a CloudWatch dashboard.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CloudWatchDashboard {
     /// <p>The name of the CloudWatch dashboard.</p>
     #[serde(rename = "Name")]
@@ -121,7 +121,7 @@ pub struct CloudWatchDashboard {
 }
 
 /// <p>Information about a constraint.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ConstraintDetail {
     /// <p>The identifier of the constraint.</p>
     #[serde(rename = "ConstraintId")]
@@ -142,7 +142,7 @@ pub struct ConstraintDetail {
 }
 
 /// <p>Summary information about a constraint.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ConstraintSummary {
     /// <p>The description of the constraint.</p>
     #[serde(rename = "Description")]
@@ -154,7 +154,7 @@ pub struct ConstraintSummary {
     pub type_: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CopyProductInput {
     /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
@@ -185,7 +185,7 @@ pub struct CopyProductInput {
     pub target_product_name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CopyProductOutput {
     /// <p>The token to use to track the progress of the operation.</p>
     #[serde(rename = "CopyProductToken")]
@@ -193,7 +193,7 @@ pub struct CopyProductOutput {
     pub copy_product_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateConstraintInput {
     /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
@@ -220,7 +220,7 @@ pub struct CreateConstraintInput {
     pub type_: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CreateConstraintOutput {
     /// <p>Information about the constraint.</p>
     #[serde(rename = "ConstraintDetail")]
@@ -236,7 +236,7 @@ pub struct CreateConstraintOutput {
     pub status: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreatePortfolioInput {
     /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
@@ -261,7 +261,7 @@ pub struct CreatePortfolioInput {
     pub tags: Option<Vec<Tag>>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CreatePortfolioOutput {
     /// <p>Information about the portfolio.</p>
     #[serde(rename = "PortfolioDetail")]
@@ -273,7 +273,7 @@ pub struct CreatePortfolioOutput {
     pub tags: Option<Vec<Tag>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreatePortfolioShareInput {
     /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
@@ -287,10 +287,10 @@ pub struct CreatePortfolioShareInput {
     pub portfolio_id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CreatePortfolioShareOutput {}
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateProductInput {
     /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
@@ -337,7 +337,7 @@ pub struct CreateProductInput {
     pub tags: Option<Vec<Tag>>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CreateProductOutput {
     /// <p>Information about the product view.</p>
     #[serde(rename = "ProductViewDetail")]
@@ -353,7 +353,7 @@ pub struct CreateProductOutput {
     pub tags: Option<Vec<Tag>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateProvisionedProductPlanInput {
     /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
@@ -395,7 +395,7 @@ pub struct CreateProvisionedProductPlanInput {
     pub tags: Option<Vec<Tag>>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CreateProvisionedProductPlanOutput {
     /// <p>The plan identifier.</p>
     #[serde(rename = "PlanId")]
@@ -419,7 +419,7 @@ pub struct CreateProvisionedProductPlanOutput {
     pub provisioning_artifact_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateProvisioningArtifactInput {
     /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
@@ -436,7 +436,7 @@ pub struct CreateProvisioningArtifactInput {
     pub product_id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CreateProvisioningArtifactOutput {
     /// <p>The URL of the CloudFormation template in Amazon S3, in JSON format.</p>
     #[serde(rename = "Info")]
@@ -452,7 +452,7 @@ pub struct CreateProvisioningArtifactOutput {
     pub status: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateTagOptionInput {
     /// <p>The TagOption key.</p>
     #[serde(rename = "Key")]
@@ -462,7 +462,7 @@ pub struct CreateTagOptionInput {
     pub value: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CreateTagOptionOutput {
     /// <p>Information about the TagOption.</p>
     #[serde(rename = "TagOptionDetail")]
@@ -470,7 +470,7 @@ pub struct CreateTagOptionOutput {
     pub tag_option_detail: Option<TagOptionDetail>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteConstraintInput {
     /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
@@ -481,10 +481,10 @@ pub struct DeleteConstraintInput {
     pub id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DeleteConstraintOutput {}
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeletePortfolioInput {
     /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
@@ -495,10 +495,10 @@ pub struct DeletePortfolioInput {
     pub id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DeletePortfolioOutput {}
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeletePortfolioShareInput {
     /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
@@ -512,10 +512,10 @@ pub struct DeletePortfolioShareInput {
     pub portfolio_id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DeletePortfolioShareOutput {}
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteProductInput {
     /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
@@ -526,10 +526,10 @@ pub struct DeleteProductInput {
     pub id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DeleteProductOutput {}
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteProvisionedProductPlanInput {
     /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
@@ -544,10 +544,10 @@ pub struct DeleteProvisionedProductPlanInput {
     pub plan_id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DeleteProvisionedProductPlanOutput {}
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteProvisioningArtifactInput {
     /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
@@ -561,20 +561,20 @@ pub struct DeleteProvisioningArtifactInput {
     pub provisioning_artifact_id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DeleteProvisioningArtifactOutput {}
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteTagOptionInput {
     /// <p>The TagOption identifier.</p>
     #[serde(rename = "Id")]
     pub id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DeleteTagOptionOutput {}
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeConstraintInput {
     /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
@@ -585,7 +585,7 @@ pub struct DescribeConstraintInput {
     pub id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribeConstraintOutput {
     /// <p>Information about the constraint.</p>
     #[serde(rename = "ConstraintDetail")]
@@ -601,7 +601,7 @@ pub struct DescribeConstraintOutput {
     pub status: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeCopyProductStatusInput {
     /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
@@ -612,7 +612,7 @@ pub struct DescribeCopyProductStatusInput {
     pub copy_product_token: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribeCopyProductStatusOutput {
     /// <p>The status of the copy product operation.</p>
     #[serde(rename = "CopyProductStatus")]
@@ -628,7 +628,7 @@ pub struct DescribeCopyProductStatusOutput {
     pub target_product_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribePortfolioInput {
     /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
@@ -639,7 +639,7 @@ pub struct DescribePortfolioInput {
     pub id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribePortfolioOutput {
     /// <p>Information about the portfolio.</p>
     #[serde(rename = "PortfolioDetail")]
@@ -655,7 +655,7 @@ pub struct DescribePortfolioOutput {
     pub tags: Option<Vec<Tag>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeProductAsAdminInput {
     /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
@@ -666,7 +666,7 @@ pub struct DescribeProductAsAdminInput {
     pub id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribeProductAsAdminOutput {
     /// <p>Information about the product view.</p>
     #[serde(rename = "ProductViewDetail")]
@@ -686,7 +686,7 @@ pub struct DescribeProductAsAdminOutput {
     pub tags: Option<Vec<Tag>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeProductInput {
     /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
@@ -697,7 +697,7 @@ pub struct DescribeProductInput {
     pub id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribeProductOutput {
     /// <p>Summary information about the product view.</p>
     #[serde(rename = "ProductViewSummary")]
@@ -709,7 +709,7 @@ pub struct DescribeProductOutput {
     pub provisioning_artifacts: Option<Vec<ProvisioningArtifact>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeProductViewInput {
     /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
@@ -720,7 +720,7 @@ pub struct DescribeProductViewInput {
     pub id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribeProductViewOutput {
     /// <p>Summary information about the product.</p>
     #[serde(rename = "ProductViewSummary")]
@@ -732,7 +732,7 @@ pub struct DescribeProductViewOutput {
     pub provisioning_artifacts: Option<Vec<ProvisioningArtifact>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeProvisionedProductInput {
     /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
@@ -743,7 +743,7 @@ pub struct DescribeProvisionedProductInput {
     pub id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribeProvisionedProductOutput {
     /// <p>Any CloudWatch dashboards that were created when provisioning the product.</p>
     #[serde(rename = "CloudWatchDashboards")]
@@ -755,7 +755,7 @@ pub struct DescribeProvisionedProductOutput {
     pub provisioned_product_detail: Option<ProvisionedProductDetail>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeProvisionedProductPlanInput {
     /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
@@ -774,7 +774,7 @@ pub struct DescribeProvisionedProductPlanInput {
     pub plan_id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribeProvisionedProductPlanOutput {
     /// <p>The page token to use to retrieve the next set of results. If there are no additional results, this value is null.</p>
     #[serde(rename = "NextPageToken")]
@@ -790,7 +790,7 @@ pub struct DescribeProvisionedProductPlanOutput {
     pub resource_changes: Option<Vec<ResourceChange>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeProvisioningArtifactInput {
     /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
@@ -808,7 +808,7 @@ pub struct DescribeProvisioningArtifactInput {
     pub verbose: Option<bool>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribeProvisioningArtifactOutput {
     /// <p>The URL of the CloudFormation template in Amazon S3.</p>
     #[serde(rename = "Info")]
@@ -824,7 +824,7 @@ pub struct DescribeProvisioningArtifactOutput {
     pub status: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeProvisioningParametersInput {
     /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
@@ -842,7 +842,7 @@ pub struct DescribeProvisioningParametersInput {
     pub provisioning_artifact_id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribeProvisioningParametersOutput {
     /// <p>Information about the constraints used to provision the product.</p>
     #[serde(rename = "ConstraintSummaries")]
@@ -862,7 +862,7 @@ pub struct DescribeProvisioningParametersOutput {
     pub usage_instructions: Option<Vec<UsageInstruction>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeRecordInput {
     /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
@@ -881,7 +881,7 @@ pub struct DescribeRecordInput {
     pub page_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribeRecordOutput {
     /// <p>The page token to use to retrieve the next set of results. If there are no additional results, this value is null.</p>
     #[serde(rename = "NextPageToken")]
@@ -897,14 +897,14 @@ pub struct DescribeRecordOutput {
     pub record_outputs: Option<Vec<RecordOutput>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeTagOptionInput {
     /// <p>The TagOption identifier.</p>
     #[serde(rename = "Id")]
     pub id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribeTagOptionOutput {
     /// <p>Information about the TagOption.</p>
     #[serde(rename = "TagOptionDetail")]
@@ -912,7 +912,7 @@ pub struct DescribeTagOptionOutput {
     pub tag_option_detail: Option<TagOptionDetail>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DisassociatePrincipalFromPortfolioInput {
     /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
@@ -926,10 +926,10 @@ pub struct DisassociatePrincipalFromPortfolioInput {
     pub principal_arn: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DisassociatePrincipalFromPortfolioOutput {}
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DisassociateProductFromPortfolioInput {
     /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
@@ -943,10 +943,10 @@ pub struct DisassociateProductFromPortfolioInput {
     pub product_id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DisassociateProductFromPortfolioOutput {}
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DisassociateTagOptionFromResourceInput {
     /// <p>The resource identifier.</p>
     #[serde(rename = "ResourceId")]
@@ -956,10 +956,10 @@ pub struct DisassociateTagOptionFromResourceInput {
     pub tag_option_id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DisassociateTagOptionFromResourceOutput {}
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ExecuteProvisionedProductPlanInput {
     /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
@@ -973,7 +973,7 @@ pub struct ExecuteProvisionedProductPlanInput {
     pub plan_id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ExecuteProvisionedProductPlanOutput {
     /// <p>Information about the result of provisioning the product.</p>
     #[serde(rename = "RecordDetail")]
@@ -982,7 +982,7 @@ pub struct ExecuteProvisionedProductPlanOutput {
 }
 
 /// <p>Summary information about a product path for a user.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct LaunchPathSummary {
     /// <p>The constraints on the portfolio-product relationship.</p>
     #[serde(rename = "ConstraintSummaries")]
@@ -1002,7 +1002,7 @@ pub struct LaunchPathSummary {
     pub tags: Option<Vec<Tag>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListAcceptedPortfolioSharesInput {
     /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
@@ -1018,7 +1018,7 @@ pub struct ListAcceptedPortfolioSharesInput {
     pub page_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListAcceptedPortfolioSharesOutput {
     /// <p>The page token to use to retrieve the next set of results. If there are no additional results, this value is null.</p>
     #[serde(rename = "NextPageToken")]
@@ -1030,7 +1030,7 @@ pub struct ListAcceptedPortfolioSharesOutput {
     pub portfolio_details: Option<Vec<PortfolioDetail>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListConstraintsForPortfolioInput {
     /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
@@ -1053,7 +1053,7 @@ pub struct ListConstraintsForPortfolioInput {
     pub product_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListConstraintsForPortfolioOutput {
     /// <p>Information about the constraints.</p>
     #[serde(rename = "ConstraintDetails")]
@@ -1065,7 +1065,7 @@ pub struct ListConstraintsForPortfolioOutput {
     pub next_page_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListLaunchPathsInput {
     /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
@@ -1084,7 +1084,7 @@ pub struct ListLaunchPathsInput {
     pub product_id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListLaunchPathsOutput {
     /// <p>Information about the launch path.</p>
     #[serde(rename = "LaunchPathSummaries")]
@@ -1096,7 +1096,7 @@ pub struct ListLaunchPathsOutput {
     pub next_page_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListPortfolioAccessInput {
     /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
@@ -1107,7 +1107,7 @@ pub struct ListPortfolioAccessInput {
     pub portfolio_id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListPortfolioAccessOutput {
     /// <p>Information about the AWS accounts with access to the portfolio.</p>
     #[serde(rename = "AccountIds")]
@@ -1119,7 +1119,7 @@ pub struct ListPortfolioAccessOutput {
     pub next_page_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListPortfoliosForProductInput {
     /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
@@ -1138,7 +1138,7 @@ pub struct ListPortfoliosForProductInput {
     pub product_id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListPortfoliosForProductOutput {
     /// <p>The page token to use to retrieve the next set of results. If there are no additional results, this value is null.</p>
     #[serde(rename = "NextPageToken")]
@@ -1150,7 +1150,7 @@ pub struct ListPortfoliosForProductOutput {
     pub portfolio_details: Option<Vec<PortfolioDetail>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListPortfoliosInput {
     /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
@@ -1166,7 +1166,7 @@ pub struct ListPortfoliosInput {
     pub page_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListPortfoliosOutput {
     /// <p>The page token to use to retrieve the next set of results. If there are no additional results, this value is null.</p>
     #[serde(rename = "NextPageToken")]
@@ -1178,7 +1178,7 @@ pub struct ListPortfoliosOutput {
     pub portfolio_details: Option<Vec<PortfolioDetail>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListPrincipalsForPortfolioInput {
     /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
@@ -1197,7 +1197,7 @@ pub struct ListPrincipalsForPortfolioInput {
     pub portfolio_id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListPrincipalsForPortfolioOutput {
     /// <p>The page token to use to retrieve the next set of results. If there are no additional results, this value is null.</p>
     #[serde(rename = "NextPageToken")]
@@ -1209,7 +1209,7 @@ pub struct ListPrincipalsForPortfolioOutput {
     pub principals: Option<Vec<Principal>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListProvisionedProductPlansInput {
     /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
@@ -1233,7 +1233,7 @@ pub struct ListProvisionedProductPlansInput {
     pub provision_product_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListProvisionedProductPlansOutput {
     /// <p>The page token to use to retrieve the next set of results. If there are no additional results, this value is null.</p>
     #[serde(rename = "NextPageToken")]
@@ -1245,7 +1245,7 @@ pub struct ListProvisionedProductPlansOutput {
     pub provisioned_product_plans: Option<Vec<ProvisionedProductPlanSummary>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListProvisioningArtifactsInput {
     /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
@@ -1256,7 +1256,7 @@ pub struct ListProvisioningArtifactsInput {
     pub product_id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListProvisioningArtifactsOutput {
     /// <p>The page token to use to retrieve the next set of results. If there are no additional results, this value is null.</p>
     #[serde(rename = "NextPageToken")]
@@ -1268,7 +1268,7 @@ pub struct ListProvisioningArtifactsOutput {
     pub provisioning_artifact_details: Option<Vec<ProvisioningArtifactDetail>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListRecordHistoryInput {
     /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
@@ -1292,7 +1292,7 @@ pub struct ListRecordHistoryInput {
     pub search_filter: Option<ListRecordHistorySearchFilter>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListRecordHistoryOutput {
     /// <p>The page token to use to retrieve the next set of results. If there are no additional results, this value is null.</p>
     #[serde(rename = "NextPageToken")]
@@ -1305,7 +1305,7 @@ pub struct ListRecordHistoryOutput {
 }
 
 /// <p>The search filter to use when listing history records.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListRecordHistorySearchFilter {
     /// <p><p>The filter key.</p> <ul> <li> <p> <code>product</code> - Filter results based on the specified product identifier.</p> </li> <li> <p> <code>provisionedproduct</code> - Filter results based on the provisioned product identifier.</p> </li> </ul></p>
     #[serde(rename = "Key")]
@@ -1317,7 +1317,7 @@ pub struct ListRecordHistorySearchFilter {
     pub value: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListResourcesForTagOptionInput {
     /// <p>The maximum number of items to return with this call.</p>
     #[serde(rename = "PageSize")]
@@ -1336,7 +1336,7 @@ pub struct ListResourcesForTagOptionInput {
     pub tag_option_id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListResourcesForTagOptionOutput {
     /// <p>The page token for the next set of results. To retrieve the first set of results, use null.</p>
     #[serde(rename = "PageToken")]
@@ -1349,7 +1349,7 @@ pub struct ListResourcesForTagOptionOutput {
 }
 
 /// <p>Filters to use when listing TagOptions.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListTagOptionsFilters {
     /// <p>The active state.</p>
     #[serde(rename = "Active")]
@@ -1365,7 +1365,7 @@ pub struct ListTagOptionsFilters {
     pub value: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListTagOptionsInput {
     /// <p>The search filters. If no search filters are specified, the output includes all TagOptions.</p>
     #[serde(rename = "Filters")]
@@ -1381,7 +1381,7 @@ pub struct ListTagOptionsInput {
     pub page_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListTagOptionsOutput {
     /// <p>The page token for the next set of results. To retrieve the first set of results, use null.</p>
     #[serde(rename = "PageToken")]
@@ -1394,7 +1394,7 @@ pub struct ListTagOptionsOutput {
 }
 
 /// <p>The constraints that the administrator has put on the parameter.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ParameterConstraints {
     /// <p>The values that the administrator has allowed for the parameter.</p>
     #[serde(rename = "AllowedValues")]
@@ -1403,7 +1403,7 @@ pub struct ParameterConstraints {
 }
 
 /// <p>Information about a portfolio.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct PortfolioDetail {
     /// <p>The ARN assigned to the portfolio.</p>
     #[serde(rename = "ARN")]
@@ -1432,7 +1432,7 @@ pub struct PortfolioDetail {
 }
 
 /// <p>Information about a principal.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct Principal {
     /// <p>The ARN of the principal (IAM user, role, or group).</p>
     #[serde(rename = "PrincipalARN")]
@@ -1445,7 +1445,7 @@ pub struct Principal {
 }
 
 /// <p>A single product view aggregation value/count pair, containing metadata about each product to which the calling user has access.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ProductViewAggregationValue {
     /// <p>An approximate count of the products that match the value.</p>
     #[serde(rename = "ApproximateCount")]
@@ -1458,7 +1458,7 @@ pub struct ProductViewAggregationValue {
 }
 
 /// <p>Information about a product view.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ProductViewDetail {
     /// <p>The UTC time stamp of the creation time.</p>
     #[serde(rename = "CreatedTime")]
@@ -1479,7 +1479,7 @@ pub struct ProductViewDetail {
 }
 
 /// <p>Summary information about a product view.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ProductViewSummary {
     /// <p>The distributor of the product. Contact the product administrator for the significance of this value.</p>
     #[serde(rename = "Distributor")]
@@ -1527,7 +1527,7 @@ pub struct ProductViewSummary {
     pub type_: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ProvisionProductInput {
     /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
@@ -1563,7 +1563,7 @@ pub struct ProvisionProductInput {
     pub tags: Option<Vec<Tag>>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ProvisionProductOutput {
     /// <p>Information about the result of provisioning the product.</p>
     #[serde(rename = "RecordDetail")]
@@ -1572,7 +1572,7 @@ pub struct ProvisionProductOutput {
 }
 
 /// <p>Information about a provisioned product.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ProvisionedProductAttribute {
     /// <p>The ARN of the provisioned product.</p>
     #[serde(rename = "Arn")]
@@ -1637,7 +1637,7 @@ pub struct ProvisionedProductAttribute {
 }
 
 /// <p>Information about a provisioned product.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ProvisionedProductDetail {
     /// <p>The ARN of the provisioned product.</p>
     #[serde(rename = "Arn")]
@@ -1678,7 +1678,7 @@ pub struct ProvisionedProductDetail {
 }
 
 /// <p>Information about a plan.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ProvisionedProductPlanDetails {
     /// <p>The UTC time stamp of the creation time.</p>
     #[serde(rename = "CreatedTime")]
@@ -1743,7 +1743,7 @@ pub struct ProvisionedProductPlanDetails {
 }
 
 /// <p>Summary information about a plan.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ProvisionedProductPlanSummary {
     /// <p>The plan identifier.</p>
     #[serde(rename = "PlanId")]
@@ -1772,7 +1772,7 @@ pub struct ProvisionedProductPlanSummary {
 }
 
 /// <p>Information about a provisioning artifact. A provisioning artifact is also known as a product version.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ProvisioningArtifact {
     /// <p>The UTC time stamp of the creation time.</p>
     #[serde(rename = "CreatedTime")]
@@ -1793,7 +1793,7 @@ pub struct ProvisioningArtifact {
 }
 
 /// <p>Information about a provisioning artifact (also known as a version) for a product.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ProvisioningArtifactDetail {
     /// <p>Indicates whether the product version is active.</p>
     #[serde(rename = "Active")]
@@ -1822,7 +1822,7 @@ pub struct ProvisioningArtifactDetail {
 }
 
 /// <p>Information about a parameter used to provision a product.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ProvisioningArtifactParameter {
     /// <p>The default value.</p>
     #[serde(rename = "DefaultValue")]
@@ -1851,7 +1851,7 @@ pub struct ProvisioningArtifactParameter {
 }
 
 /// <p>Information about a provisioning artifact (also known as a version) for a product.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ProvisioningArtifactProperties {
     /// <p>The description of the provisioning artifact, including how it differs from the previous provisioning artifact.</p>
     #[serde(rename = "Description")]
@@ -1871,7 +1871,7 @@ pub struct ProvisioningArtifactProperties {
 }
 
 /// <p>Summary information about a provisioning artifact (also known as a version) for a product.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ProvisioningArtifactSummary {
     /// <p>The UTC time stamp of the creation time.</p>
     #[serde(rename = "CreatedTime")]
@@ -1896,7 +1896,7 @@ pub struct ProvisioningArtifactSummary {
 }
 
 /// <p>Information about a parameter used to provision a product.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ProvisioningParameter {
     /// <p>The parameter key.</p>
     #[serde(rename = "Key")]
@@ -1909,7 +1909,7 @@ pub struct ProvisioningParameter {
 }
 
 /// <p>Information about a request operation.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct RecordDetail {
     /// <p>The UTC time stamp of the creation time.</p>
     #[serde(rename = "CreatedTime")]
@@ -1966,7 +1966,7 @@ pub struct RecordDetail {
 }
 
 /// <p>The error code and description resulting from an operation.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct RecordError {
     /// <p>The numeric value of the error.</p>
     #[serde(rename = "Code")]
@@ -1979,7 +1979,7 @@ pub struct RecordError {
 }
 
 /// <p>The output for the product created as the result of a request. For example, the output for a CloudFormation-backed product that creates an S3 bucket would include the S3 bucket URL.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct RecordOutput {
     /// <p>The description of the output.</p>
     #[serde(rename = "Description")]
@@ -1996,7 +1996,7 @@ pub struct RecordOutput {
 }
 
 /// <p>Information about a tag, which is a key-value pair.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct RecordTag {
     /// <p>The key for this tag.</p>
     #[serde(rename = "Key")]
@@ -2008,7 +2008,7 @@ pub struct RecordTag {
     pub value: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct RejectPortfolioShareInput {
     /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
@@ -2019,11 +2019,11 @@ pub struct RejectPortfolioShareInput {
     pub portfolio_id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct RejectPortfolioShareOutput {}
 
 /// <p>Information about a resource change that will occur when a plan is executed.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ResourceChange {
     /// <p>The change action.</p>
     #[serde(rename = "Action")]
@@ -2056,7 +2056,7 @@ pub struct ResourceChange {
 }
 
 /// <p>Information about a change to a resource attribute.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ResourceChangeDetail {
     /// <p>The ID of the entity that caused the change.</p>
     #[serde(rename = "CausingEntity")]
@@ -2073,7 +2073,7 @@ pub struct ResourceChangeDetail {
 }
 
 /// <p>Information about a resource.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ResourceDetail {
     /// <p>The ARN of the resource.</p>
     #[serde(rename = "ARN")]
@@ -2098,7 +2098,7 @@ pub struct ResourceDetail {
 }
 
 /// <p>Information about a change to a resource attribute.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ResourceTargetDefinition {
     /// <p>The attribute to be changed.</p>
     #[serde(rename = "Attribute")]
@@ -2114,7 +2114,7 @@ pub struct ResourceTargetDefinition {
     pub requires_recreation: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ScanProvisionedProductsInput {
     /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
@@ -2134,7 +2134,7 @@ pub struct ScanProvisionedProductsInput {
     pub page_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ScanProvisionedProductsOutput {
     /// <p>The page token to use to retrieve the next set of results. If there are no additional results, this value is null.</p>
     #[serde(rename = "NextPageToken")]
@@ -2146,7 +2146,7 @@ pub struct ScanProvisionedProductsOutput {
     pub provisioned_products: Option<Vec<ProvisionedProductDetail>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct SearchProductsAsAdminInput {
     /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
@@ -2182,7 +2182,7 @@ pub struct SearchProductsAsAdminInput {
     pub sort_order: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct SearchProductsAsAdminOutput {
     /// <p>The page token to use to retrieve the next set of results. If there are no additional results, this value is null.</p>
     #[serde(rename = "NextPageToken")]
@@ -2194,7 +2194,7 @@ pub struct SearchProductsAsAdminOutput {
     pub product_view_details: Option<Vec<ProductViewDetail>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct SearchProductsInput {
     /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
@@ -2222,7 +2222,7 @@ pub struct SearchProductsInput {
     pub sort_order: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct SearchProductsOutput {
     /// <p>The page token to use to retrieve the next set of results. If there are no additional results, this value is null.</p>
     #[serde(rename = "NextPageToken")]
@@ -2239,7 +2239,7 @@ pub struct SearchProductsOutput {
     pub product_view_summaries: Option<Vec<ProductViewSummary>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct SearchProvisionedProductsInput {
     /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
@@ -2271,7 +2271,7 @@ pub struct SearchProvisionedProductsInput {
     pub sort_order: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct SearchProvisionedProductsOutput {
     /// <p>The page token to use to retrieve the next set of results. If there are no additional results, this value is null.</p>
     #[serde(rename = "NextPageToken")]
@@ -2288,7 +2288,7 @@ pub struct SearchProvisionedProductsOutput {
 }
 
 /// <p>Information about a tag. A tag is a key-value pair. Tags are propagated to the resources created when provisioning a product.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Tag {
     /// <p>The tag key.</p>
     #[serde(rename = "Key")]
@@ -2299,7 +2299,7 @@ pub struct Tag {
 }
 
 /// <p>Information about a TagOption.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct TagOptionDetail {
     /// <p>The TagOption active state.</p>
     #[serde(rename = "Active")]
@@ -2320,7 +2320,7 @@ pub struct TagOptionDetail {
 }
 
 /// <p>Summary information about a TagOption.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct TagOptionSummary {
     /// <p>The TagOption key.</p>
     #[serde(rename = "Key")]
@@ -2332,7 +2332,7 @@ pub struct TagOptionSummary {
     pub values: Option<Vec<String>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct TerminateProvisionedProductInput {
     /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
@@ -2355,7 +2355,7 @@ pub struct TerminateProvisionedProductInput {
     pub terminate_token: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct TerminateProvisionedProductOutput {
     /// <p>Information about the result of this request.</p>
     #[serde(rename = "RecordDetail")]
@@ -2363,7 +2363,7 @@ pub struct TerminateProvisionedProductOutput {
     pub record_detail: Option<RecordDetail>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateConstraintInput {
     /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
@@ -2378,7 +2378,7 @@ pub struct UpdateConstraintInput {
     pub id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct UpdateConstraintOutput {
     /// <p>Information about the constraint.</p>
     #[serde(rename = "ConstraintDetail")]
@@ -2394,7 +2394,7 @@ pub struct UpdateConstraintOutput {
     pub status: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdatePortfolioInput {
     /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
@@ -2425,7 +2425,7 @@ pub struct UpdatePortfolioInput {
     pub remove_tags: Option<Vec<String>>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct UpdatePortfolioOutput {
     /// <p>Information about the portfolio.</p>
     #[serde(rename = "PortfolioDetail")]
@@ -2437,7 +2437,7 @@ pub struct UpdatePortfolioOutput {
     pub tags: Option<Vec<Tag>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateProductInput {
     /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
@@ -2484,7 +2484,7 @@ pub struct UpdateProductInput {
     pub support_url: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct UpdateProductOutput {
     /// <p>Information about the product view.</p>
     #[serde(rename = "ProductViewDetail")]
@@ -2496,7 +2496,7 @@ pub struct UpdateProductOutput {
     pub tags: Option<Vec<Tag>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateProvisionedProductInput {
     /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
@@ -2531,7 +2531,7 @@ pub struct UpdateProvisionedProductInput {
     pub update_token: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct UpdateProvisionedProductOutput {
     /// <p>Information about the result of the request.</p>
     #[serde(rename = "RecordDetail")]
@@ -2539,7 +2539,7 @@ pub struct UpdateProvisionedProductOutput {
     pub record_detail: Option<RecordDetail>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateProvisioningArtifactInput {
     /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
@@ -2565,7 +2565,7 @@ pub struct UpdateProvisioningArtifactInput {
     pub provisioning_artifact_id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct UpdateProvisioningArtifactOutput {
     /// <p>The URL of the CloudFormation template in Amazon S3.</p>
     #[serde(rename = "Info")]
@@ -2582,7 +2582,7 @@ pub struct UpdateProvisioningArtifactOutput {
 }
 
 /// <p>The parameter key-value pair used to update a provisioned product.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct UpdateProvisioningParameter {
     /// <p>The parameter key.</p>
     #[serde(rename = "Key")]
@@ -2598,7 +2598,7 @@ pub struct UpdateProvisioningParameter {
     pub value: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateTagOptionInput {
     /// <p>The updated active state.</p>
     #[serde(rename = "Active")]
@@ -2613,7 +2613,7 @@ pub struct UpdateTagOptionInput {
     pub value: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct UpdateTagOptionOutput {
     /// <p>Information about the TagOption.</p>
     #[serde(rename = "TagOptionDetail")]
@@ -2622,7 +2622,7 @@ pub struct UpdateTagOptionOutput {
 }
 
 /// <p>Additional information provided by the administrator.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct UsageInstruction {
     /// <p>The usage instruction type for the value.</p>
     #[serde(rename = "Type")]

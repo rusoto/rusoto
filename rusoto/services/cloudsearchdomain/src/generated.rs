@@ -31,7 +31,7 @@ use serde_json;
 use serde_json::from_str;
 use serde_json::Value as SerdeJsonValue;
 /// <p>A container for facet information. </p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct Bucket {
     /// <p>The number of hits that contain the facet value in the specified facet field.</p>
     #[serde(rename = "count")]
@@ -44,7 +44,7 @@ pub struct Bucket {
 }
 
 /// <p>A container for the calculated facet values and counts.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct BucketInfo {
     /// <p>A list of the calculated facet values and counts.</p>
     #[serde(rename = "buckets")]
@@ -53,7 +53,7 @@ pub struct BucketInfo {
 }
 
 /// <p>A warning returned by the document service when an issue is discovered while processing an upload request.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DocumentServiceWarning {
     /// <p>The description for a warning returned by the document service.</p>
     #[serde(rename = "message")]
@@ -62,7 +62,7 @@ pub struct DocumentServiceWarning {
 }
 
 /// <p>The statistics for a field calculated in the request.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct FieldStats {
     /// <p>The number of documents that contain a value in the specified field in the result set.</p>
     #[serde(rename = "count")]
@@ -99,7 +99,7 @@ pub struct FieldStats {
 }
 
 /// <p>Information about a document that matches the search request.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct Hit {
     /// <p>The expressions returned from a document that matches the search request.</p>
     #[serde(rename = "exprs")]
@@ -120,7 +120,7 @@ pub struct Hit {
 }
 
 /// <p>The collection of documents that match the search request.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct Hits {
     /// <p>A cursor that can be used to retrieve the next set of matching documents when you want to page through a large result set.</p>
     #[serde(rename = "cursor")]
@@ -141,7 +141,7 @@ pub struct Hits {
 }
 
 /// <p>Container for the parameters to the <code>Search</code> request.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct SearchRequest {
     /// <p>Retrieves a cursor value you can use to page through large result sets. Use the <code>size</code> parameter to control the number of hits to include in each response. You can specify either the <code>cursor</code> or <code>start</code> parameter in a request; they are mutually exclusive. To get the first cursor, set the cursor value to <code>initial</code>. In subsequent requests, specify the cursor value returned in the hits section of the response. </p> <p>For more information, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/paginating-results.html">Paginating Results</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>
     #[serde(rename = "cursor")]
@@ -201,7 +201,7 @@ pub struct SearchRequest {
 }
 
 /// <p>The result of a <code>Search</code> request. Contains the documents that match the specified search criteria and any requested fields, highlights, and facet information.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct SearchResponse {
     /// <p>The requested facet information.</p>
     #[serde(rename = "facets")]
@@ -222,7 +222,7 @@ pub struct SearchResponse {
 }
 
 /// <p>Contains the resource id (<code>rid</code>) and the time it took to process the request (<code>timems</code>).</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct SearchStatus {
     /// <p>The encrypted resource ID for the request.</p>
     #[serde(rename = "rid")]
@@ -235,7 +235,7 @@ pub struct SearchStatus {
 }
 
 /// <p>Container for the suggestion information returned in a <code>SuggestResponse</code>.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct SuggestModel {
     /// <p>The number of documents that were found to match the query string.</p>
     #[serde(rename = "found")]
@@ -252,7 +252,7 @@ pub struct SuggestModel {
 }
 
 /// <p>Container for the parameters to the <code>Suggest</code> request.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct SuggestRequest {
     /// <p>Specifies the string for which you want to get suggestions.</p>
     #[serde(rename = "query")]
@@ -267,7 +267,7 @@ pub struct SuggestRequest {
 }
 
 /// <p>Contains the response to a <code>Suggest</code> request.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct SuggestResponse {
     /// <p>The status of a <code>SuggestRequest</code>. Contains the resource ID (<code>rid</code>) and how long it took to process the request (<code>timems</code>).</p>
     #[serde(rename = "status")]
@@ -280,7 +280,7 @@ pub struct SuggestResponse {
 }
 
 /// <p>Contains the resource id (<code>rid</code>) and the time it took to process the request (<code>timems</code>).</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct SuggestStatus {
     /// <p>The encrypted resource ID for the request.</p>
     #[serde(rename = "rid")]
@@ -293,7 +293,7 @@ pub struct SuggestStatus {
 }
 
 /// <p>An autocomplete suggestion that matches the query string specified in a <code>SuggestRequest</code>. </p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct SuggestionMatch {
     /// <p>The document ID of the suggested document.</p>
     #[serde(rename = "id")]
@@ -310,7 +310,7 @@ pub struct SuggestionMatch {
 }
 
 /// <p>Container for the parameters to the <code>UploadDocuments</code> request.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UploadDocumentsRequest {
     /// <p><p>The format of the batch you are uploading. Amazon CloudSearch supports two document batch formats:</p> <ul> <li>application/json</li> <li>application/xml</li> </ul></p>
     #[serde(rename = "contentType")]
@@ -326,7 +326,7 @@ pub struct UploadDocumentsRequest {
 }
 
 /// <p>Contains the response to an <code>UploadDocuments</code> request.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct UploadDocumentsResponse {
     /// <p>The number of documents that were added to the search domain.</p>
     #[serde(rename = "adds")]

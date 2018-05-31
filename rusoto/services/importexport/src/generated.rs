@@ -44,7 +44,7 @@ enum DeserializerNext {
     Element(String),
 }
 /// <p>A discrete item that contains the description and URL of an artifact (such as a PDF).</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct Artifact {
     pub description: Option<String>,
     pub url: Option<String>,
@@ -136,7 +136,7 @@ impl ArtifactListDeserializer {
     }
 }
 /// <p>Input structure for the CancelJob operation.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CancelJobInput {
     pub api_version: Option<String>,
     pub job_id: String,
@@ -165,7 +165,7 @@ impl CancelJobInputSerializer {
 }
 
 /// <p>Output structure for the CancelJob operation.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CancelJobOutput {
     pub success: Option<bool>,
 }
@@ -225,7 +225,7 @@ impl CarrierDeserializer {
     }
 }
 /// <p>Input structure for the CreateJob operation.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateJobInput {
     pub api_version: Option<String>,
     pub job_type: String,
@@ -271,7 +271,7 @@ impl CreateJobInputSerializer {
 }
 
 /// <p>Output structure for the CreateJob operation.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateJobOutput {
     pub artifact_list: Option<Vec<Artifact>>,
     pub job_id: Option<String>,
@@ -417,7 +417,7 @@ impl GenericStringDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetShippingLabelInput {
     pub api_version: Option<String>,
     pub city: Option<String>,
@@ -512,7 +512,7 @@ impl GetShippingLabelInputSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetShippingLabelOutput {
     pub shipping_label_url: Option<String>,
     pub warning: Option<String>,
@@ -565,7 +565,7 @@ impl GetShippingLabelOutputDeserializer {
     }
 }
 /// <p>Input structure for the GetStatus operation.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetStatusInput {
     pub api_version: Option<String>,
     pub job_id: String,
@@ -594,7 +594,7 @@ impl GetStatusInputSerializer {
 }
 
 /// <p>Output structure for the GetStatus operation.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetStatusOutput {
     pub artifact_list: Option<Vec<Artifact>>,
     pub carrier: Option<String>,
@@ -757,7 +757,7 @@ impl IsTruncatedDeserializer {
     }
 }
 /// <p>Representation of a job returned by the ListJobs operation.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct Job {
     pub creation_date: Option<String>,
     pub is_canceled: Option<bool>,
@@ -901,7 +901,7 @@ impl JobsListDeserializer {
     }
 }
 /// <p>Input structure for the ListJobs operation.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ListJobsInput {
     pub api_version: Option<String>,
     pub marker: Option<String>,
@@ -939,7 +939,7 @@ impl ListJobsInputSerializer {
 }
 
 /// <p>Output structure for the ListJobs operation.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ListJobsOutput {
     pub is_truncated: Option<bool>,
     pub jobs: Option<Vec<Job>>,
@@ -1145,7 +1145,7 @@ impl URLDeserializer {
     }
 }
 /// <p>Input structure for the UpateJob operation.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct UpdateJobInput {
     pub api_version: Option<String>,
     pub job_id: String,
@@ -1189,7 +1189,7 @@ impl UpdateJobInputSerializer {
 }
 
 /// <p>Output structure for the UpateJob operation.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct UpdateJobOutput {
     pub artifact_list: Option<Vec<Artifact>>,
     pub success: Option<bool>,

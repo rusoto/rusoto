@@ -30,7 +30,7 @@ use rusoto_core::signature::SignedRequest;
 use serde_json;
 use serde_json::from_str;
 use serde_json::Value as SerdeJsonValue;
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct AcceptQualificationRequestRequest {
     /// <p> The value of the Qualification. You can omit this value if you are using the presence or absence of the Qualification as the basis for a HIT requirement. </p>
     #[serde(rename = "IntegerValue")]
@@ -41,10 +41,10 @@ pub struct AcceptQualificationRequestRequest {
     pub qualification_request_id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct AcceptQualificationRequestResponse {}
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ApproveAssignmentRequest {
     /// <p> The ID of the assignment. The assignment must correspond to a HIT created by the Requester. </p>
     #[serde(rename = "AssignmentId")]
@@ -59,11 +59,11 @@ pub struct ApproveAssignmentRequest {
     pub requester_feedback: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ApproveAssignmentResponse {}
 
 /// <p> The Assignment data structure represents a single assignment of a HIT to a Worker. The assignment tracks the Worker's efforts to complete the HIT, and contains the results for later retrieval. </p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct Assignment {
     /// <p> The date and time the Worker accepted the assignment.</p>
     #[serde(rename = "AcceptTime")]
@@ -115,7 +115,7 @@ pub struct Assignment {
     pub worker_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct AssociateQualificationWithWorkerRequest {
     /// <p>The value of the Qualification to assign.</p>
     #[serde(rename = "IntegerValue")]
@@ -133,11 +133,11 @@ pub struct AssociateQualificationWithWorkerRequest {
     pub worker_id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct AssociateQualificationWithWorkerResponse {}
 
 /// <p>An object representing a Bonus payment paid to a Worker.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct BonusPayment {
     /// <p>The ID of the assignment associated with this bonus payment.</p>
     #[serde(rename = "AssignmentId")]
@@ -160,7 +160,7 @@ pub struct BonusPayment {
     pub worker_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateAdditionalAssignmentsForHITRequest {
     /// <p>The ID of the HIT to extend.</p>
     #[serde(rename = "HITId")]
@@ -174,10 +174,10 @@ pub struct CreateAdditionalAssignmentsForHITRequest {
     pub unique_request_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CreateAdditionalAssignmentsForHITResponse {}
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateHITRequest {
     /// <p> The amount of time, in seconds, that a Worker has to complete the HIT after accepting it. If a Worker does not complete the assignment within the specified duration, the assignment is considered abandoned. If the HIT is still active (that is, its lifetime has not elapsed), the assignment becomes available for other users to find and accept. </p>
     #[serde(rename = "AssignmentDurationInSeconds")]
@@ -240,7 +240,7 @@ pub struct CreateHITRequest {
     pub unique_request_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CreateHITResponse {
     /// <p> Contains the newly created HIT data. For a description of the HIT data structure as it appears in responses, see the HIT Data Structure documentation. </p>
     #[serde(rename = "HIT")]
@@ -248,7 +248,7 @@ pub struct CreateHITResponse {
     pub hit: Option<HIT>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateHITTypeRequest {
     /// <p> The amount of time, in seconds, that a Worker has to complete the HIT after accepting it. If a Worker does not complete the assignment within the specified duration, the assignment is considered abandoned. If the HIT is still active (that is, its lifetime has not elapsed), the assignment becomes available for other users to find and accept. </p>
     #[serde(rename = "AssignmentDurationInSeconds")]
@@ -276,7 +276,7 @@ pub struct CreateHITTypeRequest {
     pub title: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CreateHITTypeResponse {
     /// <p> The ID of the newly registered HIT type.</p>
     #[serde(rename = "HITTypeId")]
@@ -284,7 +284,7 @@ pub struct CreateHITTypeResponse {
     pub hit_type_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateHITWithHITTypeRequest {
     /// <p> The Assignment-level Review Policy applies to the assignments under the HIT. You can specify for Mechanical Turk to take various actions based on the policy. </p>
     #[serde(rename = "AssignmentReviewPolicy")]
@@ -326,7 +326,7 @@ pub struct CreateHITWithHITTypeRequest {
     pub unique_request_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CreateHITWithHITTypeResponse {
     /// <p> Contains the newly created HIT data. For a description of the HIT data structure as it appears in responses, see the HIT Data Structure documentation. </p>
     #[serde(rename = "HIT")]
@@ -334,7 +334,7 @@ pub struct CreateHITWithHITTypeResponse {
     pub hit: Option<HIT>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateQualificationTypeRequest {
     /// <p>The answers to the Qualification test specified in the Test parameter, in the form of an AnswerKey data structure.</p> <p>Constraints: Must not be longer than 65535 bytes.</p> <p>Constraints: None. If not specified, you must process Qualification requests manually.</p>
     #[serde(rename = "AnswerKey")]
@@ -375,7 +375,7 @@ pub struct CreateQualificationTypeRequest {
     pub test_duration_in_seconds: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CreateQualificationTypeResponse {
     /// <p>The created Qualification type, returned as a QualificationType data structure.</p>
     #[serde(rename = "QualificationType")]
@@ -383,7 +383,7 @@ pub struct CreateQualificationTypeResponse {
     pub qualification_type: Option<QualificationType>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateWorkerBlockRequest {
     /// <p>A message explaining the reason for blocking the Worker. This parameter enables you to keep track of your Workers. The Worker does not see this message.</p>
     #[serde(rename = "Reason")]
@@ -393,30 +393,30 @@ pub struct CreateWorkerBlockRequest {
     pub worker_id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CreateWorkerBlockResponse {}
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteHITRequest {
     /// <p>The ID of the HIT to be deleted.</p>
     #[serde(rename = "HITId")]
     pub hit_id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DeleteHITResponse {}
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteQualificationTypeRequest {
     /// <p>The ID of the QualificationType to dispose.</p>
     #[serde(rename = "QualificationTypeId")]
     pub qualification_type_id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DeleteQualificationTypeResponse {}
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteWorkerBlockRequest {
     /// <p>A message that explains the reason for unblocking the Worker. The Worker does not see this message.</p>
     #[serde(rename = "Reason")]
@@ -427,10 +427,10 @@ pub struct DeleteWorkerBlockRequest {
     pub worker_id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DeleteWorkerBlockResponse {}
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DisassociateQualificationFromWorkerRequest {
     /// <p>The ID of the Qualification type of the Qualification to be revoked.</p>
     #[serde(rename = "QualificationTypeId")]
@@ -444,13 +444,13 @@ pub struct DisassociateQualificationFromWorkerRequest {
     pub worker_id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DisassociateQualificationFromWorkerResponse {}
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetAccountBalanceRequest {}
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct GetAccountBalanceResponse {
     #[serde(rename = "AvailableBalance")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -460,14 +460,14 @@ pub struct GetAccountBalanceResponse {
     pub on_hold_balance: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetAssignmentRequest {
     /// <p>The ID of the Assignment to be retrieved.</p>
     #[serde(rename = "AssignmentId")]
     pub assignment_id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct GetAssignmentResponse {
     /// <p> The assignment. The response includes one Assignment element. </p>
     #[serde(rename = "Assignment")]
@@ -479,7 +479,7 @@ pub struct GetAssignmentResponse {
     pub hit: Option<HIT>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetFileUploadURLRequest {
     /// <p>The ID of the assignment that contains the question with a FileUploadAnswer.</p>
     #[serde(rename = "AssignmentId")]
@@ -489,7 +489,7 @@ pub struct GetFileUploadURLRequest {
     pub question_identifier: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct GetFileUploadURLResponse {
     /// <p> A temporary URL for the file that the Worker uploaded for the answer. </p>
     #[serde(rename = "FileUploadURL")]
@@ -497,14 +497,14 @@ pub struct GetFileUploadURLResponse {
     pub file_upload_url: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetHITRequest {
     /// <p>The ID of the HIT to be retrieved.</p>
     #[serde(rename = "HITId")]
     pub hit_id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct GetHITResponse {
     /// <p> Contains the requested HIT data.</p>
     #[serde(rename = "HIT")]
@@ -512,7 +512,7 @@ pub struct GetHITResponse {
     pub hit: Option<HIT>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetQualificationScoreRequest {
     /// <p>The ID of the QualificationType.</p>
     #[serde(rename = "QualificationTypeId")]
@@ -522,7 +522,7 @@ pub struct GetQualificationScoreRequest {
     pub worker_id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct GetQualificationScoreResponse {
     /// <p> The Qualification data structure of the Qualification assigned to a user, including the Qualification type and the value (score). </p>
     #[serde(rename = "Qualification")]
@@ -530,14 +530,14 @@ pub struct GetQualificationScoreResponse {
     pub qualification: Option<Qualification>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetQualificationTypeRequest {
     /// <p>The ID of the QualificationType.</p>
     #[serde(rename = "QualificationTypeId")]
     pub qualification_type_id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct GetQualificationTypeResponse {
     /// <p> The returned Qualification Type</p>
     #[serde(rename = "QualificationType")]
@@ -546,7 +546,7 @@ pub struct GetQualificationTypeResponse {
 }
 
 /// <p> The HIT data structure represents a single HIT, including all the information necessary for a Worker to accept and complete the HIT.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct HIT {
     /// <p> The length of time, in seconds, that a Worker has to complete the HIT after accepting it.</p>
     #[serde(rename = "AssignmentDurationInSeconds")]
@@ -634,7 +634,7 @@ pub struct HIT {
 }
 
 /// <p> The HITLayoutParameter data structure defines parameter values used with a HITLayout. A HITLayout is a reusable Amazon Mechanical Turk project template used to provide Human Intelligence Task (HIT) question data for CreateHIT. </p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct HITLayoutParameter {
     /// <p> The name of the parameter in the HITLayout. </p>
     #[serde(rename = "Name")]
@@ -644,7 +644,7 @@ pub struct HITLayoutParameter {
     pub value: String,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListAssignmentsForHITRequest {
     /// <p>The status of the assignments to return: Submitted | Approved | Rejected</p>
     #[serde(rename = "AssignmentStatuses")]
@@ -662,7 +662,7 @@ pub struct ListAssignmentsForHITRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListAssignmentsForHITResponse {
     /// <p> The collection of Assignment data structures returned by this call.</p>
     #[serde(rename = "Assignments")]
@@ -677,7 +677,7 @@ pub struct ListAssignmentsForHITResponse {
     pub num_results: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListBonusPaymentsRequest {
     /// <p>The ID of the assignment associated with the bonus payments to retrieve. If specified, only bonus payments for the given assignment are returned. Either the HITId parameter or the AssignmentId parameter must be specified</p>
     #[serde(rename = "AssignmentId")]
@@ -696,7 +696,7 @@ pub struct ListBonusPaymentsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListBonusPaymentsResponse {
     /// <p>A successful request to the ListBonusPayments operation returns a list of BonusPayment objects. </p>
     #[serde(rename = "BonusPayments")]
@@ -711,7 +711,7 @@ pub struct ListBonusPaymentsResponse {
     pub num_results: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListHITsForQualificationTypeRequest {
     /// <p> Limit the number of results returned. </p>
     #[serde(rename = "MaxResults")]
@@ -726,7 +726,7 @@ pub struct ListHITsForQualificationTypeRequest {
     pub qualification_type_id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListHITsForQualificationTypeResponse {
     /// <p> The list of HIT elements returned by the query.</p>
     #[serde(rename = "HITs")]
@@ -741,7 +741,7 @@ pub struct ListHITsForQualificationTypeResponse {
     pub num_results: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListHITsRequest {
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -752,7 +752,7 @@ pub struct ListHITsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListHITsResponse {
     /// <p> The list of HIT elements returned by the query.</p>
     #[serde(rename = "HITs")]
@@ -767,7 +767,7 @@ pub struct ListHITsResponse {
     pub num_results: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListQualificationRequestsRequest {
     /// <p> The maximum number of results to return in a single call. </p>
     #[serde(rename = "MaxResults")]
@@ -782,7 +782,7 @@ pub struct ListQualificationRequestsRequest {
     pub qualification_type_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListQualificationRequestsResponse {
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -797,7 +797,7 @@ pub struct ListQualificationRequestsResponse {
     pub qualification_requests: Option<Vec<QualificationRequest>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListQualificationTypesRequest {
     /// <p> The maximum number of results to return in a single call. </p>
     #[serde(rename = "MaxResults")]
@@ -819,7 +819,7 @@ pub struct ListQualificationTypesRequest {
     pub query: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListQualificationTypesResponse {
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -834,7 +834,7 @@ pub struct ListQualificationTypesResponse {
     pub qualification_types: Option<Vec<QualificationType>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListReviewPolicyResultsForHITRequest {
     /// <p>The unique identifier of the HIT to retrieve review results for.</p>
     #[serde(rename = "HITId")]
@@ -861,7 +861,7 @@ pub struct ListReviewPolicyResultsForHITRequest {
     pub retrieve_results: Option<bool>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListReviewPolicyResultsForHITResponse {
     /// <p> The name of the Assignment-level Review Policy. This contains only the PolicyName element. </p>
     #[serde(rename = "AssignmentReviewPolicy")]
@@ -888,7 +888,7 @@ pub struct ListReviewPolicyResultsForHITResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListReviewableHITsRequest {
     /// <p> The ID of the HIT type of the HITs to consider for the query. If not specified, all HITs for the Reviewer are considered </p>
     #[serde(rename = "HITTypeId")]
@@ -908,7 +908,7 @@ pub struct ListReviewableHITsRequest {
     pub status: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListReviewableHITsResponse {
     /// <p> The list of HIT elements returned by the query.</p>
     #[serde(rename = "HITs")]
@@ -923,7 +923,7 @@ pub struct ListReviewableHITsResponse {
     pub num_results: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListWorkerBlocksRequest {
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -934,7 +934,7 @@ pub struct ListWorkerBlocksRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListWorkerBlocksResponse {
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -949,7 +949,7 @@ pub struct ListWorkerBlocksResponse {
     pub worker_blocks: Option<Vec<WorkerBlock>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListWorkersWithQualificationTypeRequest {
     /// <p> Limit the number of results returned. </p>
     #[serde(rename = "MaxResults")]
@@ -968,7 +968,7 @@ pub struct ListWorkersWithQualificationTypeRequest {
     pub status: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListWorkersWithQualificationTypeResponse {
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -984,7 +984,7 @@ pub struct ListWorkersWithQualificationTypeResponse {
 }
 
 /// <p>The Locale data structure represents a geographical region or location.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Locale {
     /// <p> The country of the locale. Must be a valid ISO 3166 country code. For example, the code US refers to the United States of America. </p>
     #[serde(rename = "Country")]
@@ -996,7 +996,7 @@ pub struct Locale {
 }
 
 /// <p>The NotificationSpecification data structure describes a HIT event notification for a HIT type.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct NotificationSpecification {
     /// <p><p> The target for notification messages. The Destination’s format is determined by the specified Transport: </p> <ul> <li> <p>When Transport is Email, the Destination is your email address.</p> </li> <li> <p>When Transport is SQS, the Destination is your queue URL.</p> </li> <li> <p>When Transport is SNS, the Destination is the ARN of your topic.</p> </li> </ul></p>
     #[serde(rename = "Destination")]
@@ -1013,7 +1013,7 @@ pub struct NotificationSpecification {
 }
 
 /// <p> When MTurk encounters an issue with notifying the Workers you specified, it returns back this object with failure details. </p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct NotifyWorkersFailureStatus {
     /// <p> Encoded value for the failure type. </p>
     #[serde(rename = "NotifyWorkersFailureCode")]
@@ -1029,7 +1029,7 @@ pub struct NotifyWorkersFailureStatus {
     pub worker_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct NotifyWorkersRequest {
     /// <p>The text of the email message to send. Can include up to 4,096 characters</p>
     #[serde(rename = "MessageText")]
@@ -1042,7 +1042,7 @@ pub struct NotifyWorkersRequest {
     pub worker_ids: Vec<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct NotifyWorkersResponse {
     /// <p> When MTurk sends notifications to the list of Workers, it returns back any failures it encounters in this list of NotifyWorkersFailureStatus objects. </p>
     #[serde(rename = "NotifyWorkersFailureStatuses")]
@@ -1051,7 +1051,7 @@ pub struct NotifyWorkersResponse {
 }
 
 /// <p> This data structure is the data type for the AnswerKey parameter of the ScoreMyKnownAnswers/2011-09-01 Review Policy. </p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ParameterMapEntry {
     /// <p> The QuestionID from the HIT that is used to identify which question requires Mechanical Turk to score as part of the ScoreMyKnownAnswers/2011-09-01 Review Policy. </p>
     #[serde(rename = "Key")]
@@ -1064,7 +1064,7 @@ pub struct ParameterMapEntry {
 }
 
 /// <p> Name of the parameter from the Review policy. </p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct PolicyParameter {
     /// <p> Name of the parameter from the list of Review Polices. </p>
     #[serde(rename = "Key")]
@@ -1081,7 +1081,7 @@ pub struct PolicyParameter {
 }
 
 /// <p>The Qualification data structure represents a Qualification assigned to a user, including the Qualification type and the value (score).</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct Qualification {
     /// <p> The date and time the Qualification was granted to the Worker. If the Worker's Qualification was revoked, and then re-granted based on a new Qualification request, GrantTime is the date and time of the last call to the AcceptQualificationRequest operation.</p>
     #[serde(rename = "GrantTime")]
@@ -1109,7 +1109,7 @@ pub struct Qualification {
 }
 
 /// <p> The QualificationRequest data structure represents a request a Worker has made for a Qualification. </p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct QualificationRequest {
     /// <p> The Worker's answers for the Qualification type's test contained in a QuestionFormAnswers document, if the type has a test and the Worker has submitted answers. If the Worker does not provide any answers, Answer may be empty. </p>
     #[serde(rename = "Answer")]
@@ -1138,7 +1138,7 @@ pub struct QualificationRequest {
 }
 
 /// <p> The QualificationRequirement data structure describes a Qualification that a Worker must have before the Worker is allowed to accept a HIT. A requirement may optionally state that a Worker must have the Qualification in order to preview the HIT, or see the HIT in search results. </p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct QualificationRequirement {
     /// <p> Setting this attribute prevents Workers whose Qualifications do not meet this QualificationRequirement from taking the specified action. Valid arguments include "Accept" (Worker cannot accept the HIT, but can preview the HIT and see it in their search results), "PreviewAndAccept" (Worker cannot accept or preview the HIT, but can see the HIT in their search results), and "DiscoverPreviewAndAccept" (Worker cannot accept, preview, or see the HIT in their search results). It's possible for you to create a HIT with multiple QualificationRequirements (which can have different values for the ActionGuarded attribute). In this case, the Worker is only permitted to perform an action when they have met all QualificationRequirements guarding the action. The actions in the order of least restrictive to most restrictive are Discover, Preview and Accept. For example, if a Worker meets all QualificationRequirements that are set to DiscoverPreviewAndAccept, but do not meet all requirements that are set with PreviewAndAccept, then the Worker will be able to Discover, i.e. see the HIT in their search result, but will not be able to Preview or Accept the HIT. ActionsGuarded should not be used in combination with the <code>RequiredToPreview</code> field. </p>
     #[serde(rename = "ActionsGuarded")]
@@ -1161,7 +1161,7 @@ pub struct QualificationRequirement {
 }
 
 /// <p> The QualificationType data structure represents a Qualification type, a description of a property of a Worker that must match the requirements of a HIT for the Worker to be able to accept the HIT. The type also describes how a Worker can obtain a Qualification of that type, such as through a Qualification test. </p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct QualificationType {
     /// <p>The answers to the Qualification test specified in the Test parameter.</p>
     #[serde(rename = "AnswerKey")]
@@ -1217,7 +1217,7 @@ pub struct QualificationType {
     pub test_duration_in_seconds: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct RejectAssignmentRequest {
     /// <p> The ID of the assignment. The assignment must correspond to a HIT created by the Requester. </p>
     #[serde(rename = "AssignmentId")]
@@ -1227,10 +1227,10 @@ pub struct RejectAssignmentRequest {
     pub requester_feedback: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct RejectAssignmentResponse {}
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct RejectQualificationRequestRequest {
     /// <p> The ID of the Qualification request, as returned by the <code>ListQualificationRequests</code> operation. </p>
     #[serde(rename = "QualificationRequestId")]
@@ -1241,11 +1241,11 @@ pub struct RejectQualificationRequestRequest {
     pub reason: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct RejectQualificationRequestResponse {}
 
 /// <p> Both the AssignmentReviewReport and the HITReviewReport elements contains the ReviewActionDetail data structure. This structure is returned multiple times for each action specified in the Review Policy. </p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ReviewActionDetail {
     /// <p>The unique identifier for the action.</p>
     #[serde(rename = "ActionId")]
@@ -1282,7 +1282,7 @@ pub struct ReviewActionDetail {
 }
 
 /// <p> HIT Review Policy data structures represent HIT review policies, which you specify when you create a HIT. </p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ReviewPolicy {
     /// <p>Name of the parameter from the Review policy.</p>
     #[serde(rename = "Parameters")]
@@ -1294,7 +1294,7 @@ pub struct ReviewPolicy {
 }
 
 /// <p> Contains both ReviewResult and ReviewAction elements for a particular HIT. </p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ReviewReport {
     /// <p> A list of ReviewAction objects for each action specified in the Review Policy. </p>
     #[serde(rename = "ReviewActions")]
@@ -1307,7 +1307,7 @@ pub struct ReviewReport {
 }
 
 /// <p> This data structure is returned multiple times for each result specified in the Review Policy. </p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ReviewResultDetail {
     /// <p> A unique identifier of the Review action result. </p>
     #[serde(rename = "ActionId")]
@@ -1335,7 +1335,7 @@ pub struct ReviewResultDetail {
     pub value: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct SendBonusRequest {
     /// <p>The ID of the assignment for which this bonus is paid.</p>
     #[serde(rename = "AssignmentId")]
@@ -1355,10 +1355,10 @@ pub struct SendBonusRequest {
     pub worker_id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct SendBonusResponse {}
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct SendTestEventNotificationRequest {
     /// <p> The notification specification to test. This value is identical to the value you would provide to the UpdateNotificationSettings operation when you establish the notification specification for a HIT type. </p>
     #[serde(rename = "Notification")]
@@ -1368,10 +1368,10 @@ pub struct SendTestEventNotificationRequest {
     pub test_event_type: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct SendTestEventNotificationResponse {}
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateExpirationForHITRequest {
     /// <p> The date and time at which you want the HIT to expire </p>
     #[serde(rename = "ExpireAt")]
@@ -1381,10 +1381,10 @@ pub struct UpdateExpirationForHITRequest {
     pub hit_id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct UpdateExpirationForHITResponse {}
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateHITReviewStatusRequest {
     /// <p> The ID of the HIT to update. </p>
     #[serde(rename = "HITId")]
@@ -1395,10 +1395,10 @@ pub struct UpdateHITReviewStatusRequest {
     pub revert: Option<bool>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct UpdateHITReviewStatusResponse {}
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateHITTypeOfHITRequest {
     /// <p>The HIT to update.</p>
     #[serde(rename = "HITId")]
@@ -1408,10 +1408,10 @@ pub struct UpdateHITTypeOfHITRequest {
     pub hit_type_id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct UpdateHITTypeOfHITResponse {}
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateNotificationSettingsRequest {
     /// <p> Specifies whether notifications are sent for HITs of this HIT type, according to the notification specification. You must specify either the Notification parameter or the Active parameter for the call to UpdateNotificationSettings to succeed. </p>
     #[serde(rename = "Active")]
@@ -1426,10 +1426,10 @@ pub struct UpdateNotificationSettingsRequest {
     pub notification: Option<NotificationSpecification>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct UpdateNotificationSettingsResponse {}
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateQualificationTypeRequest {
     /// <p>The answers to the Qualification test specified in the Test parameter, in the form of an AnswerKey data structure.</p>
     #[serde(rename = "AnswerKey")]
@@ -1468,7 +1468,7 @@ pub struct UpdateQualificationTypeRequest {
     pub test_duration_in_seconds: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct UpdateQualificationTypeResponse {
     /// <p> Contains a QualificationType data structure.</p>
     #[serde(rename = "QualificationType")]
@@ -1477,7 +1477,7 @@ pub struct UpdateQualificationTypeResponse {
 }
 
 /// <p> The WorkerBlock data structure represents a Worker who has been blocked. It has two elements: the WorkerId and the Reason for the block. </p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct WorkerBlock {
     /// <p> A message explaining the reason the Worker was blocked. </p>
     #[serde(rename = "Reason")]

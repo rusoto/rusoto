@@ -44,7 +44,7 @@ enum DeserializerNext {
     Element(String),
 }
 /// <p>Information about an action.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct Action {
     /// <p>The Amazon Resource Name (ARN) of the target group.</p>
     pub target_group_arn: String,
@@ -184,7 +184,7 @@ impl ActionsSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct AddListenerCertificatesInput {
     /// <p>The certificate to add. You can specify one certificate per call.</p>
     pub certificates: Vec<Certificate>,
@@ -213,7 +213,7 @@ impl AddListenerCertificatesInputSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct AddListenerCertificatesOutput {
     /// <p>Information about the certificates.</p>
     pub certificates: Option<Vec<Certificate>>,
@@ -261,7 +261,7 @@ impl AddListenerCertificatesOutputDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct AddTagsInput {
     /// <p>The Amazon Resource Name (ARN) of the resource.</p>
     pub resource_arns: Vec<String>,
@@ -287,7 +287,7 @@ impl AddTagsInputSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct AddTagsOutput {}
 
 struct AddTagsOutputDeserializer;
@@ -321,7 +321,7 @@ impl AllocationIdDeserializer {
     }
 }
 /// <p>Information about an Availability Zone.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct AvailabilityZone {
     /// <p>[Network Load Balancers] The static IP address.</p>
     pub load_balancer_addresses: Option<Vec<LoadBalancerAddress>>,
@@ -439,7 +439,7 @@ impl CanonicalHostedZoneIdDeserializer {
     }
 }
 /// <p>Information about an SSL server certificate.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct Certificate {
     /// <p>The Amazon Resource Name (ARN) of the certificate.</p>
     pub certificate_arn: Option<String>,
@@ -585,7 +585,7 @@ impl CertificateListSerializer {
 }
 
 /// <p>Information about a cipher used in a policy.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct Cipher {
     /// <p>The name of the cipher.</p>
     pub name: Option<String>,
@@ -719,7 +719,7 @@ impl ConditionFieldNameDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateListenerInput {
     /// <p>[HTTPS listeners] The SSL server certificate. You must provide exactly one certificate.</p>
     pub certificates: Option<Vec<Certificate>>,
@@ -777,7 +777,7 @@ impl CreateListenerInputSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateListenerOutput {
     /// <p>Information about the listener.</p>
     pub listeners: Option<Vec<Listener>>,
@@ -823,7 +823,7 @@ impl CreateListenerOutputDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateLoadBalancerInput {
     /// <p>[Application Load Balancers] The type of IP addresses used by the subnets for your load balancer. The possible values are <code>ipv4</code> (for IPv4 addresses) and <code>dualstack</code> (for IPv4 and IPv6 addresses). Internal load balancers must use <code>ipv4</code>.</p>
     pub ip_address_type: Option<String>,
@@ -897,7 +897,7 @@ impl CreateLoadBalancerInputSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateLoadBalancerOutput {
     /// <p>Information about the load balancer.</p>
     pub load_balancers: Option<Vec<LoadBalancer>>,
@@ -945,7 +945,7 @@ impl CreateLoadBalancerOutputDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateRuleInput {
     /// <p>An action. Each action has the type <code>forward</code> and specifies a target group.</p>
     pub actions: Vec<Action>,
@@ -983,7 +983,7 @@ impl CreateRuleInputSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateRuleOutput {
     /// <p>Information about the rule.</p>
     pub rules: Option<Vec<Rule>>,
@@ -1028,7 +1028,7 @@ impl CreateRuleOutputDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateTargetGroupInput {
     /// <p>The approximate amount of time, in seconds, between health checks of an individual target. For Application Load Balancers, the range is 5 to 300 seconds. For Network Load Balancers, the supported values are 10 or 30 seconds. The default is 30 seconds.</p>
     pub health_check_interval_seconds: Option<i64>,
@@ -1137,7 +1137,7 @@ impl CreateTargetGroupInputSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateTargetGroupOutput {
     /// <p>Information about the target group.</p>
     pub target_groups: Option<Vec<TargetGroup>>,
@@ -1227,7 +1227,7 @@ impl DefaultDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteListenerInput {
     /// <p>The Amazon Resource Name (ARN) of the listener.</p>
     pub listener_arn: String,
@@ -1249,7 +1249,7 @@ impl DeleteListenerInputSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteListenerOutput {}
 
 struct DeleteListenerOutputDeserializer;
@@ -1268,7 +1268,7 @@ impl DeleteListenerOutputDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteLoadBalancerInput {
     /// <p>The Amazon Resource Name (ARN) of the load balancer.</p>
     pub load_balancer_arn: String,
@@ -1290,7 +1290,7 @@ impl DeleteLoadBalancerInputSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteLoadBalancerOutput {}
 
 struct DeleteLoadBalancerOutputDeserializer;
@@ -1309,7 +1309,7 @@ impl DeleteLoadBalancerOutputDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteRuleInput {
     /// <p>The Amazon Resource Name (ARN) of the rule.</p>
     pub rule_arn: String,
@@ -1331,7 +1331,7 @@ impl DeleteRuleInputSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteRuleOutput {}
 
 struct DeleteRuleOutputDeserializer;
@@ -1350,7 +1350,7 @@ impl DeleteRuleOutputDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteTargetGroupInput {
     /// <p>The Amazon Resource Name (ARN) of the target group.</p>
     pub target_group_arn: String,
@@ -1372,7 +1372,7 @@ impl DeleteTargetGroupInputSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteTargetGroupOutput {}
 
 struct DeleteTargetGroupOutputDeserializer;
@@ -1391,7 +1391,7 @@ impl DeleteTargetGroupOutputDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeregisterTargetsInput {
     /// <p>The Amazon Resource Name (ARN) of the target group.</p>
     pub target_group_arn: String,
@@ -1420,7 +1420,7 @@ impl DeregisterTargetsInputSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeregisterTargetsOutput {}
 
 struct DeregisterTargetsOutputDeserializer;
@@ -1439,7 +1439,7 @@ impl DeregisterTargetsOutputDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeAccountLimitsInput {
     /// <p>The marker for the next set of results. (You received this marker from a previous call.)</p>
     pub marker: Option<String>,
@@ -1471,7 +1471,7 @@ impl DescribeAccountLimitsInputSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeAccountLimitsOutput {
     /// <p>Information about the limits.</p>
     pub limits: Option<Vec<Limit>>,
@@ -1522,7 +1522,7 @@ impl DescribeAccountLimitsOutputDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeListenerCertificatesInput {
     /// <p>The Amazon Resource Names (ARN) of the listener.</p>
     pub listener_arn: String,
@@ -1560,7 +1560,7 @@ impl DescribeListenerCertificatesInputSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeListenerCertificatesOutput {
     /// <p>Information about the certificates.</p>
     pub certificates: Option<Vec<Certificate>>,
@@ -1614,7 +1614,7 @@ impl DescribeListenerCertificatesOutputDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeListenersInput {
     /// <p>The Amazon Resource Names (ARN) of the listeners.</p>
     pub listener_arns: Option<Vec<String>>,
@@ -1663,7 +1663,7 @@ impl DescribeListenersInputSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeListenersOutput {
     /// <p>Information about the listeners.</p>
     pub listeners: Option<Vec<Listener>>,
@@ -1715,7 +1715,7 @@ impl DescribeListenersOutputDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeLoadBalancerAttributesInput {
     /// <p>The Amazon Resource Name (ARN) of the load balancer.</p>
     pub load_balancer_arn: String,
@@ -1737,7 +1737,7 @@ impl DescribeLoadBalancerAttributesInputSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeLoadBalancerAttributesOutput {
     /// <p>Information about the load balancer attributes.</p>
     pub attributes: Option<Vec<LoadBalancerAttribute>>,
@@ -1784,7 +1784,7 @@ impl DescribeLoadBalancerAttributesOutputDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeLoadBalancersInput {
     /// <p>The Amazon Resource Names (ARN) of the load balancers. You can specify up to 20 load balancers in a single call.</p>
     pub load_balancer_arns: Option<Vec<String>>,
@@ -1834,7 +1834,7 @@ impl DescribeLoadBalancersInputSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeLoadBalancersOutput {
     /// <p>Information about the load balancers.</p>
     pub load_balancers: Option<Vec<LoadBalancer>>,
@@ -1888,7 +1888,7 @@ impl DescribeLoadBalancersOutputDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeRulesInput {
     /// <p>The Amazon Resource Name (ARN) of the listener.</p>
     pub listener_arn: Option<String>,
@@ -1937,7 +1937,7 @@ impl DescribeRulesInputSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeRulesOutput {
     /// <p>The marker to use when requesting the next set of results. If there are no additional results, the string is empty.</p>
     pub next_marker: Option<String>,
@@ -1988,7 +1988,7 @@ impl DescribeRulesOutputDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeSSLPoliciesInput {
     /// <p>The marker for the next set of results. (You received this marker from a previous call.)</p>
     pub marker: Option<String>,
@@ -2029,7 +2029,7 @@ impl DescribeSSLPoliciesInputSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeSSLPoliciesOutput {
     /// <p>The marker to use when requesting the next set of results. If there are no additional results, the string is empty.</p>
     pub next_marker: Option<String>,
@@ -2083,7 +2083,7 @@ impl DescribeSSLPoliciesOutputDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeTagsInput {
     /// <p>The Amazon Resource Names (ARN) of the resources.</p>
     pub resource_arns: Vec<String>,
@@ -2106,7 +2106,7 @@ impl DescribeTagsInputSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeTagsOutput {
     /// <p>Information about the tags.</p>
     pub tag_descriptions: Option<Vec<TagDescription>>,
@@ -2153,7 +2153,7 @@ impl DescribeTagsOutputDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeTargetGroupAttributesInput {
     /// <p>The Amazon Resource Name (ARN) of the target group.</p>
     pub target_group_arn: String,
@@ -2175,7 +2175,7 @@ impl DescribeTargetGroupAttributesInputSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeTargetGroupAttributesOutput {
     /// <p>Information about the target group attributes</p>
     pub attributes: Option<Vec<TargetGroupAttribute>>,
@@ -2222,7 +2222,7 @@ impl DescribeTargetGroupAttributesOutputDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeTargetGroupsInput {
     /// <p>The Amazon Resource Name (ARN) of the load balancer.</p>
     pub load_balancer_arn: Option<String>,
@@ -2280,7 +2280,7 @@ impl DescribeTargetGroupsInputSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeTargetGroupsOutput {
     /// <p>The marker to use when requesting the next set of results. If there are no additional results, the string is empty.</p>
     pub next_marker: Option<String>,
@@ -2334,7 +2334,7 @@ impl DescribeTargetGroupsOutputDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeTargetHealthInput {
     /// <p>The Amazon Resource Name (ARN) of the target group.</p>
     pub target_group_arn: String,
@@ -2365,7 +2365,7 @@ impl DescribeTargetHealthInputSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeTargetHealthOutput {
     /// <p>Information about the health of the targets.</p>
     pub target_health_descriptions: Option<Vec<TargetHealthDescription>>,
@@ -2541,7 +2541,7 @@ impl IsDefaultDeserializer {
     }
 }
 /// <p>Information about an Elastic Load Balancing resource limit for your AWS account.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct Limit {
     /// <p>The maximum value of the limit.</p>
     pub max: Option<String>,
@@ -2684,7 +2684,7 @@ impl ListOfStringSerializer {
 }
 
 /// <p>Information about a listener.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct Listener {
     /// <p>The SSL server certificate. You must provide a certificate if the protocol is HTTPS.</p>
     pub certificates: Option<Vec<Certificate>>,
@@ -2842,7 +2842,7 @@ impl ListenersDeserializer {
     }
 }
 /// <p>Information about a load balancer.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct LoadBalancer {
     /// <p>The Availability Zones for the load balancer.</p>
     pub availability_zones: Option<Vec<AvailabilityZone>>,
@@ -2969,7 +2969,7 @@ impl LoadBalancerDeserializer {
     }
 }
 /// <p>Information about a static IP address for a load balancer.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct LoadBalancerAddress {
     /// <p>[Network Load Balancers] The allocation ID of the Elastic IP address.</p>
     pub allocation_id: Option<String>,
@@ -3134,7 +3134,7 @@ impl LoadBalancerArnsSerializer {
 }
 
 /// <p>Information about a load balancer attribute.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct LoadBalancerAttribute {
     /// <p><p>The name of the attribute.</p> <ul> <li> <p> <code>access<em>logs.s3.enabled</code> - [Application Load Balancers] Indicates whether access logs stored in Amazon S3 are enabled. The value is <code>true</code> or <code>false</code>.</p> </li> <li> <p> <code>access</em>logs.s3.bucket</code> - [Application Load Balancers] The name of the S3 bucket for the access logs. This attribute is required if access logs in Amazon S3 are enabled. The bucket must exist in the same region as the load balancer and have a bucket policy that grants Elastic Load Balancing permission to write to the bucket.</p> </li> <li> <p> <code>access<em>logs.s3.prefix</code> - [Application Load Balancers] The prefix for the location in the S3 bucket. If you don&#39;t specify a prefix, the access logs are stored in the root of the bucket.</p> </li> <li> <p> <code>deletion</em>protection.enabled</code> - Indicates whether deletion protection is enabled. The value is <code>true</code> or <code>false</code>.</p> </li> <li> <p> <code>idle<em>timeout.timeout</em>seconds</code> - [Application Load Balancers] The idle timeout value, in seconds. The valid range is 1-4000. The default is 60 seconds.</p> </li> <li> <p> <code>load<em>balancing.cross</em>zone.enabled</code> - [Network Load Balancers] Indicates whether cross-zone load balancing is enabled. The value is <code>true</code> or <code>false</code>. The default is <code>false</code>.</p> </li> <li> <p> <code>routing.http2.enabled</code> - [Application Load Balancers] Indicates whether HTTP/2 is enabled. The value is <code>true</code> or <code>false</code>. The default is <code>true</code>.</p> </li> </ul></p>
     pub key: Option<String>,
@@ -3336,7 +3336,7 @@ impl LoadBalancerSchemeEnumDeserializer {
     }
 }
 /// <p>Information about the state of the load balancer.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct LoadBalancerState {
     /// <p>The state code. The initial state of the load balancer is <code>provisioning</code>. After the load balancer is fully set up and ready to route traffic, its state is <code>active</code>. If the load balancer could not be set up, its state is <code>failed</code>.</p>
     pub code: Option<String>,
@@ -3472,7 +3472,7 @@ impl MarkerDeserializer {
     }
 }
 /// <p>Information to use when checking for a successful response from a target.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct Matcher {
     /// <p>The HTTP codes.</p> <p>For Application Load Balancers, you can specify values between 200 and 499, and the default value is 200. You can specify multiple values (for example, "200,202") or a range of values (for example, "200-299").</p> <p>For Network Load Balancers, this is 200 to 399.</p>
     pub http_code: String,
@@ -3548,7 +3548,7 @@ impl MaxDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ModifyListenerInput {
     /// <p>The default SSL server certificate.</p>
     pub certificates: Option<Vec<Certificate>>,
@@ -3612,7 +3612,7 @@ impl ModifyListenerInputSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ModifyListenerOutput {
     /// <p>Information about the modified listeners.</p>
     pub listeners: Option<Vec<Listener>>,
@@ -3658,7 +3658,7 @@ impl ModifyListenerOutputDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ModifyLoadBalancerAttributesInput {
     /// <p>The load balancer attributes.</p>
     pub attributes: Vec<LoadBalancerAttribute>,
@@ -3687,7 +3687,7 @@ impl ModifyLoadBalancerAttributesInputSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ModifyLoadBalancerAttributesOutput {
     /// <p>Information about the load balancer attributes.</p>
     pub attributes: Option<Vec<LoadBalancerAttribute>>,
@@ -3734,7 +3734,7 @@ impl ModifyLoadBalancerAttributesOutputDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ModifyRuleInput {
     /// <p>The actions. The target group must use the HTTP or HTTPS protocol.</p>
     pub actions: Option<Vec<Action>>,
@@ -3770,7 +3770,7 @@ impl ModifyRuleInputSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ModifyRuleOutput {
     /// <p>Information about the rule.</p>
     pub rules: Option<Vec<Rule>>,
@@ -3815,7 +3815,7 @@ impl ModifyRuleOutputDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ModifyTargetGroupAttributesInput {
     /// <p>The attributes.</p>
     pub attributes: Vec<TargetGroupAttribute>,
@@ -3844,7 +3844,7 @@ impl ModifyTargetGroupAttributesInputSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ModifyTargetGroupAttributesOutput {
     /// <p>Information about the attributes.</p>
     pub attributes: Option<Vec<TargetGroupAttribute>>,
@@ -3891,7 +3891,7 @@ impl ModifyTargetGroupAttributesOutputDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ModifyTargetGroupInput {
     /// <p>The approximate amount of time, in seconds, between health checks of an individual target. For Application Load Balancers, the range is 5 to 300 seconds. For Network Load Balancers, the supported values are 10 or 30 seconds.</p>
     pub health_check_interval_seconds: Option<i64>,
@@ -3974,7 +3974,7 @@ impl ModifyTargetGroupInputSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ModifyTargetGroupOutput {
     /// <p>Information about the target group.</p>
     pub target_groups: Option<Vec<TargetGroup>>,
@@ -4078,7 +4078,7 @@ impl ProtocolEnumDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct RegisterTargetsInput {
     /// <p>The Amazon Resource Name (ARN) of the target group.</p>
     pub target_group_arn: String,
@@ -4107,7 +4107,7 @@ impl RegisterTargetsInputSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct RegisterTargetsOutput {}
 
 struct RegisterTargetsOutputDeserializer;
@@ -4126,7 +4126,7 @@ impl RegisterTargetsOutputDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct RemoveListenerCertificatesInput {
     /// <p>The certificate to remove. You can specify one certificate per call.</p>
     pub certificates: Vec<Certificate>,
@@ -4155,7 +4155,7 @@ impl RemoveListenerCertificatesInputSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct RemoveListenerCertificatesOutput {}
 
 struct RemoveListenerCertificatesOutputDeserializer;
@@ -4174,7 +4174,7 @@ impl RemoveListenerCertificatesOutputDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct RemoveTagsInput {
     /// <p>The Amazon Resource Name (ARN) of the resource.</p>
     pub resource_arns: Vec<String>,
@@ -4200,7 +4200,7 @@ impl RemoveTagsInputSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct RemoveTagsOutput {}
 
 struct RemoveTagsOutputDeserializer;
@@ -4246,7 +4246,7 @@ impl ResourceArnsSerializer {
 }
 
 /// <p>Information about a rule.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct Rule {
     /// <p>The actions.</p>
     pub actions: Option<Vec<Action>>,
@@ -4345,7 +4345,7 @@ impl RuleArnsSerializer {
 }
 
 /// <p>Information about a condition for a rule.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct RuleCondition {
     /// <p>The name of the field. The possible values are <code>host-header</code> and <code>path-pattern</code>.</p>
     pub field: Option<String>,
@@ -4490,7 +4490,7 @@ impl RulePriorityListSerializer {
 }
 
 /// <p>Information about the priorities for the rules for a listener.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct RulePriorityPair {
     /// <p>The rule priority.</p>
     pub priority: Option<i64>,
@@ -4630,7 +4630,7 @@ impl SecurityGroupsSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct SetIpAddressTypeInput {
     /// <p>The IP address type. The possible values are <code>ipv4</code> (for IPv4 addresses) and <code>dualstack</code> (for IPv4 and IPv6 addresses). Internal load balancers must use <code>ipv4</code>.</p>
     pub ip_address_type: String,
@@ -4658,7 +4658,7 @@ impl SetIpAddressTypeInputSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct SetIpAddressTypeOutput {
     /// <p>The IP address type.</p>
     pub ip_address_type: Option<String>,
@@ -4706,7 +4706,7 @@ impl SetIpAddressTypeOutputDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct SetRulePrioritiesInput {
     /// <p>The rule priorities.</p>
     pub rule_priorities: Vec<RulePriorityPair>,
@@ -4729,7 +4729,7 @@ impl SetRulePrioritiesInputSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct SetRulePrioritiesOutput {
     /// <p>Information about the rules.</p>
     pub rules: Option<Vec<Rule>>,
@@ -4774,7 +4774,7 @@ impl SetRulePrioritiesOutputDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct SetSecurityGroupsInput {
     /// <p>The Amazon Resource Name (ARN) of the load balancer.</p>
     pub load_balancer_arn: String,
@@ -4803,7 +4803,7 @@ impl SetSecurityGroupsInputSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct SetSecurityGroupsOutput {
     /// <p>The IDs of the security groups associated with the load balancer.</p>
     pub security_group_ids: Option<Vec<String>>,
@@ -4850,7 +4850,7 @@ impl SetSecurityGroupsOutputDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct SetSubnetsInput {
     /// <p>The Amazon Resource Name (ARN) of the load balancer.</p>
     pub load_balancer_arn: String,
@@ -4884,7 +4884,7 @@ impl SetSubnetsInputSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct SetSubnetsOutput {
     /// <p>Information about the subnet and Availability Zone.</p>
     pub availability_zones: Option<Vec<AvailabilityZone>>,
@@ -4972,7 +4972,7 @@ impl SslPoliciesDeserializer {
     }
 }
 /// <p>Information about a policy used for SSL negotiation.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct SslPolicy {
     /// <p>The ciphers.</p>
     pub ciphers: Option<Vec<Cipher>>,
@@ -5169,7 +5169,7 @@ impl SubnetIdDeserializer {
     }
 }
 /// <p>Information about a subnet mapping.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct SubnetMapping {
     /// <p>[Network Load Balancers] The allocation ID of the Elastic IP address.</p>
     pub allocation_id: Option<String>,
@@ -5224,7 +5224,7 @@ impl SubnetsSerializer {
 }
 
 /// <p>Information about a tag.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct Tag {
     /// <p>The key of the tag.</p>
     pub key: String,
@@ -5298,7 +5298,7 @@ impl TagSerializer {
 }
 
 /// <p>The tags associated with a resource.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct TagDescription {
     /// <p>The Amazon Resource Name (ARN) of the resource.</p>
     pub resource_arn: Option<String>,
@@ -5486,7 +5486,7 @@ impl TagValueDeserializer {
     }
 }
 /// <p>Information about a target.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct TargetDescription {
     /// <p>An Availability Zone or <code>all</code>. This determines whether the target receives traffic from the load balancer nodes in the specified Availability Zone or from all enabled Availability Zones for the load balancer.</p> <p>This parameter is not supported if the target type of the target group is <code>instance</code>. If the IP address is in a subnet of the VPC for the target group, the Availability Zone is automatically detected and this parameter is optional. If the IP address is outside the VPC, this parameter is required.</p> <p>With an Application Load Balancer, if the IP address is outside the VPC for the target group, the only supported value is <code>all</code>.</p>
     pub availability_zone: Option<String>,
@@ -5582,7 +5582,7 @@ impl TargetDescriptionsSerializer {
 }
 
 /// <p>Information about a target group.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct TargetGroup {
     /// <p>The approximate amount of time, in seconds, between health checks of an individual target.</p>
     pub health_check_interval_seconds: Option<i64>,
@@ -5760,7 +5760,7 @@ impl TargetGroupArnsSerializer {
 }
 
 /// <p>Information about a target group attribute.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct TargetGroupAttribute {
     /// <p><p>The name of the attribute.</p> <ul> <li> <p> <code>deregistration<em>delay.timeout</em>seconds</code> - The amount time for Elastic Load Balancing to wait before changing the state of a deregistering target from <code>draining</code> to <code>unused</code>. The range is 0-3600 seconds. The default value is 300 seconds.</p> </li> <li> <p> <code>proxy<em>protocol</em>v2.enabled</code> - [Network Load Balancers] Indicates whether Proxy Protocol version 2 is enabled.</p> </li> <li> <p> <code>stickiness.enabled</code> - [Application Load Balancers] Indicates whether sticky sessions are enabled. The value is <code>true</code> or <code>false</code>.</p> </li> <li> <p> <code>stickiness.type</code> - [Application Load Balancers] The type of sticky sessions. The possible value is <code>lb<em>cookie</code>.</p> </li> <li> <p> <code>stickiness.lb</em>cookie.duration_seconds</code> - [Application Load Balancers] The time period, in seconds, during which requests from a client should be routed to the same target. After this time period expires, the load balancer-generated cookie is considered stale. The range is 1 second to 1 week (604800 seconds). The default value is 1 day (86400 seconds).</p> </li> </ul></p>
     pub key: Option<String>,
@@ -5988,7 +5988,7 @@ impl TargetGroupsDeserializer {
     }
 }
 /// <p>Information about the current health of a target.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct TargetHealth {
     /// <p>A description of the target health that provides additional details. If the state is <code>healthy</code>, a description is not provided.</p>
     pub description: Option<String>,
@@ -6051,7 +6051,7 @@ impl TargetHealthDeserializer {
     }
 }
 /// <p>Information about the health of a target.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct TargetHealthDescription {
     /// <p>The port to use to connect with the target.</p>
     pub health_check_port: Option<String>,

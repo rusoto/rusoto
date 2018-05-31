@@ -31,7 +31,7 @@ use serde_json;
 use serde_json::from_str;
 use serde_json::Value as SerdeJsonValue;
 /// <p>Information about an entity that is affected by a Health event.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct AffectedEntity {
     /// <p>The 12-digit AWS account number that contains the affected entity.</p>
     #[serde(rename = "awsAccountId")]
@@ -64,7 +64,7 @@ pub struct AffectedEntity {
 }
 
 /// <p>A range of dates and times that is used by the <a>EventFilter</a> and <a>EntityFilter</a> objects. If <code>from</code> is set and <code>to</code> is set: match items where the timestamp (<code>startTime</code>, <code>endTime</code>, or <code>lastUpdatedTime</code>) is between <code>from</code> and <code>to</code> inclusive. If <code>from</code> is set and <code>to</code> is not set: match items where the timestamp value is equal to or after <code>from</code>. If <code>from</code> is not set and <code>to</code> is set: match items where the timestamp value is equal to or before <code>to</code>.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DateTimeRange {
     /// <p>The starting date and time of a time range.</p>
     #[serde(rename = "from")]
@@ -76,7 +76,7 @@ pub struct DateTimeRange {
     pub to: Option<f64>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeAffectedEntitiesRequest {
     /// <p>Values to narrow the results returned. At least one event ARN is required. </p>
     #[serde(rename = "filter")]
@@ -95,7 +95,7 @@ pub struct DescribeAffectedEntitiesRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribeAffectedEntitiesResponse {
     /// <p>The entities that match the filter criteria.</p>
     #[serde(rename = "entities")]
@@ -107,7 +107,7 @@ pub struct DescribeAffectedEntitiesResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeEntityAggregatesRequest {
     /// <p>A list of event ARNs (unique identifiers). For example: <code>"arn:aws:health:us-east-1::event/AWS_EC2_MAINTENANCE_5331", "arn:aws:health:us-west-1::event/AWS_EBS_LOST_VOLUME_xyz"</code> </p>
     #[serde(rename = "eventArns")]
@@ -115,7 +115,7 @@ pub struct DescribeEntityAggregatesRequest {
     pub event_arns: Option<Vec<String>>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribeEntityAggregatesResponse {
     /// <p>The number of entities that are affected by each of the specified events.</p>
     #[serde(rename = "entityAggregates")]
@@ -123,7 +123,7 @@ pub struct DescribeEntityAggregatesResponse {
     pub entity_aggregates: Option<Vec<EntityAggregate>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeEventAggregatesRequest {
     /// <p>The only currently supported value is <code>eventTypeCategory</code>.</p>
     #[serde(rename = "aggregateField")]
@@ -142,7 +142,7 @@ pub struct DescribeEventAggregatesRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribeEventAggregatesResponse {
     /// <p>The number of events in each category that meet the optional filter criteria.</p>
     #[serde(rename = "eventAggregates")]
@@ -154,7 +154,7 @@ pub struct DescribeEventAggregatesResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeEventDetailsRequest {
     /// <p>A list of event ARNs (unique identifiers). For example: <code>"arn:aws:health:us-east-1::event/AWS_EC2_MAINTENANCE_5331", "arn:aws:health:us-west-1::event/AWS_EBS_LOST_VOLUME_xyz"</code> </p>
     #[serde(rename = "eventArns")]
@@ -165,7 +165,7 @@ pub struct DescribeEventDetailsRequest {
     pub locale: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribeEventDetailsResponse {
     /// <p>Error messages for any events that could not be retrieved.</p>
     #[serde(rename = "failedSet")]
@@ -177,7 +177,7 @@ pub struct DescribeEventDetailsResponse {
     pub successful_set: Option<Vec<EventDetails>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeEventTypesRequest {
     /// <p>Values to narrow the results returned.</p>
     #[serde(rename = "filter")]
@@ -197,7 +197,7 @@ pub struct DescribeEventTypesRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribeEventTypesResponse {
     /// <p>A list of event types that match the filter criteria. Event types have a category (<code>issue</code>, <code>accountNotification</code>, or <code>scheduledChange</code>), a service (for example, <code>EC2</code>, <code>RDS</code>, <code>DATAPIPELINE</code>, <code>BILLING</code>), and a code (in the format <code>AWS_<i>SERVICE</i>_<i>DESCRIPTION</i> </code>; for example, <code>AWS_EC2_SYSTEM_MAINTENANCE_EVENT</code>).</p>
     #[serde(rename = "eventTypes")]
@@ -209,7 +209,7 @@ pub struct DescribeEventTypesResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeEventsRequest {
     /// <p>Values to narrow the results returned.</p>
     #[serde(rename = "filter")]
@@ -229,7 +229,7 @@ pub struct DescribeEventsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribeEventsResponse {
     /// <p>The events that match the specified filter criteria.</p>
     #[serde(rename = "events")]
@@ -242,7 +242,7 @@ pub struct DescribeEventsResponse {
 }
 
 /// <p>The number of entities that are affected by one or more events. Returned by the <a>DescribeEntityAggregates</a> operation.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct EntityAggregate {
     /// <p>The number entities that match the criteria for the specified events.</p>
     #[serde(rename = "count")]
@@ -255,7 +255,7 @@ pub struct EntityAggregate {
 }
 
 /// <p>The values to use to filter results from the <a>DescribeAffectedEntities</a> operation.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct EntityFilter {
     /// <p>A list of entity ARNs (unique identifiers).</p>
     #[serde(rename = "entityArns")]
@@ -283,7 +283,7 @@ pub struct EntityFilter {
 }
 
 /// <p>Summary information about an event, returned by the <a>DescribeEvents</a> operation. The <a>DescribeEventDetails</a> operation also returns this information, as well as the <a>EventDescription</a> and additional event metadata.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct Event {
     /// <p>The unique identifier for the event. Format: <code>arn:aws:health:<i>event-region</i>::event/<i>EVENT_TYPE_PLUS_ID</i> </code>. Example: <code>arn:aws:health:us-east-1::event/AWS_EC2_MAINTENANCE_5331</code> </p>
     #[serde(rename = "arn")]
@@ -328,7 +328,7 @@ pub struct Event {
 }
 
 /// <p>The number of events of each issue type. Returned by the <a>DescribeEventAggregates</a> operation.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct EventAggregate {
     /// <p>The issue type for the associated count.</p>
     #[serde(rename = "aggregateValue")]
@@ -341,7 +341,7 @@ pub struct EventAggregate {
 }
 
 /// <p>Detailed information about an event. A combination of an <a>Event</a> object, an <a>EventDescription</a> object, and additional metadata about the event. Returned by the <a>DescribeEventDetails</a> operation.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct EventDetails {
     /// <p>Summary information about the event.</p>
     #[serde(rename = "event")]
@@ -358,7 +358,7 @@ pub struct EventDetails {
 }
 
 /// <p>Error information returned when a <a>DescribeEventDetails</a> operation cannot find a specified event.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct EventDetailsErrorItem {
     /// <p>A message that describes the error.</p>
     #[serde(rename = "errorMessage")]
@@ -375,7 +375,7 @@ pub struct EventDetailsErrorItem {
 }
 
 /// <p>The values to use to filter results from the <a>DescribeEvents</a> and <a>DescribeEventAggregates</a> operations.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct EventFilter {
     /// <p>A list of AWS availability zones.</p>
     #[serde(rename = "availabilityZones")]
@@ -432,7 +432,7 @@ pub struct EventFilter {
 }
 
 /// <p>The values to use to filter results from the <a>DescribeEventTypes</a> operation.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct EventTypeFilter {
     /// <p>A list of event type category codes (<code>issue</code>, <code>scheduledChange</code>, or <code>accountNotification</code>).</p>
     #[serde(rename = "eventTypeCategories")]

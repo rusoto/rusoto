@@ -31,7 +31,7 @@ use serde_json;
 use serde_json::from_str;
 use serde_json::Value as SerdeJsonValue;
 /// <p>A provider representing an Amazon Cognito Identity User Pool and its client ID.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct CognitoIdentityProvider {
     /// <p>The client ID for the Amazon Cognito Identity User Pool.</p>
     #[serde(rename = "ClientId")]
@@ -48,7 +48,7 @@ pub struct CognitoIdentityProvider {
 }
 
 /// <p>Input to the CreateIdentityPool action.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateIdentityPoolInput {
     /// <p>TRUE if the identity pool supports unauthenticated logins.</p>
     #[serde(rename = "AllowUnauthenticatedIdentities")]
@@ -79,7 +79,7 @@ pub struct CreateIdentityPoolInput {
 }
 
 /// <p>Credentials for the provided identity ID.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct Credentials {
     /// <p>The Access Key portion of the credentials.</p>
     #[serde(rename = "AccessKeyId")]
@@ -100,7 +100,7 @@ pub struct Credentials {
 }
 
 /// <p>Input to the <code>DeleteIdentities</code> action.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteIdentitiesInput {
     /// <p>A list of 1-60 identities that you want to delete.</p>
     #[serde(rename = "IdentityIdsToDelete")]
@@ -108,7 +108,7 @@ pub struct DeleteIdentitiesInput {
 }
 
 /// <p>Returned in response to a successful <code>DeleteIdentities</code> operation.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DeleteIdentitiesResponse {
     /// <p>An array of UnprocessedIdentityId objects, each of which contains an ErrorCode and IdentityId.</p>
     #[serde(rename = "UnprocessedIdentityIds")]
@@ -117,7 +117,7 @@ pub struct DeleteIdentitiesResponse {
 }
 
 /// <p>Input to the DeleteIdentityPool action.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteIdentityPoolInput {
     /// <p>An identity pool ID in the format REGION:GUID.</p>
     #[serde(rename = "IdentityPoolId")]
@@ -125,7 +125,7 @@ pub struct DeleteIdentityPoolInput {
 }
 
 /// <p>Input to the <code>DescribeIdentity</code> action.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeIdentityInput {
     /// <p>A unique identifier in the format REGION:GUID.</p>
     #[serde(rename = "IdentityId")]
@@ -133,7 +133,7 @@ pub struct DescribeIdentityInput {
 }
 
 /// <p>Input to the DescribeIdentityPool action.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeIdentityPoolInput {
     /// <p>An identity pool ID in the format REGION:GUID.</p>
     #[serde(rename = "IdentityPoolId")]
@@ -141,7 +141,7 @@ pub struct DescribeIdentityPoolInput {
 }
 
 /// <p>Input to the <code>GetCredentialsForIdentity</code> action.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetCredentialsForIdentityInput {
     /// <p>The Amazon Resource Name (ARN) of the role to be assumed when multiple roles were received in the token from the identity provider. For example, a SAML-based identity provider. This parameter is optional for identity providers that do not support role customization.</p>
     #[serde(rename = "CustomRoleArn")]
@@ -157,7 +157,7 @@ pub struct GetCredentialsForIdentityInput {
 }
 
 /// <p>Returned in response to a successful <code>GetCredentialsForIdentity</code> operation.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct GetCredentialsForIdentityResponse {
     /// <p>Credentials for the provided identity ID.</p>
     #[serde(rename = "Credentials")]
@@ -170,7 +170,7 @@ pub struct GetCredentialsForIdentityResponse {
 }
 
 /// <p>Input to the GetId action.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetIdInput {
     /// <p>A standard AWS account ID (9+ digits).</p>
     #[serde(rename = "AccountId")]
@@ -186,7 +186,7 @@ pub struct GetIdInput {
 }
 
 /// <p>Returned in response to a GetId request.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct GetIdResponse {
     /// <p>A unique identifier in the format REGION:GUID.</p>
     #[serde(rename = "IdentityId")]
@@ -195,7 +195,7 @@ pub struct GetIdResponse {
 }
 
 /// <p>Input to the <code>GetIdentityPoolRoles</code> action.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetIdentityPoolRolesInput {
     /// <p>An identity pool ID in the format REGION:GUID.</p>
     #[serde(rename = "IdentityPoolId")]
@@ -203,7 +203,7 @@ pub struct GetIdentityPoolRolesInput {
 }
 
 /// <p>Returned in response to a successful <code>GetIdentityPoolRoles</code> operation.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct GetIdentityPoolRolesResponse {
     /// <p>An identity pool ID in the format REGION:GUID.</p>
     #[serde(rename = "IdentityPoolId")]
@@ -220,7 +220,7 @@ pub struct GetIdentityPoolRolesResponse {
 }
 
 /// <p>Input to the <code>GetOpenIdTokenForDeveloperIdentity</code> action.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetOpenIdTokenForDeveloperIdentityInput {
     /// <p>A unique identifier in the format REGION:GUID.</p>
     #[serde(rename = "IdentityId")]
@@ -239,7 +239,7 @@ pub struct GetOpenIdTokenForDeveloperIdentityInput {
 }
 
 /// <p>Returned in response to a successful <code>GetOpenIdTokenForDeveloperIdentity</code> request.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct GetOpenIdTokenForDeveloperIdentityResponse {
     /// <p>A unique identifier in the format REGION:GUID.</p>
     #[serde(rename = "IdentityId")]
@@ -252,7 +252,7 @@ pub struct GetOpenIdTokenForDeveloperIdentityResponse {
 }
 
 /// <p>Input to the GetOpenIdToken action.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetOpenIdTokenInput {
     /// <p>A unique identifier in the format REGION:GUID.</p>
     #[serde(rename = "IdentityId")]
@@ -264,7 +264,7 @@ pub struct GetOpenIdTokenInput {
 }
 
 /// <p>Returned in response to a successful GetOpenIdToken request.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct GetOpenIdTokenResponse {
     /// <p>A unique identifier in the format REGION:GUID. Note that the IdentityId returned may not match the one passed on input.</p>
     #[serde(rename = "IdentityId")]
@@ -277,7 +277,7 @@ pub struct GetOpenIdTokenResponse {
 }
 
 /// <p>A description of the identity.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct IdentityDescription {
     /// <p>Date on which the identity was created.</p>
     #[serde(rename = "CreationDate")]
@@ -298,7 +298,7 @@ pub struct IdentityDescription {
 }
 
 /// <p>An object representing an Amazon Cognito identity pool.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct IdentityPool {
     /// <p>TRUE if the identity pool supports unauthenticated logins.</p>
     #[serde(rename = "AllowUnauthenticatedIdentities")]
@@ -332,7 +332,7 @@ pub struct IdentityPool {
 }
 
 /// <p>A description of the identity pool.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct IdentityPoolShortDescription {
     /// <p>An identity pool ID in the format REGION:GUID.</p>
     #[serde(rename = "IdentityPoolId")]
@@ -345,7 +345,7 @@ pub struct IdentityPoolShortDescription {
 }
 
 /// <p>Input to the ListIdentities action.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListIdentitiesInput {
     /// <p>An optional boolean parameter that allows you to hide disabled identities. If omitted, the ListIdentities API will include disabled identities in the response.</p>
     #[serde(rename = "HideDisabled")]
@@ -364,7 +364,7 @@ pub struct ListIdentitiesInput {
 }
 
 /// <p>The response to a ListIdentities request.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListIdentitiesResponse {
     /// <p>An object containing a set of identities and associated mappings.</p>
     #[serde(rename = "Identities")]
@@ -381,7 +381,7 @@ pub struct ListIdentitiesResponse {
 }
 
 /// <p>Input to the ListIdentityPools action.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListIdentityPoolsInput {
     /// <p>The maximum number of identities to return.</p>
     #[serde(rename = "MaxResults")]
@@ -393,7 +393,7 @@ pub struct ListIdentityPoolsInput {
 }
 
 /// <p>The result of a successful ListIdentityPools action.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListIdentityPoolsResponse {
     /// <p>The identity pools returned by the ListIdentityPools action.</p>
     #[serde(rename = "IdentityPools")]
@@ -406,7 +406,7 @@ pub struct ListIdentityPoolsResponse {
 }
 
 /// <p>Input to the <code>LookupDeveloperIdentityInput</code> action.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct LookupDeveloperIdentityInput {
     /// <p>A unique ID used by your backend authentication process to identify a user. Typically, a developer identity provider would issue many developer user identifiers, in keeping with the number of users.</p>
     #[serde(rename = "DeveloperUserIdentifier")]
@@ -430,7 +430,7 @@ pub struct LookupDeveloperIdentityInput {
 }
 
 /// <p>Returned in response to a successful <code>LookupDeveloperIdentity</code> action.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct LookupDeveloperIdentityResponse {
     /// <p>This is the list of developer user identifiers associated with an identity ID. Cognito supports the association of multiple developer user identifiers with an identity ID.</p>
     #[serde(rename = "DeveloperUserIdentifierList")]
@@ -447,7 +447,7 @@ pub struct LookupDeveloperIdentityResponse {
 }
 
 /// <p>A rule that maps a claim name, a claim value, and a match type to a role ARN.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct MappingRule {
     /// <p>The claim name that must be present in the token, for example, "isAdmin" or "paid".</p>
     #[serde(rename = "Claim")]
@@ -464,7 +464,7 @@ pub struct MappingRule {
 }
 
 /// <p>Input to the <code>MergeDeveloperIdentities</code> action.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct MergeDeveloperIdentitiesInput {
     /// <p>User identifier for the destination user. The value should be a <code>DeveloperUserIdentifier</code>.</p>
     #[serde(rename = "DestinationUserIdentifier")]
@@ -481,7 +481,7 @@ pub struct MergeDeveloperIdentitiesInput {
 }
 
 /// <p>Returned in response to a successful <code>MergeDeveloperIdentities</code> action.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct MergeDeveloperIdentitiesResponse {
     /// <p>A unique identifier in the format REGION:GUID.</p>
     #[serde(rename = "IdentityId")]
@@ -490,7 +490,7 @@ pub struct MergeDeveloperIdentitiesResponse {
 }
 
 /// <p>A role mapping.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct RoleMapping {
     /// <p>If you specify Token or Rules as the <code>Type</code>, <code>AmbiguousRoleResolution</code> is required.</p> <p>Specifies the action to be taken if either no rules match the claim value for the <code>Rules</code> type, or there is no <code>cognito:preferred_role</code> claim and there are multiple <code>cognito:roles</code> matches for the <code>Token</code> type.</p>
     #[serde(rename = "AmbiguousRoleResolution")]
@@ -506,7 +506,7 @@ pub struct RoleMapping {
 }
 
 /// <p>A container for rules.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct RulesConfigurationType {
     /// <p>An array of rules. You can specify up to 25 rules per identity provider.</p> <p>Rules are evaluated in order. The first one to match specifies the role.</p>
     #[serde(rename = "Rules")]
@@ -514,7 +514,7 @@ pub struct RulesConfigurationType {
 }
 
 /// <p>Input to the <code>SetIdentityPoolRoles</code> action.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct SetIdentityPoolRolesInput {
     /// <p>An identity pool ID in the format REGION:GUID.</p>
     #[serde(rename = "IdentityPoolId")]
@@ -529,7 +529,7 @@ pub struct SetIdentityPoolRolesInput {
 }
 
 /// <p>Input to the <code>UnlinkDeveloperIdentity</code> action.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UnlinkDeveloperIdentityInput {
     /// <p>The "domain" by which Cognito will refer to your users.</p>
     #[serde(rename = "DeveloperProviderName")]
@@ -546,7 +546,7 @@ pub struct UnlinkDeveloperIdentityInput {
 }
 
 /// <p>Input to the UnlinkIdentity action.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UnlinkIdentityInput {
     /// <p>A unique identifier in the format REGION:GUID.</p>
     #[serde(rename = "IdentityId")]
@@ -560,7 +560,7 @@ pub struct UnlinkIdentityInput {
 }
 
 /// <p>An array of UnprocessedIdentityId objects, each of which contains an ErrorCode and IdentityId.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct UnprocessedIdentityId {
     /// <p>The error code indicating the type of error that occurred.</p>
     #[serde(rename = "ErrorCode")]

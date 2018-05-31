@@ -30,14 +30,14 @@ use rusoto_core::signature::SignedRequest;
 use serde_json;
 use serde_json::from_str;
 use serde_json::Value as SerdeJsonValue;
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct AcceptHandshakeRequest {
     /// <p>The unique identifier (ID) of the handshake that you want to accept.</p> <p>The <a href="http://wikipedia.org/wiki/regex">regex pattern</a> for handshake ID string requires "h-" followed by from 8 to 32 lower-case letters or digits.</p>
     #[serde(rename = "HandshakeId")]
     pub handshake_id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct AcceptHandshakeResponse {
     /// <p>A structure that contains details about the accepted handshake.</p>
     #[serde(rename = "Handshake")]
@@ -46,7 +46,7 @@ pub struct AcceptHandshakeResponse {
 }
 
 /// <p>Contains information about an AWS account that is a member of an organization.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct Account {
     /// <p>The Amazon Resource Name (ARN) of the account.</p> <p>For more information about ARNs in Organizations, see <a href="http://docs.aws.amazon.com/organizations/latest/userguide/orgs_permissions.html#orgs-permissions-arns">ARN Formats Supported by Organizations</a> in the <i>AWS Organizations User Guide</i>.</p>
     #[serde(rename = "Arn")]
@@ -78,7 +78,7 @@ pub struct Account {
     pub status: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct AttachPolicyRequest {
     /// <p>The unique identifier (ID) of the policy that you want to attach to the target. You can get the ID for the policy by calling the <a>ListPolicies</a> operation.</p> <p>The <a href="http://wikipedia.org/wiki/regex">regex pattern</a> for a policy ID string requires "p-" followed by from 8 to 128 lower-case letters or digits.</p>
     #[serde(rename = "PolicyId")]
@@ -88,14 +88,14 @@ pub struct AttachPolicyRequest {
     pub target_id: String,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CancelHandshakeRequest {
     /// <p>The unique identifier (ID) of the handshake that you want to cancel. You can get the ID from the <a>ListHandshakesForOrganization</a> operation.</p> <p>The <a href="http://wikipedia.org/wiki/regex">regex pattern</a> for handshake ID string requires "h-" followed by from 8 to 32 lower-case letters or digits.</p>
     #[serde(rename = "HandshakeId")]
     pub handshake_id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CancelHandshakeResponse {
     /// <p>A structure that contains details about the handshake that you canceled.</p>
     #[serde(rename = "Handshake")]
@@ -104,7 +104,7 @@ pub struct CancelHandshakeResponse {
 }
 
 /// <p>Contains a list of child entities, either OUs or accounts.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct Child {
     /// <p><p>The unique identifier (ID) of this child entity.</p> <p>The <a href="http://wikipedia.org/wiki/regex">regex pattern</a> for a child ID string requires one of the following:</p> <ul> <li> <p>Account: a string that consists of exactly 12 digits.</p> </li> <li> <p>Organizational unit (OU): a string that begins with &quot;ou-&quot; followed by from 4 to 32 lower-case letters or digits (the ID of the root that contains the OU) followed by a second &quot;-&quot; dash and from 8 to 32 additional lower-case letters or digits.</p> </li> </ul></p>
     #[serde(rename = "Id")]
@@ -116,7 +116,7 @@ pub struct Child {
     pub type_: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateAccountRequest {
     /// <p>The friendly name of the member account.</p>
     #[serde(rename = "AccountName")]
@@ -134,7 +134,7 @@ pub struct CreateAccountRequest {
     pub role_name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CreateAccountResponse {
     /// <p>A structure that contains details about the request to create an account. This response structure might not be fully populated when you first receive it because account creation is an asynchronous process. You can pass the returned CreateAccountStatus ID as a parameter to <code> <a>DescribeCreateAccountStatus</a> </code> to get status about the progress of the request at later times. </p>
     #[serde(rename = "CreateAccountStatus")]
@@ -143,7 +143,7 @@ pub struct CreateAccountResponse {
 }
 
 /// <p>Contains the status about a <a>CreateAccount</a> request to create an AWS account in an organization.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CreateAccountStatus {
     /// <p>If the account was created successfully, the unique identifier (ID) of the new account.</p> <p>The <a href="http://wikipedia.org/wiki/regex">regex pattern</a> for an account ID string requires exactly 12 digits.</p>
     #[serde(rename = "AccountId")]
@@ -175,7 +175,7 @@ pub struct CreateAccountStatus {
     pub state: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateOrganizationRequest {
     /// <p><p>Specifies the feature set supported by the new organization. Each feature set supports different levels of functionality.</p> <ul> <li> <p> <i>CONSOLIDATED<em>BILLING</i>: All member accounts have their bills consolidated to and paid by the master account. For more information, see &lt;a href=&quot;http://docs.aws.amazon.com/organizations/latest/userguide/orgs</em>getting-started<em>concepts.html#feature-set-cb-only&quot;&gt;Consolidated Billing</a> in the <i>AWS Organizations User Guide</i>.</p> </li> <li> <p> <i>ALL</i>: In addition to all the features supported by the consolidated billing feature set, the master account can also apply any type of policy to any member account in the organization. For more information, see &lt;a href=&quot;http://docs.aws.amazon.com/organizations/latest/userguide/orgs</em>getting-started_concepts.html#feature-set-all&quot;&gt;All features</a> in the <i>AWS Organizations User Guide</i>.</p> </li> </ul></p>
     #[serde(rename = "FeatureSet")]
@@ -183,7 +183,7 @@ pub struct CreateOrganizationRequest {
     pub feature_set: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CreateOrganizationResponse {
     /// <p>A structure that contains details about the newly created organization.</p>
     #[serde(rename = "Organization")]
@@ -191,7 +191,7 @@ pub struct CreateOrganizationResponse {
     pub organization: Option<Organization>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateOrganizationalUnitRequest {
     /// <p>The friendly name to assign to the new OU.</p>
     #[serde(rename = "Name")]
@@ -201,7 +201,7 @@ pub struct CreateOrganizationalUnitRequest {
     pub parent_id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CreateOrganizationalUnitResponse {
     /// <p>A structure that contains details about the newly created OU.</p>
     #[serde(rename = "OrganizationalUnit")]
@@ -209,7 +209,7 @@ pub struct CreateOrganizationalUnitResponse {
     pub organizational_unit: Option<OrganizationalUnit>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreatePolicyRequest {
     /// <p>The policy content to add to the new policy. For example, if you create a <a href="http://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scp.html">service control policy</a> (SCP), this string must be JSON text that specifies the permissions that admins in attached accounts can delegate to their users, groups, and roles. For more information about the SCP syntax, see <a href="http://docs.aws.amazon.com/organizations/latest/userguide/orgs_reference_scp-syntax.html">Service Control Policy Syntax</a> in the <i>AWS Organizations User Guide</i>.</p>
     #[serde(rename = "Content")]
@@ -225,7 +225,7 @@ pub struct CreatePolicyRequest {
     pub type_: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CreatePolicyResponse {
     /// <p>A structure that contains details about the newly created policy.</p>
     #[serde(rename = "Policy")]
@@ -233,14 +233,14 @@ pub struct CreatePolicyResponse {
     pub policy: Option<Policy>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeclineHandshakeRequest {
     /// <p>The unique identifier (ID) of the handshake that you want to decline. You can get the ID from the <a>ListHandshakesForAccount</a> operation.</p> <p>The <a href="http://wikipedia.org/wiki/regex">regex pattern</a> for handshake ID string requires "h-" followed by from 8 to 32 lower-case letters or digits.</p>
     #[serde(rename = "HandshakeId")]
     pub handshake_id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DeclineHandshakeResponse {
     /// <p>A structure that contains details about the declined handshake. The state is updated to show the value <code>DECLINED</code>.</p>
     #[serde(rename = "Handshake")]
@@ -248,28 +248,28 @@ pub struct DeclineHandshakeResponse {
     pub handshake: Option<Handshake>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteOrganizationalUnitRequest {
     /// <p>The unique identifier (ID) of the organizational unit that you want to delete. You can get the ID from the <a>ListOrganizationalUnitsForParent</a> operation.</p> <p>The <a href="http://wikipedia.org/wiki/regex">regex pattern</a> for an organizational unit ID string requires "ou-" followed by from 4 to 32 lower-case letters or digits (the ID of the root that contains the OU) followed by a second "-" dash and from 8 to 32 additional lower-case letters or digits.</p>
     #[serde(rename = "OrganizationalUnitId")]
     pub organizational_unit_id: String,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeletePolicyRequest {
     /// <p>The unique identifier (ID) of the policy that you want to delete. You can get the ID from the <a>ListPolicies</a> or <a>ListPoliciesForTarget</a> operations.</p> <p>The <a href="http://wikipedia.org/wiki/regex">regex pattern</a> for a policy ID string requires "p-" followed by from 8 to 128 lower-case letters or digits.</p>
     #[serde(rename = "PolicyId")]
     pub policy_id: String,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeAccountRequest {
     /// <p>The unique identifier (ID) of the AWS account that you want information about. You can get the ID from the <a>ListAccounts</a> or <a>ListAccountsForParent</a> operations.</p> <p>The <a href="http://wikipedia.org/wiki/regex">regex pattern</a> for an account ID string requires exactly 12 digits.</p>
     #[serde(rename = "AccountId")]
     pub account_id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribeAccountResponse {
     /// <p>A structure that contains information about the requested account.</p>
     #[serde(rename = "Account")]
@@ -277,14 +277,14 @@ pub struct DescribeAccountResponse {
     pub account: Option<Account>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeCreateAccountStatusRequest {
     /// <p>Specifies the <code>operationId</code> that uniquely identifies the request. You can get the ID from the response to an earlier <a>CreateAccount</a> request, or from the <a>ListCreateAccountStatus</a> operation.</p> <p>The <a href="http://wikipedia.org/wiki/regex">regex pattern</a> for an create account request ID string requires "car-" followed by from 8 to 32 lower-case letters or digits.</p>
     #[serde(rename = "CreateAccountRequestId")]
     pub create_account_request_id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribeCreateAccountStatusResponse {
     /// <p>A structure that contains the current status of an account creation request.</p>
     #[serde(rename = "CreateAccountStatus")]
@@ -292,14 +292,14 @@ pub struct DescribeCreateAccountStatusResponse {
     pub create_account_status: Option<CreateAccountStatus>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeHandshakeRequest {
     /// <p>The unique identifier (ID) of the handshake that you want information about. You can get the ID from the original call to <a>InviteAccountToOrganization</a>, or from a call to <a>ListHandshakesForAccount</a> or <a>ListHandshakesForOrganization</a>.</p> <p>The <a href="http://wikipedia.org/wiki/regex">regex pattern</a> for handshake ID string requires "h-" followed by from 8 to 32 lower-case letters or digits.</p>
     #[serde(rename = "HandshakeId")]
     pub handshake_id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribeHandshakeResponse {
     /// <p>A structure that contains information about the specified handshake.</p>
     #[serde(rename = "Handshake")]
@@ -307,7 +307,7 @@ pub struct DescribeHandshakeResponse {
     pub handshake: Option<Handshake>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribeOrganizationResponse {
     /// <p>A structure that contains information about the organization.</p>
     #[serde(rename = "Organization")]
@@ -315,14 +315,14 @@ pub struct DescribeOrganizationResponse {
     pub organization: Option<Organization>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeOrganizationalUnitRequest {
     /// <p>The unique identifier (ID) of the organizational unit that you want details about. You can get the ID from the <a>ListOrganizationalUnitsForParent</a> operation.</p> <p>The <a href="http://wikipedia.org/wiki/regex">regex pattern</a> for an organizational unit ID string requires "ou-" followed by from 4 to 32 lower-case letters or digits (the ID of the root that contains the OU) followed by a second "-" dash and from 8 to 32 additional lower-case letters or digits.</p>
     #[serde(rename = "OrganizationalUnitId")]
     pub organizational_unit_id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribeOrganizationalUnitResponse {
     /// <p>A structure that contains details about the specified OU.</p>
     #[serde(rename = "OrganizationalUnit")]
@@ -330,14 +330,14 @@ pub struct DescribeOrganizationalUnitResponse {
     pub organizational_unit: Option<OrganizationalUnit>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribePolicyRequest {
     /// <p>The unique identifier (ID) of the policy that you want details about. You can get the ID from the <a>ListPolicies</a> or <a>ListPoliciesForTarget</a> operations.</p> <p>The <a href="http://wikipedia.org/wiki/regex">regex pattern</a> for a policy ID string requires "p-" followed by from 8 to 128 lower-case letters or digits.</p>
     #[serde(rename = "PolicyId")]
     pub policy_id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribePolicyResponse {
     /// <p>A structure that contains details about the specified policy.</p>
     #[serde(rename = "Policy")]
@@ -345,7 +345,7 @@ pub struct DescribePolicyResponse {
     pub policy: Option<Policy>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DetachPolicyRequest {
     /// <p>The unique identifier (ID) of the policy you want to detach. You can get the ID from the <a>ListPolicies</a> or <a>ListPoliciesForTarget</a> operations.</p> <p>The <a href="http://wikipedia.org/wiki/regex">regex pattern</a> for a policy ID string requires "p-" followed by from 8 to 128 lower-case letters or digits.</p>
     #[serde(rename = "PolicyId")]
@@ -355,14 +355,14 @@ pub struct DetachPolicyRequest {
     pub target_id: String,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DisableAWSServiceAccessRequest {
     /// <p>The service principal name of the AWS service for which you want to disable integration with your organization. This is typically in the form of a URL, such as <code> <i>service-abbreviation</i>.amazonaws.com</code>.</p>
     #[serde(rename = "ServicePrincipal")]
     pub service_principal: String,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DisablePolicyTypeRequest {
     /// <p>The policy type that you want to disable in this root.</p>
     #[serde(rename = "PolicyType")]
@@ -372,7 +372,7 @@ pub struct DisablePolicyTypeRequest {
     pub root_id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DisablePolicyTypeResponse {
     /// <p>A structure that shows the root with the updated list of enabled policy types.</p>
     #[serde(rename = "Root")]
@@ -380,17 +380,17 @@ pub struct DisablePolicyTypeResponse {
     pub root: Option<Root>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct EnableAWSServiceAccessRequest {
     /// <p>The service principal name of the AWS service for which you want to enable integration with your organization. This is typically in the form of a URL, such as <code> <i>service-abbreviation</i>.amazonaws.com</code>.</p>
     #[serde(rename = "ServicePrincipal")]
     pub service_principal: String,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct EnableAllFeaturesRequest {}
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct EnableAllFeaturesResponse {
     /// <p>A structure that contains details about the handshake created to support this request to enable all features in the organization.</p>
     #[serde(rename = "Handshake")]
@@ -398,7 +398,7 @@ pub struct EnableAllFeaturesResponse {
     pub handshake: Option<Handshake>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct EnablePolicyTypeRequest {
     /// <p>The policy type that you want to enable.</p>
     #[serde(rename = "PolicyType")]
@@ -408,7 +408,7 @@ pub struct EnablePolicyTypeRequest {
     pub root_id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct EnablePolicyTypeResponse {
     /// <p>A structure that shows the root with the updated list of enabled policy types.</p>
     #[serde(rename = "Root")]
@@ -417,7 +417,7 @@ pub struct EnablePolicyTypeResponse {
 }
 
 /// <p>A structure that contains details of a service principal that is enabled to integrate with AWS Organizations.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct EnabledServicePrincipal {
     /// <p>The date that the service principal was enabled for integration with AWS Organizations.</p>
     #[serde(rename = "DateEnabled")]
@@ -430,7 +430,7 @@ pub struct EnabledServicePrincipal {
 }
 
 /// <p>Contains information that must be exchanged to securely establish a relationship between two accounts (an <i>originator</i> and a <i>recipient</i>). For example, when a master account (the originator) invites another account (the recipient) to join its organization, the two accounts exchange information as a series of handshake requests and responses.</p> <p> <b>Note:</b> Handshakes that are CANCELED, ACCEPTED, or DECLINED show up in lists for only 30 days after entering that state After that they are deleted.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct Handshake {
     /// <p><p>The type of handshake, indicating what action occurs when the recipient accepts the handshake. The following handshake types are supported:</p> <ul> <li> <p> <b>INVITE</b>: This type of handshake represents a request to join an organization. It is always sent from the master account to only non-member accounts.</p> </li> <li> <p> <b>ENABLE<em>ALL</em>FEATURES</b>: This type of handshake represents a request to enable all features in an organization. It is always sent from the master account to only <i>invited</i> member accounts. Created accounts do not receive this because those accounts were created by the organization&#39;s master account and approval is inferred.</p> </li> <li> <p> <b>APPROVE<em>ALL</em>FEATURES</b>: This type of handshake is sent from the Organizations service when all member accounts have approved the <code>ENABLE<em>ALL</em>FEATURES</code> invitation. It is sent only to the master account and signals the master that it can finalize the process to enable all features.</p> </li> </ul></p>
     #[serde(rename = "Action")]
@@ -467,7 +467,7 @@ pub struct Handshake {
 }
 
 /// <p>Specifies the criteria that are used to select the handshakes for the operation.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct HandshakeFilter {
     /// <p>Specifies the type of handshake action.</p> <p>If you specify <code>ActionType</code>, you cannot also specify <code>ParentHandshakeId</code>.</p>
     #[serde(rename = "ActionType")]
@@ -480,7 +480,7 @@ pub struct HandshakeFilter {
 }
 
 /// <p>Identifies a participant in a handshake.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct HandshakeParty {
     /// <p>The unique identifier (ID) for the party.</p> <p>The <a href="http://wikipedia.org/wiki/regex">regex pattern</a> for handshake ID string requires "h-" followed by from 8 to 32 lower-case letters or digits.</p>
     #[serde(rename = "Id")]
@@ -491,7 +491,7 @@ pub struct HandshakeParty {
 }
 
 /// <p>Contains additional data that is needed to process a handshake.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct HandshakeResource {
     /// <p>When needed, contains an additional array of <code>HandshakeResource</code> objects.</p>
     #[serde(rename = "Resources")]
@@ -507,7 +507,7 @@ pub struct HandshakeResource {
     pub value: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct InviteAccountToOrganizationRequest {
     /// <p>Additional information that you want to include in the generated email to the recipient account owner.</p>
     #[serde(rename = "Notes")]
@@ -518,7 +518,7 @@ pub struct InviteAccountToOrganizationRequest {
     pub target: HandshakeParty,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct InviteAccountToOrganizationResponse {
     /// <p>A structure that contains details about the handshake that is created to support this invitation request.</p>
     #[serde(rename = "Handshake")]
@@ -526,7 +526,7 @@ pub struct InviteAccountToOrganizationResponse {
     pub handshake: Option<Handshake>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListAWSServiceAccessForOrganizationRequest {
     /// <p>(Optional) Use this to limit the number of results you want included in the response. If you do not include this parameter, it defaults to a value that is specific to the operation. If additional items exist beyond the maximum you specify, the <code>NextToken</code> response element is present and has a value (is not null). Include that value as the <code>NextToken</code> request parameter in the next call to the operation to get the next part of the results. Note that Organizations might return fewer results than the maximum even when there are more results available. You should check <code>NextToken</code> after every operation to ensure that you receive all of the results.</p>
     #[serde(rename = "MaxResults")]
@@ -538,7 +538,7 @@ pub struct ListAWSServiceAccessForOrganizationRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListAWSServiceAccessForOrganizationResponse {
     /// <p>A list of the service principals for the services that are enabled to integrate with your organization. Each principal is a structure that includes the name and the date that it was enabled for integration with AWS Organizations.</p>
     #[serde(rename = "EnabledServicePrincipals")]
@@ -550,7 +550,7 @@ pub struct ListAWSServiceAccessForOrganizationResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListAccountsForParentRequest {
     /// <p>(Optional) Use this to limit the number of results you want included in the response. If you do not include this parameter, it defaults to a value that is specific to the operation. If additional items exist beyond the maximum you specify, the <code>NextToken</code> response element is present and has a value (is not null). Include that value as the <code>NextToken</code> request parameter in the next call to the operation to get the next part of the results. Note that Organizations might return fewer results than the maximum even when there are more results available. You should check <code>NextToken</code> after every operation to ensure that you receive all of the results.</p>
     #[serde(rename = "MaxResults")]
@@ -565,7 +565,7 @@ pub struct ListAccountsForParentRequest {
     pub parent_id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListAccountsForParentResponse {
     /// <p>A list of the accounts in the specified root or OU.</p>
     #[serde(rename = "Accounts")]
@@ -577,7 +577,7 @@ pub struct ListAccountsForParentResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListAccountsRequest {
     /// <p>(Optional) Use this to limit the number of results you want included in the response. If you do not include this parameter, it defaults to a value that is specific to the operation. If additional items exist beyond the maximum you specify, the <code>NextToken</code> response element is present and has a value (is not null). Include that value as the <code>NextToken</code> request parameter in the next call to the operation to get the next part of the results. Note that Organizations might return fewer results than the maximum even when there are more results available. You should check <code>NextToken</code> after every operation to ensure that you receive all of the results.</p>
     #[serde(rename = "MaxResults")]
@@ -589,7 +589,7 @@ pub struct ListAccountsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListAccountsResponse {
     /// <p>A list of objects in the organization.</p>
     #[serde(rename = "Accounts")]
@@ -601,7 +601,7 @@ pub struct ListAccountsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListChildrenRequest {
     /// <p>Filters the output to include only the specified child type.</p>
     #[serde(rename = "ChildType")]
@@ -619,7 +619,7 @@ pub struct ListChildrenRequest {
     pub parent_id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListChildrenResponse {
     /// <p>The list of children of the specified parent container.</p>
     #[serde(rename = "Children")]
@@ -631,7 +631,7 @@ pub struct ListChildrenResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListCreateAccountStatusRequest {
     /// <p>(Optional) Use this to limit the number of results you want included in the response. If you do not include this parameter, it defaults to a value that is specific to the operation. If additional items exist beyond the maximum you specify, the <code>NextToken</code> response element is present and has a value (is not null). Include that value as the <code>NextToken</code> request parameter in the next call to the operation to get the next part of the results. Note that Organizations might return fewer results than the maximum even when there are more results available. You should check <code>NextToken</code> after every operation to ensure that you receive all of the results.</p>
     #[serde(rename = "MaxResults")]
@@ -647,7 +647,7 @@ pub struct ListCreateAccountStatusRequest {
     pub states: Option<Vec<String>>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListCreateAccountStatusResponse {
     /// <p>A list of objects with details about the requests. Certain elements, such as the accountId number, are present in the output only after the account has been successfully created.</p>
     #[serde(rename = "CreateAccountStatuses")]
@@ -659,7 +659,7 @@ pub struct ListCreateAccountStatusResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListHandshakesForAccountRequest {
     /// <p>Filters the handshakes that you want included in the response. The default is all types. Use the <code>ActionType</code> element to limit the output to only a specified type, such as <code>INVITE</code>, <code>ENABLE-FULL-CONTROL</code>, or <code>APPROVE-FULL-CONTROL</code>. Alternatively, for the <code>ENABLE-FULL-CONTROL</code> handshake that generates a separate child handshake for each member account, you can specify <code>ParentHandshakeId</code> to see only the handshakes that were generated by that parent request.</p>
     #[serde(rename = "Filter")]
@@ -675,7 +675,7 @@ pub struct ListHandshakesForAccountRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListHandshakesForAccountResponse {
     /// <p>A list of <a>Handshake</a> objects with details about each of the handshakes that is associated with the specified account.</p>
     #[serde(rename = "Handshakes")]
@@ -687,7 +687,7 @@ pub struct ListHandshakesForAccountResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListHandshakesForOrganizationRequest {
     /// <p>A filter of the handshakes that you want included in the response. The default is all types. Use the <code>ActionType</code> element to limit the output to only a specified type, such as <code>INVITE</code>, <code>ENABLE-ALL-FEATURES</code>, or <code>APPROVE-ALL-FEATURES</code>. Alternatively, for the <code>ENABLE-ALL-FEATURES</code> handshake that generates a separate child handshake for each member account, you can specify the <code>ParentHandshakeId</code> to see only the handshakes that were generated by that parent request.</p>
     #[serde(rename = "Filter")]
@@ -703,7 +703,7 @@ pub struct ListHandshakesForOrganizationRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListHandshakesForOrganizationResponse {
     /// <p>A list of <a>Handshake</a> objects with details about each of the handshakes that are associated with an organization.</p>
     #[serde(rename = "Handshakes")]
@@ -715,7 +715,7 @@ pub struct ListHandshakesForOrganizationResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListOrganizationalUnitsForParentRequest {
     /// <p>(Optional) Use this to limit the number of results you want included in the response. If you do not include this parameter, it defaults to a value that is specific to the operation. If additional items exist beyond the maximum you specify, the <code>NextToken</code> response element is present and has a value (is not null). Include that value as the <code>NextToken</code> request parameter in the next call to the operation to get the next part of the results. Note that Organizations might return fewer results than the maximum even when there are more results available. You should check <code>NextToken</code> after every operation to ensure that you receive all of the results.</p>
     #[serde(rename = "MaxResults")]
@@ -730,7 +730,7 @@ pub struct ListOrganizationalUnitsForParentRequest {
     pub parent_id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListOrganizationalUnitsForParentResponse {
     /// <p>If present, this value indicates that there is more output available than is included in the current response. Use this value in the <code>NextToken</code> request parameter in a subsequent call to the operation to get the next part of the output. You should repeat this until the <code>NextToken</code> response element comes back as <code>null</code>.</p>
     #[serde(rename = "NextToken")]
@@ -742,7 +742,7 @@ pub struct ListOrganizationalUnitsForParentResponse {
     pub organizational_units: Option<Vec<OrganizationalUnit>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListParentsRequest {
     /// <p><p>The unique identifier (ID) of the OU or account whose parent containers you want to list. Do not specify a root.</p> <p>The <a href="http://wikipedia.org/wiki/regex">regex pattern</a> for a child ID string requires one of the following:</p> <ul> <li> <p>Account: a string that consists of exactly 12 digits.</p> </li> <li> <p>Organizational unit (OU): a string that begins with &quot;ou-&quot; followed by from 4 to 32 lower-case letters or digits (the ID of the root that contains the OU) followed by a second &quot;-&quot; dash and from 8 to 32 additional lower-case letters or digits.</p> </li> </ul></p>
     #[serde(rename = "ChildId")]
@@ -757,7 +757,7 @@ pub struct ListParentsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListParentsResponse {
     /// <p>If present, this value indicates that there is more output available than is included in the current response. Use this value in the <code>NextToken</code> request parameter in a subsequent call to the operation to get the next part of the output. You should repeat this until the <code>NextToken</code> response element comes back as <code>null</code>.</p>
     #[serde(rename = "NextToken")]
@@ -769,7 +769,7 @@ pub struct ListParentsResponse {
     pub parents: Option<Vec<Parent>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListPoliciesForTargetRequest {
     /// <p>The type of policy that you want to include in the returned list.</p>
     #[serde(rename = "Filter")]
@@ -787,7 +787,7 @@ pub struct ListPoliciesForTargetRequest {
     pub target_id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListPoliciesForTargetResponse {
     /// <p>If present, this value indicates that there is more output available than is included in the current response. Use this value in the <code>NextToken</code> request parameter in a subsequent call to the operation to get the next part of the output. You should repeat this until the <code>NextToken</code> response element comes back as <code>null</code>.</p>
     #[serde(rename = "NextToken")]
@@ -799,7 +799,7 @@ pub struct ListPoliciesForTargetResponse {
     pub policies: Option<Vec<PolicySummary>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListPoliciesRequest {
     /// <p>Specifies the type of policy that you want to include in the response.</p>
     #[serde(rename = "Filter")]
@@ -814,7 +814,7 @@ pub struct ListPoliciesRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListPoliciesResponse {
     /// <p>If present, this value indicates that there is more output available than is included in the current response. Use this value in the <code>NextToken</code> request parameter in a subsequent call to the operation to get the next part of the output. You should repeat this until the <code>NextToken</code> response element comes back as <code>null</code>.</p>
     #[serde(rename = "NextToken")]
@@ -826,7 +826,7 @@ pub struct ListPoliciesResponse {
     pub policies: Option<Vec<PolicySummary>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListRootsRequest {
     /// <p>(Optional) Use this to limit the number of results you want included in the response. If you do not include this parameter, it defaults to a value that is specific to the operation. If additional items exist beyond the maximum you specify, the <code>NextToken</code> response element is present and has a value (is not null). Include that value as the <code>NextToken</code> request parameter in the next call to the operation to get the next part of the results. Note that Organizations might return fewer results than the maximum even when there are more results available. You should check <code>NextToken</code> after every operation to ensure that you receive all of the results.</p>
     #[serde(rename = "MaxResults")]
@@ -838,7 +838,7 @@ pub struct ListRootsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListRootsResponse {
     /// <p>If present, this value indicates that there is more output available than is included in the current response. Use this value in the <code>NextToken</code> request parameter in a subsequent call to the operation to get the next part of the output. You should repeat this until the <code>NextToken</code> response element comes back as <code>null</code>.</p>
     #[serde(rename = "NextToken")]
@@ -850,7 +850,7 @@ pub struct ListRootsResponse {
     pub roots: Option<Vec<Root>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListTargetsForPolicyRequest {
     /// <p>(Optional) Use this to limit the number of results you want included in the response. If you do not include this parameter, it defaults to a value that is specific to the operation. If additional items exist beyond the maximum you specify, the <code>NextToken</code> response element is present and has a value (is not null). Include that value as the <code>NextToken</code> request parameter in the next call to the operation to get the next part of the results. Note that Organizations might return fewer results than the maximum even when there are more results available. You should check <code>NextToken</code> after every operation to ensure that you receive all of the results.</p>
     #[serde(rename = "MaxResults")]
@@ -865,7 +865,7 @@ pub struct ListTargetsForPolicyRequest {
     pub policy_id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListTargetsForPolicyResponse {
     /// <p>If present, this value indicates that there is more output available than is included in the current response. Use this value in the <code>NextToken</code> request parameter in a subsequent call to the operation to get the next part of the output. You should repeat this until the <code>NextToken</code> response element comes back as <code>null</code>.</p>
     #[serde(rename = "NextToken")]
@@ -877,7 +877,7 @@ pub struct ListTargetsForPolicyResponse {
     pub targets: Option<Vec<PolicyTargetSummary>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct MoveAccountRequest {
     /// <p>The unique identifier (ID) of the account that you want to move.</p> <p>The <a href="http://wikipedia.org/wiki/regex">regex pattern</a> for an account ID string requires exactly 12 digits.</p>
     #[serde(rename = "AccountId")]
@@ -891,7 +891,7 @@ pub struct MoveAccountRequest {
 }
 
 /// <p>Contains details about an organization. An organization is a collection of accounts that are centrally managed together using consolidated billing, organized hierarchically with organizational units (OUs), and controlled with policies .</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct Organization {
     /// <p>The Amazon Resource Name (ARN) of an organization.</p> <p>For more information about ARNs in Organizations, see <a href="http://docs.aws.amazon.com/organizations/latest/userguide/orgs_permissions.html#orgs-permissions-arns">ARN Formats Supported by Organizations</a> in the <i>AWS Organizations User Guide</i>.</p>
     #[serde(rename = "Arn")]
@@ -924,7 +924,7 @@ pub struct Organization {
 }
 
 /// <p>Contains details about an organizational unit (OU). An OU is a container of AWS accounts within a root of an organization. Policies that are attached to an OU apply to all accounts contained in that OU and in any child OUs.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct OrganizationalUnit {
     /// <p>The Amazon Resource Name (ARN) of this OU.</p> <p>For more information about ARNs in Organizations, see <a href="http://docs.aws.amazon.com/organizations/latest/userguide/orgs_permissions.html#orgs-permissions-arns">ARN Formats Supported by Organizations</a> in the <i>AWS Organizations User Guide</i>.</p>
     #[serde(rename = "Arn")]
@@ -941,7 +941,7 @@ pub struct OrganizationalUnit {
 }
 
 /// <p>Contains information about either a root or an organizational unit (OU) that can contain OUs or accounts in an organization.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct Parent {
     /// <p><p>The unique identifier (ID) of the parent entity.</p> <p>The <a href="http://wikipedia.org/wiki/regex">regex pattern</a> for a parent ID string requires one of the following:</p> <ul> <li> <p>Root: a string that begins with &quot;r-&quot; followed by from 4 to 32 lower-case letters or digits.</p> </li> <li> <p>Organizational unit (OU): a string that begins with &quot;ou-&quot; followed by from 4 to 32 lower-case letters or digits (the ID of the root that the OU is in) followed by a second &quot;-&quot; dash and from 8 to 32 additional lower-case letters or digits.</p> </li> </ul></p>
     #[serde(rename = "Id")]
@@ -954,7 +954,7 @@ pub struct Parent {
 }
 
 /// <p>Contains rules to be applied to the affected accounts. Policies can be attached directly to accounts, or to roots and OUs to affect all accounts in those hierarchies.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct Policy {
     /// <p>The text content of the policy.</p>
     #[serde(rename = "Content")]
@@ -967,7 +967,7 @@ pub struct Policy {
 }
 
 /// <p>Contains information about a policy, but does not include the content. To see the content of a policy, see <a>DescribePolicy</a>.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct PolicySummary {
     /// <p>The Amazon Resource Name (ARN) of the policy.</p> <p>For more information about ARNs in Organizations, see <a href="http://docs.aws.amazon.com/organizations/latest/userguide/orgs_permissions.html#orgs-permissions-arns">ARN Formats Supported by Organizations</a> in the <i>AWS Organizations User Guide</i>.</p>
     #[serde(rename = "Arn")]
@@ -996,7 +996,7 @@ pub struct PolicySummary {
 }
 
 /// <p>Contains information about a root, OU, or account that a policy is attached to.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct PolicyTargetSummary {
     /// <p>The Amazon Resource Name (ARN) of the policy target.</p> <p>For more information about ARNs in Organizations, see <a href="http://docs.aws.amazon.com/organizations/latest/userguide/orgs_permissions.html#orgs-permissions-arns">ARN Formats Supported by Organizations</a> in the <i>AWS Organizations User Guide</i>.</p>
     #[serde(rename = "Arn")]
@@ -1017,7 +1017,7 @@ pub struct PolicyTargetSummary {
 }
 
 /// <p>Contains information about a policy type and its status in the associated root.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct PolicyTypeSummary {
     /// <p>The status of the policy type as it relates to the associated root. To attach a policy of the specified type to a root or to an OU or account in that root, it must be available in the organization and enabled for that root.</p>
     #[serde(rename = "Status")]
@@ -1029,7 +1029,7 @@ pub struct PolicyTypeSummary {
     pub type_: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct RemoveAccountFromOrganizationRequest {
     /// <p>The unique identifier (ID) of the member account that you want to remove from the organization.</p> <p>The <a href="http://wikipedia.org/wiki/regex">regex pattern</a> for an account ID string requires exactly 12 digits.</p>
     #[serde(rename = "AccountId")]
@@ -1037,7 +1037,7 @@ pub struct RemoveAccountFromOrganizationRequest {
 }
 
 /// <p>Contains details about a root. A root is a top-level parent node in the hierarchy of an organization that can contain organizational units (OUs) and accounts. Every root contains every AWS account in the organization. Each root enables the accounts to be organized in a different way and to have different policy types enabled for use in that root.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct Root {
     /// <p>The Amazon Resource Name (ARN) of the root.</p> <p>For more information about ARNs in Organizations, see <a href="http://docs.aws.amazon.com/organizations/latest/userguide/orgs_permissions.html#orgs-permissions-arns">ARN Formats Supported by Organizations</a> in the <i>AWS Organizations User Guide</i>.</p>
     #[serde(rename = "Arn")]
@@ -1057,7 +1057,7 @@ pub struct Root {
     pub policy_types: Option<Vec<PolicyTypeSummary>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateOrganizationalUnitRequest {
     /// <p>The new name that you want to assign to the OU.</p> <p>The <a href="http://wikipedia.org/wiki/regex">regex pattern</a> that is used to validate this parameter is a string of any of the characters in the ASCII character range.</p>
     #[serde(rename = "Name")]
@@ -1068,7 +1068,7 @@ pub struct UpdateOrganizationalUnitRequest {
     pub organizational_unit_id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct UpdateOrganizationalUnitResponse {
     /// <p>A structure that contains the details about the specified OU, including its new name.</p>
     #[serde(rename = "OrganizationalUnit")]
@@ -1076,7 +1076,7 @@ pub struct UpdateOrganizationalUnitResponse {
     pub organizational_unit: Option<OrganizationalUnit>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdatePolicyRequest {
     /// <p>If provided, the new content for the policy. The text must be correctly formatted JSON that complies with the syntax for the policy's type. For more information, see <a href="http://docs.aws.amazon.com/organizations/latest/userguide/orgs_reference_scp-syntax.html">Service Control Policy Syntax</a> in the <i>AWS Organizations User Guide</i>.</p>
     #[serde(rename = "Content")]
@@ -1095,7 +1095,7 @@ pub struct UpdatePolicyRequest {
     pub policy_id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct UpdatePolicyResponse {
     /// <p>A structure that contains details about the updated policy, showing the requested changes.</p>
     #[serde(rename = "Policy")]

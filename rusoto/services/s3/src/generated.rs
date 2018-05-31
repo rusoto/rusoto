@@ -46,7 +46,7 @@ enum DeserializerNext {
     Element(String),
 }
 /// <p>Specifies the days since the initiation of an Incomplete Multipart Upload that Lifecycle will wait before permanently removing all parts of the upload.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct AbortIncompleteMultipartUpload {
     /// <p>Indicates the number of days that must pass since initiation for Lifecycle to abort an Incomplete Multipart Upload.</p>
     pub days_after_initiation: Option<i64>,
@@ -120,7 +120,7 @@ impl AbortIncompleteMultipartUploadSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct AbortMultipartUploadOutput {
     pub request_charged: Option<String>,
 }
@@ -141,7 +141,7 @@ impl AbortMultipartUploadOutputDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct AbortMultipartUploadRequest {
     pub bucket: String,
     pub key: String,
@@ -149,7 +149,7 @@ pub struct AbortMultipartUploadRequest {
     pub upload_id: String,
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct AccelerateConfiguration {
     /// <p>The accelerate configuration of the bucket.</p>
     pub status: Option<String>,
@@ -179,7 +179,7 @@ impl AccelerateConfigurationSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct AccessControlPolicy {
     /// <p>A list of grants.</p>
     pub grants: Option<Vec<Grant>>,
@@ -209,7 +209,7 @@ impl AccessControlPolicySerializer {
 }
 
 /// <p>Container for information regarding the access control for replicas.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct AccessControlTranslation {
     /// <p>The override value for the owner of the replica object.</p>
     pub owner: String,
@@ -555,7 +555,7 @@ impl AllowedOriginsSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct AnalyticsAndOperator {
     /// <p>The prefix to use when evaluating an AND predicate.</p>
     pub prefix: Option<String>,
@@ -633,7 +633,7 @@ impl AnalyticsAndOperatorSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct AnalyticsConfiguration {
     /// <p>The filter used to describe a set of objects for analyses. A filter must have exactly one prefix, one tag, or one conjunction (AnalyticsAndOperator). If no filter is provided, all objects will be considered in any analysis.</p>
     pub filter: Option<AnalyticsFilter>,
@@ -752,7 +752,7 @@ impl AnalyticsConfigurationListDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct AnalyticsExportDestination {
     /// <p>A destination signifying output to an S3 bucket.</p>
     pub s3_bucket_destination: AnalyticsS3BucketDestination,
@@ -823,7 +823,7 @@ impl AnalyticsExportDestinationSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct AnalyticsFilter {
     /// <p>A conjunction (logical AND) of predicates, which is used in evaluating an analytics filter. The operator must have at least two predicates.</p>
     pub and: Option<AnalyticsAndOperator>,
@@ -946,7 +946,7 @@ impl AnalyticsIdSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct AnalyticsS3BucketDestination {
     /// <p>The Amazon resource name (ARN) of the bucket to which data is exported.</p>
     pub bucket: String,
@@ -1166,7 +1166,7 @@ impl BodySerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct Bucket {
     /// <p>Date the bucket was created.</p>
     pub creation_date: Option<String>,
@@ -1254,7 +1254,7 @@ impl BucketAccelerateStatusSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct BucketLifecycleConfiguration {
     pub rules: Vec<LifecycleRule>,
 }
@@ -1311,7 +1311,7 @@ impl BucketLocationConstraintSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct BucketLoggingStatus {
     pub logging_enabled: Option<LoggingEnabled>,
 }
@@ -1508,7 +1508,7 @@ impl BytesScannedDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CORSConfiguration {
     pub cors_rules: Vec<CORSRule>,
 }
@@ -1530,7 +1530,7 @@ impl CORSConfigurationSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CORSRule {
     /// <p>Specifies which headers are allowed in a pre-flight OPTIONS request.</p>
     pub allowed_headers: Option<Vec<String>>,
@@ -1687,7 +1687,7 @@ impl CORSRulesSerializer {
 }
 
 /// <p>Describes how a CSV-formatted input object is formatted.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CSVInput {
     /// <p>Single character used to indicate a row should be ignored when present at the start of a row.</p>
     pub comments: Option<String>,
@@ -1768,7 +1768,7 @@ impl CSVInputSerializer {
 }
 
 /// <p>Describes how CSV-formatted results are formatted.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CSVOutput {
     /// <p>Value used to separate individual fields in a record.</p>
     pub field_delimiter: Option<String>,
@@ -1873,7 +1873,7 @@ impl CloudFunctionSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CloudFunctionConfiguration {
     pub cloud_function: Option<String>,
     pub events: Option<Vec<String>>,
@@ -2050,7 +2050,7 @@ impl CommentsSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CommonPrefix {
     pub prefix: Option<String>,
 }
@@ -2119,7 +2119,7 @@ impl CommonPrefixListDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CompleteMultipartUploadOutput {
     pub bucket: Option<String>,
     /// <p>Entity tag of the object.</p>
@@ -2187,7 +2187,7 @@ impl CompleteMultipartUploadOutputDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CompleteMultipartUploadRequest {
     pub bucket: String,
     pub key: String,
@@ -2196,7 +2196,7 @@ pub struct CompleteMultipartUploadRequest {
     pub upload_id: String,
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CompletedMultipartUpload {
     pub parts: Option<Vec<CompletedPart>>,
 }
@@ -2220,7 +2220,7 @@ impl CompletedMultipartUploadSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CompletedPart {
     /// <p>Entity tag returned when the part was uploaded.</p>
     pub e_tag: Option<String>,
@@ -2298,7 +2298,7 @@ impl CompressionTypeSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct Condition {
     /// <p>The HTTP error code when the redirect is applied. In the event of an error, if the error code equals this value, then the specified redirect is applied. Required when parent element Condition is specified and sibling KeyPrefixEquals is not specified. If both are specified, then both must be true for the redirect to be applied.</p>
     pub http_error_code_returned_equals: Option<String>,
@@ -2389,7 +2389,7 @@ impl ConditionSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ContinuationEvent {}
 
 struct ContinuationEventDeserializer;
@@ -2408,7 +2408,7 @@ impl ContinuationEventDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CopyObjectOutput {
     pub copy_object_result: Option<CopyObjectResult>,
     pub copy_source_version_id: Option<String>,
@@ -2468,7 +2468,7 @@ impl CopyObjectOutputDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CopyObjectRequest {
     /// <p>The canned ACL to apply to the object.</p>
     pub acl: Option<String>,
@@ -2535,7 +2535,7 @@ pub struct CopyObjectRequest {
     pub website_redirect_location: Option<String>,
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CopyObjectResult {
     pub e_tag: Option<String>,
     pub last_modified: Option<String>,
@@ -2586,7 +2586,7 @@ impl CopyObjectResultDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CopyPartResult {
     /// <p>Entity tag of the object.</p>
     pub e_tag: Option<String>,
@@ -2639,7 +2639,7 @@ impl CopyPartResultDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateBucketConfiguration {
     /// <p>Specifies the region where the bucket will be created. If you don&#39;t specify a region, the bucket will be created in US Standard.</p>
     pub location_constraint: Option<String>,
@@ -2669,7 +2669,7 @@ impl CreateBucketConfigurationSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateBucketOutput {
     pub location: Option<String>,
 }
@@ -2690,7 +2690,7 @@ impl CreateBucketOutputDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateBucketRequest {
     /// <p>The canned ACL to apply to the bucket.</p>
     pub acl: Option<String>,
@@ -2708,7 +2708,7 @@ pub struct CreateBucketRequest {
     pub grant_write_acp: Option<String>,
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateMultipartUploadOutput {
     /// <p>Date when multipart upload will become eligible for abort operation by lifecycle.</p>
     pub abort_date: Option<String>,
@@ -2779,7 +2779,7 @@ impl CreateMultipartUploadOutputDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateMultipartUploadRequest {
     /// <p>The canned ACL to apply to the object.</p>
     pub acl: Option<String>,
@@ -2945,7 +2945,7 @@ impl DaysAfterInitiationSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct Delete {
     pub objects: Vec<ObjectIdentifier>,
     /// <p>Element to enable quiet mode for the request. When you add this element, you must set its value to true.</p>
@@ -2977,7 +2977,7 @@ impl DeleteSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteBucketAnalyticsConfigurationRequest {
     /// <p>The name of the bucket from which an analytics configuration is deleted.</p>
     pub bucket: String,
@@ -2985,18 +2985,18 @@ pub struct DeleteBucketAnalyticsConfigurationRequest {
     pub id: String,
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteBucketCorsRequest {
     pub bucket: String,
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteBucketEncryptionRequest {
     /// <p>The name of the bucket containing the server-side encryption configuration to delete.</p>
     pub bucket: String,
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteBucketInventoryConfigurationRequest {
     /// <p>The name of the bucket containing the inventory configuration to delete.</p>
     pub bucket: String,
@@ -3004,12 +3004,12 @@ pub struct DeleteBucketInventoryConfigurationRequest {
     pub id: String,
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteBucketLifecycleRequest {
     pub bucket: String,
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteBucketMetricsConfigurationRequest {
     /// <p>The name of the bucket containing the metrics configuration to delete.</p>
     pub bucket: String,
@@ -3017,27 +3017,27 @@ pub struct DeleteBucketMetricsConfigurationRequest {
     pub id: String,
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteBucketPolicyRequest {
     pub bucket: String,
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteBucketReplicationRequest {
     pub bucket: String,
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteBucketRequest {
     pub bucket: String,
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteBucketTaggingRequest {
     pub bucket: String,
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteBucketWebsiteRequest {
     pub bucket: String,
 }
@@ -3056,7 +3056,7 @@ impl DeleteMarkerDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteMarkerEntry {
     /// <p>Specifies whether the object is (true) or is not (false) the latest version of an object.</p>
     pub is_latest: Option<bool>,
@@ -3168,7 +3168,7 @@ impl DeleteMarkersDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteObjectOutput {
     /// <p>Specifies whether the versioned object that was permanently deleted was (true) or was not (false) a delete marker.</p>
     pub delete_marker: Option<bool>,
@@ -3193,7 +3193,7 @@ impl DeleteObjectOutputDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteObjectRequest {
     pub bucket: String,
     pub key: String,
@@ -3204,7 +3204,7 @@ pub struct DeleteObjectRequest {
     pub version_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteObjectTaggingOutput {
     /// <p>The versionId of the object the tag-set was removed from.</p>
     pub version_id: Option<String>,
@@ -3226,7 +3226,7 @@ impl DeleteObjectTaggingOutputDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteObjectTaggingRequest {
     pub bucket: String,
     pub key: String,
@@ -3234,7 +3234,7 @@ pub struct DeleteObjectTaggingRequest {
     pub version_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteObjectsOutput {
     pub deleted: Option<Vec<DeletedObject>>,
     pub errors: Option<Vec<S3Error>>,
@@ -3285,7 +3285,7 @@ impl DeleteObjectsOutputDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteObjectsRequest {
     pub bucket: String,
     pub delete: Delete,
@@ -3294,7 +3294,7 @@ pub struct DeleteObjectsRequest {
     pub request_payer: Option<String>,
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeletedObject {
     pub delete_marker: Option<bool>,
     pub delete_marker_version_id: Option<String>,
@@ -3443,7 +3443,7 @@ impl DescriptionSerializer {
 }
 
 /// <p>Container for replication destination information.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct Destination {
     /// <p>Container for information regarding the access control for replicas.</p>
     pub access_control_translation: Option<AccessControlTranslation>,
@@ -3734,7 +3734,7 @@ impl EncodingTypeSerializer {
 }
 
 /// <p>Describes the server-side encryption that will be applied to the restore results.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct Encryption {
     /// <p>The server-side encryption algorithm used when storing job results in Amazon S3 (e.g., AES256, aws:kms).</p>
     pub encryption_type: String,
@@ -3783,7 +3783,7 @@ impl EncryptionSerializer {
 }
 
 /// <p>Container for information regarding encryption based configuration for replicas.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct EncryptionConfiguration {
     /// <p>The id of the KMS key used to encrypt the replica object.</p>
     pub replica_kms_key_id: Option<String>,
@@ -3855,7 +3855,7 @@ impl EncryptionConfigurationSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct EndEvent {}
 
 struct EndEventDeserializer;
@@ -3874,7 +3874,7 @@ impl EndEventDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct S3Error {
     pub code: Option<String>,
     pub key: Option<String>,
@@ -3934,7 +3934,7 @@ impl S3ErrorDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ErrorDocument {
     /// <p>The object key name to use when a 4XX class error occurs.</p>
     pub key: String,
@@ -4356,7 +4356,7 @@ impl FileHeaderInfoSerializer {
 }
 
 /// <p>Container for key value pair that defines the criteria for the filter rule.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct FilterRule {
     /// <p>Object key name prefix or suffix identifying one or more objects to which the filtering rule applies. Maximum prefix length can be up to 1,024 characters. Overlapping prefixes and suffixes are not supported. For more information, go to <a href="http://docs.aws.amazon.com/AmazonS3/latest/dev/NotificationHowTo.html">Configuring Event Notifications</a> in the Amazon Simple Storage Service Developer Guide.</p>
     pub name: Option<String>,
@@ -4555,7 +4555,7 @@ impl FilterRuleValueSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetBucketAccelerateConfigurationOutput {
     /// <p>The accelerate configuration of the bucket.</p>
     pub status: Option<String>,
@@ -4602,13 +4602,13 @@ impl GetBucketAccelerateConfigurationOutputDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetBucketAccelerateConfigurationRequest {
     /// <p>Name of the bucket for which the accelerate configuration is retrieved.</p>
     pub bucket: String,
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetBucketAclOutput {
     /// <p>A list of grants.</p>
     pub grants: Option<Vec<Grant>>,
@@ -4660,12 +4660,12 @@ impl GetBucketAclOutputDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetBucketAclRequest {
     pub bucket: String,
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetBucketAnalyticsConfigurationOutput {
     /// <p>The configuration and any analyses for the analytics filter.</p>
     pub analytics_configuration: Option<AnalyticsConfiguration>,
@@ -4714,7 +4714,7 @@ impl GetBucketAnalyticsConfigurationOutputDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetBucketAnalyticsConfigurationRequest {
     /// <p>The name of the bucket from which an analytics configuration is retrieved.</p>
     pub bucket: String,
@@ -4722,7 +4722,7 @@ pub struct GetBucketAnalyticsConfigurationRequest {
     pub id: String,
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetBucketCorsOutput {
     pub cors_rules: Option<Vec<CORSRule>>,
 }
@@ -4767,12 +4767,12 @@ impl GetBucketCorsOutputDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetBucketCorsRequest {
     pub bucket: String,
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetBucketEncryptionOutput {
     pub server_side_encryption_configuration: Option<ServerSideEncryptionConfiguration>,
 }
@@ -4821,13 +4821,13 @@ impl GetBucketEncryptionOutputDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetBucketEncryptionRequest {
     /// <p>The name of the bucket from which the server-side encryption configuration is retrieved.</p>
     pub bucket: String,
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetBucketInventoryConfigurationOutput {
     /// <p>Specifies the inventory configuration.</p>
     pub inventory_configuration: Option<InventoryConfiguration>,
@@ -4876,7 +4876,7 @@ impl GetBucketInventoryConfigurationOutputDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetBucketInventoryConfigurationRequest {
     /// <p>The name of the bucket containing the inventory configuration to retrieve.</p>
     pub bucket: String,
@@ -4884,7 +4884,7 @@ pub struct GetBucketInventoryConfigurationRequest {
     pub id: String,
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetBucketLifecycleConfigurationOutput {
     pub rules: Option<Vec<LifecycleRule>>,
 }
@@ -4929,12 +4929,12 @@ impl GetBucketLifecycleConfigurationOutputDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetBucketLifecycleConfigurationRequest {
     pub bucket: String,
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetBucketLifecycleOutput {
     pub rules: Option<Vec<Rule>>,
 }
@@ -4978,12 +4978,12 @@ impl GetBucketLifecycleOutputDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetBucketLifecycleRequest {
     pub bucket: String,
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetBucketLocationOutput {
     pub location_constraint: Option<String>,
 }
@@ -5003,12 +5003,12 @@ impl GetBucketLocationOutputDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetBucketLocationRequest {
     pub bucket: String,
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetBucketLoggingOutput {
     pub logging_enabled: Option<LoggingEnabled>,
 }
@@ -5055,12 +5055,12 @@ impl GetBucketLoggingOutputDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetBucketLoggingRequest {
     pub bucket: String,
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetBucketMetricsConfigurationOutput {
     /// <p>Specifies the metrics configuration.</p>
     pub metrics_configuration: Option<MetricsConfiguration>,
@@ -5109,7 +5109,7 @@ impl GetBucketMetricsConfigurationOutputDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetBucketMetricsConfigurationRequest {
     /// <p>The name of the bucket containing the metrics configuration to retrieve.</p>
     pub bucket: String,
@@ -5117,24 +5117,24 @@ pub struct GetBucketMetricsConfigurationRequest {
     pub id: String,
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetBucketNotificationConfigurationRequest {
     /// <p>Name of the bucket to get the notification configuration for.</p>
     pub bucket: String,
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetBucketPolicyOutput {
     /// <p>The bucket policy as a JSON document.</p>
     pub policy: Option<String>,
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetBucketPolicyRequest {
     pub bucket: String,
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetBucketReplicationOutput {
     pub replication_configuration: Option<ReplicationConfiguration>,
 }
@@ -5182,12 +5182,12 @@ impl GetBucketReplicationOutputDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetBucketReplicationRequest {
     pub bucket: String,
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetBucketRequestPaymentOutput {
     /// <p>Specifies who pays for the download and request fees.</p>
     pub payer: Option<String>,
@@ -5232,12 +5232,12 @@ impl GetBucketRequestPaymentOutputDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetBucketRequestPaymentRequest {
     pub bucket: String,
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetBucketTaggingOutput {
     pub tag_set: Vec<Tag>,
 }
@@ -5281,12 +5281,12 @@ impl GetBucketTaggingOutputDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetBucketTaggingRequest {
     pub bucket: String,
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetBucketVersioningOutput {
     /// <p>Specifies whether MFA delete is enabled in the bucket versioning configuration. This element is only returned if the bucket has been configured with MFA delete. If the bucket has never been so configured, this element is not returned.</p>
     pub mfa_delete: Option<String>,
@@ -5341,12 +5341,12 @@ impl GetBucketVersioningOutputDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetBucketVersioningRequest {
     pub bucket: String,
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetBucketWebsiteOutput {
     pub error_document: Option<ErrorDocument>,
     pub index_document: Option<IndexDocument>,
@@ -5415,12 +5415,12 @@ impl GetBucketWebsiteOutputDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetBucketWebsiteRequest {
     pub bucket: String,
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetObjectAclOutput {
     /// <p>A list of grants.</p>
     pub grants: Option<Vec<Grant>>,
@@ -5473,7 +5473,7 @@ impl GetObjectAclOutputDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetObjectAclRequest {
     pub bucket: String,
     pub key: String,
@@ -5538,7 +5538,7 @@ pub struct GetObjectOutput {
     pub website_redirect_location: Option<String>,
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetObjectRequest {
     pub bucket: String,
     /// <p>Return the object only if its entity tag (ETag) is the same as the one specified, otherwise return a 412 (precondition failed).</p>
@@ -5577,7 +5577,7 @@ pub struct GetObjectRequest {
     pub version_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetObjectTaggingOutput {
     pub tag_set: Vec<Tag>,
     pub version_id: Option<String>,
@@ -5622,7 +5622,7 @@ impl GetObjectTaggingOutputDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetObjectTaggingRequest {
     pub bucket: String,
     pub key: String,
@@ -5635,14 +5635,14 @@ pub struct GetObjectTorrentOutput {
     pub request_charged: Option<String>,
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetObjectTorrentRequest {
     pub bucket: String,
     pub key: String,
     pub request_payer: Option<String>,
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct GlacierJobParameters {
     /// <p>Glacier retrieval tier at which the restore will be processed.</p>
     pub tier: String,
@@ -5670,7 +5670,7 @@ impl GlacierJobParametersSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct Grant {
     pub grantee: Option<Grantee>,
     /// <p>Specifies the permission given to the grantee.</p>
@@ -5751,7 +5751,7 @@ impl GrantSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct Grantee {
     /// <p>Screen name of the grantee.</p>
     pub display_name: Option<String>,
@@ -5938,12 +5938,12 @@ impl GrantsSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct HeadBucketRequest {
     pub bucket: String,
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct HeadObjectOutput {
     pub accept_ranges: Option<String>,
     /// <p>Specifies caching behavior along the request/reply chain.</p>
@@ -6009,7 +6009,7 @@ impl HeadObjectOutputDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct HeadObjectRequest {
     pub bucket: String,
     /// <p>Return the object only if its entity tag (ETag) is the same as the one specified, otherwise return a 412 (precondition failed).</p>
@@ -6176,7 +6176,7 @@ impl IDSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct IndexDocument {
     /// <p>A suffix that is appended to a request that is for a directory on the website endpoint (e.g. if the suffix is index.html and you make a request to samplebucket/images/ the data that is returned will be for the object with the key name images/index.html) The suffix must not be empty and must not include a slash character.</p>
     pub suffix: String,
@@ -6258,7 +6258,7 @@ impl InitiatedDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct Initiator {
     /// <p>Name of the Principal.</p>
     pub display_name: Option<String>,
@@ -6312,7 +6312,7 @@ impl InitiatorDeserializer {
     }
 }
 /// <p>Describes the serialization format of the object.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct InputSerialization {
     /// <p>Describes the serialization of a CSV-encoded object.</p>
     pub csv: Option<CSVInput>,
@@ -6352,7 +6352,7 @@ impl InputSerializationSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct InventoryConfiguration {
     /// <p>Contains information about where to publish the inventory results.</p>
     pub destination: InventoryDestination,
@@ -6515,7 +6515,7 @@ impl InventoryConfigurationListDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct InventoryDestination {
     /// <p>Contains the bucket name, file format, bucket owner (optional), and prefix (optional) where inventory results are published.</p>
     pub s3_bucket_destination: InventoryS3BucketDestination,
@@ -6587,7 +6587,7 @@ impl InventoryDestinationSerializer {
 }
 
 /// <p>Contains the type of server-side encryption used to encrypt the inventory results.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct InventoryEncryption {
     /// <p>Specifies the use of SSE-KMS to encrypt delievered Inventory reports.</p>
     pub ssekms: Option<SSEKMS>,
@@ -6660,7 +6660,7 @@ impl InventoryEncryptionSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct InventoryFilter {
     /// <p>The prefix that an object must have to be included in the inventory results.</p>
     pub prefix: String,
@@ -6966,7 +6966,7 @@ impl InventoryOptionalFieldsSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct InventoryS3BucketDestination {
     /// <p>The ID of the account that owns the destination bucket.</p>
     pub account_id: Option<String>,
@@ -7084,7 +7084,7 @@ impl InventoryS3BucketDestinationSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct InventorySchedule {
     /// <p>Specifies how frequently inventory results are produced.</p>
     pub frequency: String,
@@ -7218,7 +7218,7 @@ impl IsTruncatedDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct JSONInput {
     /// <p>The type of JSON. Valid values: Document, Lines.</p>
     pub type_: Option<String>,
@@ -7248,7 +7248,7 @@ impl JSONInputSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct JSONOutput {
     /// <p>The value used to separate individual records in the output.</p>
     pub record_delimiter: Option<String>,
@@ -7438,7 +7438,7 @@ impl LambdaFunctionArnSerializer {
 }
 
 /// <p>Container for specifying the AWS Lambda notification configuration.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct LambdaFunctionConfiguration {
     pub events: Vec<String>,
     pub filter: Option<NotificationConfigurationFilter>,
@@ -7597,7 +7597,7 @@ impl LastModifiedDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct LifecycleConfiguration {
     pub rules: Vec<Rule>,
 }
@@ -7619,7 +7619,7 @@ impl LifecycleConfigurationSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct LifecycleExpiration {
     /// <p>Indicates at what date the object is to be moved or deleted. Should be in GMT ISO 8601 Format.</p>
     pub date: Option<String>,
@@ -7721,7 +7721,7 @@ impl LifecycleExpirationSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct LifecycleRule {
     pub abort_incomplete_multipart_upload: Option<AbortIncompleteMultipartUpload>,
     pub expiration: Option<LifecycleExpiration>,
@@ -7880,7 +7880,7 @@ impl LifecycleRuleSerializer {
 }
 
 /// <p>This is used in a Lifecycle Rule Filter to apply a logical AND to two or more predicates. The Lifecycle Rule will apply to any object matching all of the predicates configured inside the And operator.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct LifecycleRuleAndOperator {
     pub prefix: Option<String>,
     /// <p>All of these tags must exist in the object&#39;s tag set in order for the rule to apply.</p>
@@ -7958,7 +7958,7 @@ impl LifecycleRuleAndOperatorSerializer {
 }
 
 /// <p>The Filter is used to identify objects that a Lifecycle Rule applies to. A Filter must have exactly one of Prefix, Tag, or And specified.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct LifecycleRuleFilter {
     pub and: Option<LifecycleRuleAndOperator>,
     /// <p>Prefix identifying one or more objects to which the rule applies.</p>
@@ -8091,7 +8091,7 @@ impl LifecycleRulesSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ListBucketAnalyticsConfigurationsOutput {
     /// <p>The list of analytics configurations for a bucket.</p>
     pub analytics_configuration_list: Option<Vec<AnalyticsConfiguration>>,
@@ -8163,7 +8163,7 @@ impl ListBucketAnalyticsConfigurationsOutputDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ListBucketAnalyticsConfigurationsRequest {
     /// <p>The name of the bucket from which analytics configurations are retrieved.</p>
     pub bucket: String,
@@ -8171,7 +8171,7 @@ pub struct ListBucketAnalyticsConfigurationsRequest {
     pub continuation_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ListBucketInventoryConfigurationsOutput {
     /// <p>If sent in the request, the marker that is used as a starting point for this inventory configuration list response.</p>
     pub continuation_token: Option<String>,
@@ -8243,7 +8243,7 @@ impl ListBucketInventoryConfigurationsOutputDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ListBucketInventoryConfigurationsRequest {
     /// <p>The name of the bucket containing the inventory configurations to retrieve.</p>
     pub bucket: String,
@@ -8251,7 +8251,7 @@ pub struct ListBucketInventoryConfigurationsRequest {
     pub continuation_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ListBucketMetricsConfigurationsOutput {
     /// <p>The marker that is used as a starting point for this metrics configuration list response. This value is present if it was sent in the request.</p>
     pub continuation_token: Option<String>,
@@ -8323,7 +8323,7 @@ impl ListBucketMetricsConfigurationsOutputDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ListBucketMetricsConfigurationsRequest {
     /// <p>The name of the bucket containing the metrics configurations to retrieve.</p>
     pub bucket: String,
@@ -8331,7 +8331,7 @@ pub struct ListBucketMetricsConfigurationsRequest {
     pub continuation_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ListBucketsOutput {
     pub buckets: Option<Vec<Bucket>>,
     pub owner: Option<Owner>,
@@ -8380,7 +8380,7 @@ impl ListBucketsOutputDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ListMultipartUploadsOutput {
     /// <p>Name of the bucket to which the multipart upload was initiated.</p>
     pub bucket: Option<String>,
@@ -8503,7 +8503,7 @@ impl ListMultipartUploadsOutputDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ListMultipartUploadsRequest {
     pub bucket: String,
     /// <p>Character you use to group keys.</p>
@@ -8519,7 +8519,7 @@ pub struct ListMultipartUploadsRequest {
     pub upload_id_marker: Option<String>,
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ListObjectVersionsOutput {
     pub common_prefixes: Option<Vec<CommonPrefix>>,
     pub delete_markers: Option<Vec<DeleteMarkerEntry>>,
@@ -8641,7 +8641,7 @@ impl ListObjectVersionsOutputDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ListObjectVersionsRequest {
     pub bucket: String,
     /// <p>A delimiter is a character you use to group keys.</p>
@@ -8657,7 +8657,7 @@ pub struct ListObjectVersionsRequest {
     pub version_id_marker: Option<String>,
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ListObjectsOutput {
     pub common_prefixes: Option<Vec<CommonPrefix>>,
     pub contents: Option<Vec<Object>>,
@@ -8754,7 +8754,7 @@ impl ListObjectsOutputDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ListObjectsRequest {
     pub bucket: String,
     /// <p>A delimiter is a character you use to group keys.</p>
@@ -8770,7 +8770,7 @@ pub struct ListObjectsRequest {
     pub request_payer: Option<String>,
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ListObjectsV2Output {
     /// <p>CommonPrefixes contains all (if there are any) keys between Prefix and the next occurrence of the string specified by delimiter</p>
     pub common_prefixes: Option<Vec<CommonPrefix>>,
@@ -8890,7 +8890,7 @@ impl ListObjectsV2OutputDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ListObjectsV2Request {
     /// <p>Name of the bucket to list.</p>
     pub bucket: String,
@@ -8912,7 +8912,7 @@ pub struct ListObjectsV2Request {
     pub start_after: Option<String>,
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ListPartsOutput {
     /// <p>Date when multipart upload will become eligible for abort operation by lifecycle.</p>
     pub abort_date: Option<String>,
@@ -9027,7 +9027,7 @@ impl ListPartsOutputDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ListPartsRequest {
     pub bucket: String,
     pub key: String,
@@ -9076,7 +9076,7 @@ impl LocationPrefixSerializer {
 }
 
 /// <p>Container for logging information. Presence of this element indicates that logging is enabled. Parameters TargetBucket and TargetPrefix are required in this case.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct LoggingEnabled {
     /// <p>Specifies the bucket where you want Amazon S3 to store server access logs. You can have your logs delivered to any bucket that you own, including the same bucket that is being logged. You can also configure multiple buckets to deliver their logs to the same target bucket. In this case you should choose a different TargetPrefix for each source bucket so that the delivered log files can be distinguished by key.</p>
     pub target_bucket: String,
@@ -9391,7 +9391,7 @@ impl MessageDeserializer {
     }
 }
 /// <p>A metadata key-value pair to store with an object.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct MetadataEntry {
     pub name: Option<String>,
     pub value: Option<String>,
@@ -9469,7 +9469,7 @@ impl MetadataValueSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct MetricsAndOperator {
     /// <p>The prefix used when evaluating an AND predicate.</p>
     pub prefix: Option<String>,
@@ -9547,7 +9547,7 @@ impl MetricsAndOperatorSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct MetricsConfiguration {
     /// <p>Specifies a metrics configuration filter. The metrics configuration will only include objects that meet the filter&#39;s criteria. A filter must be a prefix, a tag, or a conjunction (MetricsAndOperator).</p>
     pub filter: Option<MetricsFilter>,
@@ -9652,7 +9652,7 @@ impl MetricsConfigurationListDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct MetricsFilter {
     /// <p>A conjunction (logical AND) of predicates, which is used in evaluating a metrics filter. The operator must have at least two predicates, and an object must match all of the predicates in order for the filter to apply.</p>
     pub and: Option<MetricsAndOperator>,
@@ -9775,7 +9775,7 @@ impl MetricsIdSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct MultipartUpload {
     /// <p>Date and time at which the multipart upload was initiated.</p>
     pub initiated: Option<String>,
@@ -9998,7 +9998,7 @@ impl NextVersionIdMarkerDeserializer {
     }
 }
 /// <p>Specifies when noncurrent object versions expire. Upon expiration, Amazon S3 permanently deletes the noncurrent object versions. You set this lifecycle configuration action on a bucket that has versioning enabled (or suspended) to request that Amazon S3 delete noncurrent object versions at a specific period in the object&#39;s lifetime.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct NoncurrentVersionExpiration {
     /// <p>Specifies the number of days an object is noncurrent before Amazon S3 can perform the associated action. For information about the noncurrent days calculations, see <a href="http://docs.aws.amazon.com/AmazonS3/latest/dev/s3-access-control.html">How Amazon S3 Calculates When an Object Became Noncurrent</a> in the Amazon Simple Storage Service Developer Guide.</p>
     pub noncurrent_days: Option<i64>,
@@ -10070,7 +10070,7 @@ impl NoncurrentVersionExpirationSerializer {
 }
 
 /// <p>Container for the transition rule that describes when noncurrent objects transition to the STANDARD<em>IA, ONEZONE</em>IA or GLACIER storage class. If your bucket is versioning-enabled (or versioning is suspended), you can set this action to request that Amazon S3 transition noncurrent object versions to the STANDARD<em>IA, ONEZONE</em>IA or GLACIER storage class at a specific period in the object&#39;s lifetime.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct NoncurrentVersionTransition {
     /// <p>Specifies the number of days an object is noncurrent before Amazon S3 can perform the associated action. For information about the noncurrent days calculations, see <a href="http://docs.aws.amazon.com/AmazonS3/latest/dev/s3-access-control.html">How Amazon S3 Calculates When an Object Became Noncurrent</a> in the Amazon Simple Storage Service Developer Guide.</p>
     pub noncurrent_days: Option<i64>,
@@ -10203,7 +10203,7 @@ impl NoncurrentVersionTransitionListSerializer {
 }
 
 /// <p>Container for specifying the notification configuration of the bucket. If this element is empty, notifications are turned off on the bucket.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct NotificationConfiguration {
     pub lambda_function_configurations: Option<Vec<LambdaFunctionConfiguration>>,
     pub queue_configurations: Option<Vec<QueueConfiguration>>,
@@ -10298,7 +10298,7 @@ impl NotificationConfigurationSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct NotificationConfigurationDeprecated {
     pub cloud_function_configuration: Option<CloudFunctionConfiguration>,
     pub queue_configuration: Option<QueueConfigurationDeprecated>,
@@ -10401,7 +10401,7 @@ impl NotificationConfigurationDeprecatedSerializer {
 }
 
 /// <p>Container for object key name filtering rules. For information about key name filtering, go to <a href="http://docs.aws.amazon.com/AmazonS3/latest/dev/NotificationHowTo.html">Configuring Event Notifications</a> in the Amazon Simple Storage Service Developer Guide.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct NotificationConfigurationFilter {
     pub key: Option<S3KeyFilter>,
 }
@@ -10500,7 +10500,7 @@ impl NotificationIdSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct Object {
     pub e_tag: Option<String>,
     pub key: Option<String>,
@@ -10591,7 +10591,7 @@ impl ObjectCannedACLSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ObjectIdentifier {
     /// <p>Key name of the object to delete.</p>
     pub key: String,
@@ -10721,7 +10721,7 @@ impl ObjectStorageClassDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ObjectVersion {
     pub e_tag: Option<String>,
     /// <p>Specifies whether the object is (true) or is not (false) the latest version of an object.</p>
@@ -10887,7 +10887,7 @@ impl ObjectVersionStorageClassDeserializer {
     }
 }
 /// <p>Describes the location where the restore job&#39;s output is stored.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct OutputLocation {
     /// <p>Describes an S3 location that will receive the results of the restore request.</p>
     pub s3: Option<S3Location>,
@@ -10913,7 +10913,7 @@ impl OutputLocationSerializer {
 }
 
 /// <p>Describes how results of the Select job are serialized.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct OutputSerialization {
     /// <p>Describes the serialization of CSV-encoded Select results.</p>
     pub csv: Option<CSVOutput>,
@@ -10943,7 +10943,7 @@ impl OutputSerializationSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct Owner {
     pub display_name: Option<String>,
     pub id: Option<String>,
@@ -11062,7 +11062,7 @@ impl OwnerOverrideSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct Part {
     /// <p>Entity tag returned when the part was uploaded.</p>
     pub e_tag: Option<String>,
@@ -11348,7 +11348,7 @@ impl PrefixSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct Progress {
     /// <p>Current number of uncompressed object bytes processed.</p>
     pub bytes_processed: Option<i64>,
@@ -11404,7 +11404,7 @@ impl ProgressDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ProgressEvent {
     /// <p>The Progress event details.</p>
     pub details: Option<Progress>,
@@ -11485,7 +11485,7 @@ impl ProtocolSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct PutBucketAccelerateConfigurationRequest {
     /// <p>Specifies the Accelerate Configuration you want to set for the bucket.</p>
     pub accelerate_configuration: AccelerateConfiguration,
@@ -11493,7 +11493,7 @@ pub struct PutBucketAccelerateConfigurationRequest {
     pub bucket: String,
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct PutBucketAclRequest {
     /// <p>The canned ACL to apply to the bucket.</p>
     pub acl: Option<String>,
@@ -11512,7 +11512,7 @@ pub struct PutBucketAclRequest {
     pub grant_write_acp: Option<String>,
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct PutBucketAnalyticsConfigurationRequest {
     /// <p>The configuration and any analyses for the analytics filter.</p>
     pub analytics_configuration: AnalyticsConfiguration,
@@ -11522,14 +11522,14 @@ pub struct PutBucketAnalyticsConfigurationRequest {
     pub id: String,
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct PutBucketCorsRequest {
     pub bucket: String,
     pub cors_configuration: CORSConfiguration,
     pub content_md5: Option<String>,
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct PutBucketEncryptionRequest {
     /// <p>The name of the bucket for which the server-side encryption configuration is set.</p>
     pub bucket: String,
@@ -11538,7 +11538,7 @@ pub struct PutBucketEncryptionRequest {
     pub server_side_encryption_configuration: ServerSideEncryptionConfiguration,
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct PutBucketInventoryConfigurationRequest {
     /// <p>The name of the bucket where the inventory configuration will be stored.</p>
     pub bucket: String,
@@ -11548,27 +11548,27 @@ pub struct PutBucketInventoryConfigurationRequest {
     pub inventory_configuration: InventoryConfiguration,
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct PutBucketLifecycleConfigurationRequest {
     pub bucket: String,
     pub lifecycle_configuration: Option<BucketLifecycleConfiguration>,
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct PutBucketLifecycleRequest {
     pub bucket: String,
     pub content_md5: Option<String>,
     pub lifecycle_configuration: Option<LifecycleConfiguration>,
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct PutBucketLoggingRequest {
     pub bucket: String,
     pub bucket_logging_status: BucketLoggingStatus,
     pub content_md5: Option<String>,
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct PutBucketMetricsConfigurationRequest {
     /// <p>The name of the bucket for which the metrics configuration is set.</p>
     pub bucket: String,
@@ -11578,20 +11578,20 @@ pub struct PutBucketMetricsConfigurationRequest {
     pub metrics_configuration: MetricsConfiguration,
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct PutBucketNotificationConfigurationRequest {
     pub bucket: String,
     pub notification_configuration: NotificationConfiguration,
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct PutBucketNotificationRequest {
     pub bucket: String,
     pub content_md5: Option<String>,
     pub notification_configuration: NotificationConfigurationDeprecated,
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct PutBucketPolicyRequest {
     pub bucket: String,
     /// <p>Set this parameter to true to confirm that you want to remove your permissions to change this bucket policy in the future.</p>
@@ -11601,28 +11601,28 @@ pub struct PutBucketPolicyRequest {
     pub policy: String,
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct PutBucketReplicationRequest {
     pub bucket: String,
     pub content_md5: Option<String>,
     pub replication_configuration: ReplicationConfiguration,
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct PutBucketRequestPaymentRequest {
     pub bucket: String,
     pub content_md5: Option<String>,
     pub request_payment_configuration: RequestPaymentConfiguration,
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct PutBucketTaggingRequest {
     pub bucket: String,
     pub content_md5: Option<String>,
     pub tagging: Tagging,
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct PutBucketVersioningRequest {
     pub bucket: String,
     pub content_md5: Option<String>,
@@ -11631,14 +11631,14 @@ pub struct PutBucketVersioningRequest {
     pub versioning_configuration: VersioningConfiguration,
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct PutBucketWebsiteRequest {
     pub bucket: String,
     pub content_md5: Option<String>,
     pub website_configuration: WebsiteConfiguration,
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct PutObjectAclOutput {
     pub request_charged: Option<String>,
 }
@@ -11659,7 +11659,7 @@ impl PutObjectAclOutputDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct PutObjectAclRequest {
     /// <p>The canned ACL to apply to the object.</p>
     pub acl: Option<String>,
@@ -11682,7 +11682,7 @@ pub struct PutObjectAclRequest {
     pub version_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct PutObjectOutput {
     /// <p>Entity tag for the uploaded object.</p>
     pub e_tag: Option<String>,
@@ -11772,7 +11772,7 @@ pub struct PutObjectRequest {
     pub website_redirect_location: Option<String>,
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct PutObjectTaggingOutput {
     pub version_id: Option<String>,
 }
@@ -11793,7 +11793,7 @@ impl PutObjectTaggingOutputDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct PutObjectTaggingRequest {
     pub bucket: String,
     pub content_md5: Option<String>,
@@ -11838,7 +11838,7 @@ impl QueueArnSerializer {
 }
 
 /// <p>Container for specifying an configuration when you want Amazon S3 to publish events to an Amazon Simple Queue Service (Amazon SQS) queue.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct QueueConfiguration {
     pub events: Vec<String>,
     pub filter: Option<NotificationConfigurationFilter>,
@@ -11934,7 +11934,7 @@ impl QueueConfigurationSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct QueueConfigurationDeprecated {
     pub events: Option<Vec<String>>,
     pub id: Option<String>,
@@ -12168,7 +12168,7 @@ impl RecordDelimiterSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct RecordsEvent {
     /// <p>The byte array of partial, one or more result records.</p>
     pub payload: Option<Vec<u8>>,
@@ -12213,7 +12213,7 @@ impl RecordsEventDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct Redirect {
     /// <p>The host name to use in the redirect request.</p>
     pub host_name: Option<String>,
@@ -12346,7 +12346,7 @@ impl RedirectSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct RedirectAllRequestsTo {
     /// <p>Name of the host where requests will be redirected.</p>
     pub host_name: String,
@@ -12534,7 +12534,7 @@ impl ReplicaKmsKeyIDSerializer {
 }
 
 /// <p>Container for replication rules. You can add as many as 1,000 rules. Total replication configuration size can be up to 2 MB.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ReplicationConfiguration {
     /// <p>Amazon Resource Name (ARN) of an IAM role for Amazon S3 to assume when replicating the objects.</p>
     pub role: String,
@@ -12609,7 +12609,7 @@ impl ReplicationConfigurationSerializer {
 }
 
 /// <p>Container for information about a particular replication rule.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ReplicationRule {
     /// <p>Container for replication destination information.</p>
     pub destination: Destination,
@@ -12807,7 +12807,7 @@ impl ReplicationRulesSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct RequestPaymentConfiguration {
     /// <p>Specifies who pays for the download and request fees.</p>
     pub payer: String,
@@ -12835,7 +12835,7 @@ impl RequestPaymentConfigurationSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct RequestProgress {
     /// <p>Specifies whether periodic QueryProgress frames should be sent. Valid values: TRUE, FALSE. Default value: FALSE.</p>
     pub enabled: Option<bool>,
@@ -12985,7 +12985,7 @@ impl ResponseExpiresSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct RestoreObjectOutput {
     pub request_charged: Option<String>,
     /// <p>Indicates the path in the provided S3 output location where Select results will be restored to.</p>
@@ -13008,7 +13008,7 @@ impl RestoreObjectOutputDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct RestoreObjectRequest {
     pub bucket: String,
     pub key: String,
@@ -13018,7 +13018,7 @@ pub struct RestoreObjectRequest {
 }
 
 /// <p>Container for restore job parameters.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct RestoreRequest {
     /// <p>Lifetime of the active copy in days. Do not use with restores that specify OutputLocation.</p>
     pub days: Option<i64>,
@@ -13148,7 +13148,7 @@ impl RoleSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct RoutingRule {
     /// <p>A container for describing a condition that must be met for the specified redirect to apply. For example, 1. If request is for pages in the /docs folder, redirect to the /documents folder. 2. If request results in HTTP error 4xx, redirect request to another host where you might process the error.</p>
     pub condition: Option<Condition>,
@@ -13284,7 +13284,7 @@ impl RoutingRulesSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct Rule {
     pub abort_incomplete_multipart_upload: Option<AbortIncompleteMultipartUpload>,
     pub expiration: Option<LifecycleExpiration>,
@@ -13488,7 +13488,7 @@ impl RulesSerializer {
 }
 
 /// <p>Container for object key name prefix and suffix filtering rules.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct S3KeyFilter {
     pub filter_rules: Option<Vec<FilterRule>>,
 }
@@ -13556,7 +13556,7 @@ impl S3KeyFilterSerializer {
 }
 
 /// <p>Describes an S3 location that will receive the results of the restore request.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct S3Location {
     /// <p>A list of grants that control access to the staged results.</p>
     pub access_control_list: Option<Vec<Grant>>,
@@ -13632,7 +13632,7 @@ impl S3LocationSerializer {
 }
 
 /// <p>Specifies the use of SSE-KMS to encrypt delievered Inventory reports.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct SSEKMS {
     /// <p>Specifies the ID of the AWS Key Management Service (KMS) master encryption key to use for encrypting Inventory reports.</p>
     pub key_id: String,
@@ -13736,7 +13736,7 @@ impl SSEKMSKeyIdSerializer {
 }
 
 /// <p>Specifies the use of SSE-S3 to encrypt delievered Inventory reports.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct SSES3 {}
 
 struct SSES3Deserializer;
@@ -13772,7 +13772,7 @@ impl SSES3Serializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct SelectObjectContentEventStream {
     /// <p>The Continuation Event.</p>
     pub cont: Option<ContinuationEvent>,
@@ -13843,7 +13843,7 @@ impl SelectObjectContentEventStreamDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct SelectObjectContentOutput {
     pub payload: Option<SelectObjectContentEventStream>,
 }
@@ -13892,7 +13892,7 @@ impl SelectObjectContentOutputDeserializer {
     }
 }
 /// <p>Request to filter the contents of an Amazon S3 object based on a simple Structured Query Language (SQL) statement. In the request, along with the SQL expression, you must also specify a data serialization format (JSON or CSV) of the object. Amazon S3 uses this to parse object data into records, and returns only records that match the specified SQL expression. You must also specify the data serialization format for the response. For more information, go to <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/RESTObjectSELECTContent.html">S3Select API Documentation</a>.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct SelectObjectContentRequest {
     /// <p>The S3 Bucket.</p>
     pub bucket: String,
@@ -13948,7 +13948,7 @@ impl SelectObjectContentRequestSerializer {
     }
 }
 /// <p>Describes the parameters for Select job types.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct SelectParameters {
     /// <p>The expression that is used to query the object.</p>
     pub expression: String,
@@ -14034,7 +14034,7 @@ impl ServerSideEncryptionSerializer {
 }
 
 /// <p>Describes the default server-side encryption to apply to new objects in the bucket. If Put Object request does not specify any server-side encryption, this default encryption will be applied.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ServerSideEncryptionByDefault {
     /// <p>KMS master key ID to use for the default encryption. This parameter is allowed if SSEAlgorithm is aws:kms.</p>
     pub kms_master_key_id: Option<String>,
@@ -14122,7 +14122,7 @@ impl ServerSideEncryptionByDefaultSerializer {
 }
 
 /// <p>Container for server-side encryption configuration rules. Currently S3 supports one rule only.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ServerSideEncryptionConfiguration {
     /// <p>Container for information about a particular server-side encryption configuration rule.</p>
     pub rules: Vec<ServerSideEncryptionRule>,
@@ -14188,7 +14188,7 @@ impl ServerSideEncryptionConfigurationSerializer {
 }
 
 /// <p>Container for information about a particular server-side encryption configuration rule.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ServerSideEncryptionRule {
     /// <p>Describes the default server-side encryption to apply to new objects in the bucket. If Put Object request does not specify any server-side encryption, this default encryption will be applied.</p>
     pub apply_server_side_encryption_by_default: Option<ServerSideEncryptionByDefault>,
@@ -14323,7 +14323,7 @@ impl SizeDeserializer {
     }
 }
 /// <p>Container for filters that define which source objects should be replicated.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct SourceSelectionCriteria {
     /// <p>Container for filter information of selection of KMS Encrypted S3 objects.</p>
     pub sse_kms_encrypted_objects: Option<SseKmsEncryptedObjects>,
@@ -14397,7 +14397,7 @@ impl SourceSelectionCriteriaSerializer {
 }
 
 /// <p>Container for filter information of selection of KMS Encrypted S3 objects.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct SseKmsEncryptedObjects {
     /// <p>The replication for KMS encrypted S3 objects is disabled if status is not Enabled.</p>
     pub status: String,
@@ -14537,7 +14537,7 @@ impl StartAfterSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct Stats {
     /// <p>Total number of uncompressed object bytes processed.</p>
     pub bytes_processed: Option<i64>,
@@ -14593,7 +14593,7 @@ impl StatsDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct StatsEvent {
     /// <p>The Stats event details.</p>
     pub details: Option<Stats>,
@@ -14673,7 +14673,7 @@ impl StorageClassSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct StorageClassAnalysis {
     /// <p>A container used to describe how data related to the storage class analysis should be exported.</p>
     pub data_export: Option<StorageClassAnalysisDataExport>,
@@ -14743,7 +14743,7 @@ impl StorageClassAnalysisSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct StorageClassAnalysisDataExport {
     /// <p>The place to store the data for an analysis.</p>
     pub destination: AnalyticsExportDestination,
@@ -14899,7 +14899,7 @@ impl SuffixSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct Tag {
     /// <p>Name of the tag.</p>
     pub key: String,
@@ -15039,7 +15039,7 @@ impl TagSetSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct Tagging {
     pub tag_set: Vec<Tag>,
 }
@@ -15096,7 +15096,7 @@ impl TargetBucketSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct TargetGrant {
     pub grantee: Option<Grantee>,
     /// <p>Logging permissions assigned to the Grantee for the bucket.</p>
@@ -15364,7 +15364,7 @@ impl TopicArnSerializer {
 }
 
 /// <p>Container for specifying the configuration when you want Amazon S3 to publish events to an Amazon Simple Notification Service (Amazon SNS) topic.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct TopicConfiguration {
     pub events: Vec<String>,
     pub filter: Option<NotificationConfigurationFilter>,
@@ -15460,7 +15460,7 @@ impl TopicConfigurationSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct TopicConfigurationDeprecated {
     pub events: Option<Vec<String>>,
     pub id: Option<String>,
@@ -15595,7 +15595,7 @@ impl TopicConfigurationListSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct Transition {
     /// <p>Indicates at what date the object is to be moved or deleted. Should be in GMT ISO 8601 Format.</p>
     pub date: Option<String>,
@@ -15877,7 +15877,7 @@ impl UploadIdMarkerSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct UploadPartCopyOutput {
     pub copy_part_result: Option<CopyPartResult>,
     /// <p>The version of the source object that was copied, if you have enabled versioning on the source bucket.</p>
@@ -15935,7 +15935,7 @@ impl UploadPartCopyOutputDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct UploadPartCopyRequest {
     pub bucket: String,
     /// <p>The name of the source bucket and key name of the source object, separated by a slash (/). Must be URL-encoded.</p>
@@ -15970,7 +15970,7 @@ pub struct UploadPartCopyRequest {
     pub upload_id: String,
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct UploadPartOutput {
     /// <p>Entity tag for the uploaded object.</p>
     pub e_tag: Option<String>,
@@ -16116,7 +16116,7 @@ impl VersionIdMarkerSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct VersioningConfiguration {
     /// <p>Specifies whether MFA delete is enabled in the bucket versioning configuration. This element is only returned if the bucket has been configured with MFA delete. If the bucket has never been so configured, this element is not returned.</p>
     pub mfa_delete: Option<String>,
@@ -16156,7 +16156,7 @@ impl VersioningConfigurationSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct WebsiteConfiguration {
     pub error_document: Option<ErrorDocument>,
     pub index_document: Option<IndexDocument>,

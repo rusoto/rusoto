@@ -31,7 +31,7 @@ use serde_json;
 use serde_json::from_str;
 use serde_json::Value as SerdeJsonValue;
 /// <p>Details of the common errors that all actions return.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct FailureInfo {
     /// <p>The code of the common error. Valid values include <code>InternalServiceException</code>, <code>InvalidParameterException</code>, and any valid error code returned by the AWS service that hosts the resource that you want to tag.</p>
     #[serde(rename = "ErrorCode")]
@@ -47,7 +47,7 @@ pub struct FailureInfo {
     pub status_code: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetResourcesInput {
     /// <p>A string that indicates that additional data is available. Leave this value empty for your initial request. If the response includes a <code>PaginationToken</code>, use that string for this value to request an additional page of data.</p>
     #[serde(rename = "PaginationToken")]
@@ -71,7 +71,7 @@ pub struct GetResourcesInput {
     pub tags_per_page: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct GetResourcesOutput {
     /// <p>A string that indicates that the response contains more data than can be returned in a single response. To receive additional data, specify this string for the <code>PaginationToken</code> value in a subsequent request.</p>
     #[serde(rename = "PaginationToken")]
@@ -83,7 +83,7 @@ pub struct GetResourcesOutput {
     pub resource_tag_mapping_list: Option<Vec<ResourceTagMapping>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetTagKeysInput {
     /// <p>A string that indicates that additional data is available. Leave this value empty for your initial request. If the response includes a PaginationToken, use that string for this value to request an additional page of data.</p>
     #[serde(rename = "PaginationToken")]
@@ -91,7 +91,7 @@ pub struct GetTagKeysInput {
     pub pagination_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct GetTagKeysOutput {
     /// <p>A string that indicates that the response contains more data than can be returned in a single response. To receive additional data, specify this string for the <code>PaginationToken</code> value in a subsequent request.</p>
     #[serde(rename = "PaginationToken")]
@@ -103,7 +103,7 @@ pub struct GetTagKeysOutput {
     pub tag_keys: Option<Vec<String>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetTagValuesInput {
     /// <p>The key for which you want to list all existing values in the specified region for the AWS account.</p>
     #[serde(rename = "Key")]
@@ -114,7 +114,7 @@ pub struct GetTagValuesInput {
     pub pagination_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct GetTagValuesOutput {
     /// <p>A string that indicates that the response contains more data than can be returned in a single response. To receive additional data, specify this string for the <code>PaginationToken</code> value in a subsequent request.</p>
     #[serde(rename = "PaginationToken")]
@@ -127,7 +127,7 @@ pub struct GetTagValuesOutput {
 }
 
 /// <p>A list of resource ARNs and the tags (keys and values) that are associated with each.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ResourceTagMapping {
     /// <p>An array of resource ARN(s).</p>
     #[serde(rename = "ResourceARN")]
@@ -140,7 +140,7 @@ pub struct ResourceTagMapping {
 }
 
 /// <p>The metadata that you apply to AWS resources to help you categorize and organize them. Each tag consists of a key and an optional value, both of which you define. For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Using_Tags.html#tag-basics">Tag Basics</a> in the <i>Amazon EC2 User Guide for Linux Instances</i>.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct Tag {
     /// <p>One part of a key-value pair that make up a tag. A key is a general label that acts like a category for more specific tag values.</p>
     #[serde(rename = "Key")]
@@ -151,7 +151,7 @@ pub struct Tag {
 }
 
 /// <p>A list of tags (keys and values) that are used to specify the associated resources.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct TagFilter {
     /// <p>One part of a key-value pair that make up a tag. A key is a general label that acts like a category for more specific tag values.</p>
     #[serde(rename = "Key")]
@@ -163,7 +163,7 @@ pub struct TagFilter {
     pub values: Option<Vec<String>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct TagResourcesInput {
     /// <p>A list of ARNs. An ARN (Amazon Resource Name) uniquely identifies a resource. You can specify a minimum of 1 and a maximum of 20 ARNs (resources) to tag. An ARN can be set to a maximum of 1600 characters. For more information, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html">Amazon Resource Names (ARNs) and AWS Service Namespaces</a> in the <i>AWS General Reference</i>.</p>
     #[serde(rename = "ResourceARNList")]
@@ -173,7 +173,7 @@ pub struct TagResourcesInput {
     pub tags: ::std::collections::HashMap<String, String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct TagResourcesOutput {
     /// <p>Details of resources that could not be tagged. An error code, status code, and error message are returned for each failed item.</p>
     #[serde(rename = "FailedResourcesMap")]
@@ -181,7 +181,7 @@ pub struct TagResourcesOutput {
     pub failed_resources_map: Option<::std::collections::HashMap<String, FailureInfo>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UntagResourcesInput {
     /// <p>A list of ARNs. An ARN (Amazon Resource Name) uniquely identifies a resource. You can specify a minimum of 1 and a maximum of 20 ARNs (resources) to untag. An ARN can be set to a maximum of 1600 characters. For more information, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html">Amazon Resource Names (ARNs) and AWS Service Namespaces</a> in the <i>AWS General Reference</i>.</p>
     #[serde(rename = "ResourceARNList")]
@@ -191,7 +191,7 @@ pub struct UntagResourcesInput {
     pub tag_keys: Vec<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct UntagResourcesOutput {
     /// <p>Details of resources that could not be untagged. An error code, status code, and error message are returned for each failed item.</p>
     #[serde(rename = "FailedResourcesMap")]

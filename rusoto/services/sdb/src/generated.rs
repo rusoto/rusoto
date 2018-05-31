@@ -44,7 +44,7 @@ enum DeserializerNext {
     Element(String),
 }
 /// <p></p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct Attribute {
     /// <p></p>
     pub alternate_name_encoding: Option<String>,
@@ -191,7 +191,7 @@ impl AttributeNameListSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct BatchDeleteAttributesRequest {
     /// <p>The name of the domain in which the attributes are being deleted.</p>
     pub domain_name: String,
@@ -220,7 +220,7 @@ impl BatchDeleteAttributesRequestSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct BatchPutAttributesRequest {
     /// <p>The name of the domain in which the attributes are being stored.</p>
     pub domain_name: String,
@@ -249,7 +249,7 @@ impl BatchPutAttributesRequestSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateDomainRequest {
     /// <p>The name of the domain to create. The name can range between 3 and 255 characters and can contain the following characters: a-z, A-Z, 0-9, &#39;_&#39;, &#39;-&#39;, and &#39;.&#39;.</p>
     pub domain_name: String,
@@ -271,7 +271,7 @@ impl CreateDomainRequestSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeletableItem {
     pub attributes: Option<Vec<Attribute>>,
     pub name: String,
@@ -311,7 +311,7 @@ impl DeletableItemListSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteAttributesRequest {
     /// <p>A list of Attributes. Similar to columns on a spreadsheet, attributes represent categories of data that can be assigned to items.</p>
     pub attributes: Option<Vec<Attribute>>,
@@ -357,7 +357,7 @@ impl DeleteAttributesRequestSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteDomainRequest {
     /// <p>The name of the domain to delete.</p>
     pub domain_name: String,
@@ -379,7 +379,7 @@ impl DeleteDomainRequestSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DomainMetadataRequest {
     /// <p>The name of the domain for which to display the metadata of.</p>
     pub domain_name: String,
@@ -401,7 +401,7 @@ impl DomainMetadataRequestSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DomainMetadataResult {
     /// <p>The number of unique attribute names in the domain.</p>
     pub attribute_name_count: Option<i64>,
@@ -516,7 +516,7 @@ impl DomainNameListDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetAttributesRequest {
     /// <p>The names of the attributes.</p>
     pub attribute_names: Option<Vec<String>>,
@@ -561,7 +561,7 @@ impl GetAttributesRequestSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetAttributesResult {
     /// <p>The list of attributes returned by the operation.</p>
     pub attributes: Option<Vec<Attribute>>,
@@ -624,7 +624,7 @@ impl IntegerDeserializer {
     }
 }
 /// <p></p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct Item {
     /// <p></p>
     pub alternate_name_encoding: Option<String>,
@@ -708,7 +708,7 @@ impl ItemListDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ListDomainsRequest {
     /// <p>The maximum number of domain names you want returned. The range is 1 to 100. The default setting is 100.</p>
     pub max_number_of_domains: Option<i64>,
@@ -740,7 +740,7 @@ impl ListDomainsRequestSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ListDomainsResult {
     /// <p>A list of domain names that match the expression.</p>
     pub domain_names: Option<Vec<String>>,
@@ -808,7 +808,7 @@ impl LongDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct PutAttributesRequest {
     /// <p>The list of attributes.</p>
     pub attributes: Vec<ReplaceableAttribute>,
@@ -853,7 +853,7 @@ impl PutAttributesRequestSerializer {
 }
 
 /// <p></p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ReplaceableAttribute {
     /// <p>The name of the replaceable attribute.</p>
     pub name: String,
@@ -901,7 +901,7 @@ impl ReplaceableAttributeListSerializer {
 }
 
 /// <p></p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ReplaceableItem {
     /// <p>The list of attributes for a replaceable item.</p>
     pub attributes: Vec<ReplaceableAttribute>,
@@ -941,7 +941,7 @@ impl ReplaceableItemListSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct SelectRequest {
     /// <p>Determines whether or not strong consistency should be enforced when data is read from SimpleDB. If <code>true</code>, any data previously written to SimpleDB will be returned. Otherwise, results will be consistent eventually, and the client may not see data that was written immediately before your read.</p>
     pub consistent_read: Option<bool>,
@@ -979,7 +979,7 @@ impl SelectRequestSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct SelectResult {
     /// <p>A list of items that match the select expression.</p>
     pub items: Option<Vec<Item>>,
@@ -1045,7 +1045,7 @@ impl StringDeserializer {
     }
 }
 /// <p> Specifies the conditions under which data should be updated. If an update condition is specified for a request, the data will only be updated if the condition is satisfied. For example, if an attribute with a specific name and value exists, or if a specific attribute doesn't exist. </p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct UpdateCondition {
     /// <p>A value specifying whether or not the specified attribute must exist with the specified value in order for the update condition to be satisfied. Specify <code>true</code> if the attribute must exist for the update condition to be satisfied. Specify <code>false</code> if the attribute should not exist in order for the update condition to be satisfied.</p>
     pub exists: Option<bool>,

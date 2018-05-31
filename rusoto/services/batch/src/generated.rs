@@ -30,7 +30,7 @@ use serde_json;
 use serde_json::from_str;
 use serde_json::Value as SerdeJsonValue;
 /// <p>An object representing an AWS Batch array job.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ArrayProperties {
     /// <p>The size of the array job.</p>
     #[serde(rename = "size")]
@@ -39,7 +39,7 @@ pub struct ArrayProperties {
 }
 
 /// <p>An object representing the array properties of a job.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ArrayPropertiesDetail {
     /// <p>The job index within the array that is associated with this job. This parameter is returned for array job children.</p>
     #[serde(rename = "index")]
@@ -56,7 +56,7 @@ pub struct ArrayPropertiesDetail {
 }
 
 /// <p>An object representing the array properties of a job.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ArrayPropertiesSummary {
     /// <p>The job index within the array that is associated with this job. This parameter is returned for children of array jobs.</p>
     #[serde(rename = "index")]
@@ -69,7 +69,7 @@ pub struct ArrayPropertiesSummary {
 }
 
 /// <p>An object representing the details of a container that is part of a job attempt.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct AttemptContainerDetail {
     /// <p>The Amazon Resource Name (ARN) of the Amazon ECS container instance that hosts the job attempt.</p>
     #[serde(rename = "containerInstanceArn")]
@@ -94,7 +94,7 @@ pub struct AttemptContainerDetail {
 }
 
 /// <p>An object representing a job attempt.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct AttemptDetail {
     /// <p>Details about the container in this job attempt.</p>
     #[serde(rename = "container")]
@@ -114,7 +114,7 @@ pub struct AttemptDetail {
     pub stopped_at: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CancelJobRequest {
     /// <p>The AWS Batch job ID of the job to cancel.</p>
     #[serde(rename = "jobId")]
@@ -124,11 +124,11 @@ pub struct CancelJobRequest {
     pub reason: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CancelJobResponse {}
 
 /// <p>An object representing an AWS Batch compute environment.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ComputeEnvironmentDetail {
     /// <p>The Amazon Resource Name (ARN) of the compute environment. </p>
     #[serde(rename = "computeEnvironmentArn")]
@@ -166,7 +166,7 @@ pub struct ComputeEnvironmentDetail {
 }
 
 /// <p>The order in which compute environments are tried for job placement within a queue. Compute environments are tried in ascending order. For example, if two compute environments are associated with a job queue, the compute environment with a lower order integer value is tried for job placement first.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ComputeEnvironmentOrder {
     /// <p>The Amazon Resource Name (ARN) of the compute environment.</p>
     #[serde(rename = "computeEnvironment")]
@@ -177,7 +177,7 @@ pub struct ComputeEnvironmentOrder {
 }
 
 /// <p>An object representing an AWS Batch compute resource.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ComputeResource {
     /// <p>The minimum percentage that a Spot Instance price must be when compared with the On-Demand price for that instance type before instances are launched. For example, if your bid percentage is 20%, then the Spot price must be below 20% of the current On-Demand price for that EC2 instance.</p>
     #[serde(rename = "bidPercentage")]
@@ -227,7 +227,7 @@ pub struct ComputeResource {
 }
 
 /// <p>An object representing the attributes of a compute environment that can be updated.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ComputeResourceUpdate {
     /// <p>The desired number of EC2 vCPUS in the compute environment.</p>
     #[serde(rename = "desiredvCpus")]
@@ -244,7 +244,7 @@ pub struct ComputeResourceUpdate {
 }
 
 /// <p>An object representing the details of a container that is part of a job.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ContainerDetail {
     /// <p>The command that is passed to the container. </p>
     #[serde(rename = "command")]
@@ -317,7 +317,7 @@ pub struct ContainerDetail {
 }
 
 /// <p>The overrides that should be sent to a container.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ContainerOverrides {
     /// <p>The command to send to the container that overrides the default command from the Docker image or the job definition.</p>
     #[serde(rename = "command")]
@@ -338,7 +338,7 @@ pub struct ContainerOverrides {
 }
 
 /// <p>Container properties are used in job definitions to describe the container that is launched as part of a job.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ContainerProperties {
     /// <p>The command that is passed to the container. This parameter maps to <code>Cmd</code> in the <a href="https://docs.docker.com/engine/reference/api/docker_remote_api_v1.23/#create-a-container">Create a container</a> section of the <a href="https://docs.docker.com/engine/reference/api/docker_remote_api_v1.23/">Docker Remote API</a> and the <code>COMMAND</code> parameter to <a href="https://docs.docker.com/engine/reference/run/">docker run</a>. For more information, see <a href="https://docs.docker.com/engine/reference/builder/#cmd">https://docs.docker.com/engine/reference/builder/#cmd</a>.</p>
     #[serde(rename = "command")]
@@ -388,7 +388,7 @@ pub struct ContainerProperties {
 }
 
 /// <p>An object representing summary details of a container within a job.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ContainerSummary {
     /// <p>The exit code to return upon completion.</p>
     #[serde(rename = "exitCode")]
@@ -400,7 +400,7 @@ pub struct ContainerSummary {
     pub reason: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateComputeEnvironmentRequest {
     /// <p>The name for your compute environment. Up to 128 letters (uppercase and lowercase), numbers, hyphens, and underscores are allowed.</p>
     #[serde(rename = "computeEnvironmentName")]
@@ -421,7 +421,7 @@ pub struct CreateComputeEnvironmentRequest {
     pub type_: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CreateComputeEnvironmentResponse {
     /// <p>The Amazon Resource Name (ARN) of the compute environment. </p>
     #[serde(rename = "computeEnvironmentArn")]
@@ -433,7 +433,7 @@ pub struct CreateComputeEnvironmentResponse {
     pub compute_environment_name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateJobQueueRequest {
     /// <p>The set of compute environments mapped to a job queue and their order relative to each other. The job scheduler uses this parameter to determine which compute environment should execute a given job. Compute environments must be in the <code>VALID</code> state before you can associate them with a job queue. You can associate up to three compute environments with a job queue.</p>
     #[serde(rename = "computeEnvironmentOrder")]
@@ -450,7 +450,7 @@ pub struct CreateJobQueueRequest {
     pub state: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CreateJobQueueResponse {
     /// <p>The Amazon Resource Name (ARN) of the job queue.</p>
     #[serde(rename = "jobQueueArn")]
@@ -460,37 +460,37 @@ pub struct CreateJobQueueResponse {
     pub job_queue_name: String,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteComputeEnvironmentRequest {
     /// <p>The name or Amazon Resource Name (ARN) of the compute environment to delete. </p>
     #[serde(rename = "computeEnvironment")]
     pub compute_environment: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DeleteComputeEnvironmentResponse {}
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteJobQueueRequest {
     /// <p>The short name or full Amazon Resource Name (ARN) of the queue to delete. </p>
     #[serde(rename = "jobQueue")]
     pub job_queue: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DeleteJobQueueResponse {}
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeregisterJobDefinitionRequest {
     /// <p>The name and revision (<code>name:revision</code>) or full Amazon Resource Name (ARN) of the job definition to deregister. </p>
     #[serde(rename = "jobDefinition")]
     pub job_definition: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DeregisterJobDefinitionResponse {}
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeComputeEnvironmentsRequest {
     /// <p>A list of up to 100 compute environment names or full Amazon Resource Name (ARN) entries. </p>
     #[serde(rename = "computeEnvironments")]
@@ -506,7 +506,7 @@ pub struct DescribeComputeEnvironmentsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribeComputeEnvironmentsResponse {
     /// <p>The list of compute environments.</p>
     #[serde(rename = "computeEnvironments")]
@@ -518,7 +518,7 @@ pub struct DescribeComputeEnvironmentsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeJobDefinitionsRequest {
     /// <p>The name of the job definition to describe.</p>
     #[serde(rename = "jobDefinitionName")]
@@ -542,7 +542,7 @@ pub struct DescribeJobDefinitionsRequest {
     pub status: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribeJobDefinitionsResponse {
     /// <p>The list of job definitions. </p>
     #[serde(rename = "jobDefinitions")]
@@ -554,7 +554,7 @@ pub struct DescribeJobDefinitionsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeJobQueuesRequest {
     /// <p>A list of up to 100 queue names or full queue Amazon Resource Name (ARN) entries.</p>
     #[serde(rename = "jobQueues")]
@@ -570,7 +570,7 @@ pub struct DescribeJobQueuesRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribeJobQueuesResponse {
     /// <p>The list of job queues. </p>
     #[serde(rename = "jobQueues")]
@@ -582,14 +582,14 @@ pub struct DescribeJobQueuesResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeJobsRequest {
     /// <p>A space-separated list of up to 100 job IDs.</p>
     #[serde(rename = "jobs")]
     pub jobs: Vec<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribeJobsResponse {
     /// <p>The list of jobs. </p>
     #[serde(rename = "jobs")]
@@ -598,7 +598,7 @@ pub struct DescribeJobsResponse {
 }
 
 /// <p>The contents of the <code>host</code> parameter determine whether your data volume persists on the host container instance and where it is stored. If the host parameter is empty, then the Docker daemon assigns a host path for your data volume, but the data is not guaranteed to persist after the containers associated with it stop running.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Host {
     /// <p>The path on the host container instance that is presented to the container. If this parameter is empty, then the Docker daemon has assigned a host path for you. If the <code>host</code> parameter contains a <code>sourcePath</code> file location, then the data volume persists at the specified location on the host container instance until you delete it manually. If the <code>sourcePath</code> value does not exist on the host container instance, the Docker daemon creates it. If the location does exist, the contents of the source path folder are exported.</p>
     #[serde(rename = "sourcePath")]
@@ -607,7 +607,7 @@ pub struct Host {
 }
 
 /// <p>An object representing an AWS Batch job definition.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct JobDefinition {
     /// <p>An object with various properties specific to container-based jobs. </p>
     #[serde(rename = "containerProperties")]
@@ -644,7 +644,7 @@ pub struct JobDefinition {
 }
 
 /// <p>An object representing an AWS Batch job dependency.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct JobDependency {
     /// <p>The job ID of the AWS Batch job associated with this dependency.</p>
     #[serde(rename = "jobId")]
@@ -657,7 +657,7 @@ pub struct JobDependency {
 }
 
 /// <p>An object representing an AWS Batch job.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct JobDetail {
     /// <p>The array properties of the job, if it is an array job.</p>
     #[serde(rename = "arrayProperties")]
@@ -720,7 +720,7 @@ pub struct JobDetail {
 }
 
 /// <p>An object representing the details of an AWS Batch job queue.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct JobQueueDetail {
     /// <p>The compute environments that are attached to the job queue and the order in which job placement is preferred. Compute environments are selected for job placement in ascending order.</p>
     #[serde(rename = "computeEnvironmentOrder")]
@@ -748,7 +748,7 @@ pub struct JobQueueDetail {
 }
 
 /// <p>An object representing summary details of a job.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct JobSummary {
     /// <p>The array properties of the job, if it is an array job.</p>
     #[serde(rename = "arrayProperties")]
@@ -787,7 +787,7 @@ pub struct JobSummary {
 }
 
 /// <p>An object representing a job timeout configuration.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct JobTimeout {
     /// <p>The time duration in seconds (measured from the job attempt's <code>startedAt</code> timestamp) after which AWS Batch terminates your jobs if they have not finished.</p>
     #[serde(rename = "attemptDurationSeconds")]
@@ -796,7 +796,7 @@ pub struct JobTimeout {
 }
 
 /// <p>A key-value pair object.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct KeyValuePair {
     /// <p>The name of the key-value pair. For environment variables, this is the name of the environment variable.</p>
     #[serde(rename = "name")]
@@ -808,7 +808,7 @@ pub struct KeyValuePair {
     pub value: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListJobsRequest {
     /// <p>The job ID for an array job. Specifying an array job ID with this parameter lists all child jobs from within the specified array.</p>
     #[serde(rename = "arrayJobId")]
@@ -832,7 +832,7 @@ pub struct ListJobsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListJobsResponse {
     /// <p>A list of job summaries that match the request.</p>
     #[serde(rename = "jobSummaryList")]
@@ -844,7 +844,7 @@ pub struct ListJobsResponse {
 }
 
 /// <p>Details on a Docker volume mount point that is used in a job's container properties.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct MountPoint {
     /// <p>The path on the container at which to mount the host volume.</p>
     #[serde(rename = "containerPath")]
@@ -860,7 +860,7 @@ pub struct MountPoint {
     pub source_volume: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct RegisterJobDefinitionRequest {
     /// <p>An object with various properties specific for container-based jobs. This parameter is required if the <code>type</code> parameter is <code>container</code>.</p>
     #[serde(rename = "containerProperties")]
@@ -886,7 +886,7 @@ pub struct RegisterJobDefinitionRequest {
     pub type_: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct RegisterJobDefinitionResponse {
     /// <p>The Amazon Resource Name (ARN) of the job definition. </p>
     #[serde(rename = "jobDefinitionArn")]
@@ -900,7 +900,7 @@ pub struct RegisterJobDefinitionResponse {
 }
 
 /// <p>The retry strategy associated with a job.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct RetryStrategy {
     /// <p>The number of times to move a job to the <code>RUNNABLE</code> status. You may specify between 1 and 10 attempts. If the value of <code>attempts</code> is greater than one, the job is retried if it fails until it has moved to <code>RUNNABLE</code> that many times.</p>
     #[serde(rename = "attempts")]
@@ -908,7 +908,7 @@ pub struct RetryStrategy {
     pub attempts: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct SubmitJobRequest {
     /// <p>The array properties for the submitted job, such as the size of the array. The array size can be between 2 and 10,000. If you specify array properties for a job, it becomes an array job. For more information, see <a href="http://docs.aws.amazon.com/batch/latest/userguide/array_jobs.html">Array Jobs</a> in the <i>AWS Batch User Guide</i>.</p>
     #[serde(rename = "arrayProperties")]
@@ -945,7 +945,7 @@ pub struct SubmitJobRequest {
     pub timeout: Option<JobTimeout>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct SubmitJobResponse {
     /// <p>The unique identifier for the job.</p>
     #[serde(rename = "jobId")]
@@ -955,7 +955,7 @@ pub struct SubmitJobResponse {
     pub job_name: String,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct TerminateJobRequest {
     /// <p>The AWS Batch job ID of the job to terminate.</p>
     #[serde(rename = "jobId")]
@@ -965,11 +965,11 @@ pub struct TerminateJobRequest {
     pub reason: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct TerminateJobResponse {}
 
 /// <p>The <code>ulimit</code> settings to pass to the container.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Ulimit {
     /// <p>The hard limit for the <code>ulimit</code> type.</p>
     #[serde(rename = "hardLimit")]
@@ -982,7 +982,7 @@ pub struct Ulimit {
     pub soft_limit: i64,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateComputeEnvironmentRequest {
     /// <p>The name or full Amazon Resource Name (ARN) of the compute environment to update.</p>
     #[serde(rename = "computeEnvironment")]
@@ -1001,7 +1001,7 @@ pub struct UpdateComputeEnvironmentRequest {
     pub state: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct UpdateComputeEnvironmentResponse {
     /// <p>The Amazon Resource Name (ARN) of the compute environment. </p>
     #[serde(rename = "computeEnvironmentArn")]
@@ -1013,7 +1013,7 @@ pub struct UpdateComputeEnvironmentResponse {
     pub compute_environment_name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateJobQueueRequest {
     /// <p>Details the set of compute environments mapped to a job queue and their order relative to each other. This is one of the parameters used by the job scheduler to determine which compute environment should execute a given job. </p>
     #[serde(rename = "computeEnvironmentOrder")]
@@ -1032,7 +1032,7 @@ pub struct UpdateJobQueueRequest {
     pub state: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct UpdateJobQueueResponse {
     /// <p>The Amazon Resource Name (ARN) of the job queue.</p>
     #[serde(rename = "jobQueueArn")]
@@ -1045,7 +1045,7 @@ pub struct UpdateJobQueueResponse {
 }
 
 /// <p>A data volume used in a job's container properties.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Volume {
     /// <p>The contents of the <code>host</code> parameter determine whether your data volume persists on the host container instance and where it is stored. If the host parameter is empty, then the Docker daemon assigns a host path for your data volume. However, the data is not guaranteed to persist after the containers associated with it stop running.</p>
     #[serde(rename = "host")]

@@ -30,7 +30,7 @@ use rusoto_core::signature::SignedRequest;
 use serde_json;
 use serde_json::from_str;
 use serde_json::Value as SerdeJsonValue;
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct AddTagsToCertificateRequest {
     /// <p>String that contains the ARN of the ACM certificate to which the tag is to be applied. This must be of the form:</p> <p> <code>arn:aws:acm:region:123456789012:certificate/12345678-1234-1234-1234-123456789012</code> </p> <p>For more information about ARNs, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html">Amazon Resource Names (ARNs) and AWS Service Namespaces</a>. </p>
     #[serde(rename = "CertificateArn")]
@@ -41,7 +41,7 @@ pub struct AddTagsToCertificateRequest {
 }
 
 /// <p>Contains metadata about an ACM certificate. This structure is returned in the response to a <a>DescribeCertificate</a> request. </p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CertificateDetail {
     /// <p>The Amazon Resource Name (ARN) of the certificate. For more information about ARNs, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html">Amazon Resource Names (ARNs) and AWS Service Namespaces</a> in the <i>AWS General Reference</i>.</p>
     #[serde(rename = "CertificateArn")]
@@ -150,7 +150,7 @@ pub struct CertificateDetail {
 }
 
 /// <p>Structure that contains options for your certificate. Currently, you can use this only to specify whether to opt in to or out of certificate transparency logging. Some browsers require that public certificates issued for your domain be recorded in a log. Certificates that are not logged typically generate a browser error. Transparency makes it possible for you to detect SSL/TLS certificates that have been mistakenly or maliciously issued for your domain. For general information, see <a href="http://docs.aws.amazon.com/http:/docs.aws.amazon.comacm/latest/userguide/acm-concepts.html#concept-transparency">Certificate Transparency Logging</a>. </p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct CertificateOptions {
     /// <p>You can opt out of certificate transparency logging by specifying the <code>DISABLED</code> option. Opt in by specifying <code>ENABLED</code>. </p>
     #[serde(rename = "CertificateTransparencyLoggingPreference")]
@@ -159,7 +159,7 @@ pub struct CertificateOptions {
 }
 
 /// <p>This structure is returned in the response object of <a>ListCertificates</a> action. </p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CertificateSummary {
     /// <p>Amazon Resource Name (ARN) of the certificate. This is of the form:</p> <p> <code>arn:aws:acm:region:123456789012:certificate/12345678-1234-1234-1234-123456789012</code> </p> <p>For more information about ARNs, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html">Amazon Resource Names (ARNs) and AWS Service Namespaces</a>. </p>
     #[serde(rename = "CertificateArn")]
@@ -171,21 +171,21 @@ pub struct CertificateSummary {
     pub domain_name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteCertificateRequest {
     /// <p>String that contains the ARN of the ACM certificate to be deleted. This must be of the form:</p> <p> <code>arn:aws:acm:region:123456789012:certificate/12345678-1234-1234-1234-123456789012</code> </p> <p>For more information about ARNs, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html">Amazon Resource Names (ARNs) and AWS Service Namespaces</a>.</p>
     #[serde(rename = "CertificateArn")]
     pub certificate_arn: String,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeCertificateRequest {
     /// <p>The Amazon Resource Name (ARN) of the ACM certificate. The ARN must have the following form:</p> <p> <code>arn:aws:acm:region:123456789012:certificate/12345678-1234-1234-1234-123456789012</code> </p> <p>For more information about ARNs, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html">Amazon Resource Names (ARNs) and AWS Service Namespaces</a>.</p>
     #[serde(rename = "CertificateArn")]
     pub certificate_arn: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribeCertificateResponse {
     /// <p>Metadata about an ACM certificate.</p>
     #[serde(rename = "Certificate")]
@@ -194,7 +194,7 @@ pub struct DescribeCertificateResponse {
 }
 
 /// <p>Contains information about the validation of each domain name in the certificate.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DomainValidation {
     /// <p>A fully qualified domain name (FQDN) in the certificate. For example, <code>www.example.com</code> or <code>example.com</code>. </p>
     #[serde(rename = "DomainName")]
@@ -222,7 +222,7 @@ pub struct DomainValidation {
 }
 
 /// <p>Contains information about the domain names that you want ACM to use to send you emails that enable you to validate domain ownership.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DomainValidationOption {
     /// <p>A fully qualified domain name (FQDN) in the certificate request.</p>
     #[serde(rename = "DomainName")]
@@ -232,7 +232,7 @@ pub struct DomainValidationOption {
     pub validation_domain: String,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ExportCertificateRequest {
     /// <p>An Amazon Resource Name (ARN) of the issued certificate. This must be of the form:</p> <p> <code>arn:aws:acm:region:account:certificate/12345678-1234-1234-1234-123456789012</code> </p>
     #[serde(rename = "CertificateArn")]
@@ -247,7 +247,7 @@ pub struct ExportCertificateRequest {
     pub passphrase: Vec<u8>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ExportCertificateResponse {
     /// <p>The base64 PEM-encoded certificate.</p>
     #[serde(rename = "Certificate")]
@@ -264,7 +264,7 @@ pub struct ExportCertificateResponse {
 }
 
 /// <p>The Extended Key Usage X.509 v3 extension defines one or more purposes for which the public key can be used. This is in addition to or in place of the basic purposes specified by the Key Usage extension. </p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ExtendedKeyUsage {
     /// <p>The name of an Extended Key Usage value.</p>
     #[serde(rename = "Name")]
@@ -277,7 +277,7 @@ pub struct ExtendedKeyUsage {
 }
 
 /// <p>This structure can be used in the <a>ListCertificates</a> action to filter the output of the certificate list. </p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct Filters {
     /// <p>Specify one or more <a>ExtendedKeyUsage</a> extension values.</p>
     #[serde(rename = "extendedKeyUsage")]
@@ -293,14 +293,14 @@ pub struct Filters {
     pub key_usage: Option<Vec<String>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetCertificateRequest {
     /// <p>String that contains a certificate ARN in the following format:</p> <p> <code>arn:aws:acm:region:123456789012:certificate/12345678-1234-1234-1234-123456789012</code> </p> <p>For more information about ARNs, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html">Amazon Resource Names (ARNs) and AWS Service Namespaces</a>.</p>
     #[serde(rename = "CertificateArn")]
     pub certificate_arn: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct GetCertificateResponse {
     /// <p>String that contains the ACM certificate represented by the ARN specified at input.</p>
     #[serde(rename = "Certificate")]
@@ -312,7 +312,7 @@ pub struct GetCertificateResponse {
     pub certificate_chain: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ImportCertificateRequest {
     /// <p>The certificate to import.</p>
     #[serde(rename = "Certificate")]
@@ -344,7 +344,7 @@ pub struct ImportCertificateRequest {
     pub private_key: Vec<u8>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ImportCertificateResponse {
     /// <p>The <a href="http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html">Amazon Resource Name (ARN)</a> of the imported certificate.</p>
     #[serde(rename = "CertificateArn")]
@@ -353,7 +353,7 @@ pub struct ImportCertificateResponse {
 }
 
 /// <p>The Key Usage X.509 v3 extension defines the purpose of the public key contained in the certificate.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct KeyUsage {
     /// <p>A string value that contains a Key Usage extension name.</p>
     #[serde(rename = "Name")]
@@ -361,7 +361,7 @@ pub struct KeyUsage {
     pub name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListCertificatesRequest {
     /// <p>Filter the certificate list by status value.</p>
     #[serde(rename = "CertificateStatuses")]
@@ -381,7 +381,7 @@ pub struct ListCertificatesRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListCertificatesResponse {
     /// <p>A list of ACM certificates.</p>
     #[serde(rename = "CertificateSummaryList")]
@@ -393,14 +393,14 @@ pub struct ListCertificatesResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListTagsForCertificateRequest {
     /// <p>String that contains the ARN of the ACM certificate for which you want to list the tags. This must have the following form:</p> <p> <code>arn:aws:acm:region:123456789012:certificate/12345678-1234-1234-1234-123456789012</code> </p> <p>For more information about ARNs, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html">Amazon Resource Names (ARNs) and AWS Service Namespaces</a>. </p>
     #[serde(rename = "CertificateArn")]
     pub certificate_arn: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListTagsForCertificateResponse {
     /// <p>The key-value pairs that define the applied tags.</p>
     #[serde(rename = "Tags")]
@@ -408,7 +408,7 @@ pub struct ListTagsForCertificateResponse {
     pub tags: Option<Vec<Tag>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct RemoveTagsFromCertificateRequest {
     /// <p>String that contains the ARN of the ACM Certificate with one or more tags that you want to remove. This must be of the form:</p> <p> <code>arn:aws:acm:region:123456789012:certificate/12345678-1234-1234-1234-123456789012</code> </p> <p>For more information about ARNs, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html">Amazon Resource Names (ARNs) and AWS Service Namespaces</a>. </p>
     #[serde(rename = "CertificateArn")]
@@ -419,7 +419,7 @@ pub struct RemoveTagsFromCertificateRequest {
 }
 
 /// <p>Contains information about the status of ACM's <a href="http://docs.aws.amazon.com/http:/docs.aws.amazon.comacm/latest/userguide/acm-renewal.html">managed renewal</a> for the certificate. This structure exists only when the certificate type is <code>AMAZON_ISSUED</code>.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct RenewalSummary {
     /// <p>Contains information about the validation of each domain name in the certificate, as it pertains to ACM's <a href="http://docs.aws.amazon.com/http:/docs.aws.amazon.comacm/latest/userguide/acm-renewal.html">managed renewal</a>. This is different from the initial validation that occurs as a result of the <a>RequestCertificate</a> request. This field exists only when the certificate type is <code>AMAZON_ISSUED</code>.</p>
     #[serde(rename = "DomainValidationOptions")]
@@ -429,7 +429,7 @@ pub struct RenewalSummary {
     pub renewal_status: String,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct RequestCertificateRequest {
     /// <p>The Amazon Resource Name (ARN) of the private certificate authority (CA) that will be used to issue the certificate. For more information about private CAs, see the <a href="http://docs.aws.amazon.com/http:/docs.aws.amazon.comacm-pca/latest/userguide/PcaWelcome.html">AWS Certificate Manager Private Certificate Authority (PCA)</a> user guide. The ARN must have the following form: </p> <p> <code>arn:aws:acm-pca:region:account:certificate-authority/12345678-1234-1234-1234-123456789012</code> </p>
     #[serde(rename = "CertificateAuthorityArn")]
@@ -460,7 +460,7 @@ pub struct RequestCertificateRequest {
     pub validation_method: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct RequestCertificateResponse {
     /// <p>String that contains the ARN of the issued certificate. This must be of the form:</p> <p> <code>arn:aws:acm:us-east-1:123456789012:certificate/12345678-1234-1234-1234-123456789012</code> </p>
     #[serde(rename = "CertificateArn")]
@@ -468,7 +468,7 @@ pub struct RequestCertificateResponse {
     pub certificate_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ResendValidationEmailRequest {
     /// <p>String that contains the ARN of the requested certificate. The certificate ARN is generated and returned by the <a>RequestCertificate</a> action as soon as the request is made. By default, using this parameter causes email to be sent to all top-level domains you specified in the certificate request. The ARN must be of the form: </p> <p> <code>arn:aws:acm:us-east-1:123456789012:certificate/12345678-1234-1234-1234-123456789012</code> </p>
     #[serde(rename = "CertificateArn")]
@@ -482,7 +482,7 @@ pub struct ResendValidationEmailRequest {
 }
 
 /// <p>Contains a DNS record value that you can use to can use to validate ownership or control of a domain. This is used by the <a>DescribeCertificate</a> action. </p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ResourceRecord {
     /// <p>The name of the DNS record to create in your domain. This is supplied by ACM.</p>
     #[serde(rename = "Name")]
@@ -496,7 +496,7 @@ pub struct ResourceRecord {
 }
 
 /// <p>A key-value pair that identifies or specifies metadata about an ACM resource.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Tag {
     /// <p>The key of the tag.</p>
     #[serde(rename = "Key")]
@@ -507,7 +507,7 @@ pub struct Tag {
     pub value: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateCertificateOptionsRequest {
     /// <p>ARN of the requested certificate to update. This must be of the form:</p> <p> <code>arn:aws:acm:us-east-1:<i>account</i>:certificate/<i>12345678-1234-1234-1234-123456789012</i> </code> </p>
     #[serde(rename = "CertificateArn")]

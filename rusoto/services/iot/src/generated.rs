@@ -31,7 +31,7 @@ use serde_json;
 use serde_json::from_str;
 use serde_json::Value as SerdeJsonValue;
 /// <p>The input for the AcceptCertificateTransfer operation.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct AcceptCertificateTransferRequest {
     /// <p>The ID of the certificate.</p>
     #[serde(rename = "certificateId")]
@@ -43,7 +43,7 @@ pub struct AcceptCertificateTransferRequest {
 }
 
 /// <p>Describes the actions associated with a rule.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Action {
     /// <p>Change the state of a CloudWatch alarm.</p>
     #[serde(rename = "cloudwatchAlarm")]
@@ -99,7 +99,7 @@ pub struct Action {
     pub sqs: Option<SqsAction>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct AddThingToThingGroupRequest {
     /// <p>The ARN of the thing to add to a group.</p>
     #[serde(rename = "thingArn")]
@@ -119,11 +119,11 @@ pub struct AddThingToThingGroupRequest {
     pub thing_name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct AddThingToThingGroupResponse {}
 
 /// <p>Contains information that allowed the authorization.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct Allowed {
     /// <p>A list of policies that allowed the authentication.</p>
     #[serde(rename = "policies")]
@@ -131,7 +131,7 @@ pub struct Allowed {
     pub policies: Option<Vec<Policy>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct AssociateTargetsWithJobRequest {
     /// <p>An optional comment string describing why the job was associated with the targets.</p>
     #[serde(rename = "comment")]
@@ -145,7 +145,7 @@ pub struct AssociateTargetsWithJobRequest {
     pub targets: Vec<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct AssociateTargetsWithJobResponse {
     /// <p>A short text description of the job.</p>
     #[serde(rename = "description")]
@@ -161,7 +161,7 @@ pub struct AssociateTargetsWithJobResponse {
     pub job_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct AttachPolicyRequest {
     /// <p>The name of the policy to attach.</p>
     #[serde(rename = "policyName")]
@@ -172,7 +172,7 @@ pub struct AttachPolicyRequest {
 }
 
 /// <p>The input for the AttachPrincipalPolicy operation.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct AttachPrincipalPolicyRequest {
     /// <p>The policy name.</p>
     #[serde(rename = "policyName")]
@@ -183,7 +183,7 @@ pub struct AttachPrincipalPolicyRequest {
 }
 
 /// <p>The input for the AttachThingPrincipal operation.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct AttachThingPrincipalRequest {
     /// <p>The principal, such as a certificate or other credential.</p>
     #[serde(rename = "principal")]
@@ -194,11 +194,11 @@ pub struct AttachThingPrincipalRequest {
 }
 
 /// <p>The output from the AttachThingPrincipal operation.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct AttachThingPrincipalResponse {}
 
 /// <p>The attribute payload.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AttributePayload {
     /// <p>A JSON string containing up to three key-value pair in JSON format. For example:</p> <p> <code>{\"attributes\":{\"string1\":\"string2\"}}</code> </p>
     #[serde(rename = "attributes")]
@@ -211,7 +211,7 @@ pub struct AttributePayload {
 }
 
 /// <p>A collection of authorization information.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AuthInfo {
     /// <p>The type of action for which the principal is being authorized.</p>
     #[serde(rename = "actionType")]
@@ -224,7 +224,7 @@ pub struct AuthInfo {
 }
 
 /// <p>The authorizer result.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct AuthResult {
     /// <p>The policies and statements that allowed the specified action.</p>
     #[serde(rename = "allowed")]
@@ -249,7 +249,7 @@ pub struct AuthResult {
 }
 
 /// <p>The authorizer description.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct AuthorizerDescription {
     /// <p>The authorizer ARN.</p>
     #[serde(rename = "authorizerArn")]
@@ -286,7 +286,7 @@ pub struct AuthorizerDescription {
 }
 
 /// <p>The authorizer summary.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct AuthorizerSummary {
     /// <p>The authorizer ARN.</p>
     #[serde(rename = "authorizerArn")]
@@ -299,7 +299,7 @@ pub struct AuthorizerSummary {
 }
 
 /// <p>A CA certificate.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CACertificate {
     /// <p>The ARN of the CA certificate.</p>
     #[serde(rename = "certificateArn")]
@@ -320,7 +320,7 @@ pub struct CACertificate {
 }
 
 /// <p>Describes a CA certificate.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CACertificateDescription {
     /// <p>Whether the CA certificate configured for auto registration of device certificates. Valid values are "ENABLE" and "DISABLE"</p>
     #[serde(rename = "autoRegistrationStatus")]
@@ -362,14 +362,14 @@ pub struct CACertificateDescription {
 }
 
 /// <p>The input for the CancelCertificateTransfer operation.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CancelCertificateTransferRequest {
     /// <p>The ID of the certificate.</p>
     #[serde(rename = "certificateId")]
     pub certificate_id: String,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CancelJobRequest {
     /// <p>An optional comment string describing why the job was canceled.</p>
     #[serde(rename = "comment")]
@@ -380,7 +380,7 @@ pub struct CancelJobRequest {
     pub job_id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CancelJobResponse {
     /// <p>A short text description of the job.</p>
     #[serde(rename = "description")]
@@ -397,7 +397,7 @@ pub struct CancelJobResponse {
 }
 
 /// <p>Information about a certificate.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct Certificate {
     /// <p>The ARN of the certificate.</p>
     #[serde(rename = "certificateArn")]
@@ -418,7 +418,7 @@ pub struct Certificate {
 }
 
 /// <p>Describes a certificate.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CertificateDescription {
     /// <p>The certificate ID of the CA certificate used to sign this certificate.</p>
     #[serde(rename = "caCertificateId")]
@@ -468,14 +468,14 @@ pub struct CertificateDescription {
     pub transfer_data: Option<TransferData>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ClearDefaultAuthorizerRequest {}
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ClearDefaultAuthorizerResponse {}
 
 /// <p>Describes an action that updates a CloudWatch alarm.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct CloudwatchAlarmAction {
     /// <p>The CloudWatch alarm name.</p>
     #[serde(rename = "alarmName")]
@@ -492,7 +492,7 @@ pub struct CloudwatchAlarmAction {
 }
 
 /// <p>Describes an action that captures a CloudWatch metric.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct CloudwatchMetricAction {
     /// <p>The CloudWatch metric name.</p>
     #[serde(rename = "metricName")]
@@ -516,7 +516,7 @@ pub struct CloudwatchMetricAction {
 }
 
 /// <p>Describes the method to use when code signing a file.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct CodeSigning {
     /// <p>The ID of the AWSSignerJob which was created to sign the file.</p>
     #[serde(rename = "awsSignerJobId")]
@@ -529,7 +529,7 @@ pub struct CodeSigning {
 }
 
 /// <p>Describes the certificate chain being used when code signing a file.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct CodeSigningCertificateChain {
     /// <p>The name of the certificate.</p>
     #[serde(rename = "certificateName")]
@@ -546,7 +546,7 @@ pub struct CodeSigningCertificateChain {
 }
 
 /// <p>Describes the signature for a file.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct CodeSigningSignature {
     /// <p>A base64 encoded binary representation of the code signing signature.</p>
     #[serde(rename = "inlineDocument")]
@@ -563,7 +563,7 @@ pub struct CodeSigningSignature {
 }
 
 /// <p>Configuration.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Configuration {
     /// <p>True to enable the configuration.</p>
     #[serde(rename = "Enabled")]
@@ -571,7 +571,7 @@ pub struct Configuration {
     pub enabled: Option<bool>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateAuthorizerRequest {
     /// <p>The ARN of the authorizer's Lambda function.</p>
     #[serde(rename = "authorizerFunctionArn")]
@@ -591,7 +591,7 @@ pub struct CreateAuthorizerRequest {
     pub token_signing_public_keys: ::std::collections::HashMap<String, String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CreateAuthorizerResponse {
     /// <p>The authorizer ARN.</p>
     #[serde(rename = "authorizerArn")]
@@ -604,7 +604,7 @@ pub struct CreateAuthorizerResponse {
 }
 
 /// <p>The input for the CreateCertificateFromCsr operation.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateCertificateFromCsrRequest {
     /// <p>The certificate signing request (CSR).</p>
     #[serde(rename = "certificateSigningRequest")]
@@ -616,7 +616,7 @@ pub struct CreateCertificateFromCsrRequest {
 }
 
 /// <p>The output from the CreateCertificateFromCsr operation.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CreateCertificateFromCsrResponse {
     /// <p>The Amazon Resource Name (ARN) of the certificate. You can use the ARN as a principal for policy operations.</p>
     #[serde(rename = "certificateArn")]
@@ -632,7 +632,7 @@ pub struct CreateCertificateFromCsrResponse {
     pub certificate_pem: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateJobRequest {
     /// <p>A short text description of the job.</p>
     #[serde(rename = "description")]
@@ -670,7 +670,7 @@ pub struct CreateJobRequest {
     pub targets: Vec<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CreateJobResponse {
     /// <p>The job description.</p>
     #[serde(rename = "description")]
@@ -687,7 +687,7 @@ pub struct CreateJobResponse {
 }
 
 /// <p>The input for the CreateKeysAndCertificate operation.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateKeysAndCertificateRequest {
     /// <p>Specifies whether the certificate is active.</p>
     #[serde(rename = "setAsActive")]
@@ -696,7 +696,7 @@ pub struct CreateKeysAndCertificateRequest {
 }
 
 /// <p>The output of the CreateKeysAndCertificate operation.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CreateKeysAndCertificateResponse {
     /// <p>The ARN of the certificate.</p>
     #[serde(rename = "certificateArn")]
@@ -716,7 +716,7 @@ pub struct CreateKeysAndCertificateResponse {
     pub key_pair: Option<KeyPair>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateOTAUpdateRequest {
     /// <p>A list of additional OTA update parameters which are name-value pairs.</p>
     #[serde(rename = "additionalParameters")]
@@ -744,7 +744,7 @@ pub struct CreateOTAUpdateRequest {
     pub targets: Vec<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CreateOTAUpdateResponse {
     /// <p>The AWS IoT job ARN associated with the OTA update.</p>
     #[serde(rename = "awsIotJobArn")]
@@ -769,7 +769,7 @@ pub struct CreateOTAUpdateResponse {
 }
 
 /// <p>The input for the CreatePolicy operation.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreatePolicyRequest {
     /// <p>The JSON document that describes the policy. <b>policyDocument</b> must have a minimum length of 1, with a maximum length of 2048, excluding whitespace.</p>
     #[serde(rename = "policyDocument")]
@@ -780,7 +780,7 @@ pub struct CreatePolicyRequest {
 }
 
 /// <p>The output from the CreatePolicy operation.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CreatePolicyResponse {
     /// <p>The policy ARN.</p>
     #[serde(rename = "policyArn")]
@@ -801,7 +801,7 @@ pub struct CreatePolicyResponse {
 }
 
 /// <p>The input for the CreatePolicyVersion operation.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreatePolicyVersionRequest {
     /// <p>The JSON document that describes the policy. Minimum length of 1. Maximum length of 2048, excluding whitespace.</p>
     #[serde(rename = "policyDocument")]
@@ -816,7 +816,7 @@ pub struct CreatePolicyVersionRequest {
 }
 
 /// <p>The output of the CreatePolicyVersion operation.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CreatePolicyVersionResponse {
     /// <p>Specifies whether the policy version is the default.</p>
     #[serde(rename = "isDefaultVersion")]
@@ -836,7 +836,7 @@ pub struct CreatePolicyVersionResponse {
     pub policy_version_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateRoleAliasRequest {
     /// <p>How long (in seconds) the credentials will be valid.</p>
     #[serde(rename = "credentialDurationSeconds")]
@@ -850,7 +850,7 @@ pub struct CreateRoleAliasRequest {
     pub role_arn: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CreateRoleAliasResponse {
     /// <p>The role alias.</p>
     #[serde(rename = "roleAlias")]
@@ -862,7 +862,7 @@ pub struct CreateRoleAliasResponse {
     pub role_alias_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateStreamRequest {
     /// <p>A description of the stream.</p>
     #[serde(rename = "description")]
@@ -879,7 +879,7 @@ pub struct CreateStreamRequest {
     pub stream_id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CreateStreamResponse {
     /// <p>A description of the stream.</p>
     #[serde(rename = "description")]
@@ -899,7 +899,7 @@ pub struct CreateStreamResponse {
     pub stream_version: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateThingGroupRequest {
     /// <p>The name of the parent thing group.</p>
     #[serde(rename = "parentGroupName")]
@@ -914,7 +914,7 @@ pub struct CreateThingGroupRequest {
     pub thing_group_properties: Option<ThingGroupProperties>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CreateThingGroupResponse {
     /// <p>The thing group ARN.</p>
     #[serde(rename = "thingGroupArn")]
@@ -931,7 +931,7 @@ pub struct CreateThingGroupResponse {
 }
 
 /// <p>The input for the CreateThing operation.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateThingRequest {
     /// <p>The attribute payload, which consists of up to three name/value pairs in a JSON document. For example:</p> <p> <code>{\"attributes\":{\"string1\":\"string2\"}}</code> </p>
     #[serde(rename = "attributePayload")]
@@ -947,7 +947,7 @@ pub struct CreateThingRequest {
 }
 
 /// <p>The output of the CreateThing operation.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CreateThingResponse {
     /// <p>The ARN of the new thing.</p>
     #[serde(rename = "thingArn")]
@@ -964,7 +964,7 @@ pub struct CreateThingResponse {
 }
 
 /// <p>The input for the CreateThingType operation.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateThingTypeRequest {
     /// <p>The name of the thing type.</p>
     #[serde(rename = "thingTypeName")]
@@ -976,7 +976,7 @@ pub struct CreateThingTypeRequest {
 }
 
 /// <p>The output of the CreateThingType operation.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct CreateThingTypeResponse {
     /// <p>The Amazon Resource Name (ARN) of the thing type.</p>
     #[serde(rename = "thingTypeArn")]
@@ -993,7 +993,7 @@ pub struct CreateThingTypeResponse {
 }
 
 /// <p>The input for the CreateTopicRule operation.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateTopicRuleRequest {
     /// <p>The name of the rule.</p>
     #[serde(rename = "ruleName")]
@@ -1004,7 +1004,7 @@ pub struct CreateTopicRuleRequest {
 }
 
 /// <p>Describes a custom method used to code sign a file.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct CustomCodeSigning {
     /// <p>The certificate chain.</p>
     #[serde(rename = "certificateChain")]
@@ -1024,18 +1024,18 @@ pub struct CustomCodeSigning {
     pub signature_algorithm: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteAuthorizerRequest {
     /// <p>The name of the authorizer to delete.</p>
     #[serde(rename = "authorizerName")]
     pub authorizer_name: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DeleteAuthorizerResponse {}
 
 /// <p>Input for the DeleteCACertificate operation.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteCACertificateRequest {
     /// <p>The ID of the certificate to delete.</p>
     #[serde(rename = "certificateId")]
@@ -1043,11 +1043,11 @@ pub struct DeleteCACertificateRequest {
 }
 
 /// <p>The output for the DeleteCACertificate operation.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DeleteCACertificateResponse {}
 
 /// <p>The input for the DeleteCertificate operation.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteCertificateRequest {
     /// <p>The ID of the certificate.</p>
     #[serde(rename = "certificateId")]
@@ -1058,18 +1058,18 @@ pub struct DeleteCertificateRequest {
     pub force_delete: Option<bool>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteOTAUpdateRequest {
     /// <p>The OTA update ID to delete.</p>
     #[serde(rename = "otaUpdateId")]
     pub ota_update_id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DeleteOTAUpdateResponse {}
 
 /// <p>The input for the DeletePolicy operation.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeletePolicyRequest {
     /// <p>The name of the policy to delete.</p>
     #[serde(rename = "policyName")]
@@ -1077,7 +1077,7 @@ pub struct DeletePolicyRequest {
 }
 
 /// <p>The input for the DeletePolicyVersion operation.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeletePolicyVersionRequest {
     /// <p>The name of the policy.</p>
     #[serde(rename = "policyName")]
@@ -1088,34 +1088,34 @@ pub struct DeletePolicyVersionRequest {
 }
 
 /// <p>The input for the DeleteRegistrationCode operation.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteRegistrationCodeRequest {}
 
 /// <p>The output for the DeleteRegistrationCode operation.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DeleteRegistrationCodeResponse {}
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteRoleAliasRequest {
     /// <p>The role alias to delete.</p>
     #[serde(rename = "roleAlias")]
     pub role_alias: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DeleteRoleAliasResponse {}
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteStreamRequest {
     /// <p>The stream ID.</p>
     #[serde(rename = "streamId")]
     pub stream_id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DeleteStreamResponse {}
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteThingGroupRequest {
     /// <p>The expected version of the thing group to delete.</p>
     #[serde(rename = "expectedVersion")]
@@ -1126,11 +1126,11 @@ pub struct DeleteThingGroupRequest {
     pub thing_group_name: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DeleteThingGroupResponse {}
 
 /// <p>The input for the DeleteThing operation.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteThingRequest {
     /// <p>The expected version of the thing record in the registry. If the version of the record in the registry does not match the expected version specified in the request, the <code>DeleteThing</code> request is rejected with a <code>VersionConflictException</code>.</p>
     #[serde(rename = "expectedVersion")]
@@ -1142,11 +1142,11 @@ pub struct DeleteThingRequest {
 }
 
 /// <p>The output of the DeleteThing operation.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DeleteThingResponse {}
 
 /// <p>The input for the DeleteThingType operation.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteThingTypeRequest {
     /// <p>The name of the thing type.</p>
     #[serde(rename = "thingTypeName")]
@@ -1154,18 +1154,18 @@ pub struct DeleteThingTypeRequest {
 }
 
 /// <p>The output for the DeleteThingType operation.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DeleteThingTypeResponse {}
 
 /// <p>The input for the DeleteTopicRule operation.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteTopicRuleRequest {
     /// <p>The name of the rule.</p>
     #[serde(rename = "ruleName")]
     pub rule_name: String,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteV2LoggingLevelRequest {
     /// <p>The name of the resource for which you are configuring logging.</p>
     #[serde(rename = "targetName")]
@@ -1176,7 +1176,7 @@ pub struct DeleteV2LoggingLevelRequest {
 }
 
 /// <p>Contains information that denied the authorization.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct Denied {
     /// <p>Information that explicitly denies the authorization. </p>
     #[serde(rename = "explicitDeny")]
@@ -1189,7 +1189,7 @@ pub struct Denied {
 }
 
 /// <p>The input for the DeprecateThingType operation.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeprecateThingTypeRequest {
     /// <p>The name of the thing type to deprecate.</p>
     #[serde(rename = "thingTypeName")]
@@ -1201,17 +1201,17 @@ pub struct DeprecateThingTypeRequest {
 }
 
 /// <p>The output for the DeprecateThingType operation.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DeprecateThingTypeResponse {}
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeAuthorizerRequest {
     /// <p>The name of the authorizer to describe.</p>
     #[serde(rename = "authorizerName")]
     pub authorizer_name: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribeAuthorizerResponse {
     /// <p>The authorizer description.</p>
     #[serde(rename = "authorizerDescription")]
@@ -1220,7 +1220,7 @@ pub struct DescribeAuthorizerResponse {
 }
 
 /// <p>The input for the DescribeCACertificate operation.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeCACertificateRequest {
     /// <p>The CA certificate identifier.</p>
     #[serde(rename = "certificateId")]
@@ -1228,7 +1228,7 @@ pub struct DescribeCACertificateRequest {
 }
 
 /// <p>The output from the DescribeCACertificate operation.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribeCACertificateResponse {
     /// <p>The CA certificate description.</p>
     #[serde(rename = "certificateDescription")]
@@ -1241,7 +1241,7 @@ pub struct DescribeCACertificateResponse {
 }
 
 /// <p>The input for the DescribeCertificate operation.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeCertificateRequest {
     /// <p>The ID of the certificate.</p>
     #[serde(rename = "certificateId")]
@@ -1249,7 +1249,7 @@ pub struct DescribeCertificateRequest {
 }
 
 /// <p>The output of the DescribeCertificate operation.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribeCertificateResponse {
     /// <p>The description of the certificate.</p>
     #[serde(rename = "certificateDescription")]
@@ -1257,10 +1257,10 @@ pub struct DescribeCertificateResponse {
     pub certificate_description: Option<CertificateDescription>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeDefaultAuthorizerRequest {}
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribeDefaultAuthorizerResponse {
     /// <p>The default authorizer's description.</p>
     #[serde(rename = "authorizerDescription")]
@@ -1269,7 +1269,7 @@ pub struct DescribeDefaultAuthorizerResponse {
 }
 
 /// <p>The input for the DescribeEndpoint operation.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeEndpointRequest {
     /// <p>The endpoint type.</p>
     #[serde(rename = "endpointType")]
@@ -1278,7 +1278,7 @@ pub struct DescribeEndpointRequest {
 }
 
 /// <p>The output from the DescribeEndpoint operation.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribeEndpointResponse {
     /// <p>The endpoint. The format of the endpoint is as follows: <i>identifier</i>.iot.<i>region</i>.amazonaws.com.</p>
     #[serde(rename = "endpointAddress")]
@@ -1286,10 +1286,10 @@ pub struct DescribeEndpointResponse {
     pub endpoint_address: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeEventConfigurationsRequest {}
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribeEventConfigurationsResponse {
     /// <p>The creation date of the event configuration.</p>
     #[serde(rename = "creationDate")]
@@ -1305,14 +1305,14 @@ pub struct DescribeEventConfigurationsResponse {
     pub last_modified_date: Option<f64>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeIndexRequest {
     /// <p>The index name.</p>
     #[serde(rename = "indexName")]
     pub index_name: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribeIndexResponse {
     /// <p>The index name.</p>
     #[serde(rename = "indexName")]
@@ -1328,7 +1328,7 @@ pub struct DescribeIndexResponse {
     pub schema: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeJobExecutionRequest {
     /// <p>A string (consisting of the digits "0" through "9" which is used to specify a particular job execution on a particular device.</p>
     #[serde(rename = "executionNumber")]
@@ -1342,7 +1342,7 @@ pub struct DescribeJobExecutionRequest {
     pub thing_name: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribeJobExecutionResponse {
     /// <p>Information about the job execution.</p>
     #[serde(rename = "execution")]
@@ -1350,14 +1350,14 @@ pub struct DescribeJobExecutionResponse {
     pub execution: Option<JobExecution>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeJobRequest {
     /// <p>The unique identifier you assigned to this job when it was created.</p>
     #[serde(rename = "jobId")]
     pub job_id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribeJobResponse {
     /// <p>An S3 link to the job document.</p>
     #[serde(rename = "documentSource")]
@@ -1369,14 +1369,14 @@ pub struct DescribeJobResponse {
     pub job: Option<Job>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeRoleAliasRequest {
     /// <p>The role alias to describe.</p>
     #[serde(rename = "roleAlias")]
     pub role_alias: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribeRoleAliasResponse {
     /// <p>The role alias description.</p>
     #[serde(rename = "roleAliasDescription")]
@@ -1384,14 +1384,14 @@ pub struct DescribeRoleAliasResponse {
     pub role_alias_description: Option<RoleAliasDescription>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeStreamRequest {
     /// <p>The stream ID.</p>
     #[serde(rename = "streamId")]
     pub stream_id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribeStreamResponse {
     /// <p>Information about the stream.</p>
     #[serde(rename = "streamInfo")]
@@ -1399,14 +1399,14 @@ pub struct DescribeStreamResponse {
     pub stream_info: Option<StreamInfo>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeThingGroupRequest {
     /// <p>The name of the thing group.</p>
     #[serde(rename = "thingGroupName")]
     pub thing_group_name: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribeThingGroupResponse {
     /// <p>The thing group ARN.</p>
     #[serde(rename = "thingGroupArn")]
@@ -1434,14 +1434,14 @@ pub struct DescribeThingGroupResponse {
     pub version: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeThingRegistrationTaskRequest {
     /// <p>The task ID.</p>
     #[serde(rename = "taskId")]
     pub task_id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribeThingRegistrationTaskResponse {
     /// <p>The task creation date.</p>
     #[serde(rename = "creationDate")]
@@ -1494,7 +1494,7 @@ pub struct DescribeThingRegistrationTaskResponse {
 }
 
 /// <p>The input for the DescribeThing operation.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeThingRequest {
     /// <p>The name of the thing.</p>
     #[serde(rename = "thingName")]
@@ -1502,7 +1502,7 @@ pub struct DescribeThingRequest {
 }
 
 /// <p>The output from the DescribeThing operation.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribeThingResponse {
     /// <p>The thing attributes.</p>
     #[serde(rename = "attributes")]
@@ -1535,7 +1535,7 @@ pub struct DescribeThingResponse {
 }
 
 /// <p>The input for the DescribeThingType operation.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeThingTypeRequest {
     /// <p>The name of the thing type.</p>
     #[serde(rename = "thingTypeName")]
@@ -1543,7 +1543,7 @@ pub struct DescribeThingTypeRequest {
 }
 
 /// <p>The output for the DescribeThingType operation.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DescribeThingTypeResponse {
     /// <p>The thing type ARN.</p>
     #[serde(rename = "thingTypeArn")]
@@ -1567,7 +1567,7 @@ pub struct DescribeThingTypeResponse {
     pub thing_type_properties: Option<ThingTypeProperties>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DetachPolicyRequest {
     /// <p>The policy to detach.</p>
     #[serde(rename = "policyName")]
@@ -1578,7 +1578,7 @@ pub struct DetachPolicyRequest {
 }
 
 /// <p>The input for the DetachPrincipalPolicy operation.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DetachPrincipalPolicyRequest {
     /// <p>The name of the policy to detach.</p>
     #[serde(rename = "policyName")]
@@ -1589,7 +1589,7 @@ pub struct DetachPrincipalPolicyRequest {
 }
 
 /// <p>The input for the DetachThingPrincipal operation.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DetachThingPrincipalRequest {
     /// <p>If the principal is a certificate, this value must be ARN of the certificate. If the principal is an Amazon Cognito identity, this value must be the ID of the Amazon Cognito identity.</p>
     #[serde(rename = "principal")]
@@ -1600,11 +1600,11 @@ pub struct DetachThingPrincipalRequest {
 }
 
 /// <p>The output from the DetachThingPrincipal operation.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct DetachThingPrincipalResponse {}
 
 /// <p>The input for the DisableTopicRuleRequest operation.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DisableTopicRuleRequest {
     /// <p>The name of the rule to disable.</p>
     #[serde(rename = "ruleName")]
@@ -1612,7 +1612,7 @@ pub struct DisableTopicRuleRequest {
 }
 
 /// <p>Describes an action to write to a DynamoDB table.</p> <p>The <code>tableName</code>, <code>hashKeyField</code>, and <code>rangeKeyField</code> values must match the values used when you created the table.</p> <p>The <code>hashKeyValue</code> and <code>rangeKeyvalue</code> fields use a substitution template syntax. These templates provide data at runtime. The syntax is as follows: ${<i>sql-expression</i>}.</p> <p>You can specify any valid expression in a WHERE or SELECT clause, including JSON properties, comparisons, calculations, and functions. For example, the following field uses the third level of the topic:</p> <p> <code>"hashKeyValue": "${topic(3)}"</code> </p> <p>The following field uses the timestamp:</p> <p> <code>"rangeKeyValue": "${timestamp()}"</code> </p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DynamoDBAction {
     /// <p>The hash key name.</p>
     #[serde(rename = "hashKeyField")]
@@ -1653,7 +1653,7 @@ pub struct DynamoDBAction {
 }
 
 /// <p>Describes an action to write to a DynamoDB table.</p> <p>This DynamoDB action writes each attribute in the message payload into it's own column in the DynamoDB table.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DynamoDBv2Action {
     /// <p>Specifies the DynamoDB table to which the message data will be written. For example:</p> <p> <code>{ "dynamoDBv2": { "roleArn": "aws:iam:12341251:my-role" "putItem": { "tableName": "my-table" } } }</code> </p> <p>Each attribute in the message payload will be written to a separate column in the DynamoDB database.</p>
     #[serde(rename = "putItem")]
@@ -1666,7 +1666,7 @@ pub struct DynamoDBv2Action {
 }
 
 /// <p>The policy that has the effect on the authorization results.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct EffectivePolicy {
     /// <p>The policy ARN.</p>
     #[serde(rename = "policyArn")]
@@ -1683,7 +1683,7 @@ pub struct EffectivePolicy {
 }
 
 /// <p>Describes an action that writes data to an Amazon Elasticsearch Service domain.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ElasticsearchAction {
     /// <p>The endpoint of your Elasticsearch domain.</p>
     #[serde(rename = "endpoint")]
@@ -1703,7 +1703,7 @@ pub struct ElasticsearchAction {
 }
 
 /// <p>The input for the EnableTopicRuleRequest operation.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct EnableTopicRuleRequest {
     /// <p>The name of the topic rule to enable.</p>
     #[serde(rename = "ruleName")]
@@ -1711,7 +1711,7 @@ pub struct EnableTopicRuleRequest {
 }
 
 /// <p>Error information.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ErrorInfo {
     /// <p>The error code.</p>
     #[serde(rename = "code")]
@@ -1724,7 +1724,7 @@ pub struct ErrorInfo {
 }
 
 /// <p>Information that explicitly denies authorization.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ExplicitDeny {
     /// <p>The policies that denied the authorization.</p>
     #[serde(rename = "policies")]
@@ -1733,7 +1733,7 @@ pub struct ExplicitDeny {
 }
 
 /// <p>Describes an action that writes data to an Amazon Kinesis Firehose stream.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct FirehoseAction {
     /// <p>The delivery stream name.</p>
     #[serde(rename = "deliveryStreamName")]
@@ -1747,7 +1747,7 @@ pub struct FirehoseAction {
     pub separator: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetEffectivePoliciesRequest {
     /// <p>The Cognito identity pool ID.</p>
     #[serde(rename = "cognitoIdentityPoolId")]
@@ -1763,7 +1763,7 @@ pub struct GetEffectivePoliciesRequest {
     pub thing_name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct GetEffectivePoliciesResponse {
     /// <p>The effective policies.</p>
     #[serde(rename = "effectivePolicies")]
@@ -1771,10 +1771,10 @@ pub struct GetEffectivePoliciesResponse {
     pub effective_policies: Option<Vec<EffectivePolicy>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetIndexingConfigurationRequest {}
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct GetIndexingConfigurationResponse {
     /// <p>Thing indexing configuration.</p>
     #[serde(rename = "thingIndexingConfiguration")]
@@ -1782,14 +1782,14 @@ pub struct GetIndexingConfigurationResponse {
     pub thing_indexing_configuration: Option<ThingIndexingConfiguration>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetJobDocumentRequest {
     /// <p>The unique identifier you assigned to this job when it was created.</p>
     #[serde(rename = "jobId")]
     pub job_id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct GetJobDocumentResponse {
     /// <p>The job document content.</p>
     #[serde(rename = "document")]
@@ -1798,11 +1798,11 @@ pub struct GetJobDocumentResponse {
 }
 
 /// <p>The input for the GetLoggingOptions operation.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetLoggingOptionsRequest {}
 
 /// <p>The output from the GetLoggingOptions operation.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct GetLoggingOptionsResponse {
     /// <p>The logging level.</p>
     #[serde(rename = "logLevel")]
@@ -1814,14 +1814,14 @@ pub struct GetLoggingOptionsResponse {
     pub role_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetOTAUpdateRequest {
     /// <p>The OTA update ID.</p>
     #[serde(rename = "otaUpdateId")]
     pub ota_update_id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct GetOTAUpdateResponse {
     /// <p>The OTA update info.</p>
     #[serde(rename = "otaUpdateInfo")]
@@ -1830,7 +1830,7 @@ pub struct GetOTAUpdateResponse {
 }
 
 /// <p>The input for the GetPolicy operation.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetPolicyRequest {
     /// <p>The name of the policy.</p>
     #[serde(rename = "policyName")]
@@ -1838,7 +1838,7 @@ pub struct GetPolicyRequest {
 }
 
 /// <p>The output from the GetPolicy operation.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct GetPolicyResponse {
     #[serde(rename = "creationDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1868,7 +1868,7 @@ pub struct GetPolicyResponse {
 }
 
 /// <p>The input for the GetPolicyVersion operation.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetPolicyVersionRequest {
     /// <p>The name of the policy.</p>
     #[serde(rename = "policyName")]
@@ -1879,7 +1879,7 @@ pub struct GetPolicyVersionRequest {
 }
 
 /// <p>The output from the GetPolicyVersion operation.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct GetPolicyVersionResponse {
     #[serde(rename = "creationDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1913,11 +1913,11 @@ pub struct GetPolicyVersionResponse {
 }
 
 /// <p>The input to the GetRegistrationCode operation.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetRegistrationCodeRequest {}
 
 /// <p>The output from the GetRegistrationCode operation.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct GetRegistrationCodeResponse {
     /// <p>The CA certificate registration code.</p>
     #[serde(rename = "registrationCode")]
@@ -1926,7 +1926,7 @@ pub struct GetRegistrationCodeResponse {
 }
 
 /// <p>The input for the GetTopicRule operation.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetTopicRuleRequest {
     /// <p>The name of the rule.</p>
     #[serde(rename = "ruleName")]
@@ -1934,7 +1934,7 @@ pub struct GetTopicRuleRequest {
 }
 
 /// <p>The output from the GetTopicRule operation.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct GetTopicRuleResponse {
     /// <p>The rule.</p>
     #[serde(rename = "rule")]
@@ -1946,10 +1946,10 @@ pub struct GetTopicRuleResponse {
     pub rule_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetV2LoggingOptionsRequest {}
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct GetV2LoggingOptionsResponse {
     /// <p>The default log level.</p>
     #[serde(rename = "defaultLogLevel")]
@@ -1966,7 +1966,7 @@ pub struct GetV2LoggingOptionsResponse {
 }
 
 /// <p>The name and ARN of a group.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct GroupNameAndArn {
     /// <p>The group ARN.</p>
     #[serde(rename = "groupArn")]
@@ -1979,7 +1979,7 @@ pub struct GroupNameAndArn {
 }
 
 /// <p>Information that implicitly denies authorization. When policy doesn't explicitly deny or allow an action on a resource it is considered an implicit deny.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ImplicitDeny {
     /// <p>Policies that don't contain a matching allow or deny statement for the specified action on the specified resource. </p>
     #[serde(rename = "policies")]
@@ -1988,7 +1988,7 @@ pub struct ImplicitDeny {
 }
 
 /// <p>The <code>Job</code> object contains details about a job.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct Job {
     /// <p>If the job was updated, describes the reason for the update.</p>
     #[serde(rename = "comment")]
@@ -2049,7 +2049,7 @@ pub struct Job {
 }
 
 /// <p>The job execution object represents the execution of a job on a particular device.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct JobExecution {
     /// <p>A string (consisting of the digits "0" through "9") which identifies this particular job execution on this particular device. It can be used in commands which return or update job execution information. </p>
     #[serde(rename = "executionNumber")]
@@ -2086,7 +2086,7 @@ pub struct JobExecution {
 }
 
 /// <p>Details of the job execution status.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct JobExecutionStatusDetails {
     /// <p>The job execution status.</p>
     #[serde(rename = "detailsMap")]
@@ -2095,7 +2095,7 @@ pub struct JobExecutionStatusDetails {
 }
 
 /// <p>The job execution summary.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct JobExecutionSummary {
     /// <p>A string (consisting of the digits "0" through "9") which identifies this particular job execution on this particular device. It can be used later in commands which return or update job execution information.</p>
     #[serde(rename = "executionNumber")]
@@ -2120,7 +2120,7 @@ pub struct JobExecutionSummary {
 }
 
 /// <p>Contains a summary of information about job executions for a specific job.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct JobExecutionSummaryForJob {
     /// <p>Contains a subset of information about a job execution.</p>
     #[serde(rename = "jobExecutionSummary")]
@@ -2133,7 +2133,7 @@ pub struct JobExecutionSummaryForJob {
 }
 
 /// <p>The job execution summary for a thing.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct JobExecutionSummaryForThing {
     /// <p>Contains a subset of information about a job execution.</p>
     #[serde(rename = "jobExecutionSummary")]
@@ -2146,7 +2146,7 @@ pub struct JobExecutionSummaryForThing {
 }
 
 /// <p>Allows you to create a staged rollout of a job.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct JobExecutionsRolloutConfig {
     /// <p>The maximum number of things that will be notified of a pending job, per minute. This parameter allows you to create a staged rollout.</p>
     #[serde(rename = "maximumPerMinute")]
@@ -2155,7 +2155,7 @@ pub struct JobExecutionsRolloutConfig {
 }
 
 /// <p>The job process details.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct JobProcessDetails {
     /// <p>The number of things that cancelled the job.</p>
     #[serde(rename = "numberOfCanceledThings")]
@@ -2192,7 +2192,7 @@ pub struct JobProcessDetails {
 }
 
 /// <p>The job summary.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct JobSummary {
     /// <p>The time, in milliseconds since the epoch, when the job completed.</p>
     #[serde(rename = "completedAt")]
@@ -2229,7 +2229,7 @@ pub struct JobSummary {
 }
 
 /// <p>Describes a key pair.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct KeyPair {
     /// <p>The private key.</p>
     #[serde(rename = "PrivateKey")]
@@ -2242,7 +2242,7 @@ pub struct KeyPair {
 }
 
 /// <p>Describes an action to write data to an Amazon Kinesis stream.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct KinesisAction {
     /// <p>The partition key.</p>
     #[serde(rename = "partitionKey")]
@@ -2257,14 +2257,14 @@ pub struct KinesisAction {
 }
 
 /// <p>Describes an action to invoke a Lambda function.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct LambdaAction {
     /// <p>The ARN of the Lambda function.</p>
     #[serde(rename = "functionArn")]
     pub function_arn: String,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListAttachedPoliciesRequest {
     /// <p>The token to retrieve the next set of results.</p>
     #[serde(rename = "marker")]
@@ -2283,7 +2283,7 @@ pub struct ListAttachedPoliciesRequest {
     pub target: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListAttachedPoliciesResponse {
     /// <p>The token to retrieve the next set of results, or ``null`` if there are no more results.</p>
     #[serde(rename = "nextMarker")]
@@ -2295,7 +2295,7 @@ pub struct ListAttachedPoliciesResponse {
     pub policies: Option<Vec<Policy>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListAuthorizersRequest {
     /// <p>Return the list of authorizers in ascending alphabetical order.</p>
     #[serde(rename = "ascendingOrder")]
@@ -2315,7 +2315,7 @@ pub struct ListAuthorizersRequest {
     pub status: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListAuthorizersResponse {
     /// <p>The authorizers.</p>
     #[serde(rename = "authorizers")]
@@ -2328,7 +2328,7 @@ pub struct ListAuthorizersResponse {
 }
 
 /// <p>Input for the ListCACertificates operation.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListCACertificatesRequest {
     /// <p>Determines the order of the results.</p>
     #[serde(rename = "ascendingOrder")]
@@ -2345,7 +2345,7 @@ pub struct ListCACertificatesRequest {
 }
 
 /// <p>The output from the ListCACertificates operation.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListCACertificatesResponse {
     /// <p>The CA certificates registered in your AWS account.</p>
     #[serde(rename = "certificates")]
@@ -2358,7 +2358,7 @@ pub struct ListCACertificatesResponse {
 }
 
 /// <p>The input to the ListCertificatesByCA operation.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListCertificatesByCARequest {
     /// <p>Specifies the order for results. If True, the results are returned in ascending order, based on the creation date.</p>
     #[serde(rename = "ascendingOrder")]
@@ -2378,7 +2378,7 @@ pub struct ListCertificatesByCARequest {
 }
 
 /// <p>The output of the ListCertificatesByCA operation.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListCertificatesByCAResponse {
     /// <p>The device certificates signed by the specified CA certificate.</p>
     #[serde(rename = "certificates")]
@@ -2391,7 +2391,7 @@ pub struct ListCertificatesByCAResponse {
 }
 
 /// <p>The input for the ListCertificates operation.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListCertificatesRequest {
     /// <p>Specifies the order for results. If True, the results are returned in ascending order, based on the creation date.</p>
     #[serde(rename = "ascendingOrder")]
@@ -2408,7 +2408,7 @@ pub struct ListCertificatesRequest {
 }
 
 /// <p>The output of the ListCertificates operation.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListCertificatesResponse {
     /// <p>The descriptions of the certificates.</p>
     #[serde(rename = "certificates")]
@@ -2420,7 +2420,7 @@ pub struct ListCertificatesResponse {
     pub next_marker: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListIndicesRequest {
     /// <p>The maximum number of results to return at one time.</p>
     #[serde(rename = "maxResults")]
@@ -2432,7 +2432,7 @@ pub struct ListIndicesRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListIndicesResponse {
     /// <p>The index names.</p>
     #[serde(rename = "indexNames")]
@@ -2444,7 +2444,7 @@ pub struct ListIndicesResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListJobExecutionsForJobRequest {
     /// <p>The unique identifier you assigned to this job when it was created.</p>
     #[serde(rename = "jobId")]
@@ -2463,7 +2463,7 @@ pub struct ListJobExecutionsForJobRequest {
     pub status: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListJobExecutionsForJobResponse {
     /// <p>A list of job execution summaries.</p>
     #[serde(rename = "executionSummaries")]
@@ -2475,7 +2475,7 @@ pub struct ListJobExecutionsForJobResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListJobExecutionsForThingRequest {
     /// <p>The maximum number of results to be returned per request.</p>
     #[serde(rename = "maxResults")]
@@ -2494,7 +2494,7 @@ pub struct ListJobExecutionsForThingRequest {
     pub thing_name: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListJobExecutionsForThingResponse {
     /// <p>A list of job execution summaries.</p>
     #[serde(rename = "executionSummaries")]
@@ -2506,7 +2506,7 @@ pub struct ListJobExecutionsForThingResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListJobsRequest {
     /// <p>The maximum number of results to return per request.</p>
     #[serde(rename = "maxResults")]
@@ -2534,7 +2534,7 @@ pub struct ListJobsRequest {
     pub thing_group_name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListJobsResponse {
     /// <p>A list of jobs.</p>
     #[serde(rename = "jobs")]
@@ -2546,7 +2546,7 @@ pub struct ListJobsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListOTAUpdatesRequest {
     /// <p>The maximum number of results to return at one time.</p>
     #[serde(rename = "maxResults")]
@@ -2562,7 +2562,7 @@ pub struct ListOTAUpdatesRequest {
     pub ota_update_status: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListOTAUpdatesResponse {
     /// <p>A token to use to get the next set of results.</p>
     #[serde(rename = "nextToken")]
@@ -2575,7 +2575,7 @@ pub struct ListOTAUpdatesResponse {
 }
 
 /// <p>The input to the ListOutgoingCertificates operation.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListOutgoingCertificatesRequest {
     /// <p>Specifies the order for results. If True, the results are returned in ascending order, based on the creation date.</p>
     #[serde(rename = "ascendingOrder")]
@@ -2592,7 +2592,7 @@ pub struct ListOutgoingCertificatesRequest {
 }
 
 /// <p>The output from the ListOutgoingCertificates operation.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListOutgoingCertificatesResponse {
     /// <p>The marker for the next set of results.</p>
     #[serde(rename = "nextMarker")]
@@ -2605,7 +2605,7 @@ pub struct ListOutgoingCertificatesResponse {
 }
 
 /// <p>The input for the ListPolicies operation.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListPoliciesRequest {
     /// <p>Specifies the order for results. If true, the results are returned in ascending creation order.</p>
     #[serde(rename = "ascendingOrder")]
@@ -2622,7 +2622,7 @@ pub struct ListPoliciesRequest {
 }
 
 /// <p>The output from the ListPolicies operation.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListPoliciesResponse {
     /// <p>The marker for the next set of results, or null if there are no additional results.</p>
     #[serde(rename = "nextMarker")]
@@ -2635,7 +2635,7 @@ pub struct ListPoliciesResponse {
 }
 
 /// <p>The input for the ListPolicyPrincipals operation.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListPolicyPrincipalsRequest {
     /// <p>Specifies the order for results. If true, the results are returned in ascending creation order.</p>
     #[serde(rename = "ascendingOrder")]
@@ -2655,7 +2655,7 @@ pub struct ListPolicyPrincipalsRequest {
 }
 
 /// <p>The output from the ListPolicyPrincipals operation.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListPolicyPrincipalsResponse {
     /// <p>The marker for the next set of results, or null if there are no additional results.</p>
     #[serde(rename = "nextMarker")]
@@ -2668,7 +2668,7 @@ pub struct ListPolicyPrincipalsResponse {
 }
 
 /// <p>The input for the ListPolicyVersions operation.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListPolicyVersionsRequest {
     /// <p>The policy name.</p>
     #[serde(rename = "policyName")]
@@ -2676,7 +2676,7 @@ pub struct ListPolicyVersionsRequest {
 }
 
 /// <p>The output from the ListPolicyVersions operation.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListPolicyVersionsResponse {
     /// <p>The policy versions.</p>
     #[serde(rename = "policyVersions")]
@@ -2685,7 +2685,7 @@ pub struct ListPolicyVersionsResponse {
 }
 
 /// <p>The input for the ListPrincipalPolicies operation.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListPrincipalPoliciesRequest {
     /// <p>Specifies the order for results. If true, results are returned in ascending creation order.</p>
     #[serde(rename = "ascendingOrder")]
@@ -2705,7 +2705,7 @@ pub struct ListPrincipalPoliciesRequest {
 }
 
 /// <p>The output from the ListPrincipalPolicies operation.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListPrincipalPoliciesResponse {
     /// <p>The marker for the next set of results, or null if there are no additional results.</p>
     #[serde(rename = "nextMarker")]
@@ -2718,7 +2718,7 @@ pub struct ListPrincipalPoliciesResponse {
 }
 
 /// <p>The input for the ListPrincipalThings operation.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListPrincipalThingsRequest {
     /// <p>The maximum number of results to return in this operation.</p>
     #[serde(rename = "maxResults")]
@@ -2734,7 +2734,7 @@ pub struct ListPrincipalThingsRequest {
 }
 
 /// <p>The output from the ListPrincipalThings operation.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListPrincipalThingsResponse {
     /// <p>The token used to get the next set of results, or <b>null</b> if there are no additional results.</p>
     #[serde(rename = "nextToken")]
@@ -2746,7 +2746,7 @@ pub struct ListPrincipalThingsResponse {
     pub things: Option<Vec<String>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListRoleAliasesRequest {
     /// <p>Return the list of role aliases in ascending alphabetical order.</p>
     #[serde(rename = "ascendingOrder")]
@@ -2762,7 +2762,7 @@ pub struct ListRoleAliasesRequest {
     pub page_size: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListRoleAliasesResponse {
     /// <p>A marker used to get the next set of results.</p>
     #[serde(rename = "nextMarker")]
@@ -2774,7 +2774,7 @@ pub struct ListRoleAliasesResponse {
     pub role_aliases: Option<Vec<String>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListStreamsRequest {
     /// <p>Set to true to return the list of streams in ascending order.</p>
     #[serde(rename = "ascendingOrder")]
@@ -2790,7 +2790,7 @@ pub struct ListStreamsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListStreamsResponse {
     /// <p>A token used to get the next set of results.</p>
     #[serde(rename = "nextToken")]
@@ -2802,7 +2802,7 @@ pub struct ListStreamsResponse {
     pub streams: Option<Vec<StreamSummary>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListTargetsForPolicyRequest {
     /// <p>A marker used to get the next set of results.</p>
     #[serde(rename = "marker")]
@@ -2817,7 +2817,7 @@ pub struct ListTargetsForPolicyRequest {
     pub policy_name: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListTargetsForPolicyResponse {
     /// <p>A marker used to get the next set of results.</p>
     #[serde(rename = "nextMarker")]
@@ -2829,7 +2829,7 @@ pub struct ListTargetsForPolicyResponse {
     pub targets: Option<Vec<String>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListThingGroupsForThingRequest {
     /// <p>The maximum number of results to return at one time.</p>
     #[serde(rename = "maxResults")]
@@ -2844,7 +2844,7 @@ pub struct ListThingGroupsForThingRequest {
     pub thing_name: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListThingGroupsForThingResponse {
     /// <p>The token used to get the next set of results, or <b>null</b> if there are no additional results.</p>
     #[serde(rename = "nextToken")]
@@ -2856,7 +2856,7 @@ pub struct ListThingGroupsForThingResponse {
     pub thing_groups: Option<Vec<GroupNameAndArn>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListThingGroupsRequest {
     /// <p>The maximum number of results to return at one time.</p>
     #[serde(rename = "maxResults")]
@@ -2880,7 +2880,7 @@ pub struct ListThingGroupsRequest {
     pub recursive: Option<bool>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListThingGroupsResponse {
     /// <p>The token used to get the next set of results, or <b>null</b> if there are no additional results.</p>
     #[serde(rename = "nextToken")]
@@ -2893,7 +2893,7 @@ pub struct ListThingGroupsResponse {
 }
 
 /// <p>The input for the ListThingPrincipal operation.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListThingPrincipalsRequest {
     /// <p>The name of the thing.</p>
     #[serde(rename = "thingName")]
@@ -2901,7 +2901,7 @@ pub struct ListThingPrincipalsRequest {
 }
 
 /// <p>The output from the ListThingPrincipals operation.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListThingPrincipalsResponse {
     /// <p>The principals associated with the thing.</p>
     #[serde(rename = "principals")]
@@ -2909,7 +2909,7 @@ pub struct ListThingPrincipalsResponse {
     pub principals: Option<Vec<String>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListThingRegistrationTaskReportsRequest {
     /// <p>The maximum number of results to return per request.</p>
     #[serde(rename = "maxResults")]
@@ -2927,7 +2927,7 @@ pub struct ListThingRegistrationTaskReportsRequest {
     pub task_id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListThingRegistrationTaskReportsResponse {
     /// <p>The token to retrieve the next set of results.</p>
     #[serde(rename = "nextToken")]
@@ -2943,7 +2943,7 @@ pub struct ListThingRegistrationTaskReportsResponse {
     pub resource_links: Option<Vec<String>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListThingRegistrationTasksRequest {
     /// <p>The maximum number of results to return at one time.</p>
     #[serde(rename = "maxResults")]
@@ -2959,7 +2959,7 @@ pub struct ListThingRegistrationTasksRequest {
     pub status: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListThingRegistrationTasksResponse {
     /// <p>The token used to get the next set of results, or <b>null</b> if there are no additional results.</p>
     #[serde(rename = "nextToken")]
@@ -2972,7 +2972,7 @@ pub struct ListThingRegistrationTasksResponse {
 }
 
 /// <p>The input for the ListThingTypes operation.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListThingTypesRequest {
     /// <p>The maximum number of results to return in this operation.</p>
     #[serde(rename = "maxResults")]
@@ -2989,7 +2989,7 @@ pub struct ListThingTypesRequest {
 }
 
 /// <p>The output for the ListThingTypes operation.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListThingTypesResponse {
     /// <p>The token for the next set of results, or <b>null</b> if there are no additional results.</p>
     #[serde(rename = "nextToken")]
@@ -3001,7 +3001,7 @@ pub struct ListThingTypesResponse {
     pub thing_types: Option<Vec<ThingTypeDefinition>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListThingsInThingGroupRequest {
     /// <p>The maximum number of results to return at one time.</p>
     #[serde(rename = "maxResults")]
@@ -3020,7 +3020,7 @@ pub struct ListThingsInThingGroupRequest {
     pub thing_group_name: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListThingsInThingGroupResponse {
     /// <p>The token used to get the next set of results, or <b>null</b> if there are no additional results.</p>
     #[serde(rename = "nextToken")]
@@ -3033,7 +3033,7 @@ pub struct ListThingsInThingGroupResponse {
 }
 
 /// <p>The input for the ListThings operation.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListThingsRequest {
     /// <p>The attribute name used to search for things.</p>
     #[serde(rename = "attributeName")]
@@ -3058,7 +3058,7 @@ pub struct ListThingsRequest {
 }
 
 /// <p>The output from the ListThings operation.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListThingsResponse {
     /// <p>The token used to get the next set of results, or <b>null</b> if there are no additional results.</p>
     #[serde(rename = "nextToken")]
@@ -3071,7 +3071,7 @@ pub struct ListThingsResponse {
 }
 
 /// <p>The input for the ListTopicRules operation.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListTopicRulesRequest {
     /// <p>The maximum number of results to return.</p>
     #[serde(rename = "maxResults")]
@@ -3092,7 +3092,7 @@ pub struct ListTopicRulesRequest {
 }
 
 /// <p>The output from the ListTopicRules operation.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListTopicRulesResponse {
     /// <p>A token used to retrieve the next value.</p>
     #[serde(rename = "nextToken")]
@@ -3104,7 +3104,7 @@ pub struct ListTopicRulesResponse {
     pub rules: Option<Vec<TopicRuleListItem>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListV2LoggingLevelsRequest {
     /// <p>The maximum number of results to return at one time.</p>
     #[serde(rename = "maxResults")]
@@ -3120,7 +3120,7 @@ pub struct ListV2LoggingLevelsRequest {
     pub target_type: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ListV2LoggingLevelsResponse {
     /// <p>The logging configuration for a target.</p>
     #[serde(rename = "logTargetConfigurations")]
@@ -3133,7 +3133,7 @@ pub struct ListV2LoggingLevelsResponse {
 }
 
 /// <p>A log target.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct LogTarget {
     /// <p>The target name.</p>
     #[serde(rename = "targetName")]
@@ -3145,7 +3145,7 @@ pub struct LogTarget {
 }
 
 /// <p>The target configuration.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct LogTargetConfiguration {
     /// <p>The logging level.</p>
     #[serde(rename = "logLevel")]
@@ -3158,7 +3158,7 @@ pub struct LogTargetConfiguration {
 }
 
 /// <p>Describes the logging options payload.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct LoggingOptionsPayload {
     /// <p>The log level.</p>
     #[serde(rename = "logLevel")]
@@ -3170,7 +3170,7 @@ pub struct LoggingOptionsPayload {
 }
 
 /// <p>Describes a file to be associated with an OTA update.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct OTAUpdateFile {
     /// <p>A list of name/attribute pairs.</p>
     #[serde(rename = "attributes")]
@@ -3195,7 +3195,7 @@ pub struct OTAUpdateFile {
 }
 
 /// <p>Information about an OTA update.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct OTAUpdateInfo {
     /// <p>A collection of name/value pairs</p>
     #[serde(rename = "additionalParameters")]
@@ -3252,7 +3252,7 @@ pub struct OTAUpdateInfo {
 }
 
 /// <p>An OTA update summary.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct OTAUpdateSummary {
     /// <p>The date when the OTA update was created.</p>
     #[serde(rename = "creationDate")]
@@ -3269,7 +3269,7 @@ pub struct OTAUpdateSummary {
 }
 
 /// <p>A certificate that has been transferred but not yet accepted.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct OutgoingCertificate {
     /// <p>The certificate ARN.</p>
     #[serde(rename = "certificateArn")]
@@ -3298,7 +3298,7 @@ pub struct OutgoingCertificate {
 }
 
 /// <p>Describes an AWS IoT policy.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct Policy {
     /// <p>The policy ARN.</p>
     #[serde(rename = "policyArn")]
@@ -3311,7 +3311,7 @@ pub struct Policy {
 }
 
 /// <p>Describes a policy version.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct PolicyVersion {
     /// <p>The date and time the policy was created.</p>
     #[serde(rename = "createDate")]
@@ -3328,7 +3328,7 @@ pub struct PolicyVersion {
 }
 
 /// <p>Configuration for pre-signed S3 URLs.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct PresignedUrlConfig {
     /// <p>How long (in seconds) pre-signed URLs are valid. Valid values are 60 - 3600, the default value is 3600 seconds. Pre-signed URLs are generated when Jobs receives an MQTT request for the job document.</p>
     #[serde(rename = "expiresInSec")]
@@ -3341,7 +3341,7 @@ pub struct PresignedUrlConfig {
 }
 
 /// <p>The input for the DynamoActionVS action that specifies the DynamoDB table to which the message data will be written.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct PutItemInput {
     /// <p>The table where the message data will be written</p>
     #[serde(rename = "tableName")]
@@ -3349,7 +3349,7 @@ pub struct PutItemInput {
 }
 
 /// <p>The input to the RegisterCACertificate operation.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct RegisterCACertificateRequest {
     /// <p>Allows this CA certificate to be used for auto registration of device certificates.</p>
     #[serde(rename = "allowAutoRegistration")]
@@ -3372,7 +3372,7 @@ pub struct RegisterCACertificateRequest {
 }
 
 /// <p>The output from the RegisterCACertificateResponse operation.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct RegisterCACertificateResponse {
     /// <p>The CA certificate ARN.</p>
     #[serde(rename = "certificateArn")]
@@ -3385,7 +3385,7 @@ pub struct RegisterCACertificateResponse {
 }
 
 /// <p>The input to the RegisterCertificate operation.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct RegisterCertificateRequest {
     /// <p>The CA certificate used to sign the device certificate being registered.</p>
     #[serde(rename = "caCertificatePem")]
@@ -3401,7 +3401,7 @@ pub struct RegisterCertificateRequest {
 }
 
 /// <p>The output from the RegisterCertificate operation.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct RegisterCertificateResponse {
     /// <p>The certificate ARN.</p>
     #[serde(rename = "certificateArn")]
@@ -3413,7 +3413,7 @@ pub struct RegisterCertificateResponse {
     pub certificate_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct RegisterThingRequest {
     /// <p>The parameters for provisioning a thing.</p>
     #[serde(rename = "parameters")]
@@ -3424,7 +3424,7 @@ pub struct RegisterThingRequest {
     pub template_body: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct RegisterThingResponse {
     #[serde(rename = "certificatePem")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3436,7 +3436,7 @@ pub struct RegisterThingResponse {
 }
 
 /// <p>The registration configuration.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct RegistrationConfig {
     /// <p>The ARN of the role.</p>
     #[serde(rename = "roleArn")]
@@ -3449,7 +3449,7 @@ pub struct RegistrationConfig {
 }
 
 /// <p>The input for the RejectCertificateTransfer operation.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct RejectCertificateTransferRequest {
     /// <p>The ID of the certificate.</p>
     #[serde(rename = "certificateId")]
@@ -3460,7 +3460,7 @@ pub struct RejectCertificateTransferRequest {
     pub reject_reason: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct RemoveThingFromThingGroupRequest {
     /// <p>The ARN of the thing to remove from the group.</p>
     #[serde(rename = "thingArn")]
@@ -3480,11 +3480,11 @@ pub struct RemoveThingFromThingGroupRequest {
     pub thing_name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct RemoveThingFromThingGroupResponse {}
 
 /// <p>The input for the ReplaceTopicRule operation.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ReplaceTopicRuleRequest {
     /// <p>The name of the rule.</p>
     #[serde(rename = "ruleName")]
@@ -3495,7 +3495,7 @@ pub struct ReplaceTopicRuleRequest {
 }
 
 /// <p>Describes an action to republish to another topic.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct RepublishAction {
     /// <p>The ARN of the IAM role that grants access.</p>
     #[serde(rename = "roleArn")]
@@ -3506,7 +3506,7 @@ pub struct RepublishAction {
 }
 
 /// <p>Role alias description.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct RoleAliasDescription {
     /// <p>The UNIX timestamp of when the role alias was created.</p>
     #[serde(rename = "creationDate")]
@@ -3538,7 +3538,7 @@ pub struct RoleAliasDescription {
 }
 
 /// <p>Describes an action to write data to an Amazon S3 bucket.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct S3Action {
     /// <p>The Amazon S3 bucket.</p>
     #[serde(rename = "bucketName")]
@@ -3556,7 +3556,7 @@ pub struct S3Action {
 }
 
 /// <p>The location in S3 the contains the files to stream.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct S3Location {
     /// <p>The S3 bucket that contains the file to stream.</p>
     #[serde(rename = "bucket")]
@@ -3571,7 +3571,7 @@ pub struct S3Location {
 }
 
 /// <p>Describes an action to write a message to a Salesforce IoT Cloud Input Stream.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SalesforceAction {
     /// <p>The token used to authenticate access to the Salesforce IoT Cloud Input Stream. The token is available from the Salesforce IoT Cloud platform after creation of the Input Stream.</p>
     #[serde(rename = "token")]
@@ -3581,7 +3581,7 @@ pub struct SalesforceAction {
     pub url: String,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct SearchIndexRequest {
     /// <p>The search index name.</p>
     #[serde(rename = "indexName")]
@@ -3604,7 +3604,7 @@ pub struct SearchIndexRequest {
     pub query_version: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct SearchIndexResponse {
     /// <p>The token used to get the next set of results, or <b>null</b> if there are no additional results.</p>
     #[serde(rename = "nextToken")]
@@ -3616,14 +3616,14 @@ pub struct SearchIndexResponse {
     pub things: Option<Vec<ThingDocument>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct SetDefaultAuthorizerRequest {
     /// <p>The authorizer name.</p>
     #[serde(rename = "authorizerName")]
     pub authorizer_name: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct SetDefaultAuthorizerResponse {
     /// <p>The authorizer ARN.</p>
     #[serde(rename = "authorizerArn")]
@@ -3636,7 +3636,7 @@ pub struct SetDefaultAuthorizerResponse {
 }
 
 /// <p>The input for the SetDefaultPolicyVersion operation.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct SetDefaultPolicyVersionRequest {
     /// <p>The policy name.</p>
     #[serde(rename = "policyName")]
@@ -3647,14 +3647,14 @@ pub struct SetDefaultPolicyVersionRequest {
 }
 
 /// <p>The input for the SetLoggingOptions operation.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct SetLoggingOptionsRequest {
     /// <p>The logging options payload.</p>
     #[serde(rename = "loggingOptionsPayload")]
     pub logging_options_payload: LoggingOptionsPayload,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct SetV2LoggingLevelRequest {
     /// <p>The log level.</p>
     #[serde(rename = "logLevel")]
@@ -3664,7 +3664,7 @@ pub struct SetV2LoggingLevelRequest {
     pub log_target: LogTarget,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct SetV2LoggingOptionsRequest {
     /// <p>The default logging level.</p>
     #[serde(rename = "defaultLogLevel")]
@@ -3681,7 +3681,7 @@ pub struct SetV2LoggingOptionsRequest {
 }
 
 /// <p>Describes an action to publish to an Amazon SNS topic.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SnsAction {
     /// <p>The message format of the message to publish. Optional. Accepted values are "JSON" and "RAW". The default value of the attribute is "RAW". SNS uses this setting to determine if the payload should be parsed and relevant platform-specific bits of the payload should be extracted. To read more about SNS message formats, see <a href="http://docs.aws.amazon.com/sns/latest/dg/json-formats.html">http://docs.aws.amazon.com/sns/latest/dg/json-formats.html</a> refer to their official documentation.</p>
     #[serde(rename = "messageFormat")]
@@ -3696,7 +3696,7 @@ pub struct SnsAction {
 }
 
 /// <p>Describes an action to publish data to an Amazon SQS queue.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SqsAction {
     /// <p>The URL of the Amazon SQS queue.</p>
     #[serde(rename = "queueUrl")]
@@ -3710,7 +3710,7 @@ pub struct SqsAction {
     pub use_base_64: Option<bool>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct StartThingRegistrationTaskRequest {
     /// <p>The S3 bucket that contains the input file.</p>
     #[serde(rename = "inputFileBucket")]
@@ -3726,7 +3726,7 @@ pub struct StartThingRegistrationTaskRequest {
     pub template_body: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct StartThingRegistrationTaskResponse {
     /// <p>The bulk thing provisioning task ID.</p>
     #[serde(rename = "taskId")]
@@ -3734,18 +3734,18 @@ pub struct StartThingRegistrationTaskResponse {
     pub task_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct StopThingRegistrationTaskRequest {
     /// <p>The bulk thing provisioning task ID.</p>
     #[serde(rename = "taskId")]
     pub task_id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct StopThingRegistrationTaskResponse {}
 
 /// <p>Describes a group of files that can be streamed.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Stream {
     /// <p>The ID of a file associated with a stream.</p>
     #[serde(rename = "fileId")]
@@ -3758,7 +3758,7 @@ pub struct Stream {
 }
 
 /// <p>Represents a file to stream.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct StreamFile {
     /// <p>The file ID.</p>
     #[serde(rename = "fileId")]
@@ -3771,7 +3771,7 @@ pub struct StreamFile {
 }
 
 /// <p>Information about a stream.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct StreamInfo {
     /// <p>The date when the stream was created.</p>
     #[serde(rename = "createdAt")]
@@ -3808,7 +3808,7 @@ pub struct StreamInfo {
 }
 
 /// <p>A summary of a stream.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct StreamSummary {
     /// <p>A description of the stream.</p>
     #[serde(rename = "description")]
@@ -3828,7 +3828,7 @@ pub struct StreamSummary {
     pub stream_version: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct TestAuthorizationRequest {
     /// <p>A list of authorization info objects. Simulating authorization will create a response for each <code>authInfo</code> object in the list.</p>
     #[serde(rename = "authInfos")]
@@ -3855,7 +3855,7 @@ pub struct TestAuthorizationRequest {
     pub principal: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct TestAuthorizationResponse {
     /// <p>The authentication results.</p>
     #[serde(rename = "authResults")]
@@ -3863,7 +3863,7 @@ pub struct TestAuthorizationResponse {
     pub auth_results: Option<Vec<AuthResult>>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct TestInvokeAuthorizerRequest {
     /// <p>The custom authorizer name.</p>
     #[serde(rename = "authorizerName")]
@@ -3876,7 +3876,7 @@ pub struct TestInvokeAuthorizerRequest {
     pub token_signature: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct TestInvokeAuthorizerResponse {
     /// <p>The number of seconds after which the connection is terminated.</p>
     #[serde(rename = "disconnectAfterInSeconds")]
@@ -3901,7 +3901,7 @@ pub struct TestInvokeAuthorizerResponse {
 }
 
 /// <p>The properties of the thing, including thing name, thing type name, and a list of thing attributes.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ThingAttribute {
     /// <p>A list of thing attributes which are name-value pairs.</p>
     #[serde(rename = "attributes")]
@@ -3926,7 +3926,7 @@ pub struct ThingAttribute {
 }
 
 /// <p>The thing search index document.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ThingDocument {
     /// <p>The attributes.</p>
     #[serde(rename = "attributes")]
@@ -3955,7 +3955,7 @@ pub struct ThingDocument {
 }
 
 /// <p>Thing group metadata.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ThingGroupMetadata {
     /// <p>The UNIX timestamp of when the thing group was created.</p>
     #[serde(rename = "creationDate")]
@@ -3972,7 +3972,7 @@ pub struct ThingGroupMetadata {
 }
 
 /// <p>Thing group properties.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ThingGroupProperties {
     /// <p>The thing group attributes in JSON format.</p>
     #[serde(rename = "attributePayload")]
@@ -3985,7 +3985,7 @@ pub struct ThingGroupProperties {
 }
 
 /// <p>Thing indexing configuration.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ThingIndexingConfiguration {
     /// <p><p>Thing indexing mode. Valid values are: </p> <ul> <li> <p>REGISTRY – Your thing index will contain only registry data.</p> </li> <li> <p>REGISTRY<em>AND</em>SHADOW - Your thing index will contain registry and shadow data.</p> </li> <li> <p>OFF - Thing indexing is disabled.</p> </li> </ul></p>
     #[serde(rename = "thingIndexingMode")]
@@ -3994,7 +3994,7 @@ pub struct ThingIndexingConfiguration {
 }
 
 /// <p>The definition of the thing type, including thing type name and description.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ThingTypeDefinition {
     /// <p>The thing type ARN.</p>
     #[serde(rename = "thingTypeArn")]
@@ -4015,7 +4015,7 @@ pub struct ThingTypeDefinition {
 }
 
 /// <p>The ThingTypeMetadata contains additional information about the thing type including: creation date and time, a value indicating whether the thing type is deprecated, and a date and time when time was deprecated.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct ThingTypeMetadata {
     /// <p>The date and time when the thing type was created.</p>
     #[serde(rename = "creationDate")]
@@ -4032,7 +4032,7 @@ pub struct ThingTypeMetadata {
 }
 
 /// <p>The ThingTypeProperties contains information about the thing type including: a thing type description, and a list of searchable thing attribute names.</p>
-#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ThingTypeProperties {
     /// <p>A list of searchable thing attribute names.</p>
     #[serde(rename = "searchableAttributes")]
@@ -4045,7 +4045,7 @@ pub struct ThingTypeProperties {
 }
 
 /// <p>Describes a rule.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct TopicRule {
     /// <p>The actions associated with the rule.</p>
     #[serde(rename = "actions")]
@@ -4082,7 +4082,7 @@ pub struct TopicRule {
 }
 
 /// <p>Describes a rule.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct TopicRuleListItem {
     /// <p>The date and time the rule was created.</p>
     #[serde(rename = "createdAt")]
@@ -4107,7 +4107,7 @@ pub struct TopicRuleListItem {
 }
 
 /// <p>Describes a rule.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct TopicRulePayload {
     /// <p>The actions associated with the rule.</p>
     #[serde(rename = "actions")]
@@ -4134,7 +4134,7 @@ pub struct TopicRulePayload {
 }
 
 /// <p>The input for the TransferCertificate operation.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct TransferCertificateRequest {
     /// <p>The ID of the certificate.</p>
     #[serde(rename = "certificateId")]
@@ -4149,7 +4149,7 @@ pub struct TransferCertificateRequest {
 }
 
 /// <p>The output from the TransferCertificate operation.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct TransferCertificateResponse {
     /// <p>The ARN of the certificate.</p>
     #[serde(rename = "transferredCertificateArn")]
@@ -4158,7 +4158,7 @@ pub struct TransferCertificateResponse {
 }
 
 /// <p>Data used to transfer a certificate to an AWS account.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct TransferData {
     /// <p>The date the transfer was accepted.</p>
     #[serde(rename = "acceptDate")]
@@ -4182,7 +4182,7 @@ pub struct TransferData {
     pub transfer_message: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateAuthorizerRequest {
     /// <p>The ARN of the authorizer's Lambda function.</p>
     #[serde(rename = "authorizerFunctionArn")]
@@ -4205,7 +4205,7 @@ pub struct UpdateAuthorizerRequest {
     pub token_signing_public_keys: Option<::std::collections::HashMap<String, String>>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct UpdateAuthorizerResponse {
     /// <p>The authorizer ARN.</p>
     #[serde(rename = "authorizerArn")]
@@ -4218,7 +4218,7 @@ pub struct UpdateAuthorizerResponse {
 }
 
 /// <p>The input to the UpdateCACertificate operation.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateCACertificateRequest {
     /// <p>The CA certificate identifier.</p>
     #[serde(rename = "certificateId")]
@@ -4242,7 +4242,7 @@ pub struct UpdateCACertificateRequest {
 }
 
 /// <p>The input for the UpdateCertificate operation.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateCertificateRequest {
     /// <p>The ID of the certificate.</p>
     #[serde(rename = "certificateId")]
@@ -4252,7 +4252,7 @@ pub struct UpdateCertificateRequest {
     pub new_status: String,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateEventConfigurationsRequest {
     /// <p>The new event configuration values.</p>
     #[serde(rename = "eventConfigurations")]
@@ -4260,10 +4260,10 @@ pub struct UpdateEventConfigurationsRequest {
     pub event_configurations: Option<::std::collections::HashMap<String, Configuration>>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct UpdateEventConfigurationsResponse {}
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateIndexingConfigurationRequest {
     /// <p>Thing indexing configuration.</p>
     #[serde(rename = "thingIndexingConfiguration")]
@@ -4271,10 +4271,10 @@ pub struct UpdateIndexingConfigurationRequest {
     pub thing_indexing_configuration: Option<ThingIndexingConfiguration>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct UpdateIndexingConfigurationResponse {}
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateRoleAliasRequest {
     /// <p>The number of seconds the credential will be valid.</p>
     #[serde(rename = "credentialDurationSeconds")]
@@ -4289,7 +4289,7 @@ pub struct UpdateRoleAliasRequest {
     pub role_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct UpdateRoleAliasResponse {
     /// <p>The role alias.</p>
     #[serde(rename = "roleAlias")]
@@ -4301,7 +4301,7 @@ pub struct UpdateRoleAliasResponse {
     pub role_alias_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateStreamRequest {
     /// <p>The description of the stream.</p>
     #[serde(rename = "description")]
@@ -4320,7 +4320,7 @@ pub struct UpdateStreamRequest {
     pub stream_id: String,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct UpdateStreamResponse {
     /// <p>A description of the stream.</p>
     #[serde(rename = "description")]
@@ -4340,7 +4340,7 @@ pub struct UpdateStreamResponse {
     pub stream_version: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateThingGroupRequest {
     /// <p>The expected version of the thing group. If this does not match the version of the thing group being updated, the update will fail.</p>
     #[serde(rename = "expectedVersion")]
@@ -4354,7 +4354,7 @@ pub struct UpdateThingGroupRequest {
     pub thing_group_properties: ThingGroupProperties,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct UpdateThingGroupResponse {
     /// <p>The version of the updated thing group.</p>
     #[serde(rename = "version")]
@@ -4362,7 +4362,7 @@ pub struct UpdateThingGroupResponse {
     pub version: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateThingGroupsForThingRequest {
     /// <p>The groups to which the thing will be added.</p>
     #[serde(rename = "thingGroupsToAdd")]
@@ -4378,11 +4378,11 @@ pub struct UpdateThingGroupsForThingRequest {
     pub thing_name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct UpdateThingGroupsForThingResponse {}
 
 /// <p>The input for the UpdateThing operation.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateThingRequest {
     /// <p>A list of thing attributes, a JSON string containing name-value pairs. For example:</p> <p> <code>{\"attributes\":{\"name1\":\"value2\"}}</code> </p> <p>This data is used to add new attributes or update existing attributes.</p>
     #[serde(rename = "attributePayload")]
@@ -4406,7 +4406,7 @@ pub struct UpdateThingRequest {
 }
 
 /// <p>The output from the UpdateThing operation.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct UpdateThingResponse {}
 
 /// Errors returned by AcceptCertificateTransfer

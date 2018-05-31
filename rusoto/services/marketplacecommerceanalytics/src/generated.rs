@@ -31,7 +31,7 @@ use serde_json;
 use serde_json::from_str;
 use serde_json::Value as SerdeJsonValue;
 /// <p>Container for the parameters to the GenerateDataSet operation.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GenerateDataSetRequest {
     /// <p>(Optional) Key-value pairs which will be returned, unmodified, in the Amazon SNS notification message and the data set metadata file. These key-value pairs can be used to correlated responses with tracking information from other systems.</p>
     #[serde(rename = "customerDefinedValues")]
@@ -59,7 +59,7 @@ pub struct GenerateDataSetRequest {
 }
 
 /// <p>Container for the result of the GenerateDataSet operation.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct GenerateDataSetResult {
     /// <p>A unique identifier representing a specific request to the GenerateDataSet operation. This identifier can be used to correlate a request with notifications from the SNS topic.</p>
     #[serde(rename = "dataSetRequestId")]
@@ -68,7 +68,7 @@ pub struct GenerateDataSetResult {
 }
 
 /// <p>Container for the parameters to the StartSupportDataExport operation.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct StartSupportDataExportRequest {
     /// <p>(Optional) Key-value pairs which will be returned, unmodified, in the Amazon SNS notification message and the data set metadata file.</p>
     #[serde(rename = "customerDefinedValues")]
@@ -96,7 +96,7 @@ pub struct StartSupportDataExportRequest {
 }
 
 /// <p>Container for the result of the StartSupportDataExport operation.</p>
-#[derive(Default, Debug, Clone, Deserialize)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 pub struct StartSupportDataExportResult {
     /// <p>A unique identifier representing a specific request to the StartSupportDataExport operation. This identifier can be used to correlate a request with notifications from the SNS topic.</p>
     #[serde(rename = "dataSetRequestId")]

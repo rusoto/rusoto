@@ -44,7 +44,7 @@ enum DeserializerNext {
     Element(String),
 }
 /// <p>Contains the parameters for accepting the quote.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct AcceptReservedInstancesExchangeQuoteRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -89,7 +89,7 @@ impl AcceptReservedInstancesExchangeQuoteRequestSerializer {
 }
 
 /// <p>The result of the exchange and whether it was <code>successful</code>.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct AcceptReservedInstancesExchangeQuoteResult {
     /// <p>The ID of the successful exchange.</p>
     pub exchange_id: Option<String>,
@@ -135,7 +135,7 @@ impl AcceptReservedInstancesExchangeQuoteResultDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct AcceptVpcEndpointConnectionsRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -172,7 +172,7 @@ impl AcceptVpcEndpointConnectionsRequestSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct AcceptVpcEndpointConnectionsResult {
     /// <p>Information about the interface endpoints that were not accepted, if applicable.</p>
     pub unsuccessful: Option<Vec<UnsuccessfulItem>>,
@@ -220,7 +220,7 @@ impl AcceptVpcEndpointConnectionsResultDeserializer {
     }
 }
 /// <p>Contains the parameters for AcceptVpcPeeringConnection.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct AcceptVpcPeeringConnectionRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -253,7 +253,7 @@ impl AcceptVpcPeeringConnectionRequestSerializer {
 }
 
 /// <p>Contains the output of AcceptVpcPeeringConnection.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct AcceptVpcPeeringConnectionResult {
     /// <p>Information about the VPC peering connection.</p>
     pub vpc_peering_connection: Option<VpcPeeringConnection>,
@@ -303,7 +303,7 @@ impl AcceptVpcPeeringConnectionResultDeserializer {
     }
 }
 /// <p>Describes an account attribute.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct AccountAttribute {
     /// <p>The name of the account attribute.</p>
     pub attribute_name: Option<String>,
@@ -415,7 +415,7 @@ impl AccountAttributeNameStringListSerializer {
 }
 
 /// <p>Describes a value of an account attribute.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct AccountAttributeValue {
     /// <p>The value of the attribute.</p>
     pub attribute_value: Option<String>,
@@ -506,7 +506,7 @@ impl AccountAttributeValueListDeserializer {
     }
 }
 /// <p>Describes a running instance in a Spot Fleet.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ActiveInstance {
     /// <p>The health status of the instance. If the status of either the instance status check or the system status check is <code>impaired</code>, the health status of the instance is <code>unhealthy</code>. Otherwise, the health status is <code>healthy</code>.</p>
     pub instance_health: Option<String>,
@@ -628,7 +628,7 @@ impl ActivityStatusDeserializer {
     }
 }
 /// <p>Describes an Elastic IP address.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct Address {
     /// <p>The ID representing the allocation of the address for use with EC2-VPC.</p>
     pub allocation_id: Option<String>,
@@ -769,7 +769,7 @@ impl AddressListDeserializer {
     }
 }
 /// <p>Contains the parameters for AllocateAddress.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct AllocateAddressRequest {
     /// <p>[EC2-VPC] The Elastic IP address to recover.</p>
     pub address: Option<String>,
@@ -810,7 +810,7 @@ impl AllocateAddressRequestSerializer {
 }
 
 /// <p>Contains the output of AllocateAddress.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct AllocateAddressResult {
     /// <p>[EC2-VPC] The ID that AWS assigns to represent the allocation of the Elastic IP address for use with instances in a VPC.</p>
     pub allocation_id: Option<String>,
@@ -869,7 +869,7 @@ impl AllocateAddressResultDeserializer {
     }
 }
 /// <p>Contains the parameters for AllocateHosts.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct AllocateHostsRequest {
     /// <p>This is enabled by default. This property allows instances to be automatically placed onto available Dedicated Hosts, when you are launching instances without specifying a host ID.</p> <p>Default: Enabled</p>
     pub auto_placement: Option<String>,
@@ -920,7 +920,7 @@ impl AllocateHostsRequestSerializer {
 }
 
 /// <p>Contains the output of AllocateHosts.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct AllocateHostsResult {
     /// <p>The ID of the allocated Dedicated Host. This is used when you want to launch an instance onto a specific host.</p>
     pub host_ids: Option<Vec<String>>,
@@ -1009,7 +1009,7 @@ impl AllocationStrategyDeserializer {
     }
 }
 /// <p>Describes a principal.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct AllowedPrincipal {
     /// <p>The Amazon Resource Name (ARN) of the principal.</p>
     pub principal: Option<String>,
@@ -1119,7 +1119,7 @@ impl ArchitectureValuesDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct AssignIpv6AddressesRequest {
     /// <p>The number of IPv6 addresses to assign to the network interface. Amazon EC2 automatically selects the IPv6 addresses from the subnet range. You can't use this option if specifying specific IPv6 addresses.</p>
     pub ipv_6_address_count: Option<i64>,
@@ -1158,7 +1158,7 @@ impl AssignIpv6AddressesRequestSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct AssignIpv6AddressesResult {
     /// <p>The IPv6 addresses assigned to the network interface.</p>
     pub assigned_ipv_6_addresses: Option<Vec<String>>,
@@ -1216,7 +1216,7 @@ impl AssignIpv6AddressesResultDeserializer {
     }
 }
 /// <p>Contains the parameters for AssignPrivateIpAddresses.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct AssignPrivateIpAddressesRequest {
     /// <p>Indicates whether to allow an IP address that is already assigned to another network interface or instance to be reassigned to the specified network interface.</p>
     pub allow_reassignment: Option<bool>,
@@ -1264,7 +1264,7 @@ impl AssignPrivateIpAddressesRequestSerializer {
 }
 
 /// <p>Contains the parameters for AssociateAddress.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct AssociateAddressRequest {
     /// <p>[EC2-VPC] The allocation ID. This is required for EC2-VPC.</p>
     pub allocation_id: Option<String>,
@@ -1337,7 +1337,7 @@ impl AssociateAddressRequestSerializer {
 }
 
 /// <p>Contains the output of AssociateAddress.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct AssociateAddressResult {
     /// <p>[EC2-VPC] The ID that represents the association of the Elastic IP address with an instance.</p>
     pub association_id: Option<String>,
@@ -1386,7 +1386,7 @@ impl AssociateAddressResultDeserializer {
     }
 }
 /// <p>Contains the parameters for AssociateDhcpOptions.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct AssociateDhcpOptionsRequest {
     /// <p>The ID of the DHCP options set, or <code>default</code> to associate no DHCP options with the VPC.</p>
     pub dhcp_options_id: String,
@@ -1422,7 +1422,7 @@ impl AssociateDhcpOptionsRequestSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct AssociateIamInstanceProfileRequest {
     /// <p>The IAM instance profile.</p>
     pub iam_instance_profile: IamInstanceProfileSpecification,
@@ -1451,7 +1451,7 @@ impl AssociateIamInstanceProfileRequestSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct AssociateIamInstanceProfileResult {
     /// <p>Information about the IAM instance profile association.</p>
     pub iam_instance_profile_association: Option<IamInstanceProfileAssociation>,
@@ -1502,7 +1502,7 @@ impl AssociateIamInstanceProfileResultDeserializer {
     }
 }
 /// <p>Contains the parameters for AssociateRouteTable.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct AssociateRouteTableRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -1539,7 +1539,7 @@ impl AssociateRouteTableRequestSerializer {
 }
 
 /// <p>Contains the output of AssociateRouteTable.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct AssociateRouteTableResult {
     /// <p>The route table association ID (needed to disassociate the route table).</p>
     pub association_id: Option<String>,
@@ -1587,7 +1587,7 @@ impl AssociateRouteTableResultDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct AssociateSubnetCidrBlockRequest {
     /// <p>The IPv6 CIDR block for your subnet. The subnet must have a /64 prefix length.</p>
     pub ipv_6_cidr_block: String,
@@ -1615,7 +1615,7 @@ impl AssociateSubnetCidrBlockRequestSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct AssociateSubnetCidrBlockResult {
     /// <p>Information about the IPv6 CIDR block association.</p>
     pub ipv_6_cidr_block_association: Option<SubnetIpv6CidrBlockAssociation>,
@@ -1671,7 +1671,7 @@ impl AssociateSubnetCidrBlockResultDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct AssociateVpcCidrBlockRequest {
     /// <p>Requests an Amazon-provided IPv6 CIDR block with a /56 prefix length for the VPC. You cannot specify the range of IPv6 addresses, or the size of the CIDR block.</p>
     pub amazon_provided_ipv_6_cidr_block: Option<bool>,
@@ -1709,7 +1709,7 @@ impl AssociateVpcCidrBlockRequestSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct AssociateVpcCidrBlockResult {
     /// <p>Information about the IPv4 CIDR block association.</p>
     pub cidr_block_association: Option<VpcCidrBlockAssociation>,
@@ -1785,7 +1785,7 @@ impl AssociationIdListSerializer {
 }
 
 /// <p>Contains the parameters for AttachClassicLinkVpc.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct AttachClassicLinkVpcRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -1829,7 +1829,7 @@ impl AttachClassicLinkVpcRequestSerializer {
 }
 
 /// <p>Contains the output of AttachClassicLinkVpc.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct AttachClassicLinkVpcResult {
     /// <p>Returns <code>true</code> if the request succeeds; otherwise, it returns an error.</p>
     pub return_: Option<bool>,
@@ -1875,7 +1875,7 @@ impl AttachClassicLinkVpcResultDeserializer {
     }
 }
 /// <p>Contains the parameters for AttachInternetGateway.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct AttachInternetGatewayRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -1912,7 +1912,7 @@ impl AttachInternetGatewayRequestSerializer {
 }
 
 /// <p>Contains the parameters for AttachNetworkInterface.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct AttachNetworkInterfaceRequest {
     /// <p>The index of the device for the network interface attachment.</p>
     pub device_index: i64,
@@ -1955,7 +1955,7 @@ impl AttachNetworkInterfaceRequestSerializer {
 }
 
 /// <p>Contains the output of AttachNetworkInterface.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct AttachNetworkInterfaceResult {
     /// <p>The ID of the network interface attachment.</p>
     pub attachment_id: Option<String>,
@@ -2002,7 +2002,7 @@ impl AttachNetworkInterfaceResultDeserializer {
     }
 }
 /// <p>Contains the parameters for AttachVolume.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct AttachVolumeRequest {
     /// <p>The device name (for example, <code>/dev/sdh</code> or <code>xvdh</code>).</p>
     pub device: String,
@@ -2045,7 +2045,7 @@ impl AttachVolumeRequestSerializer {
 }
 
 /// <p>Contains the parameters for AttachVpnGateway.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct AttachVpnGatewayRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -2082,7 +2082,7 @@ impl AttachVpnGatewayRequestSerializer {
 }
 
 /// <p>Contains the output of AttachVpnGateway.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct AttachVpnGatewayResult {
     /// <p>Information about the attachment.</p>
     pub vpc_attachment: Option<VpcAttachment>,
@@ -2145,7 +2145,7 @@ impl AttachmentStatusDeserializer {
     }
 }
 /// <p>Describes a value for a resource attribute that is a Boolean value.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct AttributeBooleanValue {
     /// <p>The attribute value. The valid values are <code>true</code> or <code>false</code>.</p>
     pub value: Option<bool>,
@@ -2210,7 +2210,7 @@ impl AttributeBooleanValueSerializer {
 }
 
 /// <p>Describes a value for a resource attribute that is a String.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct AttributeValue {
     /// <p>The attribute value. The value is case-sensitive.</p>
     pub value: Option<String>,
@@ -2275,7 +2275,7 @@ impl AttributeValueSerializer {
 }
 
 /// <p>Contains the parameters for AuthorizeSecurityGroupEgress.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct AuthorizeSecurityGroupEgressRequest {
     /// <p>Not supported. Use a set of IP permissions to specify the CIDR.</p>
     pub cidr_ip: Option<String>,
@@ -2363,7 +2363,7 @@ impl AuthorizeSecurityGroupEgressRequestSerializer {
 }
 
 /// <p>Contains the parameters for AuthorizeSecurityGroupIngress.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct AuthorizeSecurityGroupIngressRequest {
     /// <p>The CIDR IPv4 address range. You can't specify this parameter when specifying a source security group.</p>
     pub cidr_ip: Option<String>,
@@ -2475,7 +2475,7 @@ impl AutoPlacementDeserializer {
     }
 }
 /// <p>Describes an Availability Zone.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct AvailabilityZone {
     /// <p>Any messages about the Availability Zone.</p>
     pub messages: Option<Vec<AvailabilityZoneMessage>>,
@@ -2587,7 +2587,7 @@ impl AvailabilityZoneListDeserializer {
     }
 }
 /// <p>Describes a message about an Availability Zone.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct AvailabilityZoneMessage {
     /// <p>The message about the Availability Zone.</p>
     pub message: Option<String>,
@@ -2689,7 +2689,7 @@ impl AvailabilityZoneStateDeserializer {
     }
 }
 /// <p>The capacity information for instances launched onto the Dedicated Host.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct AvailableCapacity {
     /// <p>The total number of instances that the Dedicated Host supports.</p>
     pub available_instance_capacity: Option<Vec<InstanceCapacity>>,
@@ -2829,7 +2829,7 @@ impl BlobDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct BlobAttributeValue {
     pub value: Option<Vec<u8>>,
 }
@@ -2855,7 +2855,7 @@ impl BlobAttributeValueSerializer {
 }
 
 /// <p>Describes a block device mapping.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct BlockDeviceMapping {
     /// <p>The device name (for example, <code>/dev/sdh</code> or <code>xvdh</code>).</p>
     pub device_name: Option<String>,
@@ -3048,7 +3048,7 @@ impl BundleIdStringListSerializer {
 }
 
 /// <p>Contains the parameters for BundleInstance.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct BundleInstanceRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -3082,7 +3082,7 @@ impl BundleInstanceRequestSerializer {
 }
 
 /// <p>Contains the output of BundleInstance.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct BundleInstanceResult {
     /// <p>Information about the bundle task.</p>
     pub bundle_task: Option<BundleTask>,
@@ -3131,7 +3131,7 @@ impl BundleInstanceResultDeserializer {
     }
 }
 /// <p>Describes a bundle task.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct BundleTask {
     /// <p>The ID of the bundle task.</p>
     pub bundle_id: Option<String>,
@@ -3222,7 +3222,7 @@ impl BundleTaskDeserializer {
     }
 }
 /// <p>Describes an error for <a>BundleInstance</a>.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct BundleTaskError {
     /// <p>The error code.</p>
     pub code: Option<String>,
@@ -3341,7 +3341,7 @@ impl CancelBatchErrorCodeDeserializer {
     }
 }
 /// <p>Contains the parameters for CancelBundleTask.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CancelBundleTaskRequest {
     /// <p>The ID of the bundle task.</p>
     pub bundle_id: String,
@@ -3372,7 +3372,7 @@ impl CancelBundleTaskRequestSerializer {
 }
 
 /// <p>Contains the output of CancelBundleTask.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CancelBundleTaskResult {
     /// <p>Information about the bundle task.</p>
     pub bundle_task: Option<BundleTask>,
@@ -3421,7 +3421,7 @@ impl CancelBundleTaskResultDeserializer {
     }
 }
 /// <p>Contains the parameters for CancelConversionTask.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CancelConversionRequest {
     /// <p>The ID of the conversion task.</p>
     pub conversion_task_id: String,
@@ -3460,7 +3460,7 @@ impl CancelConversionRequestSerializer {
 }
 
 /// <p>Contains the parameters for CancelExportTask.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CancelExportTaskRequest {
     /// <p>The ID of the export task. This is the ID returned by <code>CreateInstanceExportTask</code>.</p>
     pub export_task_id: String,
@@ -3483,7 +3483,7 @@ impl CancelExportTaskRequestSerializer {
 }
 
 /// <p>Contains the parameters for CancelImportTask.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CancelImportTaskRequest {
     /// <p>The reason for canceling the task.</p>
     pub cancel_reason: Option<String>,
@@ -3524,7 +3524,7 @@ impl CancelImportTaskRequestSerializer {
 }
 
 /// <p>Contains the output for CancelImportTask.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CancelImportTaskResult {
     /// <p>The ID of the task being canceled.</p>
     pub import_task_id: Option<String>,
@@ -3584,7 +3584,7 @@ impl CancelImportTaskResultDeserializer {
     }
 }
 /// <p>Contains the parameters for CancelReservedInstancesListing.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CancelReservedInstancesListingRequest {
     /// <p>The ID of the Reserved Instance listing.</p>
     pub reserved_instances_listing_id: String,
@@ -3607,7 +3607,7 @@ impl CancelReservedInstancesListingRequestSerializer {
 }
 
 /// <p>Contains the output of CancelReservedInstancesListing.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CancelReservedInstancesListingResult {
     /// <p>The Reserved Instance listing.</p>
     pub reserved_instances_listings: Option<Vec<ReservedInstancesListing>>,
@@ -3657,7 +3657,7 @@ impl CancelReservedInstancesListingResultDeserializer {
     }
 }
 /// <p>Describes a Spot Fleet error.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CancelSpotFleetRequestsError {
     /// <p>The error code.</p>
     pub code: String,
@@ -3709,7 +3709,7 @@ impl CancelSpotFleetRequestsErrorDeserializer {
     }
 }
 /// <p>Describes a Spot Fleet request that was not successfully canceled.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CancelSpotFleetRequestsErrorItem {
     /// <p>The error.</p>
     pub error: CancelSpotFleetRequestsError,
@@ -3807,7 +3807,7 @@ impl CancelSpotFleetRequestsErrorSetDeserializer {
     }
 }
 /// <p>Contains the parameters for CancelSpotFleetRequests.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CancelSpotFleetRequestsRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -3845,7 +3845,7 @@ impl CancelSpotFleetRequestsRequestSerializer {
 }
 
 /// <p>Contains the output of CancelSpotFleetRequests.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CancelSpotFleetRequestsResponse {
     /// <p>Information about the Spot Fleet requests that are successfully canceled.</p>
     pub successful_fleet_requests: Option<Vec<CancelSpotFleetRequestsSuccessItem>>,
@@ -3906,7 +3906,7 @@ impl CancelSpotFleetRequestsResponseDeserializer {
     }
 }
 /// <p>Describes a Spot Fleet request that was successfully canceled.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CancelSpotFleetRequestsSuccessItem {
     /// <p>The current state of the Spot Fleet request.</p>
     pub current_spot_fleet_request_state: String,
@@ -4029,7 +4029,7 @@ impl CancelSpotInstanceRequestStateDeserializer {
     }
 }
 /// <p>Contains the parameters for CancelSpotInstanceRequests.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CancelSpotInstanceRequestsRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -4061,7 +4061,7 @@ impl CancelSpotInstanceRequestsRequestSerializer {
 }
 
 /// <p>Contains the output of CancelSpotInstanceRequests.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CancelSpotInstanceRequestsResult {
     /// <p>One or more Spot Instance requests.</p>
     pub cancelled_spot_instance_requests: Option<Vec<CancelledSpotInstanceRequest>>,
@@ -4112,7 +4112,7 @@ impl CancelSpotInstanceRequestsResultDeserializer {
     }
 }
 /// <p>Describes a request to cancel a Spot Instance.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CancelledSpotInstanceRequest {
     /// <p>The ID of the Spot Instance request.</p>
     pub spot_instance_request_id: Option<String>,
@@ -4210,7 +4210,7 @@ impl CancelledSpotInstanceRequestListDeserializer {
     }
 }
 /// <p>Describes an IPv4 CIDR block.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CidrBlock {
     /// <p>The IPv4 CIDR block.</p>
     pub cidr_block: Option<String>,
@@ -4297,7 +4297,7 @@ impl CidrBlockSetDeserializer {
     }
 }
 /// <p>Describes the ClassicLink DNS support status of a VPC.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ClassicLinkDnsSupport {
     /// <p>Indicates whether ClassicLink DNS support is enabled for the VPC.</p>
     pub classic_link_dns_supported: Option<bool>,
@@ -4392,7 +4392,7 @@ impl ClassicLinkDnsSupportListDeserializer {
     }
 }
 /// <p>Describes a linked EC2-Classic instance.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ClassicLinkInstance {
     /// <p>A list of security groups.</p>
     pub groups: Option<Vec<GroupIdentifier>>,
@@ -4498,7 +4498,7 @@ impl ClassicLinkInstanceListDeserializer {
     }
 }
 /// <p>Describes a Classic Load Balancer.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ClassicLoadBalancer {
     /// <p>The name of the load balancer.</p>
     pub name: String,
@@ -4615,7 +4615,7 @@ impl ClassicLoadBalancersSerializer {
 }
 
 /// <p>Describes the Classic Load Balancers to attach to a Spot Fleet. Spot Fleet registers the running Spot Instances with these Classic Load Balancers.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ClassicLoadBalancersConfig {
     /// <p>One or more Classic Load Balancers.</p>
     pub classic_load_balancers: Vec<ClassicLoadBalancer>,
@@ -4683,7 +4683,7 @@ impl ClassicLoadBalancersConfigSerializer {
 }
 
 /// <p>Describes the client-specific data.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ClientData {
     /// <p>A user-defined comment about the disk upload.</p>
     pub comment: Option<String>,
@@ -4732,7 +4732,7 @@ impl ClientDataSerializer {
 }
 
 /// <p>Contains the parameters for ConfirmProductInstance.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ConfirmProductInstanceRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -4769,7 +4769,7 @@ impl ConfirmProductInstanceRequestSerializer {
 }
 
 /// <p>Contains the output of ConfirmProductInstance.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ConfirmProductInstanceResult {
     /// <p>The AWS account ID of the instance owner. This is only present if the product code is attached to the instance.</p>
     pub owner_id: Option<String>,
@@ -4821,7 +4821,7 @@ impl ConfirmProductInstanceResultDeserializer {
     }
 }
 /// <p>Describes a connection notification for a VPC endpoint or VPC endpoint service.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ConnectionNotification {
     /// <p>The events for the notification. Valid values are <code>Accept</code>, <code>Connect</code>, <code>Delete</code>, and <code>Reject</code>.</p>
     pub connection_events: Option<Vec<String>>,
@@ -5011,7 +5011,7 @@ impl ConversionIdStringListSerializer {
 }
 
 /// <p>Describes a conversion task.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ConversionTask {
     /// <p>The ID of the conversion task.</p>
     pub conversion_task_id: String,
@@ -5114,7 +5114,7 @@ impl ConversionTaskStateDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CopyFpgaImageRequest {
     /// <p>Unique, case-sensitive identifier that you provide to ensure the idempotency of the request. For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Run_Instance_Idempotency.html">Ensuring Idempotency</a>.</p>
     pub client_token: Option<String>,
@@ -5174,7 +5174,7 @@ impl CopyFpgaImageRequestSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CopyFpgaImageResult {
     /// <p>The ID of the new AFI.</p>
     pub fpga_image_id: Option<String>,
@@ -5221,7 +5221,7 @@ impl CopyFpgaImageResultDeserializer {
     }
 }
 /// <p>Contains the parameters for CopyImage.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CopyImageRequest {
     /// <p>Unique, case-sensitive identifier you provide to ensure idempotency of the request. For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Run_Instance_Idempotency.html">How to Ensure Idempotency</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
     pub client_token: Option<String>,
@@ -5296,7 +5296,7 @@ impl CopyImageRequestSerializer {
 }
 
 /// <p>Contains the output of CopyImage.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CopyImageResult {
     /// <p>The ID of the new AMI.</p>
     pub image_id: Option<String>,
@@ -5343,7 +5343,7 @@ impl CopyImageResultDeserializer {
     }
 }
 /// <p>Contains the parameters for CopySnapshot.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CopySnapshotRequest {
     /// <p>A description for the EBS snapshot.</p>
     pub description: Option<String>,
@@ -5420,7 +5420,7 @@ impl CopySnapshotRequestSerializer {
 }
 
 /// <p>Contains the output of CopySnapshot.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CopySnapshotResult {
     /// <p>The ID of the new snapshot.</p>
     pub snapshot_id: Option<String>,
@@ -5467,7 +5467,7 @@ impl CopySnapshotResultDeserializer {
     }
 }
 /// <p>Contains the parameters for CreateCustomerGateway.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateCustomerGatewayRequest {
     /// <p>For devices that support BGP, the customer gateway's BGP ASN.</p> <p>Default: 65000</p>
     pub bgp_asn: i64,
@@ -5510,7 +5510,7 @@ impl CreateCustomerGatewayRequestSerializer {
 }
 
 /// <p>Contains the output of CreateCustomerGateway.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateCustomerGatewayResult {
     /// <p>Information about the customer gateway.</p>
     pub customer_gateway: Option<CustomerGateway>,
@@ -5557,7 +5557,7 @@ impl CreateCustomerGatewayResultDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateDefaultSubnetRequest {
     /// <p>The Availability Zone in which to create the default subnet.</p>
     pub availability_zone: String,
@@ -5587,7 +5587,7 @@ impl CreateDefaultSubnetRequestSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateDefaultSubnetResult {
     /// <p>Information about the subnet.</p>
     pub subnet: Option<Subnet>,
@@ -5633,7 +5633,7 @@ impl CreateDefaultSubnetResultDeserializer {
     }
 }
 /// <p>Contains the parameters for CreateDefaultVpc.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateDefaultVpcRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -5658,7 +5658,7 @@ impl CreateDefaultVpcRequestSerializer {
 }
 
 /// <p>Contains the output of CreateDefaultVpc.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateDefaultVpcResult {
     /// <p>Information about the VPC.</p>
     pub vpc: Option<Vpc>,
@@ -5704,7 +5704,7 @@ impl CreateDefaultVpcResultDeserializer {
     }
 }
 /// <p>Contains the parameters for CreateDhcpOptions.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateDhcpOptionsRequest {
     /// <p>A DHCP configuration option.</p>
     pub dhcp_configurations: Vec<NewDhcpConfiguration>,
@@ -5736,7 +5736,7 @@ impl CreateDhcpOptionsRequestSerializer {
 }
 
 /// <p>Contains the output of CreateDhcpOptions.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateDhcpOptionsResult {
     /// <p>A set of DHCP options.</p>
     pub dhcp_options: Option<DhcpOptions>,
@@ -5784,7 +5784,7 @@ impl CreateDhcpOptionsResultDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateEgressOnlyInternetGatewayRequest {
     /// <p>Unique, case-sensitive identifier you provide to ensure the idempotency of the request. For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Run_Instance_Idempotency.html">How to Ensure Idempotency</a>.</p>
     pub client_token: Option<String>,
@@ -5822,7 +5822,7 @@ impl CreateEgressOnlyInternetGatewayRequestSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateEgressOnlyInternetGatewayResult {
     /// <p>Unique, case-sensitive identifier you provide to ensure the idempotency of the request.</p>
     pub client_token: Option<String>,
@@ -5878,7 +5878,7 @@ impl CreateEgressOnlyInternetGatewayResultDeserializer {
     }
 }
 /// <p>Contains the parameters for CreateFlowLogs.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateFlowLogsRequest {
     /// <p>Unique, case-sensitive identifier you provide to ensure the idempotency of the request. For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Run_Instance_Idempotency.html">How to Ensure Idempotency</a>.</p>
     pub client_token: Option<String>,
@@ -5934,7 +5934,7 @@ impl CreateFlowLogsRequestSerializer {
 }
 
 /// <p>Contains the output of CreateFlowLogs.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateFlowLogsResult {
     /// <p>Unique, case-sensitive identifier you provide to ensure the idempotency of the request.</p>
     pub client_token: Option<String>,
@@ -5995,7 +5995,7 @@ impl CreateFlowLogsResultDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateFpgaImageRequest {
     /// <p>Unique, case-sensitive identifier that you provide to ensure the idempotency of the request. For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Run_Instance_Idempotency.html">Ensuring Idempotency</a>.</p>
     pub client_token: Option<String>,
@@ -6059,7 +6059,7 @@ impl CreateFpgaImageRequestSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateFpgaImageResult {
     /// <p>The global FPGA image identifier (AGFI ID).</p>
     pub fpga_image_global_id: Option<String>,
@@ -6114,7 +6114,7 @@ impl CreateFpgaImageResultDeserializer {
     }
 }
 /// <p>Contains the parameters for CreateImage.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateImageRequest {
     /// <p>Information about one or more block device mappings.</p>
     pub block_device_mappings: Option<Vec<BlockDeviceMapping>>,
@@ -6176,7 +6176,7 @@ impl CreateImageRequestSerializer {
 }
 
 /// <p>Contains the output of CreateImage.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateImageResult {
     /// <p>The ID of the new AMI.</p>
     pub image_id: Option<String>,
@@ -6223,7 +6223,7 @@ impl CreateImageResultDeserializer {
     }
 }
 /// <p>Contains the parameters for CreateInstanceExportTask.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateInstanceExportTaskRequest {
     /// <p>A description for the conversion task or the resource being exported. The maximum length is 255 bytes.</p>
     pub description: Option<String>,
@@ -6271,7 +6271,7 @@ impl CreateInstanceExportTaskRequestSerializer {
 }
 
 /// <p>Contains the output for CreateInstanceExportTask.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateInstanceExportTaskResult {
     /// <p>Information about the instance export task.</p>
     pub export_task: Option<ExportTask>,
@@ -6320,7 +6320,7 @@ impl CreateInstanceExportTaskResultDeserializer {
     }
 }
 /// <p>Contains the parameters for CreateInternetGateway.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateInternetGatewayRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -6345,7 +6345,7 @@ impl CreateInternetGatewayRequestSerializer {
 }
 
 /// <p>Contains the output of CreateInternetGateway.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateInternetGatewayResult {
     /// <p>Information about the Internet gateway.</p>
     pub internet_gateway: Option<InternetGateway>,
@@ -6393,7 +6393,7 @@ impl CreateInternetGatewayResultDeserializer {
     }
 }
 /// <p>Contains the parameters for CreateKeyPair.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateKeyPairRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -6423,7 +6423,7 @@ impl CreateKeyPairRequestSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateLaunchTemplateRequest {
     /// <p>Unique, case-sensitive identifier you provide to ensure the idempotency of the request. For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/APIReference/Run_Instance_Idempotency.html">Ensuring Idempotency</a>.</p>
     pub client_token: Option<String>,
@@ -6476,7 +6476,7 @@ impl CreateLaunchTemplateRequestSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateLaunchTemplateResult {
     /// <p>Information about the launch template.</p>
     pub launch_template: Option<LaunchTemplate>,
@@ -6524,7 +6524,7 @@ impl CreateLaunchTemplateResultDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateLaunchTemplateVersionRequest {
     /// <p>Unique, case-sensitive identifier you provide to ensure the idempotency of the request. For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/APIReference/Run_Instance_Idempotency.html">Ensuring Idempotency</a>.</p>
     pub client_token: Option<String>,
@@ -6595,7 +6595,7 @@ impl CreateLaunchTemplateVersionRequestSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateLaunchTemplateVersionResult {
     /// <p>Information about the launch template version.</p>
     pub launch_template_version: Option<LaunchTemplateVersion>,
@@ -6645,7 +6645,7 @@ impl CreateLaunchTemplateVersionResultDeserializer {
     }
 }
 /// <p>Contains the parameters for CreateNatGateway.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateNatGatewayRequest {
     /// <p>The allocation ID of an Elastic IP address to associate with the NAT gateway. If the Elastic IP address is associated with another resource, you must first disassociate it.</p>
     pub allocation_id: String,
@@ -6682,7 +6682,7 @@ impl CreateNatGatewayRequestSerializer {
 }
 
 /// <p>Contains the output of CreateNatGateway.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateNatGatewayResult {
     /// <p>Unique, case-sensitive identifier to ensure the idempotency of the request. Only returned if a client token was provided in the request.</p>
     pub client_token: Option<String>,
@@ -6737,7 +6737,7 @@ impl CreateNatGatewayResultDeserializer {
     }
 }
 /// <p>Contains the parameters for CreateNetworkAclEntry.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateNetworkAclEntryRequest {
     /// <p>The IPv4 network range to allow or deny, in CIDR notation (for example <code>172.16.0.0/24</code>).</p>
     pub cidr_block: Option<String>,
@@ -6826,7 +6826,7 @@ impl CreateNetworkAclEntryRequestSerializer {
 }
 
 /// <p>Contains the parameters for CreateNetworkAcl.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateNetworkAclRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -6857,7 +6857,7 @@ impl CreateNetworkAclRequestSerializer {
 }
 
 /// <p>Contains the output of CreateNetworkAcl.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateNetworkAclResult {
     /// <p>Information about the network ACL.</p>
     pub network_acl: Option<NetworkAcl>,
@@ -6906,7 +6906,7 @@ impl CreateNetworkAclResultDeserializer {
     }
 }
 /// <p>Contains the parameters for CreateNetworkInterfacePermission.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateNetworkInterfacePermissionRequest {
     /// <p>The AWS account ID.</p>
     pub aws_account_id: Option<String>,
@@ -6959,7 +6959,7 @@ impl CreateNetworkInterfacePermissionRequestSerializer {
 }
 
 /// <p>Contains the output of CreateNetworkInterfacePermission.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateNetworkInterfacePermissionResult {
     /// <p>Information about the permission for the network interface.</p>
     pub interface_permission: Option<NetworkInterfacePermission>,
@@ -7009,7 +7009,7 @@ impl CreateNetworkInterfacePermissionResultDeserializer {
     }
 }
 /// <p>Contains the parameters for CreateNetworkInterface.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateNetworkInterfaceRequest {
     /// <p>A description for the network interface.</p>
     pub description: Option<String>,
@@ -7099,7 +7099,7 @@ impl CreateNetworkInterfaceRequestSerializer {
 }
 
 /// <p>Contains the output of CreateNetworkInterface.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateNetworkInterfaceResult {
     /// <p>Information about the network interface.</p>
     pub network_interface: Option<NetworkInterface>,
@@ -7147,7 +7147,7 @@ impl CreateNetworkInterfaceResultDeserializer {
     }
 }
 /// <p>Contains the parameters for CreatePlacementGroup.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreatePlacementGroupRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -7184,7 +7184,7 @@ impl CreatePlacementGroupRequestSerializer {
 }
 
 /// <p>Contains the parameters for CreateReservedInstancesListing.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateReservedInstancesListingRequest {
     /// <p>Unique, case-sensitive identifier you provide to ensure idempotency of your listings. This helps avoid duplicate listings. For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/APIReference/Run_Instance_Idempotency.html">Ensuring Idempotency</a>.</p>
     pub client_token: String,
@@ -7226,7 +7226,7 @@ impl CreateReservedInstancesListingRequestSerializer {
 }
 
 /// <p>Contains the output of CreateReservedInstancesListing.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateReservedInstancesListingResult {
     /// <p>Information about the Standard Reserved Instance listing.</p>
     pub reserved_instances_listings: Option<Vec<ReservedInstancesListing>>,
@@ -7276,7 +7276,7 @@ impl CreateReservedInstancesListingResultDeserializer {
     }
 }
 /// <p>Contains the parameters for CreateRoute.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateRouteRequest {
     /// <p>The IPv4 CIDR address block used for the destination match. Routing decisions are based on the most specific match.</p>
     pub destination_cidr_block: Option<String>,
@@ -7371,7 +7371,7 @@ impl CreateRouteRequestSerializer {
 }
 
 /// <p>Contains the output of CreateRoute.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateRouteResult {
     /// <p>Returns <code>true</code> if the request succeeds; otherwise, it returns an error.</p>
     pub return_: Option<bool>,
@@ -7417,7 +7417,7 @@ impl CreateRouteResultDeserializer {
     }
 }
 /// <p>Contains the parameters for CreateRouteTable.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateRouteTableRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -7448,7 +7448,7 @@ impl CreateRouteTableRequestSerializer {
 }
 
 /// <p>Contains the output of CreateRouteTable.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateRouteTableResult {
     /// <p>Information about the route table.</p>
     pub route_table: Option<RouteTable>,
@@ -7497,7 +7497,7 @@ impl CreateRouteTableResultDeserializer {
     }
 }
 /// <p>Contains the parameters for CreateSecurityGroup.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateSecurityGroupRequest {
     /// <p>A description for the security group. This is informational only.</p> <p>Constraints: Up to 255 characters in length</p> <p>Constraints for EC2-Classic: ASCII characters</p> <p>Constraints for EC2-VPC: a-z, A-Z, 0-9, spaces, and ._-:/()#,@[]+=&amp;;{}!$*</p>
     pub description: String,
@@ -7542,7 +7542,7 @@ impl CreateSecurityGroupRequestSerializer {
 }
 
 /// <p>Contains the output of CreateSecurityGroup.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateSecurityGroupResult {
     /// <p>The ID of the security group.</p>
     pub group_id: Option<String>,
@@ -7589,7 +7589,7 @@ impl CreateSecurityGroupResultDeserializer {
     }
 }
 /// <p>Contains the parameters for CreateSnapshot.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateSnapshotRequest {
     /// <p>A description for the snapshot.</p>
     pub description: Option<String>,
@@ -7637,7 +7637,7 @@ impl CreateSnapshotRequestSerializer {
 }
 
 /// <p>Contains the parameters for CreateSpotDatafeedSubscription.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateSpotDatafeedSubscriptionRequest {
     /// <p>The Amazon S3 bucket in which to store the Spot Instance data feed.</p>
     pub bucket: String,
@@ -7676,7 +7676,7 @@ impl CreateSpotDatafeedSubscriptionRequestSerializer {
 }
 
 /// <p>Contains the output of CreateSpotDatafeedSubscription.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateSpotDatafeedSubscriptionResult {
     /// <p>The Spot Instance data feed subscription.</p>
     pub spot_datafeed_subscription: Option<SpotDatafeedSubscription>,
@@ -7726,7 +7726,7 @@ impl CreateSpotDatafeedSubscriptionResultDeserializer {
     }
 }
 /// <p>Contains the parameters for CreateSubnet.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateSubnetRequest {
     /// <p>The Availability Zone for the subnet.</p> <p>Default: AWS selects one for you. If you create more than one subnet in your VPC, we may not necessarily select a different zone for each subnet.</p>
     pub availability_zone: Option<String>,
@@ -7779,7 +7779,7 @@ impl CreateSubnetRequestSerializer {
 }
 
 /// <p>Contains the output of CreateSubnet.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateSubnetResult {
     /// <p>Information about the subnet.</p>
     pub subnet: Option<Subnet>,
@@ -7825,7 +7825,7 @@ impl CreateSubnetResultDeserializer {
     }
 }
 /// <p>Contains the parameters for CreateTags.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateTagsRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -7860,7 +7860,7 @@ impl CreateTagsRequestSerializer {
 }
 
 /// <p>Describes the user or group to be added or removed from the permissions for a volume.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateVolumePermission {
     /// <p>The specific group that is to be added or removed from a volume's list of create volume permissions.</p>
     pub group: Option<String>,
@@ -7992,7 +7992,7 @@ impl CreateVolumePermissionListSerializer {
 }
 
 /// <p>Describes modifications to the permissions for a volume.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateVolumePermissionModifications {
     /// <p>Adds a specific AWS account ID or group to a volume's list of create volume permissions.</p>
     pub add: Option<Vec<CreateVolumePermission>>,
@@ -8027,7 +8027,7 @@ impl CreateVolumePermissionModificationsSerializer {
 }
 
 /// <p>Contains the parameters for CreateVolume.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateVolumeRequest {
     /// <p>The Availability Zone in which to create the volume. Use <a>DescribeAvailabilityZones</a> to list the Availability Zones that are currently available to you.</p>
     pub availability_zone: String,
@@ -8114,7 +8114,7 @@ impl CreateVolumeRequestSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateVpcEndpointConnectionNotificationRequest {
     /// <p>Unique, case-sensitive identifier you provide to ensure the idempotency of the request. For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/APIReference/Run_Instance_Idempotency.html">How to Ensure Idempotency</a>.</p>
     pub client_token: Option<String>,
@@ -8179,7 +8179,7 @@ impl CreateVpcEndpointConnectionNotificationRequestSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateVpcEndpointConnectionNotificationResult {
     /// <p>Unique, case-sensitive identifier you provide to ensure the idempotency of the request.</p>
     pub client_token: Option<String>,
@@ -8235,7 +8235,7 @@ impl CreateVpcEndpointConnectionNotificationResultDeserializer {
     }
 }
 /// <p>Contains the parameters for CreateVpcEndpoint.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateVpcEndpointRequest {
     /// <p>Unique, case-sensitive identifier you provide to ensure the idempotency of the request. For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/APIReference/Run_Instance_Idempotency.html">How to Ensure Idempotency</a>.</p>
     pub client_token: Option<String>,
@@ -8331,7 +8331,7 @@ impl CreateVpcEndpointRequestSerializer {
 }
 
 /// <p>Contains the output of CreateVpcEndpoint.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateVpcEndpointResult {
     /// <p>Unique, case-sensitive identifier you provide to ensure the idempotency of the request.</p>
     pub client_token: Option<String>,
@@ -8385,7 +8385,7 @@ impl CreateVpcEndpointResultDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateVpcEndpointServiceConfigurationRequest {
     /// <p>Indicate whether requests from service consumers to create an endpoint to your service must be accepted. To accept a request, use <a>AcceptVpcEndpointConnections</a>.</p>
     pub acceptance_required: Option<bool>,
@@ -8436,7 +8436,7 @@ impl CreateVpcEndpointServiceConfigurationRequestSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateVpcEndpointServiceConfigurationResult {
     /// <p>Unique, case-sensitive identifier you provide to ensure the idempotency of the request.</p>
     pub client_token: Option<String>,
@@ -8492,7 +8492,7 @@ impl CreateVpcEndpointServiceConfigurationResultDeserializer {
     }
 }
 /// <p>Contains the parameters for CreateVpcPeeringConnection.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateVpcPeeringConnectionRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -8549,7 +8549,7 @@ impl CreateVpcPeeringConnectionRequestSerializer {
 }
 
 /// <p>Contains the output of CreateVpcPeeringConnection.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateVpcPeeringConnectionResult {
     /// <p>Information about the VPC peering connection.</p>
     pub vpc_peering_connection: Option<VpcPeeringConnection>,
@@ -8599,7 +8599,7 @@ impl CreateVpcPeeringConnectionResultDeserializer {
     }
 }
 /// <p>Contains the parameters for CreateVpc.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateVpcRequest {
     /// <p>Requests an Amazon-provided IPv6 CIDR block with a /56 prefix length for the VPC. You cannot specify the range of IP addresses, or the size of the CIDR block.</p>
     pub amazon_provided_ipv_6_cidr_block: Option<bool>,
@@ -8646,7 +8646,7 @@ impl CreateVpcRequestSerializer {
 }
 
 /// <p>Contains the output of CreateVpc.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateVpcResult {
     /// <p>Information about the VPC.</p>
     pub vpc: Option<Vpc>,
@@ -8692,7 +8692,7 @@ impl CreateVpcResultDeserializer {
     }
 }
 /// <p>Contains the parameters for CreateVpnConnection.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateVpnConnectionRequest {
     /// <p>The ID of the customer gateway.</p>
     pub customer_gateway_id: String,
@@ -8744,7 +8744,7 @@ impl CreateVpnConnectionRequestSerializer {
 }
 
 /// <p>Contains the output of CreateVpnConnection.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateVpnConnectionResult {
     /// <p>Information about the VPN connection.</p>
     pub vpn_connection: Option<VpnConnection>,
@@ -8793,7 +8793,7 @@ impl CreateVpnConnectionResultDeserializer {
     }
 }
 /// <p>Contains the parameters for CreateVpnConnectionRoute.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateVpnConnectionRouteRequest {
     /// <p>The CIDR block associated with the local subnet of the customer network.</p>
     pub destination_cidr_block: String,
@@ -8822,7 +8822,7 @@ impl CreateVpnConnectionRouteRequestSerializer {
 }
 
 /// <p>Contains the parameters for CreateVpnGateway.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateVpnGatewayRequest {
     /// <p>A private Autonomous System Number (ASN) for the Amazon side of a BGP session. If you're using a 16-bit ASN, it must be in the 64512 to 65534 range. If you're using a 32-bit ASN, it must be in the 4200000000 to 4294967294 range.</p> <p>Default: 64512</p>
     pub amazon_side_asn: Option<i64>,
@@ -8869,7 +8869,7 @@ impl CreateVpnGatewayRequestSerializer {
 }
 
 /// <p>Contains the output of CreateVpnGateway.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateVpnGatewayResult {
     /// <p>Information about the virtual private gateway.</p>
     pub vpn_gateway: Option<VpnGateway>,
@@ -8918,7 +8918,7 @@ impl CreateVpnGatewayResultDeserializer {
     }
 }
 /// <p>Describes the credit option for CPU usage of a T2 instance.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreditSpecification {
     /// <p>The credit option for CPU usage of a T2 instance.</p>
     pub cpu_credits: Option<String>,
@@ -8965,7 +8965,7 @@ impl CreditSpecificationDeserializer {
     }
 }
 /// <p>The credit option for CPU usage of a T2 instance.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreditSpecificationRequest {
     /// <p>The credit option for CPU usage of a T2 instance. Valid values are <code>standard</code> and <code>unlimited</code>.</p>
     pub cpu_credits: String,
@@ -9002,7 +9002,7 @@ impl CurrencyCodeValuesDeserializer {
     }
 }
 /// <p>Describes a customer gateway.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CustomerGateway {
     /// <p>The customer gateway's Border Gateway Protocol (BGP) Autonomous System Number (ASN).</p>
     pub bgp_asn: Option<String>,
@@ -9159,7 +9159,7 @@ impl DateTimeDeserializer {
     }
 }
 /// <p>Contains the parameters for DeleteCustomerGateway.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteCustomerGatewayRequest {
     /// <p>The ID of the customer gateway.</p>
     pub customer_gateway_id: String,
@@ -9190,7 +9190,7 @@ impl DeleteCustomerGatewayRequestSerializer {
 }
 
 /// <p>Contains the parameters for DeleteDhcpOptions.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteDhcpOptionsRequest {
     /// <p>The ID of the DHCP options set.</p>
     pub dhcp_options_id: String,
@@ -9220,7 +9220,7 @@ impl DeleteDhcpOptionsRequestSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteEgressOnlyInternetGatewayRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -9250,7 +9250,7 @@ impl DeleteEgressOnlyInternetGatewayRequestSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteEgressOnlyInternetGatewayResult {
     /// <p>Returns <code>true</code> if the request succeeds; otherwise, it returns an error.</p>
     pub return_code: Option<bool>,
@@ -9297,7 +9297,7 @@ impl DeleteEgressOnlyInternetGatewayResultDeserializer {
     }
 }
 /// <p>Contains the parameters for DeleteFlowLogs.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteFlowLogsRequest {
     /// <p>One or more flow log IDs.</p>
     pub flow_log_ids: Vec<String>,
@@ -9321,7 +9321,7 @@ impl DeleteFlowLogsRequestSerializer {
 }
 
 /// <p>Contains the output of DeleteFlowLogs.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteFlowLogsResult {
     /// <p>Information about the flow logs that could not be deleted successfully.</p>
     pub unsuccessful: Option<Vec<UnsuccessfulItem>>,
@@ -9368,7 +9368,7 @@ impl DeleteFlowLogsResultDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteFpgaImageRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -9398,7 +9398,7 @@ impl DeleteFpgaImageRequestSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteFpgaImageResult {
     /// <p>Is <code>true</code> if the request succeeds, and an error otherwise.</p>
     pub return_: Option<bool>,
@@ -9444,7 +9444,7 @@ impl DeleteFpgaImageResultDeserializer {
     }
 }
 /// <p>Contains the parameters for DeleteInternetGateway.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteInternetGatewayRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -9475,7 +9475,7 @@ impl DeleteInternetGatewayRequestSerializer {
 }
 
 /// <p>Contains the parameters for DeleteKeyPair.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteKeyPairRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -9505,7 +9505,7 @@ impl DeleteKeyPairRequestSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteLaunchTemplateRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -9545,7 +9545,7 @@ impl DeleteLaunchTemplateRequestSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteLaunchTemplateResult {
     /// <p>Information about the launch template.</p>
     pub launch_template: Option<LaunchTemplate>,
@@ -9593,7 +9593,7 @@ impl DeleteLaunchTemplateResultDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteLaunchTemplateVersionsRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -9641,7 +9641,7 @@ impl DeleteLaunchTemplateVersionsRequestSerializer {
 }
 
 /// <p>Describes a launch template version that could not be deleted.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteLaunchTemplateVersionsResponseErrorItem {
     /// <p>The ID of the launch template.</p>
     pub launch_template_id: Option<String>,
@@ -9756,7 +9756,7 @@ impl DeleteLaunchTemplateVersionsResponseErrorSetDeserializer {
     }
 }
 /// <p>Describes a launch template version that was successfully deleted.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteLaunchTemplateVersionsResponseSuccessItem {
     /// <p>The ID of the launch template.</p>
     pub launch_template_id: Option<String>,
@@ -9858,7 +9858,7 @@ impl DeleteLaunchTemplateVersionsResponseSuccessSetDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteLaunchTemplateVersionsResult {
     /// <p>Information about the launch template versions that were successfully deleted.</p>
     pub successfully_deleted_launch_template_versions:
@@ -9913,7 +9913,7 @@ impl DeleteLaunchTemplateVersionsResultDeserializer {
     }
 }
 /// <p>Contains the parameters for DeleteNatGateway.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteNatGatewayRequest {
     /// <p>The ID of the NAT gateway.</p>
     pub nat_gateway_id: String,
@@ -9936,7 +9936,7 @@ impl DeleteNatGatewayRequestSerializer {
 }
 
 /// <p>Contains the output of DeleteNatGateway.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteNatGatewayResult {
     /// <p>The ID of the NAT gateway.</p>
     pub nat_gateway_id: Option<String>,
@@ -9983,7 +9983,7 @@ impl DeleteNatGatewayResultDeserializer {
     }
 }
 /// <p>Contains the parameters for DeleteNetworkAclEntry.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteNetworkAclEntryRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -10026,7 +10026,7 @@ impl DeleteNetworkAclEntryRequestSerializer {
 }
 
 /// <p>Contains the parameters for DeleteNetworkAcl.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteNetworkAclRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -10057,7 +10057,7 @@ impl DeleteNetworkAclRequestSerializer {
 }
 
 /// <p>Contains the parameters for DeleteNetworkInterfacePermission.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteNetworkInterfacePermissionRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -10096,7 +10096,7 @@ impl DeleteNetworkInterfacePermissionRequestSerializer {
 }
 
 /// <p>Contains the output for DeleteNetworkInterfacePermission.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteNetworkInterfacePermissionResult {
     /// <p>Returns <code>true</code> if the request succeeds, otherwise returns an error.</p>
     pub return_: Option<bool>,
@@ -10142,7 +10142,7 @@ impl DeleteNetworkInterfacePermissionResultDeserializer {
     }
 }
 /// <p>Contains the parameters for DeleteNetworkInterface.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteNetworkInterfaceRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -10173,7 +10173,7 @@ impl DeleteNetworkInterfaceRequestSerializer {
 }
 
 /// <p>Contains the parameters for DeletePlacementGroup.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeletePlacementGroupRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -10204,7 +10204,7 @@ impl DeletePlacementGroupRequestSerializer {
 }
 
 /// <p>Contains the parameters for DeleteRoute.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteRouteRequest {
     /// <p>The IPv4 CIDR range for the route. The value you specify must match the CIDR for the route exactly.</p>
     pub destination_cidr_block: Option<String>,
@@ -10251,7 +10251,7 @@ impl DeleteRouteRequestSerializer {
 }
 
 /// <p>Contains the parameters for DeleteRouteTable.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteRouteTableRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -10282,7 +10282,7 @@ impl DeleteRouteTableRequestSerializer {
 }
 
 /// <p>Contains the parameters for DeleteSecurityGroup.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteSecurityGroupRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -10323,7 +10323,7 @@ impl DeleteSecurityGroupRequestSerializer {
 }
 
 /// <p>Contains the parameters for DeleteSnapshot.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteSnapshotRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -10354,7 +10354,7 @@ impl DeleteSnapshotRequestSerializer {
 }
 
 /// <p>Contains the parameters for DeleteSpotDatafeedSubscription.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteSpotDatafeedSubscriptionRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -10379,7 +10379,7 @@ impl DeleteSpotDatafeedSubscriptionRequestSerializer {
 }
 
 /// <p>Contains the parameters for DeleteSubnet.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteSubnetRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -10410,7 +10410,7 @@ impl DeleteSubnetRequestSerializer {
 }
 
 /// <p>Contains the parameters for DeleteTags.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteTagsRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -10447,7 +10447,7 @@ impl DeleteTagsRequestSerializer {
 }
 
 /// <p>Contains the parameters for DeleteVolume.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteVolumeRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -10477,7 +10477,7 @@ impl DeleteVolumeRequestSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteVpcEndpointConnectionNotificationsRequest {
     /// <p>One or more notification IDs.</p>
     pub connection_notification_ids: Vec<String>,
@@ -10512,7 +10512,7 @@ impl DeleteVpcEndpointConnectionNotificationsRequestSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteVpcEndpointConnectionNotificationsResult {
     /// <p>Information about the notifications that could not be deleted successfully.</p>
     pub unsuccessful: Option<Vec<UnsuccessfulItem>>,
@@ -10559,7 +10559,7 @@ impl DeleteVpcEndpointConnectionNotificationsResultDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteVpcEndpointServiceConfigurationsRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -10594,7 +10594,7 @@ impl DeleteVpcEndpointServiceConfigurationsRequestSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteVpcEndpointServiceConfigurationsResult {
     /// <p>Information about the service configurations that were not deleted, if applicable.</p>
     pub unsuccessful: Option<Vec<UnsuccessfulItem>>,
@@ -10642,7 +10642,7 @@ impl DeleteVpcEndpointServiceConfigurationsResultDeserializer {
     }
 }
 /// <p>Contains the parameters for DeleteVpcEndpoints.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteVpcEndpointsRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -10674,7 +10674,7 @@ impl DeleteVpcEndpointsRequestSerializer {
 }
 
 /// <p>Contains the output of DeleteVpcEndpoints.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteVpcEndpointsResult {
     /// <p>Information about the VPC endpoints that were not successfully deleted.</p>
     pub unsuccessful: Option<Vec<UnsuccessfulItem>>,
@@ -10722,7 +10722,7 @@ impl DeleteVpcEndpointsResultDeserializer {
     }
 }
 /// <p>Contains the parameters for DeleteVpcPeeringConnection.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteVpcPeeringConnectionRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -10753,7 +10753,7 @@ impl DeleteVpcPeeringConnectionRequestSerializer {
 }
 
 /// <p>Contains the output of DeleteVpcPeeringConnection.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteVpcPeeringConnectionResult {
     /// <p>Returns <code>true</code> if the request succeeds; otherwise, it returns an error.</p>
     pub return_: Option<bool>,
@@ -10799,7 +10799,7 @@ impl DeleteVpcPeeringConnectionResultDeserializer {
     }
 }
 /// <p>Contains the parameters for DeleteVpc.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteVpcRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -10830,7 +10830,7 @@ impl DeleteVpcRequestSerializer {
 }
 
 /// <p>Contains the parameters for DeleteVpnConnection.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteVpnConnectionRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -10861,7 +10861,7 @@ impl DeleteVpnConnectionRequestSerializer {
 }
 
 /// <p>Contains the parameters for DeleteVpnConnectionRoute.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteVpnConnectionRouteRequest {
     /// <p>The CIDR block associated with the local subnet of the customer network.</p>
     pub destination_cidr_block: String,
@@ -10890,7 +10890,7 @@ impl DeleteVpnConnectionRouteRequestSerializer {
 }
 
 /// <p>Contains the parameters for DeleteVpnGateway.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteVpnGatewayRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -10921,7 +10921,7 @@ impl DeleteVpnGatewayRequestSerializer {
 }
 
 /// <p>Contains the parameters for DeregisterImage.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeregisterImageRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -10952,7 +10952,7 @@ impl DeregisterImageRequestSerializer {
 }
 
 /// <p>Contains the parameters for DescribeAccountAttributes.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeAccountAttributesRequest {
     /// <p>One or more account attribute names.</p>
     pub attribute_names: Option<Vec<String>>,
@@ -10986,7 +10986,7 @@ impl DescribeAccountAttributesRequestSerializer {
 }
 
 /// <p>Contains the output of DescribeAccountAttributes.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeAccountAttributesResult {
     /// <p>Information about one or more account attributes.</p>
     pub account_attributes: Option<Vec<AccountAttribute>>,
@@ -11036,7 +11036,7 @@ impl DescribeAccountAttributesResultDeserializer {
     }
 }
 /// <p>Contains the parameters for DescribeAddresses.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeAddressesRequest {
     /// <p>[EC2-VPC] One or more allocation IDs.</p> <p>Default: Describes all your Elastic IP addresses.</p>
     pub allocation_ids: Option<Vec<String>>,
@@ -11088,7 +11088,7 @@ impl DescribeAddressesRequestSerializer {
 }
 
 /// <p>Contains the output of DescribeAddresses.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeAddressesResult {
     /// <p>Information about one or more Elastic IP addresses.</p>
     pub addresses: Option<Vec<Address>>,
@@ -11136,7 +11136,7 @@ impl DescribeAddressesResultDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeAggregateIdFormatRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -11160,7 +11160,7 @@ impl DescribeAggregateIdFormatRequestSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeAggregateIdFormatResult {
     /// <p>Information about each resource's ID format.</p>
     pub statuses: Option<Vec<IdFormat>>,
@@ -11217,7 +11217,7 @@ impl DescribeAggregateIdFormatResultDeserializer {
     }
 }
 /// <p>Contains the parameters for DescribeAvailabilityZones.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeAvailabilityZonesRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -11260,7 +11260,7 @@ impl DescribeAvailabilityZonesRequestSerializer {
 }
 
 /// <p>Contains the output of DescribeAvailabiltyZones.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeAvailabilityZonesResult {
     /// <p>Information about one or more Availability Zones.</p>
     pub availability_zones: Option<Vec<AvailabilityZone>>,
@@ -11310,7 +11310,7 @@ impl DescribeAvailabilityZonesResultDeserializer {
     }
 }
 /// <p>Contains the parameters for DescribeBundleTasks.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeBundleTasksRequest {
     /// <p>One or more bundle task IDs.</p> <p>Default: Describes all your bundle tasks.</p>
     pub bundle_ids: Option<Vec<String>>,
@@ -11353,7 +11353,7 @@ impl DescribeBundleTasksRequestSerializer {
 }
 
 /// <p>Contains the output of DescribeBundleTasks.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeBundleTasksResult {
     /// <p>Information about one or more bundle tasks.</p>
     pub bundle_tasks: Option<Vec<BundleTask>>,
@@ -11402,7 +11402,7 @@ impl DescribeBundleTasksResultDeserializer {
     }
 }
 /// <p>Contains the parameters for DescribeClassicLinkInstances.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeClassicLinkInstancesRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -11461,7 +11461,7 @@ impl DescribeClassicLinkInstancesRequestSerializer {
 }
 
 /// <p>Contains the output of DescribeClassicLinkInstances.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeClassicLinkInstancesResult {
     /// <p>Information about one or more linked EC2-Classic instances.</p>
     pub instances: Option<Vec<ClassicLinkInstance>>,
@@ -11555,7 +11555,7 @@ impl DescribeConversionTaskListDeserializer {
     }
 }
 /// <p>Contains the parameters for DescribeConversionTasks.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeConversionTasksRequest {
     /// <p>One or more conversion task IDs.</p>
     pub conversion_task_ids: Option<Vec<String>>,
@@ -11589,7 +11589,7 @@ impl DescribeConversionTasksRequestSerializer {
 }
 
 /// <p>Contains the output for DescribeConversionTasks.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeConversionTasksResult {
     /// <p>Information about the conversion tasks.</p>
     pub conversion_tasks: Option<Vec<ConversionTask>>,
@@ -11639,7 +11639,7 @@ impl DescribeConversionTasksResultDeserializer {
     }
 }
 /// <p>Contains the parameters for DescribeCustomerGateways.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeCustomerGatewaysRequest {
     /// <p>One or more customer gateway IDs.</p> <p>Default: Describes all your customer gateways.</p>
     pub customer_gateway_ids: Option<Vec<String>>,
@@ -11682,7 +11682,7 @@ impl DescribeCustomerGatewaysRequestSerializer {
 }
 
 /// <p>Contains the output of DescribeCustomerGateways.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeCustomerGatewaysResult {
     /// <p>Information about one or more customer gateways.</p>
     pub customer_gateways: Option<Vec<CustomerGateway>>,
@@ -11732,7 +11732,7 @@ impl DescribeCustomerGatewaysResultDeserializer {
     }
 }
 /// <p>Contains the parameters for DescribeDhcpOptions.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeDhcpOptionsRequest {
     /// <p>The IDs of one or more DHCP options sets.</p> <p>Default: Describes all your DHCP options sets.</p>
     pub dhcp_options_ids: Option<Vec<String>>,
@@ -11775,7 +11775,7 @@ impl DescribeDhcpOptionsRequestSerializer {
 }
 
 /// <p>Contains the output of DescribeDhcpOptions.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeDhcpOptionsResult {
     /// <p>Information about one or more DHCP options sets.</p>
     pub dhcp_options: Option<Vec<DhcpOptions>>,
@@ -11823,7 +11823,7 @@ impl DescribeDhcpOptionsResultDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeEgressOnlyInternetGatewaysRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -11872,7 +11872,7 @@ impl DescribeEgressOnlyInternetGatewaysRequestSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeEgressOnlyInternetGatewaysResult {
     /// <p>Information about the egress-only Internet gateways.</p>
     pub egress_only_internet_gateways: Option<Vec<EgressOnlyInternetGateway>>,
@@ -11928,7 +11928,7 @@ impl DescribeEgressOnlyInternetGatewaysResultDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeElasticGpusRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -11986,7 +11986,7 @@ impl DescribeElasticGpusRequestSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeElasticGpusResult {
     /// <p>Information about the Elastic GPUs.</p>
     pub elastic_gpu_set: Option<Vec<ElasticGpus>>,
@@ -12047,7 +12047,7 @@ impl DescribeElasticGpusResultDeserializer {
     }
 }
 /// <p>Contains the parameters for DescribeExportTasks.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeExportTasksRequest {
     /// <p>One or more export task IDs.</p>
     pub export_task_ids: Option<Vec<String>>,
@@ -12073,7 +12073,7 @@ impl DescribeExportTasksRequestSerializer {
 }
 
 /// <p>Contains the output for DescribeExportTasks.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeExportTasksResult {
     /// <p>Information about the export tasks.</p>
     pub export_tasks: Option<Vec<ExportTask>>,
@@ -12122,7 +12122,7 @@ impl DescribeExportTasksResultDeserializer {
     }
 }
 /// <p>Contains the parameters for DescribeFlowLogs.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeFlowLogsRequest {
     /// <p><p>One or more filters.</p> <ul> <li> <p> <code>deliver-log-status</code> - The status of the logs delivery (<code>SUCCESS</code> | <code>FAILED</code>).</p> </li> <li> <p> <code>flow-log-id</code> - The ID of the flow log.</p> </li> <li> <p> <code>log-group-name</code> - The name of the log group.</p> </li> <li> <p> <code>resource-id</code> - The ID of the VPC, subnet, or network interface.</p> </li> <li> <p> <code>traffic-type</code> - The type of traffic (<code>ACCEPT</code> | <code>REJECT</code> | <code>ALL</code>)</p> </li> </ul></p>
     pub filter: Option<Vec<Filter>>,
@@ -12173,7 +12173,7 @@ impl DescribeFlowLogsRequestSerializer {
 }
 
 /// <p>Contains the output of DescribeFlowLogs.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeFlowLogsResult {
     /// <p>Information about the flow logs.</p>
     pub flow_logs: Option<Vec<FlowLog>>,
@@ -12227,7 +12227,7 @@ impl DescribeFlowLogsResultDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeFpgaImageAttributeRequest {
     /// <p>The AFI attribute.</p>
     pub attribute: String,
@@ -12263,7 +12263,7 @@ impl DescribeFpgaImageAttributeRequestSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeFpgaImageAttributeResult {
     /// <p>Information about the attribute.</p>
     pub fpga_image_attribute: Option<FpgaImageAttribute>,
@@ -12312,7 +12312,7 @@ impl DescribeFpgaImageAttributeResultDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeFpgaImagesRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -12379,7 +12379,7 @@ impl DescribeFpgaImagesRequestSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeFpgaImagesResult {
     /// <p>Information about one or more FPGA images.</p>
     pub fpga_images: Option<Vec<FpgaImage>>,
@@ -12433,7 +12433,7 @@ impl DescribeFpgaImagesResultDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeHostReservationOfferingsRequest {
     /// <p><p>One or more filters.</p> <ul> <li> <p> <code>instance-family</code> - The instance family of the offering (e.g., <code>m4</code>).</p> </li> <li> <p> <code>payment-option</code> - The payment option (<code>NoUpfront</code> | <code>PartialUpfront</code> | <code>AllUpfront</code>).</p> </li> </ul></p>
     pub filter: Option<Vec<Filter>>,
@@ -12498,7 +12498,7 @@ impl DescribeHostReservationOfferingsRequestSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeHostReservationOfferingsResult {
     /// <p>The token to use to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>
     pub next_token: Option<String>,
@@ -12552,7 +12552,7 @@ impl DescribeHostReservationOfferingsResultDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeHostReservationsRequest {
     /// <p><p>One or more filters.</p> <ul> <li> <p> <code>instance-family</code> - The instance family (e.g., <code>m4</code>).</p> </li> <li> <p> <code>payment-option</code> - The payment option (<code>NoUpfront</code> | <code>PartialUpfront</code> | <code>AllUpfront</code>).</p> </li> <li> <p> <code>state</code> - The state of the reservation (<code>payment-pending</code> | <code>payment-failed</code> | <code>active</code> | <code>retired</code>).</p> </li> </ul></p>
     pub filter: Option<Vec<Filter>>,
@@ -12602,7 +12602,7 @@ impl DescribeHostReservationsRequestSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeHostReservationsResult {
     /// <p>Details about the reservation's configuration.</p>
     pub host_reservation_set: Option<Vec<HostReservation>>,
@@ -12658,7 +12658,7 @@ impl DescribeHostReservationsResultDeserializer {
     }
 }
 /// <p>Contains the parameters for DescribeHosts.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeHostsRequest {
     /// <p><p>One or more filters.</p> <ul> <li> <p> <code>instance-type</code> - The instance type size that the Dedicated Host is configured to support.</p> </li> <li> <p> <code>auto-placement</code> - Whether auto-placement is enabled or disabled (<code>on</code> | <code>off</code>).</p> </li> <li> <p> <code>host-reservation-id</code> - The ID of the reservation assigned to this host.</p> </li> <li> <p> <code>client-token</code> - The idempotency token you provided when you launched the instance</p> </li> <li> <p> <code>state</code>- The allocation state of the Dedicated Host (<code>available</code> | <code>under-assessment</code> | <code>permanent-failure</code> | <code>released</code> | <code>released-permanent-failure</code>).</p> </li> <li> <p> <code>availability-zone</code> - The Availability Zone of the host.</p> </li> </ul></p>
     pub filter: Option<Vec<Filter>>,
@@ -12709,7 +12709,7 @@ impl DescribeHostsRequestSerializer {
 }
 
 /// <p>Contains the output of DescribeHosts.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeHostsResult {
     /// <p>Information about the Dedicated Hosts.</p>
     pub hosts: Option<Vec<Host>>,
@@ -12760,7 +12760,7 @@ impl DescribeHostsResultDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeIamInstanceProfileAssociationsRequest {
     /// <p>One or more IAM instance profile associations.</p>
     pub association_ids: Option<Vec<String>>,
@@ -12814,7 +12814,7 @@ impl DescribeIamInstanceProfileAssociationsRequestSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeIamInstanceProfileAssociationsResult {
     /// <p>Information about one or more IAM instance profile associations.</p>
     pub iam_instance_profile_associations: Option<Vec<IamInstanceProfileAssociation>>,
@@ -12871,7 +12871,7 @@ impl DescribeIamInstanceProfileAssociationsResultDeserializer {
     }
 }
 /// <p>Contains the parameters for DescribeIdFormat.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeIdFormatRequest {
     /// <p>The type of resource: <code>bundle</code> | <code>conversion-task</code> | <code>customer-gateway</code> | <code>dhcp-options</code> | <code>elastic-ip-allocation</code> | <code>elastic-ip-association</code> | <code>export-task</code> | <code>flow-log</code> | <code>image</code> | <code>import-task</code> | <code>instance</code> | <code>internet-gateway</code> | <code>network-acl</code> | <code>network-acl-association</code> | <code>network-interface</code> | <code>network-interface-attachment</code> | <code>prefix-list</code> | <code>reservation</code> | <code>route-table</code> | <code>route-table-association</code> | <code>security-group</code> | <code>snapshot</code> | <code>subnet</code> | <code>subnet-cidr-block-association</code> | <code>volume</code> | <code>vpc</code> | <code>vpc-cidr-block-association</code> | <code>vpc-endpoint</code> | <code>vpc-peering-connection</code> | <code>vpn-connection</code> | <code>vpn-gateway</code> </p>
     pub resource: Option<String>,
@@ -12896,7 +12896,7 @@ impl DescribeIdFormatRequestSerializer {
 }
 
 /// <p>Contains the output of DescribeIdFormat.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeIdFormatResult {
     /// <p>Information about the ID format for the resource.</p>
     pub statuses: Option<Vec<IdFormat>>,
@@ -12945,7 +12945,7 @@ impl DescribeIdFormatResultDeserializer {
     }
 }
 /// <p>Contains the parameters for DescribeIdentityIdFormat.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeIdentityIdFormatRequest {
     /// <p>The ARN of the principal, which can be an IAM role, IAM user, or the root user.</p>
     pub principal_arn: String,
@@ -12976,7 +12976,7 @@ impl DescribeIdentityIdFormatRequestSerializer {
 }
 
 /// <p>Contains the output of DescribeIdentityIdFormat.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeIdentityIdFormatResult {
     /// <p>Information about the ID format for the resources.</p>
     pub statuses: Option<Vec<IdFormat>>,
@@ -13025,7 +13025,7 @@ impl DescribeIdentityIdFormatResultDeserializer {
     }
 }
 /// <p>Contains the parameters for DescribeImageAttribute.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeImageAttributeRequest {
     /// <p>The AMI attribute.</p> <p> <b>Note</b>: Depending on your account privileges, the <code>blockDeviceMapping</code> attribute may return a <code>Client.AuthFailure</code> error. If this happens, use <a>DescribeImages</a> to get information about the block device mapping for the AMI.</p>
     pub attribute: String,
@@ -13062,7 +13062,7 @@ impl DescribeImageAttributeRequestSerializer {
 }
 
 /// <p>Contains the parameters for DescribeImages.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeImagesRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -13123,7 +13123,7 @@ impl DescribeImagesRequestSerializer {
 }
 
 /// <p>Contains the output of DescribeImages.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeImagesResult {
     /// <p>Information about one or more images.</p>
     pub images: Option<Vec<Image>>,
@@ -13170,7 +13170,7 @@ impl DescribeImagesResultDeserializer {
     }
 }
 /// <p>Contains the parameters for DescribeImportImageTasks.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeImportImageTasksRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -13229,7 +13229,7 @@ impl DescribeImportImageTasksRequestSerializer {
 }
 
 /// <p>Contains the output for DescribeImportImageTasks.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeImportImageTasksResult {
     /// <p>A list of zero or more import image tasks that are currently active or were completed or canceled in the previous 7 days.</p>
     pub import_image_tasks: Option<Vec<ImportImageTask>>,
@@ -13285,7 +13285,7 @@ impl DescribeImportImageTasksResultDeserializer {
     }
 }
 /// <p>Contains the parameters for DescribeImportSnapshotTasks.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeImportSnapshotTasksRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -13344,7 +13344,7 @@ impl DescribeImportSnapshotTasksRequestSerializer {
 }
 
 /// <p>Contains the output for DescribeImportSnapshotTasks.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeImportSnapshotTasksResult {
     /// <p>A list of zero or more import snapshot tasks that are currently active or were completed or canceled in the previous 7 days.</p>
     pub import_snapshot_tasks: Option<Vec<ImportSnapshotTask>>,
@@ -13400,7 +13400,7 @@ impl DescribeImportSnapshotTasksResultDeserializer {
     }
 }
 /// <p>Contains the parameters for DescribeInstanceAttribute.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeInstanceAttributeRequest {
     /// <p>The instance attribute.</p> <p>Note: The <code>enaSupport</code> attribute is not supported at this time.</p>
     pub attribute: String,
@@ -13436,7 +13436,7 @@ impl DescribeInstanceAttributeRequestSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeInstanceCreditSpecificationsRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -13498,7 +13498,7 @@ impl DescribeInstanceCreditSpecificationsRequestSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeInstanceCreditSpecificationsResult {
     /// <p>Information about the credit option for CPU usage of an instance.</p>
     pub instance_credit_specifications: Option<Vec<InstanceCreditSpecification>>,
@@ -13555,7 +13555,7 @@ impl DescribeInstanceCreditSpecificationsResultDeserializer {
     }
 }
 /// <p>Contains the parameters for DescribeInstanceStatus.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeInstanceStatusRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -13622,7 +13622,7 @@ impl DescribeInstanceStatusRequestSerializer {
 }
 
 /// <p>Contains the output of DescribeInstanceStatus.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeInstanceStatusResult {
     /// <p>One or more instance status descriptions.</p>
     pub instance_statuses: Option<Vec<InstanceStatus>>,
@@ -13676,7 +13676,7 @@ impl DescribeInstanceStatusResultDeserializer {
     }
 }
 /// <p>Contains the parameters for DescribeInstances.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeInstancesRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -13735,7 +13735,7 @@ impl DescribeInstancesRequestSerializer {
 }
 
 /// <p>Contains the output of DescribeInstances.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeInstancesResult {
     /// <p>The token to use to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>
     pub next_token: Option<String>,
@@ -13790,7 +13790,7 @@ impl DescribeInstancesResultDeserializer {
     }
 }
 /// <p>Contains the parameters for DescribeInternetGateways.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeInternetGatewaysRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -13833,7 +13833,7 @@ impl DescribeInternetGatewaysRequestSerializer {
 }
 
 /// <p>Contains the output of DescribeInternetGateways.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeInternetGatewaysResult {
     /// <p>Information about one or more Internet gateways.</p>
     pub internet_gateways: Option<Vec<InternetGateway>>,
@@ -13883,7 +13883,7 @@ impl DescribeInternetGatewaysResultDeserializer {
     }
 }
 /// <p>Contains the parameters for DescribeKeyPairs.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeKeyPairsRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -13926,7 +13926,7 @@ impl DescribeKeyPairsRequestSerializer {
 }
 
 /// <p>Contains the output of DescribeKeyPairs.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeKeyPairsResult {
     /// <p>Information about one or more key pairs.</p>
     pub key_pairs: Option<Vec<KeyPairInfo>>,
@@ -13972,7 +13972,7 @@ impl DescribeKeyPairsResultDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeLaunchTemplateVersionsRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -14062,7 +14062,7 @@ impl DescribeLaunchTemplateVersionsRequestSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeLaunchTemplateVersionsResult {
     /// <p>Information about the launch template versions.</p>
     pub launch_template_versions: Option<Vec<LaunchTemplateVersion>>,
@@ -14117,7 +14117,7 @@ impl DescribeLaunchTemplateVersionsResultDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeLaunchTemplatesRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -14184,7 +14184,7 @@ impl DescribeLaunchTemplatesRequestSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeLaunchTemplatesResult {
     /// <p>Information about the launch templates.</p>
     pub launch_templates: Option<Vec<LaunchTemplate>>,
@@ -14238,7 +14238,7 @@ impl DescribeLaunchTemplatesResultDeserializer {
     }
 }
 /// <p>Contains the parameters for DescribeMovingAddresses.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeMovingAddressesRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -14297,7 +14297,7 @@ impl DescribeMovingAddressesRequestSerializer {
 }
 
 /// <p>Contains the output of DescribeMovingAddresses.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeMovingAddressesResult {
     /// <p>The status for each Elastic IP address.</p>
     pub moving_address_statuses: Option<Vec<MovingAddressStatus>>,
@@ -14353,7 +14353,7 @@ impl DescribeMovingAddressesResultDeserializer {
     }
 }
 /// <p>Contains the parameters for DescribeNatGateways.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeNatGatewaysRequest {
     /// <p><p>One or more filters.</p> <ul> <li> <p> <code>nat-gateway-id</code> - The ID of the NAT gateway.</p> </li> <li> <p> <code>state</code> - The state of the NAT gateway (<code>pending</code> | <code>failed</code> | <code>available</code> | <code>deleting</code> | <code>deleted</code>).</p> </li> <li> <p> <code>subnet-id</code> - The ID of the subnet in which the NAT gateway resides.</p> </li> <li> <p> <code>tag</code>:<i>key</i>=<i>value</i> - The key/value combination of a tag assigned to the resource. Specify the key of the tag in the filter name and the value of the tag in the filter value. For example, for the tag Purpose=X, specify <code>tag:Purpose</code> for the filter name and <code>X</code> for the filter value.</p> </li> <li> <p> <code>tag-key</code> - The key of a tag assigned to the resource. This filter is independent of the <code>tag-value</code> filter. For example, if you use both the filter &quot;tag-key=Purpose&quot; and the filter &quot;tag-value=X&quot;, you get any resources assigned both the tag key Purpose (regardless of what the tag&#39;s value is), and the tag value X (regardless of what the tag&#39;s key is). If you want to list only resources where Purpose is X, see the <code>tag</code>:<i>key</i>=<i>value</i> filter.</p> </li> <li> <p> <code>tag-value</code> - The value of a tag assigned to the resource. This filter is independent of the <code>tag-key</code> filter.</p> </li> <li> <p> <code>vpc-id</code> - The ID of the VPC in which the NAT gateway resides.</p> </li> </ul></p>
     pub filter: Option<Vec<Filter>>,
@@ -14404,7 +14404,7 @@ impl DescribeNatGatewaysRequestSerializer {
 }
 
 /// <p>Contains the output of DescribeNatGateways.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeNatGatewaysResult {
     /// <p>Information about the NAT gateways.</p>
     pub nat_gateways: Option<Vec<NatGateway>>,
@@ -14459,7 +14459,7 @@ impl DescribeNatGatewaysResultDeserializer {
     }
 }
 /// <p>Contains the parameters for DescribeNetworkAcls.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeNetworkAclsRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -14502,7 +14502,7 @@ impl DescribeNetworkAclsRequestSerializer {
 }
 
 /// <p>Contains the output of DescribeNetworkAcls.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeNetworkAclsResult {
     /// <p>Information about one or more network ACLs.</p>
     pub network_acls: Option<Vec<NetworkAcl>>,
@@ -14551,7 +14551,7 @@ impl DescribeNetworkAclsResultDeserializer {
     }
 }
 /// <p>Contains the parameters for DescribeNetworkInterfaceAttribute.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeNetworkInterfaceAttributeRequest {
     /// <p>The attribute of the network interface. This parameter is required.</p>
     pub attribute: Option<String>,
@@ -14590,7 +14590,7 @@ impl DescribeNetworkInterfaceAttributeRequestSerializer {
 }
 
 /// <p>Contains the output of DescribeNetworkInterfaceAttribute.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeNetworkInterfaceAttributeResult {
     /// <p>The attachment (if any) of the network interface.</p>
     pub attachment: Option<NetworkInterfaceAttachment>,
@@ -14672,7 +14672,7 @@ impl DescribeNetworkInterfaceAttributeResultDeserializer {
     }
 }
 /// <p>Contains the parameters for DescribeNetworkInterfacePermissions.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeNetworkInterfacePermissionsRequest {
     /// <p><p>One or more filters.</p> <ul> <li> <p> <code>network-interface-permission.network-interface-permission-id</code> - The ID of the permission.</p> </li> <li> <p> <code>network-interface-permission.network-interface-id</code> - The ID of the network interface.</p> </li> <li> <p> <code>network-interface-permission.aws-account-id</code> - The AWS account ID.</p> </li> <li> <p> <code>network-interface-permission.aws-service</code> - The AWS service.</p> </li> <li> <p> <code>network-interface-permission.permission</code> - The type of permission (<code>INSTANCE-ATTACH</code> | <code>EIP-ASSOCIATE</code>).</p> </li> </ul></p>
     pub filters: Option<Vec<Filter>>,
@@ -14727,7 +14727,7 @@ impl DescribeNetworkInterfacePermissionsRequestSerializer {
 }
 
 /// <p>Contains the output for DescribeNetworkInterfacePermissions.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeNetworkInterfacePermissionsResult {
     /// <p>The network interface permissions.</p>
     pub network_interface_permissions: Option<Vec<NetworkInterfacePermission>>,
@@ -14784,7 +14784,7 @@ impl DescribeNetworkInterfacePermissionsResultDeserializer {
     }
 }
 /// <p>Contains the parameters for DescribeNetworkInterfaces.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeNetworkInterfacesRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -14827,7 +14827,7 @@ impl DescribeNetworkInterfacesRequestSerializer {
 }
 
 /// <p>Contains the output of DescribeNetworkInterfaces.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeNetworkInterfacesResult {
     /// <p>Information about one or more network interfaces.</p>
     pub network_interfaces: Option<Vec<NetworkInterface>>,
@@ -14877,7 +14877,7 @@ impl DescribeNetworkInterfacesResultDeserializer {
     }
 }
 /// <p>Contains the parameters for DescribePlacementGroups.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribePlacementGroupsRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -14920,7 +14920,7 @@ impl DescribePlacementGroupsRequestSerializer {
 }
 
 /// <p>Contains the output of DescribePlacementGroups.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribePlacementGroupsResult {
     /// <p>One or more placement groups.</p>
     pub placement_groups: Option<Vec<PlacementGroup>>,
@@ -14968,7 +14968,7 @@ impl DescribePlacementGroupsResultDeserializer {
     }
 }
 /// <p>Contains the parameters for DescribePrefixLists.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribePrefixListsRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -15027,7 +15027,7 @@ impl DescribePrefixListsRequestSerializer {
 }
 
 /// <p>Contains the output of DescribePrefixLists.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribePrefixListsResult {
     /// <p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>
     pub next_token: Option<String>,
@@ -15081,7 +15081,7 @@ impl DescribePrefixListsResultDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribePrincipalIdFormatRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -15130,7 +15130,7 @@ impl DescribePrincipalIdFormatRequestSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribePrincipalIdFormatResult {
     /// <p>The token to use to retrieve the next page of results. This value is null when there are no more results to return.</p>
     pub next_token: Option<String>,
@@ -15184,7 +15184,7 @@ impl DescribePrincipalIdFormatResultDeserializer {
     }
 }
 /// <p>Contains the parameters for DescribeRegions.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeRegionsRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -15227,7 +15227,7 @@ impl DescribeRegionsRequestSerializer {
 }
 
 /// <p>Contains the output of DescribeRegions.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeRegionsResult {
     /// <p>Information about one or more regions.</p>
     pub regions: Option<Vec<Region>>,
@@ -15276,7 +15276,7 @@ impl DescribeRegionsResultDeserializer {
     }
 }
 /// <p>Contains the parameters for DescribeReservedInstancesListings.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeReservedInstancesListingsRequest {
     /// <p><p>One or more filters.</p> <ul> <li> <p> <code>reserved-instances-id</code> - The ID of the Reserved Instances.</p> </li> <li> <p> <code>reserved-instances-listing-id</code> - The ID of the Reserved Instances listing.</p> </li> <li> <p> <code>status</code> - The status of the Reserved Instance listing (<code>pending</code> | <code>active</code> | <code>cancelled</code> | <code>closed</code>).</p> </li> <li> <p> <code>status-message</code> - The reason for the status.</p> </li> </ul></p>
     pub filters: Option<Vec<Filter>>,
@@ -15318,7 +15318,7 @@ impl DescribeReservedInstancesListingsRequestSerializer {
 }
 
 /// <p>Contains the output of DescribeReservedInstancesListings.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeReservedInstancesListingsResult {
     /// <p>Information about the Reserved Instance listing.</p>
     pub reserved_instances_listings: Option<Vec<ReservedInstancesListing>>,
@@ -15368,7 +15368,7 @@ impl DescribeReservedInstancesListingsResultDeserializer {
     }
 }
 /// <p>Contains the parameters for DescribeReservedInstancesModifications.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeReservedInstancesModificationsRequest {
     /// <p><p>One or more filters.</p> <ul> <li> <p> <code>client-token</code> - The idempotency token for the modification request.</p> </li> <li> <p> <code>create-date</code> - The time when the modification request was created.</p> </li> <li> <p> <code>effective-date</code> - The time when the modification becomes effective.</p> </li> <li> <p> <code>modification-result.reserved-instances-id</code> - The ID for the Reserved Instances created as part of the modification request. This ID is only available when the status of the modification is <code>fulfilled</code>.</p> </li> <li> <p> <code>modification-result.target-configuration.availability-zone</code> - The Availability Zone for the new Reserved Instances.</p> </li> <li> <p> <code>modification-result.target-configuration.instance-count </code> - The number of new Reserved Instances.</p> </li> <li> <p> <code>modification-result.target-configuration.instance-type</code> - The instance type of the new Reserved Instances.</p> </li> <li> <p> <code>modification-result.target-configuration.platform</code> - The network platform of the new Reserved Instances (<code>EC2-Classic</code> | <code>EC2-VPC</code>).</p> </li> <li> <p> <code>reserved-instances-id</code> - The ID of the Reserved Instances modified.</p> </li> <li> <p> <code>reserved-instances-modification-id</code> - The ID of the modification request.</p> </li> <li> <p> <code>status</code> - The status of the Reserved Instances modification request (<code>processing</code> | <code>fulfilled</code> | <code>failed</code>).</p> </li> <li> <p> <code>status-message</code> - The reason for the status.</p> </li> <li> <p> <code>update-date</code> - The time when the modification request was last updated.</p> </li> </ul></p>
     pub filters: Option<Vec<Filter>>,
@@ -15415,7 +15415,7 @@ impl DescribeReservedInstancesModificationsRequestSerializer {
 }
 
 /// <p>Contains the output of DescribeReservedInstancesModifications.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeReservedInstancesModificationsResult {
     /// <p>The token to use to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>
     pub next_token: Option<String>,
@@ -15472,7 +15472,7 @@ impl DescribeReservedInstancesModificationsResultDeserializer {
     }
 }
 /// <p>Contains the parameters for DescribeReservedInstancesOfferings.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeReservedInstancesOfferingsRequest {
     /// <p>The Availability Zone in which the Reserved Instance can be used.</p>
     pub availability_zone: Option<String>,
@@ -15611,7 +15611,7 @@ impl DescribeReservedInstancesOfferingsRequestSerializer {
 }
 
 /// <p>Contains the output of DescribeReservedInstancesOfferings.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeReservedInstancesOfferingsResult {
     /// <p>The token to use to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>
     pub next_token: Option<String>,
@@ -15668,7 +15668,7 @@ impl DescribeReservedInstancesOfferingsResultDeserializer {
     }
 }
 /// <p>Contains the parameters for DescribeReservedInstances.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeReservedInstancesRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -15727,7 +15727,7 @@ impl DescribeReservedInstancesRequestSerializer {
 }
 
 /// <p>Contains the output for DescribeReservedInstances.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeReservedInstancesResult {
     /// <p>A list of Reserved Instances.</p>
     pub reserved_instances: Option<Vec<ReservedInstances>>,
@@ -15777,7 +15777,7 @@ impl DescribeReservedInstancesResultDeserializer {
     }
 }
 /// <p>Contains the parameters for DescribeRouteTables.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeRouteTablesRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -15820,7 +15820,7 @@ impl DescribeRouteTablesRequestSerializer {
 }
 
 /// <p>Contains the output of DescribeRouteTables.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeRouteTablesResult {
     /// <p>Information about one or more route tables.</p>
     pub route_tables: Option<Vec<RouteTable>>,
@@ -15869,7 +15869,7 @@ impl DescribeRouteTablesResultDeserializer {
     }
 }
 /// <p>Contains the parameters for DescribeScheduledInstanceAvailability.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeScheduledInstanceAvailabilityRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -15953,7 +15953,7 @@ impl DescribeScheduledInstanceAvailabilityRequestSerializer {
 }
 
 /// <p>Contains the output of DescribeScheduledInstanceAvailability.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeScheduledInstanceAvailabilityResult {
     /// <p>The token required to retrieve the next set of results. This value is <code>null</code> when there are no more results to return.</p>
     pub next_token: Option<String>,
@@ -16010,7 +16010,7 @@ impl DescribeScheduledInstanceAvailabilityResultDeserializer {
     }
 }
 /// <p>Contains the parameters for DescribeScheduledInstances.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeScheduledInstancesRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -16078,7 +16078,7 @@ impl DescribeScheduledInstancesRequestSerializer {
 }
 
 /// <p>Contains the output of DescribeScheduledInstances.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeScheduledInstancesResult {
     /// <p>The token required to retrieve the next set of results. This value is <code>null</code> when there are no more results to return.</p>
     pub next_token: Option<String>,
@@ -16133,7 +16133,7 @@ impl DescribeScheduledInstancesResultDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeSecurityGroupReferencesRequest {
     /// <p>Checks whether you have the required permissions for the operation, without actually making the request, and provides an error response. If you have the required permissions, the error response is DryRunOperation. Otherwise, it is UnauthorizedOperation.</p>
     pub dry_run: Option<bool>,
@@ -16160,7 +16160,7 @@ impl DescribeSecurityGroupReferencesRequestSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeSecurityGroupReferencesResult {
     /// <p>Information about the VPCs with the referencing security groups.</p>
     pub security_group_reference_set: Option<Vec<SecurityGroupReference>>,
@@ -16210,7 +16210,7 @@ impl DescribeSecurityGroupReferencesResultDeserializer {
     }
 }
 /// <p>Contains the parameters for DescribeSecurityGroups.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeSecurityGroupsRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -16278,7 +16278,7 @@ impl DescribeSecurityGroupsRequestSerializer {
 }
 
 /// <p>Contains the output of DescribeSecurityGroups.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeSecurityGroupsResult {
     /// <p>The token to use to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>
     pub next_token: Option<String>,
@@ -16332,7 +16332,7 @@ impl DescribeSecurityGroupsResultDeserializer {
     }
 }
 /// <p>Contains the parameters for DescribeSnapshotAttribute.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeSnapshotAttributeRequest {
     /// <p>The snapshot attribute you would like to view.</p>
     pub attribute: String,
@@ -16369,7 +16369,7 @@ impl DescribeSnapshotAttributeRequestSerializer {
 }
 
 /// <p>Contains the output of DescribeSnapshotAttribute.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeSnapshotAttributeResult {
     /// <p>A list of permissions for creating volumes from the snapshot.</p>
     pub create_volume_permissions: Option<Vec<CreateVolumePermission>>,
@@ -16433,7 +16433,7 @@ impl DescribeSnapshotAttributeResultDeserializer {
     }
 }
 /// <p>Contains the parameters for DescribeSnapshots.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeSnapshotsRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -16510,7 +16510,7 @@ impl DescribeSnapshotsRequestSerializer {
 }
 
 /// <p>Contains the output of DescribeSnapshots.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeSnapshotsResult {
     /// <p>The <code>NextToken</code> value to include in a future <code>DescribeSnapshots</code> request. When the results of a <code>DescribeSnapshots</code> request exceed <code>MaxResults</code>, this value can be used to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>
     pub next_token: Option<String>,
@@ -16565,7 +16565,7 @@ impl DescribeSnapshotsResultDeserializer {
     }
 }
 /// <p>Contains the parameters for DescribeSpotDatafeedSubscription.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeSpotDatafeedSubscriptionRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -16590,7 +16590,7 @@ impl DescribeSpotDatafeedSubscriptionRequestSerializer {
 }
 
 /// <p>Contains the output of DescribeSpotDatafeedSubscription.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeSpotDatafeedSubscriptionResult {
     /// <p>The Spot Instance data feed subscription.</p>
     pub spot_datafeed_subscription: Option<SpotDatafeedSubscription>,
@@ -16640,7 +16640,7 @@ impl DescribeSpotDatafeedSubscriptionResultDeserializer {
     }
 }
 /// <p>Contains the parameters for DescribeSpotFleetInstances.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeSpotFleetInstancesRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -16687,7 +16687,7 @@ impl DescribeSpotFleetInstancesRequestSerializer {
 }
 
 /// <p>Contains the output of DescribeSpotFleetInstances.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeSpotFleetInstancesResponse {
     /// <p>The running instances. Note that this list is refreshed periodically and might be out of date.</p>
     pub active_instances: Vec<ActiveInstance>,
@@ -16748,7 +16748,7 @@ impl DescribeSpotFleetInstancesResponseDeserializer {
     }
 }
 /// <p>Contains the parameters for DescribeSpotFleetRequestHistory.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeSpotFleetRequestHistoryRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -16809,7 +16809,7 @@ impl DescribeSpotFleetRequestHistoryRequestSerializer {
 }
 
 /// <p>Contains the output of DescribeSpotFleetRequestHistory.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeSpotFleetRequestHistoryResponse {
     /// <p>Information about the events in the history of the Spot Fleet request.</p>
     pub history_records: Vec<HistoryRecord>,
@@ -16884,7 +16884,7 @@ impl DescribeSpotFleetRequestHistoryResponseDeserializer {
     }
 }
 /// <p>Contains the parameters for DescribeSpotFleetRequests.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeSpotFleetRequestsRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -16934,7 +16934,7 @@ impl DescribeSpotFleetRequestsRequestSerializer {
 }
 
 /// <p>Contains the output of DescribeSpotFleetRequests.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeSpotFleetRequestsResponse {
     /// <p>The token required to retrieve the next set of results. This value is <code>null</code> when there are no more results to return.</p>
     pub next_token: Option<String>,
@@ -16990,7 +16990,7 @@ impl DescribeSpotFleetRequestsResponseDeserializer {
     }
 }
 /// <p>Contains the parameters for DescribeSpotInstanceRequests.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeSpotInstanceRequestsRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -17033,7 +17033,7 @@ impl DescribeSpotInstanceRequestsRequestSerializer {
 }
 
 /// <p>Contains the output of DescribeSpotInstanceRequests.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeSpotInstanceRequestsResult {
     /// <p>One or more Spot Instance requests.</p>
     pub spot_instance_requests: Option<Vec<SpotInstanceRequest>>,
@@ -17083,7 +17083,7 @@ impl DescribeSpotInstanceRequestsResultDeserializer {
     }
 }
 /// <p>Contains the parameters for DescribeSpotPriceHistory.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeSpotPriceHistoryRequest {
     /// <p>Filters the results by the specified Availability Zone.</p>
     pub availability_zone: Option<String>,
@@ -17175,7 +17175,7 @@ impl DescribeSpotPriceHistoryRequestSerializer {
 }
 
 /// <p>Contains the output of DescribeSpotPriceHistory.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeSpotPriceHistoryResult {
     /// <p>The token required to retrieve the next set of results. This value is null or an empty string when there are no more results to return.</p>
     pub next_token: Option<String>,
@@ -17230,7 +17230,7 @@ impl DescribeSpotPriceHistoryResultDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeStaleSecurityGroupsRequest {
     /// <p>Checks whether you have the required permissions for the operation, without actually making the request, and provides an error response. If you have the required permissions, the error response is DryRunOperation. Otherwise, it is UnauthorizedOperation.</p>
     pub dry_run: Option<bool>,
@@ -17276,7 +17276,7 @@ impl DescribeStaleSecurityGroupsRequestSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeStaleSecurityGroupsResult {
     /// <p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>
     pub next_token: Option<String>,
@@ -17332,7 +17332,7 @@ impl DescribeStaleSecurityGroupsResultDeserializer {
     }
 }
 /// <p>Contains the parameters for DescribeSubnets.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeSubnetsRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -17375,7 +17375,7 @@ impl DescribeSubnetsRequestSerializer {
 }
 
 /// <p>Contains the output of DescribeSubnets.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeSubnetsResult {
     /// <p>Information about one or more subnets.</p>
     pub subnets: Option<Vec<Subnet>>,
@@ -17424,7 +17424,7 @@ impl DescribeSubnetsResultDeserializer {
     }
 }
 /// <p>Contains the parameters for DescribeTags.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeTagsRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -17474,7 +17474,7 @@ impl DescribeTagsRequestSerializer {
 }
 
 /// <p>Contains the output of DescribeTags.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeTagsResult {
     /// <p>The token to use to retrieve the next page of results. This value is <code>null</code> when there are no more results to return..</p>
     pub next_token: Option<String>,
@@ -17528,7 +17528,7 @@ impl DescribeTagsResultDeserializer {
     }
 }
 /// <p>Contains the parameters for DescribeVolumeAttribute.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeVolumeAttributeRequest {
     /// <p>The attribute of the volume. This parameter is required.</p>
     pub attribute: Option<String>,
@@ -17567,7 +17567,7 @@ impl DescribeVolumeAttributeRequestSerializer {
 }
 
 /// <p>Contains the output of DescribeVolumeAttribute.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeVolumeAttributeResult {
     /// <p>The state of <code>autoEnableIO</code> attribute.</p>
     pub auto_enable_io: Option<AttributeBooleanValue>,
@@ -17629,7 +17629,7 @@ impl DescribeVolumeAttributeResultDeserializer {
     }
 }
 /// <p>Contains the parameters for DescribeVolumeStatus.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeVolumeStatusRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -17688,7 +17688,7 @@ impl DescribeVolumeStatusRequestSerializer {
 }
 
 /// <p>Contains the output of DescribeVolumeStatus.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeVolumeStatusResult {
     /// <p>The token to use to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>
     pub next_token: Option<String>,
@@ -17741,7 +17741,7 @@ impl DescribeVolumeStatusResultDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeVolumesModificationsRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -17799,7 +17799,7 @@ impl DescribeVolumesModificationsRequestSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeVolumesModificationsResult {
     /// <p>Token for pagination, null if there are no more results </p>
     pub next_token: Option<String>,
@@ -17855,7 +17855,7 @@ impl DescribeVolumesModificationsResultDeserializer {
     }
 }
 /// <p>Contains the parameters for DescribeVolumes.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeVolumesRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -17914,7 +17914,7 @@ impl DescribeVolumesRequestSerializer {
 }
 
 /// <p>Contains the output of DescribeVolumes.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeVolumesResult {
     /// <p>The <code>NextToken</code> value to include in a future <code>DescribeVolumes</code> request. When the results of a <code>DescribeVolumes</code> request exceed <code>MaxResults</code>, this value can be used to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>
     pub next_token: Option<String>,
@@ -17969,7 +17969,7 @@ impl DescribeVolumesResultDeserializer {
     }
 }
 /// <p>Contains the parameters for DescribeVpcAttribute.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeVpcAttributeRequest {
     /// <p>The VPC attribute.</p>
     pub attribute: String,
@@ -18006,7 +18006,7 @@ impl DescribeVpcAttributeRequestSerializer {
 }
 
 /// <p>Contains the output of DescribeVpcAttribute.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeVpcAttributeResult {
     /// <p>Indicates whether the instances launched in the VPC get DNS hostnames. If this attribute is <code>true</code>, instances in the VPC get DNS hostnames; otherwise, they do not.</p>
     pub enable_dns_hostnames: Option<AttributeBooleanValue>,
@@ -18070,7 +18070,7 @@ impl DescribeVpcAttributeResultDeserializer {
     }
 }
 /// <p>Contains the parameters for DescribeVpcClassicLinkDnsSupport.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeVpcClassicLinkDnsSupportRequest {
     /// <p>The maximum number of items to return for this request. The request returns a token that you can specify in a subsequent call to get the next set of results.</p>
     pub max_results: Option<i64>,
@@ -18112,7 +18112,7 @@ impl DescribeVpcClassicLinkDnsSupportRequestSerializer {
 }
 
 /// <p>Contains the output of DescribeVpcClassicLinkDnsSupport.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeVpcClassicLinkDnsSupportResult {
     /// <p>The token to use when requesting the next set of items.</p>
     pub next_token: Option<String>,
@@ -18166,7 +18166,7 @@ impl DescribeVpcClassicLinkDnsSupportResultDeserializer {
     }
 }
 /// <p>Contains the parameters for DescribeVpcClassicLink.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeVpcClassicLinkRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -18209,7 +18209,7 @@ impl DescribeVpcClassicLinkRequestSerializer {
 }
 
 /// <p>Contains the output of DescribeVpcClassicLink.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeVpcClassicLinkResult {
     /// <p>The ClassicLink status of one or more VPCs.</p>
     pub vpcs: Option<Vec<VpcClassicLink>>,
@@ -18256,7 +18256,7 @@ impl DescribeVpcClassicLinkResultDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeVpcEndpointConnectionNotificationsRequest {
     /// <p>The ID of the notification.</p>
     pub connection_notification_id: Option<String>,
@@ -18317,7 +18317,7 @@ impl DescribeVpcEndpointConnectionNotificationsRequestSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeVpcEndpointConnectionNotificationsResult {
     /// <p>One or more notifications.</p>
     pub connection_notification_set: Option<Vec<ConnectionNotification>>,
@@ -18372,7 +18372,7 @@ impl DescribeVpcEndpointConnectionNotificationsResultDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeVpcEndpointConnectionsRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -18421,7 +18421,7 @@ impl DescribeVpcEndpointConnectionsRequestSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeVpcEndpointConnectionsResult {
     /// <p>The token to use to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>
     pub next_token: Option<String>,
@@ -18476,7 +18476,7 @@ impl DescribeVpcEndpointConnectionsResultDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeVpcEndpointServiceConfigurationsRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -18538,7 +18538,7 @@ impl DescribeVpcEndpointServiceConfigurationsRequestSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeVpcEndpointServiceConfigurationsResult {
     /// <p>The token to use to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>
     pub next_token: Option<String>,
@@ -18593,7 +18593,7 @@ impl DescribeVpcEndpointServiceConfigurationsResultDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeVpcEndpointServicePermissionsRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -18652,7 +18652,7 @@ impl DescribeVpcEndpointServicePermissionsRequestSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeVpcEndpointServicePermissionsResult {
     /// <p>Information about one or more allowed principals.</p>
     pub allowed_principals: Option<Vec<AllowedPrincipal>>,
@@ -18708,7 +18708,7 @@ impl DescribeVpcEndpointServicePermissionsResultDeserializer {
     }
 }
 /// <p>Contains the parameters for DescribeVpcEndpointServices.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeVpcEndpointServicesRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -18767,7 +18767,7 @@ impl DescribeVpcEndpointServicesRequestSerializer {
 }
 
 /// <p>Contains the output of DescribeVpcEndpointServices.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeVpcEndpointServicesResult {
     /// <p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>
     pub next_token: Option<String>,
@@ -18829,7 +18829,7 @@ impl DescribeVpcEndpointServicesResultDeserializer {
     }
 }
 /// <p>Contains the parameters for DescribeVpcEndpoints.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeVpcEndpointsRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -18888,7 +18888,7 @@ impl DescribeVpcEndpointsRequestSerializer {
 }
 
 /// <p>Contains the output of DescribeVpcEndpoints.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeVpcEndpointsResult {
     /// <p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>
     pub next_token: Option<String>,
@@ -18943,7 +18943,7 @@ impl DescribeVpcEndpointsResultDeserializer {
     }
 }
 /// <p>Contains the parameters for DescribeVpcPeeringConnections.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeVpcPeeringConnectionsRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -18986,7 +18986,7 @@ impl DescribeVpcPeeringConnectionsRequestSerializer {
 }
 
 /// <p>Contains the output of DescribeVpcPeeringConnections.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeVpcPeeringConnectionsResult {
     /// <p>Information about the VPC peering connections.</p>
     pub vpc_peering_connections: Option<Vec<VpcPeeringConnection>>,
@@ -19036,7 +19036,7 @@ impl DescribeVpcPeeringConnectionsResultDeserializer {
     }
 }
 /// <p>Contains the parameters for DescribeVpcs.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeVpcsRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -19079,7 +19079,7 @@ impl DescribeVpcsRequestSerializer {
 }
 
 /// <p>Contains the output of DescribeVpcs.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeVpcsResult {
     /// <p>Information about one or more VPCs.</p>
     pub vpcs: Option<Vec<Vpc>>,
@@ -19125,7 +19125,7 @@ impl DescribeVpcsResultDeserializer {
     }
 }
 /// <p>Contains the parameters for DescribeVpnConnections.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeVpnConnectionsRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -19168,7 +19168,7 @@ impl DescribeVpnConnectionsRequestSerializer {
 }
 
 /// <p>Contains the output of DescribeVpnConnections.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeVpnConnectionsResult {
     /// <p>Information about one or more VPN connections.</p>
     pub vpn_connections: Option<Vec<VpnConnection>>,
@@ -19216,7 +19216,7 @@ impl DescribeVpnConnectionsResultDeserializer {
     }
 }
 /// <p>Contains the parameters for DescribeVpnGateways.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeVpnGatewaysRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -19259,7 +19259,7 @@ impl DescribeVpnGatewaysRequestSerializer {
 }
 
 /// <p>Contains the output of DescribeVpnGateways.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeVpnGatewaysResult {
     /// <p>Information about one or more virtual private gateways.</p>
     pub vpn_gateways: Option<Vec<VpnGateway>>,
@@ -19308,7 +19308,7 @@ impl DescribeVpnGatewaysResultDeserializer {
     }
 }
 /// <p>Contains the parameters for DetachClassicLinkVpc.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DetachClassicLinkVpcRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -19345,7 +19345,7 @@ impl DetachClassicLinkVpcRequestSerializer {
 }
 
 /// <p>Contains the output of DetachClassicLinkVpc.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DetachClassicLinkVpcResult {
     /// <p>Returns <code>true</code> if the request succeeds; otherwise, it returns an error.</p>
     pub return_: Option<bool>,
@@ -19391,7 +19391,7 @@ impl DetachClassicLinkVpcResultDeserializer {
     }
 }
 /// <p>Contains the parameters for DetachInternetGateway.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DetachInternetGatewayRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -19428,7 +19428,7 @@ impl DetachInternetGatewayRequestSerializer {
 }
 
 /// <p>Contains the parameters for DetachNetworkInterface.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DetachNetworkInterfaceRequest {
     /// <p>The ID of the attachment.</p>
     pub attachment_id: String,
@@ -19467,7 +19467,7 @@ impl DetachNetworkInterfaceRequestSerializer {
 }
 
 /// <p>Contains the parameters for DetachVolume.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DetachVolumeRequest {
     /// <p>The device name.</p>
     pub device: Option<String>,
@@ -19522,7 +19522,7 @@ impl DetachVolumeRequestSerializer {
 }
 
 /// <p>Contains the parameters for DetachVpnGateway.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DetachVpnGatewayRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -19573,7 +19573,7 @@ impl DeviceTypeDeserializer {
     }
 }
 /// <p>Describes a DHCP configuration option.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DhcpConfiguration {
     /// <p>The name of a DHCP option.</p>
     pub key: Option<String>,
@@ -19708,7 +19708,7 @@ impl DhcpConfigurationValueListDeserializer {
     }
 }
 /// <p>Describes a set of DHCP options.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DhcpOptions {
     /// <p>One or more DHCP options in the set.</p>
     pub dhcp_configurations: Option<Vec<DhcpConfiguration>>,
@@ -19823,7 +19823,7 @@ impl DhcpOptionsListDeserializer {
     }
 }
 /// <p>Contains the parameters for DisableVgwRoutePropagation.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DisableVgwRoutePropagationRequest {
     /// <p>The ID of the virtual private gateway.</p>
     pub gateway_id: String,
@@ -19852,7 +19852,7 @@ impl DisableVgwRoutePropagationRequestSerializer {
 }
 
 /// <p>Contains the parameters for DisableVpcClassicLinkDnsSupport.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DisableVpcClassicLinkDnsSupportRequest {
     /// <p>The ID of the VPC.</p>
     pub vpc_id: Option<String>,
@@ -19877,7 +19877,7 @@ impl DisableVpcClassicLinkDnsSupportRequestSerializer {
 }
 
 /// <p>Contains the output of DisableVpcClassicLinkDnsSupport.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DisableVpcClassicLinkDnsSupportResult {
     /// <p>Returns <code>true</code> if the request succeeds; otherwise, it returns an error.</p>
     pub return_: Option<bool>,
@@ -19923,7 +19923,7 @@ impl DisableVpcClassicLinkDnsSupportResultDeserializer {
     }
 }
 /// <p>Contains the parameters for DisableVpcClassicLink.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DisableVpcClassicLinkRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -19954,7 +19954,7 @@ impl DisableVpcClassicLinkRequestSerializer {
 }
 
 /// <p>Contains the output of DisableVpcClassicLink.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DisableVpcClassicLinkResult {
     /// <p>Returns <code>true</code> if the request succeeds; otherwise, it returns an error.</p>
     pub return_: Option<bool>,
@@ -20000,7 +20000,7 @@ impl DisableVpcClassicLinkResultDeserializer {
     }
 }
 /// <p>Contains the parameters for DisassociateAddress.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DisassociateAddressRequest {
     /// <p>[EC2-VPC] The association ID. Required for EC2-VPC.</p>
     pub association_id: Option<String>,
@@ -20040,7 +20040,7 @@ impl DisassociateAddressRequestSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DisassociateIamInstanceProfileRequest {
     /// <p>The ID of the IAM instance profile association.</p>
     pub association_id: String,
@@ -20062,7 +20062,7 @@ impl DisassociateIamInstanceProfileRequestSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DisassociateIamInstanceProfileResult {
     /// <p>Information about the IAM instance profile association.</p>
     pub iam_instance_profile_association: Option<IamInstanceProfileAssociation>,
@@ -20113,7 +20113,7 @@ impl DisassociateIamInstanceProfileResultDeserializer {
     }
 }
 /// <p>Contains the parameters for DisassociateRouteTable.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DisassociateRouteTableRequest {
     /// <p>The association ID representing the current association between the route table and subnet.</p>
     pub association_id: String,
@@ -20143,7 +20143,7 @@ impl DisassociateRouteTableRequestSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DisassociateSubnetCidrBlockRequest {
     /// <p>The association ID for the CIDR block.</p>
     pub association_id: String,
@@ -20165,7 +20165,7 @@ impl DisassociateSubnetCidrBlockRequestSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DisassociateSubnetCidrBlockResult {
     /// <p>Information about the IPv6 CIDR block association.</p>
     pub ipv_6_cidr_block_association: Option<SubnetIpv6CidrBlockAssociation>,
@@ -20221,7 +20221,7 @@ impl DisassociateSubnetCidrBlockResultDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DisassociateVpcCidrBlockRequest {
     /// <p>The association ID for the CIDR block.</p>
     pub association_id: String,
@@ -20243,7 +20243,7 @@ impl DisassociateVpcCidrBlockRequestSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DisassociateVpcCidrBlockResult {
     /// <p>Information about the IPv4 CIDR block association.</p>
     pub cidr_block_association: Option<VpcCidrBlockAssociation>,
@@ -20307,7 +20307,7 @@ impl DisassociateVpcCidrBlockResultDeserializer {
     }
 }
 /// <p>Describes a disk image.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DiskImage {
     /// <p>A description of the disk image.</p>
     pub description: Option<String>,
@@ -20350,7 +20350,7 @@ impl DiskImageSerializer {
 }
 
 /// <p>Describes a disk image.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DiskImageDescription {
     /// <p>The checksum computed for the disk image.</p>
     pub checksum: Option<String>,
@@ -20414,7 +20414,7 @@ impl DiskImageDescriptionDeserializer {
     }
 }
 /// <p>Describes a disk image.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DiskImageDetail {
     /// <p>The size of the disk image, in GiB.</p>
     pub bytes: i64,
@@ -20475,7 +20475,7 @@ impl DiskImageListSerializer {
 }
 
 /// <p>Describes a disk image volume.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DiskImageVolumeDescription {
     /// <p>The volume identifier.</p>
     pub id: String,
@@ -20526,7 +20526,7 @@ impl DiskImageVolumeDescriptionDeserializer {
     }
 }
 /// <p>Describes a DNS entry.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DnsEntry {
     /// <p>The DNS name.</p>
     pub dns_name: Option<String>,
@@ -20647,7 +20647,7 @@ impl DoubleDeserializer {
     }
 }
 /// <p>Describes a block device for an EBS volume.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct EbsBlockDevice {
     /// <p>Indicates whether the EBS volume is deleted on instance termination.</p>
     pub delete_on_termination: Option<bool>,
@@ -20788,7 +20788,7 @@ impl EbsBlockDeviceSerializer {
 }
 
 /// <p>Describes a parameter used to set up an EBS volume in a block device mapping.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct EbsInstanceBlockDevice {
     /// <p>The time stamp when the attachment initiated.</p>
     pub attach_time: Option<String>,
@@ -20856,7 +20856,7 @@ impl EbsInstanceBlockDeviceDeserializer {
     }
 }
 /// <p>Describes information used to set up an EBS volume specified in a block device mapping.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct EbsInstanceBlockDeviceSpecification {
     /// <p>Indicates whether the volume is deleted on instance termination.</p>
     pub delete_on_termination: Option<bool>,
@@ -20889,7 +20889,7 @@ impl EbsInstanceBlockDeviceSpecificationSerializer {
 }
 
 /// <p>Describes an egress-only Internet gateway.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct EgressOnlyInternetGateway {
     /// <p>Information about the attachment of the egress-only Internet gateway.</p>
     pub attachments: Option<Vec<InternetGatewayAttachment>>,
@@ -21017,7 +21017,7 @@ impl EgressOnlyInternetGatewayListDeserializer {
     }
 }
 /// <p>Describes the association between an instance and an Elastic GPU.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ElasticGpuAssociation {
     /// <p>The ID of the association.</p>
     pub elastic_gpu_association_id: Option<String>,
@@ -21127,7 +21127,7 @@ impl ElasticGpuAssociationListDeserializer {
     }
 }
 /// <p>Describes the status of an Elastic GPU.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ElasticGpuHealth {
     /// <p>The health status.</p>
     pub status: Option<String>,
@@ -21227,7 +21227,7 @@ impl ElasticGpuSetDeserializer {
     }
 }
 /// <p>A specification for an Elastic GPU.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ElasticGpuSpecification {
     /// <p>The type of Elastic GPU.</p>
     pub type_: String,
@@ -21261,7 +21261,7 @@ impl ElasticGpuSpecificationListSerializer {
 }
 
 /// <p>Describes an elastic GPU.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ElasticGpuSpecificationResponse {
     /// <p>The elastic GPU type.</p>
     pub type_: Option<String>,
@@ -21389,7 +21389,7 @@ impl ElasticGpuStatusDeserializer {
     }
 }
 /// <p>Describes an Elastic GPU.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ElasticGpus {
     /// <p>The Availability Zone in the which the Elastic GPU resides.</p>
     pub availability_zone: Option<String>,
@@ -21472,7 +21472,7 @@ impl ElasticGpusDeserializer {
     }
 }
 /// <p>Contains the parameters for EnableVgwRoutePropagation.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct EnableVgwRoutePropagationRequest {
     /// <p>The ID of the virtual private gateway.</p>
     pub gateway_id: String,
@@ -21501,7 +21501,7 @@ impl EnableVgwRoutePropagationRequestSerializer {
 }
 
 /// <p>Contains the parameters for EnableVolumeIO.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct EnableVolumeIORequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -21532,7 +21532,7 @@ impl EnableVolumeIORequestSerializer {
 }
 
 /// <p>Contains the parameters for EnableVpcClassicLinkDnsSupport.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct EnableVpcClassicLinkDnsSupportRequest {
     /// <p>The ID of the VPC.</p>
     pub vpc_id: Option<String>,
@@ -21557,7 +21557,7 @@ impl EnableVpcClassicLinkDnsSupportRequestSerializer {
 }
 
 /// <p>Contains the output of EnableVpcClassicLinkDnsSupport.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct EnableVpcClassicLinkDnsSupportResult {
     /// <p>Returns <code>true</code> if the request succeeds; otherwise, it returns an error.</p>
     pub return_: Option<bool>,
@@ -21603,7 +21603,7 @@ impl EnableVpcClassicLinkDnsSupportResultDeserializer {
     }
 }
 /// <p>Contains the parameters for EnableVpcClassicLink.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct EnableVpcClassicLinkRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -21634,7 +21634,7 @@ impl EnableVpcClassicLinkRequestSerializer {
 }
 
 /// <p>Contains the output of EnableVpcClassicLink.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct EnableVpcClassicLinkResult {
     /// <p>Returns <code>true</code> if the request succeeds; otherwise, it returns an error.</p>
     pub return_: Option<bool>,
@@ -21694,7 +21694,7 @@ impl EventCodeDeserializer {
     }
 }
 /// <p>Describes a Spot Fleet event.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct EventInformation {
     /// <p>The description of the event.</p>
     pub event_description: Option<String>,
@@ -21809,7 +21809,7 @@ impl ExportEnvironmentDeserializer {
     }
 }
 /// <p>Describes an instance export task.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ExportTask {
     /// <p>A description of the resource being exported.</p>
     pub description: Option<String>,
@@ -21957,7 +21957,7 @@ impl ExportTaskStateDeserializer {
     }
 }
 /// <p>Describes the format and location for an instance export task.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ExportToS3Task {
     /// <p>The container format used to combine disk images with metadata (such as OVF). If absent, only the disk image is exported.</p>
     pub container_format: Option<String>,
@@ -22023,7 +22023,7 @@ impl ExportToS3TaskDeserializer {
     }
 }
 /// <p>Describes an instance export task.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ExportToS3TaskSpecification {
     /// <p>The container format used to combine disk images with metadata (such as OVF). If absent, only the disk image is exported.</p>
     pub container_format: Option<String>,
@@ -22072,7 +22072,7 @@ impl ExportToS3TaskSpecificationSerializer {
 }
 
 /// <p>A filter name and value pair that is used to return a more specific list of results. Filters can be used to match a set of resources by various criteria, such as tags, attributes, or IDs.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct Filter {
     /// <p>The name of the filter. Filter names are case-sensitive.</p>
     pub name: Option<String>,
@@ -22117,7 +22117,7 @@ impl FilterListSerializer {
 }
 
 /// <p>Describes a launch template.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct FleetLaunchTemplateSpecification {
     /// <p>The ID of the launch template. You must specify either a template ID or a template name.</p>
     pub launch_template_id: Option<String>,
@@ -22239,7 +22239,7 @@ impl FloatDeserializer {
     }
 }
 /// <p>Describes a flow log.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct FlowLog {
     /// <p>The date and time the flow log was created.</p>
     pub creation_time: Option<String>,
@@ -22384,7 +22384,7 @@ impl FlowLogSetDeserializer {
     }
 }
 /// <p>Describes an Amazon FPGA image (AFI).</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct FpgaImage {
     /// <p>The date and time the AFI was created.</p>
     pub create_time: Option<String>,
@@ -22510,7 +22510,7 @@ impl FpgaImageDeserializer {
     }
 }
 /// <p>Describes an Amazon FPGA image (AFI) attribute.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct FpgaImageAttribute {
     /// <p>The description of the AFI.</p>
     pub description: Option<String>,
@@ -22635,7 +22635,7 @@ impl FpgaImageListDeserializer {
     }
 }
 /// <p>Describes the state of the bitstream generation process for an Amazon FPGA image (AFI).</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct FpgaImageState {
     /// <p><p>The state. The following are the possible values:</p> <ul> <li> <p> <code>pending</code> - AFI bitstream generation is in progress.</p> </li> <li> <p> <code>available</code> - The AFI is available for use.</p> </li> <li> <p> <code>failed</code> - AFI bitstream generation failed.</p> </li> <li> <p> <code>unavailable</code> - The AFI is no longer available for use.</p> </li> </ul></p>
     pub code: Option<String>,
@@ -22716,7 +22716,7 @@ impl GatewayTypeDeserializer {
     }
 }
 /// <p>Contains the parameters for GetConsoleOutput.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetConsoleOutputRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -22747,7 +22747,7 @@ impl GetConsoleOutputRequestSerializer {
 }
 
 /// <p>Contains the output of GetConsoleOutput.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetConsoleOutputResult {
     /// <p>The ID of the instance.</p>
     pub instance_id: Option<String>,
@@ -22805,7 +22805,7 @@ impl GetConsoleOutputResultDeserializer {
     }
 }
 /// <p>Contains the parameters for the request.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetConsoleScreenshotRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -22844,7 +22844,7 @@ impl GetConsoleScreenshotRequestSerializer {
 }
 
 /// <p>Contains the output of the request.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetConsoleScreenshotResult {
     /// <p>The data that comprises the image.</p>
     pub image_data: Option<String>,
@@ -22896,7 +22896,7 @@ impl GetConsoleScreenshotResultDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetHostReservationPurchasePreviewRequest {
     /// <p>The ID/s of the Dedicated Host/s that the reservation will be associated with.</p>
     pub host_id_set: Vec<String>,
@@ -22925,7 +22925,7 @@ impl GetHostReservationPurchasePreviewRequestSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetHostReservationPurchasePreviewResult {
     /// <p>The currency in which the <code>totalUpfrontPrice</code> and <code>totalHourlyPrice</code> amounts are specified. At this time, the only supported currency is <code>USD</code>.</p>
     pub currency_code: Option<String>,
@@ -22995,7 +22995,7 @@ impl GetHostReservationPurchasePreviewResultDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetLaunchTemplateDataRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -23025,7 +23025,7 @@ impl GetLaunchTemplateDataRequestSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetLaunchTemplateDataResult {
     /// <p>The instance data.</p>
     pub launch_template_data: Option<ResponseLaunchTemplateData>,
@@ -23075,7 +23075,7 @@ impl GetLaunchTemplateDataResultDeserializer {
     }
 }
 /// <p>Contains the parameters for GetPasswordData.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetPasswordDataRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -23106,7 +23106,7 @@ impl GetPasswordDataRequestSerializer {
 }
 
 /// <p>Contains the output of GetPasswordData.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetPasswordDataResult {
     /// <p>The ID of the Windows instance.</p>
     pub instance_id: Option<String>,
@@ -23165,7 +23165,7 @@ impl GetPasswordDataResultDeserializer {
     }
 }
 /// <p>Contains the parameters for GetReservedInstanceExchangeQuote.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetReservedInstancesExchangeQuoteRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -23206,7 +23206,7 @@ impl GetReservedInstancesExchangeQuoteRequestSerializer {
 }
 
 /// <p>Contains the output of GetReservedInstancesExchangeQuote.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetReservedInstancesExchangeQuoteResult {
     /// <p>The currency of the transaction.</p>
     pub currency_code: Option<String>,
@@ -23372,7 +23372,7 @@ impl GroupIdStringListSerializer {
 }
 
 /// <p>Describes a security group.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct GroupIdentifier {
     /// <p>The ID of the security group.</p>
     pub group_id: Option<String>,
@@ -23569,7 +23569,7 @@ impl GroupNameStringListSerializer {
 }
 
 /// <p>Describes an event in the history of the Spot Fleet request.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct HistoryRecord {
     /// <p>Information about the event.</p>
     pub event_information: EventInformation,
@@ -23669,7 +23669,7 @@ impl HistoryRecordsDeserializer {
     }
 }
 /// <p>Describes the properties of the Dedicated Host.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct Host {
     /// <p>Whether auto-placement is on or off.</p>
     pub auto_placement: Option<String>,
@@ -23775,7 +23775,7 @@ impl HostDeserializer {
     }
 }
 /// <p>Describes an instance running on a Dedicated Host.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct HostInstance {
     /// <p>the IDs of instances that are running on the Dedicated Host.</p>
     pub instance_id: Option<String>,
@@ -23908,7 +23908,7 @@ impl HostListDeserializer {
     }
 }
 /// <p>Details about the Dedicated Host Reservation offering.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct HostOffering {
     /// <p>The currency of the offering.</p>
     pub currency_code: Option<String>,
@@ -24036,7 +24036,7 @@ impl HostOfferingSetDeserializer {
     }
 }
 /// <p>Describes properties of a Dedicated Host.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct HostProperties {
     /// <p>The number of cores on the Dedicated Host.</p>
     pub cores: Option<i64>,
@@ -24100,7 +24100,7 @@ impl HostPropertiesDeserializer {
     }
 }
 /// <p>Details about the Dedicated Host Reservation and associated Dedicated Hosts.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct HostReservation {
     /// <p>The number of Dedicated Hosts the reservation is associated with.</p>
     pub count: Option<i64>,
@@ -24294,7 +24294,7 @@ impl HypervisorTypeDeserializer {
     }
 }
 /// <p>Describes an IAM instance profile.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct IamInstanceProfile {
     /// <p>The Amazon Resource Name (ARN) of the instance profile.</p>
     pub arn: Option<String>,
@@ -24345,7 +24345,7 @@ impl IamInstanceProfileDeserializer {
     }
 }
 /// <p>Describes an association between an IAM instance profile and an instance.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct IamInstanceProfileAssociation {
     /// <p>The ID of the association.</p>
     pub association_id: Option<String>,
@@ -24480,7 +24480,7 @@ impl IamInstanceProfileAssociationStateDeserializer {
     }
 }
 /// <p>Describes an IAM instance profile.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct IamInstanceProfileSpecification {
     /// <p>The Amazon Resource Name (ARN) of the instance profile.</p>
     pub arn: Option<String>,
@@ -24556,7 +24556,7 @@ impl IamInstanceProfileSpecificationSerializer {
 }
 
 /// <p>Describes the ICMP type and code.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct IcmpTypeCode {
     /// <p>The ICMP code. A value of -1 means all codes for the specified ICMP type.</p>
     pub code: Option<i64>,
@@ -24632,7 +24632,7 @@ impl IcmpTypeCodeSerializer {
 }
 
 /// <p>Describes the ID format for a resource.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct IdFormat {
     /// <p>The date in UTC at which you are permanently switched over to using longer IDs. If a deadline is not yet available for this resource type, this field is not returned.</p>
     pub deadline: Option<String>,
@@ -24731,7 +24731,7 @@ impl IdFormatListDeserializer {
     }
 }
 /// <p>Describes an image.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct Image {
     /// <p>The architecture of the image.</p>
     pub architecture: Option<String>,
@@ -24943,7 +24943,7 @@ impl ImageDeserializer {
     }
 }
 /// <p>Describes an image attribute.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ImageAttribute {
     /// <p>One or more block device mapping entries.</p>
     pub block_device_mappings: Option<Vec<BlockDeviceMapping>>,
@@ -25045,7 +25045,7 @@ impl ImageAttributeDeserializer {
     }
 }
 /// <p>Describes the disk container object for an import image task.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ImageDiskContainer {
     /// <p>The description of the disk image.</p>
     pub description: Option<String>,
@@ -25201,7 +25201,7 @@ impl ImageTypeValuesDeserializer {
     }
 }
 /// <p>Contains the parameters for ImportImage.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ImportImageRequest {
     /// <p>The architecture of the virtual machine.</p> <p>Valid values: <code>i386</code> | <code>x86_64</code> </p>
     pub architecture: Option<String>,
@@ -25300,7 +25300,7 @@ impl ImportImageRequestSerializer {
 }
 
 /// <p>Contains the output for ImportImage.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ImportImageResult {
     /// <p>The architecture of the virtual machine.</p>
     pub architecture: Option<String>,
@@ -25409,7 +25409,7 @@ impl ImportImageResultDeserializer {
     }
 }
 /// <p>Describes an import image task.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ImportImageTask {
     /// <p>The architecture of the virtual machine.</p> <p>Valid values: <code>i386</code> | <code>x86_64</code> </p>
     pub architecture: Option<String>,
@@ -25560,7 +25560,7 @@ impl ImportImageTaskListDeserializer {
     }
 }
 /// <p>Describes the launch specification for VM import.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ImportInstanceLaunchSpecification {
     /// <p>Reserved.</p>
     pub additional_info: Option<String>,
@@ -25669,7 +25669,7 @@ impl ImportInstanceLaunchSpecificationSerializer {
 }
 
 /// <p>Contains the parameters for ImportInstance.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ImportInstanceRequest {
     /// <p>A description for the instance being imported.</p>
     pub description: Option<String>,
@@ -25726,7 +25726,7 @@ impl ImportInstanceRequestSerializer {
 }
 
 /// <p>Contains the output for ImportInstance.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ImportInstanceResult {
     /// <p>Information about the conversion task.</p>
     pub conversion_task: Option<ConversionTask>,
@@ -25775,7 +25775,7 @@ impl ImportInstanceResultDeserializer {
     }
 }
 /// <p>Describes an import instance task.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ImportInstanceTaskDetails {
     /// <p>A description of the task.</p>
     pub description: Option<String>,
@@ -25842,7 +25842,7 @@ impl ImportInstanceTaskDetailsDeserializer {
     }
 }
 /// <p>Describes an import volume task.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ImportInstanceVolumeDetailItem {
     /// <p>The Availability Zone where the resulting instance will reside.</p>
     pub availability_zone: String,
@@ -25970,7 +25970,7 @@ impl ImportInstanceVolumeDetailSetDeserializer {
     }
 }
 /// <p>Contains the parameters for ImportKeyPair.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ImportKeyPairRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -26009,7 +26009,7 @@ impl ImportKeyPairRequestSerializer {
 }
 
 /// <p>Contains the output of ImportKeyPair.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ImportKeyPairResult {
     /// <p>The MD5 public key fingerprint as specified in section 4 of RFC 4716.</p>
     pub key_fingerprint: Option<String>,
@@ -26064,7 +26064,7 @@ impl ImportKeyPairResultDeserializer {
     }
 }
 /// <p>Contains the parameters for ImportSnapshot.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ImportSnapshotRequest {
     /// <p>The client-specific data.</p>
     pub client_data: Option<ClientData>,
@@ -26131,7 +26131,7 @@ impl ImportSnapshotRequestSerializer {
 }
 
 /// <p>Contains the output for ImportSnapshot.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ImportSnapshotResult {
     /// <p>A description of the import snapshot task.</p>
     pub description: Option<String>,
@@ -26193,7 +26193,7 @@ impl ImportSnapshotResultDeserializer {
     }
 }
 /// <p>Describes an import snapshot task.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ImportSnapshotTask {
     /// <p>A description of the import snapshot task.</p>
     pub description: Option<String>,
@@ -26309,7 +26309,7 @@ impl ImportTaskIdListSerializer {
 }
 
 /// <p>Contains the parameters for ImportVolume.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ImportVolumeRequest {
     /// <p>The Availability Zone for the resulting EBS volume.</p>
     pub availability_zone: String,
@@ -26354,7 +26354,7 @@ impl ImportVolumeRequestSerializer {
 }
 
 /// <p>Contains the output for ImportVolume.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ImportVolumeResult {
     /// <p>Information about the conversion task.</p>
     pub conversion_task: Option<ConversionTask>,
@@ -26403,7 +26403,7 @@ impl ImportVolumeResultDeserializer {
     }
 }
 /// <p>Describes an import volume task.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ImportVolumeTaskDetails {
     /// <p>The Availability Zone where the resulting volume will reside.</p>
     pub availability_zone: String,
@@ -26476,7 +26476,7 @@ impl ImportVolumeTaskDetailsDeserializer {
     }
 }
 /// <p>Describes an instance.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct Instance {
     /// <p>The AMI launch index, which can be used to find this instance in the launch group.</p>
     pub ami_launch_index: Option<i64>,
@@ -26802,7 +26802,7 @@ impl InstanceDeserializer {
     }
 }
 /// <p>Describes an instance attribute.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct InstanceAttribute {
     /// <p>The block device mapping of the instance.</p>
     pub block_device_mappings: Option<Vec<InstanceBlockDeviceMapping>>,
@@ -26959,7 +26959,7 @@ impl InstanceAttributeDeserializer {
     }
 }
 /// <p>Describes a block device mapping.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct InstanceBlockDeviceMapping {
     /// <p>The device name (for example, <code>/dev/sdh</code> or <code>xvdh</code>).</p>
     pub device_name: Option<String>,
@@ -27055,7 +27055,7 @@ impl InstanceBlockDeviceMappingListDeserializer {
     }
 }
 /// <p>Describes a block device mapping entry.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct InstanceBlockDeviceMappingSpecification {
     /// <p>The device name (for example, <code>/dev/sdh</code> or <code>xvdh</code>).</p>
     pub device_name: Option<String>,
@@ -27120,7 +27120,7 @@ impl InstanceBlockDeviceMappingSpecificationListSerializer {
 }
 
 /// <p>Information about the instance type that the Dedicated Host supports.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct InstanceCapacity {
     /// <p>The number of instances that can still be launched onto the Dedicated Host.</p>
     pub available_capacity: Option<i64>,
@@ -27183,7 +27183,7 @@ impl InstanceCapacityDeserializer {
     }
 }
 /// <p>Describes a Reserved Instance listing state.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct InstanceCount {
     /// <p>The number of listed Reserved Instances in the state specified by the <code>state</code>.</p>
     pub instance_count: Option<i64>,
@@ -27278,7 +27278,7 @@ impl InstanceCountListDeserializer {
     }
 }
 /// <p>Describes the credit option for CPU usage of a T2 instance. </p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct InstanceCreditSpecification {
     /// <p>The credit option for CPU usage of the instance. Valid values are <code>standard</code> and <code>unlimited</code>.</p>
     pub cpu_credits: Option<String>,
@@ -27385,7 +27385,7 @@ impl InstanceCreditSpecificationListRequestSerializer {
 }
 
 /// <p>Describes the credit option for CPU usage of a T2 instance.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct InstanceCreditSpecificationRequest {
     /// <p>The credit option for CPU usage of the instance. Valid values are <code>standard</code> and <code>unlimited</code>.</p>
     pub cpu_credits: Option<String>,
@@ -27418,7 +27418,7 @@ impl InstanceCreditSpecificationRequestSerializer {
 }
 
 /// <p>Describes an instance to export.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct InstanceExportDetails {
     /// <p>The ID of the resource being exported.</p>
     pub instance_id: Option<String>,
@@ -27552,7 +27552,7 @@ impl InstanceInterruptionBehaviorDeserializer {
     }
 }
 /// <p>Describes an IPv6 address.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct InstanceIpv6Address {
     /// <p>The IPv6 address.</p>
     pub ipv_6_address: Option<String>,
@@ -27683,7 +27683,7 @@ impl InstanceIpv6AddressListRequestSerializer {
 }
 
 /// <p>Describes an IPv6 address.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct InstanceIpv6AddressRequest {
     /// <p>The IPv6 address.</p>
     pub ipv_6_address: Option<String>,
@@ -27762,7 +27762,7 @@ impl InstanceListDeserializer {
     }
 }
 /// <p>Describes the market (purchasing) option for the instances.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct InstanceMarketOptionsRequest {
     /// <p>The market type.</p>
     pub market_type: Option<String>,
@@ -27796,7 +27796,7 @@ impl InstanceMarketOptionsRequestSerializer {
 }
 
 /// <p>Describes the monitoring of an instance.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct InstanceMonitoring {
     /// <p>The ID of the instance.</p>
     pub instance_id: Option<String>,
@@ -27893,7 +27893,7 @@ impl InstanceMonitoringListDeserializer {
     }
 }
 /// <p>Describes a network interface.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct InstanceNetworkInterface {
     /// <p>The association information for an Elastic IPv4 associated with the network interface.</p>
     pub association: Option<InstanceNetworkInterfaceAssociation>,
@@ -28047,7 +28047,7 @@ impl InstanceNetworkInterfaceDeserializer {
     }
 }
 /// <p>Describes association information for an Elastic IP address (IPv4).</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct InstanceNetworkInterfaceAssociation {
     /// <p>The ID of the owner of the Elastic IP address.</p>
     pub ip_owner_id: Option<String>,
@@ -28108,7 +28108,7 @@ impl InstanceNetworkInterfaceAssociationDeserializer {
     }
 }
 /// <p>Describes a network interface attachment.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct InstanceNetworkInterfaceAttachment {
     /// <p>The time stamp when the attachment initiated.</p>
     pub attach_time: Option<String>,
@@ -28224,7 +28224,7 @@ impl InstanceNetworkInterfaceListDeserializer {
     }
 }
 /// <p>Describes a network interface.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct InstanceNetworkInterfaceSpecification {
     /// <p>Indicates whether to assign a public IPv4 address to an instance you launch in a VPC. The public IP address can only be assigned to a network interface for eth0, and can only be assigned to a new network interface, not an existing one. You cannot specify more than one network interface in the request. If launching into a default subnet, the default value is <code>true</code>.</p>
     pub associate_public_ip_address: Option<bool>,
@@ -28507,7 +28507,7 @@ impl InstanceNetworkInterfaceSpecificationListSerializer {
 }
 
 /// <p>Describes a private IPv4 address.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct InstancePrivateIpAddress {
     /// <p>The association information for an Elastic IP address for the network interface.</p>
     pub association: Option<InstanceNetworkInterfaceAssociation>,
@@ -28622,7 +28622,7 @@ impl InstancePrivateIpAddressListDeserializer {
     }
 }
 /// <p>Describes the current state of an instance.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct InstanceState {
     /// <p><p>The low byte represents the state. The high byte is an opaque internal value and should be ignored.</p> <ul> <li> <p> <code>0</code> : <code>pending</code> </p> </li> <li> <p> <code>16</code> : <code>running</code> </p> </li> <li> <p> <code>32</code> : <code>shutting-down</code> </p> </li> <li> <p> <code>48</code> : <code>terminated</code> </p> </li> <li> <p> <code>64</code> : <code>stopping</code> </p> </li> <li> <p> <code>80</code> : <code>stopped</code> </p> </li> </ul></p>
     pub code: Option<i64>,
@@ -28675,7 +28675,7 @@ impl InstanceStateDeserializer {
     }
 }
 /// <p>Describes an instance state change.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct InstanceStateChange {
     /// <p>The current state of the instance.</p>
     pub current_state: Option<InstanceState>,
@@ -28794,7 +28794,7 @@ impl InstanceStateNameDeserializer {
     }
 }
 /// <p>Describes the status of an instance.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct InstanceStatus {
     /// <p>The Availability Zone of the instance.</p>
     pub availability_zone: Option<String>,
@@ -28879,7 +28879,7 @@ impl InstanceStatusDeserializer {
     }
 }
 /// <p>Describes the instance status.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct InstanceStatusDetails {
     /// <p>The time when a status check failed. For an instance that was launched and impaired, this is the time when the instance was launched.</p>
     pub impaired_since: Option<String>,
@@ -28981,7 +28981,7 @@ impl InstanceStatusDetailsListDeserializer {
     }
 }
 /// <p>Describes a scheduled event for an instance.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct InstanceStatusEvent {
     /// <p>The event code.</p>
     pub code: Option<String>,
@@ -29127,7 +29127,7 @@ impl InstanceStatusListDeserializer {
     }
 }
 /// <p>Describes the status of an instance.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct InstanceStatusSummary {
     /// <p>The system instance health or application instance health.</p>
     pub details: Option<Vec<InstanceStatusDetails>>,
@@ -29236,7 +29236,7 @@ impl InterfacePermissionTypeDeserializer {
     }
 }
 /// <p>Describes an Internet gateway.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct InternetGateway {
     /// <p>Any VPCs attached to the Internet gateway.</p>
     pub attachments: Option<Vec<InternetGatewayAttachment>>,
@@ -29300,7 +29300,7 @@ impl InternetGatewayDeserializer {
     }
 }
 /// <p>Describes the attachment of a VPC to an Internet gateway or an egress-only Internet gateway.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct InternetGatewayAttachment {
     /// <p>The current state of the attachment. For an Internet gateway, the state is <code>available</code> when attached to a VPC; otherwise, this value is not returned.</p>
     pub state: Option<String>,
@@ -29437,7 +29437,7 @@ impl InternetGatewayListDeserializer {
     }
 }
 /// <p>Describes a set of permissions for a security group rule.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct IpPermission {
     /// <p>The start of port range for the TCP and UDP protocols, or an ICMP/ICMPv6 type number. A value of <code>-1</code> indicates all ICMP/ICMPv6 types. If you specify all ICMP/ICMPv6 types, you must specify all codes.</p>
     pub from_port: Option<i64>,
@@ -29635,7 +29635,7 @@ impl IpPermissionListSerializer {
 }
 
 /// <p>Describes an IPv4 range.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct IpRange {
     /// <p>The IPv4 CIDR range. You can either specify a CIDR range or a source security group, not both. To specify a single IPv4 address, use the /32 prefix length.</p>
     pub cidr_ip: Option<String>,
@@ -29856,7 +29856,7 @@ impl Ipv6AddressListSerializer {
 }
 
 /// <p>Describes an IPv6 CIDR block.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct Ipv6CidrBlock {
     /// <p>The IPv6 CIDR block.</p>
     pub ipv_6_cidr_block: Option<String>,
@@ -29945,7 +29945,7 @@ impl Ipv6CidrBlockSetDeserializer {
     }
 }
 /// <p>[EC2-VPC only] Describes an IPv6 range.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct Ipv6Range {
     /// <p>The IPv6 CIDR range. You can either specify a CIDR range or a source security group, not both. To specify a single IPv6 address, use the /128 prefix length.</p>
     pub cidr_ipv_6: Option<String>,
@@ -30086,7 +30086,7 @@ impl KeyNameStringListSerializer {
 }
 
 /// <p>Describes a key pair.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct KeyPair {
     /// <p>The SHA-1 digest of the DER encoded private key.</p>
     pub key_fingerprint: Option<String>,
@@ -30147,7 +30147,7 @@ impl KeyPairDeserializer {
     }
 }
 /// <p>Describes a key pair.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct KeyPairInfo {
     /// <p>If you used <a>CreateKeyPair</a> to create the key pair, this is the SHA-1 digest of the DER encoded private key. If you used <a>ImportKeyPair</a> to provide AWS the public key, this is the MD5 public key fingerprint as specified in section 4 of RFC4716.</p>
     pub key_fingerprint: Option<String>,
@@ -30242,7 +30242,7 @@ impl KeyPairListDeserializer {
     }
 }
 /// <p>Describes a launch permission.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct LaunchPermission {
     /// <p>The name of the group.</p>
     pub group: Option<String>,
@@ -30374,7 +30374,7 @@ impl LaunchPermissionListSerializer {
 }
 
 /// <p>Describes a launch permission modification.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct LaunchPermissionModifications {
     /// <p>The AWS account ID to add to the list of launch permissions for the AMI.</p>
     pub add: Option<Vec<LaunchPermission>>,
@@ -30409,7 +30409,7 @@ impl LaunchPermissionModificationsSerializer {
 }
 
 /// <p>Describes the launch specification for an instance.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct LaunchSpecification {
     /// <p>Deprecated.</p>
     pub addressing_type: Option<String>,
@@ -30617,7 +30617,7 @@ impl LaunchSpecsListSerializer {
 }
 
 /// <p>Describes a launch template.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct LaunchTemplate {
     /// <p>The time launch template was created.</p>
     pub create_time: Option<String>,
@@ -30708,7 +30708,7 @@ impl LaunchTemplateDeserializer {
     }
 }
 /// <p>Describes a block device mapping.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct LaunchTemplateBlockDeviceMapping {
     /// <p>The device name.</p>
     pub device_name: Option<String>,
@@ -30818,7 +30818,7 @@ impl LaunchTemplateBlockDeviceMappingListDeserializer {
     }
 }
 /// <p>Describes a block device mapping.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct LaunchTemplateBlockDeviceMappingRequest {
     /// <p>The device name (for example, /dev/sdh or xvdh).</p>
     pub device_name: Option<String>,
@@ -30883,7 +30883,7 @@ impl LaunchTemplateBlockDeviceMappingRequestListSerializer {
 }
 
 /// <p>Describes a launch template and overrides.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct LaunchTemplateConfig {
     /// <p>The launch template.</p>
     pub launch_template_specification: Option<FleetLaunchTemplateSpecification>,
@@ -31024,7 +31024,7 @@ impl LaunchTemplateConfigListSerializer {
 }
 
 /// <p>Describes a block device for an EBS volume.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct LaunchTemplateEbsBlockDevice {
     /// <p>Indicates whether the EBS volume is deleted on instance termination.</p>
     pub delete_on_termination: Option<bool>,
@@ -31110,7 +31110,7 @@ impl LaunchTemplateEbsBlockDeviceDeserializer {
     }
 }
 /// <p>The parameters for a block device for an EBS volume.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct LaunchTemplateEbsBlockDeviceRequest {
     /// <p>Indicates whether the EBS volume is deleted on instance termination.</p>
     pub delete_on_termination: Option<bool>,
@@ -31197,7 +31197,7 @@ impl LaunchTemplateErrorCodeDeserializer {
     }
 }
 /// <p>Describes an IAM instance profile.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct LaunchTemplateIamInstanceProfileSpecification {
     /// <p>The Amazon Resource Name (ARN) of the instance profile.</p>
     pub arn: Option<String>,
@@ -31248,7 +31248,7 @@ impl LaunchTemplateIamInstanceProfileSpecificationDeserializer {
     }
 }
 /// <p>An IAM instance profile.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct LaunchTemplateIamInstanceProfileSpecificationRequest {
     /// <p>The Amazon Resource Name (ARN) of the instance profile.</p>
     pub arn: Option<String>,
@@ -31285,7 +31285,7 @@ impl LaunchTemplateIamInstanceProfileSpecificationRequestSerializer {
 }
 
 /// <p>The market (purchasing) option for the instances.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct LaunchTemplateInstanceMarketOptions {
     /// <p>The market type.</p>
     pub market_type: Option<String>,
@@ -31344,7 +31344,7 @@ impl LaunchTemplateInstanceMarketOptionsDeserializer {
     }
 }
 /// <p>The market (purchasing) option for the instances.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct LaunchTemplateInstanceMarketOptionsRequest {
     /// <p>The market type.</p>
     pub market_type: Option<String>,
@@ -31382,7 +31382,7 @@ impl LaunchTemplateInstanceMarketOptionsRequestSerializer {
 }
 
 /// <p>Describes a network interface.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct LaunchTemplateInstanceNetworkInterfaceSpecification {
     /// <p>Indicates whether to associate a public IPv4 address with eth0 for a new network interface.</p>
     pub associate_public_ip_address: Option<bool>,
@@ -31555,7 +31555,7 @@ impl LaunchTemplateInstanceNetworkInterfaceSpecificationListDeserializer {
     }
 }
 /// <p>The parameters for a network interface.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct LaunchTemplateInstanceNetworkInterfaceSpecificationRequest {
     /// <p>Associates a public IPv4 address with eth0 for a new network interface.</p>
     pub associate_public_ip_address: Option<bool>,
@@ -31718,7 +31718,7 @@ impl LaunchTemplateNameStringListSerializer {
 }
 
 /// <p>Describes overrides for a launch template.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct LaunchTemplateOverrides {
     /// <p>The Availability Zone in which to launch the instances.</p>
     pub availability_zone: Option<String>,
@@ -31892,7 +31892,7 @@ impl LaunchTemplateOverridesListSerializer {
 }
 
 /// <p>Describes the placement of an instance.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct LaunchTemplatePlacement {
     /// <p>The affinity setting for the instance on the Dedicated Host.</p>
     pub affinity: Option<String>,
@@ -31970,7 +31970,7 @@ impl LaunchTemplatePlacementDeserializer {
     }
 }
 /// <p>The placement for the instance.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct LaunchTemplatePlacementRequest {
     /// <p>The affinity setting for an instance on a Dedicated Host.</p>
     pub affinity: Option<String>,
@@ -32075,7 +32075,7 @@ impl LaunchTemplateSetDeserializer {
     }
 }
 /// <p>The launch template to use. You must specify either the launch template ID or launch template name in the request.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct LaunchTemplateSpecification {
     /// <p>The ID of the launch template.</p>
     pub launch_template_id: Option<String>,
@@ -32116,7 +32116,7 @@ impl LaunchTemplateSpecificationSerializer {
 }
 
 /// <p>The options for Spot Instances.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct LaunchTemplateSpotMarketOptions {
     /// <p>The required duration for the Spot Instances (also known as Spot blocks), in minutes. This value must be a multiple of 60 (60, 120, 180, 240, 300, or 360).</p>
     pub block_duration_minutes: Option<i64>,
@@ -32193,7 +32193,7 @@ impl LaunchTemplateSpotMarketOptionsDeserializer {
     }
 }
 /// <p>The options for Spot Instances.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct LaunchTemplateSpotMarketOptionsRequest {
     /// <p>The required duration for the Spot Instances (also known as Spot blocks), in minutes. This value must be a multiple of 60 (60, 120, 180, 240, 300, or 360).</p>
     pub block_duration_minutes: Option<i64>,
@@ -32250,7 +32250,7 @@ impl LaunchTemplateSpotMarketOptionsRequestSerializer {
 }
 
 /// <p>The tag specification for the launch template.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct LaunchTemplateTagSpecification {
     /// <p>The type of resource.</p>
     pub resource_type: Option<String>,
@@ -32346,7 +32346,7 @@ impl LaunchTemplateTagSpecificationListDeserializer {
     }
 }
 /// <p>The tags specification for the launch template.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct LaunchTemplateTagSpecificationRequest {
     /// <p>The type of resource to tag. Currently, the resource types that support tagging on creation are <code>instance</code> and <code>volume</code>.</p>
     pub resource_type: Option<String>,
@@ -32391,7 +32391,7 @@ impl LaunchTemplateTagSpecificationRequestListSerializer {
 }
 
 /// <p>Describes a launch template version.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct LaunchTemplateVersion {
     /// <p>The time the version was created.</p>
     pub create_time: Option<String>,
@@ -32535,7 +32535,7 @@ impl LaunchTemplateVersionSetDeserializer {
     }
 }
 /// <p>Describes the monitoring for the instance.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct LaunchTemplatesMonitoring {
     /// <p>Indicates whether detailed monitoring is enabled. Otherwise, basic monitoring is enabled.</p>
     pub enabled: Option<bool>,
@@ -32582,7 +32582,7 @@ impl LaunchTemplatesMonitoringDeserializer {
     }
 }
 /// <p>Describes the monitoring for the instance.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct LaunchTemplatesMonitoringRequest {
     /// <p>Specify <code>true</code> to enable detailed monitoring. Otherwise, basic monitoring is enabled.</p>
     pub enabled: Option<bool>,
@@ -32635,7 +32635,7 @@ impl ListingStatusDeserializer {
     }
 }
 /// <p>Describes the Classic Load Balancers and target groups to attach to a Spot Fleet request.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct LoadBalancersConfig {
     /// <p>The Classic Load Balancers.</p>
     pub classic_load_balancers_config: Option<ClassicLoadBalancersConfig>,
@@ -32721,7 +32721,7 @@ impl LoadBalancersConfigSerializer {
 }
 
 /// <p>Describes a load permission.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct LoadPermission {
     /// <p>The name of the group.</p>
     pub group: Option<String>,
@@ -32826,7 +32826,7 @@ impl LoadPermissionListRequestSerializer {
 }
 
 /// <p>Describes modifications to the load permissions of an Amazon FPGA image (AFI).</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct LoadPermissionModifications {
     /// <p>The load permissions to add.</p>
     pub add: Option<Vec<LoadPermissionRequest>>,
@@ -32861,7 +32861,7 @@ impl LoadPermissionModificationsSerializer {
 }
 
 /// <p>Describes a load permission.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct LoadPermissionRequest {
     /// <p>The name of the group.</p>
     pub group: Option<String>,
@@ -32921,7 +32921,7 @@ impl MarketTypeDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ModifyFpgaImageAttributeRequest {
     /// <p>The name of the attribute.</p>
     pub attribute: Option<String>,
@@ -33019,7 +33019,7 @@ impl ModifyFpgaImageAttributeRequestSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ModifyFpgaImageAttributeResult {
     /// <p>Information about the attribute.</p>
     pub fpga_image_attribute: Option<FpgaImageAttribute>,
@@ -33069,7 +33069,7 @@ impl ModifyFpgaImageAttributeResultDeserializer {
     }
 }
 /// <p>Contains the parameters for ModifyHosts.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ModifyHostsRequest {
     /// <p>Specify whether to enable or disable auto-placement.</p>
     pub auto_placement: String,
@@ -33099,7 +33099,7 @@ impl ModifyHostsRequestSerializer {
 }
 
 /// <p>Contains the output of ModifyHosts.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ModifyHostsResult {
     /// <p>The IDs of the Dedicated Hosts that were successfully modified.</p>
     pub successful: Option<Vec<String>>,
@@ -33155,7 +33155,7 @@ impl ModifyHostsResultDeserializer {
     }
 }
 /// <p>Contains the parameters of ModifyIdFormat.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ModifyIdFormatRequest {
     /// <p>The type of resource: <code>bundle</code> | <code>conversion-task</code> | <code>customer-gateway</code> | <code>dhcp-options</code> | <code>elastic-ip-allocation</code> | <code>elastic-ip-association</code> | <code>export-task</code> | <code>flow-log</code> | <code>image</code> | <code>import-task</code> | <code>internet-gateway</code> | <code>network-acl</code> | <code>network-acl-association</code> | <code>network-interface</code> | <code>network-interface-attachment</code> | <code>prefix-list</code> | <code>route-table</code> | <code>route-table-association</code> | <code>security-group</code> | <code>subnet</code> | <code>subnet-cidr-block-association</code> | <code>vpc</code> | <code>vpc-cidr-block-association</code> | <code>vpc-endpoint</code> | <code>vpc-peering-connection</code> | <code>vpn-connection</code> | <code>vpn-gateway</code>.</p> <p>Alternatively, use the <code>all-current</code> option to include all resource types that are currently within their opt-in period for longer IDs.</p>
     pub resource: String,
@@ -33184,7 +33184,7 @@ impl ModifyIdFormatRequestSerializer {
 }
 
 /// <p>Contains the parameters of ModifyIdentityIdFormat.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ModifyIdentityIdFormatRequest {
     /// <p>The ARN of the principal, which can be an IAM user, IAM role, or the root user. Specify <code>all</code> to modify the ID format for all IAM users, IAM roles, and the root user of the account.</p>
     pub principal_arn: String,
@@ -33219,7 +33219,7 @@ impl ModifyIdentityIdFormatRequestSerializer {
 }
 
 /// <p>Contains the parameters for ModifyImageAttribute.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ModifyImageAttributeRequest {
     /// <p>The name of the attribute to modify. The valid values are <code>description</code>, <code>launchPermission</code>, and <code>productCodes</code>.</p>
     pub attribute: Option<String>,
@@ -33319,7 +33319,7 @@ impl ModifyImageAttributeRequestSerializer {
 }
 
 /// <p>Contains the parameters for ModifyInstanceAttribute.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ModifyInstanceAttributeRequest {
     /// <p>The name of the attribute.</p>
     pub attribute: Option<String>,
@@ -33473,7 +33473,7 @@ impl ModifyInstanceAttributeRequestSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ModifyInstanceCreditSpecificationRequest {
     /// <p>A unique, case-sensitive token that you provide to ensure idempotency of your modification request. For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/APIReference/Run_Instance_Idempotency.html">Ensuring Idempotency</a>.</p>
     pub client_token: Option<String>,
@@ -33512,7 +33512,7 @@ impl ModifyInstanceCreditSpecificationRequestSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ModifyInstanceCreditSpecificationResult {
     /// <p>Information about the instances whose credit option for CPU usage was successfully modified.</p>
     pub successful_instance_credit_specifications:
@@ -33575,7 +33575,7 @@ impl ModifyInstanceCreditSpecificationResultDeserializer {
     }
 }
 /// <p>Contains the parameters for ModifyInstancePlacement.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ModifyInstancePlacementRequest {
     /// <p>The affinity setting for the instance.</p>
     pub affinity: Option<String>,
@@ -33630,7 +33630,7 @@ impl ModifyInstancePlacementRequestSerializer {
 }
 
 /// <p>Contains the output of ModifyInstancePlacement.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ModifyInstancePlacementResult {
     /// <p>Is <code>true</code> if the request succeeds, and an error otherwise.</p>
     pub return_: Option<bool>,
@@ -33675,7 +33675,7 @@ impl ModifyInstancePlacementResultDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ModifyLaunchTemplateRequest {
     /// <p>Unique, case-sensitive identifier you provide to ensure the idempotency of the request. For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/APIReference/Run_Instance_Idempotency.html">Ensuring Idempotency</a>.</p>
     pub client_token: Option<String>,
@@ -33731,7 +33731,7 @@ impl ModifyLaunchTemplateRequestSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ModifyLaunchTemplateResult {
     /// <p>Information about the launch template.</p>
     pub launch_template: Option<LaunchTemplate>,
@@ -33780,7 +33780,7 @@ impl ModifyLaunchTemplateResultDeserializer {
     }
 }
 /// <p>Contains the parameters for ModifyNetworkInterfaceAttribute.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ModifyNetworkInterfaceAttributeRequest {
     /// <p>Information about the interface attachment. If modifying the 'delete on termination' attribute, you must specify the ID of the interface attachment.</p>
     pub attachment: Option<NetworkInterfaceAttachmentChanges>,
@@ -33847,7 +33847,7 @@ impl ModifyNetworkInterfaceAttributeRequestSerializer {
 }
 
 /// <p>Contains the parameters for ModifyReservedInstances.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ModifyReservedInstancesRequest {
     /// <p>A unique, case-sensitive token you provide to ensure idempotency of your modification request. For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/APIReference/Run_Instance_Idempotency.html">Ensuring Idempotency</a>.</p>
     pub client_token: Option<String>,
@@ -33886,7 +33886,7 @@ impl ModifyReservedInstancesRequestSerializer {
 }
 
 /// <p>Contains the output of ModifyReservedInstances.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ModifyReservedInstancesResult {
     /// <p>The ID for the modification.</p>
     pub reserved_instances_modification_id: Option<String>,
@@ -33936,7 +33936,7 @@ impl ModifyReservedInstancesResultDeserializer {
     }
 }
 /// <p>Contains the parameters for ModifySnapshotAttribute.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ModifySnapshotAttributeRequest {
     /// <p><p>The snapshot attribute to modify.</p> <note> <p>Only volume creation permissions may be modified at the customer level.</p> </note></p>
     pub attribute: Option<String>,
@@ -34010,7 +34010,7 @@ impl ModifySnapshotAttributeRequestSerializer {
 }
 
 /// <p>Contains the parameters for ModifySpotFleetRequest.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ModifySpotFleetRequestRequest {
     /// <p>Indicates whether running Spot Instances should be terminated if the target capacity of the Spot Fleet request is decreased below the current size of the Spot Fleet.</p>
     pub excess_capacity_termination_policy: Option<String>,
@@ -34049,7 +34049,7 @@ impl ModifySpotFleetRequestRequestSerializer {
 }
 
 /// <p>Contains the output of ModifySpotFleetRequest.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ModifySpotFleetRequestResponse {
     /// <p>Is <code>true</code> if the request succeeds, and an error otherwise.</p>
     pub return_: Option<bool>,
@@ -34095,7 +34095,7 @@ impl ModifySpotFleetRequestResponseDeserializer {
     }
 }
 /// <p>Contains the parameters for ModifySubnetAttribute.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ModifySubnetAttributeRequest {
     /// <p>Specify <code>true</code> to indicate that network interfaces created in the specified subnet should be assigned an IPv6 address. This includes a network interface that's created when launching an instance into the subnet (the instance therefore receives an IPv6 address). </p> <p>If you enable the IPv6 addressing feature for your subnet, your network interface or instance only receives an IPv6 address if it's created using version <code>2016-11-15</code> or later of the Amazon EC2 API.</p>
     pub assign_ipv_6_address_on_creation: Option<AttributeBooleanValue>,
@@ -34136,7 +34136,7 @@ impl ModifySubnetAttributeRequestSerializer {
 }
 
 /// <p>Contains the parameters for ModifyVolumeAttribute.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ModifyVolumeAttributeRequest {
     /// <p>Indicates whether the volume should be auto-enabled for I/O operations.</p>
     pub auto_enable_io: Option<AttributeBooleanValue>,
@@ -34175,7 +34175,7 @@ impl ModifyVolumeAttributeRequestSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ModifyVolumeRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -34229,7 +34229,7 @@ impl ModifyVolumeRequestSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ModifyVolumeResult {
     /// <p>A <a>VolumeModification</a> object.</p>
     pub volume_modification: Option<VolumeModification>,
@@ -34279,7 +34279,7 @@ impl ModifyVolumeResultDeserializer {
     }
 }
 /// <p>Contains the parameters for ModifyVpcAttribute.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ModifyVpcAttributeRequest {
     /// <p>Indicates whether the instances launched in the VPC get DNS hostnames. If enabled, instances in the VPC get DNS hostnames; otherwise, they do not.</p> <p>You cannot modify the DNS resolution and DNS hostnames attributes in the same request. Use separate requests for each attribute. You can only enable DNS hostnames if you've enabled DNS support.</p>
     pub enable_dns_hostnames: Option<AttributeBooleanValue>,
@@ -34319,7 +34319,7 @@ impl ModifyVpcAttributeRequestSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ModifyVpcEndpointConnectionNotificationRequest {
     /// <p>One or more events for the endpoint. Valid values are <code>Accept</code>, <code>Connect</code>, <code>Delete</code>, and <code>Reject</code>.</p>
     pub connection_events: Option<Vec<String>>,
@@ -34370,7 +34370,7 @@ impl ModifyVpcEndpointConnectionNotificationRequestSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ModifyVpcEndpointConnectionNotificationResult {
     /// <p>Returns <code>true</code> if the request succeeds; otherwise, it returns an error.</p>
     pub return_value: Option<bool>,
@@ -34417,7 +34417,7 @@ impl ModifyVpcEndpointConnectionNotificationResultDeserializer {
     }
 }
 /// <p>Contains the parameters for ModifyVpcEndpoint.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ModifyVpcEndpointRequest {
     /// <p>(Gateway endpoint) One or more route tables IDs to associate with the endpoint.</p>
     pub add_route_table_ids: Option<Vec<String>>,
@@ -34525,7 +34525,7 @@ impl ModifyVpcEndpointRequestSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ModifyVpcEndpointResult {
     /// <p>Returns <code>true</code> if the request succeeds; otherwise, it returns an error.</p>
     pub return_: Option<bool>,
@@ -34570,7 +34570,7 @@ impl ModifyVpcEndpointResultDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ModifyVpcEndpointServiceConfigurationRequest {
     /// <p>Indicate whether requests to create an endpoint to your service must be accepted.</p>
     pub acceptance_required: Option<bool>,
@@ -34630,7 +34630,7 @@ impl ModifyVpcEndpointServiceConfigurationRequestSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ModifyVpcEndpointServiceConfigurationResult {
     /// <p>Returns <code>true</code> if the request succeeds; otherwise, it returns an error.</p>
     pub return_: Option<bool>,
@@ -34675,7 +34675,7 @@ impl ModifyVpcEndpointServiceConfigurationResultDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ModifyVpcEndpointServicePermissionsRequest {
     /// <p>One or more Amazon Resource Names (ARNs) of principals for which to allow permission. Specify <code>*</code> to allow all principals.</p>
     pub add_allowed_principals: Option<Vec<String>>,
@@ -34727,7 +34727,7 @@ impl ModifyVpcEndpointServicePermissionsRequestSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ModifyVpcEndpointServicePermissionsResult {
     /// <p>Returns <code>true</code> if the request succeeds; otherwise, it returns an error.</p>
     pub return_value: Option<bool>,
@@ -34773,7 +34773,7 @@ impl ModifyVpcEndpointServicePermissionsResultDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ModifyVpcPeeringConnectionOptionsRequest {
     /// <p>The VPC peering connection options for the accepter VPC.</p>
     pub accepter_peering_connection_options: Option<PeeringConnectionOptionsRequest>,
@@ -34821,7 +34821,7 @@ impl ModifyVpcPeeringConnectionOptionsRequestSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ModifyVpcPeeringConnectionOptionsResult {
     /// <p>Information about the VPC peering connection options for the accepter VPC.</p>
     pub accepter_peering_connection_options: Option<PeeringConnectionOptions>,
@@ -34880,7 +34880,7 @@ impl ModifyVpcPeeringConnectionOptionsResultDeserializer {
     }
 }
 /// <p>Contains the parameters for ModifyVpcTenancy.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ModifyVpcTenancyRequest {
     /// <p>Checks whether you have the required permissions for the operation, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -34917,7 +34917,7 @@ impl ModifyVpcTenancyRequestSerializer {
 }
 
 /// <p>Contains the output of ModifyVpcTenancy.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ModifyVpcTenancyResult {
     /// <p>Returns <code>true</code> if the request succeeds; otherwise, returns an error.</p>
     pub return_value: Option<bool>,
@@ -34964,7 +34964,7 @@ impl ModifyVpcTenancyResultDeserializer {
     }
 }
 /// <p>Contains the parameters for MonitorInstances.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct MonitorInstancesRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -34996,7 +34996,7 @@ impl MonitorInstancesRequestSerializer {
 }
 
 /// <p>Contains the output of MonitorInstances.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct MonitorInstancesResult {
     /// <p>The monitoring information.</p>
     pub instance_monitorings: Option<Vec<InstanceMonitoring>>,
@@ -35044,7 +35044,7 @@ impl MonitorInstancesResultDeserializer {
     }
 }
 /// <p>Describes the monitoring of an instance.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct Monitoring {
     /// <p>Indicates whether detailed monitoring is enabled. Otherwise, basic monitoring is enabled.</p>
     pub state: Option<String>,
@@ -35106,7 +35106,7 @@ impl MonitoringStateDeserializer {
     }
 }
 /// <p>Contains the parameters for MoveAddressToVpc.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct MoveAddressToVpcRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -35137,7 +35137,7 @@ impl MoveAddressToVpcRequestSerializer {
 }
 
 /// <p>Contains the output of MoveAddressToVpc.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct MoveAddressToVpcResult {
     /// <p>The allocation ID for the Elastic IP address.</p>
     pub allocation_id: Option<String>,
@@ -35203,7 +35203,7 @@ impl MoveStatusDeserializer {
     }
 }
 /// <p>Describes the status of a moving Elastic IP address.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct MovingAddressStatus {
     /// <p>The status of the Elastic IP address that's being moved to the EC2-VPC platform, or restored to the EC2-Classic platform.</p>
     pub move_status: Option<String>,
@@ -35300,7 +35300,7 @@ impl MovingAddressStatusSetDeserializer {
     }
 }
 /// <p>Describes a NAT gateway.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct NatGateway {
     /// <p>The date and time the NAT gateway was created.</p>
     pub create_time: Option<String>,
@@ -35414,7 +35414,7 @@ impl NatGatewayDeserializer {
     }
 }
 /// <p>Describes the IP addresses and network interface associated with a NAT gateway.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct NatGatewayAddress {
     /// <p>The allocation ID of the Elastic IP address that's associated with the NAT gateway.</p>
     pub allocation_id: Option<String>,
@@ -35577,7 +35577,7 @@ impl NatGatewayStateDeserializer {
     }
 }
 /// <p>Describes a network ACL.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct NetworkAcl {
     /// <p>Any associations between the network ACL and one or more subnets</p>
     pub associations: Option<Vec<NetworkAclAssociation>>,
@@ -35656,7 +35656,7 @@ impl NetworkAclDeserializer {
     }
 }
 /// <p>Describes an association between a network ACL and a subnet.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct NetworkAclAssociation {
     /// <p>The ID of the association between a network ACL and a subnet.</p>
     pub network_acl_association_id: Option<String>,
@@ -35758,7 +35758,7 @@ impl NetworkAclAssociationListDeserializer {
     }
 }
 /// <p>Describes an entry in a network ACL.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct NetworkAclEntry {
     /// <p>The IPv4 network range to allow or deny, in CIDR notation.</p>
     pub cidr_block: Option<String>,
@@ -35934,7 +35934,7 @@ impl NetworkAclListDeserializer {
     }
 }
 /// <p>Describes a network interface.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct NetworkInterface {
     /// <p>The association information for an Elastic IP address (IPv4) associated with the network interface.</p>
     pub association: Option<NetworkInterfaceAssociation>,
@@ -36122,7 +36122,7 @@ impl NetworkInterfaceDeserializer {
     }
 }
 /// <p>Describes association information for an Elastic IP address (IPv4 only).</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct NetworkInterfaceAssociation {
     /// <p>The allocation ID.</p>
     pub allocation_id: Option<String>,
@@ -36197,7 +36197,7 @@ impl NetworkInterfaceAssociationDeserializer {
     }
 }
 /// <p>Describes a network interface attachment.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct NetworkInterfaceAttachment {
     /// <p>The timestamp indicating when the attachment initiated.</p>
     pub attach_time: Option<String>,
@@ -36285,7 +36285,7 @@ impl NetworkInterfaceAttachmentDeserializer {
     }
 }
 /// <p>Describes an attachment change.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct NetworkInterfaceAttachmentChanges {
     /// <p>The ID of the network interface attachment.</p>
     pub attachment_id: Option<String>,
@@ -36329,7 +36329,7 @@ impl NetworkInterfaceIdListSerializer {
 }
 
 /// <p>Describes an IPv6 address associated with a network interface.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct NetworkInterfaceIpv6Address {
     /// <p>The IPv6 address.</p>
     pub ipv_6_address: Option<String>,
@@ -36460,7 +36460,7 @@ impl NetworkInterfaceListDeserializer {
     }
 }
 /// <p>Describes a permission for a network interface.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct NetworkInterfacePermission {
     /// <p>The AWS account ID.</p>
     pub aws_account_id: Option<String>,
@@ -36599,7 +36599,7 @@ impl NetworkInterfacePermissionListDeserializer {
     }
 }
 /// <p>Describes the state of a network interface permission.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct NetworkInterfacePermissionState {
     /// <p>The state of the permission.</p>
     pub state: Option<String>,
@@ -36671,7 +36671,7 @@ impl NetworkInterfacePermissionStateCodeDeserializer {
     }
 }
 /// <p>Describes the private IPv4 address of a network interface.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct NetworkInterfacePrivateIpAddress {
     /// <p>The association information for an Elastic IP address (IPv4) associated with the network interface.</p>
     pub association: Option<NetworkInterfaceAssociation>,
@@ -36814,7 +36814,7 @@ impl NetworkInterfaceTypeDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct NewDhcpConfiguration {
     pub key: Option<String>,
     pub values: Option<Vec<String>>,
@@ -36977,7 +36977,7 @@ impl PaymentOptionDeserializer {
     }
 }
 /// <p>Describes the data that identifies an Amazon FPGA image (AFI) on the PCI bus.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct PciId {
     /// <p>The ID of the device.</p>
     pub device_id: Option<String>,
@@ -37044,7 +37044,7 @@ impl PciIdDeserializer {
     }
 }
 /// <p>Describes the VPC peering connection options.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct PeeringConnectionOptions {
     /// <p>If true, the public DNS hostnames of instances in the specified VPC resolve to private IP addresses when queried from instances in the peer VPC.</p>
     pub allow_dns_resolution_from_remote_vpc: Option<bool>,
@@ -37112,7 +37112,7 @@ impl PeeringConnectionOptionsDeserializer {
     }
 }
 /// <p>The VPC peering connection options.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct PeeringConnectionOptionsRequest {
     /// <p>If true, enables a local VPC to resolve public DNS hostnames to private IP addresses when queried from instances in the peer VPC.</p>
     pub allow_dns_resolution_from_remote_vpc: Option<bool>,
@@ -37167,7 +37167,7 @@ impl PermissionGroupDeserializer {
     }
 }
 /// <p>Describes the placement of an instance.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct Placement {
     /// <p>The affinity setting for the instance on the Dedicated Host. This parameter is not supported for the <a>ImportInstance</a> command.</p>
     pub affinity: Option<String>,
@@ -37294,7 +37294,7 @@ impl PlacementSerializer {
 }
 
 /// <p>Describes a placement group.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct PlacementGroup {
     /// <p>The name of the placement group.</p>
     pub group_name: Option<String>,
@@ -37449,7 +37449,7 @@ impl PlatformValuesDeserializer {
     }
 }
 /// <p>Describes a range of ports.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct PortRange {
     /// <p>The first port in the range.</p>
     pub from: Option<i64>,
@@ -37525,7 +37525,7 @@ impl PortRangeSerializer {
 }
 
 /// <p>Describes prefixes for AWS services.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct PrefixList {
     /// <p>The IP address range of the AWS service.</p>
     pub cidrs: Option<Vec<String>>,
@@ -37587,7 +37587,7 @@ impl PrefixListDeserializer {
     }
 }
 /// <p>[EC2-VPC only] The ID of the prefix.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct PrefixListId {
     /// <p>A description for the security group rule that references this prefix list ID.</p> <p>Constraints: Up to 255 characters in length. Allowed characters are a-z, A-Z, 0-9, spaces, and ._-:/()#,@[]+=;{}!$*</p>
     pub description: Option<String>,
@@ -37797,7 +37797,7 @@ impl PrefixListSetDeserializer {
     }
 }
 /// <p>Describes the price for a Reserved Instance.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct PriceSchedule {
     /// <p>The current price schedule, as determined by the term remaining for the Reserved Instance in the listing.</p> <p>A specific price schedule is always in effect, but only one price schedule can be active at any time. Take, for example, a Reserved Instance listing that has five months remaining in its term. When you specify price schedules for five months and two months, this means that schedule 1, covering the first three months of the remaining term, will be active during months 5, 4, and 3. Then schedule 2, covering the last two months of the term, will be active for months 2 and 1.</p>
     pub active: Option<bool>,
@@ -37900,7 +37900,7 @@ impl PriceScheduleListDeserializer {
     }
 }
 /// <p>Describes the price for a Reserved Instance.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct PriceScheduleSpecification {
     /// <p>The currency for transacting the Reserved Instance resale. At this time, the only supported currency is <code>USD</code>.</p>
     pub currency_code: Option<String>,
@@ -37952,7 +37952,7 @@ impl PriceScheduleSpecificationListSerializer {
 }
 
 /// <p>Describes a Reserved Instance offering.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct PricingDetail {
     /// <p>The number of reservations available for the price.</p>
     pub count: Option<i64>,
@@ -38043,7 +38043,7 @@ impl PricingDetailsListDeserializer {
     }
 }
 /// <p>PrincipalIdFormat description</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct PrincipalIdFormat {
     /// <p>PrincipalIdFormatARN description</p>
     pub arn: Option<String>,
@@ -38169,7 +38169,7 @@ impl PrivateIpAddressConfigSetSerializer {
 }
 
 /// <p>Describes a secondary private IPv4 address for a network interface.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct PrivateIpAddressSpecification {
     /// <p>Indicates whether the private IPv4 address is the primary private IPv4 address. Only one IPv4 address can be designated as primary.</p>
     pub primary: Option<bool>,
@@ -38310,7 +38310,7 @@ impl PrivateIpAddressStringListSerializer {
 }
 
 /// <p>Describes a product code.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ProductCode {
     /// <p>The product code.</p>
     pub product_code_id: Option<String>,
@@ -38442,7 +38442,7 @@ impl ProductDescriptionListSerializer {
 }
 
 /// <p>Describes a virtual private gateway propagating route.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct PropagatingVgw {
     /// <p>The ID of the virtual private gateway (VGW).</p>
     pub gateway_id: Option<String>,
@@ -38529,7 +38529,7 @@ impl PropagatingVgwListDeserializer {
     }
 }
 /// <p>Reserved. If you need to sustain traffic greater than the <a href="http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/vpc-nat-gateway.html">documented limits</a>, contact us through the <a href="https://console.aws.amazon.com/support/home?">Support Center</a>.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ProvisionedBandwidth {
     /// <p>Reserved. If you need to sustain traffic greater than the <a href="http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/vpc-nat-gateway.html">documented limits</a>, contact us through the <a href="https://console.aws.amazon.com/support/home?">Support Center</a>.</p>
     pub provision_time: Option<String>,
@@ -38615,7 +38615,7 @@ impl PublicIpStringListSerializer {
 }
 
 /// <p>Describes the result of the purchase.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct Purchase {
     /// <p>The currency in which the <code>UpfrontPrice</code> and <code>HourlyPrice</code> amounts are specified. At this time, the only supported currency is <code>USD</code>.</p>
     pub currency_code: Option<String>,
@@ -38712,7 +38712,7 @@ impl PurchaseDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct PurchaseHostReservationRequest {
     /// <p>Unique, case-sensitive identifier you provide to ensure idempotency of the request. For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Run_Instance_Idempotency.html">How to Ensure Idempotency</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
     pub client_token: Option<String>,
@@ -38765,7 +38765,7 @@ impl PurchaseHostReservationRequestSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct PurchaseHostReservationResult {
     /// <p>Unique, case-sensitive identifier you provide to ensure idempotency of the request. For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Run_Instance_Idempotency.html">How to Ensure Idempotency</a> in the <i>Amazon Elastic Compute Cloud User Guide</i> </p>
     pub client_token: Option<String>,
@@ -38842,7 +38842,7 @@ impl PurchaseHostReservationResultDeserializer {
     }
 }
 /// <p>Describes a request to purchase Scheduled Instances.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct PurchaseRequest {
     /// <p>The number of instances.</p>
     pub instance_count: i64,
@@ -38882,7 +38882,7 @@ impl PurchaseRequestSetSerializer {
 }
 
 /// <p>Contains the parameters for PurchaseReservedInstancesOffering.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct PurchaseReservedInstancesOfferingRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -38928,7 +38928,7 @@ impl PurchaseReservedInstancesOfferingRequestSerializer {
 }
 
 /// <p>Contains the output of PurchaseReservedInstancesOffering.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct PurchaseReservedInstancesOfferingResult {
     /// <p>The IDs of the purchased Reserved Instances.</p>
     pub reserved_instances_id: Option<String>,
@@ -38977,7 +38977,7 @@ impl PurchaseReservedInstancesOfferingResultDeserializer {
     }
 }
 /// <p>Contains the parameters for PurchaseScheduledInstances.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct PurchaseScheduledInstancesRequest {
     /// <p>Unique, case-sensitive identifier that ensures the idempotency of the request. For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/APIReference/Run_Instance_Idempotency.html">Ensuring Idempotency</a>.</p>
     pub client_token: Option<String>,
@@ -39017,7 +39017,7 @@ impl PurchaseScheduledInstancesRequestSerializer {
 }
 
 /// <p>Contains the output of PurchaseScheduledInstances.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct PurchaseScheduledInstancesResult {
     /// <p>Information about the Scheduled Instances.</p>
     pub scheduled_instance_set: Option<Vec<ScheduledInstance>>,
@@ -39176,7 +39176,7 @@ impl ReasonCodesListSerializer {
 }
 
 /// <p>Contains the parameters for RebootInstances.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct RebootInstancesRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -39208,7 +39208,7 @@ impl RebootInstancesRequestSerializer {
 }
 
 /// <p>Describes a recurring charge.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct RecurringCharge {
     /// <p>The amount of the recurring charge.</p>
     pub amount: Option<f64>,
@@ -39317,7 +39317,7 @@ impl RecurringChargesListDeserializer {
     }
 }
 /// <p>Describes a region.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct Region {
     /// <p>The region service endpoint.</p>
     pub endpoint: Option<String>,
@@ -39424,7 +39424,7 @@ impl RegionNameStringListSerializer {
 }
 
 /// <p>Contains the parameters for RegisterImage.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct RegisterImageRequest {
     /// <p>The architecture of the AMI.</p> <p>Default: For Amazon EBS-backed AMIs, <code>i386</code>. For instance store-backed AMIs, the architecture specified in the manifest file.</p>
     pub architecture: Option<String>,
@@ -39545,7 +39545,7 @@ impl RegisterImageRequestSerializer {
 }
 
 /// <p>Contains the output of RegisterImage.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct RegisterImageResult {
     /// <p>The ID of the newly registered AMI.</p>
     pub image_id: Option<String>,
@@ -39591,7 +39591,7 @@ impl RegisterImageResultDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct RejectVpcEndpointConnectionsRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -39628,7 +39628,7 @@ impl RejectVpcEndpointConnectionsRequestSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct RejectVpcEndpointConnectionsResult {
     /// <p>Information about the endpoints that were not rejected, if applicable.</p>
     pub unsuccessful: Option<Vec<UnsuccessfulItem>>,
@@ -39676,7 +39676,7 @@ impl RejectVpcEndpointConnectionsResultDeserializer {
     }
 }
 /// <p>Contains the parameters for RejectVpcPeeringConnection.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct RejectVpcPeeringConnectionRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -39707,7 +39707,7 @@ impl RejectVpcPeeringConnectionRequestSerializer {
 }
 
 /// <p>Contains the output of RejectVpcPeeringConnection.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct RejectVpcPeeringConnectionResult {
     /// <p>Returns <code>true</code> if the request succeeds; otherwise, it returns an error.</p>
     pub return_: Option<bool>,
@@ -39753,7 +39753,7 @@ impl RejectVpcPeeringConnectionResultDeserializer {
     }
 }
 /// <p>Contains the parameters for ReleaseAddress.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ReleaseAddressRequest {
     /// <p>[EC2-VPC] The allocation ID. Required for EC2-VPC.</p>
     pub allocation_id: Option<String>,
@@ -39794,7 +39794,7 @@ impl ReleaseAddressRequestSerializer {
 }
 
 /// <p>Contains the parameters for ReleaseHosts.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ReleaseHostsRequest {
     /// <p>The IDs of the Dedicated Hosts you want to release.</p>
     pub host_ids: Vec<String>,
@@ -39818,7 +39818,7 @@ impl ReleaseHostsRequestSerializer {
 }
 
 /// <p>Contains the output of ReleaseHosts.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ReleaseHostsResult {
     /// <p>The IDs of the Dedicated Hosts that were successfully released.</p>
     pub successful: Option<Vec<String>>,
@@ -39873,7 +39873,7 @@ impl ReleaseHostsResultDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ReplaceIamInstanceProfileAssociationRequest {
     /// <p>The ID of the existing IAM instance profile association.</p>
     pub association_id: String,
@@ -39906,7 +39906,7 @@ impl ReplaceIamInstanceProfileAssociationRequestSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ReplaceIamInstanceProfileAssociationResult {
     /// <p>Information about the IAM instance profile association.</p>
     pub iam_instance_profile_association: Option<IamInstanceProfileAssociation>,
@@ -39957,7 +39957,7 @@ impl ReplaceIamInstanceProfileAssociationResultDeserializer {
     }
 }
 /// <p>Contains the parameters for ReplaceNetworkAclAssociation.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ReplaceNetworkAclAssociationRequest {
     /// <p>The ID of the current association between the original network ACL and the subnet.</p>
     pub association_id: String,
@@ -39994,7 +39994,7 @@ impl ReplaceNetworkAclAssociationRequestSerializer {
 }
 
 /// <p>Contains the output of ReplaceNetworkAclAssociation.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ReplaceNetworkAclAssociationResult {
     /// <p>The ID of the new association.</p>
     pub new_association_id: Option<String>,
@@ -40043,7 +40043,7 @@ impl ReplaceNetworkAclAssociationResultDeserializer {
     }
 }
 /// <p>Contains the parameters for ReplaceNetworkAclEntry.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ReplaceNetworkAclEntryRequest {
     /// <p>The IPv4 network range to allow or deny, in CIDR notation (for example <code>172.16.0.0/24</code>).</p>
     pub cidr_block: Option<String>,
@@ -40132,7 +40132,7 @@ impl ReplaceNetworkAclEntryRequestSerializer {
 }
 
 /// <p>Contains the parameters for ReplaceRoute.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ReplaceRouteRequest {
     /// <p>The IPv4 CIDR address block used for the destination match. The value you provide must match the CIDR of an existing route in the table.</p>
     pub destination_cidr_block: Option<String>,
@@ -40227,7 +40227,7 @@ impl ReplaceRouteRequestSerializer {
 }
 
 /// <p>Contains the parameters for ReplaceRouteTableAssociation.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ReplaceRouteTableAssociationRequest {
     /// <p>The association ID.</p>
     pub association_id: String,
@@ -40264,7 +40264,7 @@ impl ReplaceRouteTableAssociationRequestSerializer {
 }
 
 /// <p>Contains the output of ReplaceRouteTableAssociation.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ReplaceRouteTableAssociationResult {
     /// <p>The ID of the new association.</p>
     pub new_association_id: Option<String>,
@@ -40313,7 +40313,7 @@ impl ReplaceRouteTableAssociationResultDeserializer {
     }
 }
 /// <p>Contains the parameters for ReportInstanceStatus.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ReportInstanceStatusRequest {
     /// <p>Descriptive text about the health state of your instance.</p>
     pub description: Option<String>,
@@ -40404,7 +40404,7 @@ impl RequestHostIdSetSerializer {
 }
 
 /// <p>The information to include in the launch template.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct RequestLaunchTemplateData {
     /// <p><p>The block device mapping.</p> <important> <p>Supplying both a snapshot ID and an encryption value as arguments for block-device mapping results in an error. This is because only blank volumes can be encrypted on start, and these are not created from a snapshot. If a snapshot is the basis for the volume, it contains data by definition and its encryption status cannot be changed using this action.</p> </important></p>
     pub block_device_mappings: Option<Vec<LaunchTemplateBlockDeviceMappingRequest>>,
@@ -40592,7 +40592,7 @@ impl RequestLaunchTemplateDataSerializer {
 }
 
 /// <p>Contains the parameters for RequestSpotFleet.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct RequestSpotFleetRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -40624,7 +40624,7 @@ impl RequestSpotFleetRequestSerializer {
 }
 
 /// <p>Contains the output of RequestSpotFleet.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct RequestSpotFleetResponse {
     /// <p>The ID of the Spot Fleet request.</p>
     pub spot_fleet_request_id: String,
@@ -40671,7 +40671,7 @@ impl RequestSpotFleetResponseDeserializer {
     }
 }
 /// <p>Contains the parameters for RequestSpotInstances.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct RequestSpotInstancesRequest {
     /// <p>The user-specified name for a logical grouping of requests.</p> <p>When you specify an Availability Zone group in a Spot Instance request, all Spot Instances in the request are launched in the same Availability Zone. Instance proximity is maintained with this parameter, but the choice of Availability Zone is not. The group applies only to requests for Spot Instances of the same instance type. Any additional Spot Instance requests that are specified with the same Availability Zone group name are launched in that same Availability Zone, as long as at least one instance from the group is still active.</p> <p>If there is no active instance running in the Availability Zone group that you specify for a new Spot Instance request (all instances are terminated, the request is expired, or the maximum price you specified falls below current Spot price), then Amazon EC2 launches the instance in any Availability Zone where the constraint can be met. Consequently, the subsequent set of Spot Instances could be placed in a different zone from the original request, even if you specified the same Availability Zone group.</p> <p>Default: Instances are launched in any available Availability Zone.</p>
     pub availability_zone_group: Option<String>,
@@ -40785,7 +40785,7 @@ impl RequestSpotInstancesRequestSerializer {
 }
 
 /// <p>Contains the output of RequestSpotInstances.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct RequestSpotInstancesResult {
     /// <p>One or more Spot Instance requests.</p>
     pub spot_instance_requests: Option<Vec<SpotInstanceRequest>>,
@@ -40835,7 +40835,7 @@ impl RequestSpotInstancesResultDeserializer {
     }
 }
 /// <p>Describes the launch specification for an instance.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct RequestSpotLaunchSpecification {
     /// <p>Deprecated.</p>
     pub addressing_type: Option<String>,
@@ -40987,7 +40987,7 @@ impl RequestSpotLaunchSpecificationSerializer {
 }
 
 /// <p>Describes a reservation.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct Reservation {
     /// <p>[EC2-Classic only] One or more security groups.</p>
     pub groups: Option<Vec<GroupIdentifier>>,
@@ -41117,7 +41117,7 @@ impl ReservationStateDeserializer {
     }
 }
 /// <p>The cost associated with the Reserved Instance.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ReservationValue {
     /// <p>The hourly rate of the reservation.</p>
     pub hourly_price: Option<String>,
@@ -41192,7 +41192,7 @@ impl ReservedInstanceIdSetSerializer {
 }
 
 /// <p>Describes the limit price of a Reserved Instance offering.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ReservedInstanceLimitPrice {
     /// <p>Used for Reserved Instance Marketplace offerings. Specifies the limit price on the total order (instanceCount * price).</p>
     pub amount: Option<f64>,
@@ -41225,7 +41225,7 @@ impl ReservedInstanceLimitPriceSerializer {
 }
 
 /// <p>The total value of the Convertible Reserved Instance.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ReservedInstanceReservationValue {
     /// <p>The total value of the Convertible Reserved Instance that you are exchanging.</p>
     pub reservation_value: Option<ReservationValue>,
@@ -41339,7 +41339,7 @@ impl ReservedInstanceStateDeserializer {
     }
 }
 /// <p>Describes a Reserved Instance.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ReservedInstances {
     /// <p>The Availability Zone in which the Reserved Instance can be used.</p>
     pub availability_zone: Option<String>,
@@ -41503,7 +41503,7 @@ impl ReservedInstancesDeserializer {
     }
 }
 /// <p>Describes the configuration settings for the modified Reserved Instances.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ReservedInstancesConfiguration {
     /// <p>The Availability Zone for the modified Reserved Instances.</p>
     pub availability_zone: Option<String>,
@@ -41633,7 +41633,7 @@ impl ReservedInstancesConfigurationListSerializer {
 }
 
 /// <p>Describes the ID of a Reserved Instance.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ReservedInstancesId {
     /// <p>The ID of the Reserved Instance.</p>
     pub reserved_instances_id: Option<String>,
@@ -41736,7 +41736,7 @@ impl ReservedInstancesListDeserializer {
     }
 }
 /// <p>Describes a Reserved Instance listing.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ReservedInstancesListing {
     /// <p>A unique, case-sensitive key supplied by the client to ensure that the request is idempotent. For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/APIReference/Run_Instance_Idempotency.html">Ensuring Idempotency</a>.</p>
     pub client_token: Option<String>,
@@ -41886,7 +41886,7 @@ impl ReservedInstancesListingListDeserializer {
     }
 }
 /// <p>Describes a Reserved Instance modification.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ReservedInstancesModification {
     /// <p>A unique, case-sensitive key supplied by the client to ensure that the request is idempotent. For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/APIReference/Run_Instance_Idempotency.html">Ensuring Idempotency</a>.</p>
     pub client_token: Option<String>,
@@ -42048,7 +42048,7 @@ impl ReservedInstancesModificationListDeserializer {
     }
 }
 /// <p>Describes the modification request/s.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ReservedInstancesModificationResult {
     /// <p>The ID for the Reserved Instances that were created as part of the modification request. This field is only available when the modification is fulfilled.</p>
     pub reserved_instances_id: Option<String>,
@@ -42151,7 +42151,7 @@ impl ReservedInstancesModificationResultListDeserializer {
     }
 }
 /// <p>Describes a Reserved Instance offering.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ReservedInstancesOffering {
     /// <p>The Availability Zone in which the Reserved Instance can be used.</p>
     pub availability_zone: Option<String>,
@@ -42392,7 +42392,7 @@ impl ReservedIntancesIdsDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ResetFpgaImageAttributeRequest {
     /// <p>The attribute.</p>
     pub attribute: Option<String>,
@@ -42430,7 +42430,7 @@ impl ResetFpgaImageAttributeRequestSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ResetFpgaImageAttributeResult {
     /// <p>Is <code>true</code> if the request succeeds, and an error otherwise.</p>
     pub return_: Option<bool>,
@@ -42476,7 +42476,7 @@ impl ResetFpgaImageAttributeResultDeserializer {
     }
 }
 /// <p>Contains the parameters for ResetImageAttribute.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ResetImageAttributeRequest {
     /// <p>The attribute to reset (currently you can only reset the launch permission attribute).</p>
     pub attribute: String,
@@ -42513,7 +42513,7 @@ impl ResetImageAttributeRequestSerializer {
 }
 
 /// <p>Contains the parameters for ResetInstanceAttribute.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ResetInstanceAttributeRequest {
     /// <p><p>The attribute to reset.</p> <important> <p>You can only reset the following attributes: <code>kernel</code> | <code>ramdisk</code> | <code>sourceDestCheck</code>. To change an instance attribute, use <a>ModifyInstanceAttribute</a>.</p> </important></p>
     pub attribute: String,
@@ -42550,7 +42550,7 @@ impl ResetInstanceAttributeRequestSerializer {
 }
 
 /// <p>Contains the parameters for ResetNetworkInterfaceAttribute.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ResetNetworkInterfaceAttributeRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -42589,7 +42589,7 @@ impl ResetNetworkInterfaceAttributeRequestSerializer {
 }
 
 /// <p>Contains the parameters for ResetSnapshotAttribute.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ResetSnapshotAttributeRequest {
     /// <p>The attribute to reset. Currently, only the attribute for permission to create volumes can be reset.</p>
     pub attribute: String,
@@ -42662,7 +42662,7 @@ impl ResourceTypeDeserializer {
     }
 }
 /// <p>Describes the error that's returned when you cannot delete a launch template version.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ResponseError {
     /// <p>The error code.</p>
     pub code: Option<String>,
@@ -42795,7 +42795,7 @@ impl ResponseHostIdSetDeserializer {
     }
 }
 /// <p>The information for a launch template. </p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ResponseLaunchTemplateData {
     /// <p>The block device mappings.</p>
     pub block_device_mappings: Option<Vec<LaunchTemplateBlockDeviceMapping>>,
@@ -43004,7 +43004,7 @@ impl RestorableByStringListSerializer {
 }
 
 /// <p>Contains the parameters for RestoreAddressToClassic.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct RestoreAddressToClassicRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -43035,7 +43035,7 @@ impl RestoreAddressToClassicRequestSerializer {
 }
 
 /// <p>Contains the output of RestoreAddressToClassic.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct RestoreAddressToClassicResult {
     /// <p>The Elastic IP address.</p>
     pub public_ip: Option<String>,
@@ -43087,7 +43087,7 @@ impl RestoreAddressToClassicResultDeserializer {
     }
 }
 /// <p>Contains the parameters for RevokeSecurityGroupEgress.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct RevokeSecurityGroupEgressRequest {
     /// <p>Not supported. Use a set of IP permissions to specify the CIDR.</p>
     pub cidr_ip: Option<String>,
@@ -43175,7 +43175,7 @@ impl RevokeSecurityGroupEgressRequestSerializer {
 }
 
 /// <p>Contains the parameters for RevokeSecurityGroupIngress.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct RevokeSecurityGroupIngressRequest {
     /// <p>The CIDR IP address range. You can't specify this parameter when specifying a source security group.</p>
     pub cidr_ip: Option<String>,
@@ -43273,7 +43273,7 @@ impl RevokeSecurityGroupIngressRequestSerializer {
 }
 
 /// <p>Describes a route in a route table.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct Route {
     /// <p>The IPv4 CIDR block used for the destination match.</p>
     pub destination_cidr_block: Option<String>,
@@ -43463,7 +43463,7 @@ impl RouteStateDeserializer {
     }
 }
 /// <p>Describes a route table.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct RouteTable {
     /// <p>The associations between the route table and one or more subnets.</p>
     pub associations: Option<Vec<RouteTableAssociation>>,
@@ -43542,7 +43542,7 @@ impl RouteTableDeserializer {
     }
 }
 /// <p>Describes an association between a route table and a subnet.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct RouteTableAssociation {
     /// <p>Indicates whether this is the main route table.</p>
     pub main: Option<bool>,
@@ -43703,7 +43703,7 @@ impl RuleActionDeserializer {
     }
 }
 /// <p>Describes the monitoring of an instance.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct RunInstancesMonitoringEnabled {
     /// <p>Indicates whether detailed monitoring is enabled. Otherwise, basic monitoring is enabled.</p>
     pub enabled: bool,
@@ -43766,7 +43766,7 @@ impl RunInstancesMonitoringEnabledSerializer {
 }
 
 /// <p>Contains the parameters for RunInstances.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct RunInstancesRequest {
     /// <p>Reserved.</p>
     pub additional_info: Option<String>,
@@ -44032,7 +44032,7 @@ impl RunInstancesRequestSerializer {
 }
 
 /// <p>Contains the parameters for RunScheduledInstances.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct RunScheduledInstancesRequest {
     /// <p>Unique, case-sensitive identifier that ensures the idempotency of the request. For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/APIReference/Run_Instance_Idempotency.html">Ensuring Idempotency</a>.</p>
     pub client_token: Option<String>,
@@ -44086,7 +44086,7 @@ impl RunScheduledInstancesRequestSerializer {
 }
 
 /// <p>Contains the output of RunScheduledInstances.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct RunScheduledInstancesResult {
     /// <p>The IDs of the newly launched instances.</p>
     pub instance_id_set: Option<Vec<String>>,
@@ -44135,7 +44135,7 @@ impl RunScheduledInstancesResultDeserializer {
     }
 }
 /// <p>Describes the storage parameters for S3 and S3 buckets for an instance store-backed AMI.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct S3Storage {
     /// <p>The access key ID of the owner of the bucket. Before you specify a value for your access key ID, review and follow the guidance in <a href="http://docs.aws.amazon.com/general/latest/gr/aws-access-keys-best-practices.html">Best Practices for Managing AWS Access Keys</a>.</p>
     pub aws_access_key_id: Option<String>,
@@ -44253,7 +44253,7 @@ impl S3StorageSerializer {
 }
 
 /// <p>Describes a Scheduled Instance.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ScheduledInstance {
     /// <p>The Availability Zone.</p>
     pub availability_zone: Option<String>,
@@ -44406,7 +44406,7 @@ impl ScheduledInstanceDeserializer {
     }
 }
 /// <p>Describes a schedule that is available for your Scheduled Instances.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ScheduledInstanceAvailability {
     /// <p>The Availability Zone.</p>
     pub availability_zone: Option<String>,
@@ -44596,7 +44596,7 @@ impl ScheduledInstanceIdRequestSetSerializer {
 }
 
 /// <p>Describes the recurring schedule for a Scheduled Instance.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ScheduledInstanceRecurrence {
     /// <p>The frequency (<code>Daily</code>, <code>Weekly</code>, or <code>Monthly</code>).</p>
     pub frequency: Option<String>,
@@ -44671,7 +44671,7 @@ impl ScheduledInstanceRecurrenceDeserializer {
     }
 }
 /// <p>Describes the recurring schedule for a Scheduled Instance.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ScheduledInstanceRecurrenceRequest {
     /// <p>The frequency (<code>Daily</code>, <code>Weekly</code>, or <code>Monthly</code>).</p>
     pub frequency: Option<String>,
@@ -44771,7 +44771,7 @@ impl ScheduledInstanceSetDeserializer {
     }
 }
 /// <p>Describes a block device mapping for a Scheduled Instance.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ScheduledInstancesBlockDeviceMapping {
     /// <p>The device name (for example, <code>/dev/sdh</code> or <code>xvdh</code>).</p>
     pub device_name: Option<String>,
@@ -44832,7 +44832,7 @@ impl ScheduledInstancesBlockDeviceMappingSetSerializer {
 }
 
 /// <p>Describes an EBS volume for a Scheduled Instance.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ScheduledInstancesEbs {
     /// <p>Indicates whether the volume is deleted on instance termination.</p>
     pub delete_on_termination: Option<bool>,
@@ -44897,7 +44897,7 @@ impl ScheduledInstancesEbsSerializer {
 }
 
 /// <p>Describes an IAM instance profile for a Scheduled Instance.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ScheduledInstancesIamInstanceProfile {
     /// <p>The Amazon Resource Name (ARN).</p>
     pub arn: Option<String>,
@@ -44930,7 +44930,7 @@ impl ScheduledInstancesIamInstanceProfileSerializer {
 }
 
 /// <p>Describes an IPv6 address.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ScheduledInstancesIpv6Address {
     /// <p>The IPv6 address.</p>
     pub ipv_6_address: Option<String>,
@@ -44966,7 +44966,7 @@ impl ScheduledInstancesIpv6AddressListSerializer {
 }
 
 /// <p>Describes the launch specification for a Scheduled Instance.</p> <p>If you are launching the Scheduled Instance in EC2-VPC, you must specify the ID of the subnet. You can specify the subnet using either <code>SubnetId</code> or <code>NetworkInterface</code>.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ScheduledInstancesLaunchSpecification {
     /// <p>One or more block device mapping entries.</p>
     pub block_device_mappings: Option<Vec<ScheduledInstancesBlockDeviceMapping>>,
@@ -45099,7 +45099,7 @@ impl ScheduledInstancesLaunchSpecificationSerializer {
 }
 
 /// <p>Describes whether monitoring is enabled for a Scheduled Instance.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ScheduledInstancesMonitoring {
     /// <p>Indicates whether monitoring is enabled.</p>
     pub enabled: Option<bool>,
@@ -45124,7 +45124,7 @@ impl ScheduledInstancesMonitoringSerializer {
 }
 
 /// <p>Describes a network interface for a Scheduled Instance.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ScheduledInstancesNetworkInterface {
     /// <p>Indicates whether to assign a public IPv4 address to instances launched in a VPC. The public IPv4 address can only be assigned to a network interface for eth0, and can only be assigned to a new network interface, not an existing one. You cannot specify more than one network interface in the request. If launching into a default subnet, the default value is <code>true</code>.</p>
     pub associate_public_ip_address: Option<bool>,
@@ -45251,7 +45251,7 @@ impl ScheduledInstancesNetworkInterfaceSetSerializer {
 }
 
 /// <p>Describes the placement for a Scheduled Instance.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ScheduledInstancesPlacement {
     /// <p>The Availability Zone.</p>
     pub availability_zone: Option<String>,
@@ -45284,7 +45284,7 @@ impl ScheduledInstancesPlacementSerializer {
 }
 
 /// <p>Describes a private IPv4 address for a Scheduled Instance.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ScheduledInstancesPrivateIpAddressConfig {
     /// <p>Indicates whether this is a primary IPv4 address. Otherwise, this is a secondary IPv4 address.</p>
     pub primary: Option<bool>,
@@ -45342,7 +45342,7 @@ impl ScopeDeserializer {
     }
 }
 /// <p>Describes a security group</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct SecurityGroup {
     /// <p>A description of the security group.</p>
     pub description: Option<String>,
@@ -45489,7 +45489,7 @@ impl SecurityGroupIdStringListSerializer {
 }
 
 /// <p>Describes a security group.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct SecurityGroupIdentifier {
     /// <p>The ID of the security group.</p>
     pub group_id: Option<String>,
@@ -45582,7 +45582,7 @@ impl SecurityGroupListDeserializer {
     }
 }
 /// <p>Describes a VPC with a security group that references your security group.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct SecurityGroupReference {
     /// <p>The ID of your security group.</p>
     pub group_id: String,
@@ -45695,7 +45695,7 @@ impl SecurityGroupStringListSerializer {
 }
 
 /// <p>Describes a service configuration for a VPC endpoint service.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ServiceConfiguration {
     /// <p>Indicates whether requests from other AWS accounts to create an endpoint to the service must first be accepted.</p>
     pub acceptance_required: Option<bool>,
@@ -45846,7 +45846,7 @@ impl ServiceConfigurationSetDeserializer {
     }
 }
 /// <p>Describes a VPC endpoint service.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ServiceDetail {
     /// <p>Indicates whether VPC endpoint connection requests to the service must be accepted by the service owner.</p>
     pub acceptance_required: Option<bool>,
@@ -46012,7 +46012,7 @@ impl ServiceTypeDeserializer {
     }
 }
 /// <p>Describes the type of service for a VPC endpoint.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ServiceTypeDetail {
     /// <p>The type of service.</p>
     pub service_type: Option<String>,
@@ -46117,7 +46117,7 @@ impl ShutdownBehaviorDeserializer {
     }
 }
 /// <p>Describes the time period for a Scheduled Instance to start its first schedule. The time period must span less than one day.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct SlotDateTimeRangeRequest {
     /// <p>The earliest date and time, in UTC, for the Scheduled Instance to start.</p>
     pub earliest_time: String,
@@ -46146,7 +46146,7 @@ impl SlotDateTimeRangeRequestSerializer {
 }
 
 /// <p>Describes the time period for a Scheduled Instance to start its first schedule.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct SlotStartTimeRangeRequest {
     /// <p>The earliest date and time, in UTC, for the Scheduled Instance to start.</p>
     pub earliest_time: Option<String>,
@@ -46179,7 +46179,7 @@ impl SlotStartTimeRangeRequestSerializer {
 }
 
 /// <p>Describes a snapshot.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct Snapshot {
     /// <p>The data encryption key identifier for the snapshot. This value is a unique identifier that corresponds to the data encryption key that was used to encrypt the original volume or snapshot copy. Because data encryption keys are inherited by volumes created from snapshots, and vice versa, if snapshots share the same data encryption key identifier, then they belong to the same volume/snapshot lineage. This parameter is only returned by the <a>DescribeSnapshots</a> API operation.</p>
     pub data_encryption_key_id: Option<String>,
@@ -46308,7 +46308,7 @@ impl SnapshotDeserializer {
     }
 }
 /// <p>Describes the snapshot created from the imported disk.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct SnapshotDetail {
     /// <p>A description for the snapshot.</p>
     pub description: Option<String>,
@@ -46452,7 +46452,7 @@ impl SnapshotDetailListDeserializer {
     }
 }
 /// <p>The disk container object for the import snapshot request.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct SnapshotDiskContainer {
     /// <p>The description of the disk image being imported.</p>
     pub description: Option<String>,
@@ -46567,7 +46567,7 @@ impl SnapshotStateDeserializer {
     }
 }
 /// <p>Details about the import snapshot task.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct SnapshotTaskDetail {
     /// <p>The description of the snapshot.</p>
     pub description: Option<String>,
@@ -46665,7 +46665,7 @@ impl SnapshotTaskDetailDeserializer {
     }
 }
 /// <p>Describes the data feed for a Spot Instance.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct SpotDatafeedSubscription {
     /// <p>The Amazon S3 bucket where the Spot Instance data feed is located.</p>
     pub bucket: Option<String>,
@@ -46736,7 +46736,7 @@ impl SpotDatafeedSubscriptionDeserializer {
     }
 }
 /// <p>Describes the launch specification for one or more Spot Instances.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct SpotFleetLaunchSpecification {
     /// <p>Deprecated.</p>
     pub addressing_type: Option<String>,
@@ -47041,7 +47041,7 @@ impl SpotFleetLaunchSpecificationSerializer {
 }
 
 /// <p>Describes whether monitoring is enabled.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct SpotFleetMonitoring {
     /// <p>Enables monitoring for the instance.</p> <p>Default: <code>false</code> </p>
     pub enabled: Option<bool>,
@@ -47107,7 +47107,7 @@ impl SpotFleetMonitoringSerializer {
 }
 
 /// <p>Describes a Spot Fleet request.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct SpotFleetRequestConfig {
     /// <p>The progress of the Spot Fleet request. If there is an error, the status is <code>error</code>. After all requests are placed, the status is <code>pending_fulfillment</code>. If the size of the fleet is equal to or greater than its target capacity, the status is <code>fulfilled</code>. If the size of the fleet is decreased, the status is <code>pending_termination</code> while Spot Instances are terminating.</p>
     pub activity_status: Option<String>,
@@ -47185,7 +47185,7 @@ impl SpotFleetRequestConfigDeserializer {
     }
 }
 /// <p>Describes the configuration of a Spot Fleet request.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct SpotFleetRequestConfigData {
     /// <p>Indicates how to allocate the target capacity across the Spot pools specified by the Spot Fleet request. The default is <code>lowestPrice</code>.</p>
     pub allocation_strategy: Option<String>,
@@ -47494,7 +47494,7 @@ impl SpotFleetRequestConfigSetDeserializer {
     }
 }
 /// <p>The tags for a Spot Fleet resource.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct SpotFleetTagSpecification {
     /// <p>The type of resource. Currently, the only resource type that is supported is <code>instance</code>.</p>
     pub resource_type: Option<String>,
@@ -47624,7 +47624,7 @@ impl SpotFleetTagSpecificationListSerializer {
 }
 
 /// <p>Describes a Spot Instance request.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct SpotInstanceRequest {
     /// <p>If you specified a duration and your Spot Instance request was fulfilled, this is the fixed hourly price in effect for the Spot Instance while it runs.</p>
     pub actual_block_hourly_price: Option<String>,
@@ -47867,7 +47867,7 @@ impl SpotInstanceStateDeserializer {
     }
 }
 /// <p>Describes a Spot Instance state change.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct SpotInstanceStateFault {
     /// <p>The reason code for the Spot Instance state change.</p>
     pub code: Option<String>,
@@ -47918,7 +47918,7 @@ impl SpotInstanceStateFaultDeserializer {
     }
 }
 /// <p>Describes the status of a Spot Instance request.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct SpotInstanceStatus {
     /// <p>The status code. For a list of status codes, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/spot-bid-status.html#spot-instance-bid-status-understand">Spot Status Codes</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
     pub code: Option<String>,
@@ -47989,7 +47989,7 @@ impl SpotInstanceTypeDeserializer {
     }
 }
 /// <p>The options for Spot Instances.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct SpotMarketOptions {
     /// <p>The required duration for the Spot Instances (also known as Spot blocks), in minutes. This value must be a multiple of 60 (60, 120, 180, 240, 300, or 360).</p>
     pub block_duration_minutes: Option<i64>,
@@ -48046,7 +48046,7 @@ impl SpotMarketOptionsSerializer {
 }
 
 /// <p>Describes Spot Instance placement.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct SpotPlacement {
     /// <p>The Availability Zone.</p> <p>[Spot Fleet only] To specify multiple Availability Zones, separate them using commas; for example, "us-west-2a, us-west-2b".</p>
     pub availability_zone: Option<String>,
@@ -48138,7 +48138,7 @@ impl SpotPlacementSerializer {
 }
 
 /// <p>Describes the maximum price per hour that you are willing to pay for a Spot Instance.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct SpotPrice {
     /// <p>The Availability Zone.</p>
     pub availability_zone: Option<String>,
@@ -48256,7 +48256,7 @@ impl SpotPriceHistoryListDeserializer {
     }
 }
 /// <p>Describes a stale rule in a security group.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct StaleIpPermission {
     /// <p>The start of the port range for the TCP and UDP protocols, or an ICMP type number. A value of <code>-1</code> indicates all ICMP types. </p>
     pub from_port: Option<i64>,
@@ -48377,7 +48377,7 @@ impl StaleIpPermissionSetDeserializer {
     }
 }
 /// <p>Describes a stale security group (a security group that contains stale rules).</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct StaleSecurityGroup {
     /// <p>The description of the security group.</p>
     pub description: Option<String>,
@@ -48500,7 +48500,7 @@ impl StaleSecurityGroupSetDeserializer {
     }
 }
 /// <p>Contains the parameters for StartInstances.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct StartInstancesRequest {
     /// <p>Reserved.</p>
     pub additional_info: Option<String>,
@@ -48540,7 +48540,7 @@ impl StartInstancesRequestSerializer {
 }
 
 /// <p>Contains the output of StartInstances.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct StartInstancesResult {
     /// <p>Information about one or more started instances.</p>
     pub starting_instances: Option<Vec<InstanceStateChange>>,
@@ -48602,7 +48602,7 @@ impl StateDeserializer {
     }
 }
 /// <p>Describes a state change.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct StateReason {
     /// <p>The reason code for the state change.</p>
     pub code: Option<String>,
@@ -48695,7 +48695,7 @@ impl StatusTypeDeserializer {
     }
 }
 /// <p>Contains the parameters for StopInstances.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct StopInstancesRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -48735,7 +48735,7 @@ impl StopInstancesRequestSerializer {
 }
 
 /// <p>Contains the output of StopInstances.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct StopInstancesResult {
     /// <p>Information about one or more stopped instances.</p>
     pub stopping_instances: Option<Vec<InstanceStateChange>>,
@@ -48783,7 +48783,7 @@ impl StopInstancesResultDeserializer {
     }
 }
 /// <p>Describes the storage location for an instance store-backed AMI.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct Storage {
     /// <p>An Amazon S3 storage location.</p>
     pub s3: Option<S3Storage>,
@@ -48845,7 +48845,7 @@ impl StorageSerializer {
 }
 
 /// <p>Describes a storage location in Amazon S3.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct StorageLocation {
     /// <p>The name of the S3 bucket.</p>
     pub bucket: Option<String>,
@@ -48892,7 +48892,7 @@ impl StringDeserializer {
     }
 }
 /// <p>Describes a subnet.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct Subnet {
     /// <p>Indicates whether a network interface created in this subnet (including a network interface created by <a>RunInstances</a>) receives an IPv6 address.</p>
     pub assign_ipv_6_address_on_creation: Option<bool>,
@@ -49009,7 +49009,7 @@ impl SubnetDeserializer {
     }
 }
 /// <p>Describes the state of a CIDR block.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct SubnetCidrBlockState {
     /// <p>The state of a CIDR block.</p>
     pub state: Option<String>,
@@ -49091,7 +49091,7 @@ impl SubnetIdStringListSerializer {
 }
 
 /// <p>Describes an IPv6 CIDR block associated with a subnet.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct SubnetIpv6CidrBlockAssociation {
     /// <p>The association ID for the CIDR block.</p>
     pub association_id: Option<String>,
@@ -49253,7 +49253,7 @@ impl SubnetStateDeserializer {
     }
 }
 /// <p>Describes the T2 instance whose credit option for CPU usage was successfully modified.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct SuccessfulInstanceCreditSpecificationItem {
     /// <p>The ID of the instance.</p>
     pub instance_id: Option<String>,
@@ -49358,7 +49358,7 @@ impl SummaryStatusDeserializer {
     }
 }
 /// <p>Describes a tag.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct Tag {
     /// <p>The key of the tag.</p> <p>Constraints: Tag keys are case-sensitive and accept a maximum of 127 Unicode characters. May not begin with <code>aws:</code> </p>
     pub key: Option<String>,
@@ -49434,7 +49434,7 @@ impl TagSerializer {
 }
 
 /// <p>Describes a tag.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct TagDescription {
     /// <p>The tag key.</p>
     pub key: Option<String>,
@@ -49591,7 +49591,7 @@ impl TagListSerializer {
 }
 
 /// <p>The tags to apply to a resource when the resource is being created.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct TagSpecification {
     /// <p>The type of resource to tag. Currently, the resource types that support tagging on creation are <code>instance</code> and <code>volume</code>. </p>
     pub resource_type: Option<String>,
@@ -49632,7 +49632,7 @@ impl TagSpecificationListSerializer {
 }
 
 /// <p>Information about the Convertible Reserved Instance offering.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct TargetConfiguration {
     /// <p>The number of instances the Convertible Reserved Instance offering can be applied to. This parameter is reserved and cannot be specified in a request</p>
     pub instance_count: Option<i64>,
@@ -49687,7 +49687,7 @@ impl TargetConfigurationDeserializer {
     }
 }
 /// <p>Details about the target configuration.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct TargetConfigurationRequest {
     /// <p>The number of instances the Covertible Reserved Instance offering can be applied to. This parameter is reserved and cannot be specified in a request</p>
     pub instance_count: Option<i64>,
@@ -49729,7 +49729,7 @@ impl TargetConfigurationRequestSetSerializer {
 }
 
 /// <p>Describes a load balancer target group.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct TargetGroup {
     /// <p>The Amazon Resource Name (ARN) of the target group.</p>
     pub arn: String,
@@ -49844,7 +49844,7 @@ impl TargetGroupsSerializer {
 }
 
 /// <p>Describes the target groups to attach to a Spot Fleet. Spot Fleet registers the running Spot Instances with these target groups.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct TargetGroupsConfig {
     /// <p>One or more target groups.</p>
     pub target_groups: Vec<TargetGroup>,
@@ -49909,7 +49909,7 @@ impl TargetGroupsConfigSerializer {
 }
 
 /// <p>The total value of the new Convertible Reserved Instances.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct TargetReservationValue {
     /// <p>The total value of the Convertible Reserved Instances that make up the exchange. This is the sum of the list value, remaining upfront price, and additional upfront cost of the exchange.</p>
     pub reservation_value: Option<ReservationValue>,
@@ -50036,7 +50036,7 @@ impl TenancyDeserializer {
     }
 }
 /// <p>Contains the parameters for TerminateInstances.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct TerminateInstancesRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -50068,7 +50068,7 @@ impl TerminateInstancesRequestSerializer {
 }
 
 /// <p>Contains the output of TerminateInstances.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct TerminateInstancesResult {
     /// <p>Information about one or more terminated instances.</p>
     pub terminating_instances: Option<Vec<InstanceStateChange>>,
@@ -50141,7 +50141,7 @@ impl TunnelOptionsListSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct UnassignIpv6AddressesRequest {
     /// <p>The IPv6 addresses to unassign from the network interface.</p>
     pub ipv_6_addresses: Vec<String>,
@@ -50170,7 +50170,7 @@ impl UnassignIpv6AddressesRequestSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct UnassignIpv6AddressesResult {
     /// <p>The ID of the network interface.</p>
     pub network_interface_id: Option<String>,
@@ -50228,7 +50228,7 @@ impl UnassignIpv6AddressesResultDeserializer {
     }
 }
 /// <p>Contains the parameters for UnassignPrivateIpAddresses.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct UnassignPrivateIpAddressesRequest {
     /// <p>The ID of the network interface.</p>
     pub network_interface_id: String,
@@ -50258,7 +50258,7 @@ impl UnassignPrivateIpAddressesRequestSerializer {
 }
 
 /// <p>Contains the parameters for UnmonitorInstances.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct UnmonitorInstancesRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -50290,7 +50290,7 @@ impl UnmonitorInstancesRequestSerializer {
 }
 
 /// <p>Contains the output of UnmonitorInstances.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct UnmonitorInstancesResult {
     /// <p>The monitoring information.</p>
     pub instance_monitorings: Option<Vec<InstanceMonitoring>>,
@@ -50352,7 +50352,7 @@ impl UnsuccessfulInstanceCreditSpecificationErrorCodeDeserializer {
     }
 }
 /// <p>Describes the T2 instance whose credit option for CPU usage was not modified.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct UnsuccessfulInstanceCreditSpecificationItem {
     /// <p>The applicable error for the T2 instance whose credit option for CPU usage was not modified.</p>
     pub error: Option<UnsuccessfulInstanceCreditSpecificationItemError>,
@@ -50404,7 +50404,7 @@ impl UnsuccessfulInstanceCreditSpecificationItemDeserializer {
     }
 }
 /// <p>Information about the error for the T2 instance whose credit option for CPU usage was not modified.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct UnsuccessfulInstanceCreditSpecificationItemError {
     /// <p>The error code.</p>
     pub code: Option<String>,
@@ -50499,7 +50499,7 @@ impl UnsuccessfulInstanceCreditSpecificationSetDeserializer {
     }
 }
 /// <p>Information about items that were not successfully processed in a batch call.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct UnsuccessfulItem {
     /// <p>Information about the error.</p>
     pub error: UnsuccessfulItemError,
@@ -50553,7 +50553,7 @@ impl UnsuccessfulItemDeserializer {
     }
 }
 /// <p>Information about the error that occurred. For more information about errors, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/APIReference/errors-overview.html">Error Codes</a>.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct UnsuccessfulItemError {
     /// <p>The error code.</p>
     pub code: String,
@@ -50688,7 +50688,7 @@ impl UnsuccessfulItemSetDeserializer {
     }
 }
 /// <p>Contains the parameters for UpdateSecurityGroupRuleDescriptionsEgress.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct UpdateSecurityGroupRuleDescriptionsEgressRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -50740,7 +50740,7 @@ impl UpdateSecurityGroupRuleDescriptionsEgressRequestSerializer {
 }
 
 /// <p>Contains the output of UpdateSecurityGroupRuleDescriptionsEgress.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct UpdateSecurityGroupRuleDescriptionsEgressResult {
     /// <p>Returns <code>true</code> if the request succeeds; otherwise, returns an error.</p>
     pub return_: Option<bool>,
@@ -50786,7 +50786,7 @@ impl UpdateSecurityGroupRuleDescriptionsEgressResultDeserializer {
     }
 }
 /// <p>Contains the parameters for UpdateSecurityGroupRuleDescriptionsIngress.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct UpdateSecurityGroupRuleDescriptionsIngressRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -50838,7 +50838,7 @@ impl UpdateSecurityGroupRuleDescriptionsIngressRequestSerializer {
 }
 
 /// <p>Contains the output of UpdateSecurityGroupRuleDescriptionsIngress.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct UpdateSecurityGroupRuleDescriptionsIngressResult {
     /// <p>Returns <code>true</code> if the request succeeds; otherwise, returns an error.</p>
     pub return_: Option<bool>,
@@ -50884,7 +50884,7 @@ impl UpdateSecurityGroupRuleDescriptionsIngressResultDeserializer {
     }
 }
 /// <p>Describes the S3 bucket for the disk image.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct UserBucket {
     /// <p>The name of the S3 bucket where the disk image is located.</p>
     pub s3_bucket: Option<String>,
@@ -50917,7 +50917,7 @@ impl UserBucketSerializer {
 }
 
 /// <p>Describes the S3 bucket for the disk image.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct UserBucketDetails {
     /// <p>The S3 bucket from which the disk image was created.</p>
     pub s3_bucket: Option<String>,
@@ -50969,7 +50969,7 @@ impl UserBucketDetailsDeserializer {
     }
 }
 /// <p>Describes the user data for an instance.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct UserData {
     /// <p>The user data. If you are using an AWS SDK or command line tool, Base64-encoding is performed for you, and you can load the text from a file. Otherwise, you must provide Base64-encoded text.</p>
     pub data: Option<String>,
@@ -51005,7 +51005,7 @@ impl UserGroupStringListSerializer {
 }
 
 /// <p>Describes a security group and AWS account ID pair.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct UserIdGroupPair {
     /// <p>A description for the security group rule that references this user ID group pair.</p> <p>Constraints: Up to 255 characters in length. Allowed characters are a-z, A-Z, 0-9, spaces, and ._-:/()#,@[]+=;{}!$*</p>
     pub description: Option<String>,
@@ -51330,7 +51330,7 @@ impl VersionStringListSerializer {
 }
 
 /// <p>Describes telemetry for a VPN tunnel.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct VgwTelemetry {
     /// <p>The number of accepted routes.</p>
     pub accepted_route_count: Option<i64>,
@@ -51464,7 +51464,7 @@ impl VirtualizationTypeDeserializer {
     }
 }
 /// <p>Describes a volume.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct Volume {
     /// <p>Information about the volume attachments.</p>
     pub attachments: Option<Vec<VolumeAttachment>>,
@@ -51579,7 +51579,7 @@ impl VolumeDeserializer {
     }
 }
 /// <p>Describes volume attachment details.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct VolumeAttachment {
     /// <p>The time stamp when the attachment initiated.</p>
     pub attach_time: Option<String>,
@@ -51714,7 +51714,7 @@ impl VolumeAttachmentStateDeserializer {
     }
 }
 /// <p>Describes an EBS volume.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct VolumeDetail {
     /// <p>The size of the volume, in GiB.</p>
     pub size: i64,
@@ -51788,7 +51788,7 @@ impl VolumeListDeserializer {
     }
 }
 /// <p>Describes the modification status of an EBS volume.</p> <p>If the volume has never been modified, some element values will be null.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct VolumeModification {
     /// <p>Modification completion or failure time.</p>
     pub end_time: Option<String>,
@@ -51983,7 +51983,7 @@ impl VolumeStateDeserializer {
     }
 }
 /// <p>Describes a volume status operation code.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct VolumeStatusAction {
     /// <p>The code identifying the operation, for example, <code>enable-volume-io</code>.</p>
     pub code: Option<String>,
@@ -52089,7 +52089,7 @@ impl VolumeStatusActionsListDeserializer {
     }
 }
 /// <p>Describes a volume status.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct VolumeStatusDetails {
     /// <p>The name of the volume status.</p>
     pub name: Option<String>,
@@ -52184,7 +52184,7 @@ impl VolumeStatusDetailsListDeserializer {
     }
 }
 /// <p>Describes a volume status event.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct VolumeStatusEvent {
     /// <p>A description of the event.</p>
     pub description: Option<String>,
@@ -52297,7 +52297,7 @@ impl VolumeStatusEventsListDeserializer {
     }
 }
 /// <p>Describes the status of a volume.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct VolumeStatusInfo {
     /// <p>The details of the volume status.</p>
     pub details: Option<Vec<VolumeStatusDetails>>,
@@ -52366,7 +52366,7 @@ impl VolumeStatusInfoStatusDeserializer {
     }
 }
 /// <p>Describes the volume status.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct VolumeStatusItem {
     /// <p>The details of the operation.</p>
     pub actions: Option<Vec<VolumeStatusAction>>,
@@ -52515,7 +52515,7 @@ impl VolumeTypeDeserializer {
     }
 }
 /// <p>Describes a VPC.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct Vpc {
     /// <p>The primary IPv4 CIDR block for the VPC.</p>
     pub cidr_block: Option<String>,
@@ -52618,7 +52618,7 @@ impl VpcDeserializer {
     }
 }
 /// <p>Describes an attachment between a virtual private gateway and a VPC.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct VpcAttachment {
     /// <p>The current state of the attachment.</p>
     pub state: Option<String>,
@@ -52711,7 +52711,7 @@ impl VpcAttachmentListDeserializer {
     }
 }
 /// <p>Describes an IPv4 CIDR block associated with a VPC.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct VpcCidrBlockAssociation {
     /// <p>The association ID for the IPv4 CIDR block.</p>
     pub association_id: Option<String>,
@@ -52815,7 +52815,7 @@ impl VpcCidrBlockAssociationSetDeserializer {
     }
 }
 /// <p>Describes the state of a CIDR block.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct VpcCidrBlockState {
     /// <p>The state of the CIDR block.</p>
     pub state: Option<String>,
@@ -52885,7 +52885,7 @@ impl VpcCidrBlockStateCodeDeserializer {
     }
 }
 /// <p>Describes whether a VPC is enabled for ClassicLink.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct VpcClassicLink {
     /// <p>Indicates whether the VPC is enabled for ClassicLink.</p>
     pub classic_link_enabled: Option<bool>,
@@ -52996,7 +52996,7 @@ impl VpcClassicLinkListDeserializer {
     }
 }
 /// <p>Describes a VPC endpoint.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct VpcEndpoint {
     /// <p>The date and time the VPC endpoint was created.</p>
     pub creation_timestamp: Option<String>,
@@ -53132,7 +53132,7 @@ impl VpcEndpointDeserializer {
     }
 }
 /// <p>Describes a VPC endpoint connection to a service.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct VpcEndpointConnection {
     /// <p>The date and time the VPC endpoint was created.</p>
     pub creation_timestamp: Option<String>,
@@ -53319,7 +53319,7 @@ impl VpcIdStringListSerializer {
 }
 
 /// <p>Describes an IPv6 CIDR block associated with a VPC.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct VpcIpv6CidrBlockAssociation {
     /// <p>The association ID for the IPv6 CIDR block.</p>
     pub association_id: Option<String>,
@@ -53465,7 +53465,7 @@ impl VpcListDeserializer {
     }
 }
 /// <p>Describes a VPC peering connection.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct VpcPeeringConnection {
     /// <p>Information about the accepter VPC. CIDR block information is only returned when describing an active VPC peering connection.</p>
     pub accepter_vpc_info: Option<VpcPeeringConnectionVpcInfo>,
@@ -53595,7 +53595,7 @@ impl VpcPeeringConnectionListDeserializer {
     }
 }
 /// <p>Describes the VPC peering connection options.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct VpcPeeringConnectionOptionsDescription {
     /// <p>Indicates whether a local VPC can resolve public DNS hostnames to private IP addresses when queried from instances in a peer VPC.</p>
     pub allow_dns_resolution_from_remote_vpc: Option<bool>,
@@ -53663,7 +53663,7 @@ impl VpcPeeringConnectionOptionsDescriptionDeserializer {
     }
 }
 /// <p>Describes the status of a VPC peering connection.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct VpcPeeringConnectionStateReason {
     /// <p>The status of the VPC peering connection.</p>
     pub code: Option<String>,
@@ -53732,7 +53732,7 @@ impl VpcPeeringConnectionStateReasonCodeDeserializer {
     }
 }
 /// <p>Describes a VPC in a VPC peering connection.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct VpcPeeringConnectionVpcInfo {
     /// <p>The IPv4 CIDR block for the VPC.</p>
     pub cidr_block: Option<String>,
@@ -53834,7 +53834,7 @@ impl VpcStateDeserializer {
     }
 }
 /// <p>Describes a VPN connection.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct VpnConnection {
     /// <p>The category of the VPN connection. A value of <code>VPN</code> indicates an AWS VPN connection. A value of <code>VPN-Classic</code> indicates an AWS Classic VPN connection. For more information, see <a href="http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_VPN.html#vpn-categories">AWS Managed VPN Categories</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
     pub category: Option<String>,
@@ -53999,7 +53999,7 @@ impl VpnConnectionListDeserializer {
     }
 }
 /// <p>Describes VPN connection options.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct VpnConnectionOptions {
     /// <p>Indicates whether the VPN connection uses static routes only. Static routes must be used for devices that don't support BGP.</p>
     pub static_routes_only: Option<bool>,
@@ -54048,7 +54048,7 @@ impl VpnConnectionOptionsDeserializer {
     }
 }
 /// <p>Describes VPN connection options.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct VpnConnectionOptionsSpecification {
     /// <p>Indicate whether the VPN connection uses static routes only. If you are creating a VPN connection for a device that does not support BGP, you must specify <code>true</code>. Use <a>CreateVpnConnectionRoute</a> to create a static route.</p> <p>Default: <code>false</code> </p>
     pub static_routes_only: Option<bool>,
@@ -54082,7 +54082,7 @@ impl VpnConnectionOptionsSpecificationSerializer {
 }
 
 /// <p>Describes a virtual private gateway.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct VpnGateway {
     /// <p>The private Autonomous System Number (ASN) for the Amazon side of a BGP session.</p>
     pub amazon_side_asn: Option<i64>,
@@ -54231,7 +54231,7 @@ impl VpnStateDeserializer {
     }
 }
 /// <p>Describes a static route for a VPN connection.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct VpnStaticRoute {
     /// <p>The CIDR block associated with the local subnet of the customer data center.</p>
     pub destination_cidr_block: Option<String>,
@@ -54346,7 +54346,7 @@ impl VpnStaticRouteSourceDeserializer {
     }
 }
 /// <p>The tunnel options for a VPN connection.</p>
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct VpnTunnelOptionsSpecification {
     /// <p>The pre-shared key (PSK) to establish initial authentication between the virtual private gateway and customer gateway.</p> <p>Constraints: Allowed characters are alphanumeric characters and ._. Must be between 8 and 64 characters in length and cannot start with zero (0).</p>
     pub pre_shared_key: Option<String>,
