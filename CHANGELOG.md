@@ -15,6 +15,7 @@
 - Support streaming uploads for services like S3
 - Implement `DispatchSignedRequest` and `ProvideAwsCredentials` for `Arc<>` and `Rc<>` wrapped types
 - Changed HttpClient to be generic over hyper::Connect, default HttpClient<C = HttpsConnector<HttpConnector>>, see #1033
+- Derive PartialEq for all request and response types, except when they contain streams
 
 ## [0.32.0] - 2018-03-03
 
