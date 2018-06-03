@@ -288,7 +288,7 @@ pub use custom::*;
             let gen_file_path = src_dir.join("generated.rs");
 
             let status = Command::new("rustfmt")
-                .args(&["--write-mode", "overwrite"])
+                .args(&["--emit", "files"])
                 .args(&["--config-path", "rustfmt.toml"])
                 .arg(gen_file_path)
                 .status()

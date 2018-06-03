@@ -29,8 +29,9 @@ use hyper::StatusCode;
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::signature::SignedRequest;
 use rusoto_core::xmlerror::*;
-use rusoto_core::xmlutil::{characters, end_element, find_start_element, peek_at_name, skip_tree,
-                           start_element};
+use rusoto_core::xmlutil::{
+    characters, end_element, find_start_element, peek_at_name, skip_tree, start_element,
+};
 use rusoto_core::xmlutil::{Next, Peek, XmlParseError, XmlResponse};
 use std::io::Write;
 use std::str::FromStr;
@@ -15570,7 +15571,8 @@ where
         request.set_payload(Some(writer.into_inner()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok && response.status != StatusCode::NoContent
+            if response.status != StatusCode::Ok
+                && response.status != StatusCode::NoContent
                 && response.status != StatusCode::PartialContent
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
@@ -15629,7 +15631,8 @@ where
         request.set_payload(Some(writer.into_inner()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok && response.status != StatusCode::NoContent
+            if response.status != StatusCode::Ok
+                && response.status != StatusCode::NoContent
                 && response.status != StatusCode::PartialContent
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
@@ -15689,7 +15692,8 @@ where
         request.set_payload(Some(writer.into_inner()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok && response.status != StatusCode::NoContent
+            if response.status != StatusCode::Ok
+                && response.status != StatusCode::NoContent
                 && response.status != StatusCode::PartialContent
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
@@ -15745,7 +15749,8 @@ where
         request.set_payload(Some(writer.into_inner()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok && response.status != StatusCode::NoContent
+            if response.status != StatusCode::Ok
+                && response.status != StatusCode::NoContent
                 && response.status != StatusCode::PartialContent
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
@@ -15803,7 +15808,8 @@ where
         request.set_payload(Some(writer.into_inner()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok && response.status != StatusCode::NoContent
+            if response.status != StatusCode::Ok
+                && response.status != StatusCode::NoContent
                 && response.status != StatusCode::PartialContent
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
@@ -15861,7 +15867,8 @@ where
         request.set_payload(Some(writer.into_inner()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok && response.status != StatusCode::NoContent
+            if response.status != StatusCode::Ok
+                && response.status != StatusCode::NoContent
                 && response.status != StatusCode::PartialContent
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
@@ -15919,7 +15926,8 @@ where
         request.set_payload(Some(writer.into_inner()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok && response.status != StatusCode::NoContent
+            if response.status != StatusCode::Ok
+                && response.status != StatusCode::NoContent
                 && response.status != StatusCode::PartialContent
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
@@ -15979,7 +15987,8 @@ where
         request.set_payload(Some(writer.into_inner()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok && response.status != StatusCode::NoContent
+            if response.status != StatusCode::Ok
+                && response.status != StatusCode::NoContent
                 && response.status != StatusCode::PartialContent
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
@@ -16037,7 +16046,8 @@ where
         request.set_payload(Some(writer.into_inner()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok && response.status != StatusCode::NoContent
+            if response.status != StatusCode::Ok
+                && response.status != StatusCode::NoContent
                 && response.status != StatusCode::PartialContent
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
@@ -16097,7 +16107,8 @@ where
         request.set_payload(Some(writer.into_inner()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok && response.status != StatusCode::NoContent
+            if response.status != StatusCode::Ok
+                && response.status != StatusCode::NoContent
                 && response.status != StatusCode::PartialContent
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
@@ -16161,7 +16172,8 @@ where
         request.set_payload(Some(writer.into_inner()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok && response.status != StatusCode::NoContent
+            if response.status != StatusCode::Ok
+                && response.status != StatusCode::NoContent
                 && response.status != StatusCode::PartialContent
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
@@ -16213,7 +16225,8 @@ where
         let mut request = SignedRequest::new("DELETE", "route53", &self.region, &request_uri);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok && response.status != StatusCode::NoContent
+            if response.status != StatusCode::Ok
+                && response.status != StatusCode::NoContent
                 && response.status != StatusCode::PartialContent
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
@@ -16260,7 +16273,8 @@ where
         let mut request = SignedRequest::new("DELETE", "route53", &self.region, &request_uri);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok && response.status != StatusCode::NoContent
+            if response.status != StatusCode::Ok
+                && response.status != StatusCode::NoContent
                 && response.status != StatusCode::PartialContent
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
@@ -16307,7 +16321,8 @@ where
         let mut request = SignedRequest::new("DELETE", "route53", &self.region, &request_uri);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok && response.status != StatusCode::NoContent
+            if response.status != StatusCode::Ok
+                && response.status != StatusCode::NoContent
                 && response.status != StatusCode::PartialContent
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
@@ -16354,7 +16369,8 @@ where
         let mut request = SignedRequest::new("DELETE", "route53", &self.region, &request_uri);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok && response.status != StatusCode::NoContent
+            if response.status != StatusCode::Ok
+                && response.status != StatusCode::NoContent
                 && response.status != StatusCode::PartialContent
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
@@ -16407,7 +16423,8 @@ where
         let mut request = SignedRequest::new("DELETE", "route53", &self.region, &request_uri);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok && response.status != StatusCode::NoContent
+            if response.status != StatusCode::Ok
+                && response.status != StatusCode::NoContent
                 && response.status != StatusCode::PartialContent
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
@@ -16454,7 +16471,8 @@ where
         let mut request = SignedRequest::new("DELETE", "route53", &self.region, &request_uri);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok && response.status != StatusCode::NoContent
+            if response.status != StatusCode::Ok
+                && response.status != StatusCode::NoContent
                 && response.status != StatusCode::PartialContent
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
@@ -16518,7 +16536,8 @@ where
         request.set_payload(Some(writer.into_inner()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok && response.status != StatusCode::NoContent
+            if response.status != StatusCode::Ok
+                && response.status != StatusCode::NoContent
                 && response.status != StatusCode::PartialContent
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
@@ -16580,7 +16599,8 @@ where
         request.set_payload(Some(writer.into_inner()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok && response.status != StatusCode::NoContent
+            if response.status != StatusCode::Ok
+                && response.status != StatusCode::NoContent
                 && response.status != StatusCode::PartialContent
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
@@ -16629,7 +16649,8 @@ where
         let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok && response.status != StatusCode::NoContent
+            if response.status != StatusCode::Ok
+                && response.status != StatusCode::NoContent
                 && response.status != StatusCode::PartialContent
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
@@ -16676,7 +16697,8 @@ where
         let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok && response.status != StatusCode::NoContent
+            if response.status != StatusCode::Ok
+                && response.status != StatusCode::NoContent
                 && response.status != StatusCode::PartialContent
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
@@ -16723,7 +16745,8 @@ where
         let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok && response.status != StatusCode::NoContent
+            if response.status != StatusCode::Ok
+                && response.status != StatusCode::NoContent
                 && response.status != StatusCode::PartialContent
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
@@ -16782,7 +16805,8 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok && response.status != StatusCode::NoContent
+            if response.status != StatusCode::Ok
+                && response.status != StatusCode::NoContent
                 && response.status != StatusCode::PartialContent
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
@@ -16832,7 +16856,8 @@ where
         let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok && response.status != StatusCode::NoContent
+            if response.status != StatusCode::Ok
+                && response.status != StatusCode::NoContent
                 && response.status != StatusCode::PartialContent
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
@@ -16879,7 +16904,8 @@ where
         let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok && response.status != StatusCode::NoContent
+            if response.status != StatusCode::Ok
+                && response.status != StatusCode::NoContent
                 && response.status != StatusCode::PartialContent
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
@@ -16930,7 +16956,8 @@ where
         let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok && response.status != StatusCode::NoContent
+            if response.status != StatusCode::Ok
+                && response.status != StatusCode::NoContent
                 && response.status != StatusCode::PartialContent
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
@@ -16982,7 +17009,8 @@ where
         let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok && response.status != StatusCode::NoContent
+            if response.status != StatusCode::Ok
+                && response.status != StatusCode::NoContent
                 && response.status != StatusCode::PartialContent
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
@@ -17029,7 +17057,8 @@ where
         let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok && response.status != StatusCode::NoContent
+            if response.status != StatusCode::Ok
+                && response.status != StatusCode::NoContent
                 && response.status != StatusCode::PartialContent
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
@@ -17076,7 +17105,8 @@ where
         let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok && response.status != StatusCode::NoContent
+            if response.status != StatusCode::Ok
+                && response.status != StatusCode::NoContent
                 && response.status != StatusCode::PartialContent
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
@@ -17123,7 +17153,8 @@ where
         let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok && response.status != StatusCode::NoContent
+            if response.status != StatusCode::Ok
+                && response.status != StatusCode::NoContent
                 && response.status != StatusCode::PartialContent
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
@@ -17170,7 +17201,8 @@ where
         let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok && response.status != StatusCode::NoContent
+            if response.status != StatusCode::Ok
+                && response.status != StatusCode::NoContent
                 && response.status != StatusCode::PartialContent
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
@@ -17217,7 +17249,8 @@ where
         let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok && response.status != StatusCode::NoContent
+            if response.status != StatusCode::Ok
+                && response.status != StatusCode::NoContent
                 && response.status != StatusCode::PartialContent
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
@@ -17265,7 +17298,8 @@ where
         let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok && response.status != StatusCode::NoContent
+            if response.status != StatusCode::Ok
+                && response.status != StatusCode::NoContent
                 && response.status != StatusCode::PartialContent
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
@@ -17318,7 +17352,8 @@ where
         let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok && response.status != StatusCode::NoContent
+            if response.status != StatusCode::Ok
+                && response.status != StatusCode::NoContent
                 && response.status != StatusCode::PartialContent
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
@@ -17365,7 +17400,8 @@ where
         let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok && response.status != StatusCode::NoContent
+            if response.status != StatusCode::Ok
+                && response.status != StatusCode::NoContent
                 && response.status != StatusCode::PartialContent
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
@@ -17413,7 +17449,8 @@ where
         let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok && response.status != StatusCode::NoContent
+            if response.status != StatusCode::Ok
+                && response.status != StatusCode::NoContent
                 && response.status != StatusCode::PartialContent
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
@@ -17477,7 +17514,8 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok && response.status != StatusCode::NoContent
+            if response.status != StatusCode::Ok
+                && response.status != StatusCode::NoContent
                 && response.status != StatusCode::PartialContent
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
@@ -17533,7 +17571,8 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok && response.status != StatusCode::NoContent
+            if response.status != StatusCode::Ok
+                && response.status != StatusCode::NoContent
                 && response.status != StatusCode::PartialContent
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
@@ -17592,7 +17631,8 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok && response.status != StatusCode::NoContent
+            if response.status != StatusCode::Ok
+                && response.status != StatusCode::NoContent
                 && response.status != StatusCode::PartialContent
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
@@ -17651,7 +17691,8 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok && response.status != StatusCode::NoContent
+            if response.status != StatusCode::Ok
+                && response.status != StatusCode::NoContent
                 && response.status != StatusCode::PartialContent
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
@@ -17710,7 +17751,8 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok && response.status != StatusCode::NoContent
+            if response.status != StatusCode::Ok
+                && response.status != StatusCode::NoContent
                 && response.status != StatusCode::PartialContent
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
@@ -17775,7 +17817,8 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok && response.status != StatusCode::NoContent
+            if response.status != StatusCode::Ok
+                && response.status != StatusCode::NoContent
                 && response.status != StatusCode::PartialContent
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
@@ -17831,7 +17874,8 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok && response.status != StatusCode::NoContent
+            if response.status != StatusCode::Ok
+                && response.status != StatusCode::NoContent
                 && response.status != StatusCode::PartialContent
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
@@ -17882,7 +17926,8 @@ where
         let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok && response.status != StatusCode::NoContent
+            if response.status != StatusCode::Ok
+                && response.status != StatusCode::NoContent
                 && response.status != StatusCode::PartialContent
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
@@ -17941,7 +17986,8 @@ where
         request.set_payload(Some(writer.into_inner()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok && response.status != StatusCode::NoContent
+            if response.status != StatusCode::Ok
+                && response.status != StatusCode::NoContent
                 && response.status != StatusCode::PartialContent
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
@@ -17997,7 +18043,8 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok && response.status != StatusCode::NoContent
+            if response.status != StatusCode::Ok
+                && response.status != StatusCode::NoContent
                 && response.status != StatusCode::PartialContent
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
@@ -18059,7 +18106,8 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok && response.status != StatusCode::NoContent
+            if response.status != StatusCode::Ok
+                && response.status != StatusCode::NoContent
                 && response.status != StatusCode::PartialContent
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
@@ -18122,7 +18170,8 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok && response.status != StatusCode::NoContent
+            if response.status != StatusCode::Ok
+                && response.status != StatusCode::NoContent
                 && response.status != StatusCode::PartialContent
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
@@ -18191,7 +18240,8 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok && response.status != StatusCode::NoContent
+            if response.status != StatusCode::Ok
+                && response.status != StatusCode::NoContent
                 && response.status != StatusCode::PartialContent
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
@@ -18249,7 +18299,8 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok && response.status != StatusCode::NoContent
+            if response.status != StatusCode::Ok
+                && response.status != StatusCode::NoContent
                 && response.status != StatusCode::PartialContent
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
@@ -18309,7 +18360,8 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok && response.status != StatusCode::NoContent
+            if response.status != StatusCode::Ok
+                && response.status != StatusCode::NoContent
                 && response.status != StatusCode::PartialContent
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
@@ -18373,7 +18425,8 @@ where
         request.set_params(params);
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok && response.status != StatusCode::NoContent
+            if response.status != StatusCode::Ok
+                && response.status != StatusCode::NoContent
                 && response.status != StatusCode::PartialContent
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
@@ -18432,7 +18485,8 @@ where
         request.set_payload(Some(writer.into_inner()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok && response.status != StatusCode::NoContent
+            if response.status != StatusCode::Ok
+                && response.status != StatusCode::NoContent
                 && response.status != StatusCode::PartialContent
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
@@ -18488,7 +18542,8 @@ where
         request.set_payload(Some(writer.into_inner()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok && response.status != StatusCode::NoContent
+            if response.status != StatusCode::Ok
+                && response.status != StatusCode::NoContent
                 && response.status != StatusCode::PartialContent
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
@@ -18548,7 +18603,8 @@ where
         request.set_payload(Some(writer.into_inner()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok && response.status != StatusCode::NoContent
+            if response.status != StatusCode::Ok
+                && response.status != StatusCode::NoContent
                 && response.status != StatusCode::PartialContent
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
@@ -18604,7 +18660,8 @@ where
         request.set_payload(Some(writer.into_inner()));
 
         let future = self.inner.sign_and_dispatch(request, |response| {
-            if response.status != StatusCode::Ok && response.status != StatusCode::NoContent
+            if response.status != StatusCode::Ok
+                && response.status != StatusCode::NoContent
                 && response.status != StatusCode::PartialContent
             {
                 return future::Either::B(response.buffer().from_err().and_then(|response| {
